@@ -1,0 +1,46 @@
+{
+  "name": "apollon2",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "yarn workspaces foreach -A run build",
+    "lint": "yarn workspaces foreach -A run lint",
+    "lint:w": "npx eslint .",
+    "lint:fix": "yarn workspaces foreach -A -p run lint:fix",
+    "prettier": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "prettier:fix": "prettier --write \"**/*.+(js|ts|json)\"",
+    "start:server": "yarn workspace server start",
+    "start:client": "yarn workspace client dev",
+    "postinstall": "husky"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@eslint/js": "^9.16.0",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "prettier": "3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.17.0"
+  },
+  "packageManager": "yarn@4.5.3",
+  "lint-staged": {
+    "**/*.{ts,tsx,js,json,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  }
+}
