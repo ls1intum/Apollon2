@@ -40,7 +40,7 @@ import {
     );
   }
    
-  type NodeInfoProps = {
+  interface NodeInfoProps {
     id: string;
     type: string;
     selected: boolean;
@@ -49,7 +49,7 @@ import {
     width?: number;
     height?: number;
     data: any;
-  };
+  }
    
   function NodeInfo({
     id,

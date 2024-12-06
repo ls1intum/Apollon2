@@ -18,7 +18,7 @@ export const getId = (prefix = 'node') => `${prefix}_${Math.random() * 10000}`;
 
 export const getNodePositionInsideParent = (
   node: Partial<Node>,
-  groupNode: Node
+  groupNode: Node,
 ) => {
   const position = node.position ?? { x: 0, y: 0 };
   const nodeWidth = node.measured?.width ?? 0;
@@ -54,7 +54,7 @@ export const getBoundsOfBoxes = (box1: Box, box2: Box): Box => ({
 
 export const getRelativeNodesBounds = (
   nodes: Node[],
-  nodeOrigin: NodeOrigin = [0, 0]
+  nodeOrigin: NodeOrigin = [0, 0],
 ): Rect => {
   if (nodes.length === 0) {
     return { x: 0, y: 0, width: 0, height: 0 };
@@ -70,15 +70,14 @@ export const getRelativeNodesBounds = (
           y,
           width: node.width || 0,
           height: node.height || 0,
-        })
+        }),
       );
     },
-    { x: Infinity, y: Infinity, x2: -Infinity, y2: -Infinity }
+    { x: Infinity, y: Infinity, x2: -Infinity, y2: -Infinity },
   );
 
   return boxToRect(box);
 };
-
 
 export function stringToColor(str: string) {
   let colour = '#';

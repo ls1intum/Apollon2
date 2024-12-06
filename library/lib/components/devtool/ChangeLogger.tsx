@@ -6,14 +6,14 @@ import {
   type NodeChange,
 } from '@xyflow/react';
  
-type ChangeLoggerProps = {
+interface ChangeLoggerProps {
   color?: string;
   limit?: number;
-};
+}
  
-type ChangeInfoProps = {
+interface ChangeInfoProps {
   change: NodeChange;
-};
+}
  
 function ChangeInfo({ change }: ChangeInfoProps) {
   const id = 'id' in change ? change.id : '-';

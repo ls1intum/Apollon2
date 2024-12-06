@@ -25,10 +25,10 @@ function useDetachNodes() {
       });
 
       setNodes(
-        nextNodes.filter((n) => !removeParentId || n.id !== removeParentId)
+        nextNodes.filter((n) => !removeParentId || n.id !== removeParentId),
       );
     },
-    [setNodes, store]
+    [setNodes, store],
   );
 
   return detachNodes;

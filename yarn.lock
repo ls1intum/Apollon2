@@ -1613,7 +1613,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:8.17.0":
+"@typescript-eslint/eslint-plugin@npm:8.17.0, @typescript-eslint/eslint-plugin@npm:^8.17.0":
   version: 8.17.0
   resolution: "@typescript-eslint/eslint-plugin@npm:8.17.0"
   dependencies:
@@ -1661,7 +1661,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:8.17.0":
+"@typescript-eslint/parser@npm:8.17.0, @typescript-eslint/parser@npm:^8.17.0":
   version: 8.17.0
   resolution: "@typescript-eslint/parser@npm:8.17.0"
   dependencies:
@@ -2107,13 +2107,15 @@ __metadata:
     "@commitlint/cli": "npm:^19.6.0"
     "@commitlint/config-conventional": "npm:^19.6.0"
     "@eslint/js": "npm:^9.16.0"
+    "@typescript-eslint/eslint-plugin": "npm:^8.17.0"
+    "@typescript-eslint/parser": "npm:^8.17.0"
     "@vitejs/plugin-react": "npm:^4.3.4"
     eslint: "npm:^9.16.0"
     eslint-config-prettier: "npm:^9.1.0"
     husky: "npm:^9.1.7"
     lint-staged: "npm:^15.2.10"
     prettier: "npm:3.4.2"
-    typescript: "npm:^5.7.2"
+    typescript: "npm:^5.3.0"
     typescript-eslint: "npm:^8.17.0"
     vite: "npm:^6.0.3"
     vite-plugin-css: "npm:^1.0.4"

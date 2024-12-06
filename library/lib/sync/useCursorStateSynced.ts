@@ -9,13 +9,13 @@ const cursorColor = stringToColor(cursorId);
 
 const MAX_IDLE_TIME = 10000;
 
-export type Cursor = {
+export interface Cursor {
   id: string;
   color: string;
   x: number;
   y: number;
   timestamp: number;
-};
+}
 
 export function useCursorStateSynced() {
   const [cursors, setCursors] = useState<Cursor[]>([]);
@@ -47,7 +47,7 @@ export function useCursorStateSynced() {
         timestamp: Date.now(),
       });
     },
-    [screenToFlowPosition]
+    [screenToFlowPosition],
   );
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export function useCursorStateSynced() {
 
   const cursorsWithoutSelf = useMemo(
     () => cursors.filter(({ id }) => id !== cursorId),
-    [cursors]
+    [cursors],
   );
 
   return [cursorsWithoutSelf, onMouseMove] as const;

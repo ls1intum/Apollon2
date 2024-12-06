@@ -21,6 +21,7 @@ export default [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
+        project: ['./tsconfig.json'], // Update this to point to the correct tsconfig
         ecmaVersion: "latest",
         sourceType: "module",
         // No `project` here since the root has no tsconfig.json

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo } from 'react';
 import {
   NodeProps,
   NodeToolbar,
@@ -7,14 +7,14 @@ import {
   useStoreApi,
   NodeResizer,
   type Node,
-} from "@xyflow/react";
+} from '@xyflow/react';
 
-import useDetachNodes from "./useDetachNodes";
-import { getRelativeNodesBounds } from "../utils";
+import useDetachNodes from './useDetachNodes';
+import { getRelativeNodesBounds } from '../utils';
 
-const lineStyle = { borderColor: "gray" };
+const lineStyle = { borderColor: 'gray' };
 
-export type PackageType = Node<{ label: string }, "package">;
+export type PackageType = Node<{ label: string }, 'package'>;
 
 function Package({ id, selected, data: { label } }: NodeProps<PackageType>) {
   const store = useStoreApi();
@@ -24,7 +24,7 @@ function Package({ id, selected, data: { label } }: NodeProps<PackageType>) {
 
   const { minWidth, minHeight, hasChildNodes } = useStore((store) => {
     const childNodes = Array.from(store.nodeLookup.values()).filter(
-      (n) => n.parentId === id
+      (n) => n.parentId === id,
     );
     const rect = getRelativeNodesBounds(childNodes);
 
@@ -64,8 +64,8 @@ function Package({ id, selected, data: { label } }: NodeProps<PackageType>) {
       </NodeToolbar>
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
         {selected ? (
@@ -81,11 +81,11 @@ function Package({ id, selected, data: { label } }: NodeProps<PackageType>) {
   );
 }
 
-type IsEqualCompareObj = {
+interface IsEqualCompareObj {
   minWidth: number;
   minHeight: number;
   hasChildNodes: boolean;
-};
+}
 
 function isEqual(prev: IsEqualCompareObj, next: IsEqualCompareObj): boolean {
   return (

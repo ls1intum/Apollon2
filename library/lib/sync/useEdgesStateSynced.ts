@@ -10,7 +10,7 @@ export const edgesMap = ydoc.getMap<Edge>('edges');
 function useEdgesStateSynced(): [
   Edge[],
   React.Dispatch<React.SetStateAction<Edge[]>>,
-  OnEdgesChange
+  OnEdgesChange,
 ] {
   const [edges, setEdges] = useState<Edge[]>([]);
 
@@ -34,7 +34,7 @@ function useEdgesStateSynced(): [
         }
       }
     },
-    []
+    [],
   );
 
   const onEdgesChange: OnEdgesChange = useCallback((changes) => {
@@ -47,7 +47,12 @@ function useEdgesStateSynced(): [
       } else if (change.type === 'remove' && edgesMap.has(change.id)) {
         edgesMap.delete(change.id);
       } else {
-        edgesMap.set(change.id, nextEdges.find((n) => n.id === change.id)!);
+        const edge = nextEdges.find((n) => n.id === change.id);
+        if (edge) {
+          edgesMap.set(change.id, edge);
+        } else {
+          console.warn(`Edge with id ${change.id} not found in nextEdges.`);
+        }
       }
     }
   }, []);

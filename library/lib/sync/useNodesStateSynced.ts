@@ -17,7 +17,7 @@ export const nodesMap = ydoc.getMap<Node>('nodes');
 function useNodesStateSynced(): [
   Node[],
   React.Dispatch<React.SetStateAction<Node[]>>,
-  OnNodesChange
+  OnNodesChange,
 ] {
   const [nodes, setNodes] = useState<Node[]>([]);
 
@@ -40,7 +40,7 @@ function useNodesStateSynced(): [
         }
       }
     },
-    []
+    [],
   );
 
   // The onNodesChange callback updates nodesMap.
@@ -53,19 +53,28 @@ function useNodesStateSynced(): [
       if (change.type === 'add' || change.type === 'replace') {
         nodesMap.set(change.item.id, change.item);
       } else if (change.type === 'remove' && nodesMap.has(change.id)) {
-        const deletedNode = nodesMap.get(change.id)!;
-        const connectedEdges = getConnectedEdges(
-          [deletedNode],
-          [...edgesMap.values()]
-        );
+        const deletedNode = nodesMap.get(change.id);
+        if (deletedNode) {
+          const connectedEdges = getConnectedEdges(
+            [deletedNode],
+            [...edgesMap.values()],
+          );
 
-        nodesMap.delete(change.id);
+          nodesMap.delete(change.id);
 
-        for (const edge of connectedEdges) {
-          edgesMap.delete(edge.id);
+          for (const edge of connectedEdges) {
+            edgesMap.delete(edge.id);
+          }
+        } else {
+          console.warn(`Node with id ${change.id} not found in nodesMap.`);
         }
       } else {
-        nodesMap.set(change.id, nextNodes.find((n) => n.id === change.id)!);
+        const node = nextNodes.find((n) => n.id === change.id);
+        if (node) {
+          nodesMap.set(change.id, node);
+        } else {
+          console.warn(`Node with id ${change.id} not found in nextNodes.`);
+        }
       }
     }
   }, []);

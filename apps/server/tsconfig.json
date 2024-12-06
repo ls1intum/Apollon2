@@ -1,10 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "src",            // Root directory for server source code
-    "outDir": "dist",            // Output compiled files to `dist`
-    "types": ["node"],           // Include Node.js type definitions
-    "moduleResolution": "node"  // Resolve modules using Node.js conventions
+    "rootDir": "src", // Root directory for server source code
+    "outDir": "dist", // Output compiled files to `dist`
+    "types": ["node"], // Include Node.js type definitions
+    "moduleResolution": "node" // Resolve modules using Node.js conventions
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
