@@ -1,9 +1,11 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "module": "CommonJS"
+    "rootDir": "src",            // Root directory for server source code
+    "outDir": "dist",            // Output compiled files to `dist`
+    "types": ["node"],           // Include Node.js type definitions
+    "moduleResolution": "node"  // Resolve modules using Node.js conventions
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
