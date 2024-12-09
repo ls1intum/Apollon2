@@ -1,11 +1,11 @@
-import rootConfig from "../../eslint.config.mjs";
+import rootConfig from '../eslint.config.mjs';
 
 export default [
   ...rootConfig,
   {
     languageOptions: {
       parserOptions: {
-        project: "./tsconfig.json", // Points to the backend tsconfig.json
+        project: './tsconfig.json', // Points to the backend tsconfig.json
       },
     },
   },

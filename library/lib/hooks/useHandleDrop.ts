@@ -55,12 +55,12 @@ export function useHandleDrop({ nodes, setNodes }: UseHandleDropProps) {
       newNode.expandParent = true;
     }
 
-    if (type === 'classDiagram') {
+    if (type === 'class') {
       newNode.data = {
-        label: 'Class Diagram',
+        label: 'Class',
         methods: [],
         attributes: [],
-        classDiagramType: 'abstract',
+        classType: 'abstract',
       };
     }
 

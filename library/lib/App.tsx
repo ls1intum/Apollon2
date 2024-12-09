@@ -15,14 +15,14 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import '@xyflow/react/dist/style.css';
-import Sidebar from './components/Sidebar';
+import { Sidebar } from './components/Sidebar';
 import { nodeTypes } from './nodes/types';
 import DevTools from './components/devtool/DevTools';
 import useNodesStateSynced from './sync/useNodesStateSynced';
 import useEdgesStateSynced from './sync/useEdgesStateSynced';
 import useCursorStateSynced from './sync/useCursorStateSynced';
-import Cursors from './components/Cursors';
-import SelectedNodesToolbar from './components/SelectedNodesToolbar';
+import { Cursors } from './components/Cursors';
+import { SelectedNodesToolbar } from './components/SelectedNodesToolbar';
 import './app.module.css';
 import {
   useHandleDrop,

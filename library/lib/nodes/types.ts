@@ -1,10 +1,7 @@
 import { NodeTypes } from '@xyflow/react';
-import SimpleNode from './SimpleNode';
-import Package from './Package';
-import ClassDiagram from './ClassDiagram';
+import { Class, Package } from './classDiagram';
 
 export const nodeTypes = {
-  classDiagram: ClassDiagram,
+  class: Class,
   package: Package,
-  simpleNode: SimpleNode,
 } satisfies NodeTypes;

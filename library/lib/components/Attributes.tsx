@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { List } from "./List";
-import { useReactFlow } from "@xyflow/react";
+import { useState } from 'react';
+import { List } from './List';
+import { useReactFlow } from '@xyflow/react';
 
-const Attributes = ({
+export const Attributes = ({
   id,
   attributes,
   editEnabled,
@@ -12,7 +12,7 @@ const Attributes = ({
   editEnabled: boolean;
 }) => {
   const reactFlow = useReactFlow();
-  const [newAttribute, setNewAttribute] = useState("");
+  const [newAttribute, setNewAttribute] = useState('');
 
   const addAttribute = () => {
     if (!newAttribute.trim()) return;
@@ -22,13 +22,13 @@ const Attributes = ({
         { id: `attribute-${Math.random()}`, name: newAttribute },
       ],
     });
-    setNewAttribute("");
+    setNewAttribute('');
   };
 
   const updateAttribute = (attributeId: string, newName: string) => {
     reactFlow.updateNodeData(id, {
       attributes: attributes.map((attr) =>
-        attr.id === attributeId ? { ...attr, name: newName } : attr
+        attr.id === attributeId ? { ...attr, name: newName } : attr,
       ),
     });
   };
@@ -53,5 +53,3 @@ const Attributes = ({
     />
   );
 };
-
-export default Attributes;

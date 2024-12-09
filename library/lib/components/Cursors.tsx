@@ -1,7 +1,7 @@
-import { EdgeLabelRenderer, useViewport } from "@xyflow/react";
-import { Cursor } from "../sync/useCursorStateSynced";
+import { EdgeLabelRenderer, useViewport } from '@xyflow/react';
+import { Cursor } from '../sync/useCursorStateSynced';
 
-function Cursors({ cursors }: { cursors: Cursor[] }) {
+export function Cursors({ cursors }: { cursors: Cursor[] }) {
   const viewport = useViewport();
 
   return (
@@ -39,5 +39,3 @@ const cursorPath = `
   13.178L8.00195 8.71497C7.93313 8.56376 7.94391 8.38824 8.03072 8.24659C8.11753
   8.10494 8.26903 8.01566 8.435 8.00834L11.2549 7.88397L4 1.59852z
 `;
-
-export default Cursors;

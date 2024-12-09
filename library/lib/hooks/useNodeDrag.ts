@@ -14,7 +14,7 @@ export function useNodeDrag({
 }: UseNodeDragOptions) {
   return useCallback(
     (_: MouseEvent, node: Node) => {
-      if (node.type !== 'classDiagram' && !node.parentId) {
+      if (node.type !== 'class' && !node.parentId) {
         return;
       }
 

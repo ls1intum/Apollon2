@@ -9,15 +9,14 @@ import {
   type Node,
 } from '@xyflow/react';
 
-
-import { getRelativeNodesBounds } from '../utils';
-import {useDetachNodes} from '../hooks';
+import { getRelativeNodesBounds } from '../../utils';
+import { useDetachNodes } from '../../hooks';
 
 const lineStyle = { borderColor: 'gray' };
 
 export type PackageType = Node<{ label: string }, 'package'>;
 
-function Package({ id, selected, data: { label } }: NodeProps<PackageType>) {
+function Component({ id, selected, data: { label } }: NodeProps<PackageType>) {
   const store = useStoreApi();
   const { deleteElements } = useReactFlow();
   const detachNodes = useDetachNodes();
@@ -96,4 +95,4 @@ function isEqual(prev: IsEqualCompareObj, next: IsEqualCompareObj): boolean {
   );
 }
 
-export default memo(Package);
+export const Package = memo(Component);

@@ -9,26 +9,20 @@ import {
 } from '@xyflow/react';
 import { memo, useEffect, useState } from 'react';
 
-import Attributes from '../components/Attributes';
-import Methods from '../components/Methods';
-import { useDetachNodes } from '../hooks';
+import { useDetachNodes } from '@hooks';
+import { Attributes, Divider, Methods } from '@components';
 
-export type ClassDiagramNodeType = Node<
+export type ClassNodeType = Node<
   {
     label: string;
     methods: { id: string; name: string }[];
     attributes: { id: string; name: string }[];
-    classDiagramType: 'abstract' | 'interface' | 'enumeration';
+    classType: 'abstract' | 'interface' | 'enumeration';
   },
-  'classDiagram'
+  'class'
 >;
 
-function ClassDiagram({
-  selected,
-  data,
-  id,
-  parentId,
-}: NodeProps<ClassDiagramNodeType>) {
+function Component({ selected, data, id, parentId }: NodeProps<ClassNodeType>) {
   const reactFlow = useReactFlow();
   const [editEnabled, setEditEnabled] = useState(false);
   const detachNodes = useDetachNodes();
@@ -62,7 +56,7 @@ function ClassDiagram({
       </NodeToolbar>
       <div style={{ margin: 5, display: 'flex', flexDirection: 'column' }}>
         <p style={{ fontSize: 12, padding: 0, margin: 0, textAlign: 'center' }}>
-          {`<<${data.classDiagramType}>>`}
+          {`<<${data.classType}>>`}
         </p>
         <input
           value={data.label}
@@ -91,8 +85,4 @@ function ClassDiagram({
   );
 }
 
-function Divider() {
-  return <div style={{ height: 1, width: '100%', backgroundColor: 'black' }} />;
-}
-
-export default memo(ClassDiagram);
+export const Class = memo(Component);

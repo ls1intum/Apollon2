@@ -13,6 +13,14 @@ export default defineConfig({
     // eslint-disable-next-line
     visualizer({ open: false, filename: 'stats.html' }) as any,
   ],
+  resolve: {
+    alias: {
+      '@components': resolve(__dirname, 'lib/components'),
+      '@utils': resolve(__dirname, 'lib/utils'),
+      '@types': resolve(__dirname, 'lib/types'),
+      '@hooks': resolve(__dirname, 'lib/hooks'),
+    },
+  },
   build: {
     copyPublicDir: false,
     lib: {

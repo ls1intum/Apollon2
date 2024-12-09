@@ -7,7 +7,7 @@ const onDragStart = (event: DragEvent, nodeType: keyof typeof nodeTypes) => {
   event.dataTransfer.effectAllowed = 'move';
 };
 
-const Sidebar = () => {
+export const Sidebar = () => {
   return (
     <aside>
       <div className="description">
@@ -15,7 +15,7 @@ const Sidebar = () => {
       </div>
       <div
         className="react-flow__node-classDiagram"
-        onDragStart={(event: DragEvent) => onDragStart(event, 'classDiagram')}
+        onDragStart={(event: DragEvent) => onDragStart(event, 'class')}
         draggable
       >
         Class Diagram
@@ -30,5 +30,3 @@ const Sidebar = () => {
     </aside>
   );
 };
-
-export default Sidebar;
