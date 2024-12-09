@@ -14,15 +14,17 @@
     "build": "yarn workspaces foreach -A run build",
     "lint": "yarn workspaces foreach -A run lint",
     "watch": "yarn workspaces foreach -A run watch",
-    "start": "yarn workspace webapp dev",
-    "slib": "yarn workspace @apollon/library dev",
-    "blib": "yarn workspace @apollon/library build",
+    "start": "yarn build:lib && yarn workspace webapp dev",
+    "build:lib": "yarn workspace @apollon/library build",
     "lint:w": "npx eslint .",
     "lint:fix": "yarn workspaces foreach -A -p run lint:fix",
     "prettier": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "prettier:fix": "prettier --write \"**/*.+(js|ts|json)\"",
     "start:server": "yarn workspace server start",
-    "postinstall": "husky"
+    "postinstall": "husky",
+    "docker:build": "docker build -t apollon-server .",
+    "docker:run": "docker run -p 4444:4444 apollon-server",
+    "docker:push": "docker tag apollon-server egenerse45/apollon-server:latest && docker push egenerse45/apollon-server:latest"
   },
   "keywords": [],
   "author": "",
@@ -55,6 +57,7 @@
     ]
   },
   "resolutions": {
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "ws": "8.18.0"
   }
 }

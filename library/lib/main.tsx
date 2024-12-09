@@ -1,18 +1,30 @@
 import ReactDOM from 'react-dom/client';
 import AppWithProvider from './App';
-import './index.module.css';
+import { ReactFlowInstance, type Node } from '@xyflow/react';
+export { type Node } from '@xyflow/react';
 
-export class MyLibrary {
+export class Apollon2 {
   private root: ReactDOM.Root | null = null;
+  private reactFlowInstance: ReactFlowInstance | null = null;
 
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element);
-    this.root.render(<AppWithProvider />);
+    this.root.render(
+      <AppWithProvider
+        onReactFlowInit={this.setReactFlowInstance.bind(this)}
+      />,
+    );
   }
 
-  // Expose any APIs or methods you want users to access
-  public doSomething() {
-    // Implementation
+  private setReactFlowInstance(instance: ReactFlowInstance) {
+    this.reactFlowInstance = instance;
+  }
+
+  public getNodes(): Node[] {
+    if (this.reactFlowInstance) {
+      return this.reactFlowInstance?.getNodes();
+    }
+    return [];
   }
 
   public dispose() {

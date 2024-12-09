@@ -9,8 +9,9 @@ import {
   type Node,
 } from '@xyflow/react';
 
-import useDetachNodes from './useDetachNodes';
+
 import { getRelativeNodesBounds } from '../utils';
+import {useDetachNodes} from '../hooks';
 
 const lineStyle = { borderColor: 'gray' };
 

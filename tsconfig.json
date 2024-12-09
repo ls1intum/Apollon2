@@ -6,9 +6,6 @@
     "declarationMap": true, // Include source maps for debugging library usage
     "outDir": "./dist", // Output directory for compiled files
     "baseUrl": "./", // Base URL for resolving paths
-    "paths": {
-      "@apollon/library": ["packages/apollon-library/src"]
-    },
     "strict": true, // Enable strict type-checking options
     "esModuleInterop": true, // Enable compatibility with CommonJS modules
     "skipLibCheck": true // Skip type checks for libraries to speed up builds

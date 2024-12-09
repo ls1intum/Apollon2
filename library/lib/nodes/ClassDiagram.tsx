@@ -6,20 +6,21 @@ import {
   type NodeProps,
   type Node,
   useReactFlow,
-} from "@xyflow/react";
-import { memo, useEffect, useState } from "react";
-import useDetachNodes from "./useDetachNodes";
-import Attributes from "../components/Attributes";
-import Methods from "../components/Methods";
+} from '@xyflow/react';
+import { memo, useEffect, useState } from 'react';
+
+import Attributes from '../components/Attributes';
+import Methods from '../components/Methods';
+import { useDetachNodes } from '../hooks';
 
 export type ClassDiagramNodeType = Node<
   {
     label: string;
     methods: { id: string; name: string }[];
     attributes: { id: string; name: string }[];
-    classDiagramType: "abstract" | "interface" | "enumeration";
+    classDiagramType: 'abstract' | 'interface' | 'enumeration';
   },
-  "classDiagram"
+  'classDiagram'
 >;
 
 function ClassDiagram({
@@ -59,13 +60,13 @@ function ClassDiagram({
         )}
         <button onClick={() => setEditEnabled((prev) => !prev)}>Edit</button>
       </NodeToolbar>
-      <div style={{ margin: 5, display: "flex", flexDirection: "column" }}>
-        <p style={{ fontSize: 12, padding: 0, margin: 0, textAlign: "center" }}>
+      <div style={{ margin: 5, display: 'flex', flexDirection: 'column' }}>
+        <p style={{ fontSize: 12, padding: 0, margin: 0, textAlign: 'center' }}>
           {`<<${data.classDiagramType}>>`}
         </p>
         <input
           value={data.label}
-          style={{ textAlign: "center" }}
+          style={{ textAlign: 'center' }}
           disabled={!selected}
           onChange={(e) => updateNodeLabel(id, e.target.value)}
         />
@@ -91,7 +92,7 @@ function ClassDiagram({
 }
 
 function Divider() {
-  return <div style={{ height: 1, width: "100%", backgroundColor: "black" }} />;
+  return <div style={{ height: 1, width: '100%', backgroundColor: 'black' }} />;
 }
 
 export default memo(ClassDiagram);

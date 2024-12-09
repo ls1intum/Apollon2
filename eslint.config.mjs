@@ -1,34 +1,21 @@
-// import eslint from "@eslint/js";
-// import tseslint from "typescript-eslint";
-// import prettierConfig from "eslint-config-prettier";
-
-// export default tseslint.config(
-//   eslint.configs.recommended,
-//   tseslint.configs.strict,
-//   tseslint.configs.stylistic,
-//   prettierConfig
-// );
-
-import eslint from "@eslint/js";
-import tseslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-import prettierConfig from "eslint-config-prettier";
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import prettierConfig from 'eslint-config-prettier';
 
 export default [
   {
-    files: ["**/*.ts", "**/*.tsx"],
-    ignores: ["node_modules", "dist"],
+    files: ['**/*.ts', '**/*.tsx'],
+    ignores: ['node_modules', 'dist'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        project: ['./tsconfig.json'], // Update this to point to the correct tsconfig
-        ecmaVersion: "latest",
-        sourceType: "module",
-        // No `project` here since the root has no tsconfig.json
+        project: ['./tsconfig.json'],
+        ecmaVersion: 'latest',
+        sourceType: 'module',
       },
     },
     plugins: {
-      "@typescript-eslint": tseslint,
+      '@typescript-eslint': tseslint,
     },
     rules: {
       ...tseslint.configs.recommended.rules,

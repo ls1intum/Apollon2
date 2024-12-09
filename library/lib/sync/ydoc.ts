@@ -11,7 +11,8 @@ export const provider = new WebrtcProvider('REACTFLOW-COLLAB-EXAMPLE', ydoc, {
   // We are only hosting a very small and limited instance.
   // Head over to https://github.com/yjs/y-webrtc for more information
   // on how to set up your own signaling server.
-  signaling: ['wss://yjs-webrtc-signaling.fly.dev'],
+  // signaling: ['wss://yjs-webrtc-signaling.fly.dev'],
+  signaling: ['ws://localhost:4444'],
 });
 
 export default ydoc;

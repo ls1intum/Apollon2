@@ -6,12 +6,11 @@ import {
   NodeProps,
   useStore,
   useReactFlow,
-  type Node
+  type Node,
 } from '@xyflow/react';
+import { useDetachNodes } from '../hooks';
 
-import useDetachNodes from './useDetachNodes';
-
-export type SimpleNodeType = Node<{ label: string }, "simpleNode">;
+export type SimpleNodeType = Node<{ label: string }, 'simpleNode'>;
 
 function SimpleNode({ id, data }: NodeProps<SimpleNodeType>) {
   const hasParent = useStore((store) => !!store.nodeLookup.get(id)?.parentId);
