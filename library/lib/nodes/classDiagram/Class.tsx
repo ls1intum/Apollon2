@@ -11,13 +11,20 @@ import { memo, useEffect, useState } from 'react';
 
 import { useDetachNodes } from '@hooks';
 import { Attributes, Divider, Methods } from '@components';
+import './class.module.css';
+
+export enum ClassType {
+  Abstract = 'abstract',
+  Interface = 'interface',
+  Enumeration = 'enumeration',
+}
 
 export type ClassNodeType = Node<
   {
     label: string;
     methods: { id: string; name: string }[];
     attributes: { id: string; name: string }[];
-    classType: 'abstract' | 'interface' | 'enumeration';
+    classType?: ClassType;
   },
   'class'
 >;
@@ -55,10 +62,15 @@ function Component({ selected, data, id, parentId }: NodeProps<ClassNodeType>) {
         <button onClick={() => setEditEnabled((prev) => !prev)}>Edit</button>
       </NodeToolbar>
       <div style={{ margin: 5, display: 'flex', flexDirection: 'column' }}>
-        <p style={{ fontSize: 12, padding: 0, margin: 0, textAlign: 'center' }}>
-          {`<<${data.classType}>>`}
-        </p>
+        {data.classType && (
+          <p
+            style={{ fontSize: 12, padding: 0, margin: 0, textAlign: 'center' }}
+          >
+            {`<<${data.classType}>>`}
+          </p>
+        )}
         <input
+          type="text"
           value={data.label}
           style={{ textAlign: 'center' }}
           disabled={!selected}

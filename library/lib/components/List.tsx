@@ -1,4 +1,4 @@
-import { ListItem } from "./ListItem";
+import { ListItem } from './ListItem';
 
 export const List = ({
   items,
@@ -38,13 +38,18 @@ export const List = ({
       {editable && (
         <div
           style={{
-            display: "flex",
-            justifyContent: "space-between",
+            display: 'flex',
+            justifyContent: 'space-between',
             padding: 5,
           }}
         >
           <input
             value={newItemValue}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onAddItem();
+              }
+            }}
             onChange={(e) => onNewItemChange(e.target.value)}
             placeholder={placeholder}
             style={{ flex: 1, marginRight: 5 }}

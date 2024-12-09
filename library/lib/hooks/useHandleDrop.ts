@@ -1,11 +1,11 @@
 import { DragEvent } from 'react';
 import { useReactFlow, type Node } from '@xyflow/react';
 import { getId, getNodePositionInsideParent, sortNodes } from '../utils';
-import { nodeTypes } from '../nodes/types';
+import { DropNodeData } from '@types';
 
 interface UseHandleDropProps {
   nodes: Node[];
-  setNodes: (nodes: Node[] | ((prev: Node[]) => Node[])) => void;
+  setNodes: (nodesOrUpdater: React.SetStateAction<Node[]>) => void;
 }
 
 export function useHandleDrop({ nodes, setNodes }: UseHandleDropProps) {
@@ -14,16 +14,20 @@ export function useHandleDrop({ nodes, setNodes }: UseHandleDropProps) {
   const onDrop = (event: DragEvent) => {
     event.preventDefault();
 
-    const type = event.dataTransfer.getData(
-      'application/reactflow',
-    ) as keyof typeof nodeTypes;
+    const droppedNode = JSON.parse(
+      event.dataTransfer.getData('text/plain'),
+    ) as DropNodeData;
+
+    const droppedNodeType = droppedNode.type;
+
     const position = screenToFlowPosition({
       x: event.clientX - 20,
       y: event.clientY - 20,
     });
 
     const nodeDimensions =
-      type === 'package' ? { width: 400, height: 200 } : {};
+      droppedNodeType === 'package' ? { width: 400, height: 200 } : {};
+    const extraData = droppedNode.extraData ? droppedNode.extraData : {};
 
     const intersections = getIntersectingNodes({
       x: position.x,
@@ -35,12 +39,15 @@ export function useHandleDrop({ nodes, setNodes }: UseHandleDropProps) {
 
     const newNode: Node = {
       id: getId(),
-      type,
+      type: droppedNodeType,
       position,
-      data: { label: `${type}` },
+      selected: true,
+      data: { label: `${droppedNodeType}`, ...extraData },
       ...nodeDimensions,
     };
+    console.log('newNode', newNode);
 
+    console.log('groupNode', groupNode);
     if (groupNode) {
       // Position inside the group if dropped on a package node
       newNode.position = getNodePositionInsideParent(
@@ -53,15 +60,6 @@ export function useHandleDrop({ nodes, setNodes }: UseHandleDropProps) {
       ) ?? { x: 0, y: 0 };
       newNode.parentId = groupNode?.id;
       newNode.expandParent = true;
-    }
-
-    if (type === 'class') {
-      newNode.data = {
-        label: 'Class',
-        methods: [],
-        attributes: [],
-        classType: 'abstract',
-      };
     }
 
     // Ensure parents render before children

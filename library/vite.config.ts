@@ -19,6 +19,7 @@ export default defineConfig({
       '@utils': resolve(__dirname, 'lib/utils'),
       '@types': resolve(__dirname, 'lib/types'),
       '@hooks': resolve(__dirname, 'lib/hooks'),
+      '@nodes': resolve(__dirname, 'lib/nodes'),
     },
   },
   build: {
