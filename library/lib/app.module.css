@@ -1,0 +1,61 @@
+.wrapper .react-flow-wrapper {
+  height: '700px';
+  width: '500px';
+}
+
+.wrapper .react-flow__node {
+  color: black;
+}
+
+.react-flow__node-classDiagram {
+  background: 'red';
+  border-radius: 2px;
+  border: 1px solid #e5e5e5;
+  /* color: pink; */
+}
+
+.wrapper :global .react-flow__node-package {
+  background: rgba(153, 26, 152, 0.1);
+  border: 1px solid #fff;
+  box-shadow: 0px 0px 8px 0px rgba(255, 255, 255, 0.5);
+  resize: both;
+  width: auto;
+}
+
+.wrapper :global .react-flow__node-package.active {
+  box-shadow: 0px 0px 12px 0px rgba(255, 255, 255, 0.9);
+}
+
+.wrapper :global .react-flow__node-package.selected,
+.wrapper :global .react-flow__node-package:hover {
+  box-shadow: 0px 0px 8px 0px rgba(255, 255, 255, 0.5);
+}
+
+.wrapper :global .react-flow__node-package.selected {
+  border-width: 2px;
+}
+
+.wrapper :global .react-flow__node-toolbar {
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0px 0px 8px 0px rgba(255, 255, 255, 0.5);
+}
+
+.wrapper :global .react-flow__node-toolbar button {
+  border-radius: 0;
+  background: #eee;
+  color: #111;
+  font-size: 11px;
+  border: none;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.wrapper :global .react-flow__node-toolbar button:hover {
+  background-color: #ddd;
+}
+
+.wrapper :global .react-flow__node-toolbar button:nth-child(even) {
+  border-left: 1px solid #999;
+}
