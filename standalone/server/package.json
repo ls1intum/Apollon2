@@ -8,7 +8,9 @@
     "start": "node dist/server.js",
     "build": "tsc",
     "lint": "eslint .",
-    "format": "prettier --check 'src/**/*.{js,ts,tsx,json,css,md}'"
+    "format": "prettier --check 'src/**/*.{js,ts,tsx,json,css,md}'",
+    "docker:build": "docker build -t apollon2/server .",
+    "docker:run": "docker run -p 4444:4444 apollon2/server"
   },
   "dependencies": {
     "express": "^4.21.1",
