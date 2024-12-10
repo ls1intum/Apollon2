@@ -5830,9 +5830,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"server@workspace:apps/server":
+"server@workspace:standalone/server":
   version: 0.0.0-use.local
-  resolution: "server@workspace:apps/server"
+  resolution: "server@workspace:standalone/server"
   dependencies:
     "@types/express": "npm:^4"
     "@types/node": "npm:^22.10.1"
@@ -6611,9 +6611,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webapp@workspace:apps/webapp":
+"webapp@workspace:standalone/webapp":
   version: 0.0.0-use.local
-  resolution: "webapp@workspace:apps/webapp"
+  resolution: "webapp@workspace:standalone/webapp"
   dependencies:
     "@apollon/library": "workspace:*"
     "@eslint/js": "npm:^9.15.0"

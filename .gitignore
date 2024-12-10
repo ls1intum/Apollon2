@@ -47,19 +47,11 @@ jest-cache/
 jest-output/
 
 # Monorepo specific
-apps/*/node_modules/
+standalone/*/node_modules/
 packages/*/node_modules/
-apps/*/dist/
+standalone/*/dist/
 packages/*/dist/
 
 # Lint and Prettier files
 eslintcache
 .prettiercache
-
-# Yarn version berry files
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions

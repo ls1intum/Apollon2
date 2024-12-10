@@ -5,18 +5,18 @@ FROM node:20.18.0
 WORKDIR /app
 
 # Step 3: Copy the server's package.json and yarn.lock
-COPY ./apps/server/package.json ./package.json
+COPY ./standalone/server/package.json ./package.json
 COPY ./yarn.lock ./yarn.lock
 
 # Step 4: Install all dependencies (including devDependencies) for build
 RUN yarn install
 
 # Step 5: Copy the server source code
-COPY ./apps/server ./apps/server
+COPY ./standalone/server ./standalone/server
 COPY ./tsconfig.json ./tsconfig.json
 
 # Step 6: Build the server
-WORKDIR /app/apps/server
+WORKDIR /app/standalone/server
 RUN yarn build
 
 
@@ -24,4 +24,4 @@ RUN yarn build
 EXPOSE 4444
 
 # Step 9: Start the server
-CMD ["node", "apps/server/dist/server.js"]
+CMD ["node", "standalone/server/dist/server.js"]

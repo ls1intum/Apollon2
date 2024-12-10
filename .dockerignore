@@ -1,6 +1,6 @@
 node_modules
-apps/*/node_modules
-apps/*/dist
+standalone/*/node_modules
+standalone/*/dist
 *.log
 .git
 *.md

@@ -10,5 +10,5 @@
     "esModuleInterop": true, // Enable compatibility with CommonJS modules
     "skipLibCheck": true // Skip type checks for libraries to speed up builds
   },
-  "include": ["apps", "library"]
+  "include": ["standalone", "library"]
 }
