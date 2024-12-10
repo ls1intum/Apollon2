@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+
+    "jsx": "react-jsx", // Enable JSX for React
+    "rootDir": "src", // Root directory for client source code
+    "outDir": "dist", // Output compiled files to `dist`
+
+    "declaration": true, // Generate .d.ts files for library consumption
+    "declarationMap": true, // Include source maps for debugging library usage
+    "baseUrl": "./", // Base URL for resolving paths
+    "strict": true, // Enable strict type-checking options
+    "esModuleInterop": true // Enable compatibility with CommonJS modules
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

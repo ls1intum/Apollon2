@@ -1,0 +1,1 @@
+stats.html shows status of bundle with corresponding bundled packages and their sizes

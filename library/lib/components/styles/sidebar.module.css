@@ -1,0 +1,27 @@
+aside {
+  border-right: 1px solid hsl(0, 0%, 93%);
+  margin: 15px 10px;
+  font-size: 12px;
+  width: 120px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+aside > * {
+  margin-bottom: 10px;
+  cursor: grab;
+  font-weight: 700;
+}
+
+aside div[class^='react-flow__node-'] {
+  width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word; /* Ensure long words break onto the next line */
+  word-break: break-word; /* Fallback for older browsers */
+  white-space: normal; /* Allow wrapping */
+}
+
+aside .description {
+  margin-bottom: 10px;
+  color: #333;
+}

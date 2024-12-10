@@ -1,0 +1,6 @@
+node_modules
+standalone/*/node_modules
+standalone/*/dist
+*.log
+.git
+*.md
