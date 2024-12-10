@@ -7,28 +7,22 @@
     "standalone/*",
     "library"
   ],
-  "installConfig": {
-    "hoistingLimits": "workspaces"
-  },
   "scripts": {
-    "build": "yarn build:lib && yarn workspaces foreach -R --parallel -i --from '{server,webapp}' run build",
-    "lint": "yarn workspaces foreach -A run lint",
-    "watch": "yarn workspaces foreach -A run watch",
-    "start": "yarn workspaces foreach -R --parallel -i --from '{server,webapp}' run start",
-    "build:lib": "yarn workspace @apollon/library build",
-    "build:lib:watch": "yarn workspace @apollon/library build:watch",
-    "lint:w": "npx eslint .",
-    "lint:fix": "yarn workspaces foreach -A -p run lint:fix",
-    "prettier": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-    "prettier:fix": "prettier --write \"**/*.+(js|ts|json)\"",
-    "start:server": "yarn workspace server start",
-    "postinstall": "husky",
-    "docker:build": "docker build -t apollon-server .",
-    "docker:run": "docker run -p 4444:4444 apollon-server",
-    "docker:push": "docker tag apollon-server egenerse45/apollon-server:latest && docker push egenerse45/apollon-server:latest"
+    "build": "npm run build:lib && concurrently \"npm run build:server\" \"npm run build:webapp\"",
+    "build:lib": "npm run build --workspace=@apollon2/library",
+    "build:server": "npm run build --workspace=@apollon2/server",
+    "build:webapp": "npm run build --workspace=@apollon2/webapp",
+    "start": "concurrently \"npm run start:server\" \"npm run start:webapp\"",
+    "start:server": "npm run start --workspace=@apollon2/server",
+    "start:webapp": "npm run start --workspace=@apollon2/webapp",
+    "lint": "concurrently \"npm run lint:lib\" \"npm run lint:server\" \"npm run lint:webapp\"",
+    "lint:lib": "npm run lint --workspace=@apollon2/library",
+    "lint:server": "npm run lint --workspace=@apollon2/server",
+    "lint:webapp": "npm run lint --workspace=@apollon2/webapp",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "format:fix": "prettier --write \"**/*.+(js|ts|json)\"",
+    "preview": "husky"
   },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
   "engines": {
     "node": ">=20.0.0"
@@ -40,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
     "eslint": "^8.40.0",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.1.7",
@@ -50,7 +45,6 @@
     "vite": "^6.0.3",
     "vite-plugin-css": "^1.0.4"
   },
-  "packageManager": "yarn@4.5.3",
   "lint-staged": {
     "**/*.{ts,tsx,js,json,md}": [
       "prettier --write",

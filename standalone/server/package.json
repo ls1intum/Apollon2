@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@apollon2/server",
   "version": "1.0.0",
   "main": "src/server.ts",
   "license": "MIT",
@@ -7,10 +7,8 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
-    "lint": "eslint 'src/**/*.{js,ts,tsx}'",
-    "lint:fix": "eslint 'src/**/*.{js,ts,tsx}' --fix",
-    "format": "prettier --check 'src/**/*.{js,ts,tsx,json,css,md}'",
-    "format:fix": "prettier --write 'src/**/*.{js,ts,tsx,json,css,md}'"
+    "lint": "eslint .",
+    "format": "prettier --check 'src/**/*.{js,ts,tsx,json,css,md}'"
   },
   "dependencies": {
     "express": "^4.21.1",

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Apollon2, type Node } from '@apollon/library';
+import { Apollon2, type Node } from '@apollon2/library';
 import './index.css';
 
 export function App() {

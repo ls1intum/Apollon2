@@ -41,13 +41,10 @@ export function useHandleDrop({ nodes, setNodes }: UseHandleDropProps) {
       id: getId(),
       type: droppedNodeType,
       position,
-      selected: true,
       data: { label: `${droppedNodeType}`, ...extraData },
       ...nodeDimensions,
     };
-    console.log('newNode', newNode);
 
-    console.log('groupNode', groupNode);
     if (groupNode) {
       // Position inside the group if dropped on a package node
       newNode.position = getNodePositionInsideParent(
