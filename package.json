@@ -21,7 +21,12 @@
     "lint:webapp": "npm run lint --workspace=@apollon2/webapp",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "format:fix": "prettier --write \"**/*.+(js|ts|json)\"",
-    "preview": "husky"
+    "preview": "husky",
+    "docker:build:web": "docker build --platform=linux/amd64 -t egenerse45/apollon2-webapp:latest .",
+    "docker:push:web": "docker push egenerse45/apollon2-webapp:latest",
+    "docker:build:server": "npm run docker:build --workspace=@apollon2/server",
+    "docker:tag:server": "npm run docker:tag --workspace=@apollon2/server",
+    "docker:push:server": "npm run docker:push --workspace=@apollon2/server"
   },
   "license": "MIT",
   "engines": {

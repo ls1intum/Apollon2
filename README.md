@@ -1,29 +1,32 @@
 # Monorepo Setup
 
-Welcome to the Monorepo project! This repository contains multiple packages managed with Yarn workspaces. Follow the guide below to set up and run the project locally.
+Welcome to the Apollon2 Monorepo! This repository uses **npm workspaces** to manage multiple packages (including a server, webapp, and library) in a single codebase.
 
 ## Requirements
 
-Ensure you have the following installed on your system:
+Ensure you have the following installed:
 
-1. **Node.js**:
-   - Use the version specified in the `.nvmrc` file.
-   - Install and manage Node.js versions using [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm). On macOS, you can install nvm via Homebrew:
+1. **Node.js**:  
+   - This project uses a specific Node.js version as indicated in the `.nvmrc` file.
+   - Use [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm) to install/manage Node versions:
      ```bash
      brew install nvm
      ```
-     Then, load nvm into your shell:
+     Then, load `nvm` into your shell:
      ```bash
      export NVM_DIR="$HOME/.nvm"
      [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"
      ```
-
-2. **Yarn**:
-   - Install the berry version of Yarn by running:
-     ```bash
-     yarn set version berry
-     ```
-
+   
+   Once `nvm` is set up:
+   ```bash
+   nvm install
+   nvm use
+2. **npm**(comes with Node.js):
+   - This monorepo uses npm workspaces, which are supported out-of-the-box in npm 7+.
+   - Verify your npm version:
+    ```bash
+    npm -v
 ## Setup Instructions
 
 1. Clone the repository:
@@ -40,17 +43,17 @@ Ensure you have the following installed on your system:
 
 3. Install dependencies for all packages:
    ```bash
-   yarn 
+   npm install
    ```
 
 4. Build all packages:
    ```bash
-   yarn build
+   npm run build
    ```
 
 5. Start the project:
    ```bash
-   yarn start
+   npm run start
    ```
 
 ## Verifying Versions
@@ -63,19 +66,13 @@ After setup, verify that you have the correct versions installed:
   ```
   This should match the version specified in the `.nvmrc` file.
 
-- **Yarn:**
-  ```bash
-  yarn -v
-  ```
-  This should match the version specified in the `.yarnrc.yaml` file.
-
 ## Project Structure
 
 Here is a brief overview of the project structure:
 
 ```
 apollon2/
-├── apps/
+├── standalone/
 │   ├── server/
 │   │   ├── src/
 │   │   ├── package.json
@@ -89,11 +86,11 @@ apollon2/
 │   ├── package.json
 |   └── ...
 │ 
-├── .nvmrc            # Specifies the Node.js version
-├── .yarnrc.yaml      # Specifies the Yarn version
-├── package.json      # Root configuration for Yarn workspaces
-├── yarn.lock         # Yarn lockfile
-└── README.md         # Project documentation
+├── .nvmrc                # Specifies the Node.js version
+├── prettierrc            # configuration for formating typescript files
+├── commitlint.config.mj  # Checking commit messages in format
+├── Dockerfile            # To create docker image for webapp
+└── README.md             # Project documentation
 ```
 
 ## Scripts Overview
@@ -102,15 +99,15 @@ Here are the commonly used scripts defined in the monorepo:
 
 - **Install dependencies:**
   ```bash
-  yarn install
+  npm run install
   ```
 - **Build all packages:**
   ```bash
-  yarn build
+  npm run build
   ```
 - **Start the project:**
   ```bash
-  yarn start
+  npm run start
   ```
 
 ## Troubleshooting
