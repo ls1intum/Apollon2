@@ -56,4 +56,10 @@ packages/*/dist/
 eslintcache
 .prettiercache
 
-.yarn/
+# Yarn version berry files
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

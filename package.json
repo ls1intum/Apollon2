@@ -11,7 +11,7 @@
     "hoistingLimits": "workspaces"
   },
   "scripts": {
-    "build": "yarn workspaces foreach -A run build",
+    "build": "yarn build:lib && yarn workspaces foreach -R --parallel -i --from '{server,webapp}' run build",
     "lint": "yarn workspaces foreach -A run lint",
     "watch": "yarn workspaces foreach -A run watch",
     "start": "yarn workspaces foreach -R --parallel -i --from '{server,webapp}' run start",
