@@ -1,2 +1,2 @@
-yarn prettier
-yarn lint:w
+# npm run format
+# npm run lint
