@@ -1,9 +1,18 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "module": "CommonJS"
+    "target": "ES2022", // Compile to ECMAScript 2023 standards
+    "module": "ES2022", // Use the ECMAScript 2022 module system for modern tools
+    "declaration": true, // Generate .d.ts files for library consumption
+    "declarationMap": true, // Include source maps for debugging library usage
+    "outDir": "./dist", // Output directory for compiled files
+    "baseUrl": "./", // Base URL for resolving paths
+    "strict": true, // Enable strict type-checking options
+    "esModuleInterop": true, // Enable compatibility with CommonJS modules
+    "skipLibCheck": true, // Skip type checks for libraries to speed up builds
+    "rootDir": "src", // Root directory for server source code
+    "types": ["node"], // Include Node.js type definitions
+    "moduleResolution": "node" // Resolve modules using Node.js conventions
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
