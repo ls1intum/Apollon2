@@ -12,42 +12,16 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc --p ./tsconfig-build.json && vite build",
-    "lint": "eslint .",
+    "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@fontsource/roboto": "^5.1.0",
-    "@mui/material": "^6.1.10",
-    "@xyflow/react": "^12.3.0",
-    "uuid": "^11.0.3",
-    "y-webrtc": "^10.3.0",
-    "yjs": "^13.6.20"
-  },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@types/add": "^2",
-    "@types/node": "^20.11.30",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.40.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
-    "glob": "^10.3.10",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "rollup-plugin-visualizer": "^5.12.0",
-    "typescript": "^5.4.3",
-    "vite": "^4.5.3",
-    "vite-plugin-dts": "^3.7.3",
-    "vite-plugin-lib-inject-css": "^2.0.1"
+    "typescript": "5.7.2",
+    "vite": "6.0.1",
+    "@vitejs/plugin-react": "4.3.4"
   }
 }
