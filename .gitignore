@@ -47,13 +47,13 @@ jest-cache/
 jest-output/
 
 # Monorepo specific
-apps/*/node_modules/
-packages/*/node_modules/
-apps/*/dist/
-packages/*/dist/
+standalone/*/node_modules/
+library/*/node_modules/
+standalone/*/dist/
+library/*/dist/
 
 # Lint and Prettier files
 eslintcache
 .prettiercache
 
-.yarn/
+library/stats.html
