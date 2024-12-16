@@ -4,39 +4,37 @@
   "description": "",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "standalone/*",
+    "library"
   ],
   "scripts": {
-    "build": "yarn workspaces foreach -A run build",
-    "lint": "yarn workspaces foreach -A run lint",
-    "lint:w": "npx eslint .",
-    "lint:fix": "yarn workspaces foreach -A -p run lint:fix",
-    "prettier": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-    "prettier:fix": "prettier --write \"**/*.+(js|ts|json)\"",
-    "start:server": "yarn workspace server start",
-    "start:client": "yarn workspace client dev",
-    "postinstall": "husky"
+    "build": "npm run build:lib && concurrently \"npm run build:server\" \"npm run build:webapp\"",
+    "build:lib": "npm run build --workspace=@apollon2/library",
+    "build:server": "npm run build --workspace=@apollon2/server",
+    "build:webapp": "npm run build --workspace=@apollon2/webapp",
+    "start": "concurrently \"npm run start:server\" \"npm run start:webapp\"",
+    "start:server": "npm run start --workspace=@apollon2/server",
+    "start:webapp": "npm run start --workspace=@apollon2/webapp",
+    "lint": "concurrently \"npm run lint:lib\" \"npm run lint:server\" \"npm run lint:webapp\"",
+    "lint:lib": "npm run lint --workspace=@apollon2/library",
+    "lint:server": "npm run lint --workspace=@apollon2/server",
+    "lint:webapp": "npm run lint --workspace=@apollon2/webapp",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "format:fix": "prettier --write \"**/*.+(js|ts|json)\"",
+    "preview": "husky"
   },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
   "engines": {
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.6.0",
-    "@commitlint/config-conventional": "^19.6.0",
-    "@eslint/js": "^9.16.0",
-    "eslint": "^9.16.0",
-    "eslint-config-prettier": "^9.1.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
-    "prettier": "3.4.2",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.17.0"
+    "@commitlint/cli": "19.6.0",
+    "@commitlint/config-conventional": "19.6.0",
+    "concurrently": "9.1.0",
+    "husky": "9.1.7",
+    "lint-staged": "15.2.10",
+    "prettier": "3.4.2"
   },
-  "packageManager": "yarn@4.5.3",
   "lint-staged": {
     "**/*.{ts,tsx,js,json,md}": [
       "prettier --write",
