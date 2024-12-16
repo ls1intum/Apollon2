@@ -1,13 +1,24 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import dts from "vite-plugin-dts";
+import { resolve } from "path";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), dts({ include: ["lib"] })],
   build: {
+    copyPublicDir: false,
     lib: {
-      entry: "lib/index.ts",
-      name: "@apollon2/library",
-      fileName: (format) => `@apollon2/library.${format}.js`,
+      name: "apollon2-library",
+      entry: resolve(__dirname, "lib/index.tsx"),
+      formats: ["es"],
     },
+    rollupOptions: {
+      external: ["react", "react-dom", "react/jsx-runtime"],
+      output: {
+        assetFileNames: "assets/[name][extname]",
+        entryFileNames: "index.js",
+      },
+    },
+    minify: true,
   },
 });

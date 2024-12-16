@@ -5,6 +5,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "rootDir": "./lib",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -22,6 +23,6 @@
 
     "baseUrl": "."
   },
-  "include": ["lib", "vite.config.ts"],
+  "include": ["lib/**/*"],
   "exclude": ["node_modules", "dist"]
 }
