@@ -23,8 +23,8 @@
     "lint:fix:lib": "npm run lint:fix --workspace=@apollon2/library",
     "lint:fix:server": "npm run lint:fix --workspace=@apollon2/server",
     "lint:fix:webapp": "npm run lint:fix --workspace=@apollon2/webapp",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json|tsx)\"",
-    "format:fix": "prettier --write \"**/*.+(js|ts|json)\"",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|tsx|json)\"",
+    "format:check": "prettier --ignore-path .gitignore --check \"**/*.(js|ts|tsx|json)\"",
     "preview": "husky"
   },
   "license": "MIT",

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState } from "react"
 
 export function App() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
   return (
     <div>
@@ -10,5 +10,5 @@ export function App() {
         Increment From Library
       </button>
     </div>
-  );
+  )
 }
