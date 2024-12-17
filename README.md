@@ -118,6 +118,14 @@ Here are the commonly used scripts defined in the monorepo:
   ```bash
   npm run start
   ```
+- **Format the project:**
+  ```bash
+  npm run format
+  ```
+- **Check formatting of the project:**
+  ```bash
+  npm run format:check
+  ```
 
 ## Troubleshooting
 
