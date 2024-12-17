@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "echo \"No linting configured for server\""
   },
   "dependencies": {
     "express": "4.21.1"
