@@ -19,7 +19,11 @@
     "lint:lib": "npm run lint --workspace=@apollon2/library",
     "lint:server": "npm run lint --workspace=@apollon2/server",
     "lint:webapp": "npm run lint --workspace=@apollon2/webapp",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "lint:fix": "concurrently \"npm run lint:fix:lib\" \"npm run lint:fix:server\" \"npm run lint:fix:webapp\"",
+    "lint:fix:lib": "npm run lint:fix --workspace=@apollon2/library",
+    "lint:fix:server": "npm run lint:fix --workspace=@apollon2/server",
+    "lint:fix:webapp": "npm run lint:fix --workspace=@apollon2/webapp",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json|tsx)\"",
     "format:fix": "prettier --write \"**/*.+(js|ts|json)\"",
     "preview": "husky"
   },
@@ -32,13 +36,6 @@
     "@commitlint/config-conventional": "19.6.0",
     "concurrently": "9.1.0",
     "husky": "9.1.7",
-    "lint-staged": "15.2.10",
     "prettier": "3.4.2"
-  },
-  "lint-staged": {
-    "**/*.{ts,tsx,js,json,md}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
   }
 }
