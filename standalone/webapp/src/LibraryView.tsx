@@ -1,5 +1,6 @@
 import { useRef, useLayoutEffect } from "react"
 import { Apollon2 } from "@apollon2/library"
+import "@xyflow/react/dist/style.css"
 
 export function LibraryView() {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -24,5 +25,5 @@ export function LibraryView() {
     }
   }, [])
 
-  return <div ref={containerRef} />
+  return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />
 }

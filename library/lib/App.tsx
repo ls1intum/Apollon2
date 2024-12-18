@@ -4,6 +4,10 @@ import {
   ReactFlowProvider,
   type Node,
   type Edge,
+  Background,
+  BackgroundVariant,
+  Controls,
+  MiniMap,
 } from "@xyflow/react"
 
 import "@xyflow/react/dist/style.css"
@@ -18,14 +22,21 @@ interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
 }
 
-export function App({ onReactFlowInit }: AppProps) {
+function App({ onReactFlowInit }: AppProps) {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <ReactFlow
         nodes={initialNodes}
         edges={initialEdges}
         onInit={onReactFlowInit}
-      />
+        fitView
+        minZoom={0.6}
+        maxZoom={2}
+      >
+        <Background variant={BackgroundVariant.Lines} />
+        <MiniMap zoomable pannable />
+        <Controls />
+      </ReactFlow>
     </div>
   )
 }
