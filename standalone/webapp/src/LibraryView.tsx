@@ -6,14 +6,15 @@ export function LibraryView() {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const apollon2Ref = useRef<Apollon2 | null>(null)
 
+  const onGetNodesButtonClick = () => {
+    // To show that the getNodes method works
+    if (apollon2Ref.current) {
+      console.log(apollon2Ref.current.getNodes())
+    }
+  }
   useLayoutEffect(() => {
     if (containerRef.current) {
       apollon2Ref.current = new Apollon2(containerRef.current)
-
-      console.log(
-        "Random number from Apollon2:",
-        apollon2Ref.current.getNodes()
-      )
     }
 
     return () => {
@@ -25,5 +26,15 @@ export function LibraryView() {
     }
   }, [])
 
-  return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />
+  return (
+    <>
+      <button
+        onClick={onGetNodesButtonClick}
+        style={{ position: "absolute", top: "0", left: "0", zIndex: 1000 }}
+      >
+        Get Nodes
+      </button>
+      <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />
+    </>
+  )
 }
