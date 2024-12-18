@@ -1,16 +1,28 @@
 import ReactDOM from "react-dom/client"
-import { App } from "./App"
+import { AppWithProvider } from "./App"
+import { ReactFlowInstance, type Node } from "@xyflow/react"
+export { type Node } from "@xyflow/react"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
+  private reactFlowInstance: ReactFlowInstance | null = null
 
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element)
-    this.root.render(<App />)
+    this.root.render(
+      <AppWithProvider onReactFlowInit={this.setReactFlowInstance.bind(this)} />
+    )
   }
 
-  public getRandomNumber(): number {
-    return Math.random() * 100
+  private setReactFlowInstance(instance: ReactFlowInstance) {
+    this.reactFlowInstance = instance
+  }
+
+  public getNodes(): Node[] {
+    if (this.reactFlowInstance) {
+      return this.reactFlowInstance?.getNodes()
+    }
+    return []
   }
 
   public dispose() {

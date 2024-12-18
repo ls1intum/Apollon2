@@ -11,7 +11,7 @@ export function LibraryView() {
 
       console.log(
         "Random number from Apollon2:",
-        apollon2Ref.current.getRandomNumber()
+        apollon2Ref.current.getNodes()
       )
     }
 
