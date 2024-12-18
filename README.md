@@ -122,6 +122,14 @@ Here are the commonly used scripts defined in the monorepo:
   ```bash
   npm run lint
   ```
+- **Fixes formatting issues :**
+  ```bash
+  npm run format
+  ```
+- **Checks formatting issues without fixing them :**
+  ```bash
+  npm run format:check
+  ```
 
 ## Troubleshooting
 
