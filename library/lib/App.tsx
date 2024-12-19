@@ -11,6 +11,7 @@ import {
 } from "@xyflow/react"
 
 import "@xyflow/react/dist/style.css"
+import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
 
 const initialNodes: Node[] = [
   { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
@@ -30,8 +31,8 @@ function App({ onReactFlowInit }: AppProps) {
         edges={initialEdges}
         onInit={onReactFlowInit}
         fitView
-        minZoom={0.6}
-        maxZoom={2}
+        minZoom={MIN_SCALE_TO_ZOOM_OUT}
+        maxZoom={MAX_SCALE_TO_ZOOM_IN}
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
