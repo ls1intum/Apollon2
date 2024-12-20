@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2023",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
     "rootDir": "./lib",
@@ -21,7 +21,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["lib/*"]
+    }
   },
   "include": ["lib/**/*"],
   "exclude": ["node_modules", "dist"]

@@ -1,11 +1,15 @@
 import ReactDOM from "react-dom/client"
 import { AppWithProvider } from "./App"
-import { ReactFlowInstance, type Node } from "@xyflow/react"
+import { ReactFlowInstance, type Node, type Edge } from "@xyflow/react"
+import { DiagramElementNodeType } from "./nodes"
 export { type Node } from "@xyflow/react"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
-  private reactFlowInstance: ReactFlowInstance | null = null
+  private reactFlowInstance: ReactFlowInstance<
+    DiagramElementNodeType,
+    Edge
+  > | null = null
 
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element)
@@ -14,7 +18,9 @@ export class Apollon2 {
     )
   }
 
-  private setReactFlowInstance(instance: ReactFlowInstance) {
+  private setReactFlowInstance(
+    instance: ReactFlowInstance<DiagramElementNodeType, Edge>
+  ) {
     this.reactFlowInstance = instance
   }
 

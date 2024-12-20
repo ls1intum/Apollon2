@@ -2,37 +2,55 @@ import {
   ReactFlow,
   ReactFlowInstance,
   ReactFlowProvider,
-  type Node,
-  type Edge,
   Background,
   BackgroundVariant,
   Controls,
   MiniMap,
+  DefaultEdgeOptions,
+  type NodeTypes,
+  MarkerType,
+  type Edge,
+  ConnectionLineType,
+  ConnectionMode,
 } from "@xyflow/react"
 
 import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
+import { DiagramElementNode } from "./nodes/DiagramElementNode"
+import { DiagramElementNodeType } from "./nodes"
+import { defaultEdges, defaultNodes } from "./initialElements"
 
-const initialNodes: Node[] = [
-  { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
-  { id: "2", position: { x: 0, y: 100 }, data: { label: "2" } },
-]
-const initialEdges: Edge[] = [{ id: "e1-2", source: "1", target: "2" }]
+const nodeTypes: NodeTypes = {
+  diagramElementNode: DiagramElementNode,
+}
+
+const defaultEdgeOptions: DefaultEdgeOptions = {
+  type: "smoothstep",
+  markerEnd: { type: MarkerType.ArrowClosed },
+  style: { strokeWidth: 2 },
+}
 
 interface AppProps {
-  onReactFlowInit: (instance: ReactFlowInstance) => void
+  onReactFlowInit: (
+    instance: ReactFlowInstance<DiagramElementNodeType, Edge>
+  ) => void
 }
 
 function App({ onReactFlowInit }: AppProps) {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <ReactFlow
-        nodes={initialNodes}
-        edges={initialEdges}
+        nodeTypes={nodeTypes}
+        defaultEdgeOptions={defaultEdgeOptions}
+        defaultNodes={defaultNodes}
+        defaultEdges={defaultEdges}
         onInit={onReactFlowInit}
+        connectionLineType={ConnectionLineType.SmoothStep}
+        connectionMode={ConnectionMode.Loose}
         fitView
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
+        fitViewOptions={{ maxZoom: 1, minZoom: 1 }}
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
@@ -42,11 +60,7 @@ function App({ onReactFlowInit }: AppProps) {
   )
 }
 
-export function AppWithProvider({
-  onReactFlowInit,
-}: {
-  onReactFlowInit: (instance: ReactFlowInstance) => void
-}) {
+export function AppWithProvider({ onReactFlowInit }: AppProps) {
   return (
     <ReactFlowProvider>
       <App onReactFlowInit={onReactFlowInit} />

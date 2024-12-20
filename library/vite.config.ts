@@ -22,4 +22,9 @@ export default defineConfig({
     },
     minify: true,
   },
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "lib"),
+    },
+  },
 })
