@@ -23,12 +23,12 @@ export function DiagramElement({
   const innerHeight = height - 2 * strokeWidth
 
   return (
-    <svg width={width} height={height} className="shape-svg">
+    <svg width={width + strokeWidth} height={height + strokeWidth}>
       {/* this offsets the shape by the strokeWidth so that we have enough space for the stroke */}
       <g
-        transform={`translate(${svgAttributes.strokeWidth ?? 0}, ${
-          svgAttributes.strokeWidth ?? 0
-        })`}
+      // transform={`translate(${svgAttributes.strokeWidth ?? 0}, ${
+      //   svgAttributes.strokeWidth ?? 0
+      // })`}
       >
         <DiagramElementComponent
           width={innerWidth}

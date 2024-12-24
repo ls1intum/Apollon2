@@ -19,6 +19,7 @@ import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
 import { DiagramElementNode } from "./nodes/DiagramElementNode"
 import { DiagramElementNodeType } from "./nodes"
 import { defaultEdges, defaultNodes } from "./initialElements"
+import "@/styles/app.css"
 
 const nodeTypes: NodeTypes = {
   diagramElementNode: DiagramElementNode,

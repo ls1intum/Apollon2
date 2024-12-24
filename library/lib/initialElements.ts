@@ -7,6 +7,7 @@ export const defaultNodes: DiagramElementNodeType[] = [
     type: "diagramElementNode",
     position: { x: 300, y: 300 },
     style: { width: 120, height: 60 },
+    selected: false,
     data: {
       type: "package",
       color: "purple",
@@ -16,7 +17,8 @@ export const defaultNodes: DiagramElementNodeType[] = [
     id: "2",
     type: "diagramElementNode",
     position: { x: 300, y: 450 },
-    style: { width: 100, height: 100 },
+    style: { width: 300, height: 400 },
+    selected: false,
     data: {
       type: "class",
     },

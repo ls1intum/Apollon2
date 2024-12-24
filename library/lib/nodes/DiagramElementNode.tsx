@@ -43,7 +43,6 @@ export function DiagramElementNode({
         height={height}
         fill={color}
         strokeWidth={2}
-        stroke={color}
         fillOpacity={0.8}
       />
       <Handle
