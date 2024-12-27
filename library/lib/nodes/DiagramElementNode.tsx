@@ -1,11 +1,4 @@
-import {
-  NodeResizer,
-  type NodeProps,
-  useStore,
-  Handle,
-  Position,
-  useKeyPress,
-} from "@xyflow/react"
+import { type NodeProps, useStore, Handle, Position } from "@xyflow/react"
 
 import { DiagramElement } from "@/components/diagramElement"
 import { DiagramElementNodeType } from "@/nodes"
@@ -21,22 +14,15 @@ function useNodeDimensions(id: string) {
 
 export function DiagramElementNode({
   id,
-  selected,
   data,
 }: NodeProps<DiagramElementNodeType>) {
   const { color, type } = data
 
   const { width, height } = useNodeDimensions(id)
-  const shiftKeyPressed = useKeyPress("Shift")
   const handleStyle = { backgroundColor: color }
 
   return (
     <>
-      <NodeResizer
-        color={color}
-        keepAspectRatio={shiftKeyPressed}
-        isVisible={selected}
-      />
       <DiagramElement
         type={type}
         width={width}
