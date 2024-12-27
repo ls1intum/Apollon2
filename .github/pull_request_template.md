@@ -3,13 +3,15 @@
 
 ### Checklist
 
-- [ ] I linked PR with related issue
+- [ ] I linked PR with a related issue
 - [ ] I added multiple screenshots/screencasts of my UI changes
 
 ### Motivation and Context
 
 <!-- Why is this change required? What problem does it solve? -->
 <!-- If it fixes an open issue, please link to the issue here. -->
+
+This PR completes https://github.com/ls1intum/Apollon2/issues/xx
 
 ### Description
 
