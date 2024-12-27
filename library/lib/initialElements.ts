@@ -8,7 +8,7 @@ export const defaultNodes: Node[] = [
     width: 200,
     height: 200,
     selected: false,
-    data: {},
+    data: { name: "Package" },
   },
   {
     id: "2",
