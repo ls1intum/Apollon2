@@ -10,6 +10,7 @@ import {
   MarkerType,
   ConnectionLineType,
   ConnectionMode,
+  ReactFlowInstance,
 } from "@xyflow/react"
 
 import "@xyflow/react/dist/style.css"
@@ -29,7 +30,11 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
   style: { strokeWidth: 2 },
 }
 
-function App() {
+interface AppProps {
+  onReactFlowInit: (instance: ReactFlowInstance) => void
+}
+
+function App({ onReactFlowInit }: AppProps) {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <ReactFlow
@@ -40,6 +45,7 @@ function App() {
         connectionLineType={ConnectionLineType.SmoothStep}
         connectionMode={ConnectionMode.Loose}
         fitView
+        onInit={(instance) => onReactFlowInit(instance)}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
       >
@@ -51,10 +57,10 @@ function App() {
   )
 }
 
-export function AppWithProvider() {
+export function AppWithProvider({ onReactFlowInit }: AppProps) {
   return (
     <ReactFlowProvider>
-      <App />
+      <App onReactFlowInit={onReactFlowInit} />
     </ReactFlowProvider>
   )
 }

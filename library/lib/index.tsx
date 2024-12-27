@@ -10,7 +10,13 @@ export class Apollon2 {
 
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element)
-    this.root.render(<AppWithProvider />)
+    this.root.render(
+      <AppWithProvider onReactFlowInit={this.setReactFlowInstance.bind(this)} />
+    )
+  }
+
+  private setReactFlowInstance(instance: ReactFlowInstance) {
+    this.reactFlowInstance = instance
   }
 
   public getNodes(): Node[] {
