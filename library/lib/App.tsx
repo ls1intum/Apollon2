@@ -29,10 +29,6 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
   style: { strokeWidth: 2 },
 }
 
-// interface AppProps {
-//   onReactFlowInit: (instance: ReactFlowInstance) => void
-// }
-
 function App() {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
@@ -46,7 +42,6 @@ function App() {
         fitView
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
-        fitViewOptions={{ maxZoom: 1, minZoom: 1 }}
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
