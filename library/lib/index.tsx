@@ -14,15 +14,16 @@ export class Apollon2 {
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element)
     this.root.render(
-      <AppWithProvider onReactFlowInit={this.setReactFlowInstance.bind(this)} />
+      // <AppWithProvider onReactFlowInit={this.setReactFlowInstance.bind(this)} />
+      <AppWithProvider />
     )
   }
 
-  private setReactFlowInstance(
-    instance: ReactFlowInstance<DiagramElementNodeType, Edge>
-  ) {
-    this.reactFlowInstance = instance
-  }
+  // private setReactFlowInstance(
+  //   instance: ReactFlowInstance<DiagramElementNodeType, Edge>
+  // ) {
+  //   this.reactFlowInstance = instance
+  // }
 
   public getNodes(): Node[] {
     if (this.reactFlowInstance) {

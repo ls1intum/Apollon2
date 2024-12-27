@@ -1,6 +1,5 @@
 import {
   ReactFlow,
-  ReactFlowInstance,
   ReactFlowProvider,
   Background,
   BackgroundVariant,
@@ -9,20 +8,19 @@ import {
   DefaultEdgeOptions,
   type NodeTypes,
   MarkerType,
-  type Edge,
   ConnectionLineType,
   ConnectionMode,
 } from "@xyflow/react"
 
 import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
-import { DiagramElementNode } from "./nodes/DiagramElementNode"
-import { DiagramElementNodeType } from "./nodes"
 import { defaultEdges, defaultNodes } from "./initialElements"
 import "@/styles/app.css"
+import { Class, Package } from "./nodes"
 
 const nodeTypes: NodeTypes = {
-  diagramElementNode: DiagramElementNode,
+  package: Package,
+  class: Class,
 }
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
@@ -31,13 +29,11 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
   style: { strokeWidth: 2 },
 }
 
-interface AppProps {
-  onReactFlowInit: (
-    instance: ReactFlowInstance<DiagramElementNodeType, Edge>
-  ) => void
-}
+// interface AppProps {
+//   onReactFlowInit: (instance: ReactFlowInstance) => void
+// }
 
-function App({ onReactFlowInit }: AppProps) {
+function App() {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <ReactFlow
@@ -45,7 +41,6 @@ function App({ onReactFlowInit }: AppProps) {
         defaultEdgeOptions={defaultEdgeOptions}
         defaultNodes={defaultNodes}
         defaultEdges={defaultEdges}
-        onInit={onReactFlowInit}
         connectionLineType={ConnectionLineType.SmoothStep}
         connectionMode={ConnectionMode.Loose}
         fitView
@@ -61,10 +56,10 @@ function App({ onReactFlowInit }: AppProps) {
   )
 }
 
-export function AppWithProvider({ onReactFlowInit }: AppProps) {
+export function AppWithProvider() {
   return (
     <ReactFlowProvider>
-      <App onReactFlowInit={onReactFlowInit} />
+      <App />
     </ReactFlowProvider>
   )
 }

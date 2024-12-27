@@ -28,3 +28,5 @@ export type DiagramElementNodeType = Node<{
   type: DiagramElementType
   color?: string
 }>
+
+export * from "./classDiagram"
