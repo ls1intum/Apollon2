@@ -11,33 +11,29 @@ export type ExtraElements = {
 type Props = Node<{
   methods: ExtraElements[]
   attributes: ExtraElements[]
+  stereotype?: string
+  name: string
 }>
 
 export function Class({
   width,
   height,
-  data: { methods, attributes },
+  data: { methods, attributes, stereotype, name },
 }: NodeProps<Props>) {
   if (!width || !height) {
     return null
   }
 
-  //   const strokeWidth = svgAttributes.strokeWidth ? +svgAttributes.strokeWidth : 0
-  const strokeWidth = 0
-
-  // we subtract the strokeWidth to make sure the shape is not cut off
-  // this is done because svg doesn't support stroke inset (https://stackoverflow.com/questions/7241393/can-you-control-how-an-svgs-stroke-width-is-drawn)
-  const innerWidth = width - 2 * strokeWidth
-  const innerHeight = height - 2 * strokeWidth
-
   return (
     <>
-      <svg width={width + strokeWidth} height={height + strokeWidth}>
+      <svg width={width} height={height}>
         <SVGPart
-          width={innerWidth}
-          height={innerHeight}
+          width={width}
+          height={height}
+          name={name}
           methods={methods}
           attributes={attributes}
+          stereotype={stereotype}
         />
       </svg>
       <Handle id="top" type="source" position={Position.Top} />
@@ -53,28 +49,24 @@ type SVGPartProps = {
   height: number
   methods: ExtraElements[]
   attributes: ExtraElements[]
+  stereotype?: string
+  name: string
 } & SVGAttributes<SVGElement>
 
 function SVGPart({
   width,
   attributes,
   methods,
+  stereotype,
+  name,
   ...svgAttributes
 }: SVGPartProps) {
-  const element = {
-    name: "Class",
-    stereotype: "Interface",
-    textColor: "black",
-    fillColor: "yellow",
-    strokeColor: "black",
-    headerHeight: 50,
-  }
+  const headerHeight = 50
   const attributeHeight = 30
   const totalAttributesHeight = attributes.length * attributeHeight
   const totalMethodsHeight = methods.length * attributeHeight
 
-  const totalHeight =
-    element.headerHeight + totalAttributesHeight + totalMethodsHeight
+  const totalHeight = headerHeight + totalAttributesHeight + totalMethodsHeight
 
   return (
     <g {...svgAttributes}>
@@ -84,45 +76,28 @@ function SVGPart({
         width={width}
         height={totalHeight}
         fillColor="none"
-        strokeColor={element.strokeColor}
       />
 
       {/* Header Section */}
       <g>
-        <ThemedRect
-          as="rect"
-          width={width}
-          height={element.headerHeight}
-          fillColor={element.fillColor}
-          strokeColor={element.strokeColor}
-        />
+        <ThemedRect as="rect" width={width} height={headerHeight} />
         <Text x="50%" y="25" dominantBaseline="middle" textAnchor="middle">
-          {element.stereotype && (
+          {stereotype && (
             <tspan x="50%" dy="-8" textAnchor="middle" fontSize="85%">
-              {`«${element.stereotype}»`}
+              {`«${stereotype}»`}
             </tspan>
           )}
-          <tspan
-            x="50%"
-            dy={element.stereotype ? "18" : "0"}
-            textAnchor="middle"
-          >
-            {element.name}
+          <tspan x="50%" dy={stereotype ? "18" : "0"} textAnchor="middle">
+            {name}
           </tspan>
         </Text>
       </g>
 
       {/* Attributes Section */}
       {attributes.length > 0 && (
-        <g transform={`translate(0, ${element.headerHeight})`}>
+        <g transform={`translate(0, ${headerHeight})`}>
           {/* Single Rect for all attributes */}
-          <ThemedRect
-            as="rect"
-            width={width}
-            height={totalAttributesHeight}
-            fillColor="white"
-            strokeColor={element.strokeColor}
-          />
+          <ThemedRect as="rect" width={width} height={totalAttributesHeight} />
           {attributes.map((attribute, index) => (
             <Text
               key={attribute.id}
@@ -139,19 +114,9 @@ function SVGPart({
 
       {/* Methods Section */}
       {methods.length > 0 && (
-        <g
-          transform={`translate(0, ${
-            element.headerHeight + totalAttributesHeight
-          })`}
-        >
+        <g transform={`translate(0, ${headerHeight + totalAttributesHeight})`}>
           {/* Single Rect for all methods */}
-          <ThemedRect
-            as="rect"
-            width={width}
-            height={totalMethodsHeight}
-            fillColor="white"
-            strokeColor={element.strokeColor}
-          />
+          <ThemedRect as="rect" width={width} height={totalMethodsHeight} />
           {methods.map((method, index) => (
             <Text
               key={method.id}
