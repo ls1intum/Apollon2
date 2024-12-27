@@ -17,11 +17,12 @@ import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
 import { defaultEdges, defaultNodes } from "./initialElements"
 import "@/styles/app.css"
-import { Class, Package } from "./nodes"
+import { Class, Package, ColorDescription } from "./nodes"
 
 const nodeTypes: NodeTypes = {
   package: Package,
   class: Class,
+  colorDescription: ColorDescription,
 }
 
 const defaultEdgeOptions: DefaultEdgeOptions = {

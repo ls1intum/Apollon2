@@ -89,6 +89,17 @@ export const defaultNodes: Node[] = [
       ],
     },
   },
+  {
+    id: "6",
+    type: "colorDescription",
+    position: { x: -100, y: 600 },
+    width: 160,
+    height: 50,
+    selected: false,
+    data: {
+      description: "Color description",
+    },
+  },
 ]
 
 export const defaultEdges: Edge[] = [
