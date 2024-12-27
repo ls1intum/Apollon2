@@ -1,6 +1,5 @@
 import { ThemedRect } from "@/components/ThemedElements"
-
-import { NodeProps, type Node } from "@xyflow/react"
+import { Handle, NodeProps, Position, type Node } from "@xyflow/react"
 import { SVGAttributes } from "react"
 import { Text } from "@/components/Text"
 
@@ -10,8 +9,6 @@ export type ExtraElements = {
 }
 
 type Props = Node<{
-  width: number
-  height: number
   methods: ExtraElements[]
   attributes: ExtraElements[]
 }>
@@ -34,25 +31,24 @@ export function Class({
   const innerHeight = height - 2 * strokeWidth
 
   return (
-    <svg width={width + strokeWidth} height={height + strokeWidth}>
-      {/* this offsets the shape by the strokeWidth so that we have enough space for the stroke */}
-      <g
-      // transform={`translate(${svgAttributes.strokeWidth ?? 0}, ${
-      //   svgAttributes.strokeWidth ?? 0
-      // })`}
-      >
+    <>
+      <svg width={width + strokeWidth} height={height + strokeWidth}>
         <SVGPart
           width={innerWidth}
           height={innerHeight}
           methods={methods}
           attributes={attributes}
         />
-      </g>
-    </svg>
+      </svg>
+      <Handle id="top" type="source" position={Position.Top} />
+      <Handle id="right" type="source" position={Position.Right} />
+      <Handle id="bottom" type="source" position={Position.Bottom} />
+      <Handle id="left" type="source" position={Position.Left} />
+    </>
   )
 }
 
-export type SVGPartProps = {
+type SVGPartProps = {
   width: number
   height: number
   methods: ExtraElements[]

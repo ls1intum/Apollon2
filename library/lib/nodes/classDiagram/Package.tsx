@@ -1,13 +1,8 @@
 import { ThemedPath, ThemedRect } from "@/components/ThemedElements"
-import { DiagramElementProps } from "@/nodes"
-import { NodeProps, type Node } from "@xyflow/react"
+import { Handle, NodeProps, Position } from "@xyflow/react"
+import { SVGAttributes } from "react"
 
-type Props = Node<{
-  width: number
-  height: number
-}>
-
-export function Package({ width, height, ...svgAttributes }: NodeProps<Props>) {
+export function Package({ width, height }: NodeProps) {
   if (!width || !height) {
     return null
   }
@@ -21,20 +16,24 @@ export function Package({ width, height, ...svgAttributes }: NodeProps<Props>) {
   const innerHeight = height - 2 * strokeWidth
 
   return (
-    <svg width={width + strokeWidth} height={height + strokeWidth}>
-      {/* this offsets the shape by the strokeWidth so that we have enough space for the stroke */}
-      <g
-      // transform={`translate(${svgAttributes.strokeWidth ?? 0}, ${
-      //   svgAttributes.strokeWidth ?? 0
-      // })`}
-      >
-        <SVGPart width={innerWidth} height={innerHeight} {...svgAttributes} />
-      </g>
-    </svg>
+    <>
+      <svg width={width + strokeWidth} height={height + strokeWidth}>
+        <SVGPart width={innerWidth} height={innerHeight} />
+      </svg>
+      <Handle id="top" type="source" position={Position.Top} />
+      <Handle id="right" type="source" position={Position.Right} />
+      <Handle id="bottom" type="source" position={Position.Bottom} />
+      <Handle id="left" type="source" position={Position.Left} />
+    </>
   )
 }
 
-function SVGPart({ width, height, ...svgAttributes }: DiagramElementProps) {
+type SVGPartProps = {
+  width: number
+  height: number
+} & SVGAttributes<SVGElement>
+
+function SVGPart({ width, height, ...svgAttributes }: SVGPartProps) {
   return (
     <g {...svgAttributes}>
       <ThemedPath
