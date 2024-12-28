@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "@xyflow/react": "12.3.6",
-    "styled-components": "5.3.11"
+    "styled-components": "5.3.11",
+    "uuid": "11.0.3"
   },
   "peerDependencies": {
     "react": "18.3.1",

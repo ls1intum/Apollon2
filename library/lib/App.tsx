@@ -6,7 +6,6 @@ import {
   Controls,
   MiniMap,
   DefaultEdgeOptions,
-  type NodeTypes,
   MarkerType,
   ConnectionLineType,
   ConnectionMode,
@@ -17,13 +16,8 @@ import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
 import { defaultEdges, defaultNodes } from "./initialElements"
 import "@/styles/app.css"
-import { Class, Package, ColorDescription } from "./nodes"
-
-const nodeTypes: NodeTypes = {
-  package: Package,
-  class: Class,
-  colorDescription: ColorDescription,
-}
+import { nodeTypes } from "./nodes/types"
+import { Sidebar } from "./components"
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: "smoothstep",
@@ -37,7 +31,19 @@ interface AppProps {
 
 function App({ onReactFlowInit }: AppProps) {
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
+      <div
+        style={{
+          // width: "120px", // Fixed width for sidebar
+          height: "100%", // Full height
+          backgroundColor: "#f0f0f0", // Example background color
+          overflowY: "auto", // Scrollable if content overflows
+          borderRight: "1px solid #ccc", // Optional border for separation
+          padding: "10px", // Optional padding for content
+        }}
+      >
+        <Sidebar />
+      </div>
       <ReactFlow
         nodeTypes={nodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
@@ -52,7 +58,7 @@ function App({ onReactFlowInit }: AppProps) {
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
-        <Controls />
+        <Controls orientation="horizontal" />
       </ReactFlow>
     </div>
   )
