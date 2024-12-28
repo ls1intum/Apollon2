@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2022", // Compile to ECMAScript 2023 standards
-    "module": "ES2022", // Use the ECMAScript 2022 module system for modern tools
+    "target": "ES2023", // Compile to ECMAScript 2023 standards
+    "module": "ESNext", // Use the ECMAScript 2022 module system for modern tools
     "declaration": true, // Generate .d.ts files for library consumption
     "declarationMap": true, // Include source maps for debugging library usage
     "outDir": "./dist", // Output directory for compiled files

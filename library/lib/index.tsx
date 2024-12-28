@@ -1,11 +1,12 @@
 import ReactDOM from "react-dom/client"
 import { AppWithProvider } from "./App"
-import { ReactFlowInstance, type Node } from "@xyflow/react"
+import { ReactFlowInstance, type Node, type Edge } from "@xyflow/react"
+
 export { type Node } from "@xyflow/react"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
-  private reactFlowInstance: ReactFlowInstance | null = null
+  private reactFlowInstance: ReactFlowInstance<Node, Edge> | null = null
 
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element)
