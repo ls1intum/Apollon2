@@ -1,7 +1,7 @@
 import { DragEvent } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { ClassType, DropNodeData } from "@/types"
-import { ClassSVG } from "@/svgs"
+import { ClassSVG, PackageSVG } from "@/svgs"
 
 const SideBarElementWidth = 100
 const SideBarElementHeight = 55
@@ -47,6 +47,25 @@ export const Sidebar = () => {
           margin: "10px",
         }}
       >
+        <div
+          onDragStart={(event: DragEvent) =>
+            onDragStart(event, {
+              type: "package",
+              data: {
+                name: "Package",
+              },
+            })
+          }
+          draggable
+          style={{ width: SideBarElementWidth, height: SideBarElementHeight }}
+        >
+          <PackageSVG
+            width={SideBarElementWidth / SideBarElementScale}
+            height={SideBarElementHeight / SideBarElementScale}
+            name="Package"
+            svgAttributes={{ transform: `scale(${SideBarElementScale})` }}
+          />
+        </div>
         {sideBarElements.map(({ name, type, stereotype }) => (
           <div
             key={name}
