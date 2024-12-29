@@ -32,18 +32,7 @@ interface AppProps {
 function App({ onReactFlowInit }: AppProps) {
   return (
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
-      <div
-        style={{
-          // width: "120px", // Fixed width for sidebar
-          height: "100%", // Full height
-          backgroundColor: "#f0f0f0", // Example background color
-          overflowY: "auto", // Scrollable if content overflows
-          borderRight: "1px solid #ccc", // Optional border for separation
-          padding: "10px", // Optional padding for content
-        }}
-      >
-        <Sidebar />
-      </div>
+      <Sidebar />
       <ReactFlow
         nodeTypes={nodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}

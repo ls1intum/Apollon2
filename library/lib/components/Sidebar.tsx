@@ -1,110 +1,79 @@
 import { DragEvent } from "react"
-
 import { v4 as uuidv4 } from "uuid"
 import { ClassType, DropNodeData } from "@/types"
 import { ClassSVG } from "@/svgs"
+
+const SideBarElementWidth = 100
+const SideBarElementHeight = 55
+const SideBarElementScale = 0.45
 
 const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
   event.dataTransfer.setData("text/plain", JSON.stringify({ type, data }))
   event.dataTransfer.effectAllowed = "move"
 }
 
+// Common configuration for sidebar elements
+const sideBarElements = [
+  {
+    name: "Class",
+    type: "class",
+    stereotype: undefined,
+  },
+  {
+    name: "Abstract",
+    type: "class",
+    stereotype: ClassType.Abstract,
+  },
+  {
+    name: "Enumeration",
+    type: "class",
+    stereotype: ClassType.Enumeration,
+  },
+  {
+    name: "Interface",
+    type: "class",
+    stereotype: ClassType.Interface,
+  },
+]
+
 export const Sidebar = () => {
   return (
-    <aside style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+    <aside style={{ height: "100%", backgroundColor: "#f0f0f0" }}>
       <div
-        style={{ width: 100, height: 55 }}
-        onDragStart={(event: DragEvent) =>
-          onDragStart(event, {
-            type: "class",
-            data: {
-              methods: [{ id: uuidv4(), name: "+ method()" }],
-              attributes: [{ id: uuidv4(), name: "+ attribute: Type" }],
-            },
-          })
-        }
-        draggable
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          margin: "10px",
+        }}
       >
-        <ClassSVG
-          width={200}
-          height={110}
-          methods={[{ id: uuidv4(), name: "+ method()" }]}
-          attributes={[{ id: uuidv4(), name: "+ attribute: Type" }]}
-          name="Class"
-          svgAttributes={{ transform: "scale(0.45)" }}
-        />
-      </div>
-      <div
-        style={{ width: 100, height: 55 }}
-        onDragStart={(event: DragEvent) =>
-          onDragStart(event, {
-            type: "class",
-            data: {
-              methods: [{ id: uuidv4(), name: "+ method()" }],
-              attributes: [{ id: uuidv4(), name: "+ attribute: Type" }],
-              stereotype: ClassType.Abstract,
-            },
-          })
-        }
-        draggable
-      >
-        <ClassSVG
-          width={200}
-          height={110}
-          methods={[{ id: uuidv4(), name: "+ method()" }]}
-          attributes={[{ id: uuidv4(), name: "+ attribute: Type" }]}
-          name="Abstract"
-          stereotype={ClassType.Abstract}
-          svgAttributes={{ transform: "scale(0.45)" }}
-        />
-      </div>
-      <div
-        style={{ width: 100, height: 55 }}
-        onDragStart={(event: DragEvent) =>
-          onDragStart(event, {
-            type: "class",
-            data: {
-              methods: [{ id: uuidv4(), name: "+ method()" }],
-              attributes: [{ id: uuidv4(), name: "+ attribute: Type" }],
-              stereotype: ClassType.Enumeration,
-            },
-          })
-        }
-        draggable
-      >
-        <ClassSVG
-          width={200}
-          height={110}
-          methods={[{ id: uuidv4(), name: "+ method()" }]}
-          attributes={[{ id: uuidv4(), name: "+ attribute: Type" }]}
-          name="Enumeration"
-          stereotype={ClassType.Enumeration}
-          svgAttributes={{ transform: "scale(0.45)" }}
-        />
-      </div>
-      <div
-        style={{ width: 100, height: 55 }}
-        onDragStart={(event: DragEvent) =>
-          onDragStart(event, {
-            type: "class",
-            data: {
-              methods: [{ id: uuidv4(), name: "+ method()" }],
-              attributes: [{ id: uuidv4(), name: "+ attribute: Type" }],
-              stereotype: ClassType.Interface,
-            },
-          })
-        }
-        draggable
-      >
-        <ClassSVG
-          width={200}
-          height={110}
-          methods={[{ id: uuidv4(), name: "+ method()" }]}
-          attributes={[{ id: uuidv4(), name: "+ attribute: Type" }]}
-          name="Interface"
-          stereotype={ClassType.Interface}
-          svgAttributes={{ transform: "scale(0.45)" }}
-        />
+        {sideBarElements.map(({ name, type, stereotype }) => (
+          <div
+            key={name}
+            style={{ width: SideBarElementWidth, height: SideBarElementHeight }}
+            onDragStart={(event: DragEvent) =>
+              onDragStart(event, {
+                type,
+                data: {
+                  methods: [{ id: uuidv4(), name: "+ method()" }],
+                  attributes: [{ id: uuidv4(), name: "+ attribute: Type" }],
+                  stereotype,
+                },
+              })
+            }
+            draggable
+          >
+            <ClassSVG
+              width={SideBarElementWidth / SideBarElementScale}
+              height={SideBarElementHeight / SideBarElementScale}
+              methods={[{ id: uuidv4(), name: "+ method()" }]}
+              attributes={[{ id: uuidv4(), name: "+ attribute: Type" }]}
+              name={name}
+              stereotype={stereotype}
+              svgAttributes={{ transform: `scale(${SideBarElementScale})` }}
+            />
+          </div>
+        ))}
       </div>
     </aside>
   )
