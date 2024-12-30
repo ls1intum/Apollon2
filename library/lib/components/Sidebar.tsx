@@ -1,11 +1,11 @@
 import { DragEvent } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { ClassType, DropNodeData } from "@/types"
-import { ClassSVG, PackageSVG } from "@/svgs"
+import { ClassSVG, ColorDescriptionSVG, PackageSVG } from "@/svgs"
 
-const SideBarElementWidth = 100
-const SideBarElementHeight = 55
-const SideBarElementScale = 0.45
+const SideBarElementWidth = 128
+const SideBarElementHeight = 88
+const SideBarElementScale = 0.8
 
 const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
   event.dataTransfer.setData("text/plain", JSON.stringify({ type, data }))
@@ -94,6 +94,26 @@ export const Sidebar = () => {
             />
           </div>
         ))}
+        <div style={{ height: 2, width: "auto", backgroundColor: "black" }} />
+        <div
+          style={{ width: SideBarElementWidth, height: SideBarElementHeight }}
+          onDragStart={(event: DragEvent) =>
+            onDragStart(event, {
+              type: "colorDescription",
+              data: {
+                description: "Color Description",
+              },
+            })
+          }
+          draggable
+        >
+          <ColorDescriptionSVG
+            width={SideBarElementWidth / SideBarElementScale}
+            height={48 / SideBarElementScale}
+            description="Color Description"
+            svgAttributes={{ transform: `scale(${SideBarElementScale})` }}
+          />
+        </div>
       </div>
     </aside>
   )
