@@ -1,14 +1,19 @@
 import { ThemedPath, ThemedRect, Text } from "@/components"
 import { SVGAttributes } from "react"
 
-type Props = {
+export type PackageSVGProps = {
   width: number
   height: number
   name: string
   svgAttributes?: SVGAttributes<SVGElement>
 }
 
-export const PackageSVG = ({ width, height, name, svgAttributes }: Props) => {
+export const PackageSVG = ({
+  width,
+  height,
+  name,
+  svgAttributes,
+}: PackageSVGProps) => {
   return (
     <svg
       width={width}

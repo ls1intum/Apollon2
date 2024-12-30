@@ -74,6 +74,7 @@ export const Sidebar = () => {
               onDragStart(event, {
                 type,
                 data: {
+                  name,
                   methods: [{ id: uuidv4(), name: "+ method()" }],
                   attributes: [{ id: uuidv4(), name: "+ attribute: Type" }],
                   stereotype,

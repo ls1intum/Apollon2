@@ -3,7 +3,7 @@ import { Text } from "@/components/Text"
 import { ClassType, ExtraElements } from "@/types"
 import { SVGAttributes } from "react"
 
-type Props = {
+export type ClassSVGProps = {
   width: number
   height: number
   methods: ExtraElements[]
@@ -21,11 +21,7 @@ export function ClassSVG({
   stereotype,
   name,
   svgAttributes,
-}: Props) {
-  if (!width || !height) {
-    return null
-  }
-
+}: ClassSVGProps) {
   const headerHeight = 50
   const attributeHeight = 30
   const totalAttributesHeight = attributes.length * attributeHeight

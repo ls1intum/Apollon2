@@ -2,7 +2,7 @@ import { nodeTypes } from "@/nodes"
 
 export interface DropNodeData {
   type: keyof typeof nodeTypes
-  data?: Record<string, unknown>
+  data: Record<string, unknown>
 }
 
 export enum ClassType {
