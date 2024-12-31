@@ -1,40 +1,12 @@
-import { DragEvent } from "react"
-import { v4 as uuidv4 } from "uuid"
-import { ClassType, DropNodeData } from "@/types"
-import { ClassSVG, ColorDescriptionSVG, PackageSVG } from "@/svgs"
-
-const SideBarElementWidth = 128
-const SideBarElementHeight = 88
-const SideBarElementScale = 0.8
+import React, { DragEvent } from "react"
+import { dropElementConfig, transformScale } from "@/constant"
+import { Divider } from "./Divider"
+import { DropNodeData } from "@/types"
 
 const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
   event.dataTransfer.setData("text/plain", JSON.stringify({ type, data }))
   event.dataTransfer.effectAllowed = "move"
 }
-
-// Common configuration for sidebar elements
-const sideBarElements = [
-  {
-    name: "Class",
-    type: "class",
-    stereotype: undefined,
-  },
-  {
-    name: "Abstract",
-    type: "class",
-    stereotype: ClassType.Abstract,
-  },
-  {
-    name: "Enumeration",
-    type: "class",
-    stereotype: ClassType.Enumeration,
-  },
-  {
-    name: "Interface",
-    type: "class",
-    stereotype: ClassType.Interface,
-  },
-]
 
 export const Sidebar = () => {
   return (
@@ -43,77 +15,40 @@ export const Sidebar = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "10px",
+          gap: "8px",
           margin: "10px",
         }}
       >
-        <div
-          onDragStart={(event: DragEvent) =>
-            onDragStart(event, {
-              type: "package",
-              data: {
-                name: "Package",
-              },
-            })
-          }
-          draggable
-          style={{ width: SideBarElementWidth, height: SideBarElementHeight }}
-        >
-          <PackageSVG
-            width={SideBarElementWidth / SideBarElementScale}
-            height={SideBarElementHeight / SideBarElementScale}
-            name="Package"
-            svgAttributes={{ transform: `scale(${SideBarElementScale})` }}
-          />
-        </div>
-        {sideBarElements.map(({ name, type, stereotype }) => (
-          <div
-            key={name}
-            style={{ width: SideBarElementWidth, height: SideBarElementHeight }}
-            onDragStart={(event: DragEvent) =>
-              onDragStart(event, {
-                type,
-                data: {
-                  name,
-                  methods: [{ id: uuidv4(), name: "+ method()" }],
-                  attributes: [{ id: uuidv4(), name: "+ attribute: Type" }],
-                  stereotype,
-                },
-              })
-            }
-            draggable
-          >
-            <ClassSVG
-              width={SideBarElementWidth / SideBarElementScale}
-              height={SideBarElementHeight / SideBarElementScale}
-              methods={[{ id: uuidv4(), name: "+ method()" }]}
-              attributes={[{ id: uuidv4(), name: "+ attribute: Type" }]}
-              name={name}
-              stereotype={stereotype}
-              svgAttributes={{ transform: `scale(${SideBarElementScale})` }}
-            />
-          </div>
+        {dropElementConfig.map((config) => (
+          <React.Fragment key={`${config.type}_${config.name}`}>
+            {/* Add separator before the Color Description */}
+            {config.type === "colorDescription" && (
+              <Divider style={{ margin: "3px 0" }} />
+            )}
+            <div
+              style={{
+                width: config.width * transformScale,
+                height: config.height * transformScale,
+                overflow: "hidden",
+                zIndex: 2,
+              }}
+              draggable
+              onDragStart={(event: DragEvent) =>
+                onDragStart(event, {
+                  type: config.type,
+                  data: config.defaultData,
+                })
+              }
+            >
+              {React.createElement(config.svg, {
+                width: config.width,
+                height: config.height,
+                ...config.defaultData,
+                transformScale,
+              })}
+            </div>
+          </React.Fragment>
         ))}
-        <div style={{ height: 2, width: "auto", backgroundColor: "black" }} />
-        <div
-          style={{ width: SideBarElementWidth, height: SideBarElementHeight }}
-          onDragStart={(event: DragEvent) =>
-            onDragStart(event, {
-              type: "colorDescription",
-              data: {
-                description: "Color Description",
-              },
-            })
-          }
-          draggable
-        >
-          <ColorDescriptionSVG
-            width={SideBarElementWidth / SideBarElementScale}
-            height={48 / SideBarElementScale}
-            description="Color Description"
-            svgAttributes={{ transform: `scale(${SideBarElementScale})` }}
-          />
-        </div>
       </div>
     </aside>
   )

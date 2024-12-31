@@ -10,6 +10,7 @@ export type ClassSVGProps = {
   attributes: ExtraElements[]
   stereotype?: ClassType
   name: string
+  transformScale?: number
   svgAttributes?: SVGAttributes<SVGElement>
 }
 
@@ -20,6 +21,7 @@ export function ClassSVG({
   attributes,
   stereotype,
   name,
+  transformScale,
   svgAttributes,
 }: ClassSVGProps) {
   const headerHeight = 50
@@ -32,7 +34,12 @@ export function ClassSVG({
     <svg
       width={width}
       height={height}
-      style={{ transformOrigin: "0 0" }}
+      z={2}
+      style={{
+        transformOrigin: "0 0",
+        transformBox: "content-box",
+        transform: transformScale ? `scale(${transformScale})` : undefined,
+      }}
       {...svgAttributes}
     >
       <g>

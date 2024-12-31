@@ -5,6 +5,7 @@ export type PackageSVGProps = {
   width: number
   height: number
   name: string
+  transformScale?: number
   svgAttributes?: SVGAttributes<SVGElement>
 }
 
@@ -13,12 +14,17 @@ export const PackageSVG = ({
   height,
   name,
   svgAttributes,
+  transformScale,
 }: PackageSVGProps) => {
   return (
     <svg
       width={width}
       height={height}
-      style={{ transformOrigin: "0 0" }}
+      style={{
+        transformOrigin: "left top",
+        transformBox: "content-box",
+        transform: transformScale ? `scale(${transformScale})` : undefined,
+      }}
       {...svgAttributes}
     >
       <g>

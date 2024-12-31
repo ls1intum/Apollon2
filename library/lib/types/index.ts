@@ -1,7 +1,7 @@
-import { nodeTypes } from "@/nodes"
+import { DiagramNodeTypeKeys } from "@/nodes"
 
 export interface DropNodeData {
-  type: keyof typeof nodeTypes
+  type: DiagramNodeTypeKeys
   data: Record<string, unknown>
 }
 

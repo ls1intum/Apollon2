@@ -21,7 +21,7 @@ import { defaultEdges, defaultNodes } from "./initialElements"
 import "@/styles/app.css"
 import { Sidebar } from "@/components"
 import { useCallback } from "react"
-import { nodeTypes } from "./nodes"
+import { diagramNodeTypes } from "./nodes"
 import { useDragDrop } from "./hooks"
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
@@ -47,7 +47,7 @@ function App({ onReactFlowInit }: AppProps) {
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
       <Sidebar />
       <ReactFlow
-        nodeTypes={nodeTypes}
+        nodeTypes={diagramNodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
         nodes={nodes}
         edges={edges}

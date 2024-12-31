@@ -6,6 +6,7 @@ export type ColorDescriptionSVGProps = {
   width: number
   height: number
   description: string
+  transformScale?: number
   svgAttributes?: SVGAttributes<SVGElement>
 }
 
@@ -14,12 +15,17 @@ export function ColorDescriptionSVG({
   height,
   description,
   svgAttributes,
+  transformScale,
 }: ColorDescriptionSVGProps) {
   return (
     <svg
       width={width}
       height={height}
-      style={{ transformOrigin: "0 0" }}
+      style={{
+        transformOrigin: "0 0",
+        transformBox: "content-box",
+        transform: transformScale ? `scale(${transformScale})` : undefined,
+      }}
       {...svgAttributes}
     >
       <g>

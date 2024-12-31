@@ -1,3 +1,4 @@
+import { dropElementConfig } from "@/constant"
 import { DropNodeData } from "@/types"
 import { generateUUID } from "@/utils"
 import { useReactFlow, type Node } from "@xyflow/react"
@@ -9,12 +10,16 @@ export const useDragDrop = () => {
   const onDrop = useCallback(
     (event: DragEvent) => {
       event.preventDefault()
-      const data = JSON.parse(
+      const dropData = JSON.parse(
         event.dataTransfer.getData("text/plain")
       ) as DropNodeData
 
-      // check if the dropped element is valid
-      if (!data.type) {
+      const config = dropElementConfig.find(
+        (config) => config.type === dropData.type
+      )
+      // Validate the dropped element type
+      if (!config) {
+        console.warn(`Unknown drop element type: ${dropData.type}`)
         return
       }
 
@@ -22,18 +27,19 @@ export const useDragDrop = () => {
         x: event.clientX,
         y: event.clientY,
       })
+
       const newNode: Node = {
-        width: 200,
-        height: 110,
+        width: config.width,
+        height: config.height,
         id: generateUUID(),
-        type: data.type,
+        type: dropData.type,
         position,
-        data: data.data,
+        data: { ...config.defaultData, ...dropData.data },
       }
 
       setNodes((nds) => nds.concat(newNode))
     },
-    [screenToFlowPosition]
+    [screenToFlowPosition, setNodes]
   )
 
   const onDragOver = useCallback((event: DragEvent) => {
