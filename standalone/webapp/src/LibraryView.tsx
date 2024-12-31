@@ -30,7 +30,7 @@ export function LibraryView() {
     <>
       <button
         onClick={onGetNodesButtonClick}
-        style={{ position: "absolute", top: "0", left: "0", zIndex: 1000 }}
+        style={{ position: "absolute", top: "0", right: "0", zIndex: 1000 }}
       >
         Get Nodes
       </button>
