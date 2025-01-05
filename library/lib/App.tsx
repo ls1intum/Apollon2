@@ -6,24 +6,23 @@ import {
   Controls,
   MiniMap,
   DefaultEdgeOptions,
-  type NodeTypes,
   MarkerType,
   ConnectionLineType,
   ConnectionMode,
   ReactFlowInstance,
+  useNodesState,
+  addEdge,
+  useEdgesState,
+  Connection,
 } from "@xyflow/react"
-
 import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
-import { defaultEdges, defaultNodes } from "./initialElements"
+import { initialEdges, initialNodes } from "./initialElements"
 import "@/styles/app.css"
-import { Class, Package, ColorDescription } from "./nodes"
-
-const nodeTypes: NodeTypes = {
-  package: Package,
-  class: Class,
-  colorDescription: ColorDescription,
-}
+import { Sidebar } from "@/components"
+import { useCallback } from "react"
+import { diagramNodeTypes } from "./nodes"
+import { useDragDrop } from "./hooks"
 
 const defaultEdgeOptions: DefaultEdgeOptions = {
   type: "smoothstep",
@@ -36,13 +35,27 @@ interface AppProps {
 }
 
 function App({ onReactFlowInit }: AppProps) {
+  const [nodes, , onNodesChange] = useNodesState(initialNodes)
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+  const { onDrop, onDragOver } = useDragDrop()
+  const onConnect = useCallback(
+    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+    []
+  )
+
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
+      <Sidebar />
       <ReactFlow
-        nodeTypes={nodeTypes}
+        nodeTypes={diagramNodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
-        defaultNodes={defaultNodes}
-        defaultEdges={defaultEdges}
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
         connectionLineType={ConnectionLineType.SmoothStep}
         connectionMode={ConnectionMode.Loose}
         fitView
@@ -52,7 +65,7 @@ function App({ onReactFlowInit }: AppProps) {
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
-        <Controls />
+        <Controls orientation="horizontal" />
       </ReactFlow>
     </div>
   )
