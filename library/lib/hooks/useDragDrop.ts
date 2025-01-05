@@ -22,11 +22,17 @@ export const useDragDrop = () => {
         console.warn(`Unknown drop element type: ${dropData.type}`)
         return
       }
-
-      const position = screenToFlowPosition({
+      // Convert the drop position to the flow position
+      const dropPosition = screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
       })
+
+      // Adjust position by subtracting the offset
+      const position = {
+        x: dropPosition.x - dropData.offsetX,
+        y: dropPosition.y - dropData.offsetY,
+      }
 
       const newNode: Node = {
         width: config.width,

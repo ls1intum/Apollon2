@@ -4,7 +4,15 @@ import { Divider } from "./Divider"
 import { DropNodeData } from "@/types"
 
 const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
-  event.dataTransfer.setData("text/plain", JSON.stringify({ type, data }))
+  const rect = (event.target as HTMLElement).getBoundingClientRect()
+  const offsetX = (event.clientX - rect.left) / transformScale // Cursor offset from the element's left
+  const offsetY = (event.clientY - rect.top) / transformScale // Cursor offset from the element's top
+
+  // Pass the offset along with the type and data
+  event.dataTransfer.setData(
+    "text/plain",
+    JSON.stringify({ type, data, offsetX, offsetY })
+  )
   event.dataTransfer.effectAllowed = "move"
 }
 
@@ -37,6 +45,8 @@ export const Sidebar = () => {
                 onDragStart(event, {
                   type: config.type,
                   data: config.defaultData,
+                  offsetX: 0,
+                  offsetY: 0,
                 })
               }
             >
