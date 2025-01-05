@@ -24,25 +24,20 @@ export function ClassSVG({
   transformScale,
   svgAttributes,
 }: ClassSVGProps) {
-  const headerHeight = 50
-  const attributeHeight = 30
-  const methodHeight = 30
+  const margin = 2 // Padding inside the SVG content
+  const headerHeight = 50 // Height of the header section
+  const attributeHeight = 30 // Height per attribute
+  const methodHeight = 30 // Height per method
+  const innerWidth = width - 2 * margin // Adjusted content width
+  const padding = 10 // Inner padding for text
+  const maxTextWidth = innerWidth - 2 * padding // Maximum width for text
 
-  const padding = 10 // Padding inside the SVG
-  const maxTextWidth = width - 2 * padding // Maximum width for text
-
-  // Helper function to truncate individual lines
   const truncateText = (text: string, maxWidth: number): string => {
-    const approxCharWidth = 7 // Approximation for character width in font size 14px
+    const approxCharWidth = 7 // Approximate width of a character in font size 14px
     const maxChars = Math.floor(maxWidth / approxCharWidth)
-
-    if (text.length > maxChars) {
-      return `${text.slice(0, maxChars - 3)}...` // Truncate and add ellipsis
-    }
-    return text
+    return text.length > maxChars ? `${text.slice(0, maxChars - 3)}...` : text
   }
 
-  // Memoized truncated attributes
   const truncatedAttributes = useMemo(
     () =>
       attributes.map((attribute) => ({
@@ -52,7 +47,6 @@ export function ClassSVG({
     [attributes, maxTextWidth]
   )
 
-  // Memoized truncated methods
   const truncatedMethods = useMemo(
     () =>
       methods.map((method) => ({
@@ -71,32 +65,42 @@ export function ClassSVG({
     <svg
       width={width}
       height={Math.max(height, totalHeight)}
-      z={2}
       style={{
-        transformOrigin: "0 0",
+        transformOrigin: "left top",
         transformBox: "content-box",
         transform: transformScale ? `scale(${transformScale})` : undefined,
       }}
       {...svgAttributes}
     >
-      <g>
+      <g transform={`translate(${margin}, ${margin})`}>
         {/* Outer Rectangle */}
         <ThemedRect
           as="rect"
-          width={width}
-          height={Math.max(height, totalHeight)}
+          width={innerWidth}
+          height={Math.max(height, totalHeight) - 2 * margin}
           fillColor="white"
+          stroke="black"
+          strokeWidth="0.5"
         />
 
         {/* Header Section */}
         <g>
-          <Text x="50%" y="25" dominantBaseline="middle" textAnchor="middle">
+          <Text
+            x={innerWidth / 2}
+            y={headerHeight / 2}
+            dominantBaseline="middle"
+            textAnchor="middle"
+          >
             {stereotype && (
-              <tspan x="50%" dy="-8" textAnchor="middle" fontSize="85%">
+              <tspan x={innerWidth / 2} dy="-8" fontSize="85%">
                 {`«${stereotype}»`}
               </tspan>
             )}
-            <tspan x="50%" dy={stereotype ? "18" : "0"} textAnchor="middle">
+            <tspan
+              x={innerWidth / 2}
+              dy={stereotype ? "18" : "0"}
+              fontWeight="600"
+            >
               {name}
             </tspan>
           </Text>
@@ -105,7 +109,7 @@ export function ClassSVG({
         {/* Separation Line After Header */}
         <line
           x1="0"
-          x2={width}
+          x2={innerWidth}
           y1={headerHeight}
           y2={headerHeight}
           stroke="black"
@@ -118,7 +122,7 @@ export function ClassSVG({
             {truncatedAttributes.map((attribute, index) => (
               <Text
                 key={attribute.id}
-                x="10"
+                x={padding}
                 y={15 + index * attributeHeight}
                 dominantBaseline="middle"
                 textAnchor="start"
@@ -133,7 +137,7 @@ export function ClassSVG({
         {truncatedAttributes.length > 0 && (
           <line
             x1="0"
-            x2={width}
+            x2={innerWidth}
             y1={headerHeight + truncatedAttributes.length * attributeHeight}
             y2={headerHeight + truncatedAttributes.length * attributeHeight}
             stroke="black"
@@ -151,7 +155,7 @@ export function ClassSVG({
             {truncatedMethods.map((method, index) => (
               <Text
                 key={method.id}
-                x="10"
+                x={padding}
                 y={15 + index * methodHeight}
                 dominantBaseline="middle"
                 textAnchor="start"
