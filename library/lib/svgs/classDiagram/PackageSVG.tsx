@@ -16,10 +16,15 @@ export const PackageSVG = ({
   svgAttributes,
   transformScale,
 }: PackageSVGProps) => {
+  const padding = 5 // Padding inside the SVG content
+  const headerHeight = 10 // Height of the top path
+  const innerWidth = width - 2 * padding // Adjusted content width
+  const innerHeight = height - 2 * padding // Adjusted content height
+
   return (
     <svg
-      width={width}
-      height={height}
+      width={width} // Keep width as passed
+      height={height} // Keep height as passed
       style={{
         transformOrigin: "left top",
         transformBox: "content-box",
@@ -27,10 +32,32 @@ export const PackageSVG = ({
       }}
       {...svgAttributes}
     >
-      <g>
-        <ThemedPath as="path" d={`M 0 10 V 0 H 40 V 10`} />
-        <ThemedRect as="rect" y={10} width={width} height={height - 10} />
-        <Text y={20} dy={10} textAnchor="middle" fontWeight="600">
+      <g transform={`translate(${padding}, ${padding})`}>
+        {/* Top Path */}
+        <ThemedPath
+          as="path"
+          d={`M 0 ${headerHeight} V 0 H 40 V ${headerHeight}`}
+          stroke="black"
+          strokeWidth="0.5"
+        />
+        {/* Main Rectangle */}
+        <ThemedRect
+          as="rect"
+          x="0"
+          y={headerHeight}
+          width={innerWidth}
+          height={innerHeight - headerHeight}
+          stroke="black"
+          strokeWidth="0.5"
+        />
+        {/* Name Text */}
+        <Text
+          x={innerWidth / 2}
+          y={headerHeight + padding}
+          textAnchor="middle"
+          fontWeight="600"
+          dominantBaseline="hanging"
+        >
           {name}
         </Text>
       </g>
