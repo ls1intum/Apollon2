@@ -1,7 +1,7 @@
 import { ThemedRect } from "@/components/ThemedElements"
 import { Text } from "@/components/Text"
 import { ClassType, ExtraElements } from "@/types"
-import { SVGAttributes } from "react"
+import { SVGAttributes, useMemo } from "react"
 
 export type ClassSVGProps = {
   width: number
@@ -26,14 +26,51 @@ export function ClassSVG({
 }: ClassSVGProps) {
   const headerHeight = 50
   const attributeHeight = 30
-  const totalAttributesHeight = attributes.length * attributeHeight
-  const totalMethodsHeight = methods.length * attributeHeight
+  const methodHeight = 30
 
-  const totalHeight = headerHeight + totalAttributesHeight + totalMethodsHeight
+  const padding = 10 // Padding inside the SVG
+  const maxTextWidth = width - 2 * padding // Maximum width for text
+
+  // Helper function to truncate individual lines
+  const truncateText = (text: string, maxWidth: number): string => {
+    const approxCharWidth = 7 // Approximation for character width in font size 14px
+    const maxChars = Math.floor(maxWidth / approxCharWidth)
+
+    if (text.length > maxChars) {
+      return `${text.slice(0, maxChars - 3)}...` // Truncate and add ellipsis
+    }
+    return text
+  }
+
+  // Memoized truncated attributes
+  const truncatedAttributes = useMemo(
+    () =>
+      attributes.map((attribute) => ({
+        ...attribute,
+        truncatedName: truncateText(attribute.name, maxTextWidth),
+      })),
+    [attributes, maxTextWidth]
+  )
+
+  // Memoized truncated methods
+  const truncatedMethods = useMemo(
+    () =>
+      methods.map((method) => ({
+        ...method,
+        truncatedName: truncateText(method.name, maxTextWidth),
+      })),
+    [methods, maxTextWidth]
+  )
+
+  const totalHeight =
+    headerHeight +
+    truncatedAttributes.length * attributeHeight +
+    truncatedMethods.length * methodHeight
+
   return (
     <svg
       width={width}
-      height={height}
+      height={Math.max(height, totalHeight)}
       z={2}
       style={{
         transformOrigin: "0 0",
@@ -47,13 +84,12 @@ export function ClassSVG({
         <ThemedRect
           as="rect"
           width={width}
-          height={totalHeight}
-          fillColor="none"
+          height={Math.max(height, totalHeight)}
+          fillColor="white"
         />
 
         {/* Header Section */}
         <g>
-          <ThemedRect as="rect" width={width} height={headerHeight} />
           <Text x="50%" y="25" dominantBaseline="middle" textAnchor="middle">
             {stereotype && (
               <tspan x="50%" dy="-8" textAnchor="middle" fontSize="85%">
@@ -66,16 +102,20 @@ export function ClassSVG({
           </Text>
         </g>
 
+        {/* Separation Line After Header */}
+        <line
+          x1="0"
+          x2={width}
+          y1={headerHeight}
+          y2={headerHeight}
+          stroke="black"
+          strokeWidth="0.5"
+        />
+
         {/* Attributes Section */}
-        {attributes.length > 0 && (
+        {truncatedAttributes.length > 0 && (
           <g transform={`translate(0, ${headerHeight})`}>
-            {/* Single Rect for all attributes */}
-            <ThemedRect
-              as="rect"
-              width={width}
-              height={totalAttributesHeight}
-            />
-            {attributes.map((attribute, index) => (
+            {truncatedAttributes.map((attribute, index) => (
               <Text
                 key={attribute.id}
                 x="10"
@@ -83,28 +123,40 @@ export function ClassSVG({
                 dominantBaseline="middle"
                 textAnchor="start"
               >
-                {attribute.name}
+                {attribute.truncatedName}
               </Text>
             ))}
           </g>
         )}
 
+        {/* Separation Line After Attributes */}
+        {truncatedAttributes.length > 0 && (
+          <line
+            x1="0"
+            x2={width}
+            y1={headerHeight + truncatedAttributes.length * attributeHeight}
+            y2={headerHeight + truncatedAttributes.length * attributeHeight}
+            stroke="black"
+            strokeWidth="0.5"
+          />
+        )}
+
         {/* Methods Section */}
-        {methods.length > 0 && (
+        {truncatedMethods.length > 0 && (
           <g
-            transform={`translate(0, ${headerHeight + totalAttributesHeight})`}
+            transform={`translate(0, ${
+              headerHeight + truncatedAttributes.length * attributeHeight
+            })`}
           >
-            {/* Single Rect for all methods */}
-            <ThemedRect as="rect" width={width} height={totalMethodsHeight} />
-            {methods.map((method, index) => (
+            {truncatedMethods.map((method, index) => (
               <Text
                 key={method.id}
                 x="10"
-                y={15 + index * attributeHeight}
+                y={15 + index * methodHeight}
                 dominantBaseline="middle"
                 textAnchor="start"
               >
-                {method.name}
+                {method.truncatedName}
               </Text>
             ))}
           </g>
