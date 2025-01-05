@@ -1,15 +1,18 @@
 import React, { useMemo, useCallback } from "react"
 
-interface SvgWithTitleAndDescriptionProps {
+interface TitleAndDescriptionSVGProps {
   width: number
   height: number
   title: string
   description: string
 }
 
-export const SvgWithTitleAndDescription: React.FC<
-  SvgWithTitleAndDescriptionProps
-> = ({ width, height, title, description }) => {
+export const TitleAndDescriptionSVG: React.FC<TitleAndDescriptionSVGProps> = ({
+  width,
+  height,
+  title,
+  description,
+}) => {
   const padding = 10 // Padding inside the SVG
   const titleHeight = 30 // Fixed height for the title
   const separatorHeight = 1 // Height of the separator line

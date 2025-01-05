@@ -1,6 +1,6 @@
 import { NodeProps, NodeResizer, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
-import { SvgWithTitleAndDescription } from "@/svgs"
+import { TitleAndDescriptionSVG } from "@/svgs"
 
 type Props = Node<{
   description?: string
@@ -19,7 +19,7 @@ export function TitleAndDesctiption({
 
   return (
     <DefaultNodeWrapper>
-      <SvgWithTitleAndDescription
+      <TitleAndDescriptionSVG
         width={width}
         height={height}
         title={title}
