@@ -1,12 +1,7 @@
 import { NodeProps, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
 import { ClassSVG } from "@/svgs"
-import { ClassType } from "@/types"
-
-export type ExtraElements = {
-  id: string
-  name: string
-}
+import { ClassType, ExtraElements } from "@/types"
 
 type Props = Node<{
   methods: ExtraElements[]

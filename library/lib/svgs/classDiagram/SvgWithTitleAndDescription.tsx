@@ -1,0 +1,101 @@
+import React, { useMemo, useCallback } from "react"
+
+interface SvgWithTitleAndDescriptionProps {
+  width: number
+  height: number
+  title: string
+  description: string
+}
+
+export const SvgWithTitleAndDescription: React.FC<
+  SvgWithTitleAndDescriptionProps
+> = ({ width, height, title, description }) => {
+  const padding = 10 // Padding inside the SVG
+  const titleHeight = 30 // Fixed height for the title
+  const separatorHeight = 1 // Height of the separator line
+  const descriptionStartY = padding + titleHeight + separatorHeight + 10 // Space for description
+
+  // Memoized wrapText function
+  const wrapText = useCallback((text: string, maxWidth: number): string[] => {
+    const words = text.split(" ")
+    const lines: string[] = []
+    let currentLine = ""
+
+    words.forEach((word) => {
+      const testLine = currentLine ? `${currentLine} ${word}` : word
+      const lineWidth = testLine.length * 7 // Approximation for font size 14px
+      if (lineWidth < maxWidth) {
+        currentLine = testLine
+      } else {
+        lines.push(currentLine)
+        currentLine = word
+      }
+    })
+
+    if (currentLine) {
+      lines.push(currentLine)
+    }
+
+    return lines
+  }, [])
+
+  const maxTextWidth = width - 2 * padding
+
+  // Memoized description lines calculation
+  const descriptionLines = useMemo(
+    () => wrapText(description, maxTextWidth),
+    [description, maxTextWidth, wrapText]
+  )
+
+  return (
+    <svg width={width} height={height}>
+      {/* Outer Border */}
+      <rect
+        x={padding / 2}
+        y={padding / 2}
+        width={width - padding}
+        height={height - padding}
+        stroke="black"
+        strokeWidth="1"
+        fill="white"
+      />
+
+      {/* Title */}
+      <text
+        x={width / 2}
+        y={padding + titleHeight / 2}
+        fontSize="16"
+        fontWeight="bold"
+        fill="black"
+        textAnchor="middle"
+        alignmentBaseline="middle"
+      >
+        {title}
+      </text>
+
+      {/* Separator Line */}
+      <line
+        x1={padding / 2}
+        x2={width - padding / 2}
+        y1={padding + titleHeight}
+        y2={padding + titleHeight}
+        stroke="black"
+        strokeWidth={separatorHeight}
+      />
+
+      {/* Description */}
+      {descriptionLines.map((line, index) => (
+        <text
+          key={index}
+          x={padding}
+          y={descriptionStartY + index * 18} // 18px line height
+          fontSize="14"
+          fill="black"
+          alignmentBaseline="hanging"
+        >
+          {line}
+        </text>
+      ))}
+    </svg>
+  )
+}

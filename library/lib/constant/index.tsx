@@ -33,6 +33,7 @@ export const dropElementConfig: {
       name: "Class",
       methods: [{ id: generateUUID(), name: "+ method()" }],
       attributes: [{ id: generateUUID(), name: "+ attribute: Type" }],
+      // strokeWidth: 1,
     },
     svg: (props) => <ClassSVG {...props} />,
   },
