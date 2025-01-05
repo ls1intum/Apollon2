@@ -17,7 +17,7 @@ import {
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
-import { defaultEdges, defaultNodes } from "./initialElements"
+import { initialEdges, initialNodes } from "./initialElements"
 import "@/styles/app.css"
 import { Sidebar } from "@/components"
 import { useCallback } from "react"
@@ -35,8 +35,8 @@ interface AppProps {
 }
 
 function App({ onReactFlowInit }: AppProps) {
-  const [nodes, , onNodesChange] = useNodesState(defaultNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges)
+  const [nodes, , onNodesChange] = useNodesState(initialNodes)
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
   const { onDrop, onDragOver } = useDragDrop()
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),

@@ -13,7 +13,9 @@ export const SvgWithTitleAndDescription: React.FC<
   const padding = 10 // Padding inside the SVG
   const titleHeight = 30 // Fixed height for the title
   const separatorHeight = 1 // Height of the separator line
+  const lineHeight = 18 // Line height for description
   const descriptionStartY = padding + titleHeight + separatorHeight + 10 // Space for description
+  const maxDescriptionHeight = height - descriptionStartY - padding // Max height for description
 
   // Memoized wrapText function
   const wrapText = useCallback((text: string, maxWidth: number): string[] => {
@@ -42,10 +44,19 @@ export const SvgWithTitleAndDescription: React.FC<
   const maxTextWidth = width - 2 * padding
 
   // Memoized description lines calculation
-  const descriptionLines = useMemo(
-    () => wrapText(description, maxTextWidth),
-    [description, maxTextWidth, wrapText]
-  )
+  const descriptionLines = useMemo(() => {
+    const wrappedLines = wrapText(description, maxTextWidth)
+    const maxLines = Math.floor(maxDescriptionHeight / lineHeight)
+
+    if (wrappedLines.length > maxLines) {
+      const truncatedLines = wrappedLines.slice(0, maxLines)
+      // Add ellipsis to the last line if the text is truncated
+      truncatedLines[truncatedLines.length - 1] += " ..."
+      return truncatedLines
+    }
+
+    return wrappedLines
+  }, [description, maxTextWidth, maxDescriptionHeight, lineHeight, wrapText])
 
   return (
     <svg width={width} height={height}>
@@ -88,7 +99,7 @@ export const SvgWithTitleAndDescription: React.FC<
         <text
           key={index}
           x={padding}
-          y={descriptionStartY + index * 18} // 18px line height
+          y={descriptionStartY + index * lineHeight}
           fontSize="14"
           fill="black"
           alignmentBaseline="hanging"
