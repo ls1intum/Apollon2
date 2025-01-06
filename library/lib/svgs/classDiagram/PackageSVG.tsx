@@ -36,14 +36,12 @@ export const PackageSVG = ({
       <g transform={`translate(${margin}, ${margin})`}>
         {/* Top Path */}
         <ThemedPath
-          as="path"
           d={`M 0 ${headerHeight} V 0 H 40 V ${headerHeight}`}
           stroke="black"
           strokeWidth="0.5"
         />
         {/* Main Rectangle */}
         <ThemedRect
-          as="rect"
           x="0"
           y={headerHeight}
           width={innerWidth}

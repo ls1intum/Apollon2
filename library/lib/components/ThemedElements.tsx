@@ -1,4 +1,4 @@
-import baseStyled from "styled-components"
+import { styled } from "styled-components"
 
 // Default Colors
 const defaultStrokeColor = "black"
@@ -7,115 +7,98 @@ const defaultPrimaryContrast = "#ffffff" // Example: white
 const defaultBackground = "#000000" // Example: black
 
 // Themed Polyline
-export const ThemedPolyline = baseStyled.polyline.attrs(
-  (props: { fillColor?: string; strokeColor?: string }) => ({
-    fillColor: props.fillColor || defaultFillColor,
-    strokeColor: props.strokeColor || defaultStrokeColor,
-    stroke: props.strokeColor || defaultStrokeColor,
-    fill: props.fillColor || defaultFillColor,
-  })
-)`
-  fill: ${(props) => props.fillColor || defaultBackground};
-  stroke: ${(props) => props.strokeColor || defaultPrimaryContrast};
+export const ThemedPolyline = styled.polyline`
+  fill: ${(props) => props.fill || defaultBackground};
+  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
 `
+
+ThemedPolyline.defaultProps = {
+  fill: defaultFillColor,
+  stroke: defaultStrokeColor,
+}
 
 // Themed Path
-export const ThemedPath = baseStyled.path.attrs(
-  (props: { fillColor?: string; strokeColor?: string }) => ({
-    fillColor: props.fillColor || defaultFillColor,
-    strokeColor: props.strokeColor || defaultStrokeColor,
-    stroke: props.strokeColor || defaultStrokeColor,
-    fill: props.fillColor || defaultFillColor,
-  })
-)`
-  fill: ${(props) => props.fillColor || defaultBackground};
-  stroke: ${(props) => props.strokeColor || defaultPrimaryContrast};
+export const ThemedPath = styled.path`
+  fill: ${(props) => props.fill || defaultBackground};
+  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
 `
+
+ThemedPath.defaultProps = {
+  fill: defaultFillColor,
+  stroke: defaultStrokeColor,
+}
 
 // Themed Path Contrast
-export const ThemedPathContrast = baseStyled.path.attrs(
-  (props: { fillColor?: string; strokeColor?: string }) => ({
-    fillColor: props.fillColor || defaultBackground,
-    strokeColor: props.strokeColor || defaultPrimaryContrast,
-    stroke: props.strokeColor || defaultPrimaryContrast,
-    fill: props.fillColor || defaultBackground,
-  })
-)`
-  fill: ${(props) => props.fillColor || defaultPrimaryContrast};
-  stroke: ${(props) => props.strokeColor || defaultBackground};
+export const ThemedPathContrast = styled.path`
+  fill: ${(props) => props.fill || defaultPrimaryContrast};
+  stroke: ${(props) => props.stroke || defaultBackground};
 `
+
+ThemedPathContrast.defaultProps = {
+  fill: defaultBackground,
+  stroke: defaultPrimaryContrast,
+}
 
 // Themed Rect
-export const ThemedRect = baseStyled.rect.attrs(
-  (props: { fillColor?: string; strokeColor?: string }) => ({
-    fillColor: props.fillColor || defaultFillColor,
-    strokeColor: props.strokeColor || defaultStrokeColor,
-    stroke: props.strokeColor || defaultStrokeColor,
-    fill: props.fillColor || defaultFillColor,
-  })
-)`
-  fill: ${(props) => props.fillColor || defaultBackground};
-  stroke: ${(props) => props.strokeColor || defaultPrimaryContrast};
+export const ThemedRect = styled.rect`
+  fill: ${(props) => props.fill || defaultBackground};
+  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
 `
+
+ThemedRect.defaultProps = {
+  fill: defaultFillColor,
+  stroke: defaultStrokeColor,
+}
 
 // Themed Rect Contrast
-export const ThemedRectContrast = baseStyled.rect.attrs(
-  (props: { fillColor?: string; strokeColor?: string }) => ({
-    fillColor: props.fillColor || defaultBackground,
-    strokeColor: props.strokeColor || defaultPrimaryContrast,
-    stroke: props.strokeColor || defaultPrimaryContrast,
-    fill: props.fillColor || defaultBackground,
-  })
-)`
-  fill: ${(props) => props.fillColor || defaultPrimaryContrast};
-  stroke: ${(props) => props.strokeColor || defaultBackground};
+export const ThemedRectContrast = styled.rect`
+  fill: ${(props) => props.fill || defaultPrimaryContrast};
+  stroke: ${(props) => props.stroke || defaultBackground};
 `
+
+ThemedRectContrast.defaultProps = {
+  fill: defaultBackground,
+  stroke: defaultPrimaryContrast,
+}
 
 // Themed Circle
-export const ThemedCircle = baseStyled.circle.attrs(
-  (props: { fillColor?: string; strokeColor?: string }) => ({
-    fillColor: props.fillColor || defaultFillColor,
-    strokeColor: props.strokeColor || defaultStrokeColor,
-    stroke: props.strokeColor || defaultStrokeColor,
-    fill: props.fillColor || defaultFillColor,
-  })
-)`
-  fill: ${(props) => props.fillColor || defaultBackground};
-  stroke: ${(props) => props.strokeColor || defaultPrimaryContrast};
+export const ThemedCircle = styled.circle`
+  fill: ${(props) => props.fill || defaultBackground};
+  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
 `
+
+ThemedCircle.defaultProps = {
+  fill: defaultFillColor,
+  stroke: defaultStrokeColor,
+}
 
 // Themed Circle Contrast
-export const ThemedCircleContrast = baseStyled.circle.attrs(
-  (props: { fillColor?: string; strokeColor?: string }) => ({
-    fillColor: props.fillColor || defaultBackground,
-    strokeColor: props.strokeColor || defaultPrimaryContrast,
-    stroke: props.strokeColor || defaultPrimaryContrast,
-    fill: props.fillColor || defaultBackground,
-  })
-)`
-  fill: ${(props) => props.fillColor || defaultPrimaryContrast};
-  stroke: ${(props) => props.strokeColor || defaultBackground};
+export const ThemedCircleContrast = styled.circle`
+  fill: ${(props) => props.fill || defaultPrimaryContrast};
+  stroke: ${(props) => props.stroke || defaultBackground};
 `
+
+ThemedCircleContrast.defaultProps = {
+  fill: defaultBackground,
+  stroke: defaultPrimaryContrast,
+}
 
 // Themed Ellipse
-export const ThemedEllipse = baseStyled.ellipse.attrs(
-  (props: { fillColor?: string; strokeColor?: string }) => ({
-    fillColor: props.fillColor || defaultFillColor,
-    strokeColor: props.strokeColor || defaultStrokeColor,
-    stroke: props.strokeColor || defaultStrokeColor,
-    fill: props.fillColor || defaultFillColor,
-  })
-)`
-  fill: ${(props) => props.fillColor || defaultBackground};
-  stroke: ${(props) => props.strokeColor || defaultPrimaryContrast};
+export const ThemedEllipse = styled.ellipse`
+  fill: ${(props) => props.fill || defaultBackground};
+  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
 `
 
+ThemedEllipse.defaultProps = {
+  fill: defaultFillColor,
+  stroke: defaultStrokeColor,
+}
+
 // Themed Line
-export const ThemedLine = baseStyled.line.attrs(
-  (props: { strokeColor?: string }) => ({
-    strokeColor: props.strokeColor || defaultStrokeColor,
-    stroke: props.strokeColor || defaultStrokeColor,
-  })
-)`
-  stroke: ${(props) => props.strokeColor || defaultPrimaryContrast};
+export const ThemedLine = styled.line`
+  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
 `
+
+ThemedLine.defaultProps = {
+  stroke: defaultStrokeColor,
+}

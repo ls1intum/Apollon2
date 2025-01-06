@@ -75,10 +75,8 @@ export function ClassSVG({
       <g transform={`translate(${margin}, ${margin})`}>
         {/* Outer Rectangle */}
         <ThemedRect
-          as="rect"
           width={innerWidth}
           height={Math.max(height, totalHeight) - 2 * margin}
-          fillColor="white"
           stroke="black"
           strokeWidth="0.5"
         />
