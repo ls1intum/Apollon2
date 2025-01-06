@@ -58,7 +58,15 @@ export function ClassPopover({
       }}
       style={{ margin: "0 8px", maxHeight: 500 }}
     >
-      <Box sx={{ p: 1, display: "flex", flexDirection: "column", gap: 1 }}>
+      <Box
+        sx={{
+          p: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+          bgcolor: "#F8F9FA",
+        }}
+      >
         <TextField
           id="outlined-basic"
           variant="outlined"

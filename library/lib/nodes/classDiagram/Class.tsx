@@ -1,5 +1,6 @@
 import {
   NodeProps,
+  NodeResizer,
   NodeToolbar,
   Position,
   useReactFlow,
@@ -8,9 +9,10 @@ import {
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
 import { ClassSVG } from "@/svgs"
 import { ClassType, ExtraElements } from "@/types"
-import { useEffect, useRef, useState } from "react"
 import { ClassPopover } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
+import { useClassNode } from "@/hooks" // Assuming you save the hook here
+import { useEffect } from "react"
 
 export type ClassNodeProps = Node<{
   methods: ExtraElements[]
@@ -27,41 +29,42 @@ export function Class({
   data: { methods, attributes, stereotype, name },
 }: NodeProps<ClassNodeProps>) {
   const reactFlow = useReactFlow()
-  const svgRef = useRef<SVGSVGElement | null>(null)
-  const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null)
-
-  const handleClick = () => {
-    if (svgRef.current) {
-      setAnchorEl(svgRef.current)
-    }
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  const handleNameChange = (newName: string) => {
-    reactFlow.updateNodeData(id, { name: newName })
-  }
-
-  useEffect(() => {
-    if (!selected) {
-      handleClose()
-    }
-  }, [selected])
-
-  useEffect(() => {
-    if (!anchorEl) {
-      reactFlow.updateNode(id, { selected: false })
-    }
-  }, [anchorEl])
+  const { svgRef, anchorEl, handleClick, handleClose, handleNameChange } =
+    useClassNode({ id, selected: Boolean(selected) })
 
   if (!width || !height) {
     return null
   }
 
+  const svgWidth = svgRef.current?.getAttribute("width")
+    ? Number(svgRef.current?.getAttribute("width"))
+    : 0
+  const svgHeight = svgRef.current?.getAttribute("height")
+    ? Number(svgRef.current?.getAttribute("height"))
+    : 0
+
+  console.log("DEBUG svgWidth", svgWidth)
+  console.log("DEBUG svgHeight", svgHeight)
+
+  useEffect(() => {
+    if (svgWidth && svgHeight) {
+      if (width < svgWidth) {
+        reactFlow.updateNode(id, { width: svgWidth })
+      }
+      if (height < svgHeight) {
+        reactFlow.updateNode(id, { height: svgHeight })
+      }
+      if (width > svgWidth) {
+        reactFlow.updateNode(id, { width: svgWidth })
+      }
+      if (height > svgHeight) {
+        reactFlow.updateNode(id, { height: height })
+      }
+    }
+  }, [svgHeight, svgWidth])
   return (
     <DefaultNodeWrapper>
+      <NodeResizer isVisible={selected} minHeight={svgHeight} />
       <NodeToolbar
         isVisible={selected}
         position={Position.Top}
@@ -73,18 +76,15 @@ export function Class({
           style={{ cursor: "pointer", width: 16, height: 16 }}
         />
       </NodeToolbar>
-
-      <div style={{ display: "inline-block", cursor: "pointer" }}>
-        <ClassSVG
-          ref={svgRef}
-          width={width}
-          height={height}
-          attributes={attributes}
-          methods={methods}
-          stereotype={stereotype}
-          name={name}
-        />
-      </div>
+      <ClassSVG
+        ref={svgRef}
+        width={width}
+        height={height}
+        attributes={attributes}
+        methods={methods}
+        stereotype={stereotype}
+        name={name}
+      />
       <ClassPopover
         id={id}
         anchorEl={anchorEl}

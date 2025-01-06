@@ -66,11 +66,13 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
       truncatedAttributes.length * attributeHeight +
       truncatedMethods.length * methodHeight
 
+    const svgHeight = totalHeight < height ? height : totalHeight
+
     return (
       <svg
         ref={ref}
         width={width}
-        height={Math.max(height, totalHeight)}
+        height={svgHeight}
         style={{
           transformOrigin: "left top",
           transformBox: "content-box",
