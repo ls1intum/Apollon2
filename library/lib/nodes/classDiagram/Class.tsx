@@ -3,7 +3,6 @@ import {
   NodeResizer,
   NodeToolbar,
   Position,
-  useReactFlow,
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
@@ -12,7 +11,7 @@ import { ClassType, ExtraElements } from "@/types"
 import { ClassPopover } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import { useClassNode } from "@/hooks" // Assuming you save the hook here
-import { useEffect } from "react"
+import { useState } from "react"
 
 export type ClassNodeProps = Node<{
   methods: ExtraElements[]
@@ -28,7 +27,11 @@ export function Class({
   selected,
   data: { methods, attributes, stereotype, name },
 }: NodeProps<ClassNodeProps>) {
-  const reactFlow = useReactFlow()
+  const [{ minWidth, minHeight }, setMinSize] = useState({
+    minWidth: 0,
+    minHeight: 0,
+  })
+
   const { svgRef, anchorEl, handleClick, handleClose, handleNameChange } =
     useClassNode({ id, selected: Boolean(selected) })
 
@@ -36,35 +39,29 @@ export function Class({
     return null
   }
 
-  const svgWidth = svgRef.current?.getAttribute("width")
-    ? Number(svgRef.current?.getAttribute("width"))
-    : 0
-  const svgHeight = svgRef.current?.getAttribute("height")
-    ? Number(svgRef.current?.getAttribute("height"))
-    : 0
-
-  console.log("DEBUG svgWidth", svgWidth)
-  console.log("DEBUG svgHeight", svgHeight)
-
-  useEffect(() => {
-    if (svgWidth && svgHeight) {
-      if (width < svgWidth) {
-        reactFlow.updateNode(id, { width: svgWidth })
-      }
-      if (height < svgHeight) {
-        reactFlow.updateNode(id, { height: svgHeight })
-      }
-      if (width > svgWidth) {
-        reactFlow.updateNode(id, { width: svgWidth })
-      }
-      if (height > svgHeight) {
-        reactFlow.updateNode(id, { height: height })
-      }
-    }
-  }, [svgHeight, svgWidth])
+  // useEffect(() => {
+  //   if (svgWidth && svgHeight) {
+  //     if (width < svgWidth) {
+  //       reactFlow.updateNode(id, { width: svgWidth })
+  //     }
+  //     if (height < svgHeight) {
+  //       reactFlow.updateNode(id, { height: svgHeight })
+  //     }
+  //     if (width > svgWidth) {
+  //       reactFlow.updateNode(id, { width })
+  //     }
+  //     if (height > svgHeight) {
+  //       reactFlow.updateNode(id, { height })
+  //     }
+  //   }
+  // }, [svgHeight, svgWidth])
   return (
     <DefaultNodeWrapper>
-      <NodeResizer isVisible={selected} minHeight={svgHeight} />
+      <NodeResizer
+        isVisible={selected}
+        minHeight={minHeight}
+        minWidth={minWidth}
+      />
       <NodeToolbar
         isVisible={selected}
         position={Position.Top}
@@ -84,6 +81,8 @@ export function Class({
         methods={methods}
         stereotype={stereotype}
         name={name}
+        setMinSize={setMinSize}
+        id={id}
       />
       <ClassPopover
         id={id}

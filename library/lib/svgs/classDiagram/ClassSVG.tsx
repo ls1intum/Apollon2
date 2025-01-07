@@ -1,8 +1,15 @@
 import { ThemedRect } from "@/components/ThemedElements"
 import { Text } from "@/components/Text"
 import { ClassType, ExtraElements } from "@/types"
-import { SVGAttributes, useMemo } from "react"
+import {
+  Dispatch,
+  SetStateAction,
+  SVGAttributes,
+  useEffect,
+  useMemo,
+} from "react"
 import { forwardRef } from "react"
+import { useReactFlow } from "@xyflow/react"
 
 export type ClassSVGProps = {
   width: number
@@ -13,6 +20,8 @@ export type ClassSVGProps = {
   name: string
   transformScale?: number
   svgAttributes?: SVGAttributes<SVGElement>
+  setMinSize?: Dispatch<SetStateAction<{ minWidth: number; minHeight: number }>>
+  id: string
 }
 
 export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
@@ -26,6 +35,8 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
       name,
       transformScale,
       svgAttributes,
+      setMinSize,
+      id,
     }: ClassSVGProps,
     ref
   ) {
@@ -33,45 +44,69 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
     const headerHeight = 50 // Height of the header section
     const attributeHeight = 30 // Height per attribute
     const methodHeight = 30 // Height per method
-    const innerWidth = width - 2 * margin // Adjusted content width
     const padding = 10 // Inner padding for text
-    const maxTextWidth = innerWidth - 2 * padding // Maximum width for text
 
-    const truncateText = (text: string, maxWidth: number): string => {
-      const approxCharWidth = 7 // Approximate width of a character in font size 14px
-      const maxChars = Math.floor(maxWidth / approxCharWidth)
-      return text.length > maxChars ? `${text.slice(0, maxChars - 3)}...` : text
+    const reactFlow = useReactFlow()
+    // Utility to measure text width
+    const measureTextWidth = (text: string, approxCharWidth = 8): number => {
+      return text.length * approxCharWidth // Approximate width calculation
     }
 
-    const truncatedAttributes = useMemo(
-      () =>
-        attributes.map((attribute) => ({
-          ...attribute,
-          truncatedName: truncateText(attribute.name, maxTextWidth),
-        })),
-      [attributes, maxTextWidth]
-    )
+    // Calculate the widest text
+    const maxTextWidth = useMemo(() => {
+      const headerTextWidths = [
+        stereotype ? measureTextWidth(`«${stereotype}»`) : 0,
+        measureTextWidth(name),
+      ]
+      const attributesTextWidths = attributes.map((attr) =>
+        measureTextWidth(attr.name)
+      )
+      const methodsTextWidths = methods.map((method) =>
+        measureTextWidth(method.name)
+      )
+      const allTextWidths = [
+        ...headerTextWidths, // Max of stereotype and name
+        ...attributesTextWidths,
+        ...methodsTextWidths,
+      ]
+      return Math.max(...allTextWidths) // Find the maximum width
+    }, [stereotype, name, attributes, methods])
 
-    const truncatedMethods = useMemo(
-      () =>
-        methods.map((method) => ({
-          ...method,
-          truncatedName: truncateText(method.name, maxTextWidth),
-        })),
-      [methods, maxTextWidth]
-    )
-
-    const totalHeight =
+    // Calculate the minimum width needed
+    const minWidth = maxTextWidth + 2 * padding + 2 * margin
+    const minHeight =
       headerHeight +
-      truncatedAttributes.length * attributeHeight +
-      truncatedMethods.length * methodHeight
+      attributes.length * attributeHeight +
+      methods.length * methodHeight
 
-    const svgHeight = totalHeight < height ? height : totalHeight
+    // Adjusted width
+    // const finalWidth = transformScale
+    //   ? transformScale * Math.max(width, minWidth)
+    //   : Math.max(width, minWidth)
+    const svgHeight = Math.max(height, minHeight)
+    const svgWidth = Math.max(width, minWidth)
+    // const svgHeight = totalHeight
+
+    useEffect(() => {
+      // console.log("DEBUG minWidth", minWidth)
+      // console.log("DEBUG minHeight", minHeight)
+      if (setMinSize) {
+        setMinSize({ minWidth, minHeight })
+      }
+      if (minWidth > width) {
+        console.log("DEBUG minWidth > width")
+        reactFlow.updateNode(id, { width: minWidth })
+      }
+      if (minHeight > height) {
+        console.log("DEBUG minHeight > height")
+        reactFlow.updateNode(id, { height: minHeight })
+      }
+    }, [minWidth, minHeight])
 
     return (
       <svg
         ref={ref}
-        width={width}
+        width={svgWidth}
         height={svgHeight}
         style={{
           transformOrigin: "left top",
@@ -83,8 +118,8 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
         <g transform={`translate(${margin}, ${margin})`}>
           {/* Outer Rectangle */}
           <ThemedRect
-            width={innerWidth}
-            height={Math.max(height, totalHeight) - 2 * margin}
+            width={svgWidth - 2 * margin}
+            height={Math.max(height, svgHeight) - 2 * margin}
             stroke="black"
             strokeWidth="0.5"
           />
@@ -92,18 +127,18 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
           {/* Header Section */}
           <g>
             <Text
-              x={innerWidth / 2}
+              x={(svgWidth - 2 * margin) / 2}
               y={headerHeight / 2}
               dominantBaseline="middle"
               textAnchor="middle"
             >
               {stereotype && (
-                <tspan x={innerWidth / 2} dy="-8" fontSize="85%">
+                <tspan x={(svgWidth - 2 * margin) / 2} dy="-8" fontSize="85%">
                   {`«${stereotype}»`}
                 </tspan>
               )}
               <tspan
-                x={innerWidth / 2}
+                x={(svgWidth - 2 * margin) / 2}
                 dy={stereotype ? "18" : "0"}
                 fontWeight="600"
               >
@@ -115,7 +150,7 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
           {/* Separation Line After Header */}
           <line
             x1="0"
-            x2={innerWidth}
+            x2={svgWidth - 2 * margin}
             y1={headerHeight}
             y2={headerHeight}
             stroke="black"
@@ -123,9 +158,9 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
           />
 
           {/* Attributes Section */}
-          {truncatedAttributes.length > 0 && (
+          {attributes.length > 0 && (
             <g transform={`translate(0, ${headerHeight})`}>
-              {truncatedAttributes.map((attribute, index) => (
+              {attributes.map((attribute, index) => (
                 <Text
                   key={attribute.id}
                   x={padding}
@@ -133,32 +168,32 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
                   dominantBaseline="middle"
                   textAnchor="start"
                 >
-                  {attribute.truncatedName}
+                  {attribute.name}
                 </Text>
               ))}
             </g>
           )}
 
           {/* Separation Line After Attributes */}
-          {truncatedAttributes.length > 0 && (
+          {attributes.length > 0 && (
             <line
               x1="0"
-              x2={innerWidth}
-              y1={headerHeight + truncatedAttributes.length * attributeHeight}
-              y2={headerHeight + truncatedAttributes.length * attributeHeight}
+              x2={svgWidth - 2 * margin}
+              y1={headerHeight + attributes.length * attributeHeight}
+              y2={headerHeight + attributes.length * attributeHeight}
               stroke="black"
               strokeWidth="0.5"
             />
           )}
 
           {/* Methods Section */}
-          {truncatedMethods.length > 0 && (
+          {methods.length > 0 && (
             <g
               transform={`translate(0, ${
-                headerHeight + truncatedAttributes.length * attributeHeight
+                headerHeight + attributes.length * attributeHeight
               })`}
             >
-              {truncatedMethods.map((method, index) => (
+              {methods.map((method, index) => (
                 <Text
                   key={method.id}
                   x={padding}
@@ -166,7 +201,7 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
                   dominantBaseline="middle"
                   textAnchor="start"
                 >
-                  {method.truncatedName}
+                  {method.name}
                 </Text>
               ))}
             </g>

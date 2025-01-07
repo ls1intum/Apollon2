@@ -55,6 +55,7 @@ export const Sidebar = () => {
                 height: config.height,
                 ...config.defaultData,
                 transformScale,
+                id: "1",
               })}
             </div>
           </React.Fragment>
