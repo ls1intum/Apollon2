@@ -25,6 +25,11 @@ export function useClassNode({
   const handleNameChange = (newName: string) => {
     reactFlow.updateNodeData(id, { name: newName })
   }
+  const handleDelete = () => {
+    reactFlow.deleteElements({
+      nodes: [{ id }],
+    })
+  }
 
   useEffect(() => {
     if (!selected) {
@@ -44,5 +49,6 @@ export function useClassNode({
     handleClick,
     handleClose,
     handleNameChange,
+    handleDelete,
   }
 }

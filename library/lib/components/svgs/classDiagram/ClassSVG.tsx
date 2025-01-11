@@ -133,38 +133,40 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
             font={font}
           />
 
-          {/* Separation Line After Header */}
-          <SeparationLine y={headerHeight} width={finalWidth - 2 * margin} />
-
           {/* Attributes Section */}
           {attributes.length > 0 && (
-            <AttributesSection
-              attributes={attributes}
-              padding={padding}
-              attributeHeight={attributeHeight}
-              width={finalWidth - 2 * margin}
-              font={font}
-            />
-          )}
-
-          {/* Separation Line After Attributes */}
-          {attributes.length > 0 && (
-            <SeparationLine
-              y={headerHeight + attributes.length * attributeHeight}
-              width={finalWidth - 2 * margin}
-            />
+            <>
+              {/* Separation Line After Header */}
+              <SeparationLine
+                y={headerHeight}
+                width={finalWidth - 2 * margin}
+              />
+              <AttributesSection
+                attributes={attributes}
+                padding={padding}
+                attributeHeight={attributeHeight}
+                width={finalWidth - 2 * margin}
+                font={font}
+              />
+            </>
           )}
 
           {/* Methods Section */}
           {methods.length > 0 && (
-            <MethodsSection
-              attributesLength={attributes.length}
-              methods={methods}
-              padding={padding}
-              methodHeight={methodHeight}
-              width={finalWidth - 2 * margin}
-              font={font}
-            />
+            <>
+              <SeparationLine
+                y={headerHeight + attributes.length * attributeHeight}
+                width={finalWidth - 2 * margin}
+              />
+              <MethodsSection
+                attributesLength={attributes.length}
+                methods={methods}
+                padding={padding}
+                methodHeight={methodHeight}
+                width={finalWidth - 2 * margin}
+                font={font}
+              />
+            </>
           )}
         </g>
       </svg>

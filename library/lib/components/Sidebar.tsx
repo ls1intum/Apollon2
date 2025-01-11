@@ -1,6 +1,6 @@
 import React, { DragEvent } from "react"
 import { dropElementConfig, transformScale } from "@/constants"
-import { Divider } from "./Divider"
+import { DividerLine } from "./DividerLine"
 import { DropNodeData } from "@/types"
 
 const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
@@ -32,7 +32,7 @@ export const Sidebar = () => {
           <React.Fragment key={`${config.type}_${config.name}`}>
             {/* Add separator before the Color Description */}
             {config.type === "colorDescription" && (
-              <Divider style={{ margin: "3px 0" }} />
+              <DividerLine style={{ margin: "3px 0" }} height={2} />
             )}
             <div
               style={{
