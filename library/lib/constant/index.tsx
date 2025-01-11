@@ -6,7 +6,7 @@ import { DiagramNodeTypeKeys } from "@/nodes"
 
 export const transformScale = 0.8
 const droppedElementWidth = 160
-const droppedElementHeight = 110
+const droppedElementHeight = 112
 
 export const dropElementConfig: {
   type: DiagramNodeTypeKeys
@@ -33,7 +33,6 @@ export const dropElementConfig: {
       name: "Class",
       methods: [{ id: generateUUID(), name: "+ method()" }],
       attributes: [{ id: generateUUID(), name: "+ attribute: Type" }],
-      // strokeWidth: 1,
     },
     svg: (props) => <ClassSVG {...props} />,
   },

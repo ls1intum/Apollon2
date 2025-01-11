@@ -24,6 +24,22 @@ export type ClassSVGProps = {
   id: string
 }
 
+// Accurate text width measurement using Canvas API with the correct font
+const measureTextWidth = (() => {
+  const canvas = document.createElement("canvas")
+  const context = canvas.getContext("2d")
+
+  // Define the font to match root.css
+  const font = "400 16px Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"
+
+  return (text: string): number => {
+    if (!context) return text.length * 8 // Fallback if context is not available
+    context.font = font
+    const metrics = context.measureText(text)
+    return metrics.width
+  }
+})()
+
 export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
   function ClassSVG(
     {
@@ -40,19 +56,17 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
     }: ClassSVGProps,
     ref
   ) {
-    const margin = 2 // Padding inside the SVG content
-    const headerHeight = 50 // Height of the header section
-    const attributeHeight = 30 // Height per attribute
-    const methodHeight = 30 // Height per method
-    const padding = 10 // Inner padding for text
+    const margin = 2
+    const headerHeight = 50
+    const attributeHeight = 30
+    const methodHeight = 30
+    const padding = 10 // Inner horizontal padding for text
+    const font =
+      "400 16px Inter, system-ui, Avenir, Helvetica, Arial, sans-serif" // Match root.css
 
     const reactFlow = useReactFlow()
-    // Utility to measure text width
-    const measureTextWidth = (text: string, approxCharWidth = 8): number => {
-      return text.length * approxCharWidth // Approximate width calculation
-    }
 
-    // Calculate the widest text
+    // Calculate the widest text accurately
     const maxTextWidth = useMemo(() => {
       const headerTextWidths = [
         stereotype ? measureTextWidth(`«${stereotype}»`) : 0,
@@ -65,49 +79,47 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
         measureTextWidth(method.name)
       )
       const allTextWidths = [
-        ...headerTextWidths, // Max of stereotype and name
+        ...headerTextWidths,
         ...attributesTextWidths,
         ...methodsTextWidths,
       ]
-      return Math.max(...allTextWidths) // Find the maximum width
+      return Math.max(...allTextWidths)
     }, [stereotype, name, attributes, methods])
 
-    // Calculate the minimum width needed
+    // Calculate the minimum width and height needed
     const minWidth = maxTextWidth + 2 * padding + 2 * margin
     const minHeight =
       headerHeight +
       attributes.length * attributeHeight +
-      methods.length * methodHeight
+      methods.length * methodHeight +
+      margin
 
-    // Adjusted width
-    // const finalWidth = transformScale
-    //   ? transformScale * Math.max(width, minWidth)
-    //   : Math.max(width, minWidth)
-    const svgHeight = Math.max(height, minHeight)
-    const svgWidth = Math.max(width, minWidth)
-    // const svgHeight = totalHeight
+    const finalWidth = Math.max(width, minWidth)
 
     useEffect(() => {
-      // console.log("DEBUG minWidth", minWidth)
-      // console.log("DEBUG minHeight", minHeight)
       if (setMinSize) {
-        setMinSize({ minWidth, minHeight })
+        setMinSize({ minWidth: minWidth, minHeight: minHeight })
       }
-      if (minWidth > width) {
-        console.log("DEBUG minWidth > width")
-        reactFlow.updateNode(id, { width: minWidth })
+      if (finalWidth > width) {
+        reactFlow.updateNode(id, { width: finalWidth })
       }
-      if (minHeight > height) {
-        console.log("DEBUG minHeight > height")
-        reactFlow.updateNode(id, { height: minHeight })
-      }
-    }, [minWidth, minHeight])
+      reactFlow.updateNode(id, { height: minHeight })
+    }, [
+      finalWidth,
+      setMinSize,
+      reactFlow,
+      id,
+      minWidth,
+      minHeight,
+      width,
+      height,
+    ])
 
     return (
       <svg
         ref={ref}
-        width={svgWidth}
-        height={svgHeight}
+        width={finalWidth}
+        height={minHeight}
         style={{
           transformOrigin: "left top",
           transformBox: "content-box",
@@ -118,8 +130,8 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
         <g transform={`translate(${margin}, ${margin})`}>
           {/* Outer Rectangle */}
           <ThemedRect
-            width={svgWidth - 2 * margin}
-            height={Math.max(height, svgHeight) - 2 * margin}
+            width={finalWidth - 2 * margin}
+            height={minHeight - 2 * margin}
             stroke="black"
             strokeWidth="0.5"
           />
@@ -127,18 +139,19 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
           {/* Header Section */}
           <g>
             <Text
-              x={(svgWidth - 2 * margin) / 2}
+              x={(finalWidth - 2 * margin) / 2}
               y={headerHeight / 2}
               dominantBaseline="middle"
               textAnchor="middle"
+              font={font}
             >
               {stereotype && (
-                <tspan x={(svgWidth - 2 * margin) / 2} dy="-8" fontSize="85%">
+                <tspan x={(finalWidth - 2 * margin) / 2} dy="-8" fontSize="85%">
                   {`«${stereotype}»`}
                 </tspan>
               )}
               <tspan
-                x={(svgWidth - 2 * margin) / 2}
+                x={(finalWidth - 2 * margin) / 2}
                 dy={stereotype ? "18" : "0"}
                 fontWeight="600"
               >
@@ -150,7 +163,7 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
           {/* Separation Line After Header */}
           <line
             x1="0"
-            x2={svgWidth - 2 * margin}
+            x2={finalWidth - 2 * margin}
             y1={headerHeight}
             y2={headerHeight}
             stroke="black"
@@ -167,6 +180,7 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
                   y={15 + index * attributeHeight}
                   dominantBaseline="middle"
                   textAnchor="start"
+                  font={font}
                 >
                   {attribute.name}
                 </Text>
@@ -178,7 +192,7 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
           {attributes.length > 0 && (
             <line
               x1="0"
-              x2={svgWidth - 2 * margin}
+              x2={finalWidth - 2 * margin}
               y1={headerHeight + attributes.length * attributeHeight}
               y2={headerHeight + attributes.length * attributeHeight}
               stroke="black"
@@ -200,6 +214,7 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
                   y={15 + index * methodHeight}
                   dominantBaseline="middle"
                   textAnchor="start"
+                  font={font}
                 >
                   {method.name}
                 </Text>

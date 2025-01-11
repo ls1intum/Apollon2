@@ -59,7 +59,10 @@ function App({ onReactFlowInit }: AppProps) {
         connectionLineType={ConnectionLineType.SmoothStep}
         connectionMode={ConnectionMode.Loose}
         fitView
-        onInit={(instance) => onReactFlowInit(instance)}
+        onInit={(instance) => {
+          instance.zoomTo(0.8)
+          onReactFlowInit(instance)
+        }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
       >

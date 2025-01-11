@@ -39,28 +39,14 @@ export function Class({
     return null
   }
 
-  // useEffect(() => {
-  //   if (svgWidth && svgHeight) {
-  //     if (width < svgWidth) {
-  //       reactFlow.updateNode(id, { width: svgWidth })
-  //     }
-  //     if (height < svgHeight) {
-  //       reactFlow.updateNode(id, { height: svgHeight })
-  //     }
-  //     if (width > svgWidth) {
-  //       reactFlow.updateNode(id, { width })
-  //     }
-  //     if (height > svgHeight) {
-  //       reactFlow.updateNode(id, { height })
-  //     }
-  //   }
-  // }, [svgHeight, svgWidth])
   return (
     <DefaultNodeWrapper>
       <NodeResizer
+        nodeId={id}
         isVisible={selected}
-        minHeight={minHeight}
         minWidth={minWidth}
+        minHeight={minHeight}
+        maxHeight={minHeight}
       />
       <NodeToolbar
         isVisible={selected}
