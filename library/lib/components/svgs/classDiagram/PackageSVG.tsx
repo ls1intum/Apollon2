@@ -16,7 +16,7 @@ export const PackageSVG = ({
   svgAttributes,
   transformScale,
 }: PackageSVGProps) => {
-  const margin = 2 // Padding inside the SVG content
+  const margin = 2
   const headerHeight = 10 // Height of the top path
   const innerWidth = width - 2 * margin // Adjusted content width
   const innerHeight = height - 2 * margin // Adjusted content height

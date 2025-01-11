@@ -6,16 +6,15 @@ import {
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
-import { ClassSVG } from "@/svgs"
-import { ClassType, ExtraElements } from "@/types"
-import { ClassPopover } from "@/components"
+import { ClassType, ExtraElement } from "@/types"
+import { ClassPopover, ClassSVG } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
-import { useClassNode } from "@/hooks" // Assuming you save the hook here
+import { useClassNode } from "@/hooks"
 import { useState } from "react"
 
 export type ClassNodeProps = Node<{
-  methods: ExtraElements[]
-  attributes: ExtraElements[]
+  methods: ExtraElement[]
+  attributes: ExtraElement[]
   stereotype?: ClassType
   name: string
 }>

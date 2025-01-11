@@ -1,5 +1,5 @@
 import React, { DragEvent } from "react"
-import { dropElementConfig, transformScale } from "@/constant"
+import { dropElementConfig, transformScale } from "@/constants"
 import { Divider } from "./Divider"
 import { DropNodeData } from "@/types"
 
@@ -9,6 +9,7 @@ const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
   const offsetY = (event.clientY - rect.top) / transformScale // Cursor offset from the element's top
 
   // Pass the offset along with the type and data
+  // This offset will be used to position the element on drop
   event.dataTransfer.setData(
     "text/plain",
     JSON.stringify({ type, data, offsetX, offsetY })

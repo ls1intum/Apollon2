@@ -17,7 +17,7 @@ export function ColorDescriptionSVG({
   svgAttributes,
   transformScale,
 }: ColorDescriptionSVGProps) {
-  const margin = 2 // Padding inside the SVG content
+  const margin = 2
   const innerWidth = width - 2 * margin // Adjusted content width
   const innerHeight = height - 2 * margin // Adjusted content height
   const strokeWidth = 0.5

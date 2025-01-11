@@ -1,4 +1,4 @@
-import { dropElementConfig } from "@/constant"
+import { dropElementConfig } from "@/constants"
 import { DropNodeData } from "@/types"
 import { generateUUID } from "@/utils"
 import { useReactFlow, type Node } from "@xyflow/react"

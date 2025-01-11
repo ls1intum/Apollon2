@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ClassSVG, PackageSVG, ColorDescriptionSVG } from "@/svgs"
+import { ClassSVG, PackageSVG, ColorDescriptionSVG } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType } from "@/types"
 import { DiagramNodeTypeKeys } from "@/nodes"
 
+export * from "./layoutConstants"
 export const transformScale = 0.8
+
 const droppedElementWidth = 160
 const droppedElementHeight = 112
 

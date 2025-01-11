@@ -1,6 +1,6 @@
 import { NodeProps, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
-import { ColorDescriptionSVG } from "@/svgs"
+import { ColorDescriptionSVG } from "@/components"
 
 type Props = Node<{
   description: string
