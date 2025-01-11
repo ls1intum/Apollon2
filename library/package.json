@@ -18,7 +18,7 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@mui/icons-material": "^6.3.1",
+    "@mui/icons-material": "6.3.1",
     "@mui/material": "6.3.1",
     "@mui/styled-engine-sc": "6.3.1",
     "@xyflow/react": "12.3.6",
