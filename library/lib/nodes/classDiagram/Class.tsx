@@ -7,7 +7,7 @@ import {
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
 import { ClassType, ExtraElement } from "@/types"
-import { ClassPopover, ClassSVG } from "@/components"
+import { ClassPopover, ClassSVG, MinSize } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import { useClassNode } from "@/hooks"
@@ -28,7 +28,7 @@ export function Class({
   selected,
   data: { methods, attributes, stereotype, name },
 }: NodeProps<ClassNodeProps>) {
-  const [{ minWidth, minHeight }, setMinSize] = useState({
+  const [{ minHeight, minWidth }, setMinSize] = useState<MinSize>({
     minWidth: 0,
     minHeight: 0,
   })

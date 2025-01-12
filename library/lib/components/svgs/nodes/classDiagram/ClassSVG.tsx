@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useMemo } from "react"
 import { ThemedRect } from "@/components/ThemedElements"
 import { Text } from "@/components/Text"
-import { ClassType, ExtraElement, SVGComponentProps } from "@/types"
+import { ClassType, ExtraElement } from "@/types"
 import { useReactFlow } from "@xyflow/react"
 import {
   calculateMinWidth,
@@ -16,6 +16,20 @@ import {
   DEFAULT_PADDING,
   DEFAULT_MARGIN,
 } from "@/constants"
+
+export interface MinSize {
+  minWidth: number
+  minHeight: number
+}
+
+export interface SVGComponentProps {
+  width: number
+  height: number
+  transformScale?: number
+  svgAttributes?: React.SVGAttributes<SVGElement>
+  setMinSize?: React.Dispatch<React.SetStateAction<MinSize>>
+  id: string
+}
 
 export type ClassSVGProps = SVGComponentProps & {
   methods: ExtraElement[]
