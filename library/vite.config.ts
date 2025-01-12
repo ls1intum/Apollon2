@@ -25,6 +25,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "lib"),
+      "@mui/styled-engine": "@mui/styled-engine-sc",
     },
   },
 })

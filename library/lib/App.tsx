@@ -24,6 +24,7 @@ import { useCallback } from "react"
 import { diagramNodeTypes } from "./nodes"
 import { useDragDrop } from "./hooks"
 import { diagramEdgeTypes } from "./edges/types";
+import { SvgMarkers } from "./components/svgs/edges/markers"
 
 
 
@@ -148,14 +149,13 @@ const initialNodes: Node[] = [
   //   },
   // },
 ]
- 
+
 const initialEdges: Edge[] = [
   {
     id: "1->2",
     source: "1",
     target: "2",
-    type: "smoothstep",
-    markerStart: "diamond-marker",
+    type: "uniassociation",
 
   },
   {
@@ -163,18 +163,30 @@ const initialEdges: Edge[] = [
     source: "2",
     target: "3",
     type: "realization",
-    markerEnd: "arrow",
-    markerStart: "diamond-marker",
   },
   {
     id: "3->4",
     source: "3",
     target: "4",
     type: "aggregation",
-    markerEnd: "diamond-marker",
 
   },
-  
+  {
+    id: "4->5",
+    source: "4",
+    target: "5",
+    type: "composition",
+
+  },
+  {
+    id: "5->1",
+    source: "5",
+    target: "1",
+    type: "dependency",
+
+  },
+
+
 ];
 function App({ onReactFlowInit }: AppProps) {
   const [nodes, , onNodesChange] = useNodesState(initialNodes)
@@ -189,23 +201,24 @@ function App({ onReactFlowInit }: AppProps) {
       setEdges((els) => reconnectEdge(oldEdge, newConnection, els).map(edge => ({
         ...edge,
         // Preserve existing marker or assign a default
-        markerEnd: edge.markerEnd 
+        markerEnd: edge.markerEnd
       }))),
     []
   );
-  
+
 
   return (
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
       <Sidebar />
-      <svg style={{ position: 'absolute', top: 0, left: 0, width: 0, height: 0 }}>
+      <SvgMarkers />
+      {/* <svg style={{ position: 'absolute', top: 0, left: 0, width: 0, height: 0 }}>
       <defs>
         <marker
           id="diamond-marker"
           viewBox="0 0 30 30"
           markerWidth="30"
           markerHeight="30"
-          refX="10"  // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="30"  // Aligns the endpoint of the line with the rightmost point of the diamond
           refY="15" 
           orient="auto"
           markerUnits="strokeWidth"
@@ -213,7 +226,7 @@ function App({ onReactFlowInit }: AppProps) {
         <path d="M0,15 L15,22 L30,15 L15,8 z" fill="black" stroke="currentColor" stroke-width="1.5" />
         </marker>
       </defs>
-    </svg>
+    </svg> */}
       <ReactFlow
         nodeTypes={diagramNodeTypes}
         edgeTypes={diagramEdgeTypes}

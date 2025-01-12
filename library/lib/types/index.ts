@@ -13,7 +13,21 @@ export enum ClassType {
   Enumeration = "Enumeration",
 }
 
-export type ExtraElements = {
+export interface ExtraElement {
   id: string
   name: string
+}
+
+export interface MinSize {
+  minWidth: number
+  minHeight: number
+}
+
+export interface SVGComponentProps {
+  width: number
+  height: number
+  transformScale?: number
+  svgAttributes?: React.SVGAttributes<SVGElement>
+  setMinSize?: React.Dispatch<React.SetStateAction<MinSize>>
+  id: string
 }

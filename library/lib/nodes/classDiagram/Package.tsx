@@ -1,6 +1,6 @@
 import { NodeProps, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
-import { PackageSVG } from "@/svgs"
+import { PackageSVG } from "@/components"
 
 type Props = Node<{
   name: string

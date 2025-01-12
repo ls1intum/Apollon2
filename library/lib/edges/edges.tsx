@@ -1,47 +1,144 @@
-import { EdgeProps, getSmoothStepPath } from "@xyflow/react";
+import { BaseEdge, EdgeProps, getSmoothStepPath } from "@xyflow/react";
+
+
+// Uni-Directional Association Edge (Black Arrow)
+export const BiAssociationEdge = ({ id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition, }: EdgeProps) => {
+    const [edgePath] = getSmoothStepPath({
+      sourceX,
+      sourceY,
+      sourcePosition,
+      targetX,
+      targetY,
+      targetPosition,
+    });
+  return (
+    <BaseEdge id={id} path={edgePath} style={{
+      stroke: "#000000",
+    }} />
+
+  );
+};
+
+// Uni-Directional Association Edge (Black Arrow)
+export const UniAssociationEdge = ({ id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition, }: EdgeProps) => {
+    const [edgePath] = getSmoothStepPath({
+      sourceX,
+      sourceY,
+      sourcePosition,
+      targetX,
+      targetY,
+      targetPosition,
+    });
+  return (
+    <BaseEdge id={id} path={edgePath} markerEnd="url(#custom-arrow)" style={{
+      stroke: "#000000",
+    }} />
+
+  );
+};
+
+
+// Dependency Edge (Dotted White Arrow)
+export const DependencyEdge = ({ id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition, }: EdgeProps) => {
+    const [edgePath] = getSmoothStepPath({
+      sourceX,
+      sourceY,
+      sourcePosition,
+      targetX,
+      targetY,
+      targetPosition,
+    });
+  return (
+    <BaseEdge id={id} path={edgePath} markerEnd="url(#custom-arrow)" strokeDasharray="8" strokeWidth={4} style={{
+      stroke: "#000000",
+    }}/>
+
+  );
+};
 
 // Inheritance Edge (White Triangle)
-export const InheritanceEdge = ({ id, sourceX, sourceY, targetX, targetY }: EdgeProps) => {
-  const [path] = getSmoothStepPath({ sourceX, sourceY, targetX, targetY });
-
+export const InheritanceEdge = ({ id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition, }: EdgeProps) => {
+    const [edgePath] = getSmoothStepPath({
+      sourceX,
+      sourceY,
+      sourcePosition,
+      targetX,
+      targetY,
+      targetPosition,
+    });
   return (
-    
-    <g>
-      <path
-        id={id}
-        className="react-flow__edge-path"
-        d={path}
-        markerEnd="url(#diamond-marker)"
-        stroke="black"
-        fill="none"
-        strokeWidth={2}
-      />
-    </g>
+    <BaseEdge id={id} path={edgePath} markerEnd="url(#white-triangle)" style={{
+      stroke: "#000000",
+    }}/>
+
   );
 };
 
 // Realization Edge (Dotted White Triangle)
-export const RealizationEdge = ({ id, sourceX, sourceY, targetX, targetY }: EdgeProps) => {
-  const [path] = getSmoothStepPath({ sourceX, sourceY, targetX, targetY });
-
+export const RealizationEdge = ({ id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition, }: EdgeProps) => {
+    const [edgePath] = getSmoothStepPath({
+      sourceX,
+      sourceY,
+      sourcePosition,
+      targetX,
+      targetY,
+      targetPosition,
+    });
   return (
-    <g>
-      <path
-        id={id}
-        className="react-flow__edge-path"
-        d={path}
-        stroke="black"
-        fill="none"
-        strokeWidth={2}
-        strokeDasharray="4"
-      />
-    </g>
+    <BaseEdge id={id} path={edgePath} markerEnd="url(#white-triangle)" strokeDasharray="8" strokeWidth={4} style={{
+      stroke: "#000000",
+    }}/>
+
   );
 };
 
 // Aggregation Edge (White Rhombus)
-export const AggregationEdge = ({ id, sourceX, sourceY, targetX, targetY }: EdgeProps) => {
-  const [path] = getSmoothStepPath({ sourceX, sourceY, targetX, targetY });
+export const AggregationEdge = ({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition, }: EdgeProps) => {
+    const [edgePath] = getSmoothStepPath({
+      sourceX,
+      sourceY,
+      sourcePosition,
+      targetX,
+      targetY,
+      targetPosition,
+    });
   //const gap = 8; // size of the gap you want at the end of the line
   
   // Calculate the direction vector of the line
@@ -56,36 +153,32 @@ export const AggregationEdge = ({ id, sourceX, sourceY, targetX, targetY }: Edge
  
 
   return (
-    <g>
-      <path
-        id={id}
-        className="react-flow__edge-path"
-        d={path}
-        markerEnd="url(#diamond-marker)"
-        stroke="black"
-        fill="none"
-        strokeWidth={2}
-        orient="auto"
-      />
-    </g>
+    <BaseEdge id={id} path={edgePath} markerEnd="url(#white-rhombus)" style={{
+      stroke: "#000000",
+    }}/>
+
   );
 };
 
 // Composition Edge (Black Rhombus)
-export const CompositionEdge = ({ id, sourceX, sourceY, targetX, targetY }: EdgeProps) => {
-  const [path] = getSmoothStepPath({ sourceX, sourceY, targetX, targetY });
-
+export const CompositionEdge = ({ id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition, }: EdgeProps) => {
+    const [edgePath] = getSmoothStepPath({
+      sourceX,
+      sourceY,
+      sourcePosition,
+      targetX,
+      targetY,
+      targetPosition,
+    });
   return (
-    <g>
-      <path
-        id={id}
-        className="react-flow__edge-path"
-        d={path}
-        markerEnd="url(#black-rhombus)"
-        stroke="black"
-        fill="none"
-        strokeWidth={2}
-      />
-    </g>
+    <BaseEdge id={id} path={edgePath} markerEnd="url(#black-rhombus)" style={{
+      stroke: "#000000",
+    }}/>
   );
 };
