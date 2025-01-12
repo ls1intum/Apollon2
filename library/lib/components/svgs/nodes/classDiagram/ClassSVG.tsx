@@ -3,8 +3,11 @@ import { ThemedRect } from "@/components/ThemedElements"
 import { Text } from "@/components/Text"
 import { ClassType, ExtraElement, SVGComponentProps } from "@/types"
 import { useReactFlow } from "@xyflow/react"
-import { measureTextWidth } from "@/utils/textUtils"
-import { calculateMinWidth, calculateMinHeight } from "@/utils/layoutUtils"
+import {
+  calculateMinWidth,
+  calculateMinHeight,
+  measureTextWidth,
+} from "@/utils"
 import {
   DEFAULT_FONT,
   DEFAULT_HEADER_HEIGHT,
