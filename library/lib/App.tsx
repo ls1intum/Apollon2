@@ -9,86 +9,31 @@ import {
   ConnectionMode,
   ReactFlowInstance,
   useNodesState,
-  addEdge,
-  reconnectEdge,
   useEdgesState,
-  Edge,
-  Connection,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
 import "@/styles/app.css"
 import { Sidebar } from "@/components"
-import { useCallback } from "react"
 import { diagramNodeTypes } from "./nodes"
 import { useDragDrop } from "./hooks"
 import { diagramEdgeTypes } from "./edges/types"
 import { SvgMarkers } from "./components/svgs/edges/markers"
-import { create } from "zustand"
-import { type XYPosition } from "@xyflow/react"
 import { initialEdges, initialNodes } from "./initialElements"
+import { useConnect } from "./hooks/useConnect"
+import { useReconnect } from "./hooks/useReconnect"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
 }
 function App({ onReactFlowInit }: AppProps) {
   const [nodes, , onNodesChange] = useNodesState(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-
+  const [edges, , onEdgesChange] = useEdgesState(initialEdges)
   const { onDrop, onDragOver } = useDragDrop()
-  interface AppState {
-    connectionLinePath: XYPosition[]
-    setConnectionLinePath: (connectionLinePath: XYPosition[]) => void
-  }
+  const {onConnect} = useConnect()
+  const {onReconnect} = useReconnect()
 
-  const useAppStore = create<AppState>((set) => ({
-    connectionLinePath: [],
-    setConnectionLinePath: (connectionLinePath: XYPosition[]) => {
-      set({ connectionLinePath })
-    },
-  }))
-  const onReconnect = useCallback(
-    (oldEdge: Edge, newConnection: Connection) =>
-      setEdges((els) =>
-        reconnectEdge(oldEdge, newConnection, els).map((edge) => ({
-          ...edge,
-          // Preserve existing marker or assign a default
-          type: edge.type,
-          markerEnd: edge.markerEnd,
-        }))
-      ),
-    []
-  )
-  type ControlPointData = XYPosition & {
-    id: string
-    active?: boolean
-    prev?: string
-  }
-  const onConnect = useCallback(
-    (connection: Connection) => {
-      const { connectionLinePath } = useAppStore.getState()
-      const edge: Edge = {
-        ...connection,
-        id: `${Date.now()}-${connection.source}-${connection.target}`,
-        type: "biassociation",
-        selected: true,
-        data: {
-          points: connectionLinePath.map(
-            (point, i) =>
-              ({
-                ...point,
-                id: window.crypto.randomUUID(),
-                prev: i === 0 ? undefined : connectionLinePath[i - 1],
-                active: true,
-              }) as ControlPointData
-          ),
-        },
-      }
-      setEdges((edges) => addEdge(edge, edges))
-    },
-    [setEdges]
-  )
-
+  
   return (
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
       <Sidebar />
