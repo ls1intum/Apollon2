@@ -22,7 +22,7 @@ export const UniAssociationEdge = ({
     <BaseEdge
       id={id}
       path={edgePath}
-      markerEnd="url(#custom-arrow)"
+      markerEnd="url(#black-arrow)"
       style={{
         stroke: "#000000",
       }}

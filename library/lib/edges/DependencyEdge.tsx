@@ -22,7 +22,7 @@ export const DependencyEdge = ({
     <BaseEdge
       id={id}
       path={edgePath}
-      markerEnd="url(#custom-arrow)"
+      markerEnd="url(#black-arrow)"
       strokeDasharray="8"
       strokeWidth={4}
       style={{

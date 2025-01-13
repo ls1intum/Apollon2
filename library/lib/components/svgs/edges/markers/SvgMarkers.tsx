@@ -54,7 +54,7 @@ export function SvgMarkers() {
           />
         </marker>
         <marker
-          id="custom-arrow"
+          id="black-arrow"
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
