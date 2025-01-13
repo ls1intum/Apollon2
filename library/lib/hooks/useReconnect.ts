@@ -1,14 +1,8 @@
-import {
-    reconnectEdge,
-    Edge,
-    Connection,
-    useReactFlow
-  } from "@xyflow/react"
-import { useCallback} from "react"
+import { reconnectEdge, Edge, Connection, useReactFlow } from "@xyflow/react"
+import { useCallback } from "react"
 
 export const useReconnect = () => {
-
-  const { setEdges} = useReactFlow()
+  const { setEdges } = useReactFlow()
   const onReconnect = useCallback(
     (oldEdge: Edge, newConnection: Connection) =>
       setEdges((els) =>
@@ -23,4 +17,3 @@ export const useReconnect = () => {
   )
   return { onReconnect }
 }
-

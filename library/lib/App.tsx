@@ -30,10 +30,9 @@ function App({ onReactFlowInit }: AppProps) {
   const [nodes, , onNodesChange] = useNodesState(initialNodes)
   const [edges, , onEdgesChange] = useEdgesState(initialEdges)
   const { onDrop, onDragOver } = useDragDrop()
-  const {onConnect} = useConnect()
-  const {onReconnect} = useReconnect()
+  const { onConnect } = useConnect()
+  const { onReconnect } = useReconnect()
 
-  
   return (
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
       <Sidebar />
