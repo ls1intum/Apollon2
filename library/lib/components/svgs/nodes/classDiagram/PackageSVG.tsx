@@ -24,8 +24,8 @@ export const PackageSVG = ({
 
   return (
     <svg
-      width={width} // Keep width as passed
-      height={height} // Keep height as passed
+      width={width}
+      height={height}
       style={{
         transformOrigin: "left top",
         transformBox: "content-box",

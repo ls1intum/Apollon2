@@ -1,1 +1,1 @@
-export * from "./classDiagram"
+export * from "./nodes"
