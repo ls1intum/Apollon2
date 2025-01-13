@@ -85,7 +85,7 @@ export function Class({
         id={id}
       />
       <ClassPopover
-        id={id}
+        nodeId={id}
         anchorEl={anchorEl}
         open={Boolean(selected)}
         onClose={handleClose}

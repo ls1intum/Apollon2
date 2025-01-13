@@ -93,6 +93,7 @@ function App({ onReactFlowInit }: AppProps) {
       <Sidebar />
       <SvgMarkers />
       <ReactFlow
+        id="react-flow-library"
         nodeTypes={diagramNodeTypes}
         edgeTypes={diagramEdgeTypes}
         nodes={nodes}
