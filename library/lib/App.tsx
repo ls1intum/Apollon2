@@ -5,65 +5,54 @@ import {
   BackgroundVariant,
   Controls,
   MiniMap,
-  DefaultEdgeOptions,
-  MarkerType,
   ConnectionLineType,
   ConnectionMode,
   ReactFlowInstance,
   useNodesState,
-  addEdge,
   useEdgesState,
-  Connection,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
-import { initialEdges, initialNodes } from "./initialElements"
 import "@/styles/app.css"
 import { Sidebar } from "@/components"
-import { useCallback } from "react"
 import { diagramNodeTypes } from "./nodes"
 import { useDragDrop } from "./hooks"
-
-const defaultEdgeOptions: DefaultEdgeOptions = {
-  type: "smoothstep",
-  markerEnd: { type: MarkerType.ArrowClosed },
-  style: { strokeWidth: 2 },
-}
+import { diagramEdgeTypes } from "./edges/types"
+import { SvgMarkers } from "./components/svgs/edges/markers"
+import { initialEdges, initialNodes } from "./initialElements"
+import { useConnect } from "./hooks/useConnect"
+import { useReconnect } from "./hooks/useReconnect"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
 }
-
 function App({ onReactFlowInit }: AppProps) {
   const [nodes, , onNodesChange] = useNodesState(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+  const [edges, , onEdgesChange] = useEdgesState(initialEdges)
   const { onDrop, onDragOver } = useDragDrop()
-  const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    []
-  )
+  const { onConnect } = useConnect()
+  const { onReconnect } = useReconnect()
 
   return (
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
       <Sidebar />
+      <SvgMarkers />
       <ReactFlow
         id="react-flow-library"
         nodeTypes={diagramNodeTypes}
-        defaultEdgeOptions={defaultEdgeOptions}
+        edgeTypes={diagramEdgeTypes}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onReconnect={onReconnect}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        connectionLineType={ConnectionLineType.SmoothStep}
+        connectionLineType={ConnectionLineType.Step}
         connectionMode={ConnectionMode.Loose}
         fitView
-        onInit={(instance) => {
-          instance.zoomTo(0.8)
-          onReactFlowInit(instance)
-        }}
+        onInit={(instance) => onReactFlowInit(instance)}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
       >
@@ -74,7 +63,6 @@ function App({ onReactFlowInit }: AppProps) {
     </div>
   )
 }
-
 export function AppWithProvider({ onReactFlowInit }: AppProps) {
   return (
     <ReactFlowProvider>
