@@ -47,6 +47,7 @@ function App({ onReactFlowInit }: AppProps) {
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
       <Sidebar />
       <ReactFlow
+        id="react-flow-library"
         nodeTypes={diagramNodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
         nodes={nodes}
@@ -59,7 +60,10 @@ function App({ onReactFlowInit }: AppProps) {
         connectionLineType={ConnectionLineType.SmoothStep}
         connectionMode={ConnectionMode.Loose}
         fitView
-        onInit={(instance) => onReactFlowInit(instance)}
+        onInit={(instance) => {
+          instance.zoomTo(0.8)
+          onReactFlowInit(instance)
+        }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
       >

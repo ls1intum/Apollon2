@@ -17,7 +17,7 @@ export function ColorDescriptionSVG({
   svgAttributes,
   transformScale,
 }: ColorDescriptionSVGProps) {
-  const margin = 2 // Padding inside the SVG content
+  const margin = 2
   const innerWidth = width - 2 * margin // Adjusted content width
   const innerHeight = height - 2 * margin // Adjusted content height
   const strokeWidth = 0.5
@@ -36,16 +36,13 @@ export function ColorDescriptionSVG({
       <g transform={`translate(${margin}, ${margin})`}>
         {/* Main Path */}
         <ThemedPath
-          as="path"
           d={`M 0 0 L ${innerWidth - 15} 0 L ${innerWidth} 15 L ${innerWidth} ${innerHeight} L 0 ${innerHeight} L 0 0 Z`}
           strokeWidth={strokeWidth}
           strokeMiterlimit="10"
         />
         {/* Small Path for Top-Right Corner */}
         <ThemedPath
-          as="path"
           d={`M ${innerWidth - 15} 0 L ${innerWidth - 15} 15 L ${innerWidth} 15`}
-          fillColor="none"
           strokeWidth={strokeWidth}
           strokeMiterlimit="10"
         />

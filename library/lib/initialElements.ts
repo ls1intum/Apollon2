@@ -1,4 +1,5 @@
 import { type Edge, type Node } from "@xyflow/react"
+import { ClassType } from "./types"
 
 export const initialNodes: Node[] = [
   {
@@ -37,7 +38,7 @@ export const initialNodes: Node[] = [
     height: 170,
     selected: false,
     data: {
-      stereotype: "abstract",
+      stereotype: ClassType.Abstract,
       name: "AbstractClass",
       methods: [
         { id: "1", name: "method1" },
@@ -58,7 +59,7 @@ export const initialNodes: Node[] = [
     selected: false,
     data: {
       name: "InterfaceClass",
-      stereotype: "interface",
+      stereotype: ClassType.Interface,
       methods: [
         { id: "1", name: "method1" },
         { id: "2", name: "method2" },
@@ -78,7 +79,7 @@ export const initialNodes: Node[] = [
     selected: false,
     data: {
       name: "EnumerationClass",
-      stereotype: "enumaration",
+      stereotype: ClassType.Enumeration,
       methods: [
         { id: "1", name: "method1" },
         { id: "2", name: "method2" },

@@ -1,6 +1,6 @@
 import React, { DragEvent } from "react"
-import { dropElementConfig, transformScale } from "@/constant"
-import { Divider } from "./Divider"
+import { dropElementConfig, transformScale } from "@/constants"
+import { DividerLine } from "./DividerLine"
 import { DropNodeData } from "@/types"
 
 const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
@@ -9,6 +9,7 @@ const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
   const offsetY = (event.clientY - rect.top) / transformScale // Cursor offset from the element's top
 
   // Pass the offset along with the type and data
+  // This offset will be used to position the element on drop
   event.dataTransfer.setData(
     "text/plain",
     JSON.stringify({ type, data, offsetX, offsetY })
@@ -31,7 +32,7 @@ export const Sidebar = () => {
           <React.Fragment key={`${config.type}_${config.name}`}>
             {/* Add separator before the Color Description */}
             {config.type === "colorDescription" && (
-              <Divider style={{ margin: "3px 0" }} />
+              <DividerLine style={{ margin: "3px 0" }} height={2} />
             )}
             <div
               style={{
@@ -55,6 +56,7 @@ export const Sidebar = () => {
                 height: config.height,
                 ...config.defaultData,
                 transformScale,
+                id: "1",
               })}
             </div>
           </React.Fragment>

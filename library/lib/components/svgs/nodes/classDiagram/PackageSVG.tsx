@@ -16,7 +16,7 @@ export const PackageSVG = ({
   svgAttributes,
   transformScale,
 }: PackageSVGProps) => {
-  const margin = 2 // Padding inside the SVG content
+  const margin = 2
   const headerHeight = 10 // Height of the top path
   const innerWidth = width - 2 * margin // Adjusted content width
   const innerHeight = height - 2 * margin // Adjusted content height
@@ -24,8 +24,8 @@ export const PackageSVG = ({
 
   return (
     <svg
-      width={width} // Keep width as passed
-      height={height} // Keep height as passed
+      width={width}
+      height={height}
       style={{
         transformOrigin: "left top",
         transformBox: "content-box",
@@ -36,14 +36,12 @@ export const PackageSVG = ({
       <g transform={`translate(${margin}, ${margin})`}>
         {/* Top Path */}
         <ThemedPath
-          as="path"
           d={`M 0 ${headerHeight} V 0 H 40 V ${headerHeight}`}
           stroke="black"
           strokeWidth="0.5"
         />
         {/* Main Rectangle */}
         <ThemedRect
-          as="rect"
           x="0"
           y={headerHeight}
           width={innerWidth}
