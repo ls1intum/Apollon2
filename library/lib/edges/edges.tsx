@@ -1,6 +1,5 @@
 import { BaseEdge, EdgeProps, getSmoothStepPath } from "@xyflow/react";
 
-
 // Uni-Directional Association Edge (Black Arrow)
 export const BiAssociationEdge = ({ id,
   sourceX,
@@ -139,19 +138,6 @@ export const AggregationEdge = ({
       targetY,
       targetPosition,
     });
-  //const gap = 8; // size of the gap you want at the end of the line
-  
-  // Calculate the direction vector of the line
- // const dx = targetX - sourceX;
- // const dy = targetY - sourceY;
-  //const length = Math.sqrt(dx * dx + dy * dy);
-  
-  // Calculate a shortened target point
-  //const shortenedTargetX = targetX - (gap * dx) / length;
-  //const shortenedTargetY = targetY - (gap * dy) / length;
-
- 
-
   return (
     <BaseEdge id={id} path={edgePath} markerEnd="url(#white-rhombus)" style={{
       stroke: "#000000",
