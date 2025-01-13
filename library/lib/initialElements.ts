@@ -124,7 +124,6 @@ export const initialEdges: Edge[] = [
     source: "1",
     target: "2",
     type: "uniassociation",
-
   },
   {
     id: "2->3",
@@ -137,20 +136,17 @@ export const initialEdges: Edge[] = [
     source: "3",
     target: "4",
     type: "aggregation",
-
   },
   {
     id: "4->5",
     source: "4",
     target: "5",
     type: "composition",
-
   },
   {
     id: "5->1",
     source: "5",
     target: "1",
     type: "dependency",
-
   },
-];
+]

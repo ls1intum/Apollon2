@@ -1,4 +1,4 @@
-import { EdgeTypes } from "@xyflow/react";
+import { EdgeTypes } from "@xyflow/react"
 import {
   InheritanceEdge,
   RealizationEdge,
@@ -7,7 +7,7 @@ import {
   BiAssociationEdge,
   UniAssociationEdge,
   DependencyEdge,
-} from "./edges";
+} from "./edges"
 export const diagramEdgeTypes = {
   inheritance: InheritanceEdge,
   realization: RealizationEdge,
@@ -16,6 +16,6 @@ export const diagramEdgeTypes = {
   biassociation: BiAssociationEdge,
   uniassociation: UniAssociationEdge,
   dependency: DependencyEdge,
-} satisfies EdgeTypes;
+} satisfies EdgeTypes
 
-export type DiagramEdgeTypeKeys = keyof typeof diagramEdgeTypes;
+export type DiagramEdgeTypeKeys = keyof typeof diagramEdgeTypes

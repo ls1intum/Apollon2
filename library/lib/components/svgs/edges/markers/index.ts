@@ -1,1 +1,1 @@
-export * from "./SvgMarkers"; // SVG marker definitions
+export * from "./SvgMarkers" // SVG marker definitions
