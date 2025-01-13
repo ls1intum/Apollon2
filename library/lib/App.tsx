@@ -47,6 +47,7 @@ function App({ onReactFlowInit }: AppProps) {
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
       <Sidebar />
       <ReactFlow
+        id="react-flow-library"
         nodeTypes={diagramNodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
         nodes={nodes}

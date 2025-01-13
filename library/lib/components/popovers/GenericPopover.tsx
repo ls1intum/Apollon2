@@ -1,7 +1,5 @@
-// src/components/GenericPopover.tsx
-
 import React, { ReactNode } from "react"
-import { Popover, Box } from "@mui/material"
+import { Popover, Box, PopoverOrigin } from "@mui/material"
 
 interface GenericPopoverProps {
   id: string
@@ -9,14 +7,8 @@ interface GenericPopoverProps {
   open: boolean
   onClose: () => void
   children: ReactNode
-  anchorOrigin?: {
-    vertical: "top" | "bottom"
-    horizontal: "left" | "right" | "center"
-  }
-  transformOrigin?: {
-    vertical: "top" | "bottom"
-    horizontal: "left" | "right" | "center"
-  }
+  anchorOrigin?: PopoverOrigin
+  transformOrigin?: PopoverOrigin
   maxHeight?: number
   style?: React.CSSProperties
 }
@@ -39,7 +31,7 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
     onClose={onClose}
     anchorOrigin={anchorOrigin}
     transformOrigin={transformOrigin}
-    style={{ margin: "0 8px", maxHeight, ...style }}
+    style={{ maxHeight, ...style }}
   >
     <Box
       sx={{
