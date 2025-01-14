@@ -27,7 +27,8 @@
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|tsx|json)\"",
     "format:check": "prettier --ignore-path .gitignore --check \"**/*.(js|ts|tsx|json)\"",
     "preview": "husky",
-    "docker:build": "docker build --no-cache --platform=linux/amd64 -t egenerse45/apollon2-webapp:latest .",
+    "docker:build": "docker build --no-cache --platform=linux/amd64 -t apollon2-webapp:latest .",
+    "docker:start": "docker run -d -p 8080:80 --name apollon2-webapp-test apollon2-webapp:latest",
     "docker:publish": "docker push egenerse45/apollon2-webapp:latest"
   },
   "license": "MIT",
