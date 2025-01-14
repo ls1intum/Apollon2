@@ -3,6 +3,7 @@ import {
   NodeResizer,
   NodeToolbar,
   Position,
+  useReactFlow,
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
@@ -12,7 +13,8 @@ import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import { useClassNode } from "@/hooks"
 import { useState } from "react"
-import { Box } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
+import { getPositionOnCanvas } from "@/utils"
 
 export type ClassNodeProps = Node<{
   methods: ExtraElement[]
@@ -26,13 +28,14 @@ export function Class({
   width,
   height,
   selected,
+  parentId,
   data: { methods, attributes, stereotype, name },
 }: NodeProps<ClassNodeProps>) {
   const [{ minHeight, minWidth }, setMinSize] = useState<MinSize>({
     minWidth: 0,
     minHeight: 0,
   })
-
+  const { updateNode, getNode, getNodes } = useReactFlow()
   const {
     svgRef,
     anchorEl,
@@ -44,6 +47,21 @@ export function Class({
 
   if (!width || !height) {
     return null
+  }
+
+  const handleExtract = () => {
+    const nodeself = getNode(id)!
+    const allNodes = getNodes()
+
+    const nodePositionOnCanvas = getPositionOnCanvas(nodeself, allNodes)
+
+    updateNode(id, {
+      position: {
+        x: nodePositionOnCanvas.x,
+        y: nodePositionOnCanvas.y,
+      },
+      parentId: undefined,
+    })
   }
 
   return (
@@ -71,6 +89,12 @@ export function Class({
             onClick={handleClick}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />
+
+          {parentId && (
+            <Button onClick={handleExtract}>
+              <Typography variant="caption">Extract</Typography>
+            </Button>
+          )}
         </Box>
       </NodeToolbar>
       <ClassSVG

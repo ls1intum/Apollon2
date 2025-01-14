@@ -15,13 +15,13 @@ import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
 import "@/styles/app.css"
 import { Sidebar } from "@/components"
-import { diagramNodeTypes } from "./nodes"
-import { useDragDrop } from "./hooks"
+
 import { diagramEdgeTypes } from "./edges/types"
 import { SvgMarkers } from "./components/svgs/edges/markers"
 import { initialEdges, initialNodes } from "./initialElements"
-import { useConnect } from "./hooks/useConnect"
-import { useReconnect } from "./hooks/useReconnect"
+import { useConnect, useReconnect, useDragDrop, useNodeDragStop } from "./hooks"
+
+import { diagramNodeTypes } from "./nodes"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -32,6 +32,7 @@ function App({ onReactFlowInit }: AppProps) {
   const { onDrop, onDragOver } = useDragDrop()
   const { onConnect } = useConnect()
   const { onReconnect } = useReconnect()
+  const { onNodeDragStop } = useNodeDragStop()
 
   return (
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
@@ -55,6 +56,7 @@ function App({ onReactFlowInit }: AppProps) {
         onInit={(instance) => onReactFlowInit(instance)}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
+        onNodeDragStop={onNodeDragStop}
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />

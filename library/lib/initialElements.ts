@@ -1,5 +1,5 @@
 import { type Edge, type Node } from "@xyflow/react"
-import { ClassType } from "./types"
+// import { ClassType } from "./types"
 
 export const initialNodes: Node[] = [
   {
@@ -30,77 +30,77 @@ export const initialNodes: Node[] = [
       ],
     },
   },
-  {
-    id: "3",
-    type: "class",
-    position: { x: 400, y: 100 },
-    width: 296,
-    height: 170,
-    selected: false,
-    data: {
-      stereotype: ClassType.Abstract,
-      name: "AbstractClass",
-      methods: [
-        { id: "1", name: "method1" },
-        { id: "2", name: "method2" },
-      ],
-      attributes: [
-        { id: "1", name: "attribute1" },
-        { id: "2", name: "attribute2" },
-      ],
-    },
-  },
-  {
-    id: "4",
-    type: "class",
-    position: { x: 400, y: 300 },
-    width: 296,
-    height: 170,
-    selected: false,
-    data: {
-      name: "InterfaceClass",
-      stereotype: ClassType.Interface,
-      methods: [
-        { id: "1", name: "method1" },
-        { id: "2", name: "method2" },
-      ],
-      attributes: [
-        { id: "1", name: "attribute1" },
-        { id: "2", name: "attribute2" },
-      ],
-    },
-  },
-  {
-    id: "5",
-    type: "class",
-    position: { x: 400, y: 500 },
-    width: 296,
-    height: 170,
-    selected: false,
-    data: {
-      name: "EnumerationClass",
-      stereotype: ClassType.Enumeration,
-      methods: [
-        { id: "1", name: "method1" },
-        { id: "2", name: "method2" },
-      ],
-      attributes: [
-        { id: "1", name: "attribute1" },
-        { id: "2", name: "attribute2" },
-      ],
-    },
-  },
-  {
-    id: "6",
-    type: "colorDescription",
-    position: { x: -100, y: 600 },
-    width: 160,
-    height: 50,
-    selected: false,
-    data: {
-      description: "Color description",
-    },
-  },
+  // {
+  //   id: "3",
+  //   type: "class",
+  //   position: { x: 400, y: 100 },
+  //   width: 296,
+  //   height: 170,
+  //   selected: false,
+  //   data: {
+  //     stereotype: ClassType.Abstract,
+  //     name: "AbstractClass",
+  //     methods: [
+  //       { id: "1", name: "method1" },
+  //       { id: "2", name: "method2" },
+  //     ],
+  //     attributes: [
+  //       { id: "1", name: "attribute1" },
+  //       { id: "2", name: "attribute2" },
+  //     ],
+  //   },
+  // },
+  // {
+  //   id: "4",
+  //   type: "class",
+  //   position: { x: 400, y: 300 },
+  //   width: 296,
+  //   height: 170,
+  //   selected: false,
+  //   data: {
+  //     name: "InterfaceClass",
+  //     stereotype: ClassType.Interface,
+  //     methods: [
+  //       { id: "1", name: "method1" },
+  //       { id: "2", name: "method2" },
+  //     ],
+  //     attributes: [
+  //       { id: "1", name: "attribute1" },
+  //       { id: "2", name: "attribute2" },
+  //     ],
+  //   },
+  // },
+  // {
+  //   id: "5",
+  //   type: "class",
+  //   position: { x: 400, y: 500 },
+  //   width: 296,
+  //   height: 170,
+  //   selected: false,
+  //   data: {
+  //     name: "EnumerationClass",
+  //     stereotype: ClassType.Enumeration,
+  //     methods: [
+  //       { id: "1", name: "method1" },
+  //       { id: "2", name: "method2" },
+  //     ],
+  //     attributes: [
+  //       { id: "1", name: "attribute1" },
+  //       { id: "2", name: "attribute2" },
+  //     ],
+  //   },
+  // },
+  // {
+  //   id: "6",
+  //   type: "colorDescription",
+  //   position: { x: -100, y: 600 },
+  //   width: 160,
+  //   height: 50,
+  //   selected: false,
+  //   data: {
+  //     description: "Color description",
+  //   },
+  // },
 
   // Testing TitleAndDescription
   // {
