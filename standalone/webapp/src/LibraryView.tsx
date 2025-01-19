@@ -9,6 +9,7 @@ export function LibraryView() {
   const onGetNodesButtonClick = () => {
     // To show that the getNodes method works
     if (apollon2Ref.current) {
+      // console.log(JSON.stringify(apollon2Ref.current.getNodes()))
       console.log(apollon2Ref.current.getNodes())
     }
   }

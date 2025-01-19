@@ -61,84 +61,15 @@ body,
 
 .react-flow__handle {
   opacity: 0;
-  z-index: 10;
 }
 
 .react-flow__node.selected .react-flow__handle {
   opacity: 1;
 }
 
-.react-flow__handle,
-.react-flow__resize-control.handle {
-  border: 1px solid var(--background);
+.react-flow__node.dragging {
+  opacity: 0.7;
 }
-
-.sidebar-label {
-  color: var(--text);
-  font-size: 12px;
-  margin-bottom: 4px;
-  user-select: none;
-}
-
-.sidebar-items {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
-}
-
-.sidebar-item {
-  opacity: 0.5;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 3px;
-  overflow: hidden;
-  position: relative;
-}
-
-.sidebar-item > svg {
-  stroke: var(--text);
-}
-
-.sidebar-item:hover {
-  opacity: 1;
-  background-color: var(--background);
-}
-
-.sidebar-item-drag-image {
-  transform: translate(0, 0);
-  position: absolute;
-  top: -100000px;
-  left: -1000000px;
-}
-
-.color-swatch {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  outline: none;
-  box-shadow: none;
-  border: 1px solid var(--panel-background);
-  cursor: pointer;
-}
-
-.color-swatch.active {
-  outline: 2px solid var(--text);
-}
-
-.node-label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  background: none;
-  border: none;
-  outline: none;
-  box-shadow: none;
-  color: var(--text);
-}
-
-.node-label::placeholder {
-  color: var(--text);
-  opacity: 0.5;
+.react-flow__node:hover {
+  opacity: 0.9;
 }
