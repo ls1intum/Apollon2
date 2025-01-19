@@ -2,6 +2,7 @@ import { NodeProps, NodeResizer, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
 import { memo } from "react"
 import { PackageSVG } from "@/components"
+import { useHandleOnResize } from "@/hooks"
 
 type Props = Node<{
   name: string
@@ -12,27 +13,20 @@ export function Package({
   height,
   selected,
   data: { name },
-  id,
+  parentId,
 }: NodeProps<Props>) {
+  const { onResize } = useHandleOnResize(parentId)
   if (!width || !height) {
     return null
   }
-  console.log(
-    `Package ${id} rendered with width: ${width} and height: ${height}`
-  )
 
   return (
-    // <DefaultNodeWrapper>
-    //   {/* <Handle position={Position.Right} type="target" /> */}
-    //   {/* <Handle position={Position.Left} type="source" /> */}
-    //   <div style={{ width, height, backgroundColor: "red" }}></div>
-    // </DefaultNodeWrapper>
-
     <DefaultNodeWrapper>
       <NodeResizer
         isVisible={Boolean(selected)}
         minHeight={100}
         minWidth={100}
+        onResize={onResize}
       />
       <PackageSVG width={width} height={height} name={name} />
     </DefaultNodeWrapper>

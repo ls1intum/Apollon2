@@ -3,7 +3,6 @@ import {
   NodeResizer,
   NodeToolbar,
   Position,
-  useReactFlow,
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
@@ -11,10 +10,9 @@ import { ClassType, ExtraElement } from "@/types"
 import { ClassPopover, ClassSVG, MinSize } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import { useClassNode } from "@/hooks"
+import { useClassNode, useHandleOnResize } from "@/hooks"
 import { useState } from "react"
-import { Box, Button, Typography } from "@mui/material"
-import { getPositionOnCanvas } from "@/utils"
+import { Box } from "@mui/material"
 
 export type ClassNodeProps = Node<{
   methods: ExtraElement[]
@@ -35,7 +33,7 @@ export function Class({
     minWidth: 0,
     minHeight: 0,
   })
-  const { updateNode, getNode, getNodes } = useReactFlow()
+  // const { updateNode, getNode } = useReactFlow()
   const {
     svgRef,
     anchorEl,
@@ -45,24 +43,33 @@ export function Class({
     handleDelete,
   } = useClassNode({ id, selected: Boolean(selected) })
 
+  const { onResize } = useHandleOnResize(parentId)
   if (!width || !height) {
     return null
   }
 
-  const handleExtract = () => {
-    const nodeself = getNode(id)!
-    const allNodes = getNodes()
+  // const handleOnResize: OnResize = (_, params) => {
+  //   console.log("DEBUG params,", params)
 
-    const nodePositionOnCanvas = getPositionOnCanvas(nodeself, allNodes)
+  //   let tractParentId = parentId
+  //   let cumulativedParantsOffsets = 0
+  //   while (tractParentId) {
+  //     const parent = getNode(tractParentId)
 
-    updateNode(id, {
-      position: {
-        x: nodePositionOnCanvas.x,
-        y: nodePositionOnCanvas.y,
-      },
-      parentId: undefined,
-    })
-  }
+  //     if (parent) {
+  //       if (
+  //         parent.width! <
+  //         params.width + params.x + cumulativedParantsOffsets
+  //       ) {
+  //         updateNode(tractParentId, {
+  //           width: params.width + params.x + cumulativedParantsOffsets,
+  //         })
+  //         cumulativedParantsOffsets += parent.position.x
+  //       }
+  //     }
+  //     tractParentId = parent?.parentId
+  //   }
+  // }
 
   return (
     <DefaultNodeWrapper>
@@ -72,6 +79,7 @@ export function Class({
         minWidth={minWidth}
         minHeight={minHeight}
         maxHeight={minHeight}
+        onResize={onResize}
       />
       <NodeToolbar
         isVisible={selected}
@@ -89,12 +97,6 @@ export function Class({
             onClick={handleClick}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />
-
-          {parentId && (
-            <Button onClick={handleExtract}>
-              <Typography variant="caption">Extract</Typography>
-            </Button>
-          )}
         </Box>
       </NodeToolbar>
       <ClassSVG
