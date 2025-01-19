@@ -38,7 +38,7 @@ export function Class({
     svgRef,
     anchorEl,
     handleClick,
-    handleClose,
+    handlePopoverClose,
     handleNameChange,
     handleDelete,
   } = useClassNode({ id, selected: Boolean(selected) })
@@ -114,7 +114,7 @@ export function Class({
         nodeId={id}
         anchorEl={anchorEl}
         open={Boolean(selected)}
-        onClose={handleClose}
+        onClose={handlePopoverClose}
         onNameChange={handleNameChange}
       />
     </DefaultNodeWrapper>

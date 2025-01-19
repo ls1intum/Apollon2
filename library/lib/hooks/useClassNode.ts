@@ -18,7 +18,7 @@ export function useClassNode({
     }
   }
 
-  const handleClose = () => {
+  const handlePopoverClose = () => {
     setAnchorEl(null)
   }
 
@@ -33,7 +33,7 @@ export function useClassNode({
 
   useEffect(() => {
     if (!selected) {
-      handleClose()
+      handlePopoverClose()
     }
   }, [selected])
 
@@ -47,7 +47,7 @@ export function useClassNode({
     svgRef,
     anchorEl,
     handleClick,
-    handleClose,
+    handlePopoverClose,
     handleNameChange,
     handleDelete,
   }
