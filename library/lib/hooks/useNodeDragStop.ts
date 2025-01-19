@@ -55,7 +55,7 @@ export const useNodeDragStop = (
         updatedNode.position.x -= parentsFlowPosition.x
         updatedNode.position.y -= parentsFlowPosition.y
         updatedNode.parentId = parentNode.id
-        console.log("updatedNode,", updateNode)
+
         const updatedNodesList = resizeAllParents(
           updatedNode,
           nodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))

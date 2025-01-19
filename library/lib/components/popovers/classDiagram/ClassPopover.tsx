@@ -1,5 +1,4 @@
-import { ClassNodeProps } from "@/nodes/classDiagram"
-import { ClassType } from "@/types"
+import { ClassNodeProps, ClassType } from "@/types"
 import { useReactFlow } from "@xyflow/react"
 import { GenericPopover } from "../GenericPopover"
 import { DividerLine } from "../../DividerLine"
@@ -32,7 +31,7 @@ export function ClassPopover({
   }
 
   const node = getNode(nodeId)!
-  const nodeData = node.data as ClassNodeProps["data"]
+  const nodeData = node.data as ClassNodeProps
   const quadrant = getQuadrant(node.position, viewportCenter)
   const popoverOrigin = getPopoverOrigin(quadrant)
   const classStereotype = nodeData.stereotype

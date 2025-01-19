@@ -6,20 +6,13 @@ import {
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
-import { ClassType, ExtraElement } from "@/types"
 import { ClassPopover, ClassSVG, MinSize } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import { useClassNode, useHandleOnResize } from "@/hooks"
 import { useState } from "react"
 import { Box } from "@mui/material"
-
-export type ClassNodeProps = Node<{
-  methods: ExtraElement[]
-  attributes: ExtraElement[]
-  stereotype?: ClassType
-  name: string
-}>
+import { ClassNodeProps } from "@/types"
 
 export function Class({
   id,
@@ -28,12 +21,12 @@ export function Class({
   selected,
   parentId,
   data: { methods, attributes, stereotype, name },
-}: NodeProps<ClassNodeProps>) {
+}: NodeProps<Node<ClassNodeProps>>) {
   const [{ minHeight, minWidth }, setMinSize] = useState<MinSize>({
     minWidth: 0,
     minHeight: 0,
   })
-  // const { updateNode, getNode } = useReactFlow()
+
   const {
     svgRef,
     anchorEl,
@@ -42,34 +35,11 @@ export function Class({
     handleNameChange,
     handleDelete,
   } = useClassNode({ id, selected: Boolean(selected) })
-
   const { onResize } = useHandleOnResize(parentId)
+
   if (!width || !height) {
     return null
   }
-
-  // const handleOnResize: OnResize = (_, params) => {
-  //   console.log("DEBUG params,", params)
-
-  //   let tractParentId = parentId
-  //   let cumulativedParantsOffsets = 0
-  //   while (tractParentId) {
-  //     const parent = getNode(tractParentId)
-
-  //     if (parent) {
-  //       if (
-  //         parent.width! <
-  //         params.width + params.x + cumulativedParantsOffsets
-  //       ) {
-  //         updateNode(tractParentId, {
-  //           width: params.width + params.x + cumulativedParantsOffsets,
-  //         })
-  //         cumulativedParantsOffsets += parent.position.x
-  //       }
-  //     }
-  //     tractParentId = parent?.parentId
-  //   }
-  // }
 
   return (
     <DefaultNodeWrapper>

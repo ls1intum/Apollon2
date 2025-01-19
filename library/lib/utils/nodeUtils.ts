@@ -30,7 +30,6 @@ export const resizeAllParents = (node: Node, allNodes: Node[]) => {
     const allChildren = allNodes.filter((n) => n.parentId === parent.id)
 
     if (currentNode.position.x < 0) {
-      console.log("DEBUG: currentNode.position.x < 0")
       const parentPositionUpdateOffsetX = -1 * currentNode.position.x
       parent.position.x = parent.position.x - parentPositionUpdateOffsetX
       parent.width = parent.width! + parentPositionUpdateOffsetX
@@ -39,7 +38,6 @@ export const resizeAllParents = (node: Node, allNodes: Node[]) => {
       })
     }
     if (currentNode.position.y < 0) {
-      console.log("DEBUG: currentNode.position.y < 0")
       const parentPositionUpdateOffsetY = -1 * currentNode.position.y
       parent.position.y = parent.position.y - parentPositionUpdateOffsetY
       parent.height = parent.height! + parentPositionUpdateOffsetY
@@ -48,15 +46,9 @@ export const resizeAllParents = (node: Node, allNodes: Node[]) => {
       })
     }
     if (currentNode.position.x + currentNode.width! > parent.width!) {
-      console.log(
-        "DEBUG: currentNode.position.x + currentNode.width! > parent.width!"
-      )
       parent.width = currentNode.position.x + currentNode.width!
     }
     if (currentNode.position.y + currentNode.height! > parent.height!) {
-      console.log(
-        "DEBUG: currentNode.position.y + currentNode.height! > parent.height!"
-      )
       parent.height = currentNode.position.y + currentNode.height!
     }
 
