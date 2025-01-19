@@ -7,7 +7,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="30"
           markerHeight="30"
-          refX="30" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -24,7 +24,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="30"
           markerHeight="30"
-          refX="30" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -41,7 +41,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="30" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -58,7 +58,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="30" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"

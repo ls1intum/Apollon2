@@ -12,7 +12,10 @@ import {
   useEdgesState,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
-import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
+import {
+  MAX_SCALE_TO_ZOOM_IN,
+  MIN_SCALE_TO_ZOOM_OUT,
+} from "./constants/canvasConstants"
 import "@/styles/app.css"
 import { Sidebar } from "@/components"
 import { diagramNodeTypes } from "./nodes"
