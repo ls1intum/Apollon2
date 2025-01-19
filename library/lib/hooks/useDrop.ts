@@ -1,4 +1,5 @@
 import { dropElementConfig } from "@/constants"
+import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/contants"
 import { DropNodeData } from "@/types"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { useReactFlow, type Node } from "@xyflow/react"
@@ -37,8 +38,8 @@ export const useDrop = () => {
       const intersectionsWithDroppableNodes = getIntersectingNodes({
         x: dropPosition.x,
         y: dropPosition.y,
-        width: 5,
-        height: 5,
+        width: MOUSE_UP_OFFSET_IN_PIXELS,
+        height: MOUSE_UP_OFFSET_IN_PIXELS,
       }).filter((n) => n.type === "package")
 
       const parentNode =

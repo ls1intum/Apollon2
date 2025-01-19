@@ -5,6 +5,7 @@ import {
   resizeAllParents,
   sortNodesTopologically,
 } from "@/utils"
+import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/contants"
 
 export const useNodeDragStop = (
   setNodesState: Dispatch<SetStateAction<Node[]>>
@@ -23,8 +24,8 @@ export const useNodeDragStop = (
       const intersectionsWithDroppedLocation = getIntersectingNodes({
         x: draggedLastPoint.x,
         y: draggedLastPoint.y,
-        width: 5,
-        height: 5,
+        width: MOUSE_UP_OFFSET_IN_PIXELS,
+        height: MOUSE_UP_OFFSET_IN_PIXELS,
       }).filter((n) => n.type === "package" && n.id !== draggedNode.id)
 
       const parentNode = intersectionsWithDroppedLocation.length

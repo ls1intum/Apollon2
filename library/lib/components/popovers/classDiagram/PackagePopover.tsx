@@ -41,7 +41,6 @@ export function PackagePopover({
         onClose={onClose}
         anchorOrigin={popoverOrigin.anchorOrigin}
         transformOrigin={popoverOrigin.transformOrigin}
-        maxHeight={700}
       >
         <TextField
           id="outlined-basic"

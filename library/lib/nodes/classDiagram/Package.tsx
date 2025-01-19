@@ -3,6 +3,7 @@ import {
   NodeResizer,
   NodeToolbar,
   Position,
+  // useReactFlow,
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
@@ -12,7 +13,9 @@ import { PackageNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
+// import { getPositionOnCanvas } from "@/utils"
 
+// const minPadding = 20
 export default function Package({
   id,
   width,
@@ -22,6 +25,7 @@ export default function Package({
   parentId,
 }: NodeProps<Node<PackageNodeProps>>) {
   const { onResize } = useHandleOnResize(parentId)
+  // const { getNode, getNodes, getNodesBounds } = useReactFlow()
   const {
     svgRef,
     anchorEl,
@@ -55,7 +59,38 @@ export default function Package({
           />
         </Box>
       </NodeToolbar>
-      <NodeResizer isVisible={Boolean(selected)} onResize={onResize} />
+      <NodeResizer
+        isVisible={Boolean(selected)}
+        onResize={onResize}
+        // shouldResize={(event) => {
+        //   const allNodes = getNodes()
+        //   const allChildren = allNodes.filter((node) => node.parentId === id)
+
+        //   if (allChildren.length === 0) return true
+
+        //   const boundedBox = getNodesBounds(allChildren)
+        //   const nodeLocation = getPositionOnCanvas(getNode(id)!, allNodes)
+
+        //   const paddingLeft = boundedBox.x - nodeLocation.x
+        //   const paddingTop = boundedBox.y - nodeLocation.y
+        //   const paddingRight =
+        //     nodeLocation.x + width - boundedBox.x - boundedBox.width
+        //   const paddingBottom =
+        //     nodeLocation.y + height - boundedBox.y - boundedBox.height
+
+        //   const dx = event.dx
+        //   const dy = event.dy
+
+        //   let returnValue = true
+        //   if (dx > 0 && paddingLeft < minPadding) returnValue = false
+        //   if (dy > 0 && paddingTop < minPadding) returnValue = false
+        //   if (dx < 0 && paddingRight < minPadding) returnValue = false
+        //   if (dy < 0 && paddingBottom < minPadding) returnValue = false
+
+        //   console.log("returnValue", returnValue)
+        //   return returnValue
+        // }}
+      />
       <PackageSVG
         ref={svgRef}
         width={width}

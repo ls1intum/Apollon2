@@ -5,8 +5,6 @@ import {
   BackgroundVariant,
   Controls,
   MiniMap,
-  DefaultEdgeOptions,
-  MarkerType,
   ConnectionLineType,
   ConnectionMode,
   ReactFlowInstance,
@@ -23,12 +21,6 @@ import { Sidebar } from "@/components"
 import { useCallback } from "react"
 import { diagramNodeTypes } from "./nodes"
 import { useDragOver, useDrop, useNodeDragStop } from "./hooks"
-
-const defaultEdgeOptions: DefaultEdgeOptions = {
-  type: "step",
-  markerEnd: { type: MarkerType.ArrowClosed },
-  style: { strokeWidth: 2 },
-}
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -51,7 +43,6 @@ function App({ onReactFlowInit }: AppProps) {
       <ReactFlow
         id="react-flow-library"
         nodeTypes={diagramNodeTypes}
-        defaultEdgeOptions={defaultEdgeOptions}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -60,7 +51,7 @@ function App({ onReactFlowInit }: AppProps) {
         onDragOver={onDragOver}
         onDrop={onDrop}
         onNodeDragStop={onNodeDragStop}
-        connectionLineType={ConnectionLineType.SmoothStep}
+        connectionLineType={ConnectionLineType.Step}
         connectionMode={ConnectionMode.Loose}
         fitView
         onInit={(instance) => {
