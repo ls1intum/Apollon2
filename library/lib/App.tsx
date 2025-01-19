@@ -9,18 +9,22 @@ import {
   ConnectionMode,
   ReactFlowInstance,
   useNodesState,
-  addEdge,
   useEdgesState,
-  Connection,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
 import { initialEdges, initialNodes } from "./initialElements"
 import "@/styles/app.css"
 import { Sidebar } from "@/components"
-import { useCallback } from "react"
 import { diagramNodeTypes } from "./nodes"
-import { useDragOver, useDrop, useNodeDragStop } from "./hooks"
+import {
+  useConnect,
+  useDragOver,
+  useDrop,
+  useNodeDragStop,
+  useReconnect,
+} from "./hooks"
+import { diagramEdgeTypes } from "./edges"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -28,14 +32,12 @@ interface AppProps {
 
 function App({ onReactFlowInit }: AppProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+  const [edges, , onEdgesChange] = useEdgesState(initialEdges)
   const { onDrop } = useDrop()
   const { onDragOver } = useDragOver()
   const { onNodeDragStop } = useNodeDragStop(setNodes)
-  const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    []
-  )
+  const { onConnect } = useConnect()
+  const { onReconnect } = useReconnect()
 
   return (
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
@@ -43,11 +45,13 @@ function App({ onReactFlowInit }: AppProps) {
       <ReactFlow
         id="react-flow-library"
         nodeTypes={diagramNodeTypes}
+        edgeTypes={diagramEdgeTypes}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onReconnect={onReconnect}
         onDragOver={onDragOver}
         onDrop={onDrop}
         onNodeDragStop={onNodeDragStop}
