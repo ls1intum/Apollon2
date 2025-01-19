@@ -2,7 +2,7 @@ import { useReactFlow } from "@xyflow/react"
 import { GenericPopover } from "../GenericPopover"
 import { TextField } from "@mui/material"
 import { useViewportCenter } from "@/hooks"
-import { getPopoverOrigin, getQuadrant } from "@/utils"
+import { getPopoverOrigin, getPositionOnCanvas, getQuadrant } from "@/utils"
 import { PackageNodeProps } from "@/types"
 
 interface PackageComponentProps {
@@ -20,7 +20,7 @@ export function PackagePopover({
   onClose,
   onNameChange,
 }: PackageComponentProps) {
-  const { getNode } = useReactFlow()
+  const { getNode, getNodes } = useReactFlow()
   const viewportCenter = useViewportCenter()
 
   if (!anchorEl || !open) {
@@ -28,8 +28,9 @@ export function PackagePopover({
   }
 
   const node = getNode(nodeId)!
+  const nodePoistionOnCanvas = getPositionOnCanvas(node, getNodes())
   const nodeData = node.data as PackageNodeProps
-  const quadrant = getQuadrant(node.position, viewportCenter)
+  const quadrant = getQuadrant(nodePoistionOnCanvas, viewportCenter)
   const popoverOrigin = getPopoverOrigin(quadrant)
 
   return (
