@@ -3,12 +3,23 @@ import { ClassType } from "./types"
 
 export const initialNodes: Node[] = [
   {
-    id: "1",
+    id: "11",
     type: "package",
     position: { x: -100, y: 200 },
     width: 200,
     height: 200,
     selected: false,
+    data: { name: "Package" },
+  },
+  {
+    id: "22",
+    type: "package",
+    position: { x: 10, y: 20 },
+    width: 200,
+    height: 200,
+    selected: false,
+    parentId: "11",
+    expandParent: true,
     data: { name: "Package" },
   },
   {
