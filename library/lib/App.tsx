@@ -35,12 +35,11 @@ interface AppProps {
 }
 
 function App({ onReactFlowInit }: AppProps) {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes)
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
   const { onDrop } = useDrop()
   const { onDragOver } = useDragOver()
-  // const { onNodeDragStart } = useNodeDragStart()
-  const { onNodeDragStop } = useNodeDragStop()
+  const { onNodeDragStop } = useNodeDragStop(setNodes)
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     []

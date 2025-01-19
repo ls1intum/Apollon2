@@ -10,14 +10,14 @@ export const initialNodes: Node[] = [
     height: 200,
     data: { name: "11" },
   },
-  // {
-  //   id: "22",
-  //   type: "package",
-  //   position: { x: -100, y: 500 },
-  //   width: 200,
-  //   height: 200,
-  //   data: { name: "22" },
-  // },
+  {
+    id: "22",
+    type: "package",
+    position: { x: -100, y: 500 },
+    width: 200,
+    height: 200,
+    data: { name: "22" },
+  },
   // {
   //   id: "3",
   //   type: "package",

@@ -1,15 +1,16 @@
-import { useCallback } from "react"
+import { Dispatch, SetStateAction, useCallback } from "react"
 import { type OnNodeDrag, type Node, useReactFlow } from "@xyflow/react"
-import { getPositionOnCanvas, resizeAllParents } from "@/utils"
+import {
+  getPositionOnCanvas,
+  resizeAllParents,
+  sortNodesTopologically,
+} from "@/utils"
 
-export const useNodeDragStop = () => {
-  const {
-    screenToFlowPosition,
-    updateNode,
-    getNodes,
-    getIntersectingNodes,
-    setNodes,
-  } = useReactFlow()
+export const useNodeDragStop = (
+  setNodesState: Dispatch<SetStateAction<Node[]>>
+) => {
+  const { getNodes, screenToFlowPosition, getIntersectingNodes, updateNode } =
+    useReactFlow()
 
   const onNodeDragStop: OnNodeDrag<Node> = useCallback(
     (event, draggedNode) => {
@@ -60,7 +61,8 @@ export const useNodeDragStop = () => {
           nodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
         )
 
-        setNodes(updatedNodesList)
+        const sortedList = sortNodesTopologically(updatedNodesList)
+        setNodesState(sortedList)
         return
       }
 
@@ -69,10 +71,16 @@ export const useNodeDragStop = () => {
           draggedNode,
           nodes.map((n) => n)
         )
-        setNodes(updatedNodesList)
+        setNodesState(updatedNodesList)
       }
     },
-    [screenToFlowPosition, updateNode, getNodes, getIntersectingNodes, setNodes]
+    [
+      screenToFlowPosition,
+      updateNode,
+      getNodes,
+      getIntersectingNodes,
+      setNodesState,
+    ]
   )
 
   return { onNodeDragStop }

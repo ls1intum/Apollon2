@@ -64,3 +64,44 @@ export const resizeAllParents = (node: Node, allNodes: Node[]) => {
   }
   return allNodes
 }
+
+export function sortNodesTopologically(nodes: Node[]): Node[] {
+  const nodeMap = new Map<string, Node>()
+  nodes.forEach((node) => nodeMap.set(node.id, node))
+
+  const sorted: Node[] = []
+  const visited = new Set<string>()
+  const visiting = new Set<string>()
+
+  const visit = (node: Node) => {
+    if (visited.has(node.id)) return
+    if (visiting.has(node.id)) {
+      throw new Error(`Circular dependency detected at node ${node.id}`)
+    }
+
+    visiting.add(node.id)
+
+    if (node.parentId) {
+      const parentNode = nodeMap.get(node.parentId)
+      if (parentNode) {
+        visit(parentNode)
+      } else {
+        console.warn(
+          `Parent node with id ${node.parentId} not found for node ${node.id}`
+        )
+      }
+    }
+
+    visiting.delete(node.id)
+    visited.add(node.id)
+    sorted.push(node)
+  }
+
+  nodes.forEach((node) => {
+    if (!visited.has(node.id)) {
+      visit(node)
+    }
+  })
+
+  return sorted
+}
