@@ -38,6 +38,7 @@ export const useNodeDragStop = (
         updateNode(draggedNode.id, {
           position: getPositionOnCanvas(draggedNode, nodes),
           parentId: undefined,
+          expandParent: true,
         })
         return
       }
@@ -50,6 +51,7 @@ export const useNodeDragStop = (
           ...structuredClone(draggedNode),
           position: getPositionOnCanvas(draggedNode, nodes),
           parentId: undefined,
+          expandParent: true,
         }
         const parentsFlowPosition = getPositionOnCanvas(parentNode, nodes)
 
@@ -70,7 +72,9 @@ export const useNodeDragStop = (
       if (draggedNode.parentId) {
         const updatedNodesList = resizeAllParents(
           draggedNode,
-          nodes.map((n) => n)
+          nodes.map((n) =>
+            n.id === draggedNode.id ? { ...draggedNode, expandParent: true } : n
+          )
         )
         setNodesState(updatedNodesList)
       }

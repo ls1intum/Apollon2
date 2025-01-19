@@ -15,14 +15,16 @@ import "@xyflow/react/dist/style.css"
 import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
 import { initialEdges, initialNodes } from "./initialElements"
 import "@/styles/app.css"
-import { Sidebar } from "@/components"
+import { Sidebar, SvgMarkers } from "@/components"
 import { diagramNodeTypes } from "./nodes"
 import {
   useConnect,
   useDragOver,
   useDrop,
+  useNodeDragStart,
   useNodeDragStop,
   useReconnect,
+  // useNodeDragStart,
 } from "./hooks"
 import { diagramEdgeTypes } from "./edges"
 
@@ -37,11 +39,13 @@ function App({ onReactFlowInit }: AppProps) {
   const { onDragOver } = useDragOver()
   const { onNodeDragStop } = useNodeDragStop(setNodes)
   const { onConnect } = useConnect()
+  const { onNodeDragStart } = useNodeDragStart()
   const { onReconnect } = useReconnect()
 
   return (
     <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
       <Sidebar />
+      <SvgMarkers />
       <ReactFlow
         id="react-flow-library"
         nodeTypes={diagramNodeTypes}
@@ -52,6 +56,10 @@ function App({ onReactFlowInit }: AppProps) {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onReconnect={onReconnect}
+        onNodeDragStart={onNodeDragStart}
+        onDragCapture={(evet) => {
+          console.log("onDragCapture", evet)
+        }}
         onDragOver={onDragOver}
         onDrop={onDrop}
         onNodeDragStop={onNodeDragStop}

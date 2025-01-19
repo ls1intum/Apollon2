@@ -3,7 +3,7 @@ import {
   NodeResizer,
   NodeToolbar,
   Position,
-  // useReactFlow,
+  useReactFlow,
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
@@ -13,9 +13,8 @@ import { PackageNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
-// import { getPositionOnCanvas } from "@/utils"
+import LinkOffOutlinedIcon from "@mui/icons-material/LinkOffOutlined"
 
-// const minPadding = 20
 export default function Package({
   id,
   width,
@@ -25,7 +24,7 @@ export default function Package({
   parentId,
 }: NodeProps<Node<PackageNodeProps>>) {
   const { onResize } = useHandleOnResize(parentId)
-  // const { getNode, getNodes, getNodesBounds } = useReactFlow()
+  const { updateNode, getInternalNode } = useReactFlow()
   const {
     svgRef,
     anchorEl,
@@ -37,6 +36,17 @@ export default function Package({
 
   if (!width || !height) {
     return null
+  }
+
+  const handleUnlink = () => {
+    const nodeInternal = getInternalNode(id)
+    updateNode(id, {
+      parentId: undefined,
+      position: {
+        x: nodeInternal!.internals.positionAbsolute.x,
+        y: nodeInternal!.internals.positionAbsolute.y,
+      },
+    })
   }
 
   return (
@@ -57,6 +67,12 @@ export default function Package({
             onClick={handleClick}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />
+          {parentId && (
+            <LinkOffOutlinedIcon
+              onClick={handleUnlink}
+              style={{ cursor: "pointer", width: 16, height: 16 }}
+            />
+          )}
         </Box>
       </NodeToolbar>
       <NodeResizer

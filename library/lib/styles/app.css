@@ -67,9 +67,17 @@ body,
   opacity: 1;
 }
 
+.react-flow__node:hover .react-flow__handle {
+  opacity: 1;
+}
+
 .react-flow__node.dragging {
   opacity: 0.7;
 }
 .react-flow__node:hover {
   opacity: 0.9;
+}
+
+.react-flow__edges {
+  z-index: 30;
 }

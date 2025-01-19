@@ -14,7 +14,7 @@ export const PackageSVG = forwardRef<SVGSVGElement, PackageSVGProps>(
     { width, height, name, svgAttributes, transformScale }: PackageSVGProps,
     ref
   ) {
-    const margin = 0
+    const margin = 2
     const headerHeight = 10 // Height of the top path
     const innerWidth = width - 2 * margin // Adjusted content width
     const innerHeight = height - 2 * margin // Adjusted content height
@@ -32,8 +32,7 @@ export const PackageSVG = forwardRef<SVGSVGElement, PackageSVGProps>(
         }}
         {...svgAttributes}
       >
-        {/* <g transform={`translate(${margin}, ${margin})`}> */}
-        <g>
+        <g transform={`translate(${margin}, ${margin})`}>
           {/* Top Path */}
           <ThemedPath
             d={`M 0 ${headerHeight} V 0 H 40 V ${headerHeight}`}
