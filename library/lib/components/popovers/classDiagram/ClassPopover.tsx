@@ -1,13 +1,12 @@
-import { ClassNodeProps } from "@/nodes/classDiagram"
-import { ClassType } from "@/types"
+import { ClassNodeProps, ClassType } from "@/types"
 import { useReactFlow } from "@xyflow/react"
-import { GenericPopover } from "./GenericPopover"
-import { DividerLine } from "../DividerLine"
-import { EditableList } from "../EditableList"
-import { StereotypeButtonGroup } from "../StereotypeButtonGroup"
+import { GenericPopover } from "../GenericPopover"
+import { DividerLine } from "../../DividerLine"
+import { EditableList } from "../../EditableList"
+import { StereotypeButtonGroup } from "../../StereotypeButtonGroup"
 import { TextField } from "@mui/material"
 import { useViewportCenter } from "@/hooks"
-import { getPopoverOrigin, getQuadrant } from "@/utils"
+import { getPopoverOrigin, getPositionOnCanvas, getQuadrant } from "@/utils"
 
 interface PopoverComponentProps {
   nodeId: string
@@ -24,7 +23,7 @@ export function ClassPopover({
   onClose,
   onNameChange,
 }: PopoverComponentProps) {
-  const { getNode, updateNodeData } = useReactFlow()
+  const { getNode, updateNodeData, getNodes } = useReactFlow()
   const viewportCenter = useViewportCenter()
 
   if (!anchorEl || !open) {
@@ -32,8 +31,9 @@ export function ClassPopover({
   }
 
   const node = getNode(nodeId)!
-  const nodeData = node.data as ClassNodeProps["data"]
-  const quadrant = getQuadrant(node.position, viewportCenter)
+  const nodePoistionOnCanvas = getPositionOnCanvas(node, getNodes())
+  const nodeData = node.data as ClassNodeProps
+  const quadrant = getQuadrant(nodePoistionOnCanvas, viewportCenter)
   const popoverOrigin = getPopoverOrigin(quadrant)
   const classStereotype = nodeData.stereotype
 

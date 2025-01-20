@@ -21,7 +21,7 @@ export class Apollon2 {
 
   public getNodes(): Node[] {
     if (this.reactFlowInstance) {
-      return this.reactFlowInstance?.getNodes()
+      return this.reactFlowInstance.getNodes()
     }
     return []
   }

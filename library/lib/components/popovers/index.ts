@@ -1,1 +1,1 @@
-export * from "./ClassPopover"
+export * from "./classDiagram"
