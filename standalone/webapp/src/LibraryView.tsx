@@ -9,10 +9,7 @@ export function LibraryView() {
 
   useLayoutEffect(() => {
     if (containerRef.current) {
-      apollon2Ref.current = new Apollon2(containerRef.current, {
-        width: "100%",
-        height: "100%",
-      })
+      apollon2Ref.current = new Apollon2(containerRef.current)
     }
 
     return () => {
