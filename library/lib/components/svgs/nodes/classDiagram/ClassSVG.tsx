@@ -15,7 +15,7 @@ import {
   DEFAULT_METHOD_HEIGHT,
   DEFAULT_PADDING,
   DEFAULT_MARGIN,
-} from "@/constants"
+} from "@/constants/dropElementConfig"
 
 export interface MinSize {
   minWidth: number

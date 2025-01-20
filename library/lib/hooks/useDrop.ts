@@ -1,5 +1,5 @@
 import { dropElementConfig } from "@/constants"
-import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/contants"
+import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
 import { DropNodeData } from "@/types"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { useReactFlow, type Node } from "@xyflow/react"

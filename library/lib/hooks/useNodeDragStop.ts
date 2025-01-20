@@ -5,7 +5,7 @@ import {
   resizeAllParents,
   sortNodesTopologically,
 } from "@/utils"
-import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/contants"
+import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
 
 export const useNodeDragStop = (
   setNodesState: Dispatch<SetStateAction<Node[]>>
