@@ -58,7 +58,6 @@ export const useDrop = () => {
         position,
         data: { ...config.defaultData, ...dropData.data },
         parentId,
-        expandParent: true,
       }
       if (parentId) {
         const parentPositionOnCanvas = getPositionOnCanvas(parentNode, allNodes)

@@ -3,14 +3,13 @@ import {
   NodeResizer,
   NodeToolbar,
   Position,
-  useReactFlow,
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
 import { ClassPopover, ClassSVG, MinSize } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import LinkOffOutlinedIcon from "@mui/icons-material/LinkOffOutlined"
+
 import { useClassNode, useHandleOnResize } from "@/hooks"
 import { useState } from "react"
 import { Box } from "@mui/material"
@@ -38,21 +37,9 @@ export function Class({
     handleDelete,
   } = useClassNode({ id, selected: Boolean(selected) })
   const { onResize } = useHandleOnResize(parentId)
-  const { updateNode, getInternalNode } = useReactFlow()
 
   if (!width || !height) {
     return null
-  }
-
-  const handleUnlink = () => {
-    const nodeInternal = getInternalNode(id)
-    updateNode(id, {
-      parentId: undefined,
-      position: {
-        x: nodeInternal!.internals.positionAbsolute.x,
-        y: nodeInternal!.internals.positionAbsolute.y,
-      },
-    })
   }
 
   return (
@@ -81,12 +68,6 @@ export function Class({
             onClick={handleClick}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />
-          {parentId && (
-            <LinkOffOutlinedIcon
-              onClick={handleUnlink}
-              style={{ cursor: "pointer", width: 16, height: 16 }}
-            />
-          )}
         </Box>
       </NodeToolbar>
       <ClassSVG
