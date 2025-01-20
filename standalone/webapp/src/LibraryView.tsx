@@ -1,7 +1,7 @@
 import { useRef, useLayoutEffect } from "react"
 import { Apollon2 } from "@apollon2/library"
+import { Navbar } from "@/components"
 import "@xyflow/react/dist/style.css"
-import { Navbar } from "./components"
 
 export function LibraryView() {
   const containerRef = useRef<HTMLDivElement | null>(null)

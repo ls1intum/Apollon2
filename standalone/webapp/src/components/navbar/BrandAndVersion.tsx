@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box/Box"
 import Typography from "@mui/material/Typography/Typography"
-import { secondary } from "../../constants"
-import { appVersion } from "../../constants"
+import { secondary, appVersion } from "@/constants"
 
 export const BrandAndVersion = () => {
   return (

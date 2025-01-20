@@ -7,8 +7,8 @@ import Button from "@mui/material/Button"
 import { TextField } from "@mui/material"
 import { NavbarFile } from "./NavbarFile"
 import { NavbarHelp } from "./NavbarHelp"
-import { NAVBAR_BACKGROUND_COLOR, secondary } from "../../constants"
 import { BrandAndVersion } from "./BrandAndVersion"
+import { NAVBAR_BACKGROUND_COLOR, secondary } from "@/constants"
 
 export default function DesktopNavbar() {
   const [diagramName, setDiagramName] = useState<string>("")

@@ -4,7 +4,7 @@ import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import Typography from "@mui/material/Typography/Typography"
-import { secondary } from "../../constants"
+import { secondary } from "@/constants"
 
 interface Props {
   color?: string

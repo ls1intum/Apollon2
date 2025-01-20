@@ -11,7 +11,7 @@ import { NavbarFile } from "./NavbarFile"
 import { NavbarHelp } from "./NavbarHelp"
 import Button from "@mui/material/Button/Button"
 import { BrandAndVersion } from "./BrandAndVersion"
-import { NAVBAR_BACKGROUND_COLOR } from "../../constants"
+import { NAVBAR_BACKGROUND_COLOR } from "@/constants"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
