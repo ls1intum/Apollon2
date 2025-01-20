@@ -28,9 +28,11 @@ import "@/styles/app.css"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
+  width: number | string
+  height: number | string
 }
 
-function App({ onReactFlowInit }: AppProps) {
+function App({ onReactFlowInit, width, height }: AppProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, , onEdgesChange] = useEdgesState(initialEdges)
   const { onDrop } = useDrop()
@@ -38,9 +40,11 @@ function App({ onReactFlowInit }: AppProps) {
   const { onNodeDragStop } = useNodeDragStop(setNodes)
   const { onConnect } = useConnect()
   const { onReconnect } = useReconnect()
+  console.log("width", width)
+  console.log("height", height)
 
   return (
-    <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
+    <div style={{ display: "flex", width, height }}>
       <Sidebar />
       <SvgMarkers />
       <ReactFlow
@@ -69,15 +73,16 @@ function App({ onReactFlowInit }: AppProps) {
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
         <Controls orientation="horizontal" />
+        {/* <ActionsPanel /> */}
       </ReactFlow>
     </div>
   )
 }
 
-export function AppWithProvider({ onReactFlowInit }: AppProps) {
+export function AppWithProvider({ onReactFlowInit, width, height }: AppProps) {
   return (
     <ReactFlowProvider>
-      <App onReactFlowInit={onReactFlowInit} />
+      <App onReactFlowInit={onReactFlowInit} width={width} height={height} />
     </ReactFlowProvider>
   )
 }

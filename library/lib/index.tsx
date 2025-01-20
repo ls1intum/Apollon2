@@ -8,10 +8,20 @@ export class Apollon2 {
   private root: ReactDOM.Root | null = null
   private reactFlowInstance: ReactFlowInstance<Node, Edge> | null = null
 
-  constructor(element: HTMLElement) {
+  constructor(
+    element: HTMLElement,
+    options: {
+      width: number | string
+      height: number | string
+    }
+  ) {
     this.root = ReactDOM.createRoot(element)
     this.root.render(
-      <AppWithProvider onReactFlowInit={this.setReactFlowInstance.bind(this)} />
+      <AppWithProvider
+        onReactFlowInit={this.setReactFlowInstance.bind(this)}
+        width={options.width}
+        height={options.height}
+      />
     )
   }
 
