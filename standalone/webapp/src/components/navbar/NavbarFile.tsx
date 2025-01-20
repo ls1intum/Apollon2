@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from "react"
+import { useState, MouseEvent, FC } from "react"
 import Button from "@mui/material/Button"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
@@ -7,7 +7,11 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "../../constants"
 
-export const NavbarFile = () => {
+interface Props {
+  color?: string
+}
+
+export const NavbarFile: FC<Props> = ({ color }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [secondItemAnchorEl, setSecondItemAnchorEl] =
     useState<null | HTMLElement>(null)
@@ -33,8 +37,11 @@ export const NavbarFile = () => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={openMenu}
+        sx={{ textTransform: "none" }} // This removes the uppercase transformation
       >
-        <Typography color={secondary}>File</Typography>
+        <Typography color={color ?? secondary} autoCapitalize="">
+          File
+        </Typography>
         <KeyboardArrowDownIcon
           sx={{ width: 16, height: 16, color: secondary }}
         />

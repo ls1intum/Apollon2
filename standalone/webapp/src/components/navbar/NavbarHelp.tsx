@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from "react"
+import { useState, MouseEvent, FC } from "react"
 import Button from "@mui/material/Button"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
@@ -6,7 +6,11 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import Typography from "@mui/material/Typography/Typography"
 import { secondary } from "../../constants"
 
-export const NavbarHelp = () => {
+interface Props {
+  color?: string
+}
+
+export const NavbarHelp: FC<Props> = ({ color }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const open = Boolean(anchorEl)
@@ -26,8 +30,9 @@ export const NavbarHelp = () => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={openMenu}
+        sx={{ textTransform: "none" }} // This removes the uppercase transformation
       >
-        <Typography color={secondary}>Help</Typography>
+        <Typography color={color ?? secondary}>Help</Typography>
         <KeyboardArrowDownIcon
           sx={{ width: 16, height: 16, color: secondary }}
         />
