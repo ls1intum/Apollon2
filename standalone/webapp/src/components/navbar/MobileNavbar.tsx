@@ -9,14 +9,13 @@ import MenuIcon from "@mui/icons-material/Menu"
 import { TextField } from "@mui/material"
 import { NavbarFile } from "./NavbarFile"
 import { NavbarHelp } from "./NavbarHelp"
-import { secondary } from "../../constants"
 import Button from "@mui/material/Button/Button"
-
-const NAVBAR_BACKGROUND_COLOR = "#212529"
+import { BrandAndVersion } from "./BrandAndVersion"
+import { NAVBAR_BACKGROUND_COLOR } from "../../constants"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
-  const [diagramName, setDiagramName] = useState<string>("")
+  const [diagramName, setDiagramName] = useState("")
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -78,7 +77,6 @@ export default function MobileNavbar() {
               onClose={handleCloseNavMenu}
             >
               {/* Interactive Menu Items */}
-
               <Box
                 sx={{
                   display: "flex",
@@ -88,21 +86,14 @@ export default function MobileNavbar() {
                 }}
               >
                 <NavbarFile color="black" />
-
                 <Button
-                  id="basic-button"
-                  onClick={() => {
-                    console.log("SHARE button is clicked")
-                  }}
                   sx={{ textTransform: "none" }} // This removes the uppercase transformation
                 >
                   <Typography color="black">Share</Typography>
                 </Button>
-
                 <NavbarHelp color="black" />
 
                 {/* Diagram Name Input Field */}
-
                 <Box sx={{ p: 0.5 }}>
                   <TextField
                     value={diagramName}
@@ -121,27 +112,7 @@ export default function MobileNavbar() {
           </Box>
 
           {/* Mobile Title and Version */}
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              variant="h5"
-              noWrap
-              sx={{
-                mr: 2,
-                flexGrow: 1,
-                fontWeight: 700,
-              }}
-            >
-              Apollon2
-            </Typography>
-            <Typography variant="body2" sx={{ color: secondary }}>
-              v0.0.1
-            </Typography>
-          </Box>
+          <BrandAndVersion />
 
           <div />
         </Box>
