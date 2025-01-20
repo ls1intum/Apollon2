@@ -1,5 +1,8 @@
 import React, { DragEvent } from "react"
-import { dropElementConfig, transformScale } from "@/constants"
+import {
+  dropElementConfig,
+  transformScale,
+} from "@/constants/dropElementConfig"
 import { DividerLine } from "./DividerLine"
 import { DropNodeData } from "@/types"
 
