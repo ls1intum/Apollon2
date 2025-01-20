@@ -7,7 +7,6 @@ interface Props {
 export function DefaultNodeWrapper({ children }: Props) {
   return (
     <>
-      {children}
       <Handle
         id="top-left"
         type="source"
@@ -60,6 +59,7 @@ export function DefaultNodeWrapper({ children }: Props) {
         position={Position.Left}
         style={{ top: "calc(15%)" }}
       />
+      {children}
     </>
   )
 }
