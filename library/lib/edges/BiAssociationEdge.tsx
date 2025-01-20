@@ -26,6 +26,7 @@ export const BiAssociationEdge = ({
       id={id}
       path={edgePath}
       style={{
+        zIndex: 50,
         stroke: "#000000",
       }}
     />

@@ -1,5 +1,6 @@
 import { BaseEdge, EdgeProps, getSmoothStepPath } from "@xyflow/react"
 import { STEP_BOARDER_RADIUS, MARKER_PADDING } from "@/constants/edgeConstants"
+import { adjustEdgeCoordinates } from "@/utils"
 // Aggregation Edge (White Rhombus)
 export const AggregationEdge = ({
   id,
@@ -12,23 +13,18 @@ export const AggregationEdge = ({
 }: EdgeProps) => {
   const markerPadding = MARKER_PADDING
   const borderRadius = STEP_BOARDER_RADIUS
-  // Adjust coordinates based on connection positions
-  if (targetPosition === "left") {
-    targetX -= markerPadding
-  } else if (targetPosition === "right") {
-    targetX += markerPadding
-  } else if (targetPosition === "top") {
-    targetY -= markerPadding
-  } else if (targetPosition === "bottom") {
-    targetY += markerPadding
-  }
-
+  const adjustedCoordinates = adjustEdgeCoordinates(
+    targetX,
+    targetY,
+    targetPosition,
+    markerPadding
+  );
   const [edgePath] = getSmoothStepPath({
     sourceX,
     sourceY,
     sourcePosition,
-    targetX,
-    targetY,
+    targetX: adjustedCoordinates.targetX,
+    targetY: adjustedCoordinates.targetY,
     targetPosition,
     borderRadius,
   })
