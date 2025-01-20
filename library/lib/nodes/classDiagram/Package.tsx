@@ -73,12 +73,3 @@ export default function Package({
     </DefaultNodeWrapper>
   )
 }
-
-// export default memo(Package, (prev, next) => {
-//   return (
-//     prev.data.name === next.data.name &&
-//     prev.width === next.width &&
-//     prev.height === next.height &&
-//     prev.selected === next.selected
-//   )
-// })

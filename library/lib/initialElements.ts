@@ -11,17 +11,6 @@ export const initialNodes: Node[] = [
     selected: false,
     data: { name: "Package" },
   },
-  // {
-  //   id: "22",
-  //   type: "package",
-  //   position: { x: 10, y: 20 },
-  //   width: 200,
-  //   height: 200,
-  //   selected: false,
-  //   parentId: "11",
-  //   expandParent: true,
-  //   data: { name: "Package" },
-  // },
   {
     id: "2",
     type: "class",
