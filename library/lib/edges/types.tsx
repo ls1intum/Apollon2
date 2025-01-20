@@ -6,6 +6,7 @@ import { CompositionEdge } from "./CompositionEdge"
 import { BiAssociationEdge } from "./BiAssociationEdge"
 import { UniAssociationEdge } from "./UniAssociationEdge"
 import { DependencyEdge } from "./DependencyEdge"
+
 export const diagramEdgeTypes = {
   inheritance: InheritanceEdge,
   realization: RealizationEdge,
