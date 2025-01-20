@@ -1,4 +1,4 @@
-import { Position } from "@xyflow/react";
+import { Position } from "@xyflow/react"
 
 /**
  * Adjusts the target coordinates based on the position and marker padding.
@@ -16,13 +16,13 @@ export const adjustEdgeCoordinates = (
   markerPadding: number
 ): { targetX: number; targetY: number } => {
   if (targetPosition === "left") {
-    targetX -= markerPadding;
+    targetX -= markerPadding
   } else if (targetPosition === "right") {
-    targetX += markerPadding;
+    targetX += markerPadding
   } else if (targetPosition === "top") {
-    targetY -= markerPadding;
+    targetY -= markerPadding
   } else if (targetPosition === "bottom") {
-    targetY += markerPadding;
+    targetY += markerPadding
   }
-  return { targetX, targetY };
-};
+  return { targetX, targetY }
+}

@@ -14,11 +14,11 @@ export const CompositionEdge = ({
   const markerPadding = MARKER_PADDING
   const borderRadius = STEP_BOARDER_RADIUS
   const adjustedCoordinates = adjustEdgeCoordinates(
-      targetX,
-      targetY,
-      targetPosition,
-      markerPadding
-    );
+    targetX,
+    targetY,
+    targetPosition,
+    markerPadding
+  )
 
   // Generate the edge path
   const [edgePath] = getSmoothStepPath({

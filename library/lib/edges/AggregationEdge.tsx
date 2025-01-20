@@ -18,7 +18,7 @@ export const AggregationEdge = ({
     targetY,
     targetPosition,
     markerPadding
-  );
+  )
   const [edgePath] = getSmoothStepPath({
     sourceX,
     sourceY,
