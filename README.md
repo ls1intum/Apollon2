@@ -131,6 +131,20 @@ Here are the commonly used scripts defined in the monorepo:
   npm run format:check
   ```
 
+## Dockerized web app
+
+Webapp can be build and run with docker. Be sure docker is installed in your device.
+
+- **Build with docker :**
+  ```bash
+  npm run docker:build
+  ```
+- **Run with docker :**
+  ```bash
+  npm run docker:start
+  ```
+  After running 'npm run docker:start' you can navigate to http://localhost:8080/ and start using the application
+
 ## Troubleshooting
 
 - If you encounter issues with Node.js versions, ensure you have the correct version installed by running:
