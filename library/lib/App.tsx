@@ -69,7 +69,6 @@ function App({ onReactFlowInit }: AppProps) {
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
         <Controls orientation="horizontal" />
-        {/* <ActionsPanel /> */}
       </ReactFlow>
     </div>
   )
