@@ -6,12 +6,14 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "@/constants"
+import { Apollon2 } from "@apollon2/library"
 
 interface Props {
   color?: string
+  apollon2?: Apollon2
 }
 
-export const NavbarFile: FC<Props> = ({ color }) => {
+export const NavbarFile: FC<Props> = ({ color, apollon2 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [secondItemAnchorEl, setSecondItemAnchorEl] =
     useState<null | HTMLElement>(null)
@@ -55,7 +57,18 @@ export const NavbarFile: FC<Props> = ({ color }) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>New File</MenuItem>
+        <MenuItem
+          onClick={() => {
+            console.log("New File")
+            console.log("apollon2", apollon2)
+            if (apollon2) {
+              apollon2.resetDiagram()
+            }
+            handleClose()
+          }}
+        >
+          New File
+        </MenuItem>
         <MenuItem onClick={handleClose}>Start from Template</MenuItem>
         <MenuItem onClick={handleClose}>Load</MenuItem>
         <MenuItem onClick={handleClose}>Import</MenuItem>

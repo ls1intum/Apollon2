@@ -26,6 +26,13 @@ export class Apollon2 {
     return []
   }
 
+  public resetDiagram() {
+    if (this.reactFlowInstance) {
+      this.reactFlowInstance.setEdges([])
+      this.reactFlowInstance.setNodes([])
+    }
+  }
+
   public dispose() {
     if (this.root) {
       this.root.unmount()
