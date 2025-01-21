@@ -17,7 +17,7 @@ export const NavbarFile: FC<Props> = ({ color }) => {
   const [secondItemAnchorEl, setSecondItemAnchorEl] =
     useState<null | HTMLElement>(null)
 
-  const { apollon2 } = useApollon2Context()
+  const { openModal } = useApollon2Context()
 
   const open = Boolean(anchorEl)
   const openMenu = (event: MouseEvent<HTMLButtonElement>) => {
@@ -63,10 +63,8 @@ export const NavbarFile: FC<Props> = ({ color }) => {
       >
         <MenuItem
           onClick={() => {
-            console.log("New File")
-            console.log("apollon2", apollon2)
-            apollon2?.resetDiagram()
-            handleClose()
+            closeMenu()
+            openModal("NEWDIAGRAM")
           }}
         >
           New File
