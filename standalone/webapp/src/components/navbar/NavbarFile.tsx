@@ -7,7 +7,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "@/constants"
 import { useModalContext } from "@/contexts/ModalContext"
-import { useExportDiagramAsJson } from "@/hooks"
+import { useApollon2Context } from "@/contexts"
 
 interface Props {
   color?: string
@@ -19,7 +19,7 @@ export const NavbarFile: FC<Props> = ({ color }) => {
     useState<null | HTMLElement>(null)
 
   const { openModal } = useModalContext()
-  const { exportDiagramAsJson } = useExportDiagramAsJson()
+  const { apollon2, diagramName } = useApollon2Context()
 
   const open = Boolean(anchorEl)
   const openMenu = (event: MouseEvent<HTMLButtonElement>) => {
@@ -33,6 +33,12 @@ export const NavbarFile: FC<Props> = ({ color }) => {
   const closeMenu = () => {
     setAnchorEl(null)
     setSecondItemAnchorEl(null)
+  }
+
+  const handleExportAsJSON = () => {
+    if (apollon2) {
+      apollon2.exportAsJson(diagramName)
+    }
   }
 
   return (
@@ -95,9 +101,9 @@ export const NavbarFile: FC<Props> = ({ color }) => {
         transformOrigin={{ vertical: "top", horizontal: "left" }}
       >
         <MenuItem onClick={closeMenu}>As SVG</MenuItem>
-        <MenuItem onClick={closeMenu}>As PNG(White background)</MenuItem>
+        {/* <MenuItem onClick={onDownloadAsPng}>As PNG(White background)</MenuItem> */}
         <MenuItem onClick={closeMenu}>As PNG(Transparent background)</MenuItem>
-        <MenuItem onClick={exportDiagramAsJson}>As JSON</MenuItem>
+        <MenuItem onClick={handleExportAsJSON}>As JSON</MenuItem>
         <MenuItem onClick={closeMenu}>As PDF</MenuItem>
       </Menu>
     </>
