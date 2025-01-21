@@ -41,7 +41,9 @@ export const NavbarFile: FC<Props> = ({ color }) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={openMenu}
-        sx={{ textTransform: "none" }} // This removes the uppercase transformation
+        sx={{
+          textTransform: "none", // This removes the uppercase transformation
+        }}
       >
         <Typography color={color ?? secondary} autoCapitalize="">
           File
