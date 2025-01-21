@@ -25,6 +25,12 @@ export class Apollon2 {
     }
     return []
   }
+  public getEdges(): Edge[] {
+    if (this.reactFlowInstance) {
+      return this.reactFlowInstance.getEdges()
+    }
+    return []
+  }
 
   public resetDiagram() {
     if (this.reactFlowInstance) {

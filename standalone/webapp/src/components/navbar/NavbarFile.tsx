@@ -7,6 +7,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "@/constants"
 import { useModalContext } from "@/contexts/ModalContext"
+import { useExportDiagramAsJson } from "@/hooks"
 
 interface Props {
   color?: string
@@ -18,6 +19,7 @@ export const NavbarFile: FC<Props> = ({ color }) => {
     useState<null | HTMLElement>(null)
 
   const { openModal } = useModalContext()
+  const { exportDiagramAsJson } = useExportDiagramAsJson()
 
   const open = Boolean(anchorEl)
   const openMenu = (event: MouseEvent<HTMLButtonElement>) => {
@@ -70,7 +72,6 @@ export const NavbarFile: FC<Props> = ({ color }) => {
           New File
         </MenuItem>
         <MenuItem onClick={handleClose}>Start from Template</MenuItem>
-        <MenuItem onClick={handleClose}>Load</MenuItem>
         <MenuItem onClick={handleClose}>Import</MenuItem>
         <MenuItem
           onClick={(event) => {
@@ -96,7 +97,7 @@ export const NavbarFile: FC<Props> = ({ color }) => {
         <MenuItem onClick={closeMenu}>As SVG</MenuItem>
         <MenuItem onClick={closeMenu}>As PNG(White background)</MenuItem>
         <MenuItem onClick={closeMenu}>As PNG(Transparent background)</MenuItem>
-        <MenuItem onClick={closeMenu}>As JSON</MenuItem>
+        <MenuItem onClick={exportDiagramAsJson}>As JSON</MenuItem>
         <MenuItem onClick={closeMenu}>As PDF</MenuItem>
       </Menu>
     </>
