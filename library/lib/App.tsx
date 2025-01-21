@@ -65,6 +65,7 @@ function App({ onReactFlowInit }: AppProps) {
         }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
+        snapToGrid
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
