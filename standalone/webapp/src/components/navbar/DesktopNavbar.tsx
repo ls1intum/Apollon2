@@ -1,4 +1,3 @@
-import { FC, useState } from "react"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
@@ -9,14 +8,10 @@ import { NavbarFile } from "./NavbarFile"
 import { NavbarHelp } from "./NavbarHelp"
 import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR, secondary } from "@/constants"
-import { Apollon2 } from "@apollon2/library"
+import { useApollon2Context } from "@/contexts/Apollon2Context"
 
-interface Props {
-  apollon2?: Apollon2
-}
-
-export const DesktopNavbar: FC<Props> = ({ apollon2 }) => {
-  const [diagramName, setDiagramName] = useState<string>("")
+export const DesktopNavbar = () => {
+  const { diagramName, setDiagramName } = useApollon2Context()
 
   return (
     <AppBar
@@ -42,7 +37,7 @@ export const DesktopNavbar: FC<Props> = ({ apollon2 }) => {
             alignItems: "center",
           }}
         >
-          <NavbarFile apollon2={apollon2} />
+          <NavbarFile />
           <Button
             sx={{ textTransform: "none" }} // This removes the uppercase transformation
           >

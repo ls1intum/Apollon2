@@ -6,17 +6,19 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "@/constants"
-import { Apollon2 } from "@apollon2/library"
+import { useApollon2Context } from "@/contexts/Apollon2Context"
 
 interface Props {
   color?: string
-  apollon2?: Apollon2
 }
 
-export const NavbarFile: FC<Props> = ({ color, apollon2 }) => {
+export const NavbarFile: FC<Props> = ({ color }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [secondItemAnchorEl, setSecondItemAnchorEl] =
     useState<null | HTMLElement>(null)
+
+  const { apollon2 } = useApollon2Context()
+
   const open = Boolean(anchorEl)
   const openMenu = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -61,9 +63,7 @@ export const NavbarFile: FC<Props> = ({ color, apollon2 }) => {
           onClick={() => {
             console.log("New File")
             console.log("apollon2", apollon2)
-            if (apollon2) {
-              apollon2.resetDiagram()
-            }
+            apollon2?.resetDiagram()
             handleClose()
           }}
         >

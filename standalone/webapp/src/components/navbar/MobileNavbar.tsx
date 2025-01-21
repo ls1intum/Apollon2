@@ -12,11 +12,11 @@ import { NavbarHelp } from "./NavbarHelp"
 import Button from "@mui/material/Button/Button"
 import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR } from "@/constants"
+import { useApollon2Context } from "@/contexts/Apollon2Context"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
-  const [diagramName, setDiagramName] = useState("")
-
+  const { diagramName, setDiagramName } = useApollon2Context()
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
