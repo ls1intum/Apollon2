@@ -8,11 +8,9 @@ import {
   exportAsJSON,
 } from "./utils/exportUtils"
 
-export { type Node } from "@xyflow/react"
-
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
-  private reactFlowInstance: ReactFlowInstance<Node, Edge> | null = null
+  private reactFlowInstance: ReactFlowInstance | null = null
 
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element)
@@ -21,7 +19,7 @@ export class Apollon2 {
     )
   }
 
-  private setReactFlowInstance(instance: ReactFlowInstance<Node, Edge>) {
+  private setReactFlowInstance(instance: ReactFlowInstance) {
     this.reactFlowInstance = instance
   }
 

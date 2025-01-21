@@ -1,4 +1,4 @@
-import { Quadrant } from "@/enums/Quadrant"
+import { Quadrant } from "@/enums"
 import { XYPosition } from "@xyflow/react"
 
 export const getQuadrant = (
