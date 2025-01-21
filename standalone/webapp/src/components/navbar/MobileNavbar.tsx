@@ -6,17 +6,17 @@ import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import Menu from "@mui/material/Menu"
 import MenuIcon from "@mui/icons-material/Menu"
-import { TextField } from "@mui/material"
 import { NavbarFile } from "./NavbarFile"
 import { NavbarHelp } from "./NavbarHelp"
 import Button from "@mui/material/Button/Button"
 import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR } from "@/constants"
+import { useApollon2Context } from "@/contexts/Apollon2Context"
+import TextField from "@mui/material/TextField/TextField"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
-  const [diagramName, setDiagramName] = useState("")
-
+  const { diagramName, setDiagramName } = useApollon2Context()
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
@@ -31,16 +31,7 @@ export default function MobileNavbar() {
       sx={{ bgcolor: NAVBAR_BACKGROUND_COLOR }}
       elevation={0}
     >
-      <Toolbar disableGutters sx={{ ml: 2 }}>
-        {/* Logo */}
-        <img
-          alt="Logo"
-          src="images/logo.png"
-          width="60"
-          height="30"
-          style={{ marginRight: 10 }}
-        />
-
+      <Toolbar disableGutters>
         <Box
           sx={{
             display: "flex",
@@ -50,7 +41,10 @@ export default function MobileNavbar() {
           }}
         >
           {/* Mobile Menu Button */}
-          <Box>
+          <Box sx={{ ml: 2, display: "flex", alignItems: "center" }}>
+            {/* Logo */}
+            <img alt="Logo" src="images/logo.png" width="60" height="30" />
+
             <IconButton
               size="large"
               aria-label="navigation menu"

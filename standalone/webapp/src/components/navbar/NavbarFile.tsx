@@ -6,6 +6,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "@/constants"
+import { useModalContext } from "@/contexts/ModalContext"
 
 interface Props {
   color?: string
@@ -15,6 +16,9 @@ export const NavbarFile: FC<Props> = ({ color }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [secondItemAnchorEl, setSecondItemAnchorEl] =
     useState<null | HTMLElement>(null)
+
+  const { openModal } = useModalContext()
+
   const open = Boolean(anchorEl)
   const openMenu = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -37,7 +41,9 @@ export const NavbarFile: FC<Props> = ({ color }) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={openMenu}
-        sx={{ textTransform: "none" }} // This removes the uppercase transformation
+        sx={{
+          textTransform: "none", // This removes the uppercase transformation
+        }}
       >
         <Typography color={color ?? secondary} autoCapitalize="">
           File
@@ -55,7 +61,14 @@ export const NavbarFile: FC<Props> = ({ color }) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>New File</MenuItem>
+        <MenuItem
+          onClick={() => {
+            closeMenu()
+            openModal("NEWDIAGRAM")
+          }}
+        >
+          New File
+        </MenuItem>
         <MenuItem onClick={handleClose}>Start from Template</MenuItem>
         <MenuItem onClick={handleClose}>Load</MenuItem>
         <MenuItem onClick={handleClose}>Import</MenuItem>

@@ -1,4 +1,3 @@
-import { useState } from "react"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
@@ -9,9 +8,10 @@ import { NavbarFile } from "./NavbarFile"
 import { NavbarHelp } from "./NavbarHelp"
 import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR, secondary } from "@/constants"
+import { useApollon2Context } from "@/contexts/Apollon2Context"
 
-export default function DesktopNavbar() {
-  const [diagramName, setDiagramName] = useState<string>("")
+export const DesktopNavbar = () => {
+  const { diagramName, setDiagramName } = useApollon2Context()
 
   return (
     <AppBar
