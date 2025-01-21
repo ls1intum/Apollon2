@@ -8,7 +8,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
-      "@mui/styled-engine": "@mui/styled-engine-sc",
     },
   },
 })
