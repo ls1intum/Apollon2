@@ -1,7 +1,19 @@
 import ReactDOM from "react-dom/client"
 import { AppWithProvider } from "./App"
-import { ReactFlowInstance, type Node, type Edge } from "@xyflow/react"
+import {
+  ReactFlowInstance,
+  getViewportForBounds,
+  getNodesBounds,
+  type Node,
+  type Edge,
+} from "@xyflow/react"
+import { toPng, toSvg } from "html-to-image"
 export { type Node } from "@xyflow/react"
+
+export enum FileFormat {
+  SVG = "svg",
+  PNG = "png",
+}
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
@@ -45,6 +57,92 @@ export class Apollon2 {
     return []
   }
 
+  public exportImagePNG(
+    diagramName: string,
+    isBackgroundTransparent: boolean = false
+  ) {
+    if (this.reactFlowInstance) {
+      const nodesBounds = getNodesBounds(this.reactFlowInstance.getNodes())
+      const viewport = getViewportForBounds(
+        nodesBounds,
+        nodesBounds.width,
+        nodesBounds.height,
+        1,
+        1,
+        10
+      )
+
+      const padding = 50
+      const width = nodesBounds.width + 2 * padding
+      const height = nodesBounds.height + 2 * padding
+
+      const downloadDocument = document.querySelector(
+        ".react-flow__viewport"
+      ) as HTMLElement
+
+      if (!downloadDocument) return
+
+      const svgMarkers = document.getElementById("apollon2_svg-markers")
+      if (svgMarkers) {
+        downloadDocument.appendChild(svgMarkers)
+      }
+
+      console.log("DEBUG downloadDocument,", downloadDocument)
+
+      toPng(downloadDocument, {
+        backgroundColor: isBackgroundTransparent ? "transparent" : "white",
+        width: width,
+        height: height,
+        style: {
+          width: width.toString(),
+          height: height.toString(),
+          transform: `translate(${viewport.x + padding}px, ${viewport.y + padding}px) scale(${viewport.zoom})`,
+        },
+      }).then((res) => this.downloadImage(res, diagramName, FileFormat.PNG))
+    }
+  }
+  public exportImageAsSVG(diagramName: string) {
+    if (this.reactFlowInstance) {
+      const nodesBounds = getNodesBounds(this.reactFlowInstance.getNodes())
+      const viewport = getViewportForBounds(
+        nodesBounds,
+        nodesBounds.width,
+        nodesBounds.height,
+        1,
+        1,
+        10
+      )
+
+      const padding = 50
+      const width = nodesBounds.width + 2 * padding
+      const height = nodesBounds.height + 2 * padding
+
+      const downloadDocument = document.querySelector(
+        ".react-flow__viewport"
+      ) as HTMLElement
+
+      if (!downloadDocument) return
+
+      const svgMarkers = document.getElementById("apollon2_svg-markers")
+      if (svgMarkers) {
+        downloadDocument.appendChild(svgMarkers)
+      }
+
+      console.log("DEBUG downloadDocument,", downloadDocument)
+
+      toSvg(downloadDocument, {
+        backgroundColor: "white",
+        width: width,
+        height: height,
+        style: {
+          width: width.toString(),
+          height: height.toString(),
+          transform: `translate(${viewport.x + padding}px, ${viewport.y + padding}px) scale(${viewport.zoom})`,
+        },
+      }).then((res) => this.downloadImage(res, diagramName, FileFormat.SVG))
+    }
+  }
+
   public getEdges(): Edge[] {
     if (this.reactFlowInstance) {
       return this.reactFlowInstance.getEdges()
@@ -64,5 +162,17 @@ export class Apollon2 {
       this.root.unmount()
       this.root = null
     }
+  }
+
+  private downloadImage(
+    dataUrl: string,
+    diagramName: string,
+    fileFormat: FileFormat
+  ) {
+    const a = document.createElement("a")
+
+    a.setAttribute("download", `${diagramName}.${fileFormat}`)
+    a.setAttribute("href", dataUrl)
+    a.click()
   }
 }

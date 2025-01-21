@@ -43,6 +43,7 @@ function App({ onReactFlowInit }: AppProps) {
     <div style={{ display: "flex", width: "100%", height: "100%" }}>
       <Sidebar />
       <SvgMarkers />
+
       <ReactFlow
         id="react-flow-library"
         nodeTypes={diagramNodeTypes}
