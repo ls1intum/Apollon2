@@ -5,6 +5,7 @@ import { useApollon2Context } from "@/contexts"
 import { useState } from "react"
 import TextField from "@mui/material/TextField/TextField"
 import Button from "@mui/material/Button/Button"
+import { useModalContext } from "@/contexts/ModalContext"
 
 const style = {
   position: "absolute",
@@ -23,7 +24,8 @@ const style = {
 }
 
 export const NewDiagramModal = () => {
-  const { apollon2, closeModal, setDiagramName } = useApollon2Context()
+  const { apollon2, setDiagramName } = useApollon2Context()
+  const { closeModal } = useModalContext()
   const [newDiagramName, setNewDiagramName] = useState("")
 
   return (

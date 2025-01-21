@@ -1,14 +1,12 @@
-// LibraryView.tsx
-
+import React from "react"
 import { Navbar } from "@/components"
-
 import "@xyflow/react/dist/style.css"
-import { Apollon2Provider } from "./contexts/Apollon2Context"
+import { AppProviders } from "./AppProviders"
 
-export function LibraryView() {
+export const LibraryView: React.FC = () => {
   return (
-    <Apollon2Provider>
+    <AppProviders>
       <Navbar />
-    </Apollon2Provider>
+    </AppProviders>
   )
 }

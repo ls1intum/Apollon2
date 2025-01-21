@@ -6,7 +6,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "@/constants"
-import { useApollon2Context } from "@/contexts/Apollon2Context"
+import { useModalContext } from "@/contexts/ModalContext"
 
 interface Props {
   color?: string
@@ -17,7 +17,7 @@ export const NavbarFile: FC<Props> = ({ color }) => {
   const [secondItemAnchorEl, setSecondItemAnchorEl] =
     useState<null | HTMLElement>(null)
 
-  const { openModal } = useApollon2Context()
+  const { openModal } = useModalContext()
 
   const open = Boolean(anchorEl)
   const openMenu = (event: MouseEvent<HTMLButtonElement>) => {
