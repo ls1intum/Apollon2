@@ -68,8 +68,7 @@ export const NavbarFile: FC<Props> = ({ color }) => {
           apollon2.exportAsJson(diagramName)
           break
         case ExportType.PDF:
-          // Implement PDF export functionality if available
-          console.warn("PDF export not implemented")
+          apollon2.exportImageAsPDF(diagramName)
           break
         default:
           console.warn(`Unknown export type: ${type}`)

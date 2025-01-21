@@ -1,19 +1,14 @@
 import ReactDOM from "react-dom/client"
 import { AppWithProvider } from "./App"
+import { ReactFlowInstance, type Node, type Edge } from "@xyflow/react"
 import {
-  ReactFlowInstance,
-  getViewportForBounds,
-  getNodesBounds,
-  type Node,
-  type Edge,
-} from "@xyflow/react"
-import { toPng, toSvg } from "html-to-image"
-export { type Node } from "@xyflow/react"
+  exportAsPNG,
+  exportAsSVG,
+  exportAsPDF,
+  exportAsJSON,
+} from "./utils/exportUtils"
 
-export enum FileFormat {
-  SVG = "svg",
-  PNG = "png",
-}
+export { type Node } from "@xyflow/react"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
@@ -26,128 +21,16 @@ export class Apollon2 {
     )
   }
 
-  private setReactFlowInstance(instance: ReactFlowInstance) {
+  private setReactFlowInstance(instance: ReactFlowInstance<Node, Edge>) {
     this.reactFlowInstance = instance
   }
 
   public getNodes(): Node[] {
-    if (this.reactFlowInstance) {
-      return this.reactFlowInstance.getNodes()
-    }
-    return []
-  }
-
-  public exportAsJson(diagramName: string) {
-    if (this.reactFlowInstance) {
-      const data = {
-        version: "apollon2",
-        title: diagramName,
-        nodes: this.reactFlowInstance.getNodes(),
-        edges: this.reactFlowInstance.getEdges(),
-      }
-      const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-        JSON.stringify(data)
-      )}`
-      const link = document.createElement("a")
-      link.href = jsonString
-      link.download = `${diagramName}.json`
-
-      link.click()
-    }
-    return []
-  }
-
-  public exportImagePNG(
-    diagramName: string,
-    isBackgroundTransparent: boolean = false
-  ) {
-    if (this.reactFlowInstance) {
-      const nodesBounds = getNodesBounds(this.reactFlowInstance.getNodes())
-      const viewport = getViewportForBounds(
-        nodesBounds,
-        nodesBounds.width,
-        nodesBounds.height,
-        1,
-        1,
-        10
-      )
-
-      const padding = 50
-      const width = nodesBounds.width + 2 * padding
-      const height = nodesBounds.height + 2 * padding
-
-      const downloadDocument = document.querySelector(
-        ".react-flow__viewport"
-      ) as HTMLElement
-
-      if (!downloadDocument) return
-
-      const svgMarkers = document.getElementById("apollon2_svg-markers")
-      if (svgMarkers) {
-        downloadDocument.appendChild(svgMarkers)
-      }
-
-      console.log("DEBUG downloadDocument,", downloadDocument)
-
-      toPng(downloadDocument, {
-        backgroundColor: isBackgroundTransparent ? "transparent" : "white",
-        width: width,
-        height: height,
-        style: {
-          width: width.toString(),
-          height: height.toString(),
-          transform: `translate(${viewport.x + padding}px, ${viewport.y + padding}px) scale(${viewport.zoom})`,
-        },
-      }).then((res) => this.downloadImage(res, diagramName, FileFormat.PNG))
-    }
-  }
-  public exportImageAsSVG(diagramName: string) {
-    if (this.reactFlowInstance) {
-      const nodesBounds = getNodesBounds(this.reactFlowInstance.getNodes())
-      const viewport = getViewportForBounds(
-        nodesBounds,
-        nodesBounds.width,
-        nodesBounds.height,
-        1,
-        1,
-        10
-      )
-
-      const padding = 50
-      const width = nodesBounds.width + 2 * padding
-      const height = nodesBounds.height + 2 * padding
-
-      const downloadDocument = document.querySelector(
-        ".react-flow__viewport"
-      ) as HTMLElement
-
-      if (!downloadDocument) return
-
-      const svgMarkers = document.getElementById("apollon2_svg-markers")
-      if (svgMarkers) {
-        downloadDocument.appendChild(svgMarkers)
-      }
-
-      console.log("DEBUG downloadDocument,", downloadDocument)
-
-      toSvg(downloadDocument, {
-        backgroundColor: "white",
-        width: width,
-        height: height,
-        style: {
-          width: width.toString(),
-          height: height.toString(),
-          transform: `translate(${viewport.x + padding}px, ${viewport.y + padding}px) scale(${viewport.zoom})`,
-        },
-      }).then((res) => this.downloadImage(res, diagramName, FileFormat.SVG))
-    }
+    return this.reactFlowInstance ? this.reactFlowInstance.getNodes() : []
   }
 
   public getEdges(): Edge[] {
-    if (this.reactFlowInstance) {
-      return this.reactFlowInstance.getEdges()
-    }
-    return []
+    return this.reactFlowInstance ? this.reactFlowInstance.getEdges() : []
   }
 
   public resetDiagram() {
@@ -164,15 +47,38 @@ export class Apollon2 {
     }
   }
 
-  private downloadImage(
-    dataUrl: string,
-    diagramName: string,
-    fileFormat: FileFormat
-  ) {
-    const a = document.createElement("a")
+  public exportAsJson(diagramName: string) {
+    if (this.reactFlowInstance) {
+      exportAsJSON(diagramName, this.reactFlowInstance)
+    } else {
+      console.error("ReactFlowInstance is not available for exporting JSON.")
+    }
+  }
 
-    a.setAttribute("download", `${diagramName}.${fileFormat}`)
-    a.setAttribute("href", dataUrl)
-    a.click()
+  public exportImagePNG(
+    diagramName: string,
+    isBackgroundTransparent: boolean = false
+  ) {
+    if (this.reactFlowInstance) {
+      exportAsPNG(diagramName, this.reactFlowInstance, isBackgroundTransparent)
+    } else {
+      console.error("ReactFlowInstance is not available for exporting PNG.")
+    }
+  }
+
+  public exportImageAsSVG(diagramName: string) {
+    if (this.reactFlowInstance) {
+      exportAsSVG(diagramName, this.reactFlowInstance)
+    } else {
+      console.error("ReactFlowInstance is not available for exporting SVG.")
+    }
+  }
+
+  public exportImageAsPDF(diagramName: string) {
+    if (this.reactFlowInstance) {
+      exportAsPDF(diagramName, this.reactFlowInstance)
+    } else {
+      console.error("ReactFlowInstance is not available for exporting PDF.")
+    }
   }
 }
