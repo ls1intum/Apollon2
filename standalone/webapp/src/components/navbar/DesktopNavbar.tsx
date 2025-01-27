@@ -22,7 +22,7 @@ export const DesktopNavbar = () => {
       <Toolbar disableGutters sx={{ ml: 2 }}>
         <img
           alt="Logo"
-          src="images/logo.png"
+          src="assets/images/logo.png"
           width="60"
           height="30"
           style={{ marginRight: 10 }}

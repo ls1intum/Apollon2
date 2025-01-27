@@ -43,7 +43,12 @@ export default function MobileNavbar() {
           {/* Mobile Menu Button */}
           <Box sx={{ ml: 2, display: "flex", alignItems: "center" }}>
             {/* Logo */}
-            <img alt="Logo" src="images/logo.png" width="60" height="30" />
+            <img
+              alt="Logo"
+              src="assets/images/logo.png"
+              width="60"
+              height="30"
+            />
 
             <IconButton
               size="large"

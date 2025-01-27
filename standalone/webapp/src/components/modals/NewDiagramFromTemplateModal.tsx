@@ -38,10 +38,34 @@ export const NewDiagramFromTemplateModal = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>(
     TemplateType.Adapter
   )
+  const [error, setError] = useState<string | null>(null)
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     console.log("Create diagram from template")
-    apollon2?.importJson("test")
+    setError(null)
+
+    try {
+      const jsonModule = await import(
+        `assets/diagramTemplates/${selectedTemplate}.json`
+      )
+      const jsonData = jsonModule.default
+
+      if (!jsonData) {
+        throw new Error("Selected template data not found")
+      }
+
+      const JsonDataINStringFormat = JSON.stringify(jsonData)
+      apollon2?.importJson(JsonDataINStringFormat)
+      closeModal()
+    } catch (err: unknown) {
+      console.error("Error creating diagram from template:", err)
+
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError("An unexpected error occurred")
+      }
+    }
   }
 
   return (
@@ -71,6 +95,12 @@ export const NewDiagramFromTemplateModal = () => {
         <Divider />
 
         <Box sx={{ pt: 2, px: 2 }}>
+          {error && (
+            <Box sx={{ px: 2, color: "red", mt: 1 }}>
+              <Typography variant="body2">{error}</Typography>
+            </Box>
+          )}
+
           {/* Selected Template */}
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.25 }}>
             <Typography variant="body1">Selected Template</Typography>
@@ -92,12 +122,14 @@ export const NewDiagramFromTemplateModal = () => {
             <MenuItem
               selected={selectedTemplate === TemplateType.Adapter}
               onClick={() => setSelectedTemplate(TemplateType.Adapter)}
+              onDoubleClick={handleCreate}
             >
               <ListItemText inset>Adapter</ListItemText>
             </MenuItem>
             <MenuItem
               selected={selectedTemplate === TemplateType.Bridge}
               onClick={() => setSelectedTemplate(TemplateType.Bridge)}
+              onDoubleClick={handleCreate}
             >
               <ListItemText inset>Bridge</ListItemText>
             </MenuItem>
@@ -107,12 +139,14 @@ export const NewDiagramFromTemplateModal = () => {
             <MenuItem
               selected={selectedTemplate === TemplateType.Command}
               onClick={() => setSelectedTemplate(TemplateType.Command)}
+              onDoubleClick={handleCreate}
             >
               <ListItemText inset>Command</ListItemText>
             </MenuItem>
             <MenuItem
               selected={selectedTemplate === TemplateType.Observer}
               onClick={() => setSelectedTemplate(TemplateType.Observer)}
+              onDoubleClick={handleCreate}
             >
               <ListItemText inset>Obersver</ListItemText>
             </MenuItem>
@@ -122,6 +156,7 @@ export const NewDiagramFromTemplateModal = () => {
             <MenuItem
               selected={selectedTemplate === TemplateType.Factory}
               onClick={() => setSelectedTemplate(TemplateType.Factory)}
+              onDoubleClick={handleCreate}
             >
               <ListItemText inset>Factory</ListItemText>
             </MenuItem>
