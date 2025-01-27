@@ -20,7 +20,7 @@ const style = {
   display: "flex",
   flex: 1,
   flexDirection: "column",
-  minWidth: 700,
+  minWidth: 350,
   gap: 1,
 }
 
@@ -39,6 +39,11 @@ export const NewDiagramFromTemplateModal = () => {
     TemplateType.Adapter
   )
 
+  const handleCreate = () => {
+    console.log("Create diagram from template")
+    apollon2?.importJson("test")
+  }
+
   return (
     <Modal
       open
@@ -48,53 +53,80 @@ export const NewDiagramFromTemplateModal = () => {
     >
       <Paper sx={style}>
         {/* Header */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            p: 2,
+          }}
+        >
           <Typography variant="h5" id="modal-modal-title">
             Start Diagram from template
           </Typography>
-          <CloseOutlinedIcon onClick={closeModal} />
+          <Button variant="text" onClick={closeModal} size="small">
+            <CloseOutlinedIcon style={{ color: "gray" }} />
+          </Button>
         </Box>
         <Divider />
 
-        <MenuList dense sx={{ pt: 2, px: 2 }}>
-          <Typography variant="h6">Structural</Typography>
-          <MenuItem
-            selected={selectedTemplate === TemplateType.Adapter}
-            onClick={() => setSelectedTemplate(TemplateType.Adapter)}
-          >
-            <ListItemText inset>Adapter</ListItemText>
-          </MenuItem>
-          <MenuItem
-            selected={selectedTemplate === TemplateType.Bridge}
-            onClick={() => setSelectedTemplate(TemplateType.Bridge)}
-          >
-            <ListItemText inset>Bridge</ListItemText>
-          </MenuItem>
+        <Box sx={{ pt: 2, px: 2 }}>
+          {/* Selected Template */}
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.25 }}>
+            <Typography variant="body1">Selected Template</Typography>
+            <Box
+              sx={{
+                p: 1,
+                mt: 0.5,
+                mb: 1,
+                bgcolor: "lightgray",
+                borderRadius: 1,
+              }}
+            >
+              <Typography color="textPrimary">{selectedTemplate}</Typography>
+            </Box>
+          </Box>
 
-          <Divider />
-          <Typography variant="h6">Behavioral</Typography>
-          <MenuItem
-            selected={selectedTemplate === TemplateType.Command}
-            onClick={() => setSelectedTemplate(TemplateType.Command)}
-          >
-            <ListItemText inset>Command</ListItemText>
-          </MenuItem>
-          <MenuItem
-            selected={selectedTemplate === TemplateType.Observer}
-            onClick={() => setSelectedTemplate(TemplateType.Observer)}
-          >
-            <ListItemText inset>Obersver</ListItemText>
-          </MenuItem>
+          <MenuList dense>
+            <Typography variant="h6">Structural</Typography>
+            <MenuItem
+              selected={selectedTemplate === TemplateType.Adapter}
+              onClick={() => setSelectedTemplate(TemplateType.Adapter)}
+            >
+              <ListItemText inset>Adapter</ListItemText>
+            </MenuItem>
+            <MenuItem
+              selected={selectedTemplate === TemplateType.Bridge}
+              onClick={() => setSelectedTemplate(TemplateType.Bridge)}
+            >
+              <ListItemText inset>Bridge</ListItemText>
+            </MenuItem>
 
-          <Divider />
-          <Typography variant="h6">Creational</Typography>
-          <MenuItem
-            selected={selectedTemplate === TemplateType.Factory}
-            onClick={() => setSelectedTemplate(TemplateType.Factory)}
-          >
-            <ListItemText inset>Factory</ListItemText>
-          </MenuItem>
-        </MenuList>
+            <Divider />
+            <Typography variant="h6">Behavioral</Typography>
+            <MenuItem
+              selected={selectedTemplate === TemplateType.Command}
+              onClick={() => setSelectedTemplate(TemplateType.Command)}
+            >
+              <ListItemText inset>Command</ListItemText>
+            </MenuItem>
+            <MenuItem
+              selected={selectedTemplate === TemplateType.Observer}
+              onClick={() => setSelectedTemplate(TemplateType.Observer)}
+            >
+              <ListItemText inset>Obersver</ListItemText>
+            </MenuItem>
+
+            <Divider />
+            <Typography variant="h6">Creational</Typography>
+            <MenuItem
+              selected={selectedTemplate === TemplateType.Factory}
+              onClick={() => setSelectedTemplate(TemplateType.Factory)}
+            >
+              <ListItemText inset>Factory</ListItemText>
+            </MenuItem>
+          </MenuList>
+        </Box>
 
         <Box
           sx={{
@@ -103,15 +135,24 @@ export const NewDiagramFromTemplateModal = () => {
             flex: 1,
             pb: 2,
             px: 2,
+            gap: 1,
           }}
         >
           <Button
             variant="contained"
-            onClick={() => {
-              console.log(apollon2?.getNodes())
+            onClick={closeModal}
+            sx={{ bgcolor: "gray", textTransform: "none" }}
+          >
+            Close
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleCreate}
+            sx={{
+              textTransform: "none",
             }}
           >
-            Create
+            Create Diagram
           </Button>
         </Box>
       </Paper>
