@@ -1,13 +1,18 @@
-import { useState, MouseEvent, FC, useCallback } from "react"
+import { useState, MouseEvent, FC, useCallback, useRef } from "react"
 import Button from "@mui/material/Button"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
+
 import { secondary } from "@/constants"
 import { useModalContext } from "@/contexts/ModalContext"
 import { useApollon2Context } from "@/contexts"
+
+import { useImportHandler } from "@/hooks/useImportHandler"
+import { HiddenFileInput } from "./HiddenFileInput"
+import { SnackbarMessage } from "./SnackbarMessage"
 
 enum ExportType {
   SVG = "SVG",
@@ -26,9 +31,13 @@ export const NavbarFile: FC<Props> = ({ color }) => {
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState<null | HTMLElement>(
     null
   )
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const { openModal } = useModalContext()
   const { apollon2, diagramName } = useApollon2Context()
+
+  const { errorMessage, snackbarOpen, handleImport, handleSnackbarClose } =
+    useImportHandler()
 
   const isMenuOpen = Boolean(anchorEl)
   const isSubMenuOpen = Boolean(subMenuAnchorEl)
@@ -89,8 +98,9 @@ export const NavbarFile: FC<Props> = ({ color }) => {
     closeMainMenu()
   }, [closeMainMenu])
 
-  const handleImport = useCallback(() => {
-    // Implement the import functionality
+  const handleImportClick = useCallback(() => {
+    // Trigger the hidden file input click
+    fileInputRef.current?.click()
     closeMainMenu()
   }, [closeMainMenu])
 
@@ -126,7 +136,7 @@ export const NavbarFile: FC<Props> = ({ color }) => {
         <MenuItem onClick={handleStartFromTemplate}>
           Start from Template
         </MenuItem>
-        <MenuItem onClick={handleImport}>Import</MenuItem>
+        <MenuItem onClick={handleImportClick}>Import</MenuItem>
         <MenuItem
           onClick={openSubMenu}
           sx={{
@@ -165,6 +175,18 @@ export const NavbarFile: FC<Props> = ({ color }) => {
         </MenuItem>
         <MenuItem onClick={() => handleExport(ExportType.PDF)}>As PDF</MenuItem>
       </Menu>
+
+      {/* Hidden File Input for Import */}
+      <HiddenFileInput inputRef={fileInputRef} onFileChange={handleImport} />
+
+      {/* Snackbar for Error Messages */}
+      <SnackbarMessage
+        open={snackbarOpen}
+        message={errorMessage}
+        severity="error"
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      />
     </>
   )
 }

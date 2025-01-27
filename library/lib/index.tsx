@@ -1,7 +1,13 @@
 import ReactDOM from "react-dom/client"
 import { AppWithProvider } from "./App"
 import { ReactFlowInstance, type Node, type Edge } from "@xyflow/react"
-import { exportAsPNG, exportAsSVG, exportAsPDF, exportAsJSON } from "./utils"
+import {
+  exportAsPNG,
+  exportAsSVG,
+  exportAsPDF,
+  exportAsJSON,
+  validateParsedJSON,
+} from "./utils"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
@@ -72,6 +78,31 @@ export class Apollon2 {
       exportAsPDF(diagramName, this.reactFlowInstance)
     } else {
       console.error("ReactFlowInstance is not available for exporting PDF.")
+    }
+  }
+
+  public async importJson(content: string): Promise<boolean | string> {
+    if (this.reactFlowInstance) {
+      const parsed = JSON.parse(content)
+
+      // Validate the structure
+      const result = validateParsedJSON(parsed)
+
+      if (typeof result === "string") {
+        return result
+      }
+
+      const { nodes, edges } = result
+
+      this.reactFlowInstance.setNodes(nodes)
+      this.reactFlowInstance.setEdges(edges)
+      // We need to render the nodes and edges first before fitting the view
+      requestAnimationFrame(() => {
+        this.reactFlowInstance?.fitView()
+      })
+      return true
+    } else {
+      return "ReactFlowInstance is not available for importing JSON."
     }
   }
 }
