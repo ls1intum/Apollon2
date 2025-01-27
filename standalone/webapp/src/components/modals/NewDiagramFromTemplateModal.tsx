@@ -33,7 +33,7 @@ enum TemplateType {
 }
 
 export const NewDiagramFromTemplateModal = () => {
-  const { apollon2 } = useApollon2Context()
+  const { apollon2, setDiagramName } = useApollon2Context()
   const { closeModal } = useModalContext()
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>(
     TemplateType.Adapter
@@ -55,6 +55,9 @@ export const NewDiagramFromTemplateModal = () => {
       }
 
       const JsonDataINStringFormat = JSON.stringify(jsonData)
+      const diagramName = jsonData.title as string
+
+      setDiagramName(diagramName)
       apollon2?.importJson(JsonDataINStringFormat)
       closeModal()
     } catch (err: unknown) {
