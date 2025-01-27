@@ -12,7 +12,11 @@ import {
   useEdgesState,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
-import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./constants"
+import {
+  HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
+  MAX_SCALE_TO_ZOOM_IN,
+  MIN_SCALE_TO_ZOOM_OUT,
+} from "./constants"
 import { initialEdges, initialNodes } from "./initialElements"
 import { Sidebar, SvgMarkers } from "@/components"
 import { diagramNodeTypes } from "./nodes"
@@ -66,6 +70,10 @@ function App({ onReactFlowInit }: AppProps) {
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
+        snapGrid={[
+          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
+          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
+        ]}
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
