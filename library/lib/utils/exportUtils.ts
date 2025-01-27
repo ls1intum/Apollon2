@@ -81,9 +81,11 @@ export const downloadImage = (
   diagramName: string,
   fileFormat: ExportFileFormat
 ) => {
+  const fileName = `${diagramName}.${fileFormat.toLowerCase()}`
+
   const link = document.createElement("a")
-  link.setAttribute("download", `${diagramName}.${fileFormat.toLowerCase()}`)
-  link.setAttribute("href", dataUrl)
+  link.href = dataUrl
+  link.download = fileName
   link.click()
 }
 
@@ -101,9 +103,11 @@ export const exportAsJSON = (
   const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
     JSON.stringify(data)
   )}`
+  const fileName = `${diagramName}.json`
+
   const link = document.createElement("a")
   link.href = jsonString
-  link.download = `${diagramName}.json`
+  link.download = fileName
   link.click()
 }
 
