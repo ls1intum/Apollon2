@@ -96,7 +96,7 @@ export const NewDiagramFromTemplateModal = () => {
 
         <Box sx={{ pt: 2, px: 2 }}>
           {error && (
-            <Box sx={{ px: 2, color: "red", mt: 1 }}>
+            <Box sx={{ px: 1, color: "red", mb: 1 }}>
               <Typography variant="body2">{error}</Typography>
             </Box>
           )}
