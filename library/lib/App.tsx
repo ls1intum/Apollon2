@@ -60,7 +60,7 @@ function App({ onReactFlowInit }: AppProps) {
         connectionMode={ConnectionMode.Loose}
         fitView
         onInit={(instance) => {
-          instance.zoomTo(0.8)
+          instance.zoomTo(1)
           onReactFlowInit(instance)
         }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}

@@ -1,4 +1,4 @@
-import { useState, MouseEvent, FC } from "react"
+import { useState, MouseEvent, FC, useCallback } from "react"
 import Button from "@mui/material/Button"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
@@ -7,6 +7,15 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "@/constants"
 import { useModalContext } from "@/contexts/ModalContext"
+import { useApollon2Context } from "@/contexts"
+
+enum ExportType {
+  SVG = "SVG",
+  PNG_WHITE = "PNG_WHITE",
+  PNG_TRANSPARENT = "PNG_TRANSPARENT",
+  JSON = "JSON",
+  PDF = "PDF",
+}
 
 interface Props {
   color?: string
@@ -14,90 +23,147 @@ interface Props {
 
 export const NavbarFile: FC<Props> = ({ color }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [secondItemAnchorEl, setSecondItemAnchorEl] =
-    useState<null | HTMLElement>(null)
+  const [subMenuAnchorEl, setSubMenuAnchorEl] = useState<null | HTMLElement>(
+    null
+  )
 
   const { openModal } = useModalContext()
+  const { apollon2, diagramName } = useApollon2Context()
 
-  const open = Boolean(anchorEl)
-  const openMenu = (event: MouseEvent<HTMLButtonElement>) => {
+  const isMenuOpen = Boolean(anchorEl)
+  const isSubMenuOpen = Boolean(subMenuAnchorEl)
+
+  const openMainMenu = useCallback((event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
-  }
+  }, [])
 
-  const handleClose = () => {
+  const closeMainMenu = useCallback(() => {
     setAnchorEl(null)
-  }
+    setSubMenuAnchorEl(null)
+  }, [])
 
-  const closeMenu = () => {
-    setAnchorEl(null)
-    setSecondItemAnchorEl(null)
-  }
+  const openSubMenu = useCallback((event: MouseEvent<HTMLElement>) => {
+    setSubMenuAnchorEl(event.currentTarget)
+  }, [])
+
+  const handleExport = useCallback(
+    (type: ExportType) => {
+      if (!apollon2 || !diagramName) {
+        console.error("Apollon2 context is not available")
+        closeMainMenu()
+        return
+      }
+
+      switch (type) {
+        case ExportType.SVG:
+          apollon2.exportImageAsSVG(diagramName)
+          break
+        case ExportType.PNG_WHITE:
+          apollon2.exportImagePNG(diagramName, false)
+          break
+        case ExportType.PNG_TRANSPARENT:
+          apollon2.exportImagePNG(diagramName, true)
+          break
+        case ExportType.JSON:
+          apollon2.exportAsJson(diagramName)
+          break
+        case ExportType.PDF:
+          apollon2.exportImageAsPDF(diagramName)
+          break
+        default:
+          console.warn(`Unknown export type: ${type}`)
+      }
+
+      closeMainMenu()
+    },
+    [apollon2, diagramName, closeMainMenu]
+  )
+
+  const handleNewFile = useCallback(() => {
+    openModal("NEWDIAGRAM")
+    closeMainMenu()
+  }, [openModal, closeMainMenu])
+
+  const handleStartFromTemplate = useCallback(() => {
+    // Implement the functionality for starting from a template
+    closeMainMenu()
+  }, [closeMainMenu])
+
+  const handleImport = useCallback(() => {
+    // Implement the import functionality
+    closeMainMenu()
+  }, [closeMainMenu])
 
   return (
     <>
       <Button
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
+        id="file-menu-button"
+        aria-controls={isMenuOpen ? "file-menu" : undefined}
         aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={openMenu}
+        aria-expanded={isMenuOpen ? "true" : undefined}
+        onClick={openMainMenu}
         sx={{
-          textTransform: "none", // This removes the uppercase transformation
+          textTransform: "none",
         }}
       >
-        <Typography color={color ?? secondary} autoCapitalize="">
+        <Typography color={color ?? secondary} component="span">
           File
         </Typography>
         <KeyboardArrowDownIcon
-          sx={{ width: 16, height: 16, color: secondary }}
+          sx={{ width: 16, height: 16, color: secondary, ml: 0.5 }}
         />
       </Button>
       <Menu
-        id="basic-menu"
+        id="file-menu"
         anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
+        open={isMenuOpen}
+        onClose={closeMainMenu}
         MenuListProps={{
-          "aria-labelledby": "basic-button",
+          "aria-labelledby": "file-menu-button",
         }}
       >
-        <MenuItem
-          onClick={() => {
-            closeMenu()
-            openModal("NEWDIAGRAM")
-          }}
-        >
-          New File
+        <MenuItem onClick={handleNewFile}>New File</MenuItem>
+        <MenuItem onClick={handleStartFromTemplate}>
+          Start from Template
         </MenuItem>
-        <MenuItem onClick={handleClose}>Start from Template</MenuItem>
-        <MenuItem onClick={handleClose}>Load</MenuItem>
-        <MenuItem onClick={handleClose}>Import</MenuItem>
+        <MenuItem onClick={handleImport}>Import</MenuItem>
         <MenuItem
-          onClick={(event) => {
-            setSecondItemAnchorEl(event.currentTarget)
-          }}
+          onClick={openSubMenu}
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            alignItems: "center",
           }}
+          aria-haspopup="true"
+          aria-controls={isSubMenuOpen ? "export-sub-menu" : undefined}
+          aria-expanded={isSubMenuOpen ? "true" : undefined}
         >
           Export
           <KeyboardArrowRightIcon />
         </MenuItem>
       </Menu>
       <Menu
-        id="sub-menu"
-        anchorEl={secondItemAnchorEl}
-        open={Boolean(secondItemAnchorEl)}
-        onClose={closeMenu}
+        id="export-sub-menu"
+        anchorEl={subMenuAnchorEl}
+        open={isSubMenuOpen}
+        onClose={closeMainMenu}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "left" }}
+        MenuListProps={{
+          "aria-labelledby": "export-sub-menu-button",
+        }}
       >
-        <MenuItem onClick={closeMenu}>As SVG</MenuItem>
-        <MenuItem onClick={closeMenu}>As PNG(White background)</MenuItem>
-        <MenuItem onClick={closeMenu}>As PNG(Transparent background)</MenuItem>
-        <MenuItem onClick={closeMenu}>As JSON</MenuItem>
-        <MenuItem onClick={closeMenu}>As PDF</MenuItem>
+        <MenuItem onClick={() => handleExport(ExportType.SVG)}>As SVG</MenuItem>
+        <MenuItem onClick={() => handleExport(ExportType.PNG_WHITE)}>
+          As PNG (White Background)
+        </MenuItem>
+        <MenuItem onClick={() => handleExport(ExportType.PNG_TRANSPARENT)}>
+          As PNG (Transparent Background)
+        </MenuItem>
+        <MenuItem onClick={() => handleExport(ExportType.JSON)}>
+          As JSON
+        </MenuItem>
+        <MenuItem onClick={() => handleExport(ExportType.PDF)}>As PDF</MenuItem>
       </Menu>
     </>
   )
