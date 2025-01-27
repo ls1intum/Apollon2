@@ -72,7 +72,7 @@ export function DefaultNodeWrapper({ children }: Props) {
         id="left"
         type="source"
         position={Position.Left}
-        style={{ border: "0px", bottom: "2px" }}
+        style={{ border: "0px", left: "2px" }}
       />
       <Handle
         id="left-top"

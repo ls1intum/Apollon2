@@ -1,12 +1,11 @@
 import ReactDOM from "react-dom/client"
 import { AppWithProvider } from "./App"
 import { ReactFlowInstance, type Node, type Edge } from "@xyflow/react"
-
-export { type Node } from "@xyflow/react"
+import { exportAsPNG, exportAsSVG, exportAsPDF, exportAsJSON } from "./utils"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
-  private reactFlowInstance: ReactFlowInstance<Node, Edge> | null = null
+  private reactFlowInstance: ReactFlowInstance | null = null
 
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element)
@@ -20,10 +19,11 @@ export class Apollon2 {
   }
 
   public getNodes(): Node[] {
-    if (this.reactFlowInstance) {
-      return this.reactFlowInstance.getNodes()
-    }
-    return []
+    return this.reactFlowInstance ? this.reactFlowInstance.getNodes() : []
+  }
+
+  public getEdges(): Edge[] {
+    return this.reactFlowInstance ? this.reactFlowInstance.getEdges() : []
   }
 
   public resetDiagram() {
@@ -37,6 +37,41 @@ export class Apollon2 {
     if (this.root) {
       this.root.unmount()
       this.root = null
+    }
+  }
+
+  public exportAsJson(diagramName: string) {
+    if (this.reactFlowInstance) {
+      exportAsJSON(diagramName, this.reactFlowInstance)
+    } else {
+      console.error("ReactFlowInstance is not available for exporting JSON.")
+    }
+  }
+
+  public exportImagePNG(
+    diagramName: string,
+    isBackgroundTransparent: boolean = false
+  ) {
+    if (this.reactFlowInstance) {
+      exportAsPNG(diagramName, this.reactFlowInstance, isBackgroundTransparent)
+    } else {
+      console.error("ReactFlowInstance is not available for exporting PNG.")
+    }
+  }
+
+  public exportImageAsSVG(diagramName: string) {
+    if (this.reactFlowInstance) {
+      exportAsSVG(diagramName, this.reactFlowInstance)
+    } else {
+      console.error("ReactFlowInstance is not available for exporting SVG.")
+    }
+  }
+
+  public exportImageAsPDF(diagramName: string) {
+    if (this.reactFlowInstance) {
+      exportAsPDF(diagramName, this.reactFlowInstance)
+    } else {
+      console.error("ReactFlowInstance is not available for exporting PDF.")
     }
   }
 }

@@ -1,6 +1,9 @@
 export function SvgMarkers() {
   return (
-    <svg style={{ position: "absolute", top: 0, left: 0, width: 0, height: 0 }}>
+    <svg
+      style={{ position: "absolute", top: 0, left: 0, width: 0, height: 0 }}
+      id="apollon2_svg-markers"
+    >
       <defs>
         <marker
           id="black-rhombus"
