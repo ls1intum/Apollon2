@@ -1,5 +1,5 @@
 import { BaseEdge, EdgeProps, getSmoothStepPath } from "@xyflow/react"
-import { STEP_BOARDER_RADIUS } from "@/constants/edgeConstants"
+import { STEP_BOARDER_RADIUS } from "@/constants"
 
 // Uni-Directional Association Edge (Black Arrow)
 export const BiAssociationEdge = ({

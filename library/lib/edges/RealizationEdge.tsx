@@ -1,6 +1,10 @@
 import { BaseEdge, EdgeProps, getSmoothStepPath } from "@xyflow/react"
-import { STEP_BOARDER_RADIUS, MARKER_PADDING } from "@/constants/edgeConstants"
-import { adjustEdgeCoordinates } from "@/utils"
+import {
+  STEP_BOARDER_RADIUS,
+  TRIANGLE_MARKER_PADDING,
+  SOURCE_CONNECTION_POINT_PADDING,
+} from "@/constants"
+import { adjustSourceCoordinates, adjustTargetCoordinates } from "@/utils"
 
 // Realization Edge (Dotted White Triangle)
 export const RealizationEdge = ({
@@ -12,21 +16,28 @@ export const RealizationEdge = ({
   sourcePosition,
   targetPosition,
 }: EdgeProps) => {
-  const markerPadding = MARKER_PADDING
+  const markerPadding = TRIANGLE_MARKER_PADDING
+  const sourceConnectionPointPadding = SOURCE_CONNECTION_POINT_PADDING
   const borderRadius = STEP_BOARDER_RADIUS
-  const adjustedCoordinates = adjustEdgeCoordinates(
+  const adjustedTargetCoordinates = adjustTargetCoordinates(
     targetX,
     targetY,
     targetPosition,
     markerPadding
   )
-  // Generate the edge path
-  const [edgePath] = getSmoothStepPath({
+  const adjustedSourceCoordinates = adjustSourceCoordinates(
     sourceX,
     sourceY,
     sourcePosition,
-    targetX: adjustedCoordinates.targetX,
-    targetY: adjustedCoordinates.targetY,
+    sourceConnectionPointPadding
+  )
+
+  const [edgePath] = getSmoothStepPath({
+    sourceX: adjustedSourceCoordinates.sourceX,
+    sourceY: adjustedSourceCoordinates.sourceY,
+    sourcePosition,
+    targetX: adjustedTargetCoordinates.targetX,
+    targetY: adjustedTargetCoordinates.targetY,
     targetPosition,
     borderRadius,
   })
