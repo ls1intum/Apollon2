@@ -1,0 +1,55 @@
+import { type Edge, type Node } from "@xyflow/react"
+
+type ParsedJSON = {
+  version: string
+  title: string
+  nodes: Node[]
+  edges: Edge[]
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const validateParsedJSON = (json: any): ParsedJSON | string => {
+  if (
+    typeof json !== "object" ||
+    json === null ||
+    typeof json.version !== "string" ||
+    typeof json.title !== "string" ||
+    !Array.isArray(json.nodes) ||
+    !Array.isArray(json.edges)
+  ) {
+    return "Invalid JSON structure. Required fields: version, title, nodes, edges."
+  }
+
+  // Validate nodes
+  for (const node of json.nodes) {
+    if (
+      typeof node.id !== "string" ||
+      typeof node.type !== "string" ||
+      typeof node.position !== "object" ||
+      typeof node.position.x !== "number" ||
+      typeof node.position.y !== "number" ||
+      typeof node.width !== "number" ||
+      typeof node.height !== "number" ||
+      typeof node.data !== "object" ||
+      node.data === null
+    ) {
+      return `Invalid node structure`
+    }
+  }
+
+  // Validate edges
+  for (const edge of json.edges) {
+    if (
+      typeof edge.id !== "string" ||
+      typeof edge.source !== "string" ||
+      typeof edge.target !== "string" ||
+      typeof edge.type !== "string" ||
+      typeof edge.sourceHandle !== "string" ||
+      typeof edge.targetHandle !== "string"
+    ) {
+      return `Invalid edge structure`
+    }
+  }
+
+  return json as ParsedJSON
+}
