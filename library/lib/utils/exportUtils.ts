@@ -11,7 +11,7 @@ import jsPDF from "jspdf"
 import { ExportFileFormat } from "../enums"
 
 // Calculate dimensions based on nodes and viewport
-export const calculateDimensions = (
+const calculateDimensions = (
   reactFlowInstance: ReactFlowInstance<Node, Edge>
 ) => {
   const nodesBounds = getNodesBounds(reactFlowInstance.getNodes())
@@ -48,7 +48,7 @@ export const prepareDownloadDocument = (): HTMLElement | null => {
 }
 
 // Capture the element as an image (PNG or SVG)
-export const captureAsImage = (
+const captureAsImage = (
   element: HTMLElement,
   format: ExportFileFormat,
   width: number,
@@ -76,7 +76,7 @@ export const captureAsImage = (
 }
 
 // Trigger the download of the image
-export const downloadImage = (
+const downloadImage = (
   dataUrl: string,
   diagramName: string,
   fileFormat: ExportFileFormat

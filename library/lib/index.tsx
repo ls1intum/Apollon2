@@ -1,12 +1,7 @@
 import ReactDOM from "react-dom/client"
 import { AppWithProvider } from "./App"
 import { ReactFlowInstance, type Node, type Edge } from "@xyflow/react"
-import {
-  exportAsPNG,
-  exportAsSVG,
-  exportAsPDF,
-  exportAsJSON,
-} from "./utils/exportUtils"
+import { exportAsPNG, exportAsSVG, exportAsPDF, exportAsJSON } from "./utils"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
