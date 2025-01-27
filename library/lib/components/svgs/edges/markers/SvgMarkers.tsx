@@ -70,7 +70,7 @@ export function SvgMarkers() {
             d="M0,29 L30,15 L0,1"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
         </marker>
       </defs>
