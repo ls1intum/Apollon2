@@ -104,7 +104,7 @@
       "target": "7351d563-b929-460e-a09d-e2b463bfceea",
       "targetHandle": "left",
       "id": "1737994716146-8acfa3c3-de5b-424a-a555-cb68855538d0-7351d563-b929-460e-a09d-e2b463bfceea",
-      "type": "biassociation",
+      "type": "uniassociation",
       "selected": false
     },
     {
@@ -113,16 +113,16 @@
       "target": "41a9495d-9993-449e-a3b5-a7a704130380",
       "targetHandle": "left",
       "id": "1737994722983-8acfa3c3-de5b-424a-a555-cb68855538d0-41a9495d-9993-449e-a3b5-a7a704130380",
-      "type": "biassociation",
+      "type": "uniassociation",
       "selected": false
     },
     {
-      "source": "52e53f8b-cac0-4816-a70a-c2f154f3fb67",
-      "sourceHandle": "bottom",
-      "target": "f235a28a-6d9b-482c-9e67-546dfd92e0d5",
-      "targetHandle": "top",
+      "source": "f235a28a-6d9b-482c-9e67-546dfd92e0d5",
+      "sourceHandle": "top",
+      "target": "52e53f8b-cac0-4816-a70a-c2f154f3fb67",
+      "targetHandle": "bottom",
       "id": "1737994915434-52e53f8b-cac0-4816-a70a-c2f154f3fb67-f235a28a-6d9b-482c-9e67-546dfd92e0d5",
-      "type": "biassociation",
+      "type": "inheritance",
       "selected": false
     },
     {
@@ -131,7 +131,7 @@
       "target": "41a9495d-9993-449e-a3b5-a7a704130380",
       "targetHandle": "right",
       "id": "1737994981686-f235a28a-6d9b-482c-9e67-546dfd92e0d5-41a9495d-9993-449e-a3b5-a7a704130380",
-      "type": "biassociation",
+      "type": "uniassociation",
       "selected": false
     },
     {
@@ -149,7 +149,7 @@
       "target": "52e53f8b-cac0-4816-a70a-c2f154f3fb67",
       "targetHandle": "left",
       "id": "1737995015106-7351d563-b929-460e-a09d-e2b463bfceea-52e53f8b-cac0-4816-a70a-c2f154f3fb67",
-      "type": "biassociation",
+      "type": "uniassociation",
       "selected": false
     },
     {
@@ -158,7 +158,7 @@
       "target": "f235a28a-6d9b-482c-9e67-546dfd92e0d5",
       "targetHandle": "bottom",
       "id": "1737995032625-8acfa3c3-de5b-424a-a555-cb68855538d0-f235a28a-6d9b-482c-9e67-546dfd92e0d5",
-      "type": "biassociation",
+      "type": "dependency",
       "selected": false
     }
   ]

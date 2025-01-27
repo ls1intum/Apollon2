@@ -120,7 +120,7 @@
       "sourceHandle": "right",
       "target": "1c0330be-83dd-4d92-9bd1-d62a36e90c7b",
       "targetHandle": "left",
-      "type": "biassociation",
+      "type": "uniassociation",
       "selected": false,
       "id": "xy-edge__cfc9b781-debe-4ca3-903c-9a9e555f6812right-1c0330be-83dd-4d92-9bd1-d62a36e90c7bleft"
     },
@@ -130,7 +130,7 @@
       "target": "1c0330be-83dd-4d92-9bd1-d62a36e90c7b",
       "targetHandle": "bottom",
       "id": "1737998332817-8a30926e-581b-49c9-b0cc-7a9119ae1579-1c0330be-83dd-4d92-9bd1-d62a36e90c7b",
-      "type": "biassociation",
+      "type": "inheritance",
       "selected": false
     },
     {
@@ -139,7 +139,7 @@
       "target": "1c0330be-83dd-4d92-9bd1-d62a36e90c7b",
       "targetHandle": "bottom",
       "id": "1737998342518-fc1e3b34-6e01-4fb6-8c26-a70535fa1ff2-1c0330be-83dd-4d92-9bd1-d62a36e90c7b",
-      "type": "biassociation",
+      "type": "inheritance",
       "selected": false
     },
     {
@@ -148,7 +148,7 @@
       "target": "1c0330be-83dd-4d92-9bd1-d62a36e90c7b",
       "targetHandle": "bottom",
       "id": "1737998344813-552eb7f3-62a7-45d9-8133-da6f5379b5a4-1c0330be-83dd-4d92-9bd1-d62a36e90c7b",
-      "type": "biassociation",
+      "type": "inheritance",
       "selected": false
     }
   ]

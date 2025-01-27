@@ -147,7 +147,7 @@
       "target": "2eb1ceb2-266e-4669-89f1-c61e246cb10c",
       "targetHandle": "bottom",
       "id": "1737993042486-7052e703-263f-4df5-95e0-3558793849af-2eb1ceb2-266e-4669-89f1-c61e246cb10c",
-      "type": "biassociation",
+      "type": "inheritance",
       "selected": false
     },
     {
@@ -156,7 +156,7 @@
       "target": "2eb1ceb2-266e-4669-89f1-c61e246cb10c",
       "targetHandle": "bottom",
       "id": "1737993045593-2fecb039-1b0d-4de9-8820-fa120c51f4f6-2eb1ceb2-266e-4669-89f1-c61e246cb10c",
-      "type": "biassociation",
+      "type": "inheritance",
       "selected": false
     },
     {
@@ -165,7 +165,7 @@
       "target": "889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
       "targetHandle": "bottom",
       "id": "1737993203512-2e018906-a3db-4308-977b-175ace3c3185-889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
-      "type": "biassociation",
+      "type": "inheritance",
       "selected": false
     },
     {
@@ -174,7 +174,7 @@
       "target": "889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
       "targetHandle": "bottom",
       "id": "1737993210921-1bb3eed4-bcc2-45af-9b6e-62020b9c439d-889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
-      "type": "biassociation",
+      "type": "inheritance",
       "selected": false
     },
     {
