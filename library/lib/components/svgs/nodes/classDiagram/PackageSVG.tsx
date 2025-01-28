@@ -1,4 +1,5 @@
 import { Text, SVGComponentProps } from "@/components"
+import { LINE_WIDTH, LINE_WIDTH_ON_EDGE } from "@/constants"
 import { FC, forwardRef, SVGAttributes } from "react"
 
 export type PackageSVGProps = SVGComponentProps & {
@@ -9,19 +10,19 @@ export type PackageSVGProps = SVGComponentProps & {
   svgAttributes?: SVGAttributes<SVGElement>
 }
 
+const leftTopBoxHeight = 10
+const padding = 5
+
 export const PackageSVG = forwardRef<SVGSVGElement, PackageSVGProps>(
   function PackageSVG(
     { width, height, name, svgAttributes, transformScale }: PackageSVGProps,
     ref
   ) {
-    const headerHeight = 10 // Height of the top path
-    const padding = 5
-
     return (
       <svg
         ref={ref}
         width={width}
-        height={height + headerHeight}
+        height={height}
         style={{
           transformOrigin: "left top",
           transformBox: "content-box",
@@ -30,13 +31,17 @@ export const PackageSVG = forwardRef<SVGSVGElement, PackageSVGProps>(
         {...svgAttributes}
       >
         <g>
-          <HeaderBox headerHeight={headerHeight} />
-          <MainBox width={width} height={height} headerHeight={headerHeight} />
+          <LeftTopBox leftTopBoxHeight={leftTopBoxHeight} />
+          <MainBox
+            width={width}
+            height={height}
+            leftTopBoxHeight={leftTopBoxHeight}
+          />
 
           {/* Name Text */}
           <Text
             x={width / 2}
-            y={headerHeight + padding}
+            y={leftTopBoxHeight + padding}
             textAnchor="middle"
             fontWeight="600"
             dominantBaseline="hanging"
@@ -51,31 +56,60 @@ export const PackageSVG = forwardRef<SVGSVGElement, PackageSVGProps>(
 
 // Sub-components for better modularity
 
-type HeaderBoxProps = {
-  headerHeight: number
+type LeftTopBoxProps = {
+  leftTopBoxHeight: number
 }
 
-const HeaderBox: FC<HeaderBoxProps> = ({ headerHeight }) => {
+const LeftTopBox: FC<LeftTopBoxProps> = ({ leftTopBoxHeight }) => {
   return (
     <g>
       <rect
         x="0"
         y="0"
         width={40}
-        height={headerHeight}
+        height={leftTopBoxHeight}
         fill="white"
         stroke="none"
       />
-      <line x1="0" y1="0" x2="40" y2="0" stroke="black" strokeWidth={1} />
+      {/* Top Side */}
+      <line
+        x1="0"
+        y1="0"
+        x2="40"
+        y2="0"
+        stroke="black"
+        strokeWidth={LINE_WIDTH_ON_EDGE}
+      />
 
-      {/* Right Side (0.5px) */}
-      <line x1="40" y1="0" x2="40" y2="10" stroke="black" strokeWidth={0.5} />
+      {/* Right Side  */}
+      <line
+        x1="40"
+        y1="0"
+        x2="40"
+        y2="10"
+        stroke="black"
+        strokeWidth={LINE_WIDTH}
+      />
 
-      {/* Bottom Side (0.5px) */}
-      <line x1="40" y1="10" x2="0" y2="10" stroke="black" strokeWidth={0.5} />
+      {/* Bottom Side */}
+      <line
+        x1="40"
+        y1="10"
+        x2="0"
+        y2="10"
+        stroke="black"
+        strokeWidth={LINE_WIDTH}
+      />
 
-      {/* Left Side (1px) */}
-      <line x1="0" y1="10" x2="0" y2="0" stroke="black" strokeWidth={1} />
+      {/* Left Side  */}
+      <line
+        x1="0"
+        y1="10"
+        x2="0"
+        y2="0"
+        stroke="black"
+        strokeWidth={LINE_WIDTH_ON_EDGE}
+      />
     </g>
   )
 }
@@ -83,59 +117,59 @@ const HeaderBox: FC<HeaderBoxProps> = ({ headerHeight }) => {
 type MainBoxProps = {
   width: number
   height: number
-  headerHeight: number
+  leftTopBoxHeight: number
 }
 
-const MainBox: FC<MainBoxProps> = ({ width, height, headerHeight }) => {
+const MainBox: FC<MainBoxProps> = ({ width, height, leftTopBoxHeight }) => {
   return (
     <g>
       <rect
         x="0"
-        y={headerHeight}
+        y={leftTopBoxHeight}
         width={width}
-        height={height - headerHeight}
+        height={height - leftTopBoxHeight}
         fill="white"
         stroke="none"
       />
 
-      {/* Top Side with strokeWidth: 0.5px */}
+      {/* Top Side */}
       <line
         x1="0"
-        y1={headerHeight}
+        y1={leftTopBoxHeight}
         x2={width}
-        y2={headerHeight}
+        y2={leftTopBoxHeight}
         stroke="black"
-        strokeWidth="0.5"
+        strokeWidth={LINE_WIDTH}
       />
 
-      {/* Right Side with strokeWidth: 1px */}
+      {/* Right Side with strokeWidth */}
       <line
         x1={width}
-        y1={headerHeight}
+        y1={leftTopBoxHeight}
         x2={width}
         y2={height}
         stroke="black"
-        strokeWidth="1"
+        strokeWidth={LINE_WIDTH_ON_EDGE}
       />
 
-      {/* Bottom Side with strokeWidth: 1px */}
+      {/* Bottom Side with strokeWidth*/}
       <line
         x1={width}
         y1={height}
         x2="0"
         y2={height}
         stroke="black"
-        strokeWidth="0.5"
+        strokeWidth={LINE_WIDTH_ON_EDGE}
       />
 
-      {/* Left Side with strokeWidth: 1px */}
+      {/* Left Side with strokeWidth*/}
       <line
         x1="0"
         y1={height}
         x2="0"
-        y2={headerHeight}
+        y2={leftTopBoxHeight}
         stroke="black"
-        strokeWidth="1"
+        strokeWidth={LINE_WIDTH_ON_EDGE}
       />
     </g>
   )

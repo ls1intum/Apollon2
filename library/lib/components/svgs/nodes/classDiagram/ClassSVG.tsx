@@ -15,6 +15,8 @@ import {
   DEFAULT_METHOD_HEIGHT,
   DEFAULT_PADDING,
   DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE,
+  LINE_WIDTH,
+  LINE_WIDTH_ON_EDGE,
 } from "@/constants/dropElementConfig"
 
 export interface MinSize {
@@ -59,7 +61,6 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
     ref
   ) {
     // Layout constants
-
     const headerHeight = stereotype
       ? DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE
       : DEFAULT_HEADER_HEIGHT
@@ -142,7 +143,7 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
             width={width}
             height={height}
             stroke="black"
-            strokeWidth={1}
+            strokeWidth={LINE_WIDTH_ON_EDGE}
           />
 
           {/* Header Section */}
@@ -218,6 +219,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
       dominantBaseline="middle"
       textAnchor="middle"
       font={font}
+      fontWeight="bold"
     >
       {stereotype && (
         <tspan x={width / 2} dy="-8" fontSize="85%">
@@ -227,7 +229,6 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
       <tspan
         x={width / 2}
         dy={stereotype ? "18" : "0"}
-        fontWeight="600"
         fontStyle={stereotype === ClassType.Abstract ? "italic" : "normal"}
       >
         {name}
@@ -242,7 +243,14 @@ interface SeparationLineProps {
 }
 
 const SeparationLine: React.FC<SeparationLineProps> = ({ y, width }) => (
-  <line x1="0" x2={width} y1={y} y2={y} stroke="black" strokeWidth="0.5" />
+  <line
+    x1="0"
+    x2={width}
+    y1={y}
+    y2={y}
+    stroke="black"
+    strokeWidth={LINE_WIDTH}
+  />
 )
 
 interface AttributesSectionProps {
