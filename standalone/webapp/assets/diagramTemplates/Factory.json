@@ -4,10 +4,10 @@
   "nodes": [
     {
       "width": 210,
-      "height": 82,
+      "height": 70,
       "id": "cfc9b781-debe-4ca3-903c-9a9e555f6812",
       "type": "class",
-      "position": { "x": -470, "y": 100 },
+      "position": { "x": -370, "y": 110 },
       "data": {
         "name": "Factory",
         "methods": [
@@ -19,13 +19,13 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 210, "height": 82 },
+      "measured": { "width": 210, "height": 70 },
       "dragging": true,
       "resizing": false
     },
     {
       "width": 250,
-      "height": 112,
+      "height": 110,
       "id": "1c0330be-83dd-4d92-9bd1-d62a36e90c7b",
       "type": "class",
       "position": { "x": 80, "y": 90 },
@@ -46,13 +46,13 @@
         "stereotype": "Abstract"
       },
       "selected": false,
-      "measured": { "width": 250, "height": 112 },
+      "measured": { "width": 250, "height": 110 },
       "dragging": true,
       "resizing": false
     },
     {
       "width": 210,
-      "height": 82,
+      "height": 70,
       "id": "8a30926e-581b-49c9-b0cc-7a9119ae1579",
       "type": "class",
       "position": { "x": -210, "y": 310 },
@@ -67,13 +67,13 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 210, "height": 82 },
+      "measured": { "width": 210, "height": 70 },
       "resizing": false,
       "dragging": true
     },
     {
       "width": 230,
-      "height": 82,
+      "height": 70,
       "id": "fc1e3b34-6e01-4fb6-8c26-a70535fa1ff2",
       "type": "class",
       "position": { "x": 90, "y": 310 },
@@ -88,13 +88,13 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 230, "height": 82 },
+      "measured": { "width": 230, "height": 70 },
       "dragging": true,
       "resizing": false
     },
     {
       "width": 240,
-      "height": 82,
+      "height": 70,
       "id": "552eb7f3-62a7-45d9-8133-da6f5379b5a4",
       "type": "class",
       "position": { "x": 390, "y": 310 },
@@ -109,7 +109,7 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 240, "height": 82 },
+      "measured": { "width": 240, "height": 70 },
       "resizing": false,
       "dragging": true
     }
