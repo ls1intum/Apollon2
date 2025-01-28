@@ -4,7 +4,7 @@
   "nodes": [
     {
       "width": 190,
-      "height": 82,
+      "height": 70,
       "id": "2eb1ceb2-266e-4669-89f1-c61e246cb10c",
       "type": "class",
       "position": { "x": 270, "y": 120 },
@@ -16,13 +16,13 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 190, "height": 82 },
+      "measured": { "width": 190, "height": 70 },
       "dragging": true,
       "resizing": false
     },
     {
       "width": 160,
-      "height": 82,
+      "height": 70,
       "id": "7052e703-263f-4df5-95e0-3558793849af",
       "type": "class",
       "position": { "x": 120, "y": 330 },
@@ -34,13 +34,13 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 160, "height": 82 },
+      "measured": { "width": 160, "height": 70 },
       "dragging": true,
       "resizing": false
     },
     {
       "width": 167.20445251464844,
-      "height": 112,
+      "height": 100,
       "id": "286257b1-ebd3-424f-b3e4-c1c2a722531b",
       "type": "class",
       "position": { "x": -90, "y": 105 },
@@ -57,12 +57,12 @@
         ]
       },
       "selected": false,
-      "measured": { "width": 167, "height": 112 },
+      "measured": { "width": 167, "height": 100 },
       "dragging": true
     },
     {
       "width": 160,
-      "height": 82,
+      "height": 70,
       "id": "2fecb039-1b0d-4de9-8820-fa120c51f4f6",
       "type": "class",
       "position": { "x": 435, "y": 330 },
@@ -74,7 +74,7 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 160, "height": 82 },
+      "measured": { "width": 160, "height": 70 },
       "dragging": true
     }
   ],

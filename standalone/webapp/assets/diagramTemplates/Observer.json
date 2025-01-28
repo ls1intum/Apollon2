@@ -3,8 +3,8 @@
   "title": "Observer",
   "nodes": [
     {
-      "width": 223.02252197265625,
-      "height": 142,
+      "width": 225,
+      "height": 130,
       "id": "ea2576c6-d132-47d0-8caa-8f4a6df78256",
       "type": "class",
       "position": { "x": -60, "y": 30 },
@@ -24,12 +24,12 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 223, "height": 142 },
+      "measured": { "width": 225, "height": 130 },
       "dragging": true
     },
     {
-      "width": 223.02252197265625,
-      "height": 142,
+      "width": 225,
+      "height": 130,
       "id": "db6efc15-44dc-427e-9352-1a4bed4d239b",
       "type": "class",
       "position": { "x": -60, "y": 290 },
@@ -49,12 +49,12 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 223, "height": 142 },
+      "measured": { "width": 225, "height": 130 },
       "dragging": true
     },
     {
-      "width": 194.7955780029297,
-      "height": 82,
+      "width": 200,
+      "height": 70,
       "id": "659c7ab7-a771-400c-bd7c-ef061f1668f3",
       "type": "class",
       "position": { "x": 450, "y": 310 },
@@ -66,16 +66,16 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 195, "height": 82 },
+      "measured": { "width": 200, "height": 70 },
       "dragging": true,
       "resizing": false
     },
     {
       "width": 230,
-      "height": 82,
+      "height": 70,
       "id": "b399bebd-10a6-444d-9c09-cf14f41aec7d",
       "type": "class",
-      "position": { "x": 430, "y": 40 },
+      "position": { "x": 435, "y": 30 },
       "data": {
         "name": "Subscriber",
         "methods": [
@@ -84,7 +84,7 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 230, "height": 82 },
+      "measured": { "width": 230, "height": 70 },
       "resizing": false,
       "dragging": true
     }

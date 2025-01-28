@@ -18,7 +18,7 @@ export function TitleAndDesctiption({
   }
 
   return (
-    <DefaultNodeWrapper>
+    <DefaultNodeWrapper width={width} height={height}>
       <TitleAndDescriptionSVG
         width={width}
         height={height}
