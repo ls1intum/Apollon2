@@ -151,7 +151,7 @@ export const NewDiagramFromTemplateModal = () => {
               onClick={() => setSelectedTemplate(TemplateType.Observer)}
               onDoubleClick={handleCreate}
             >
-              <ListItemText inset>Obersver</ListItemText>
+              <ListItemText inset>Observer</ListItemText>
             </MenuItem>
 
             <Divider />
