@@ -54,7 +54,7 @@ export const initialNodes: Node[] = [
   {
     id: "4",
     type: "class",
-    position: { x: 112, y: 320 },
+    position: { x: 120, y: 320 },
     width: 300,
     height: 170,
     selected: false,

@@ -1,3 +1,5 @@
+import { EXTRA_SPACE_FOR_EXTENTION } from "@/constants"
+
 /**
  * Calculates the minimum width required to fit the text with specified padding and margin.
  * @param maxTextWidth - The maximum width of the text.
@@ -9,7 +11,8 @@ export const calculateMinWidth = (
   padding: number
 ): number => {
   const minWidth = maxTextWidth + 2 * padding
-  const minWidthWithSnapToGrid = Math.ceil(minWidth / 5) * 5
+  const minWidthWithSnapToGrid =
+    Math.ceil(minWidth / EXTRA_SPACE_FOR_EXTENTION) * EXTRA_SPACE_FOR_EXTENTION
   return minWidthWithSnapToGrid
 }
 
@@ -33,6 +36,7 @@ export const calculateMinHeight = (
     headerHeight +
     attributesCount * attributeHeight +
     methodsCount * methodHeight
-  const minHeightWithSnapToGrid = Math.ceil(minHeight / 5) * 5
+  const minHeightWithSnapToGrid =
+    Math.ceil(minHeight / EXTRA_SPACE_FOR_EXTENTION) * EXTRA_SPACE_FOR_EXTENTION
   return minHeightWithSnapToGrid
 }
