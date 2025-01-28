@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField/TextField"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
-  const { diagramName, setDiagramName } = useApollon2Context()
+  const { diagramName, setDiagramName, apollon2 } = useApollon2Context()
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
@@ -87,6 +87,9 @@ export default function MobileNavbar() {
                 <NavbarFile color="black" />
                 <Button
                   sx={{ textTransform: "none" }} // This removes the uppercase transformation
+                  onClick={() =>
+                    console.log("DEBUG share getnodes,", apollon2?.getNodes())
+                  }
                 >
                   <Typography color="black">Share</Typography>
                 </Button>

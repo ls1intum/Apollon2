@@ -2,15 +2,15 @@
  * Calculates the minimum width required to fit the text with specified padding and margin.
  * @param maxTextWidth - The maximum width of the text.
  * @param padding - The inner padding for text.
- * @param margin - The outer margin.
  * @returns The calculated minimum width.
  */
 export const calculateMinWidth = (
   maxTextWidth: number,
-  padding: number,
-  margin: number
+  padding: number
 ): number => {
-  return maxTextWidth + 2 * padding + 2 * margin
+  const minWidth = maxTextWidth + 2 * padding
+  const minWidthWithSnapToGrid = Math.ceil(minWidth / 5) * 5
+  return minWidthWithSnapToGrid
 }
 
 /**
@@ -20,7 +20,6 @@ export const calculateMinWidth = (
  * @param methodsCount - Number of methods.
  * @param attributeHeight - Height per attribute.
  * @param methodHeight - Height per method.
- * @param margin - The outer margin.
  * @returns The calculated minimum height.
  */
 export const calculateMinHeight = (
@@ -28,13 +27,12 @@ export const calculateMinHeight = (
   attributesCount: number,
   methodsCount: number,
   attributeHeight: number,
-  methodHeight: number,
-  margin: number
+  methodHeight: number
 ): number => {
-  return (
+  const minHeight =
     headerHeight +
     attributesCount * attributeHeight +
-    methodsCount * methodHeight +
-    margin
-  )
+    methodsCount * methodHeight
+  const minHeightWithSnapToGrid = Math.ceil(minHeight / 5) * 5
+  return minHeightWithSnapToGrid
 }
