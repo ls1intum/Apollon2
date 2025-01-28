@@ -1,9 +1,9 @@
-// ModalWrapper.tsx
-import { NewDiagramModal } from "@/components/modals/NewDiagramModal"
+import {
+  NewDiagramModal,
+  NewDiagramFromTemplateModal,
+} from "@/components/modals"
 import { ModalName, ModalProps } from "@/types"
 import React from "react"
-
-// Import other modals as needed
 
 interface ModalWrapperProps {
   name: ModalName
@@ -13,7 +13,8 @@ interface ModalWrapperProps {
 
 // Define a mapping from modal names to modal components
 const MODAL_COMPONENTS: Record<ModalName, React.ComponentType<unknown>> = {
-  NEWDIAGRAM: NewDiagramModal,
+  NEW_DIAGRAM: NewDiagramModal,
+  NEW_DIAGRAM_FROM_TEMPLATE: NewDiagramFromTemplateModal,
   // Add other modals here
 }
 

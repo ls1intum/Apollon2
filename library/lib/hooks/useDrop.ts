@@ -25,10 +25,13 @@ export const useDrop = () => {
         return
       }
       // Convert the drop position to the flow position
-      const dropPosition = screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
-      })
+      const dropPosition = screenToFlowPosition(
+        {
+          x: event.clientX,
+          y: event.clientY,
+        },
+        { snapToGrid: true }
+      )
 
       // Adjust position by subtracting the offset
       const position = {

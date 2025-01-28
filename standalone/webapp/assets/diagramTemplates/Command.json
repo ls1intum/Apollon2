@@ -1,0 +1,165 @@
+{
+  "version": "apollon2",
+  "title": "Command",
+  "nodes": [
+    {
+      "width": 160,
+      "height": 52,
+      "id": "8acfa3c3-de5b-424a-a555-cb68855538d0",
+      "type": "class",
+      "position": { "x": -280, "y": 340 },
+      "data": { "name": "Client", "methods": [], "attributes": [] },
+      "selected": false,
+      "measured": { "width": 160, "height": 52 },
+      "dragging": true,
+      "resizing": false
+    },
+    {
+      "width": 246.431640625,
+      "height": 82,
+      "id": "7351d563-b929-460e-a09d-e2b463bfceea",
+      "type": "class",
+      "position": { "x": -20, "y": 30 },
+      "data": {
+        "name": "Invoker",
+        "methods": [
+          {
+            "id": "d5ea460f-22f9-4494-a28f-2fc7a1ea64dc",
+            "name": "+ setCommand(c: Command)"
+          }
+        ],
+        "attributes": []
+      },
+      "selected": false,
+      "measured": { "width": 246, "height": 82 },
+      "dragging": true
+    },
+    {
+      "width": 160,
+      "height": 82,
+      "id": "41a9495d-9993-449e-a3b5-a7a704130380",
+      "type": "class",
+      "position": { "x": 10, "y": 200 },
+      "data": {
+        "name": "Receiver",
+        "methods": [
+          { "id": "d5ea460f-22f9-4494-a28f-2fc7a1ea64dc", "name": "+ action()" }
+        ],
+        "attributes": []
+      },
+      "selected": false,
+      "measured": { "width": 160, "height": 82 },
+      "dragging": true
+    },
+    {
+      "width": 170,
+      "height": 82,
+      "id": "52e53f8b-cac0-4816-a70a-c2f154f3fb67",
+      "type": "class",
+      "position": { "x": 390, "y": 30 },
+      "data": {
+        "name": "Command",
+        "methods": [
+          {
+            "id": "d5ea460f-22f9-4494-a28f-2fc7a1ea64dc",
+            "name": "+ execute()"
+          }
+        ],
+        "attributes": [],
+        "stereotype": "Interface"
+      },
+      "selected": false,
+      "measured": { "width": 170, "height": 82 },
+      "dragging": true,
+      "resizing": false
+    },
+    {
+      "width": 270,
+      "height": 112,
+      "id": "f235a28a-6d9b-482c-9e67-546dfd92e0d5",
+      "type": "class",
+      "position": { "x": 340, "y": 190 },
+      "data": {
+        "name": "ConcreteCommand",
+        "methods": [
+          {
+            "id": "d5ea460f-22f9-4494-a28f-2fc7a1ea64dc",
+            "name": "+ execute()"
+          }
+        ],
+        "attributes": [
+          { "id": "c418186e-4631-4b07-b5f3-25d414d248da", "name": "- state" }
+        ]
+      },
+      "selected": false,
+      "measured": { "width": 270, "height": 112 },
+      "dragging": true,
+      "resizing": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "8acfa3c3-de5b-424a-a555-cb68855538d0",
+      "sourceHandle": "top",
+      "target": "7351d563-b929-460e-a09d-e2b463bfceea",
+      "targetHandle": "left",
+      "id": "1737994716146-8acfa3c3-de5b-424a-a555-cb68855538d0-7351d563-b929-460e-a09d-e2b463bfceea",
+      "type": "uniassociation",
+      "selected": false
+    },
+    {
+      "source": "8acfa3c3-de5b-424a-a555-cb68855538d0",
+      "sourceHandle": "top",
+      "target": "41a9495d-9993-449e-a3b5-a7a704130380",
+      "targetHandle": "left",
+      "id": "1737994722983-8acfa3c3-de5b-424a-a555-cb68855538d0-41a9495d-9993-449e-a3b5-a7a704130380",
+      "type": "uniassociation",
+      "selected": false
+    },
+    {
+      "source": "f235a28a-6d9b-482c-9e67-546dfd92e0d5",
+      "sourceHandle": "top",
+      "target": "52e53f8b-cac0-4816-a70a-c2f154f3fb67",
+      "targetHandle": "bottom",
+      "id": "1737994915434-52e53f8b-cac0-4816-a70a-c2f154f3fb67-f235a28a-6d9b-482c-9e67-546dfd92e0d5",
+      "type": "inheritance",
+      "selected": false
+    },
+    {
+      "source": "f235a28a-6d9b-482c-9e67-546dfd92e0d5",
+      "sourceHandle": "left",
+      "target": "41a9495d-9993-449e-a3b5-a7a704130380",
+      "targetHandle": "right",
+      "id": "1737994981686-f235a28a-6d9b-482c-9e67-546dfd92e0d5-41a9495d-9993-449e-a3b5-a7a704130380",
+      "type": "uniassociation",
+      "selected": false
+    },
+    {
+      "source": "726a23e8-c86e-469d-927a-d0f4c199b474",
+      "sourceHandle": "top",
+      "target": "52e53f8b-cac0-4816-a70a-c2f154f3fb67",
+      "targetHandle": "bottom-right",
+      "id": "1737994991158-726a23e8-c86e-469d-927a-d0f4c199b474-52e53f8b-cac0-4816-a70a-c2f154f3fb67",
+      "type": "biassociation",
+      "selected": false
+    },
+    {
+      "source": "7351d563-b929-460e-a09d-e2b463bfceea",
+      "sourceHandle": "right",
+      "target": "52e53f8b-cac0-4816-a70a-c2f154f3fb67",
+      "targetHandle": "left",
+      "id": "1737995015106-7351d563-b929-460e-a09d-e2b463bfceea-52e53f8b-cac0-4816-a70a-c2f154f3fb67",
+      "type": "uniassociation",
+      "selected": false
+    },
+    {
+      "source": "8acfa3c3-de5b-424a-a555-cb68855538d0",
+      "sourceHandle": "right",
+      "target": "f235a28a-6d9b-482c-9e67-546dfd92e0d5",
+      "targetHandle": "bottom",
+      "id": "1737995032625-8acfa3c3-de5b-424a-a555-cb68855538d0-f235a28a-6d9b-482c-9e67-546dfd92e0d5",
+      "type": "dependency",
+      "selected": false
+    }
+  ]
+}

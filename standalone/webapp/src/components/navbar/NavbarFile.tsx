@@ -89,12 +89,12 @@ export const NavbarFile: FC<Props> = ({ color }) => {
   )
 
   const handleNewFile = useCallback(() => {
-    openModal("NEWDIAGRAM")
+    openModal("NEW_DIAGRAM")
     closeMainMenu()
   }, [openModal, closeMainMenu])
 
   const handleStartFromTemplate = useCallback(() => {
-    // Implement the functionality for starting from a template
+    openModal("NEW_DIAGRAM_FROM_TEMPLATE")
     closeMainMenu()
   }, [closeMainMenu])
 
