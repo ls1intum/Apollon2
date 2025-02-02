@@ -8,16 +8,28 @@ import {
   exportAsJSON,
   validateParsedJSON,
 } from "./utils"
+import { DiagramType } from "./types"
 
+export * from "./types"
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
   private reactFlowInstance: ReactFlowInstance | null = null
+  private diagramType: DiagramType = DiagramType.ClassDiagram
 
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element)
-    this.root.render(
-      <AppWithProvider onReactFlowInit={this.setReactFlowInstance.bind(this)} />
-    )
+    this.renderApp()
+  }
+
+  private renderApp() {
+    if (this.root) {
+      this.root.render(
+        <AppWithProvider
+          onReactFlowInit={this.setReactFlowInstance.bind(this)}
+          diagramType={this.diagramType} // Pass the diagramType directly as a prop
+        />
+      )
+    }
   }
 
   private setReactFlowInstance(instance: ReactFlowInstance) {
@@ -103,6 +115,21 @@ export class Apollon2 {
       return true
     } else {
       return "ReactFlowInstance is not available for importing JSON."
+    }
+  }
+
+  public createNewDiagram(diagramType: DiagramType) {
+    this.diagramType = diagramType
+    // Trigger a re-render by calling renderApp after updating the diagramType
+    this.renderApp()
+
+    if (this.reactFlowInstance) {
+      this.reactFlowInstance.setNodes([])
+      this.reactFlowInstance.setEdges([])
+    } else {
+      console.error(
+        "ReactFlowInstance is not available for creating new diagram"
+      )
     }
   }
 }

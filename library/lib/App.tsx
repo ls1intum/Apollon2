@@ -29,15 +29,17 @@ import {
 } from "./hooks"
 import { diagramEdgeTypes } from "./edges"
 import "@/styles/app.css"
+import { DiagramType } from "./types"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
+  diagramType: DiagramType
 }
 
-function App({ onReactFlowInit }: AppProps) {
+function App({ onReactFlowInit, diagramType }: AppProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, , onEdgesChange] = useEdgesState(initialEdges)
-  const { onDrop } = useDrop()
+  const { onDrop } = useDrop(diagramType)
   const { onDragOver } = useDragOver()
   const { onNodeDragStop } = useNodeDragStop(setNodes)
   const { onConnect } = useConnect()
@@ -45,7 +47,7 @@ function App({ onReactFlowInit }: AppProps) {
 
   return (
     <div style={{ display: "flex", width: "100%", height: "100%" }}>
-      <Sidebar />
+      <Sidebar selectedDiagramType={diagramType} />
       <SvgMarkers />
       <ReactFlow
         id="react-flow-library"
@@ -83,10 +85,10 @@ function App({ onReactFlowInit }: AppProps) {
   )
 }
 
-export function AppWithProvider({ onReactFlowInit }: AppProps) {
+export function AppWithProvider({ onReactFlowInit, diagramType }: AppProps) {
   return (
     <ReactFlowProvider>
-      <App onReactFlowInit={onReactFlowInit} />
+      <App onReactFlowInit={onReactFlowInit} diagramType={diagramType} />
     </ReactFlowProvider>
   )
 }

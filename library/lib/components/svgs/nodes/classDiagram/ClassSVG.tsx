@@ -61,7 +61,10 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
     ref
   ) {
     // Layout constants
-    const headerHeight = stereotype
+    const showStereotype = stereotype
+      ? stereotype !== ClassType.ObjectClass
+      : false
+    const headerHeight = showStereotype
       ? DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE
       : DEFAULT_HEADER_HEIGHT
     const attributeHeight = DEFAULT_ATTRIBUTE_HEIGHT
@@ -148,6 +151,7 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
 
           {/* Header Section */}
           <HeaderSection
+            showStereotype={showStereotype}
             stereotype={stereotype}
             name={name}
             width={finalWidth}
@@ -198,6 +202,7 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
 // Sub-components for better modularity
 
 interface HeaderSectionProps {
+  showStereotype: boolean
   stereotype?: ClassType
   name: string
   width: number
@@ -206,36 +211,42 @@ interface HeaderSectionProps {
 }
 
 const HeaderSection: React.FC<HeaderSectionProps> = ({
+  showStereotype,
   stereotype,
   name,
   width,
   font,
   headerHeight,
-}) => (
-  <g>
-    <Text
-      x={width / 2}
-      y={headerHeight / 2}
-      dominantBaseline="middle"
-      textAnchor="middle"
-      font={font}
-      fontWeight="bold"
-    >
-      {stereotype && (
-        <tspan x={width / 2} dy="-8" fontSize="85%">
-          {`«${stereotype}»`}
-        </tspan>
-      )}
-      <tspan
+}) => {
+  return (
+    <g>
+      <Text
         x={width / 2}
-        dy={stereotype ? "18" : "0"}
-        fontStyle={stereotype === ClassType.Abstract ? "italic" : "normal"}
+        y={headerHeight / 2}
+        dominantBaseline="middle"
+        textAnchor="middle"
+        font={font}
+        fontWeight="bold"
+        textDecoration={
+          stereotype === ClassType.ObjectClass ? "underline" : "normal"
+        }
       >
-        {name}
-      </tspan>
-    </Text>
-  </g>
-)
+        {showStereotype && (
+          <tspan x={width / 2} dy="-8" fontSize="85%">
+            {`«${stereotype}»`}
+          </tspan>
+        )}
+        <tspan
+          x={width / 2}
+          dy={showStereotype ? "18" : "0"}
+          fontStyle={stereotype === ClassType.Abstract ? "italic" : "normal"}
+        >
+          {name}
+        </tspan>
+      </Text>
+    </g>
+  )
+}
 
 interface SeparationLineProps {
   y: number
