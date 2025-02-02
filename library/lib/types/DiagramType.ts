@@ -1,4 +1,4 @@
 export enum DiagramType {
-  ClassDiagram,
-  ObjectDiagram,
+  ClassDiagram = "ClassDiagram",
+  ObjectDiagram = "ObjectDiagram",
 }

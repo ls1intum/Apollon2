@@ -60,7 +60,7 @@ export class Apollon2 {
 
   public exportAsJson(diagramName: string) {
     if (this.reactFlowInstance) {
-      exportAsJSON(diagramName, this.reactFlowInstance)
+      exportAsJSON(diagramName, this.diagramType, this.reactFlowInstance)
     } else {
       console.error("ReactFlowInstance is not available for exporting JSON.")
     }
@@ -104,8 +104,11 @@ export class Apollon2 {
         return result
       }
 
-      const { nodes, edges } = result
+      const { nodes, edges, diagramType } = result
 
+      this.diagramType = diagramType
+      // Trigger a re-render by calling renderApp after updating the diagramType
+      this.renderApp()
       this.reactFlowInstance.setNodes(nodes)
       this.reactFlowInstance.setEdges(edges)
       // We need to render the nodes and edges first before fitting the view
