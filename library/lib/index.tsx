@@ -36,6 +36,14 @@ export class Apollon2 {
     this.reactFlowInstance = instance
   }
 
+  private deSelectAllNodes = () => {
+    if (this.reactFlowInstance) {
+      this.reactFlowInstance.setNodes((nodes) =>
+        nodes.map((node) => ({ ...node, selected: false }))
+      )
+    }
+  }
+
   public getNodes(): Node[] {
     return this.reactFlowInstance ? this.reactFlowInstance.getNodes() : []
   }
@@ -60,6 +68,7 @@ export class Apollon2 {
 
   public exportAsJson(diagramName: string) {
     if (this.reactFlowInstance) {
+      this.deSelectAllNodes()
       exportAsJSON(diagramName, this.diagramType, this.reactFlowInstance)
     } else {
       console.error("ReactFlowInstance is not available for exporting JSON.")
@@ -71,6 +80,7 @@ export class Apollon2 {
     isBackgroundTransparent: boolean = false
   ) {
     if (this.reactFlowInstance) {
+      this.deSelectAllNodes()
       exportAsPNG(diagramName, this.reactFlowInstance, isBackgroundTransparent)
     } else {
       console.error("ReactFlowInstance is not available for exporting PNG.")
@@ -79,6 +89,7 @@ export class Apollon2 {
 
   public exportImageAsSVG(diagramName: string) {
     if (this.reactFlowInstance) {
+      this.deSelectAllNodes()
       exportAsSVG(diagramName, this.reactFlowInstance)
     } else {
       console.error("ReactFlowInstance is not available for exporting SVG.")
@@ -87,6 +98,7 @@ export class Apollon2 {
 
   public exportImageAsPDF(diagramName: string) {
     if (this.reactFlowInstance) {
+      this.deSelectAllNodes()
       exportAsPDF(diagramName, this.reactFlowInstance)
     } else {
       console.error("ReactFlowInstance is not available for exporting PDF.")
