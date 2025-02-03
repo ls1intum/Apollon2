@@ -1,4 +1,4 @@
-import React from "react"
+import { FC } from "react"
 
 type Props = {
   children: React.ReactNode
@@ -13,7 +13,7 @@ type Props = {
   noY?: boolean
 }
 
-export const Text: React.FC<Props & Record<string, unknown>> = ({
+export const CustomText: FC<Props & Record<string, unknown>> = ({
   children,
   fill,
   x = "50%",

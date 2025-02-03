@@ -1,10 +1,10 @@
-import { dropElementConfig } from "@/constants/dropElementConfig"
-import { DropNodeData } from "@/types"
+import { dropElementConfigs } from "@/constants/dropElementConfig"
+import { DiagramType, DropNodeData } from "@/types"
 import { generateUUID } from "@/utils"
 import { useReactFlow, type Node } from "@xyflow/react"
 import { useCallback, DragEvent } from "react"
 
-export const useDragDrop = () => {
+export const useDragDrop = (selectedDiagramType: DiagramType) => {
   const { screenToFlowPosition, setNodes } = useReactFlow()
 
   const onDrop = useCallback(
@@ -14,7 +14,7 @@ export const useDragDrop = () => {
         event.dataTransfer.getData("text/plain")
       ) as DropNodeData
 
-      const config = dropElementConfig.find(
+      const config = dropElementConfigs[selectedDiagramType].find(
         (config) => config.type === dropData.type
       )
       // Validate the dropped element type

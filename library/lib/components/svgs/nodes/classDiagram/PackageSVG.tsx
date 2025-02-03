@@ -1,4 +1,4 @@
-import { Text, SVGComponentProps } from "@/components"
+import { SVGComponentProps, CustomText } from "@/components"
 import { LINE_WIDTH, LINE_WIDTH_ON_EDGE } from "@/constants"
 import { FC, forwardRef, SVGAttributes } from "react"
 
@@ -39,7 +39,7 @@ export const PackageSVG = forwardRef<SVGSVGElement, PackageSVGProps>(
           />
 
           {/* Name Text */}
-          <Text
+          <CustomText
             x={width / 2}
             y={leftTopBoxHeight + padding}
             textAnchor="middle"
@@ -47,7 +47,7 @@ export const PackageSVG = forwardRef<SVGSVGElement, PackageSVGProps>(
             dominantBaseline="hanging"
           >
             {name}
-          </Text>
+          </CustomText>
         </g>
       </svg>
     )
