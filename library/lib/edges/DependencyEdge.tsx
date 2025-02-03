@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import {
   BaseEdge,
@@ -21,7 +20,7 @@ import { CustomEdgeToolbar } from "@/components"
 
 // --- AggregationEdge Component ---
 // Here we destructure the data prop and directly set default values.
-export const  DependencyEdge  = ({
+export const DependencyEdge = ({
   id,
   selected,
   sourceX,
@@ -30,13 +29,7 @@ export const  DependencyEdge  = ({
   targetY,
   sourcePosition,
   targetPosition,
-  data: {
-    sourceRole,
-    sourceMultiplicity,
-    targetRole,
-    targetMultiplicity,
-  } = {
-
+  data: { sourceRole, sourceMultiplicity, targetRole, targetMultiplicity } = {
     sourceRole: "",
     sourceMultiplicity: "",
     targetRole: "",
@@ -110,15 +103,15 @@ export const  DependencyEdge  = ({
     <>
       {/* Render the visible edge (stays black) */}
       <BaseEdge
-      id={id}
-      path={edgePath}
-      markerEnd="url(#black-arrow)" // Reference the black arrow marker
-      strokeDasharray="6" // Dotted line effect
-      strokeWidth={4} // Line thickness
-      style={{
-        stroke: "#000000",
-      }}
-    />
+        id={id}
+        path={edgePath}
+        markerEnd="url(#black-arrow)" // Reference the black arrow marker
+        strokeDasharray="6" // Dotted line effect
+        strokeWidth={4} // Line thickness
+        style={{
+          stroke: "#000000",
+        }}
+      />
 
       {/* Invisible overlay to capture pointer events */}
       <path

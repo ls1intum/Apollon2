@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import {
   BaseEdge,
@@ -20,7 +19,7 @@ import { CustomEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 
 // Inheritance Edge (White Triangle)
-export const InheritanceEdge= ({
+export const InheritanceEdge = ({
   id,
   selected,
   sourceX,
@@ -29,14 +28,7 @@ export const InheritanceEdge= ({
   targetY,
   sourcePosition,
   targetPosition,
-  data: {
-
-    sourceRole,
-    sourceMultiplicity,
-    targetRole,
-    targetMultiplicity,
-  } = {
-
+  data: { sourceRole, sourceMultiplicity, targetRole, targetMultiplicity } = {
     sourceRole: "",
     sourceMultiplicity: "",
     targetRole: "",
@@ -109,13 +101,13 @@ export const InheritanceEdge= ({
     <>
       {/* Render the visible edge (stays black) */}
       <BaseEdge
-       id={id}
-       path={edgePath}
-       markerEnd="url(#white-triangle)" // Reference the white triangle marker
-       style={{
-        stroke: "#000000",
-      }}
-    />
+        id={id}
+        path={edgePath}
+        markerEnd="url(#white-triangle)" // Reference the white triangle marker
+        style={{
+          stroke: "#000000",
+        }}
+      />
 
       {/* Invisible overlay to capture pointer events */}
       <path

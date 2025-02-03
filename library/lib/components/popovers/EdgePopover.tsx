@@ -43,7 +43,7 @@ export function EdgePopover({
   const { getEdge } = useReactFlow()
 
   const edge = getEdge(edgeId)!
-  console.log("POPOVER",edge, edgeId, edge.data)
+  console.log("POPOVER", edge, edgeId, edge.data)
   const edgeData = edge.data as CustomEdgeProps
 
   return (

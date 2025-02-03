@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import {
   BaseEdge,
@@ -29,12 +28,7 @@ export const BiAssociationEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
-  data: {
-    sourceRole,
-    sourceMultiplicity,
-    targetRole,
-    targetMultiplicity,
-  } = {
+  data: { sourceRole, sourceMultiplicity, targetRole, targetMultiplicity } = {
     sourceRole: "",
     sourceMultiplicity: "",
     targetRole: "",

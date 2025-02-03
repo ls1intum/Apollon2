@@ -7,4 +7,3 @@ export * from "./toolbars"
 export * from "./svgs"
 export * from "./StereotypeButtonGroup"
 export * from "./EditableList"
-

@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import {
   BaseEdge,
@@ -20,7 +19,7 @@ import { CustomEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 
 // Realization Edge (Dotted White Triangle)
-export const RealizationEdge  = ({
+export const RealizationEdge = ({
   id,
   selected,
   sourceX,
@@ -29,14 +28,7 @@ export const RealizationEdge  = ({
   targetY,
   sourcePosition,
   targetPosition,
-  data: {
-
-    sourceRole,
-    sourceMultiplicity,
-    targetRole,
-    targetMultiplicity,
-  } = {
-
+  data: { sourceRole, sourceMultiplicity, targetRole, targetMultiplicity } = {
     sourceRole: "",
     sourceMultiplicity: "",
     targetRole: "",
@@ -109,15 +101,15 @@ export const RealizationEdge  = ({
     <>
       {/* Render the visible edge (stays black) */}
       <BaseEdge
-      id={id}
-      path={edgePath}
-      markerEnd="url(#white-triangle)" // Reference the white triangle marker
-      strokeDasharray="8" // Dotted line effect
-      strokeWidth={4} // Line thickness
-      style={{
-        stroke: "#000000",
-      }}
-    />
+        id={id}
+        path={edgePath}
+        markerEnd="url(#white-triangle)" // Reference the white triangle marker
+        strokeDasharray="8" // Dotted line effect
+        strokeWidth={4} // Line thickness
+        style={{
+          stroke: "#000000",
+        }}
+      />
 
       {/* Invisible overlay to capture pointer events */}
       <path

@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import {
   BaseEdge,
@@ -29,14 +28,7 @@ export const UniAssociationEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
-  data: {
-
-    sourceRole,
-    sourceMultiplicity,
-    targetRole,
-    targetMultiplicity,
-  } = {
-
+  data: { sourceRole, sourceMultiplicity, targetRole, targetMultiplicity } = {
     sourceRole: "",
     sourceMultiplicity: "",
     targetRole: "",
@@ -109,13 +101,13 @@ export const UniAssociationEdge = ({
     <>
       {/* Render the visible edge (stays black) */}
       <BaseEdge
-      id={id}
-      path={edgePath}
-      markerEnd="url(#black-arrow)" // Reference the black arrow marker
-      style={{
-        stroke: "#000000",
-      }}
-    />
+        id={id}
+        path={edgePath}
+        markerEnd="url(#black-arrow)" // Reference the black arrow marker
+        style={{
+          stroke: "#000000",
+        }}
+      />
 
       {/* Invisible overlay to capture pointer events */}
       <path

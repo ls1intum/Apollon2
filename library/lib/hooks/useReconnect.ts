@@ -2,7 +2,7 @@ import { reconnectEdge, Edge, Connection, useReactFlow } from "@xyflow/react"
 import { useCallback } from "react"
 
 export const useReconnect = () => {
-  const { setEdges } = useReactFlow();
+  const { setEdges } = useReactFlow()
 
   const onReconnect = useCallback(
     (oldEdge: Edge, newConnection: Connection) =>
@@ -17,24 +17,26 @@ export const useReconnect = () => {
               // Update the data fields based on oldEdge values if present
               data: {
                 ...edge.data,
-                sourceRole: oldEdge.data?.sourceRole ?? edge.data?.sourceRole ?? "",
+                sourceRole:
+                  oldEdge.data?.sourceRole ?? edge.data?.sourceRole ?? "",
                 sourceMultiplicity:
                   oldEdge.data?.sourceMultiplicity ??
                   edge.data?.sourceMultiplicity ??
                   "",
-                targetRole: oldEdge.data?.targetRole ?? edge.data?.targetRole ?? "",
+                targetRole:
+                  oldEdge.data?.targetRole ?? edge.data?.targetRole ?? "",
                 targetMultiplicity:
                   oldEdge.data?.targetMultiplicity ??
                   edge.data?.targetMultiplicity ??
                   "",
               },
-            };
+            }
           }
-          return edge;
+          return edge
         })
       ),
     [setEdges]
-  );
+  )
 
-  return { onReconnect };
-};
+  return { onReconnect }
+}

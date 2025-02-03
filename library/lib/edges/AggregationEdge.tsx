@@ -29,12 +29,7 @@ export const AggregationEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
-  data: {
-    sourceRole,
-    sourceMultiplicity,
-    targetRole,
-    targetMultiplicity,
-  } = {
+  data: { sourceRole, sourceMultiplicity, targetRole, targetMultiplicity } = {
     sourceRole: "",
     sourceMultiplicity: "",
     targetRole: "",
