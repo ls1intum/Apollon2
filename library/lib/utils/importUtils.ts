@@ -1,11 +1,5 @@
-import { type Edge, type Node } from "@xyflow/react"
-
-type ParsedJSON = {
-  version: string
-  title: string
-  nodes: Node[]
-  edges: Edge[]
-}
+import { DiagramType } from "@/types"
+import { ParsedJSON } from "@/types/ParsedJson"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const validateParsedJSON = (json: any): ParsedJSON | string => {
@@ -14,10 +8,16 @@ export const validateParsedJSON = (json: any): ParsedJSON | string => {
     json === null ||
     typeof json.version !== "string" ||
     typeof json.title !== "string" ||
+    typeof json.diagramType !== "string" ||
     !Array.isArray(json.nodes) ||
     !Array.isArray(json.edges)
   ) {
     return "Invalid JSON structure. Required fields: version, title, nodes, edges."
+  }
+
+  //Validate diagramType
+  if (!(json.diagramType in DiagramType)) {
+    return "Invalid diagram type"
   }
 
   // Validate nodes

@@ -1,5 +1,6 @@
 import { type Edge, type Node } from "@xyflow/react"
 import { ClassType } from "./types"
+// import { ClassType } from "./types"
 
 export const initialNodes: Node[] = [
   {
@@ -15,7 +16,7 @@ export const initialNodes: Node[] = [
     id: "2",
     type: "class",
     position: { x: 225, y: -65 },
-    width: 296,
+    width: 300,
     height: 170,
     selected: false,
     data: {
@@ -34,7 +35,7 @@ export const initialNodes: Node[] = [
     id: "3",
     type: "class",
     position: { x: 590, y: 165 },
-    width: 296,
+    width: 300,
     height: 170,
     selected: false,
     data: {
@@ -53,8 +54,8 @@ export const initialNodes: Node[] = [
   {
     id: "4",
     type: "class",
-    position: { x: 112, y: 320 },
-    width: 296,
+    position: { x: 120, y: 320 },
+    width: 300,
     height: 170,
     selected: false,
     data: {
@@ -74,7 +75,7 @@ export const initialNodes: Node[] = [
     id: "5",
     type: "class",
     position: { x: 400, y: 500 },
-    width: 296,
+    width: 300,
     height: 170,
     selected: false,
     data: {

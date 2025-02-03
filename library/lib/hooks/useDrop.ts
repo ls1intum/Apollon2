@@ -1,11 +1,11 @@
-import { dropElementConfig } from "@/constants"
+import { dropElementConfigs } from "@/constants"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
-import { DropNodeData } from "@/types"
+import { DiagramType, DropNodeData } from "@/types"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { useReactFlow, type Node } from "@xyflow/react"
 import { useCallback, DragEvent } from "react"
 
-export const useDrop = () => {
+export const useDrop = (selectedDiagramType: DiagramType) => {
   const { screenToFlowPosition, setNodes, getIntersectingNodes, getNodes } =
     useReactFlow()
 
@@ -16,7 +16,7 @@ export const useDrop = () => {
         event.dataTransfer.getData("text/plain")
       ) as DropNodeData
 
-      const config = dropElementConfig.find(
+      const config = dropElementConfigs[selectedDiagramType].find(
         (config) => config.type === dropData.type
       )
       // Validate the dropped element type
@@ -25,11 +25,15 @@ export const useDrop = () => {
         return
       }
       // Convert the drop position to the flow position
-      const dropPosition = screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
-      })
+      const dropPosition = screenToFlowPosition(
+        {
+          x: event.clientX,
+          y: event.clientY,
+        },
+        { snapToGrid: true }
+      )
 
+      console.log("dropPosition", dropPosition)
       // Adjust position by subtracting the offset
       const position = {
         x: dropPosition.x - dropData.offsetX,

@@ -9,6 +9,8 @@ import {
 import { toPng, toSvg } from "html-to-image"
 import jsPDF from "jspdf"
 import { ExportFileFormat } from "../enums"
+import { ParsedJSON } from "@/types/ParsedJson"
+import { DiagramType } from "@/types"
 
 // Calculate dimensions based on nodes and viewport
 const calculateDimensions = (
@@ -92,11 +94,13 @@ const downloadImage = (
 // Export the diagram as JSON
 export const exportAsJSON = (
   diagramName: string,
+  diagramType: DiagramType,
   reactFlowInstance: ReactFlowInstance<Node, Edge>
 ) => {
-  const data = {
+  const data: ParsedJSON = {
     version: "apollon2",
     title: diagramName,
+    diagramType,
     nodes: reactFlowInstance.getNodes(),
     edges: reactFlowInstance.getEdges(),
   }

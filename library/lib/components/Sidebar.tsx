@@ -1,10 +1,10 @@
-import React, { DragEvent } from "react"
+import React, { DragEvent, FC } from "react"
 import {
-  dropElementConfig,
+  dropElementConfigs,
   transformScale,
 } from "@/constants/dropElementConfig"
 import { DividerLine } from "./DividerLine"
-import { DropNodeData } from "@/types"
+import { DiagramType, DropNodeData } from "@/types"
 
 const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
   const rect = (event.target as HTMLElement).getBoundingClientRect()
@@ -20,7 +20,11 @@ const onDragStart = (event: DragEvent, { type, data }: DropNodeData) => {
   event.dataTransfer.effectAllowed = "move"
 }
 
-export const Sidebar = () => {
+interface SidebarProps {
+  selectedDiagramType: DiagramType
+}
+
+export const Sidebar: FC<SidebarProps> = ({ selectedDiagramType }) => {
   return (
     <aside style={{ height: "100%", backgroundColor: "#f0f0f0" }}>
       <div
@@ -31,8 +35,8 @@ export const Sidebar = () => {
           margin: "10px",
         }}
       >
-        {dropElementConfig.map((config) => (
-          <React.Fragment key={`${config.type}_${config.name}`}>
+        {dropElementConfigs[selectedDiagramType].map((config) => (
+          <React.Fragment key={`${config.type}_${config.defaultData.name}`}>
             {/* Add separator before the Color Description */}
             {config.type === "colorDescription" && (
               <DividerLine style={{ margin: "3px 0" }} height={2} />
@@ -59,7 +63,7 @@ export const Sidebar = () => {
                 height: config.height,
                 ...config.defaultData,
                 transformScale,
-                id: "1",
+                id: "2",
               })}
             </div>
           </React.Fragment>

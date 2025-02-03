@@ -8,8 +8,8 @@ const defaultBackground = "#000000" // Example: black
 
 // Themed Polyline
 export const ThemedPolyline = styled.polyline`
-  fill: ${(props) => props.fill || defaultBackground};
-  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
+  fill: ${(props) => props.fill};
+  stroke: ${(props) => props.stroke};
 `
 
 ThemedPolyline.defaultProps = {
@@ -19,8 +19,8 @@ ThemedPolyline.defaultProps = {
 
 // Themed Path
 export const ThemedPath = styled.path`
-  fill: ${(props) => props.fill || defaultBackground};
-  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
+  fill: ${(props) => props.fill};
+  stroke: ${(props) => props.stroke};
 `
 
 ThemedPath.defaultProps = {
@@ -41,8 +41,8 @@ ThemedPathContrast.defaultProps = {
 
 // Themed Rect
 export const ThemedRect = styled.rect`
-  fill: ${(props) => props.fill || defaultBackground};
-  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
+  fill: ${(props) => props.fill};
+  stroke: ${(props) => props.stroke};
 `
 
 ThemedRect.defaultProps = {
@@ -52,8 +52,8 @@ ThemedRect.defaultProps = {
 
 // Themed Rect Contrast
 export const ThemedRectContrast = styled.rect`
-  fill: ${(props) => props.fill || defaultPrimaryContrast};
-  stroke: ${(props) => props.stroke || defaultBackground};
+  fill: ${(props) => props.fill};
+  stroke: ${(props) => props.stroke};
 `
 
 ThemedRectContrast.defaultProps = {
@@ -63,8 +63,8 @@ ThemedRectContrast.defaultProps = {
 
 // Themed Circle
 export const ThemedCircle = styled.circle`
-  fill: ${(props) => props.fill || defaultBackground};
-  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
+  fill: ${(props) => props.fill};
+  stroke: ${(props) => props.stroke};
 `
 
 ThemedCircle.defaultProps = {
@@ -74,8 +74,8 @@ ThemedCircle.defaultProps = {
 
 // Themed Circle Contrast
 export const ThemedCircleContrast = styled.circle`
-  fill: ${(props) => props.fill || defaultPrimaryContrast};
-  stroke: ${(props) => props.stroke || defaultBackground};
+  fill: ${(props) => props.fill};
+  stroke: ${(props) => props.stroke};
 `
 
 ThemedCircleContrast.defaultProps = {
@@ -85,8 +85,8 @@ ThemedCircleContrast.defaultProps = {
 
 // Themed Ellipse
 export const ThemedEllipse = styled.ellipse`
-  fill: ${(props) => props.fill || defaultBackground};
-  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
+  fill: ${(props) => props.fill};
+  stroke: ${(props) => props.stroke};
 `
 
 ThemedEllipse.defaultProps = {
@@ -96,7 +96,7 @@ ThemedEllipse.defaultProps = {
 
 // Themed Line
 export const ThemedLine = styled.line`
-  stroke: ${(props) => props.stroke || defaultPrimaryContrast};
+  stroke: ${(props) => props.stroke};
 `
 
 ThemedLine.defaultProps = {

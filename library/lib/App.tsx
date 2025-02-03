@@ -12,7 +12,11 @@ import {
   useEdgesState,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
-import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./constants"
+import {
+  HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
+  MAX_SCALE_TO_ZOOM_IN,
+  MIN_SCALE_TO_ZOOM_OUT,
+} from "./constants"
 import { initialEdges, initialNodes } from "./initialElements"
 import { Sidebar, SvgMarkers } from "@/components"
 import { diagramNodeTypes } from "./nodes"
@@ -25,15 +29,17 @@ import {
 } from "./hooks"
 import { diagramEdgeTypes } from "./edges"
 import "@/styles/app.css"
+import { DiagramType } from "./types"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
+  diagramType: DiagramType
 }
 
-function App({ onReactFlowInit }: AppProps) {
+function App({ onReactFlowInit, diagramType }: AppProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, , onEdgesChange] = useEdgesState(initialEdges)
-  const { onDrop } = useDrop()
+  const { onDrop } = useDrop(diagramType)
   const { onDragOver } = useDragOver()
   const { onNodeDragStop } = useNodeDragStop(setNodes)
   const { onConnect } = useConnect()
@@ -41,7 +47,7 @@ function App({ onReactFlowInit }: AppProps) {
 
   return (
     <div style={{ display: "flex", width: "100%", height: "100%" }}>
-      <Sidebar />
+      <Sidebar selectedDiagramType={diagramType} />
       <SvgMarkers />
       <ReactFlow
         id="react-flow-library"
@@ -66,6 +72,10 @@ function App({ onReactFlowInit }: AppProps) {
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
+        snapGrid={[
+          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
+          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
+        ]}
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
@@ -75,10 +85,10 @@ function App({ onReactFlowInit }: AppProps) {
   )
 }
 
-export function AppWithProvider({ onReactFlowInit }: AppProps) {
+export function AppWithProvider({ onReactFlowInit, diagramType }: AppProps) {
   return (
     <ReactFlowProvider>
-      <App onReactFlowInit={onReactFlowInit} />
+      <App onReactFlowInit={onReactFlowInit} diagramType={diagramType} />
     </ReactFlowProvider>
   )
 }
