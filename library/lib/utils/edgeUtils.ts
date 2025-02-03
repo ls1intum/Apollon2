@@ -1,4 +1,5 @@
 import { Position } from "@xyflow/react"
+import { getPositionOnCanvas } from "./nodeUtils";
 
 /**
  * Adjusts the target coordinates based on the position and marker padding.
@@ -53,3 +54,35 @@ export const adjustSourceCoordinates = (
   }
   return { sourceX, sourceY }
 }
+
+
+import { XYPosition, type Edge, type Node } from "@xyflow/react";
+
+/**
+ * Calculates the position of an edge on the canvas.
+ *
+ * @param edge - The edge whose position is to be calculated.
+ * @param allNodes - The list of all nodes in the graph.
+ * @returns The center position of the edge on the canvas.
+ */
+export const getEdgePositionOnCanvas = (
+  edge: Edge,
+  allNodes: Node[]
+): XYPosition => {
+  const sourceNode = allNodes.find((node) => node.id === edge.source);
+  const targetNode = allNodes.find((node) => node.id === edge.target);
+
+  if (!sourceNode || !targetNode) {
+    throw new Error(`Source or target node not found for edge ${edge.id}`);
+  }
+
+  // Get positions of source and target nodes on the canvas
+  const sourcePosition = getPositionOnCanvas(sourceNode, allNodes);
+  const targetPosition = getPositionOnCanvas(targetNode, allNodes);
+
+  // Calculate the center of the edge
+  const centerX = (sourcePosition.x + targetPosition.x) / 2;
+  const centerY = (sourcePosition.y + targetPosition.y) / 2;
+
+  return { x: centerX, y: centerY };
+};

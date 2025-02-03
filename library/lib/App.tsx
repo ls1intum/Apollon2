@@ -38,8 +38,10 @@ function App({ onReactFlowInit }: AppProps) {
   const { onNodeDragStop } = useNodeDragStop(setNodes)
   const { onConnect } = useConnect()
   const { onReconnect } = useReconnect()
+  console.log(edges);
 
   return (
+    
     <div style={{ display: "flex", width: "100%", height: "100%" }}>
       <Sidebar />
       <SvgMarkers />
