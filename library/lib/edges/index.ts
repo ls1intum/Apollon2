@@ -6,3 +6,5 @@ export * from "./DependencyEdge"
 export * from "./InheritanceEdge"
 export * from "./RealizationEdge"
 export * from "./UniAssociationEdge"
+export * from "./EdgeProps"
+

@@ -1,94 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState } from "react"
 import {
   BaseEdge,
   EdgeProps,
   getSmoothStepPath,
   type Edge,
-} from "@xyflow/react";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import EditIcon from "@mui/icons-material/Edit";
-import { Box } from "@mui/material";
-import { EdgePopover } from "../components/popovers/EdgePopover";
+} from "@xyflow/react"
+
+import { EdgePopover } from "@/components"
 import {
   STEP_BOARDER_RADIUS,
   RHOMBUS_MARKER_PADDING,
   SOURCE_CONNECTION_POINT_PADDING,
-} from "@/constants";
-import { adjustSourceCoordinates, adjustTargetCoordinates } from "@/utils";
-import { useEdgePopOver } from "@/hooks/useEdges";
+} from "@/constants"
+import { adjustSourceCoordinates, adjustTargetCoordinates } from "@/utils"
+import { useEdgePopOver, useToolbar } from "@/hooks"
+import { CustomEdgeProps } from "./EdgeProps"
 
-
-// --- Toolbar rendered over the edge ---
-interface CustomEdgeToolbarProps {
-  x: number;
-  y: number;
-  onEditClick: (event: React.MouseEvent<HTMLElement>) => void;
-}
-
-export type EdgeCustomProps = {
-  sourceRole: string;
-  sourceMultiplicity: string;
-  targetRole: string;
-  targetMultiplicity: string;
-};
-
-
-
-const CustomEdgeToolbar = ({ x, y, onEditClick }: CustomEdgeToolbarProps) => {
-  return (
-    <foreignObject width={40} height={80} x={x - 20} y={y - 60}>
-      <Box
-        sx={{
-          width: "40px",
-          height: "80px",
-          backgroundColor: "#f8fafc",
-          boxShadow: "4px 4px 4px 4px rgb(0 0 0 / .2)",
-          borderRadius: "8px",
-          padding: "8px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          cursor: "pointer",
-        }}
-      >
-        {/* Optional Delete Icon */}
-        <Box
-          sx={{
-            backgroundColor: "#f8fafc",
-            borderRadius: "8px",
-            padding: "8px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <DeleteOutlineOutlinedIcon style={{ width: 16, height: 16 }} />
-        </Box>
-        {/* Edit Icon */}
-        <Box
-          sx={{
-            backgroundColor: "#f8fafc",
-            borderRadius: "8px",
-            padding: "8px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            onEditClick(e);
-          }}
-        >
-          <EditIcon style={{ width: 16, height: 16 }} />
-        </Box>
-      </Box>
-    </foreignObject>
-  );
-};
+import { CustomEdgeToolbar } from "@/components"
 
 // --- AggregationEdge Component ---
-// Here we destructure the data prop and directly set a default value for targetRole.
+// Here we destructure the data prop and directly set default values.
 export const AggregationEdge = ({
   id,
   selected,
@@ -98,22 +29,36 @@ export const AggregationEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
-  data: {sourceRole,sourceMultiplicity, targetRole, targetMultiplicity } = { sourceRole:"", sourceMultiplicity: "", targetRole: "" , targetMultiplicity: "" },
-}: EdgeProps<Edge<EdgeCustomProps>>) => {
-  // --- State for toolbar and popover ---
-  const [toolbarOpen, setToolbarOpen] = useState(false);
-  const [edgePopoverAnchor, setEdgePopoverAnchor] = useState<HTMLElement | null>(null);
+  data: {
+    sourceRole,
+    sourceMultiplicity,
+    targetRole,
+    targetMultiplicity,
+  } = {
+    sourceRole: "",
+    sourceMultiplicity: "",
+    targetRole: "",
+    targetMultiplicity: "",
+  },
+}: EdgeProps<Edge<CustomEdgeProps>>) => {
+  const [toolbarOpen, setToolbarOpen] = useState(false)
+  const [edgePopoverAnchor, setEdgePopoverAnchor] =
+    useState<HTMLElement | null>(null)
+  const [isHovered, setIsHovered] = useState(false)
 
-  const {handleSourceRoleChange, handleSourceMultiplicityChange, handleTargetRoleChange, handleTargetMultiplicityChange } = useEdgePopOver({ id, selected: Boolean(selected) });
+  const {
+    handleSourceRoleChange,
+    handleSourceMultiplicityChange,
+    handleTargetRoleChange,
+    handleTargetMultiplicityChange,
+    handleEdgeTypeChange,
+    handleSwap,
+  } = useEdgePopOver({ id, selected: Boolean(selected) })
+  const { handleDelete } = useToolbar({ id })
 
-  // --- Edge label values stored in state (updated via the popover) ---
-  const [edgeType, setEdgeType] = useState("Association");
-
-
-  // --- Constants for computing connection points ---
-  const markerPadding = RHOMBUS_MARKER_PADDING;
-  const sourceConnectionPointPadding = SOURCE_CONNECTION_POINT_PADDING;
-  const borderRadius = STEP_BOARDER_RADIUS;
+  const markerPadding = RHOMBUS_MARKER_PADDING
+  const sourceConnectionPointPadding = SOURCE_CONNECTION_POINT_PADDING
+  const borderRadius = STEP_BOARDER_RADIUS
 
   // --- Calculate adjusted connection coordinates for source and target ---
   const adjustedTargetCoordinates = adjustTargetCoordinates(
@@ -121,13 +66,13 @@ export const AggregationEdge = ({
     targetY,
     targetPosition,
     markerPadding
-  );
+  )
   const adjustedSourceCoordinates = adjustSourceCoordinates(
     sourceX,
     sourceY,
     sourcePosition,
     sourceConnectionPointPadding
-  );
+  )
 
   // --- Generate a smooth edge path ---
   const [edgePath] = getSmoothStepPath({
@@ -138,77 +83,54 @@ export const AggregationEdge = ({
     targetY: adjustedTargetCoordinates.targetY,
     targetPosition,
     borderRadius,
-  });
+  })
 
-  // --- Store the last valid endpoint positions in state so labels persist ---
-  const [lastSourceCoords, setLastSourceCoords] = useState({
-    x: adjustedSourceCoordinates.sourceX,
-    y: adjustedSourceCoordinates.sourceY,
-  });
-  const [lastTargetCoords, setLastTargetCoords] = useState({
-    x: adjustedTargetCoordinates.targetX,
-    y: adjustedTargetCoordinates.targetY,
-  });
-
-  useEffect(() => {
-    if (
-      adjustedSourceCoordinates.sourceX !== 0 ||
-      adjustedSourceCoordinates.sourceY !== 0
-    ) {
-      setLastSourceCoords({
-        x: adjustedSourceCoordinates.sourceX,
-        y: adjustedSourceCoordinates.sourceY,
-      });
-    }
-  }, [adjustedSourceCoordinates]);
-
-  useEffect(() => {
-    if (
-      adjustedTargetCoordinates.targetX !== 0 ||
-      adjustedTargetCoordinates.targetY !== 0
-    ) {
-      setLastTargetCoords({
-        x: adjustedTargetCoordinates.targetX,
-        y: adjustedTargetCoordinates.targetY,
-      });
-    }
-  }, [adjustedTargetCoordinates]);
-
-  // --- Calculate toolbar position as the midpoint of the edge ---
   const toolbarPosition = {
-    x: (adjustedSourceCoordinates.sourceX + adjustedTargetCoordinates.targetX) / 2,
-    y: (adjustedSourceCoordinates.sourceY + adjustedTargetCoordinates.targetY) / 2,
-  };
+    x:
+      (adjustedSourceCoordinates.sourceX + adjustedTargetCoordinates.targetX) /
+        2 +
+      40,
+    y:
+      (adjustedSourceCoordinates.sourceY + adjustedTargetCoordinates.targetY) /
+        2 -
+      80,
+  }
 
   // --- Handlers ---
   const handleEdgeClick = () => {
-    setToolbarOpen(!toolbarOpen);
-    if (edgePopoverAnchor) setEdgePopoverAnchor(null);
-  };
+    setToolbarOpen(!toolbarOpen)
+    if (edgePopoverAnchor) setEdgePopoverAnchor(null)
+  }
 
   const handleEditIconClick = (event: React.MouseEvent<HTMLElement>) => {
-    setEdgePopoverAnchor(event.currentTarget);
-  };
+    setEdgePopoverAnchor(event.currentTarget)
+  }
 
   return (
     <>
-      {/* Render the base edge */}
+      {/* Render the visible edge (stays black) */}
       <BaseEdge
         id={id}
         path={edgePath}
         markerEnd="url(#white-rhombus)"
         pointerEvents="none"
-        style={{ stroke: "#000000", cursor: "pointer" }}
+        style={{
+          stroke: "#000000",
+          cursor: "pointer",
+        }}
       />
 
       {/* Invisible overlay to capture pointer events */}
       <path
         d={edgePath}
         fill="none"
-        stroke="transparent"
+        stroke={isHovered ? "rgba(128, 128, 128, 0.5)" : "transparent"}
         strokeWidth={12}
         pointerEvents="stroke"
+        style={{ transition: "stroke 0.2s ease-in-out" }}
         onClick={handleEdgeClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       />
 
       {/* Render the toolbar if toggled */}
@@ -217,6 +139,7 @@ export const AggregationEdge = ({
           x={toolbarPosition.x}
           y={toolbarPosition.y}
           onEditClick={handleEditIconClick}
+          onDeleteClick={handleDelete}
         />
       )}
 
@@ -226,21 +149,20 @@ export const AggregationEdge = ({
         anchorEl={edgePopoverAnchor}
         open={Boolean(edgePopoverAnchor)}
         onClose={() => setEdgePopoverAnchor(null)}
-        edgeType={edgeType}
-        //targetRole={targetRole}
-        onEdgeTypeChange={setEdgeType}
+        onEdgeTypeChange={handleEdgeTypeChange}
         onSourceRoleChange={handleSourceRoleChange}
         onSourceMultiplicityChange={handleSourceMultiplicityChange}
         onTargetRoleChange={handleTargetRoleChange}
         onTargetMultiplicityChange={handleTargetMultiplicityChange}
+        onSwap={handleSwap}
       />
 
       {/* Render labels directly on the SVG using the stored coordinates */}
       {/* Source Endpoint */}
       {sourceRole && (
         <text
-          x={lastSourceCoords.x}
-          y={lastSourceCoords.y - 10}
+          x={sourceX}
+          y={sourceY - 10}
           textAnchor="middle"
           style={{ fontSize: "12px", fill: "black", userSelect: "none" }}
         >
@@ -249,8 +171,8 @@ export const AggregationEdge = ({
       )}
       {sourceMultiplicity && (
         <text
-          x={lastSourceCoords.x}
-          y={lastSourceCoords.y + 15}
+          x={sourceX}
+          y={sourceY + 15}
           textAnchor="middle"
           style={{ fontSize: "12px", fill: "black", userSelect: "none" }}
         >
@@ -261,8 +183,8 @@ export const AggregationEdge = ({
       {/* Target Endpoint */}
       {targetRole && (
         <text
-          x={lastTargetCoords.x}
-          y={lastTargetCoords.y - 10}
+          x={targetX}
+          y={targetY - 10}
           textAnchor="middle"
           style={{ fontSize: "12px", fill: "black", userSelect: "none" }}
         >
@@ -271,8 +193,8 @@ export const AggregationEdge = ({
       )}
       {targetMultiplicity && (
         <text
-          x={lastTargetCoords.x}
-          y={lastTargetCoords.y + 15}
+          x={targetX}
+          y={targetY + 15}
           textAnchor="middle"
           style={{ fontSize: "12px", fill: "black", userSelect: "none" }}
         >
@@ -280,5 +202,5 @@ export const AggregationEdge = ({
         </text>
       )}
     </>
-  );
-};
+  )
+}

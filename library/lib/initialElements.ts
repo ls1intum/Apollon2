@@ -118,67 +118,96 @@ export const initialNodes: Node[] = [
   // },
 ]
 
-// export const initialEdges: Edge[] = [
-//   {
-//     id: "11->2",
-//     source: "11",
-//     target: "2",
-//     sourceHandle: "top-left",
-//     targetHandle: "top-left",
-//     type: "uniassociation",
-//   },
-//   {
-//     id: "2->3",
-//     source: "2",
-//     target: "3",
-//     sourceHandle: "top",
-//     targetHandle: "top-right",
-//     type: "realization",
-//   },
-//   {
-//     id: "3->4",
-//     source: "3",
-//     target: "4",
-//     sourceHandle: "top-left",
-//     targetHandle: "top-left",
-//     type: "aggregation",
-//   },
-//   {
-//     id: "4->5",
-//     source: "4",
-//     target: "5",
-//     sourceHandle: "top",
-//     targetHandle: "top",
-//     type: "composition",
-//   },
-//   {
-//     id: "5->11",
-//     source: "5",
-//     target: "11",
-//     sourceHandle: "left",
-//     targetHandle: "bottom-right",
-//     type: "dependency",
-//   },
-// ]
-
-// initialElements.ts
-export const initialEdges: Edge[]  = [
+export const initialEdges: Edge[] = [
   {
-    id: "3->4",
-     source: "3",
-     target: "4",
+    id: "11->2",
+    source: "11",
+    target: "2",
     sourceHandle: "top-left",
-     targetHandle: "top-left",
-    type: "aggregation", // This key must match what you register in diagramEdgeTypes.
-    selected: false,
+    targetHandle: "top-left",
+    type: "uniassociation",
     data: {
-      edgeType: "Aggregation",
       sourceRole: "",
       sourceMultiplicity: "",
       targetRole: "",
       targetMultiplicity: "",
     },
   },
-  // ...other edges
-];
+  {
+    id: "2->3",
+    source: "2",
+    target: "3",
+    sourceHandle: "top",
+    targetHandle: "top-right",
+    type: "realization",
+    data: {
+      sourceRole: "",
+      sourceMultiplicity: "",
+      targetRole: "",
+      targetMultiplicity: "",
+    },
+  },
+  {
+    id: "3->4",
+    source: "3",
+    target: "4",
+    sourceHandle: "top-left",
+    targetHandle: "top-left",
+    type: "aggregation",
+    data: {
+      sourceRole: "",
+      sourceMultiplicity: "",
+      targetRole: "",
+      targetMultiplicity: "",
+    },
+  },
+  {
+    id: "4->5",
+    source: "4",
+    target: "5",
+    sourceHandle: "top",
+    targetHandle: "top",
+    type: "composition",
+    data: {
+      sourceRole: "",
+      sourceMultiplicity: "",
+      targetRole: "",
+      targetMultiplicity: "",
+    },
+  },
+  {
+    id: "5->11",
+    source: "5",
+    target: "11",
+    sourceHandle: "left",
+    targetHandle: "bottom-right",
+    type: "dependency",
+    data: {
+      sourceRole: "",
+      sourceMultiplicity: "",
+      targetRole: "",
+      targetMultiplicity: "",
+    },
+  },
+]
 
+// initialElements.ts
+// export const initialEdges: Edge[] = [
+//   {
+//     id: "3->4",
+//     source: "3",
+//     target: "4",
+//     sourceHandle: "top-left",
+//     targetHandle: "top-left",
+//     type: "aggregation", // This key must match what you register in diagramEdgeTypes.
+//     selected: false,
+//     data: {
+//       edgeType: "aggregation",
+//       sourceRole: "",
+//       sourceMultiplicity: "",
+//       targetRole: "",
+//       targetMultiplicity: "",
+//     },
+//   },
+//   // ...other edges
+// ]
