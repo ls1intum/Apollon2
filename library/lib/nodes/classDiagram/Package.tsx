@@ -36,7 +36,7 @@ export default function Package({
   }
 
   return (
-    <DefaultNodeWrapper>
+    <DefaultNodeWrapper width={width} height={height}>
       <NodeToolbar
         isVisible={selected}
         position={Position.Top}
@@ -55,7 +55,12 @@ export default function Package({
           />
         </Box>
       </NodeToolbar>
-      <NodeResizer isVisible={Boolean(selected)} onResize={onResize} />
+      <NodeResizer
+        isVisible={Boolean(selected)}
+        onResize={onResize}
+        minHeight={50}
+        minWidth={50}
+      />
       <PackageSVG
         ref={svgRef}
         width={width}

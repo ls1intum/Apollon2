@@ -43,7 +43,7 @@ export function Class({
   }
 
   return (
-    <DefaultNodeWrapper>
+    <DefaultNodeWrapper width={width} height={height}>
       <NodeResizer
         nodeId={id}
         isVisible={selected}

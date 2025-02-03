@@ -11,7 +11,7 @@ import { NAVBAR_BACKGROUND_COLOR, secondary } from "@/constants"
 import { useApollon2Context } from "@/contexts/Apollon2Context"
 
 export const DesktopNavbar = () => {
-  const { diagramName, setDiagramName } = useApollon2Context()
+  const { diagramName, setDiagramName, apollon2 } = useApollon2Context()
 
   return (
     <AppBar
@@ -40,6 +40,9 @@ export const DesktopNavbar = () => {
           <NavbarFile />
           <Button
             sx={{ textTransform: "none" }} // This removes the uppercase transformation
+            onClick={() =>
+              console.log("DEBUG share getnodes,", apollon2?.getNodes())
+            }
           >
             <Typography color={secondary}>Share</Typography>
           </Button>

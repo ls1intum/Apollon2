@@ -4,19 +4,19 @@
   "nodes": [
     {
       "width": 160,
-      "height": 52,
+      "height": 40,
       "id": "8acfa3c3-de5b-424a-a555-cb68855538d0",
       "type": "class",
       "position": { "x": -280, "y": 340 },
       "data": { "name": "Client", "methods": [], "attributes": [] },
       "selected": false,
-      "measured": { "width": 160, "height": 52 },
+      "measured": { "width": 160, "height": 40 },
       "dragging": true,
       "resizing": false
     },
     {
       "width": 246.431640625,
-      "height": 82,
+      "height": 70,
       "id": "7351d563-b929-460e-a09d-e2b463bfceea",
       "type": "class",
       "position": { "x": -20, "y": 30 },
@@ -31,12 +31,12 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 246, "height": 82 },
+      "measured": { "width": 246, "height": 70 },
       "dragging": true
     },
     {
       "width": 160,
-      "height": 82,
+      "height": 70,
       "id": "41a9495d-9993-449e-a3b5-a7a704130380",
       "type": "class",
       "position": { "x": 10, "y": 200 },
@@ -48,15 +48,15 @@
         "attributes": []
       },
       "selected": false,
-      "measured": { "width": 160, "height": 82 },
+      "measured": { "width": 160, "height": 70 },
       "dragging": true
     },
     {
       "width": 170,
-      "height": 82,
+      "height": 80,
       "id": "52e53f8b-cac0-4816-a70a-c2f154f3fb67",
       "type": "class",
-      "position": { "x": 390, "y": 30 },
+      "position": { "x": 395, "y": 25 },
       "data": {
         "name": "Command",
         "methods": [
@@ -69,16 +69,16 @@
         "stereotype": "Interface"
       },
       "selected": false,
-      "measured": { "width": 170, "height": 82 },
+      "measured": { "width": 170, "height": 80 },
       "dragging": true,
       "resizing": false
     },
     {
       "width": 270,
-      "height": 112,
+      "height": 100,
       "id": "f235a28a-6d9b-482c-9e67-546dfd92e0d5",
       "type": "class",
-      "position": { "x": 340, "y": 190 },
+      "position": { "x": 345, "y": 185 },
       "data": {
         "name": "ConcreteCommand",
         "methods": [
@@ -92,7 +92,7 @@
         ]
       },
       "selected": false,
-      "measured": { "width": 270, "height": 112 },
+      "measured": { "width": 270, "height": 100 },
       "dragging": true,
       "resizing": false
     }
