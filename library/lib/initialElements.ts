@@ -127,6 +127,12 @@ export const initialEdges: Edge[] = [
     sourceHandle: "top-left",
     targetHandle: "top-left",
     type: "uniassociation",
+    data: {
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
+    },
   },
   {
     id: "2->3",
@@ -135,6 +141,12 @@ export const initialEdges: Edge[] = [
     sourceHandle: "top",
     targetHandle: "top-right",
     type: "realization",
+    data: {
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
+    },
   },
   {
     id: "3->4",
@@ -143,6 +155,12 @@ export const initialEdges: Edge[] = [
     sourceHandle: "top-left",
     targetHandle: "top-left",
     type: "aggregation",
+    data: {
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
+    },
   },
   {
     id: "4->5",
@@ -151,6 +169,12 @@ export const initialEdges: Edge[] = [
     sourceHandle: "top",
     targetHandle: "top",
     type: "composition",
+    data: {
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
+    },
   },
   {
     id: "5->11",
@@ -159,5 +183,11 @@ export const initialEdges: Edge[] = [
     sourceHandle: "left",
     targetHandle: "bottom-right",
     type: "dependency",
+    data: {
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
+    },
   },
 ]
