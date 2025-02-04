@@ -23,54 +23,19 @@ export function useEdgePopOver({
   }
 
   const handleEdgeTypeChange = (newType: string) => {
-    reactFlow.setEdges((eds) =>
-      eds.map((edge) => {
-        if (edge.id === id) {
-          return {
-            ...edge,
-            type: newType, // update the edge type
-            markerEnd: edge.markerEnd, // preserve markerEnd
-            data: {
-              ...edge.data,
-              // preserve the custom data fields (with fallback empty strings)
-              sourceRole: edge.data?.sourceRole ?? "",
-              sourceMultiplicity: edge.data?.sourceMultiplicity ?? "",
-              targetRole: edge.data?.targetRole ?? "",
-              targetMultiplicity: edge.data?.targetMultiplicity ?? "",
-            },
-          }
-        }
-        return edge
-      })
-    )
+    reactFlow.updateEdge(id, {type: newType})
   }
 
   const handleSwap = () => {
-    console.log("SAWP CALLED")
-    reactFlow.setEdges((eds) =>
-      eds.map((edge) => {
-        if (edge.id === id) {
-          return {
-            ...edge,
-            source: edge.target,
-            target: edge.source,
+    const edge = reactFlow.getEdge(id)
+    reactFlow.updateEdge(id, 
+        {   source: edge?.target,
+            sourceHandle: edge?.targetHandle,
+            target: edge?.source,
+            targetHandle: edge?.sourceHandle
+        
 
-            // type: edge.type, // update the edge type
-            // markerEnd: edge.markerStart, // preserve markerEnd
-            // markerStart: edge.markerEnd,
-            // data: {
-            //   ...edge.data,
-            //   // preserve the custom data fields (with fallback empty strings)
-            //   targetRole: edge.data?.sourceRole ?? "",
-            //   targetMultiplicity: edge.data?.sourceMultiplicity ?? "",
-            //   sourceRole: edge.data?.targetRole ?? "",
-            //   sourceMultiplicity: edge.data?.targetMultiplicity ?? "",
-            // },
-          }
-        }
-        return edge
-      })
-    )
+    })
   }
 
   const handleNameChange = (newName: string) => {
@@ -129,24 +94,24 @@ export function useEdgePopOver({
 
 export function useToolbar({
   id,
-  //selected,
 }: {
   id: string
-  // selected: boolean,
 }) {
   const reactFlow = useReactFlow()
   const svgRef = useRef<SVGSVGElement | null>(null)
-  //const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null)
 
   const handleDelete = () => {
     reactFlow.deleteElements({
       edges: [{ id }],
     })
   }
-
   return {
     svgRef,
-    //anchorEl,
     handleDelete,
   }
 }
+
+
+
+
+

@@ -1,8 +1,15 @@
-import { CustomEdgeToolbarProps } from "./CustomEdgeToolBarProps"
 
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
 import { Box } from "@mui/material"
+
+interface CustomEdgeToolbarProps {
+  x: number
+  y: number
+  onEditClick: (event: React.MouseEvent<HTMLElement>) => void
+  onDeleteClick: (event: React.MouseEvent<HTMLElement>) => void
+}
+
 
 export const CustomEdgeToolbar = ({
   x,
@@ -20,28 +27,23 @@ export const CustomEdgeToolbar = ({
     >
       <Box
         sx={{
-          //width: "32px",
-          //height: "56px",
           backgroundColor: "#f8fafc",
           boxShadow: "0 0 4px 0 rgb(0 0 0 / .2)",
           borderRadius: "8px",
           padding: "8px",
           display: "flex",
           flexDirection: "column",
-          //justifyContent: "space-evenly",
           alignItems: "center",
           cursor: "pointer",
           gap: "8px",
         }}
       >
-        {/* Optional Delete Icon */}
         <Box
           sx={{
             width: "16px",
             height: "16px",
             backgroundColor: "#f8fafc",
-            borderRadius: "8px",
-            //padding: "4px",
+            borderRadius: 1,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -53,14 +55,12 @@ export const CustomEdgeToolbar = ({
         >
           <DeleteOutlineOutlinedIcon style={{ width: 16, height: 16 }} />
         </Box>
-        {/* Edit Icon */}
         <Box
           sx={{
             width: "16px",
             height: "16px",
             backgroundColor: "#f8fafc",
-            borderRadius: "8px",
-            //padding: "4px",
+            borderRadius: 1,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

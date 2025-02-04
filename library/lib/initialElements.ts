@@ -128,10 +128,10 @@ export const initialEdges: Edge[] = [
     targetHandle: "top-left",
     type: "uniassociation",
     data: {
-      sourceRole: "",
-      sourceMultiplicity: "",
-      targetRole: "",
-      targetMultiplicity: "",
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
     },
   },
   {
@@ -142,10 +142,10 @@ export const initialEdges: Edge[] = [
     targetHandle: "top-right",
     type: "realization",
     data: {
-      sourceRole: "",
-      sourceMultiplicity: "",
-      targetRole: "",
-      targetMultiplicity: "",
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
     },
   },
   {
@@ -156,10 +156,10 @@ export const initialEdges: Edge[] = [
     targetHandle: "top-left",
     type: "aggregation",
     data: {
-      sourceRole: "",
-      sourceMultiplicity: "",
-      targetRole: "",
-      targetMultiplicity: "",
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
     },
   },
   {
@@ -170,10 +170,10 @@ export const initialEdges: Edge[] = [
     targetHandle: "top",
     type: "composition",
     data: {
-      sourceRole: "",
-      sourceMultiplicity: "",
-      targetRole: "",
-      targetMultiplicity: "",
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
     },
   },
   {
@@ -184,31 +184,10 @@ export const initialEdges: Edge[] = [
     targetHandle: "bottom-right",
     type: "dependency",
     data: {
-      sourceRole: "",
-      sourceMultiplicity: "",
-      targetRole: "",
-      targetMultiplicity: "",
+      sourceRole: null,
+      sourceMultiplicity: null,
+      targetRole: null,
+      targetMultiplicity: null,
     },
   },
 ]
-
-// initialElements.ts
-// export const initialEdges: Edge[] = [
-//   {
-//     id: "3->4",
-//     source: "3",
-//     target: "4",
-//     sourceHandle: "top-left",
-//     targetHandle: "top-left",
-//     type: "aggregation", // This key must match what you register in diagramEdgeTypes.
-//     selected: false,
-//     data: {
-//       edgeType: "aggregation",
-//       sourceRole: "",
-//       sourceMultiplicity: "",
-//       targetRole: "",
-//       targetMultiplicity: "",
-//     },
-//   },
-//   // ...other edges
-// ]

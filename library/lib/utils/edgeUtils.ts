@@ -1,6 +1,4 @@
 import { Position } from "@xyflow/react"
-import { getPositionOnCanvas } from "./nodeUtils"
-
 /**
  * Adjusts the target coordinates based on the position and marker padding.
  *
@@ -16,6 +14,7 @@ export const adjustTargetCoordinates = (
   targetPosition: Position,
   markerPadding: number
 ): { targetX: number; targetY: number } => {
+  console.log(targetX,targetY,markerPadding,targetPosition)
   if (targetPosition === "left") {
     targetX -= markerPadding
   } else if (targetPosition === "right") {
@@ -55,33 +54,107 @@ export const adjustSourceCoordinates = (
   return { sourceX, sourceY }
 }
 
-import { XYPosition, type Edge, type Node } from "@xyflow/react"
-
 /**
- * Calculates the position of an edge on the canvas.
+ * Calculates the toolbar position based on the source and target coordinates.
  *
- * @param edge - The edge whose position is to be calculated.
- * @param allNodes - The list of all nodes in the graph.
- * @returns The center position of the edge on the canvas.
+ * @param adjustedSourceCoordinates - The source coordinates with properties `sourceX` and `sourceY`.
+ * @param adjustedTargetCoordinates - The target coordinates with properties `targetX` and `targetY`.
+ * @returns The toolbar position with `x` and `y` properties.
  */
-export const getEdgePositionOnCanvas = (
-  edge: Edge,
-  allNodes: Node[]
-): XYPosition => {
-  const sourceNode = allNodes.find((node) => node.id === edge.source)
-  const targetNode = allNodes.find((node) => node.id === edge.target)
+export function getToolbarPosition(
+  adjustedSourceCoordinates: { sourceX: number; sourceY: number },
+  adjustedTargetCoordinates: { targetX: number; targetY: number }
+): { x: number; y: number } {
+  const x =
+    (adjustedSourceCoordinates.sourceX + adjustedTargetCoordinates.targetX) / 2 + 40;
+  const y =
+    (adjustedSourceCoordinates.sourceY + adjustedTargetCoordinates.targetY) / 2 - 80;
 
-  if (!sourceNode || !targetNode) {
-    throw new Error(`Source or target node not found for edge ${edge.id}`)
+  return { x, y };
+}
+
+
+
+interface TextPlacement {
+  roleX: number;
+  roleY: number;
+  multiplicityX: number;
+  multiplicityY: number;
+}
+
+export const calculateTextPlacement = (
+  x: number,
+  y: number,
+  position: Position
+): TextPlacement => {
+  let roleX = x, roleY = y;
+  let multiplicityX = x, multiplicityY = y;
+
+  switch (position) {
+    case "top":
+      roleX = x - 10; // Shift role slightly to the left
+      roleY = y - 15; // Move role above the marker
+      multiplicityX = x + 10; // Shift multiplicity to the right
+      multiplicityY = y - 15; // Keep multiplicity above the marker
+      break;
+    case "right":
+      roleX = x + 15; // Move role to the right
+      roleY = y - 10; // Place role above the marker
+      multiplicityX = x + 15; // Move multiplicity to the right
+      multiplicityY = y + 15; // Place multiplicity below the marker
+      break;
+    case "bottom":
+      roleX = x - 10; // Shift role slightly to the left
+      roleY = y + 15; // Move role below the marker
+      multiplicityX = x + 10; // Shift multiplicity to the right
+      multiplicityY = y + 15; // Keep multiplicity below the marker
+      break;
+    case "left":
+      roleX = x - 15; // Move role to the left
+      roleY = y - 10; // Place role above the marker
+      multiplicityX = x - 15; // Move multiplicity to the left
+      multiplicityY = y + 15; // Place multiplicity below the marker
+      break;
   }
 
-  // Get positions of source and target nodes on the canvas
-  const sourcePosition = getPositionOnCanvas(sourceNode, allNodes)
-  const targetPosition = getPositionOnCanvas(targetNode, allNodes)
+  return {
+    roleX,
+    roleY,
+    multiplicityX,
+    multiplicityY,
+  };
+};
 
-  // Calculate the center of the edge
-  const centerX = (sourcePosition.x + targetPosition.x) / 2
-  const centerY = (sourcePosition.y + targetPosition.y) / 2
-
-  return { x: centerX, y: centerY }
+export const calculateEdgeLabels = (
+  x: number,
+  y: number,
+  Position: Position,
+): { roleX: number; roleY: number, multiplicityX: number, multiplicityY: number } => {
+  let roleX = x
+  let roleY = y
+  let multiplicityX = x
+  let multiplicityY = y
+  if (Position === "left") {
+    roleX = x - 8; // Move role to the left
+    roleY = y - 10; // Place role above the marker
+     multiplicityX = x - 8; // Move multiplicity to the left
+     multiplicityY = y + 18; // Place multiplicity below the marker
+  } else if (Position === "right") {
+    roleX = x + 8; // Move role to the right
+    roleY = y - 10; // Place role above the marker
+     multiplicityX = x + 8; // Move multiplicity to the right
+    multiplicityY = y + 18; // Place multiplicity below the marker
+  } else if (Position === "top") {
+     roleX = x - 10; // Shift role slightly to the left
+    roleY = y - 3; // Move role below the marker
+     multiplicityX = x + 10; // Shift multiplicity to the right
+     multiplicityY = y - 3; // Keep multiplicity below the marker
+  } else if (Position === "bottom") {
+    roleX = x - 10; // Move role to the left
+    roleY = y + 10; // Place role above the marker
+     multiplicityX = x + 10; // Move multiplicity to the left
+     multiplicityY = y + 10; // Place multiplicity below the marker
+  }
+  return { roleX,roleY,multiplicityX,multiplicityY }
 }
+

@@ -18,7 +18,3 @@ export const diagramEdgeTypes = {
 } satisfies EdgeTypes
 
 export type DiagramEdgeTypeKeys = keyof typeof diagramEdgeTypes
-
-// export type EdgeCustomProps = {
-//   targetRole: string;
-// };

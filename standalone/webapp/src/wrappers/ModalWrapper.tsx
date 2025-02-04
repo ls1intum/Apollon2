@@ -17,7 +17,7 @@ const MODAL_COMPONENTS: Record<ModalName, React.ComponentType<unknown>> = {
   NEW_DIAGRAM_FROM_TEMPLATE: NewDiagramFromTemplateModal,
   // Add other modals here
 }
-
+ 
 export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name }) => {
   const SpecificModal = MODAL_COMPONENTS[name]
 
