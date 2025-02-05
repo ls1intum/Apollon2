@@ -41,5 +41,10 @@
     "concurrently": "9.1.0",
     "husky": "9.1.7",
     "prettier": "3.4.2"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "html2canvas": "^1.4.1"
   }
 }
