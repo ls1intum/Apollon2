@@ -1,6 +1,5 @@
 import React, { forwardRef, useEffect, useMemo } from "react"
 import { ThemedRect } from "@/components/ThemedElements"
-import { Text } from "@/components/Text"
 import { ClassType, ExtraElement } from "@/types"
 import { useReactFlow } from "@xyflow/react"
 import {
@@ -14,8 +13,12 @@ import {
   DEFAULT_ATTRIBUTE_HEIGHT,
   DEFAULT_METHOD_HEIGHT,
   DEFAULT_PADDING,
-  DEFAULT_MARGIN,
-} from "@/constants"
+  DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE,
+  LINE_WIDTH_ON_EDGE,
+} from "@/constants/dropElementConfig"
+import { SeparationLine } from "@/components/svgs/nodes/SeparationLine"
+import { HeaderSection } from "../HeaderSection"
+import { RowBlockSection } from "../RowBlockSection"
 
 export interface MinSize {
   minWidth: number
@@ -59,8 +62,12 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
     ref
   ) {
     // Layout constants
-    const margin = DEFAULT_MARGIN
-    const headerHeight = DEFAULT_HEADER_HEIGHT
+    const showStereotype = stereotype
+      ? stereotype !== ClassType.ObjectClass
+      : false
+    const headerHeight = showStereotype
+      ? DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE
+      : DEFAULT_HEADER_HEIGHT
     const attributeHeight = DEFAULT_ATTRIBUTE_HEIGHT
     const methodHeight = DEFAULT_METHOD_HEIGHT
     const padding = DEFAULT_PADDING
@@ -89,14 +96,13 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
     }, [stereotype, name, attributes, methods, font])
 
     // Calculate minimum dimensions
-    const minWidth = calculateMinWidth(maxTextWidth, padding, margin)
+    const minWidth = calculateMinWidth(maxTextWidth, padding)
     const minHeight = calculateMinHeight(
       headerHeight,
       attributes.length,
       methods.length,
       attributeHeight,
-      methodHeight,
-      margin
+      methodHeight
     )
 
     const finalWidth = Math.max(width, minWidth)
@@ -106,8 +112,10 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
       if (setMinSize) {
         setMinSize({ minWidth, minHeight })
       }
-      if (finalWidth > width) {
-        reactFlow.updateNode(id, { width: finalWidth })
+      if (finalWidth > width + 5) {
+        const newWidth = Math.ceil(finalWidth - ((finalWidth - width) % 5))
+
+        reactFlow.updateNode(id, { width: newWidth })
       }
       reactFlow.updateNode(id, { height: minHeight })
     }, [
@@ -124,8 +132,8 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
     return (
       <svg
         ref={ref}
-        width={finalWidth}
-        height={minHeight}
+        width={width}
+        height={height}
         style={{
           transformOrigin: "left top",
           transformBox: "content-box",
@@ -133,37 +141,37 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
         }}
         {...svgAttributes}
       >
-        <g transform={`translate(${margin}, ${margin})`}>
+        <g>
           {/* Outer Rectangle */}
           <ThemedRect
-            width={finalWidth - 2 * margin}
-            height={minHeight - 2 * margin}
+            width={width}
+            height={height}
             stroke="black"
-            strokeWidth="0.5"
+            strokeWidth={LINE_WIDTH_ON_EDGE}
           />
 
           {/* Header Section */}
           <HeaderSection
+            showStereotype={showStereotype}
             stereotype={stereotype}
             name={name}
-            width={finalWidth - 2 * margin}
+            width={finalWidth}
             font={font}
+            headerHeight={headerHeight}
           />
 
           {/* Attributes Section */}
           {attributes.length > 0 && (
             <>
               {/* Separation Line After Header */}
-              <SeparationLine
-                y={headerHeight}
-                width={finalWidth - 2 * margin}
-              />
-              <AttributesSection
-                attributes={attributes}
+              <SeparationLine y={headerHeight} width={finalWidth} />
+              <RowBlockSection
+                items={attributes}
                 padding={padding}
-                attributeHeight={attributeHeight}
-                width={finalWidth - 2 * margin}
+                itemHeight={attributeHeight}
+                width={finalWidth}
                 font={font}
+                offsetFromTop={headerHeight}
               />
             </>
           )}
@@ -173,15 +181,15 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
             <>
               <SeparationLine
                 y={headerHeight + attributes.length * attributeHeight}
-                width={finalWidth - 2 * margin}
+                width={finalWidth}
               />
-              <MethodsSection
-                attributesLength={attributes.length}
-                methods={methods}
+              <RowBlockSection
+                items={methods}
                 padding={padding}
-                methodHeight={methodHeight}
-                width={finalWidth - 2 * margin}
+                itemHeight={methodHeight}
+                width={finalWidth}
                 font={font}
+                offsetFromTop={headerHeight + attributes.length * methodHeight}
               />
             </>
           )}
@@ -189,112 +197,4 @@ export const ClassSVG = forwardRef<SVGSVGElement, ClassSVGProps>(
       </svg>
     )
   }
-)
-
-// Sub-components for better modularity
-
-interface HeaderSectionProps {
-  stereotype?: ClassType
-  name: string
-  width: number
-  font: string
-}
-
-const HeaderSection: React.FC<HeaderSectionProps> = ({
-  stereotype,
-  name,
-  width,
-  font,
-}) => (
-  <g>
-    <Text
-      x={width / 2}
-      y={DEFAULT_HEADER_HEIGHT / 2}
-      dominantBaseline="middle"
-      textAnchor="middle"
-      font={font}
-    >
-      {stereotype && (
-        <tspan x={width / 2} dy="-8" fontSize="85%">
-          {`«${stereotype}»`}
-        </tspan>
-      )}
-      <tspan x={width / 2} dy={stereotype ? "18" : "0"} fontWeight="600">
-        {name}
-      </tspan>
-    </Text>
-  </g>
-)
-
-interface SeparationLineProps {
-  y: number
-  width: number
-}
-
-const SeparationLine: React.FC<SeparationLineProps> = ({ y, width }) => (
-  <line x1="0" x2={width} y1={y} y2={y} stroke="black" strokeWidth="0.5" />
-)
-
-interface AttributesSectionProps {
-  attributes: ExtraElement[]
-  padding: number
-  attributeHeight: number
-  width: number
-  font: string
-}
-
-const AttributesSection: React.FC<AttributesSectionProps> = ({
-  attributes,
-  padding,
-  attributeHeight,
-  font,
-}) => (
-  <g transform={`translate(0, ${DEFAULT_HEADER_HEIGHT})`}>
-    {attributes.map((attribute, index) => (
-      <Text
-        key={attribute.id}
-        x={padding}
-        y={15 + index * attributeHeight}
-        dominantBaseline="middle"
-        textAnchor="start"
-        font={font}
-      >
-        {attribute.name}
-      </Text>
-    ))}
-  </g>
-)
-
-interface MethodsSectionProps {
-  methods: ExtraElement[]
-  attributesLength: number
-  padding: number
-  methodHeight: number
-  width: number
-  font: string
-}
-
-const MethodsSection: React.FC<MethodsSectionProps> = ({
-  attributesLength,
-  methods,
-  padding,
-  methodHeight,
-  font,
-}) => (
-  <g
-    transform={`translate(0, ${DEFAULT_HEADER_HEIGHT + attributesLength * methodHeight})`}
-  >
-    {methods.map((method, index) => (
-      <Text
-        key={method.id}
-        x={padding}
-        y={15 + index * methodHeight}
-        dominantBaseline="middle"
-        textAnchor="start"
-        font={font}
-      >
-        {method.name}
-      </Text>
-    ))}
-  </g>
 )

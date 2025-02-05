@@ -1,4 +1,4 @@
-import { Quadrant } from "@/enums/Quadrant"
+import { Quadrant } from "@/enums"
 import { LocationPopOver } from "@/types"
 
 const originMap: Record<Quadrant, LocationPopOver> = {

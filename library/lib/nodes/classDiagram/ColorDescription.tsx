@@ -16,7 +16,7 @@ export function ColorDescription({
   }
 
   return (
-    <DefaultNodeWrapper>
+    <DefaultNodeWrapper width={width} height={height}>
       <ColorDescriptionSVG
         description={description}
         width={width}

@@ -6,28 +6,23 @@ import {
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
-import { ClassType, ExtraElement } from "@/types"
 import { ClassPopover, ClassSVG, MinSize } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import { useClassNode } from "@/hooks"
+
+import { useClassNode, useHandleOnResize } from "@/hooks"
 import { useState } from "react"
 import { Box } from "@mui/material"
-
-export type ClassNodeProps = Node<{
-  methods: ExtraElement[]
-  attributes: ExtraElement[]
-  stereotype?: ClassType
-  name: string
-}>
+import { ClassNodeProps } from "@/types"
 
 export function Class({
   id,
   width,
   height,
   selected,
+  parentId,
   data: { methods, attributes, stereotype, name },
-}: NodeProps<ClassNodeProps>) {
+}: NodeProps<Node<ClassNodeProps>>) {
   const [{ minHeight, minWidth }, setMinSize] = useState<MinSize>({
     minWidth: 0,
     minHeight: 0,
@@ -37,23 +32,25 @@ export function Class({
     svgRef,
     anchorEl,
     handleClick,
-    handleClose,
+    handlePopoverClose,
     handleNameChange,
     handleDelete,
   } = useClassNode({ id, selected: Boolean(selected) })
+  const { onResize } = useHandleOnResize(parentId)
 
   if (!width || !height) {
     return null
   }
 
   return (
-    <DefaultNodeWrapper>
+    <DefaultNodeWrapper width={width} height={height}>
       <NodeResizer
         nodeId={id}
         isVisible={selected}
         minWidth={minWidth}
         minHeight={minHeight}
         maxHeight={minHeight}
+        onResize={onResize}
       />
       <NodeToolbar
         isVisible={selected}
@@ -88,7 +85,7 @@ export function Class({
         nodeId={id}
         anchorEl={anchorEl}
         open={Boolean(selected)}
-        onClose={handleClose}
+        onClose={handlePopoverClose}
         onNameChange={handleNameChange}
       />
     </DefaultNodeWrapper>

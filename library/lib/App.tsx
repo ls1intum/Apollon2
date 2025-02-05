@@ -12,30 +12,42 @@ import {
   useEdgesState,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
-import { MAX_SCALE_TO_ZOOM_IN, MIN_SCALE_TO_ZOOM_OUT } from "./contants"
-import "@/styles/app.css"
-import { Sidebar } from "@/components"
-import { diagramNodeTypes } from "./nodes"
-import { useDragDrop } from "./hooks"
-import { diagramEdgeTypes } from "./edges/types"
-import { SvgMarkers } from "./components/svgs/edges/markers"
+import {
+  HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
+  MAX_SCALE_TO_ZOOM_IN,
+  MIN_SCALE_TO_ZOOM_OUT,
+} from "./constants"
 import { initialEdges, initialNodes } from "./initialElements"
-import { useConnect } from "./hooks/useConnect"
-import { useReconnect } from "./hooks/useReconnect"
+import { Sidebar, SvgMarkers } from "@/components"
+import { diagramNodeTypes } from "./nodes"
+import {
+  useConnect,
+  useDragOver,
+  useDrop,
+  useNodeDragStop,
+  useReconnect,
+} from "./hooks"
+import { diagramEdgeTypes } from "./edges"
+import "@/styles/app.css"
+import { DiagramType } from "./types"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
+  diagramType: DiagramType
 }
-function App({ onReactFlowInit }: AppProps) {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes)
+
+function App({ onReactFlowInit, diagramType }: AppProps) {
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, , onEdgesChange] = useEdgesState(initialEdges)
-  const { onDrop, onDragOver } = useDragDrop()
+  const { onDrop } = useDrop(diagramType)
+  const { onDragOver } = useDragOver()
+  const { onNodeDragStop } = useNodeDragStop(setNodes)
   const { onConnect } = useConnect()
   const { onReconnect } = useReconnect()
 
   return (
-    <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
-      <Sidebar />
+    <div style={{ display: "flex", width: "100%", height: "100%" }}>
+      <Sidebar selectedDiagramType={diagramType} />
       <SvgMarkers />
       <ReactFlow
         id="react-flow-library"
@@ -49,12 +61,21 @@ function App({ onReactFlowInit }: AppProps) {
         onReconnect={onReconnect}
         onDragOver={onDragOver}
         onDrop={onDrop}
+        onNodeDragStop={onNodeDragStop}
         connectionLineType={ConnectionLineType.Step}
         connectionMode={ConnectionMode.Loose}
         fitView
-        onInit={(instance) => onReactFlowInit(instance)}
+        onInit={(instance) => {
+          instance.zoomTo(1)
+          onReactFlowInit(instance)
+        }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
+        snapToGrid
+        snapGrid={[
+          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
+          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
+        ]}
       >
         <Background variant={BackgroundVariant.Lines} />
         <MiniMap zoomable pannable />
@@ -63,10 +84,11 @@ function App({ onReactFlowInit }: AppProps) {
     </div>
   )
 }
-export function AppWithProvider({ onReactFlowInit }: AppProps) {
+
+export function AppWithProvider({ onReactFlowInit, diagramType }: AppProps) {
   return (
     <ReactFlowProvider>
-      <App onReactFlowInit={onReactFlowInit} />
+      <App onReactFlowInit={onReactFlowInit} diagramType={diagramType} />
     </ReactFlowProvider>
   )
 }

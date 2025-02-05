@@ -1,5 +1,5 @@
 import { ThemedPath } from "@/components/ThemedElements"
-import { Text } from "@/components/Text"
+import { CustomText } from "@/components/svgs/nodes/CustomText"
 import { SVGAttributes } from "react"
 
 export type ColorDescriptionSVGProps = {
@@ -47,7 +47,7 @@ export function ColorDescriptionSVG({
           strokeMiterlimit="10"
         />
         {/* Description Text */}
-        <Text
+        <CustomText
           x={innerWidth / 2}
           y={innerHeight / 2}
           dominantBaseline="middle"
@@ -55,7 +55,7 @@ export function ColorDescriptionSVG({
           fontWeight="600"
         >
           {description}
-        </Text>
+        </CustomText>
       </g>
     </svg>
   )

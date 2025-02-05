@@ -1,6 +1,7 @@
 import { NodeTypes } from "@xyflow/react" // Explicitly differentiate imported type
-import { Class, ColorDescription, Package } from "./classDiagram"
+import { Class, ColorDescription } from "./classDiagram"
 import { TitleAndDesctiption } from "./TitleAndDescriptionNode"
+import Package from "./classDiagram/Package"
 
 export const diagramNodeTypes = {
   package: Package,

@@ -1,13 +1,16 @@
 export function SvgMarkers() {
   return (
-    <svg style={{ position: "absolute", top: 0, left: 0, width: 0, height: 0 }}>
+    <svg
+      style={{ position: "absolute", top: 0, left: 0, width: 0, height: 0 }}
+      id="apollon2_svg-markers"
+    >
       <defs>
         <marker
           id="black-rhombus"
           viewBox="0 0 30 30"
           markerWidth="30"
           markerHeight="30"
-          refX="30" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -24,7 +27,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="30"
           markerHeight="30"
-          refX="30" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -41,7 +44,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="30" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -58,7 +61,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="30" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -67,7 +70,7 @@ export function SvgMarkers() {
             d="M0,29 L30,15 L0,1"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.5"
           />
         </marker>
       </defs>

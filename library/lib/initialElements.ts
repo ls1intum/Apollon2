@@ -1,11 +1,12 @@
 import { type Edge, type Node } from "@xyflow/react"
 import { ClassType } from "./types"
+// import { ClassType } from "./types"
 
 export const initialNodes: Node[] = [
   {
-    id: "1",
+    id: "11",
     type: "package",
-    position: { x: -100, y: 200 },
+    position: { x: -220, y: 200 },
     width: 200,
     height: 200,
     selected: false,
@@ -14,12 +15,12 @@ export const initialNodes: Node[] = [
   {
     id: "2",
     type: "class",
-    position: { x: 400, y: -100 },
-    width: 296,
+    position: { x: 225, y: -65 },
+    width: 300,
     height: 170,
     selected: false,
     data: {
-      name: "Class",
+      name: "Class2",
       methods: [
         { id: "1", name: "method1" },
         { id: "2", name: "method2" },
@@ -33,8 +34,8 @@ export const initialNodes: Node[] = [
   {
     id: "3",
     type: "class",
-    position: { x: 400, y: 100 },
-    width: 296,
+    position: { x: 590, y: 165 },
+    width: 300,
     height: 170,
     selected: false,
     data: {
@@ -53,8 +54,8 @@ export const initialNodes: Node[] = [
   {
     id: "4",
     type: "class",
-    position: { x: 400, y: 300 },
-    width: 296,
+    position: { x: 120, y: 320 },
+    width: 300,
     height: 170,
     selected: false,
     data: {
@@ -74,7 +75,7 @@ export const initialNodes: Node[] = [
     id: "5",
     type: "class",
     position: { x: 400, y: 500 },
-    width: 296,
+    width: 300,
     height: 170,
     selected: false,
     data: {
@@ -120,33 +121,43 @@ export const initialNodes: Node[] = [
 
 export const initialEdges: Edge[] = [
   {
-    id: "1->2",
-    source: "1",
+    id: "11->2",
+    source: "11",
     target: "2",
+    sourceHandle: "top-left",
+    targetHandle: "top-left",
     type: "uniassociation",
   },
   {
     id: "2->3",
     source: "2",
     target: "3",
+    sourceHandle: "top",
+    targetHandle: "top-right",
     type: "realization",
   },
   {
     id: "3->4",
     source: "3",
     target: "4",
+    sourceHandle: "top-left",
+    targetHandle: "top-left",
     type: "aggregation",
   },
   {
     id: "4->5",
     source: "4",
     target: "5",
+    sourceHandle: "top",
+    targetHandle: "top",
     type: "composition",
   },
   {
-    id: "5->1",
+    id: "5->11",
     source: "5",
-    target: "1",
+    target: "11",
+    sourceHandle: "left",
+    targetHandle: "bottom-right",
     type: "dependency",
   },
 ]
