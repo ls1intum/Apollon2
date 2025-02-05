@@ -1,16 +1,17 @@
-import { Edge, EdgeProps } from "@xyflow/react";
+import { Edge, EdgeProps } from "@xyflow/react"
 
-export type EdgeTypes = "biassociation" | "aggregation";
+export type EdgeType = "biassociation" | "aggregation"
 
 export type CustomEdgeProps = {
-    sourceRole: string | null;
-    sourceMultiplicity: string | null;
-    targetRole: string | null;
-    targetMultiplicity: string | null;
+  sourceRole: string | null
+  sourceMultiplicity: string | null
+  targetRole: string | null
+  targetMultiplicity: string | null
 }
 
 export type ExtendedEdgeProps = EdgeProps<Edge<CustomEdgeProps>> & {
-    markerEnd?: string;
-    markerPadding?: number;
-    strokeDashArray?: string;
-  };
+  // markerEnd?: string;
+  // markerPadding?: number;
+  // strokeDashArray?: string;
+  type: EdgeType
+}

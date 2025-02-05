@@ -23,18 +23,16 @@ export function useEdgePopOver({
   }
 
   const handleEdgeTypeChange = (newType: string) => {
-    reactFlow.updateEdge(id, {type: newType})
+    reactFlow.updateEdge(id, { type: newType })
   }
 
   const handleSwap = () => {
     const edge = reactFlow.getEdge(id)
-    reactFlow.updateEdge(id, 
-        {   source: edge?.target,
-            sourceHandle: edge?.targetHandle,
-            target: edge?.source,
-            targetHandle: edge?.sourceHandle
-        
-
+    reactFlow.updateEdge(id, {
+      source: edge?.target,
+      sourceHandle: edge?.targetHandle,
+      target: edge?.source,
+      targetHandle: edge?.sourceHandle,
     })
   }
 
@@ -92,11 +90,7 @@ export function useEdgePopOver({
   }
 }
 
-export function useToolbar({
-  id,
-}: {
-  id: string
-}) {
+export function useToolbar({ id }: { id: string }) {
   const reactFlow = useReactFlow()
   const svgRef = useRef<SVGSVGElement | null>(null)
 
@@ -110,8 +104,3 @@ export function useToolbar({
     handleDelete,
   }
 }
-
-
-
-
-

@@ -126,7 +126,7 @@ export const initialEdges: Edge[] = [
     target: "2",
     sourceHandle: "top-left",
     targetHandle: "top-left",
-    type: "uniassociation",
+    type: "ClassUnidirectional",
     data: {
       sourceRole: null,
       sourceMultiplicity: null,
@@ -140,7 +140,7 @@ export const initialEdges: Edge[] = [
     target: "3",
     sourceHandle: "top",
     targetHandle: "top-right",
-    type: "realization",
+    type: "ClassRealization",
     data: {
       sourceRole: null,
       sourceMultiplicity: null,
@@ -154,7 +154,7 @@ export const initialEdges: Edge[] = [
     target: "4",
     sourceHandle: "top-left",
     targetHandle: "top-left",
-    type: "aggregation",
+    type: "ClassAggregation",
     data: {
       sourceRole: null,
       sourceMultiplicity: null,
@@ -168,7 +168,7 @@ export const initialEdges: Edge[] = [
     target: "5",
     sourceHandle: "top",
     targetHandle: "top",
-    type: "composition",
+    type: "ClassComposition",
     data: {
       sourceRole: null,
       sourceMultiplicity: null,
@@ -182,7 +182,7 @@ export const initialEdges: Edge[] = [
     target: "11",
     sourceHandle: "left",
     targetHandle: "bottom-right",
-    type: "dependency",
+    type: "ClassDependency",
     data: {
       sourceRole: null,
       sourceMultiplicity: null,

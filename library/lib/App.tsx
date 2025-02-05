@@ -11,7 +11,6 @@ import {
   useNodesState,
   useEdgesState,
 } from "@xyflow/react"
-import "@xyflow/react/dist/style.css"
 import {
   HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
   MAX_SCALE_TO_ZOOM_IN,
@@ -44,7 +43,6 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
   const { onNodeDragStop } = useNodeDragStop(setNodes)
   const { onConnect } = useConnect()
   const { onReconnect } = useReconnect()
-
   return (
     <div style={{ display: "flex", width: "100%", height: "100%" }}>
       <Sidebar selectedDiagramType={diagramType} />

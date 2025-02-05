@@ -1,4 +1,3 @@
-
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
 import { Box } from "@mui/material"
@@ -9,7 +8,6 @@ interface CustomEdgeToolbarProps {
   onEditClick: (event: React.MouseEvent<HTMLElement>) => void
   onDeleteClick: (event: React.MouseEvent<HTMLElement>) => void
 }
-
 
 export const CustomEdgeToolbar = ({
   x,

@@ -1,9 +1,8 @@
-
-import { Edge, Connection, useReactFlow } from "@xyflow/react";
-import { useCallback } from "react";
+import { Edge, Connection, useReactFlow } from "@xyflow/react"
+import { useCallback } from "react"
 
 export const useReconnect = () => {
-  const { updateEdge } = useReactFlow();
+  const { updateEdge } = useReactFlow()
 
   const onReconnect = useCallback(
     (oldEdge: Edge, newConnection: Connection) => {
@@ -12,11 +11,10 @@ export const useReconnect = () => {
         target: newConnection.target,
         sourceHandle: newConnection.sourceHandle,
         targetHandle: newConnection.targetHandle,
-      
-      });
+      })
     },
     [updateEdge]
-  );
+  )
 
-  return { onReconnect };
-};
+  return { onReconnect }
+}

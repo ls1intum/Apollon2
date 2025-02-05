@@ -16,6 +16,7 @@ body,
   --panel-background: #f8fafc;
   --panel-shadow: 0 0 4px 0 rgb(0 0 0 / 0.2);
   --text: #0a0a0a;
+  --xy-edge-stroke: black;
 
   background-color: var(--background);
 }
@@ -81,3 +82,22 @@ body,
 .react-flow__edges {
   z-index: 30;
 }
+
+/* .react-flow__edge-path .--xy-edge-stroke {
+  stroke: black
+}
+
+.--xy-edge-stroke-default {
+  stroke: black;
+}
+
+.--xy-edge-stroke{
+  stroke: black;
+}
+
+.react-flow__edge-path {
+  stroke: #000000;
+}
+.react-flow {
+  --xy-node-background-color-default: #ff5050;
+} */

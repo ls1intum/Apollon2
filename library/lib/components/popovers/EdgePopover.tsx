@@ -1,4 +1,4 @@
-import  { forwardRef } from "react";
+import { forwardRef } from "react"
 import {
   Box,
   TextField,
@@ -6,23 +6,23 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from "@mui/material";
-import { GenericPopover } from "./GenericPopover";
-import { useReactFlow } from "@xyflow/react";
-import { CustomEdgeProps } from "@/edges/EdgeProps";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+} from "@mui/material"
+import { GenericPopover } from "./GenericPopover"
+import { useReactFlow } from "@xyflow/react"
+import { CustomEdgeProps } from "@/edges/EdgeProps"
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
 
 interface EdgePopoverProps {
-  edgeId: string;
-  anchorEl: HTMLElement | SVGSVGElement | null;
-  open: boolean;
-  onClose: () => void;
-  onEdgeTypeChange: (newEdgeType: string) => void;
-  onSourceMultiplicityChange: (newMultiplicity: string) => void;
-  onTargetMultiplicityChange: (newMultiplicity: string) => void;
-  onSourceRoleChange: (newRole: string) => void;
-  onTargetRoleChange: (newRole: string) => void;
-  onSwap: () => void;
+  edgeId: string
+  anchorEl: HTMLElement | SVGSVGElement | null
+  open: boolean
+  onClose: () => void
+  onEdgeTypeChange: (newEdgeType: string) => void
+  onSourceMultiplicityChange: (newMultiplicity: string) => void
+  onTargetMultiplicityChange: (newMultiplicity: string) => void
+  onSourceRoleChange: (newRole: string) => void
+  onTargetRoleChange: (newRole: string) => void
+  onSwap: () => void
 }
 
 // Modify EdgePopover to forward refs
@@ -43,13 +43,12 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
     ref
   ) => {
     if (!anchorEl || !open) {
-      return null;
+      return null
     }
 
-    const { getEdge } = useReactFlow();
-    const edge = getEdge(edgeId)!;
-    console.log("POPOVER", edge, edgeId, edge.data);
-    const edgeData = edge.data as CustomEdgeProps;
+    const { getEdge } = useReactFlow()
+    const edge = getEdge(edgeId)!
+    const edgeData = edge.data as CustomEdgeProps
 
     return (
       <GenericPopover
@@ -60,7 +59,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
         style={{ width: 800 }}
       >
         <Box
-          ref={ref} // Attach the ref here
+          ref={ref}
           sx={{ display: "flex", flexDirection: "column", gap: 2, p: 1 }}
         >
           {onSwap && (
@@ -77,13 +76,13 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
               label="Edge Type"
               onChange={(e) => onEdgeTypeChange(e.target.value)}
             >
-              <MenuItem value="biassociation">Bi-Association</MenuItem>
-              <MenuItem value="uniassociation">Uni-Association</MenuItem>
-              <MenuItem value="aggregation">Aggregation</MenuItem>
-              <MenuItem value="composition">Composition</MenuItem>
-              <MenuItem value="inheritance">Inheritance</MenuItem>
-              <MenuItem value="dependency">Dependency</MenuItem>
-              <MenuItem value="realization">Realization</MenuItem>
+              <MenuItem value="ClassBidirectional">Bi-Association</MenuItem>
+              <MenuItem value="ClassUnidirectional">Uni-Association</MenuItem>
+              <MenuItem value="ClassAggregation">Aggregation</MenuItem>
+              <MenuItem value="ClassComposition">Composition</MenuItem>
+              <MenuItem value="ClassInheritance">Inheritance</MenuItem>
+              <MenuItem value="ClassDependency">Dependency</MenuItem>
+              <MenuItem value="ClassRealization">Realization</MenuItem>
             </Select>
           </FormControl>
 
@@ -120,9 +119,9 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           />
         </Box>
       </GenericPopover>
-    );
+    )
   }
-);
+)
 
 // Add a display name for debugging
-EdgePopover.displayName = "EdgePopover";
+EdgePopover.displayName = "EdgePopover"

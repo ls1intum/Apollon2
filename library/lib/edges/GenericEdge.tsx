@@ -1,35 +1,33 @@
-import { useState } from "react";
-import {
-  BaseEdge,
-  getSmoothStepPath,
-  useReactFlow,
-} from "@xyflow/react";
-import { EdgePopover } from "@/components";
+import { useState } from "react"
+import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
+import { EdgePopover } from "@/components"
 import {
   STEP_BOARDER_RADIUS,
-  RHOMBUS_MARKER_PADDING,
+  MARKER_PADDING,
   SOURCE_CONNECTION_POINT_PADDING,
-} from "@/constants";
-import { adjustSourceCoordinates, adjustTargetCoordinates, getToolbarPosition, calculateEdgeLabels } from "@/utils";
-import { useEdgePopOver, useToolbar } from "@/hooks";
-import { ExtendedEdgeProps } from "./EdgeProps";
-import { CustomEdgeToolbar } from "@/components";
-
+} from "@/constants"
+import {
+  adjustSourceCoordinates,
+  adjustTargetCoordinates,
+  getToolbarPosition,
+  calculateEdgeLabels,
+} from "@/utils"
+import { useEdgePopOver, useToolbar } from "@/hooks"
+import { ExtendedEdgeProps } from "./EdgeProps"
+import { CustomEdgeToolbar } from "@/components"
+import { getEdgeMarkerStyles } from "@/utils"
 // Extend the props to include markerEnd and markerPadding.
-
 
 export const GenericEdge = ({
   id,
   selected,
+  type,
   sourceX,
   sourceY,
   targetX,
   targetY,
   sourcePosition,
   targetPosition,
-  markerEnd,
-  strokeDashArray,
-  markerPadding = RHOMBUS_MARKER_PADDING,
   data,
 }: ExtendedEdgeProps) => {
   const {
@@ -39,24 +37,29 @@ export const GenericEdge = ({
     handleTargetMultiplicityChange,
     handleEdgeTypeChange,
     handleSwap,
-  } = useEdgePopOver({ id, selected: Boolean(selected) });
-  const { handleDelete } = useToolbar({ id });
-  const [edgePopoverAnchor, setEdgePopoverAnchor] = useState<HTMLElement | null>(null);
-  const {updateEdge} = useReactFlow()
+  } = useEdgePopOver({ id, selected: Boolean(selected) })
+  const { handleDelete } = useToolbar({ id })
+  const [edgePopoverAnchor, setEdgePopoverAnchor] =
+    useState<HTMLElement | null>(null)
+  const { updateEdge } = useReactFlow()
+
+  const { markerPadding, markerEnd, strokeDashArray } =
+    getEdgeMarkerStyles(type)
+  const padding = markerPadding ?? MARKER_PADDING
 
   // Use the passed markerPadding when adjusting the target coordinates.
   const adjustedTargetCoordinates = adjustTargetCoordinates(
     targetX,
     targetY,
     targetPosition,
-    markerPadding
-  );
+    padding
+  )
   const adjustedSourceCoordinates = adjustSourceCoordinates(
     sourceX,
     sourceY,
     sourcePosition,
     SOURCE_CONNECTION_POINT_PADDING
-  );
+  )
 
   const [edgePath] = getSmoothStepPath({
     sourceX: adjustedSourceCoordinates.sourceX,
@@ -66,27 +69,30 @@ export const GenericEdge = ({
     targetY: adjustedTargetCoordinates.targetY,
     targetPosition,
     borderRadius: STEP_BOARDER_RADIUS,
-  });
+  })
 
-  const toolbarPosition = getToolbarPosition(adjustedSourceCoordinates, adjustedTargetCoordinates);
+  const toolbarPosition = getToolbarPosition(
+    adjustedSourceCoordinates,
+    adjustedTargetCoordinates
+  )
 
   const handleEditIconClick = (event: React.MouseEvent<HTMLElement>) => {
-    setEdgePopoverAnchor(event.currentTarget);
-  };
+    setEdgePopoverAnchor(event.currentTarget)
+  }
 
   const {
     roleX: sourceRoleX,
     roleY: sourceRoleY,
     multiplicityX: sourceMultiplicityX,
     multiplicityY: sourceMultiplicityY,
-  } = calculateEdgeLabels(sourceX, sourceY, sourcePosition);
+  } = calculateEdgeLabels(sourceX, sourceY, sourcePosition)
 
   const {
     roleX: targetRoleX,
     roleY: targetRoleY,
     multiplicityX: targetMultiplicityX,
     multiplicityY: targetMultiplicityY,
-  } = calculateEdgeLabels(targetX, targetY, targetPosition);
+  } = calculateEdgeLabels(targetX, targetY, targetPosition)
 
   return (
     <>
@@ -123,8 +129,10 @@ export const GenericEdge = ({
         edgeId={id}
         anchorEl={edgePopoverAnchor}
         open={Boolean(edgePopoverAnchor)}
-        onClose={() => {setEdgePopoverAnchor(null);
-        updateEdge(id,{selected:false})}}
+        onClose={() => {
+          setEdgePopoverAnchor(null)
+          updateEdge(id, { selected: false })
+        }}
         onEdgeTypeChange={handleEdgeTypeChange}
         onSourceRoleChange={handleSourceRoleChange}
         onSourceMultiplicityChange={handleSourceMultiplicityChange}
@@ -175,5 +183,5 @@ export const GenericEdge = ({
         </text>
       )}
     </>
-  );
-};
+  )
+}
