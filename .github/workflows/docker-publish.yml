@@ -19,15 +19,15 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME_EGE }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD_EGE }}
+          username: ${{ secrets.DOCKERHUB_USERNAME_EGE }} #Will be changed later
+          password: ${{ secrets.DOCKERHUB_PASSWORD_EGE }} #Will be changed later
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: egenerse45/apollon2-webapp:latest, egenerse45/apollon2-webapp:v1.0
+          tags: egenerse45/apollon2-webapp:latest, egenerse45/apollon2-webapp:v1.0  #Will be changed later
 
       - name: Logout from Docker Hub
         run: docker logout
