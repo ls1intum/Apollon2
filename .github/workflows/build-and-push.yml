@@ -12,7 +12,7 @@ on: # Adjust the triggers, conditions, etc. to your needs, see examples below
 jobs:
   # You can also build and push multiple images in parallel using a matrix (see examples)
   build-and-push-workflow:
-    uses: ls1intum/.github/workflows/build-and-push-docker-image.yml@main
+    uses: ls1intum/.github/.github/workflows/build-and-push-docker-image.yml@main
     with:
       image-name: ls1intum/Apollon2/apollon_reenginerring
       docker-file: Dockerfile 
