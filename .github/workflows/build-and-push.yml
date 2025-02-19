@@ -3,7 +3,11 @@ name: Build and Push Docker Image
 on: # Adjust the triggers, conditions, etc. to your needs, see examples below
   pull_request:
   push:
-    branches: [main]
+    branches: 
+      - main
+      - feat/*
+      - 97-add-docker-and-github-workflow
+
 
 jobs:
   # You can also build and push multiple images in parallel using a matrix (see examples)
