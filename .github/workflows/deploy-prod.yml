@@ -1,0 +1,20 @@
+name: Deploy to Development
+
+on:
+  workflow_dispatch: # For manual triggers via the GitHub Actions UI
+    inputs:
+      image-tag:
+        type: string
+        description: "Image tag to deploy (default: pr-<number> if PR exists, latest for default branch)"
+
+jobs:  
+  deploy:
+    uses: ls1intum/.github/.github/workflows/deploy-docker-compose.yml@main
+    with:
+      environment: Development # Replace with your environment 
+      docker-compose-file: "./docker-compose.prod.yml" # Path to your docker-compose file
+      main-image-name: ls1intum/apollon2# For checking if images with image tag exist
+      image-tag: ${{ inputs.image-tag }}
+      env-file-name: .env.test1 # (Optional) Path to the .env file, defaults to .env
+      remove-volumes: false # (Optional) Remove volumes after stopping the services
+    secrets: inherit
