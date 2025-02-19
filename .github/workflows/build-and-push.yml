@@ -14,6 +14,6 @@ jobs:
   build-and-push-workflow:
     uses: ls1intum/.github/.github/workflows/build-and-push-docker-image.yml@main
     with:
-      image-name: ls1intum/Apollon2/apollon_reenginerring
+      image-name: ls1intum/apollon2/apollon_reenginerring
       docker-file: Dockerfile 
     secrets: inherit
