@@ -10,7 +10,7 @@ export const useConnect = () => {
       const newEdge: Edge = {
         ...connection,
         id: generateUUID(),
-        type: "biassociation", // Ensure this type matches your custom edge in diagramEdgeTypes
+        type: "ClassBidirectional", // Ensure this type matches your custom edge in diagramEdgeTypes
         selected: true,
         data: {
           sourceRole: "", // Default empty string for source role
