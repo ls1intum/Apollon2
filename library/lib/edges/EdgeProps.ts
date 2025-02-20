@@ -10,8 +10,8 @@ export type CustomEdgeProps = {
 }
 
 export type ExtendedEdgeProps = EdgeProps<Edge<CustomEdgeProps>> & {
-  // markerEnd?: string;
-  // markerPadding?: number;
-  // strokeDashArray?: string;
+  markerEnd?: string
+  markerPadding?: number
+  strokeDashArray?: string
   type: EdgeType
 }

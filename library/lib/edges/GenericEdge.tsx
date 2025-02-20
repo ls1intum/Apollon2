@@ -22,6 +22,8 @@ export const GenericEdge = ({
   id,
   selected,
   type,
+  source,
+  target,
   sourceX,
   sourceY,
   targetX,
@@ -126,6 +128,8 @@ export const GenericEdge = ({
 
       {/* Render the popover for editing edge properties */}
       <EdgePopover
+        source={source}
+        target={target}
         edgeId={id}
         anchorEl={edgePopoverAnchor}
         open={Boolean(edgePopoverAnchor)}
@@ -142,6 +146,7 @@ export const GenericEdge = ({
       />
 
       {/* Render labels directly on the SVG */}
+
       {data?.sourceRole && (
         <text
           x={sourceRoleX}
@@ -162,6 +167,7 @@ export const GenericEdge = ({
           {data?.sourceMultiplicity}
         </text>
       )}
+
       {data?.targetRole && (
         <text
           x={targetRoleX}

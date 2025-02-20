@@ -6,6 +6,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Typography,
 } from "@mui/material"
 import { GenericPopover } from "./GenericPopover"
 import { useReactFlow } from "@xyflow/react"
@@ -13,6 +14,8 @@ import { CustomEdgeProps } from "@/edges/EdgeProps"
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
 
 interface EdgePopoverProps {
+  source: string
+  target: string
   edgeId: string
   anchorEl: HTMLElement | SVGSVGElement | null
   open: boolean
@@ -29,6 +32,8 @@ interface EdgePopoverProps {
 export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
   (
     {
+      source,
+      target,
       edgeId,
       anchorEl,
       open,
@@ -46,9 +51,15 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
       return null
     }
 
-    const { getEdge } = useReactFlow()
+    const { getEdge, getNode } = useReactFlow()
     const edge = getEdge(edgeId)!
     const edgeData = edge.data as CustomEdgeProps
+
+    // Retrieve source/target node names
+    const sourceNode = getNode(source)
+    const targetNode = getNode(target)
+    const sourceName = (sourceNode?.data?.name as string) ?? "Source"
+    const targetName = (targetNode?.data?.name as string) ?? "Target"
 
     return (
       <GenericPopover
@@ -56,17 +67,20 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
         anchorEl={anchorEl}
         open={open}
         onClose={onClose}
-        style={{ width: 800 }}
+        style={{ width: 1600 }}
       >
         <Box
           ref={ref}
           sx={{ display: "flex", flexDirection: "column", gap: 2, p: 1 }}
         >
+          {/* Swap icon for source/target swap */}
           {onSwap && (
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={onSwap} />
             </Box>
           )}
+
+          {/* Edge type selection */}
           <FormControl fullWidth size="small">
             <InputLabel id="edge-type-label">Edge Type</InputLabel>
             <Select
@@ -86,32 +100,46 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
             </Select>
           </FormControl>
 
-          {/* Source Fields */}
+          {/* Source subheadline */}
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+            {sourceName}
+          </Typography>
+
+          {/* Source Multiplicity */}
           <TextField
-            label="Source Multiplicity"
+            label={sourceName + " Multiplicity"}
             value={edgeData.sourceMultiplicity}
             onChange={(e) => onSourceMultiplicityChange(e.target.value)}
             size="small"
             fullWidth
           />
+
+          {/* Source Role */}
           <TextField
-            label="Source Role"
+            label={sourceName + " Role"}
             value={edgeData.sourceRole}
             onChange={(e) => onSourceRoleChange(e.target.value)}
             size="small"
             fullWidth
           />
 
-          {/* Target Fields */}
+          {/* Target subheadline */}
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+            {targetName}
+          </Typography>
+
+          {/* Target Multiplicity */}
           <TextField
-            label="Target Multiplicity"
+            label={targetName + " Multiplicity"}
             value={edgeData.targetMultiplicity}
             onChange={(e) => onTargetMultiplicityChange(e.target.value)}
             size="small"
             fullWidth
           />
+
+          {/* Target Role */}
           <TextField
-            label="Target Role"
+            label={targetName + " Role"}
             value={edgeData.targetRole}
             onChange={(e) => onTargetRoleChange(e.target.value)}
             size="small"
@@ -123,5 +151,4 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
   }
 )
 
-// Add a display name for debugging
 EdgePopover.displayName = "EdgePopover"
