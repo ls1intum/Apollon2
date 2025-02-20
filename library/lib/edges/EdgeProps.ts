@@ -1,7 +1,5 @@
 import { Edge, EdgeProps } from "@xyflow/react"
 
-
-
 export type CustomEdgeProps = {
   sourceRole: string | null
   sourceMultiplicity: string | null
