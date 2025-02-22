@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useReactFlow } from "@xyflow/react"
 
 export function useEdgePopOver({
@@ -9,14 +9,8 @@ export function useEdgePopOver({
   selected: boolean
 }) {
   const reactFlow = useReactFlow()
-  const svgRef = useRef<SVGSVGElement | null>(null)
-  const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null)
 
-  const handleClick = () => {
-    if (svgRef.current) {
-      setAnchorEl(svgRef.current)
-    }
-  }
+  const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null)
 
   const handlePopoverClose = () => {
     setAnchorEl(null)
@@ -36,10 +30,6 @@ export function useEdgePopOver({
     })
   }
 
-  const handleNameChange = (newName: string) => {
-    reactFlow.updateNodeData(id, { name: newName })
-  }
-
   const handleTargetRoleChange = (newRole: string) => {
     reactFlow.updateEdgeData(id, { targetRole: newRole })
   }
@@ -56,12 +46,6 @@ export function useEdgePopOver({
     reactFlow.updateEdgeData(id, { sourceMultiplicity: newMultiplicity })
   }
 
-  const handleDelete = () => {
-    reactFlow.deleteElements({
-      nodes: [{ id }],
-    })
-  }
-
   useEffect(() => {
     if (!selected) {
       handlePopoverClose()
@@ -75,32 +59,11 @@ export function useEdgePopOver({
   }, [anchorEl, reactFlow, id])
 
   return {
-    svgRef,
-    anchorEl,
-    handleClick,
-    handlePopoverClose,
-    handleNameChange,
-    handleDelete,
-    handleTargetRoleChange,
-    handleTargetMultiplicityChange,
     handleSourceRoleChange,
     handleSourceMultiplicityChange,
+    handleTargetRoleChange,
+    handleTargetMultiplicityChange,
     handleEdgeTypeChange,
     handleSwap,
-  }
-}
-
-export function useToolbar({ id }: { id: string }) {
-  const reactFlow = useReactFlow()
-  const svgRef = useRef<SVGSVGElement | null>(null)
-
-  const handleDelete = () => {
-    reactFlow.deleteElements({
-      edges: [{ id }],
-    })
-  }
-  return {
-    svgRef,
-    handleDelete,
   }
 }

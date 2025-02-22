@@ -47,13 +47,13 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
     },
     ref
   ) => {
+    const { getEdge, getNode } = useReactFlow()
+    const edge = getEdge(edgeId)!
+    const edgeData = edge.data as CustomEdgeProps | undefined
+
     if (!anchorEl || !open) {
       return null
     }
-
-    const { getEdge, getNode } = useReactFlow()
-    const edge = getEdge(edgeId)!
-    const edgeData = edge.data as CustomEdgeProps
 
     // Retrieve source/target node names
     const sourceNode = getNode(source)
@@ -108,7 +108,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           {/* Source Multiplicity */}
           <TextField
             label={sourceName + " Multiplicity"}
-            value={edgeData.sourceMultiplicity}
+            value={edgeData?.sourceMultiplicity ?? ""}
             onChange={(e) => onSourceMultiplicityChange(e.target.value)}
             size="small"
             fullWidth
@@ -117,7 +117,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           {/* Source Role */}
           <TextField
             label={sourceName + " Role"}
-            value={edgeData.sourceRole}
+            value={edgeData?.sourceRole ?? ""}
             onChange={(e) => onSourceRoleChange(e.target.value)}
             size="small"
             fullWidth
@@ -131,7 +131,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           {/* Target Multiplicity */}
           <TextField
             label={targetName + " Multiplicity"}
-            value={edgeData.targetMultiplicity}
+            value={edgeData?.targetMultiplicity ?? ""}
             onChange={(e) => onTargetMultiplicityChange(e.target.value)}
             size="small"
             fullWidth
@@ -140,7 +140,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           {/* Target Role */}
           <TextField
             label={targetName + " Role"}
-            value={edgeData.targetRole}
+            value={edgeData?.targetRole ?? ""}
             onChange={(e) => onTargetRoleChange(e.target.value)}
             size="small"
             fullWidth
