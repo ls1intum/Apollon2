@@ -82,22 +82,3 @@ body,
 .react-flow__edges {
   z-index: 30;
 }
-
-/* .react-flow__edge-path .--xy-edge-stroke {
-  stroke: black
-}
-
-.--xy-edge-stroke-default {
-  stroke: black;
-}
-
-.--xy-edge-stroke{
-  stroke: black;
-}
-
-.react-flow__edge-path {
-  stroke: #000000;
-}
-.react-flow {
-  --xy-node-background-color-default: #ff5050;
-} */

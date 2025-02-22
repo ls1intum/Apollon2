@@ -1,4 +1,3 @@
-//import { ExtendedEdgeProps } from "@/edges";
 import {
   MARKER_PADDING,
   DOTTED_ARROW_MARKER_PADDING,
@@ -175,7 +174,6 @@ export const calculateEdgeLabels = (
   return { roleX, roleY, multiplicityX, multiplicityY }
 }
 
-// utils/edgeStyles.ts
 export interface EdgeMarkerStyles {
   markerEnd?: string
   markerPadding?: number
