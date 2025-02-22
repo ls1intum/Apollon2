@@ -18,7 +18,7 @@ interface EdgePopoverProps {
   source: string
   target: string
   edgeId: string
-  selected: Boolean
+  selected: boolean
   anchorEl: HTMLElement | SVGSVGElement | null
   open: boolean
   onClose: () => void
