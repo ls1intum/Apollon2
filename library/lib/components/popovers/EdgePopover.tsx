@@ -12,20 +12,16 @@ import { GenericPopover } from "./GenericPopover"
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps } from "@/edges/EdgeProps"
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
+import { useEdgePopOver } from "@/hooks"
 
 interface EdgePopoverProps {
   source: string
   target: string
   edgeId: string
+  selected: Boolean
   anchorEl: HTMLElement | SVGSVGElement | null
   open: boolean
   onClose: () => void
-  onEdgeTypeChange: (newEdgeType: string) => void
-  onSourceMultiplicityChange: (newMultiplicity: string) => void
-  onTargetMultiplicityChange: (newMultiplicity: string) => void
-  onSourceRoleChange: (newRole: string) => void
-  onTargetRoleChange: (newRole: string) => void
-  onSwap: () => void
 }
 
 // Modify EdgePopover to forward refs
@@ -37,19 +33,28 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
       edgeId,
       anchorEl,
       open,
+      selected,
       onClose,
-      onEdgeTypeChange,
-      onSourceMultiplicityChange,
-      onTargetMultiplicityChange,
-      onSourceRoleChange,
-      onTargetRoleChange,
-      onSwap,
+      // onEdgeTypeChange,
+      // onSourceMultiplicityChange,
+      // onTargetMultiplicityChange,
+      // onSourceRoleChange,
+      // onTargetRoleChange,
+      // onSwap,
     },
     ref
   ) => {
     const { getEdge, getNode } = useReactFlow()
     const edge = getEdge(edgeId)!
     const edgeData = edge.data as CustomEdgeProps | undefined
+    const {
+      handleSourceRoleChange,
+      handleSourceMultiplicityChange,
+      handleTargetRoleChange,
+      handleTargetMultiplicityChange,
+      handleEdgeTypeChange,
+      handleSwap,
+    } = useEdgePopOver({ id: String(edgeId), selected: Boolean(selected) })
 
     if (!anchorEl || !open) {
       return null
@@ -74,9 +79,9 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           sx={{ display: "flex", flexDirection: "column", gap: 2, p: 1 }}
         >
           {/* Swap icon for source/target swap */}
-          {onSwap && (
+          {handleSwap && (
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={onSwap} />
+              <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
             </Box>
           )}
 
@@ -88,7 +93,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
               id="edge-type-select"
               value={edge.type}
               label="Edge Type"
-              onChange={(e) => onEdgeTypeChange(e.target.value)}
+              onChange={(e) => handleEdgeTypeChange(e.target.value)}
             >
               <MenuItem value="ClassBidirectional">Bi-Association</MenuItem>
               <MenuItem value="ClassUnidirectional">Uni-Association</MenuItem>
@@ -109,7 +114,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           <TextField
             label={sourceName + " Multiplicity"}
             value={edgeData?.sourceMultiplicity ?? ""}
-            onChange={(e) => onSourceMultiplicityChange(e.target.value)}
+            onChange={(e) => handleSourceMultiplicityChange(e.target.value)}
             size="small"
             fullWidth
           />
@@ -118,7 +123,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           <TextField
             label={sourceName + " Role"}
             value={edgeData?.sourceRole ?? ""}
-            onChange={(e) => onSourceRoleChange(e.target.value)}
+            onChange={(e) => handleSourceRoleChange(e.target.value)}
             size="small"
             fullWidth
           />
@@ -132,7 +137,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           <TextField
             label={targetName + " Multiplicity"}
             value={edgeData?.targetMultiplicity ?? ""}
-            onChange={(e) => onTargetMultiplicityChange(e.target.value)}
+            onChange={(e) => handleTargetMultiplicityChange(e.target.value)}
             size="small"
             fullWidth
           />
@@ -141,7 +146,7 @@ export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
           <TextField
             label={targetName + " Role"}
             value={edgeData?.targetRole ?? ""}
-            onChange={(e) => onTargetRoleChange(e.target.value)}
+            onChange={(e) => handleTargetRoleChange(e.target.value)}
             size="small"
             fullWidth
           />

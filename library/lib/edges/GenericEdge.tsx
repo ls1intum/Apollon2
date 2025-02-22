@@ -12,7 +12,7 @@ import {
   getToolbarPosition,
   calculateEdgeLabels,
 } from "@/utils"
-import { useEdgePopOver, useToolbar } from "@/hooks"
+import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
@@ -32,14 +32,14 @@ export const GenericEdge = ({
   targetPosition,
   data,
 }: ExtendedEdgeProps) => {
-  const {
-    handleSourceRoleChange,
-    handleSourceMultiplicityChange,
-    handleTargetRoleChange,
-    handleTargetMultiplicityChange,
-    handleEdgeTypeChange,
-    handleSwap,
-  } = useEdgePopOver({ id, selected: Boolean(selected) })
+  // const {
+  //   handleSourceRoleChange,
+  //   handleSourceMultiplicityChange,
+  //   handleTargetRoleChange,
+  //   handleTargetMultiplicityChange,
+  //   handleEdgeTypeChange,
+  //   handleSwap,
+  // } = useEdgePopOver({ id, selected: Boolean(selected) })
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
@@ -131,18 +131,13 @@ export const GenericEdge = ({
         source={source}
         target={target}
         edgeId={id}
+        selected={Boolean(selected)}
         anchorEl={edgePopoverAnchor}
         open={Boolean(edgePopoverAnchor)}
         onClose={() => {
           setEdgePopoverAnchor(null)
           updateEdge(id, { selected: false })
         }}
-        onEdgeTypeChange={handleEdgeTypeChange}
-        onSourceRoleChange={handleSourceRoleChange}
-        onSourceMultiplicityChange={handleSourceMultiplicityChange}
-        onTargetRoleChange={handleTargetRoleChange}
-        onTargetMultiplicityChange={handleTargetMultiplicityChange}
-        onSwap={handleSwap}
       />
 
       {/* Render labels directly on the SVG */}
