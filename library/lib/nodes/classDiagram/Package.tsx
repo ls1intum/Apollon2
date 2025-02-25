@@ -60,6 +60,7 @@ export default function Package({
         onResize={onResize}
         minHeight={50}
         minWidth={50}
+        handleStyle={{ width: 8, height: 8 }}
       />
       <PackageSVG
         ref={svgRef}

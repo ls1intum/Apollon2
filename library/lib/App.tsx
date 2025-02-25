@@ -35,6 +35,8 @@ interface AppProps {
   diagramType: DiagramType
 }
 
+const proOptions = { hideAttribution: true }
+
 function App({ onReactFlowInit, diagramType }: AppProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, , onEdgesChange] = useEdgesState(initialEdges)
@@ -48,6 +50,7 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
       <Sidebar selectedDiagramType={diagramType} />
       <SvgMarkers />
       <ReactFlow
+        proOptions={proOptions}
         id="react-flow-library"
         nodeTypes={diagramNodeTypes}
         edgeTypes={diagramEdgeTypes}

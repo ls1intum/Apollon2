@@ -25,7 +25,11 @@ export function TitleAndDesctiption({
         title={title}
         description={description || ""}
       />
-      <NodeResizer isVisible={selected} minHeight={200} />
+      <NodeResizer
+        isVisible={selected}
+        minHeight={200}
+        handleStyle={{ width: 8, height: 8 }}
+      />
     </DefaultNodeWrapper>
   )
 }
