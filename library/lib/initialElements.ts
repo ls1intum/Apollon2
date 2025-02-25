@@ -126,7 +126,7 @@ export const initialEdges: Edge[] = [
     target: "2",
     sourceHandle: "top-left",
     targetHandle: "top-left",
-    type: "uniassociation",
+    type: "ClassUnidirectional",
   },
   {
     id: "2->3",
@@ -134,7 +134,7 @@ export const initialEdges: Edge[] = [
     target: "3",
     sourceHandle: "top",
     targetHandle: "top-right",
-    type: "realization",
+    type: "ClassRealization",
   },
   {
     id: "3->4",
@@ -142,7 +142,7 @@ export const initialEdges: Edge[] = [
     target: "4",
     sourceHandle: "top-left",
     targetHandle: "top-left",
-    type: "aggregation",
+    type: "ClassAggregation",
   },
   {
     id: "4->5",
@@ -150,7 +150,7 @@ export const initialEdges: Edge[] = [
     target: "5",
     sourceHandle: "top",
     targetHandle: "top",
-    type: "composition",
+    type: "ClassComposition",
   },
   {
     id: "5->11",
@@ -158,6 +158,6 @@ export const initialEdges: Edge[] = [
     target: "11",
     sourceHandle: "left",
     targetHandle: "bottom-right",
-    type: "dependency",
+    type: "ClassDependency",
   },
 ]
