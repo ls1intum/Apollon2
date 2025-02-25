@@ -51,6 +51,7 @@ export function Class({
         minHeight={minHeight}
         maxHeight={minHeight}
         onResize={onResize}
+        handleStyle={{ width: 8, height: 8 }}
       />
       <NodeToolbar
         isVisible={selected}
