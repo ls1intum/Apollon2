@@ -32,14 +32,14 @@ export function DefaultNodeWrapper({ children, width, height }: Props) {
         id="top-right"
         type="source"
         position={Position.Top}
-        style={{ border: "0px", left: width - adjustedHeight }}
+        style={{ border: "0px", left: width - adjustedWidth }}
       />
 
       <Handle
         id="right-top"
         type="source"
         position={Position.Right}
-        style={{ border: "0px", top: adjustedWidth }}
+        style={{ border: "0px", top: adjustedHeight }}
       />
       <Handle
         id="right"
@@ -51,13 +51,13 @@ export function DefaultNodeWrapper({ children, width, height }: Props) {
         id="right-bottom"
         type="source"
         position={Position.Right}
-        style={{ border: "0px", top: height - adjustedWidth }}
+        style={{ border: "0px", top: height - adjustedHeight }}
       />
       <Handle
         id="bottom-right"
         type="source"
         position={Position.Bottom}
-        style={{ border: "0px", left: width - adjustedHeight }}
+        style={{ border: "0px", left: width - adjustedWidth }}
       />
       <Handle
         id="bottom"
