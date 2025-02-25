@@ -45,7 +45,7 @@ export default function MobileNavbar() {
             {/* Logo */}
             <img
               alt="Logo"
-              src="assets/images/tum-logo.png"
+              src="/assets/images/tum-logo.png"
               width="60"
               height="30"
             />
