@@ -8,14 +8,13 @@ import {
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
 
 export const useNodeDragStop = (
+  nodes: Node[],
   setNodesState: Dispatch<SetStateAction<Node[]>>
 ) => {
-  const { getNodes, screenToFlowPosition, getIntersectingNodes, updateNode } =
-    useReactFlow()
+  const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
 
   const onNodeDragStop: OnNodeDrag<Node> = useCallback(
     (event, draggedNode) => {
-      const nodes = getNodes()
       const draggedLastPoint = screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
@@ -35,10 +34,21 @@ export const useNodeDragStop = (
         : null
 
       if (!parentNode) {
-        updateNode(draggedNode.id, {
-          position: getPositionOnCanvas(draggedNode, nodes),
-          parentId: undefined,
-        })
+        setNodesState((valuse) =>
+          valuse.map((n) =>
+            n.id === draggedNode.id
+              ? {
+                  ...draggedNode,
+                  position: getPositionOnCanvas(draggedNode, nodes),
+                  parentId: undefined,
+                }
+              : n
+          )
+        )
+        // updateNode(draggedNode.id, {
+        //   position: getPositionOnCanvas(draggedNode, nodes),
+        //   parentId: undefined,
+        // })
         return
       }
 
@@ -63,6 +73,7 @@ export const useNodeDragStop = (
         )
 
         const sortedList = sortNodesTopologically(updatedNodesList)
+        console.log("sortedList", sortedList)
         setNodesState(sortedList)
         return
       }
@@ -75,13 +86,7 @@ export const useNodeDragStop = (
         setNodesState(updatedNodesList)
       }
     },
-    [
-      screenToFlowPosition,
-      updateNode,
-      getNodes,
-      getIntersectingNodes,
-      setNodesState,
-    ]
+    [screenToFlowPosition, nodes, getIntersectingNodes, setNodesState]
   )
 
   return { onNodeDragStop }

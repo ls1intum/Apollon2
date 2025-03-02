@@ -25,7 +25,9 @@
     "jspdf": "2.5.2",
     "styled-components": "6.1.14",
     "stylis": "4.3.4",
-    "uuid": "11.0.3"
+    "uuid": "11.0.3",
+    "y-webrtc": "^10.3.0",
+    "yjs": "^13.6.20"
   },
   "peerDependencies": {
     "react": "18.3.1",

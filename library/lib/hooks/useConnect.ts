@@ -1,10 +1,10 @@
-import { addEdge, Edge, Connection, useReactFlow } from "@xyflow/react"
+import { addEdge, Edge, Connection } from "@xyflow/react"
 import { useCallback } from "react"
 import { generateUUID } from "@/utils"
 
-export const useConnect = () => {
-  const { setEdges } = useReactFlow()
-
+export const useConnect = (
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>
+) => {
   const onConnect = useCallback(
     (connection: Connection) => {
       const newEdge: Edge = {
