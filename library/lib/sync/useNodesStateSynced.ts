@@ -8,6 +8,7 @@ import {
 
 import ydoc from "./ydoc"
 import { edgesMap } from "./useEdgesStateSynced"
+import { sortNodesTopologically } from "@/utils"
 
 // We are using nodesMap as the one source of truth for the nodes.
 // This means that we are doing all changes to the nodes in the map object.
@@ -84,7 +85,8 @@ export function useNodesStateSynced(): [
   // here we are observing the nodesMap and updating the nodes state whenever the map changes.
   useEffect(() => {
     const observer = () => {
-      setNodes(Array.from(nodesMap.values()))
+      setNodes(sortNodesTopologically(Array.from(nodesMap.values())))
+      // setNodes(Array.from(nodesMap.values()))
     }
 
     setNodes(Array.from(nodesMap.values()))

@@ -1,10 +1,6 @@
 import { Dispatch, SetStateAction, useCallback } from "react"
 import { type OnNodeDrag, type Node, useReactFlow } from "@xyflow/react"
-import {
-  getPositionOnCanvas,
-  resizeAllParents,
-  sortNodesTopologically,
-} from "@/utils"
+import { getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
 
 export const useNodeDragStop = (
@@ -72,9 +68,10 @@ export const useNodeDragStop = (
           nodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
         )
 
-        const sortedList = sortNodesTopologically(updatedNodesList)
-        console.log("sortedList", sortedList)
-        setNodesState(sortedList)
+        setNodesState(updatedNodesList)
+        // const sortedList = sortNodesTopologically(updatedNodesList)
+        // console.log("sortedList", sortedList)
+        // setNodesState(sortedList)
         return
       }
 

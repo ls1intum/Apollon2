@@ -11,7 +11,11 @@ export function Cursors({ cursors }: { cursors: Cursor[] }) {
         const scale = `scale(${1 / viewport.zoom})`
 
         return (
-          <svg key={id} className="cursor" style={{ transform: translate }}>
+          <svg
+            key={id}
+            className="cursor"
+            style={{ transform: translate, zIndex: 999 }}
+          >
             <g style={{ transform: scale }}>
               <path
                 d={cursorPath}
