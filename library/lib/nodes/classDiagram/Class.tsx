@@ -10,7 +10,7 @@ import { ClassPopover, ClassSVG, MinSize } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 
-import { useClassNode, useHandleOnResize } from "@/hooks"
+import { useClassNode } from "@/hooks"
 import { useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { ClassNodeProps } from "@/types"
@@ -20,7 +20,6 @@ export function Class({
   width,
   height,
   selected,
-  parentId,
   data: { methods, attributes, stereotype, name },
 }: NodeProps<Node<ClassNodeProps>>) {
   const [{ minHeight, minWidth }, setMinSize] = useState<MinSize>({
@@ -28,6 +27,7 @@ export function Class({
     minHeight: 0,
   })
   const [showEditPopover, setShowEditPopover] = useState(false)
+
   const svgRef = useRef<SVGSVGElement | null>(null)
 
   const handlePopoverClose = () => {
@@ -37,7 +37,7 @@ export function Class({
     id,
     selected: Boolean(selected),
   })
-  const { onResize } = useHandleOnResize(parentId)
+  // const { onResize } = useHandleOnResize(parentId)
 
   if (!width || !height) {
     return null
@@ -51,7 +51,7 @@ export function Class({
         minWidth={minWidth}
         minHeight={minHeight}
         maxHeight={minHeight}
-        onResize={onResize}
+        // onResize={onResize}
         handleStyle={{ width: 8, height: 8 }}
       />
       <NodeToolbar

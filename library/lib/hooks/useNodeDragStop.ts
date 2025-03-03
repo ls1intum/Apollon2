@@ -41,10 +41,6 @@ export const useNodeDragStop = (
               : n
           )
         )
-        // updateNode(draggedNode.id, {
-        //   position: getPositionOnCanvas(draggedNode, nodes),
-        //   parentId: undefined,
-        // })
         return
       }
 
