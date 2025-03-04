@@ -9,6 +9,7 @@ import {
   ConnectionMode,
   ReactFlowInstance,
 } from "@xyflow/react"
+
 import {
   HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
   MAX_SCALE_TO_ZOOM_IN,
@@ -27,11 +28,8 @@ import {
 import { diagramEdgeTypes } from "./edges"
 import "@/styles/app.css"
 import { DiagramType } from "./types"
-import {
-  useCursorStateSynced,
-  useEdgesStateSynced,
-  useNodesStateSynced,
-} from "./sync"
+import { useCursorStateSynced } from "./sync"
+import useDiagramStore from "./store/diagramStore"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -41,17 +39,14 @@ interface AppProps {
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, diagramType }: AppProps) {
-  // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
-  // const [edges, , onEdgesChange] = useEdgesState(initialEdges)
-  const [nodes, setNodes, onNodesChange] = useNodesStateSynced()
-  const [edges, setEdges, onEdgesChange] = useEdgesStateSynced()
-  const [cursors, onMouseMove] = useCursorStateSynced()
+  const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore()
 
-  const { onDrop } = useDrop(diagramType, nodes, setNodes)
+  const [cursors, onMouseMove] = useCursorStateSynced()
+  const { onDrop } = useDrop(diagramType, nodes)
   const { onDragOver } = useDragOver()
-  const { onNodeDragStop } = useNodeDragStop(nodes, setNodes)
-  const { onConnect } = useConnect(setEdges)
-  const { onReconnect } = useReconnect(setEdges)
+  const { onNodeDragStop } = useNodeDragStop()
+  const { onConnect } = useConnect()
+  const { onReconnect } = useReconnect()
 
   return (
     <div style={{ display: "flex", width: "100%", height: "100%" }}>

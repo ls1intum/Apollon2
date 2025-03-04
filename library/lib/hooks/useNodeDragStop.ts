@@ -1,13 +1,15 @@
-import { Dispatch, SetStateAction, useCallback } from "react"
+import { useCallback } from "react"
 import { type OnNodeDrag, type Node, useReactFlow } from "@xyflow/react"
 import { getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
+import useDiagramStore from "@/store/diagramStore"
+import { useShallow } from "zustand/react/shallow"
 
-export const useNodeDragStop = (
-  nodes: Node[],
-  setNodesState: Dispatch<SetStateAction<Node[]>>
-) => {
+export const useNodeDragStop = () => {
   const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
+  const { setNodes, nodes } = useDiagramStore(
+    useShallow((state) => ({ setNodes: state.setNodes, nodes: state.nodes }))
+  )
 
   const onNodeDragStop: OnNodeDrag<Node> = useCallback(
     (event, draggedNode) => {
@@ -30,8 +32,8 @@ export const useNodeDragStop = (
         : null
 
       if (!parentNode) {
-        setNodesState((valuse) =>
-          valuse.map((n) =>
+        setNodes(
+          nodes.map((n) =>
             n.id === draggedNode.id
               ? {
                   ...draggedNode,
@@ -64,7 +66,7 @@ export const useNodeDragStop = (
           nodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
         )
 
-        setNodesState(updatedNodesList)
+        setNodes(updatedNodesList)
         // const sortedList = sortNodesTopologically(updatedNodesList)
         // console.log("sortedList", sortedList)
         // setNodesState(sortedList)
@@ -76,10 +78,10 @@ export const useNodeDragStop = (
           draggedNode,
           nodes.map((n) => (n.id === draggedNode.id ? { ...draggedNode } : n))
         )
-        setNodesState(updatedNodesList)
+        setNodes(updatedNodesList)
       }
     },
-    [screenToFlowPosition, nodes, getIntersectingNodes, setNodesState]
+    [screenToFlowPosition, nodes, getIntersectingNodes, setNodes]
   )
 
   return { onNodeDragStop }

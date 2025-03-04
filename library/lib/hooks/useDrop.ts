@@ -1,16 +1,14 @@
 import { dropElementConfigs } from "@/constants"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
+import useDiagramStore from "@/store/diagramStore"
 import { DiagramType, DropNodeData } from "@/types"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { useReactFlow, type Node } from "@xyflow/react"
-import { useCallback, DragEvent, Dispatch, SetStateAction } from "react"
+import { useCallback, DragEvent } from "react"
 
-export const useDrop = (
-  selectedDiagramType: DiagramType,
-  nodes: Node[],
-  setNodes: Dispatch<SetStateAction<Node[]>>
-) => {
+export const useDrop = (selectedDiagramType: DiagramType, nodes: Node[]) => {
   const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
+  const { setNodes } = useDiagramStore()
 
   const onDrop = useCallback(
     (event: DragEvent) => {
