@@ -29,11 +29,12 @@ import { diagramEdgeTypes } from "./edges"
 import "@/styles/app.css"
 import { DiagramType } from "./types"
 import { useCursorStateSynced } from "./sync"
-import useDiagramStore from "./store/diagramStore"
+import useDiagramStore, { DiagramStoreData } from "./store/diagramStore"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
   diagramType: DiagramType
+  subscribers: Set<(state: DiagramStoreData) => void>
 }
 
 const proOptions = { hideAttribution: true }
@@ -91,10 +92,23 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
   )
 }
 
-export function AppWithProvider({ onReactFlowInit, diagramType }: AppProps) {
+export function AppWithProvider({
+  onReactFlowInit,
+  diagramType,
+  subscribers,
+}: AppProps) {
+  subscribers.forEach((subscriber) =>
+    useDiagramStore.subscribe((state) =>
+      subscriber({ nodes: state.nodes, edges: state.edges })
+    )
+  )
   return (
     <ReactFlowProvider>
-      <App onReactFlowInit={onReactFlowInit} diagramType={diagramType} />
+      <App
+        onReactFlowInit={onReactFlowInit}
+        diagramType={diagramType}
+        subscribers={subscribers}
+      />
     </ReactFlowProvider>
   )
 }

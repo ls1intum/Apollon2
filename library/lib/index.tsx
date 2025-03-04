@@ -9,12 +9,14 @@ import {
   validateParsedJSON,
 } from "./utils"
 import { DiagramType } from "./types"
-
+import { DiagramStoreData } from "./store/diagramStore"
 export * from "./types"
+
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
   private reactFlowInstance: ReactFlowInstance | null = null
   private diagramType: DiagramType = DiagramType.ClassDiagram
+  private subscribers = new Set<(state: DiagramStoreData) => void>()
 
   constructor(element: HTMLElement) {
     this.root = ReactDOM.createRoot(element)
@@ -27,6 +29,7 @@ export class Apollon2 {
         <AppWithProvider
           onReactFlowInit={this.setReactFlowInstance.bind(this)}
           diagramType={this.diagramType} // Pass the diagramType directly as a prop
+          subscribers={this.subscribers}
         />
       )
     }
@@ -146,5 +149,9 @@ export class Apollon2 {
         "ReactFlowInstance is not available for creating new diagram"
       )
     }
+  }
+
+  public subscribeToModalChange(callback: (state: DiagramStoreData) => void) {
+    this.subscribers.add(callback)
   }
 }

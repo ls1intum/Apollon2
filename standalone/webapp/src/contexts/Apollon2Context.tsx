@@ -41,6 +41,9 @@ export const Apollon2Provider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     if (containerRef.current && !apollon2) {
       const instance = new Apollon2(containerRef.current)
+      instance.subscribeToModalChange((state) => {
+        console.log("State changed", state)
+      })
       setApollon2(instance)
     }
 

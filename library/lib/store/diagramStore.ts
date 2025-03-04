@@ -17,6 +17,11 @@ import ydoc from "@/sync/ydoc"
 export const nodesMap = ydoc.getMap<Node>("nodes")
 export const edgesMap = ydoc.getMap<Edge>("edges")
 
+export type DiagramStoreData = {
+  nodes: Node[]
+  edges: Edge[]
+}
+
 type DiagramStore = {
   nodes: Node[]
   edges: Edge[]
