@@ -11,6 +11,8 @@ import {
 import { DiagramType } from "./types"
 import { DiagramStoreData } from "./store/diagramStore"
 export * from "./types"
+import { WebsocketProvider } from "y-websocket"
+import ydoc from "./sync/ydoc"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
@@ -153,5 +155,13 @@ export class Apollon2 {
 
   public subscribeToModalChange(callback: (state: DiagramStoreData) => void) {
     this.subscribers.add(callback)
+  }
+
+  public makeWebsocketConnection(serverUrl: string, roomname: string) {
+    const wsProvider = new WebsocketProvider(serverUrl, roomname, ydoc)
+
+    wsProvider.on("status", (event) => {
+      console.log(event.status) // logs "connected" or "disconnected"
+    })
   }
 }

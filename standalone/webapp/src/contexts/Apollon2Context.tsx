@@ -44,6 +44,8 @@ export const Apollon2Provider: React.FC<Props> = ({ children }) => {
       instance.subscribeToModalChange((state) => {
         console.log("State changed", state)
       })
+      instance.makeWebsocketConnection("ws://localhost:4444", "my-roomname")
+
       setApollon2(instance)
     }
 
