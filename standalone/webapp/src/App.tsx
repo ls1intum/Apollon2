@@ -1,16 +1,24 @@
 import { BrowserRouter, Route, Routes } from "react-router"
-import { LibraryView } from "./LibraryView"
+import { AppProviders } from "./AppProviders"
+import { Navbar } from "./components"
+import "@xyflow/react/dist/style.css"
+import { Apollon, ApollonWithCollaboration, ErrorPage } from "@/pages"
 
 function App() {
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <AppProviders>
+      <Navbar />
       <BrowserRouter>
         <Routes>
-          <Route path=":diagramId" element={<LibraryView />} />
-          <Route path="/" element={<LibraryView />} />
+          <Route path="/" element={<Apollon />} />
+          <Route
+            path="/diagram/:diagramId"
+            element={<ApollonWithCollaboration />}
+          />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </AppProviders>
   )
 }
 
