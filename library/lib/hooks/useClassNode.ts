@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useReactFlow } from "@xyflow/react"
 
 export function useClassNode({
@@ -9,14 +9,7 @@ export function useClassNode({
   selected: boolean
 }) {
   const reactFlow = useReactFlow()
-  const svgRef = useRef<SVGSVGElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null)
-
-  const handleClick = () => {
-    if (svgRef.current) {
-      setAnchorEl(svgRef.current)
-    }
-  }
 
   const handlePopoverClose = () => {
     setAnchorEl(null)
@@ -44,9 +37,7 @@ export function useClassNode({
   }, [anchorEl, reactFlow, id])
 
   return {
-    svgRef,
     anchorEl,
-    handleClick,
     handlePopoverClose,
     handleNameChange,
     handleDelete,

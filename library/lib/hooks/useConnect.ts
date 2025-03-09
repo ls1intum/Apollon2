@@ -1,9 +1,10 @@
-import { addEdge, Edge, Connection, useReactFlow } from "@xyflow/react"
+import { Edge, Connection } from "@xyflow/react"
 import { useCallback } from "react"
 import { generateUUID } from "@/utils"
+import useDiagramStore from "@/store/diagramStore"
 
 export const useConnect = () => {
-  const { setEdges } = useReactFlow()
+  const addEdge = useDiagramStore((state) => state.addEdge)
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -13,9 +14,9 @@ export const useConnect = () => {
         type: "ClassBidirectional", // Ensure this type matches your custom edge in diagramEdgeTypes
         selected: true,
       }
-      setEdges((edges) => addEdge(newEdge, edges))
+      addEdge(newEdge)
     },
-    [setEdges]
+    [addEdge]
   )
 
   return { onConnect }

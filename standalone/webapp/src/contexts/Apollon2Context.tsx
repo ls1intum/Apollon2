@@ -41,6 +41,11 @@ export const Apollon2Provider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     if (containerRef.current && !apollon2) {
       const instance = new Apollon2(containerRef.current)
+      instance.subscribeToModalChange((state) => {
+        console.log("State changed", state)
+      })
+      instance.makeWebsocketConnection("ws://localhost:4444", "my-roomname")
+
       setApollon2(instance)
     }
 
