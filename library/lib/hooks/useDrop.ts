@@ -34,7 +34,6 @@ export const useDrop = (selectedDiagramType: DiagramType, nodes: Node[]) => {
         { snapToGrid: true }
       )
 
-      // console.log("dropPosition", dropPosition)
       // Adjust position by subtracting the offset
       const position = {
         x: dropPosition.x - dropData.offsetX,
