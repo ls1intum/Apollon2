@@ -24,7 +24,6 @@
     "@xyflow/react": "12.3.6",
     "html-to-image": "1.11.11",
     "jspdf": "2.5.2",
-    "react-router": "^7.3.0",
     "styled-components": "6.1.14",
     "stylis": "4.3.4",
     "uuid": "11.0.3",
