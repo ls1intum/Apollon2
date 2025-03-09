@@ -67,9 +67,6 @@ export const useNodeDragStop = () => {
         )
 
         setNodes(updatedNodesList)
-        // const sortedList = sortNodesTopologically(updatedNodesList)
-        // console.log("sortedList", sortedList)
-        // setNodesState(sortedList)
         return
       }
 

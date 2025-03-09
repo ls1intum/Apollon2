@@ -40,7 +40,6 @@ export const NewDiagramFromTemplateModal = () => {
   const [error, setError] = useState<string | null>(null)
 
   const handleCreate = async () => {
-    console.log("Create diagram from template")
     setError(null)
 
     try {

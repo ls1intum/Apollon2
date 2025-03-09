@@ -37,7 +37,6 @@ export function Class({
     id,
     selected: Boolean(selected),
   })
-  // const { onResize } = useHandleOnResize(parentId)
 
   if (!width || !height) {
     return null
@@ -51,7 +50,6 @@ export function Class({
         minWidth={minWidth}
         minHeight={minHeight}
         maxHeight={minHeight}
-        // onResize={onResize}
         handleStyle={{ width: 8, height: 8 }}
       />
       <NodeToolbar

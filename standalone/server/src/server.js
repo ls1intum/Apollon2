@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 const { setupWSConnection } = require("y-websocket/bin/utils")
 const { Server } = require("ws")
 

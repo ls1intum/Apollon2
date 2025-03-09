@@ -21,7 +21,6 @@ export const adjustTargetCoordinates = (
   targetPosition: Position,
   markerPadding: number
 ): { targetX: number; targetY: number } => {
-  // console.log(targetX, targetY, markerPadding, targetPosition)
   if (targetPosition === "left") {
     targetX -= markerPadding
   } else if (targetPosition === "right") {

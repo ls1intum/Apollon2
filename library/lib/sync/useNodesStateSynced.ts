@@ -72,21 +72,18 @@ export function useNodesStateSynced(): [
       } else {
         const node = nextNodes.find((n) => n.id === change.id)
         if (node) {
-          console.log("DEBUG onNodesChange node", [change, node])
           nodesMap.set(change.id, node)
         } else {
           console.warn(`Node with id ${change.id} not found in nextNodes.`)
         }
       }
     }
-    // console.log("DEBUG onNodesChange nodesMap", nodesMap)
   }, [])
 
   // here we are observing the nodesMap and updating the nodes state whenever the map changes.
   useEffect(() => {
     const observer = () => {
       setNodes(sortNodesTopologically(Array.from(nodesMap.values())))
-      // setNodes(Array.from(nodesMap.values()))
     }
 
     setNodes(Array.from(nodesMap.values()))
@@ -96,5 +93,4 @@ export function useNodesStateSynced(): [
   }, [setNodes])
 
   return [nodes, setNodesSynced, onNodesChanges]
-  // return [Array.from(nodesMap.values()), setNodesSynced, onNodesChanges]
 }
