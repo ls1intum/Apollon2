@@ -2,7 +2,7 @@
   "name": "@apollon2/server",
   "version": "1.0.0",
   "dependencies": {
-    "@apollon2/library": "0.0.1",
+    "ws": "8.18.1",
     "y-websocket": "1.5.0"
   },
   "scripts": {
