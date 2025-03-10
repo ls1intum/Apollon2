@@ -1,5 +1,5 @@
-const { setupWSConnection } = require("y-websocket/bin/utils")
 const { Server } = require("ws")
+const { setupWSConnection } = require("./utils")
 
 const wss = new Server({ port: 4444 })
 
