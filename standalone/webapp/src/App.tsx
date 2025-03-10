@@ -7,17 +7,21 @@ import { Apollon, ApollonWithCollaboration, ErrorPage } from "@/pages"
 function App() {
   return (
     <AppProviders>
-      <Navbar />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Apollon />} />
-          <Route
-            path="/diagram/:diagramId"
-            element={<ApollonWithCollaboration />}
-          />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-      </BrowserRouter>
+      <div
+        style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+      >
+        <Navbar />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Apollon />} />
+            <Route
+              path="/diagram/:diagramId"
+              element={<ApollonWithCollaboration />}
+            />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
     </AppProviders>
   )
 }
