@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "echo bypass building in server because it is js now",
-    "start": "node src/server.js",
+    "start": "HOST=localhost PORT=4444 YPERSISTENCE=./dbDir node src/server.js",
     "lint": "echo bypass  lint in server"
   }
 }
