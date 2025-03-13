@@ -6,10 +6,8 @@ import { Apollon, ApollonWithCollaboration, ErrorPage } from "@/pages"
 
 function App() {
   return (
-    <AppProviders>
-      <div
-        style={{ display: "flex", flexDirection: "column", height: "100vh" }}
-      >
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <AppProviders>
         <Navbar />
         <BrowserRouter>
           <Routes>
@@ -21,8 +19,8 @@ function App() {
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>
-      </div>
-    </AppProviders>
+      </AppProviders>
+    </div>
   )
 }
 
