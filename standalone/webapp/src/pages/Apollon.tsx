@@ -21,9 +21,5 @@ export const Apollon: React.FC = () => {
     }
   }, [apollon2])
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <div style={{ flex: 1 }} ref={containerRef} />
-    </div>
-  )
+  return <div style={{ flex: 1 }} ref={containerRef} />
 }
