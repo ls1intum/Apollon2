@@ -37,7 +37,7 @@ type DiagramStore = {
 // Zustand store
 const useDiagramStore = create<DiagramStore>()(
   devtools((set) => ({
-    nodes: Array.from(nodesMap.values()), // Initialize from Yjs map
+    nodes: Array.from(nodesMap.values()),
     edges: Array.from(edgesMap.values()),
 
     addEdge: (edge) => {
@@ -61,7 +61,7 @@ const useDiagramStore = create<DiagramStore>()(
         }
       }
 
-      set({ nodes })
+      set({ nodes: sortNodesTopologically(nodes) })
     },
 
     setEdges: (edges) => {

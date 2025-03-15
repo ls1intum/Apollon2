@@ -14,8 +14,18 @@ export const useNodeDragStop = () => {
   const onNodeDragStop: OnNodeDrag<Node> = useCallback(
     (event, draggedNode) => {
       const draggedLastPoint = screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
+        x:
+          "changedTouches" in event
+            ? // event is handled as Mouse event in the library but also it is touch event for mobile users
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (event as any as TouchEvent).changedTouches[0].clientX
+            : event.clientX,
+        y:
+          "changedTouches" in event
+            ? // event is handled as Mouse event in the library but also it is touch event for mobile users
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (event as any as TouchEvent).changedTouches[0].clientY
+            : event.clientY,
       })
 
       const intersectionsWithDroppedLocation = getIntersectingNodes({

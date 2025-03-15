@@ -4,11 +4,18 @@
   font-weight: 400;
 }
 
+html, body {
+  overflow: hidden;
+  height: 100%;
+  touch-action: none; /* Prevent touch gestures */
+}
+
 html,
 body,
 #root {
   height: 100%;
   margin: 0;
+
 }
 
 .react-flow {
@@ -93,4 +100,11 @@ body,
   z-index: 50;
   pointer-events: none;
   user-select: none;
+}
+
+
+.prevent-select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }

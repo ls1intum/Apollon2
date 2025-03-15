@@ -18,18 +18,13 @@ import {
 
 import { Cursors, Sidebar, SvgMarkers } from "@/components"
 import { diagramNodeTypes } from "./nodes"
-import {
-  useConnect,
-  useDragOver,
-  useDrop,
-  useNodeDragStop,
-  useReconnect,
-} from "./hooks"
+import { useConnect, useReconnect, useNodeDragStop } from "./hooks"
 import { diagramEdgeTypes } from "./edges"
 import "@/styles/app.css"
 import { DiagramType } from "./types"
 import { useCursorStateSynced } from "./sync"
 import useDiagramStore, { DiagramStoreData } from "./store/diagramStore"
+import { useDragOver } from "./hooks/useDragOver"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -41,11 +36,9 @@ const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, diagramType }: AppProps) {
   const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore()
-
-  const [cursors, onMouseMove] = useCursorStateSynced()
-  const { onDrop } = useDrop(diagramType, nodes)
-  const { onDragOver } = useDragOver()
   const { onNodeDragStop } = useNodeDragStop()
+  const { onDragOver } = useDragOver()
+  const [cursors, onMouseMove] = useCursorStateSynced()
   const { onConnect } = useConnect()
   const { onReconnect } = useReconnect()
 
@@ -60,13 +53,12 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
         edgeTypes={diagramEdgeTypes}
         nodes={nodes}
         edges={edges}
+        onDragOver={onDragOver}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        onReconnect={onReconnect}
-        onDragOver={onDragOver}
-        onDrop={onDrop}
         onNodeDragStop={onNodeDragStop}
+        onReconnect={onReconnect}
         connectionLineType={ConnectionLineType.Step}
         connectionMode={ConnectionMode.Loose}
         onPointerMove={onMouseMove}
