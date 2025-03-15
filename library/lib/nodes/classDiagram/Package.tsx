@@ -12,6 +12,7 @@ import { PackageNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
+import { useEffect, useRef, useState } from "react"
 
 export default function Package({
   id,
@@ -22,14 +23,23 @@ export default function Package({
   parentId,
 }: NodeProps<Node<PackageNodeProps>>) {
   const { onResize } = useHandleOnResize(parentId)
-  const {
-    svgRef,
-    anchorEl,
-    handlePopoverClose,
-    handleNameChange,
-    handleClick,
-    handleDelete,
-  } = useClassNode({ id, selected: Boolean(selected) })
+  const [showEditPopover, setShowEditPopover] = useState(false)
+  const svgRef = useRef<SVGSVGElement | null>(null)
+
+  useEffect(() => {
+    if (!selected) {
+      setShowEditPopover(false)
+    }
+  }, [selected])
+
+  const handlePopoverClose = () => {
+    setShowEditPopover(false)
+  }
+
+  const { handleNameChange, handleDelete } = useClassNode({
+    id,
+    selected: Boolean(selected),
+  })
 
   if (!width || !height) {
     return null
@@ -50,7 +60,9 @@ export default function Package({
           />
 
           <EditIcon
-            onClick={handleClick}
+            onClick={() => {
+              setShowEditPopover(true)
+            }}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />
         </Box>
@@ -71,8 +83,8 @@ export default function Package({
       />
       <PackagePopover
         nodeId={id}
-        anchorEl={anchorEl}
-        open={Boolean(selected)}
+        anchorEl={showEditPopover ? svgRef.current : null}
+        open={showEditPopover}
         onClose={handlePopoverClose}
         onNameChange={handleNameChange}
       />

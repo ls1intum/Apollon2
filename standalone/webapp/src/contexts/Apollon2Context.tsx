@@ -1,8 +1,6 @@
 import React, {
   createContext,
   useContext,
-  useRef,
-  useEffect,
   useState,
   ReactNode,
   useMemo,
@@ -13,6 +11,7 @@ interface Apollon2ContextType {
   apollon2?: Apollon2
   diagramName: string
   setDiagramName: React.Dispatch<React.SetStateAction<string>>
+  setApollon2: React.Dispatch<React.SetStateAction<Apollon2 | undefined>>
 }
 
 const Apollon2Context = createContext<Apollon2ContextType | undefined>(
@@ -34,41 +33,22 @@ interface Props {
 }
 
 export const Apollon2Provider: React.FC<Props> = ({ children }) => {
-  const containerRef = useRef<HTMLDivElement | null>(null)
   const [apollon2, setApollon2] = useState<Apollon2>()
   const [diagramName, setDiagramName] = useState("Default Diagram")
-
-  useEffect(() => {
-    if (containerRef.current && !apollon2) {
-      const instance = new Apollon2(containerRef.current)
-      setApollon2(instance)
-    }
-
-    return () => {
-      if (apollon2) {
-        console.log("Disposing Apollon2")
-        apollon2.dispose()
-      }
-    }
-  }, [apollon2])
 
   const contextValue = useMemo(
     () => ({
       apollon2,
+      setApollon2,
       diagramName,
       setDiagramName,
     }),
-    [apollon2, diagramName, setDiagramName]
+    [apollon2, diagramName, setDiagramName, setApollon2]
   )
 
   return (
     <Apollon2Context.Provider value={contextValue}>
-      <div
-        style={{ display: "flex", flexDirection: "column", height: "100vh" }}
-      >
-        {children}
-        <div style={{ flex: 1 }} ref={containerRef} />
-      </div>
+      {children}
     </Apollon2Context.Provider>
   )
 }

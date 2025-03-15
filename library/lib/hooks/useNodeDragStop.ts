@@ -1,21 +1,18 @@
-import { Dispatch, SetStateAction, useCallback } from "react"
+import { useCallback } from "react"
 import { type OnNodeDrag, type Node, useReactFlow } from "@xyflow/react"
-import {
-  getPositionOnCanvas,
-  resizeAllParents,
-  sortNodesTopologically,
-} from "@/utils"
+import { getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
+import useDiagramStore from "@/store/diagramStore"
+import { useShallow } from "zustand/react/shallow"
 
-export const useNodeDragStop = (
-  setNodesState: Dispatch<SetStateAction<Node[]>>
-) => {
-  const { getNodes, screenToFlowPosition, getIntersectingNodes, updateNode } =
-    useReactFlow()
+export const useNodeDragStop = () => {
+  const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
+  const { setNodes, nodes } = useDiagramStore(
+    useShallow((state) => ({ setNodes: state.setNodes, nodes: state.nodes }))
+  )
 
   const onNodeDragStop: OnNodeDrag<Node> = useCallback(
     (event, draggedNode) => {
-      const nodes = getNodes()
       const draggedLastPoint = screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
@@ -35,10 +32,17 @@ export const useNodeDragStop = (
         : null
 
       if (!parentNode) {
-        updateNode(draggedNode.id, {
-          position: getPositionOnCanvas(draggedNode, nodes),
-          parentId: undefined,
-        })
+        setNodes(
+          nodes.map((n) =>
+            n.id === draggedNode.id
+              ? {
+                  ...draggedNode,
+                  position: getPositionOnCanvas(draggedNode, nodes),
+                  parentId: undefined,
+                }
+              : n
+          )
+        )
         return
       }
 
@@ -62,8 +66,7 @@ export const useNodeDragStop = (
           nodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
         )
 
-        const sortedList = sortNodesTopologically(updatedNodesList)
-        setNodesState(sortedList)
+        setNodes(updatedNodesList)
         return
       }
 
@@ -72,16 +75,10 @@ export const useNodeDragStop = (
           draggedNode,
           nodes.map((n) => (n.id === draggedNode.id ? { ...draggedNode } : n))
         )
-        setNodesState(updatedNodesList)
+        setNodes(updatedNodesList)
       }
     },
-    [
-      screenToFlowPosition,
-      updateNode,
-      getNodes,
-      getIntersectingNodes,
-      setNodesState,
-    ]
+    [screenToFlowPosition, nodes, getIntersectingNodes, setNodes]
   )
 
   return { onNodeDragStop }

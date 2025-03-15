@@ -1,13 +1,14 @@
 import { dropElementConfigs } from "@/constants"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
+import useDiagramStore from "@/store/diagramStore"
 import { DiagramType, DropNodeData } from "@/types"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { useReactFlow, type Node } from "@xyflow/react"
 import { useCallback, DragEvent } from "react"
 
-export const useDrop = (selectedDiagramType: DiagramType) => {
-  const { screenToFlowPosition, setNodes, getIntersectingNodes, getNodes } =
-    useReactFlow()
+export const useDrop = (selectedDiagramType: DiagramType, nodes: Node[]) => {
+  const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
+  const { setNodes } = useDiagramStore()
 
   const onDrop = useCallback(
     (event: DragEvent) => {
@@ -33,7 +34,6 @@ export const useDrop = (selectedDiagramType: DiagramType) => {
         { snapToGrid: true }
       )
 
-      console.log("dropPosition", dropPosition)
       // Adjust position by subtracting the offset
       const position = {
         x: dropPosition.x - dropData.offsetX,
@@ -52,7 +52,7 @@ export const useDrop = (selectedDiagramType: DiagramType) => {
         ]
 
       const parentId = parentNode ? parentNode.id : undefined
-      const allNodes = getNodes()
+      const allNodes = nodes
 
       const newNode: Node = {
         width: config.width,
@@ -80,7 +80,7 @@ export const useDrop = (selectedDiagramType: DiagramType) => {
       screenToFlowPosition,
       setNodes,
       getIntersectingNodes,
-      getNodes,
+      nodes,
       generateUUID,
       getPositionOnCanvas,
       resizeAllParents,
