@@ -7,8 +7,8 @@ interface Props {
 
 export const AppProviders: React.FC<Props> = ({ children }) => {
   return (
-    <ModalProvider>
-      <Apollon2Provider>{children}</Apollon2Provider>
-    </ModalProvider>
+    <Apollon2Provider>
+      <ModalProvider>{children}</ModalProvider>
+    </Apollon2Provider>
   )
 }

@@ -160,8 +160,14 @@ export class Apollon2 {
   public makeWebsocketConnection(serverUrl: string, roomname: string) {
     const wsProvider = new WebsocketProvider(serverUrl, roomname, ydoc)
 
-    wsProvider.on("status", (event) => {
-      console.log(event.status) // logs "connected" or "disconnected"
+    wsProvider.on("status", ({ status }) => {
+      console.log("WebSocket status:", status)
+    })
+    wsProvider.on("connection-error", (error) => {
+      console.error("WebSocket connection error:", error)
+    })
+    wsProvider.on("connection-close", (event) => {
+      console.log("WebSocket closed:", event)
     })
   }
 }

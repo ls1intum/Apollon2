@@ -14,12 +14,13 @@ interface Apollon2ContextType {
   setApollon2: React.Dispatch<React.SetStateAction<Apollon2 | undefined>>
 }
 
-const Apollon2Context = createContext<Apollon2ContextType | undefined>(
+export const Apollon2Context = createContext<Apollon2ContextType | undefined>(
   undefined
 )
 
 export const useApollon2Context = () => {
   const context = useContext(Apollon2Context)
+
   if (!context) {
     throw new Error(
       "useApollon2Context must be used within an Apollon2Provider"
