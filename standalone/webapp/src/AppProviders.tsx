@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react"
-import { Apollon2Provider } from "@/contexts/Apollon2Context"
-import { ModalProvider } from "@/contexts/ModalContext"
+import { Apollon2Provider, ModalProvider } from "@/contexts"
 
 interface Props {
   children: ReactNode
