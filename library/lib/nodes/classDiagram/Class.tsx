@@ -10,8 +10,8 @@ import { ClassPopover, ClassSVG, MinSize } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 
-import { useClassNode, useHandleOnResize } from "@/hooks"
-import { useState } from "react"
+import { useClassNode } from "@/hooks"
+import { useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { ClassNodeProps } from "@/types"
 
@@ -20,23 +20,23 @@ export function Class({
   width,
   height,
   selected,
-  parentId,
   data: { methods, attributes, stereotype, name },
 }: NodeProps<Node<ClassNodeProps>>) {
   const [{ minHeight, minWidth }, setMinSize] = useState<MinSize>({
     minWidth: 0,
     minHeight: 0,
   })
+  const [showEditPopover, setShowEditPopover] = useState(false)
 
-  const {
-    svgRef,
-    anchorEl,
-    handleClick,
-    handlePopoverClose,
-    handleNameChange,
-    handleDelete,
-  } = useClassNode({ id, selected: Boolean(selected) })
-  const { onResize } = useHandleOnResize(parentId)
+  const svgRef = useRef<SVGSVGElement | null>(null)
+
+  const handlePopoverClose = () => {
+    setShowEditPopover(false)
+  }
+  const { handleNameChange, handleDelete } = useClassNode({
+    id,
+    selected: Boolean(selected),
+  })
 
   if (!width || !height) {
     return null
@@ -50,7 +50,6 @@ export function Class({
         minWidth={minWidth}
         minHeight={minHeight}
         maxHeight={minHeight}
-        onResize={onResize}
         handleStyle={{ width: 8, height: 8 }}
       />
       <NodeToolbar
@@ -66,7 +65,9 @@ export function Class({
           />
 
           <EditIcon
-            onClick={handleClick}
+            onClick={() => {
+              setShowEditPopover(true)
+            }}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />
         </Box>
@@ -84,8 +85,8 @@ export function Class({
       />
       <ClassPopover
         nodeId={id}
-        anchorEl={anchorEl}
-        open={Boolean(selected)}
+        anchorEl={svgRef.current}
+        open={Boolean(showEditPopover)}
         onClose={handlePopoverClose}
         onNameChange={handleNameChange}
       />

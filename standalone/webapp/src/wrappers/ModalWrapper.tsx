@@ -18,7 +18,7 @@ const MODAL_COMPONENTS: Record<ModalName, React.ComponentType<unknown>> = {
   // Add other modals here
 }
 
-export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name }) => {
+export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
   const SpecificModal = MODAL_COMPONENTS[name]
 
   if (!SpecificModal) {
@@ -26,9 +26,5 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name }) => {
     return null
   }
 
-  return (
-    <>
-      <SpecificModal />
-    </>
-  )
+  return <SpecificModal {...props} />
 }
