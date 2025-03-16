@@ -31,7 +31,8 @@
     "capacitor:add:ios": "npx cap add ios",
     "capacitor:sync": "npx cap sync",
     "capacitor:open:android": "npx cap open android",
-    "capacitor:open:ios": "npx cap open ios"
+    "capacitor:open:ios": "npx cap open ios",
+    "capacitor:assets:generate": "npx capacitor-assets generate"
   },
   "license": "MIT",
   "engines": {
@@ -46,10 +47,12 @@
     "prettier": "3.4.2"
   },
   "dependencies": {
+    "@capacitor/assets": "3.0.5",
     "@capacitor/android": "7.0.1",
     "@capacitor/cli": "7.0.1",
     "@capacitor/core": "7.0.1",
     "@capacitor/ios": "7.0.1",
+    "@capacitor/splash-screen": "7.0.0",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.0",
     "@mui/material": "6.4.2",

@@ -61,3 +61,6 @@ library/stats.html
 # Capacitor generated mobile files
 android/
 ios/
+
+# Capacitor generated icons
+icons/
