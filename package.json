@@ -26,7 +26,12 @@
     "lint:fix:webapp": "npm run lint:fix --workspace=@apollon2/webapp",
     "format": "prettier --ignore-path .prettierignore --write \"**/*.+(js|ts|tsx|json)\"",
     "format:check": "prettier --ignore-path .prettierignore --check \"**/*.(js|ts|tsx|json)\"",
-    "preview": "husky"
+    "preview": "husky",
+    "capacitor:add:android": "npx cap add android",
+    "capacitor:add:ios": "npx cap add ios",
+    "capacitor:sync": "npx cap sync",
+    "capacitor:open:android": "npx cap open android",
+    "capacitor:open:ios": "npx cap open ios"
   },
   "license": "MIT",
   "engines": {
