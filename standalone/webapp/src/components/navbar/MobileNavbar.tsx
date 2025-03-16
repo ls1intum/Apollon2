@@ -13,6 +13,7 @@ import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR } from "@/constants"
 import { useApollon2Context } from "@/contexts/Apollon2Context"
 import TextField from "@mui/material/TextField/TextField"
+import TumLogo from "assets/images/tum-logo.png"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
@@ -43,12 +44,7 @@ export default function MobileNavbar() {
           {/* Mobile Menu Button */}
           <Box sx={{ ml: 2, display: "flex", alignItems: "center" }}>
             {/* Logo */}
-            <img
-              alt="Logo"
-              src="/assets/images/tum-logo.png"
-              width="60"
-              height="30"
-            />
+            <img alt="Logo" src={TumLogo} width="60" height="30" />
 
             <IconButton
               size="large"
