@@ -57,3 +57,7 @@ eslintcache
 .prettiercache
 
 library/stats.html
+
+# Capacitor generated mobile files
+android/
+ios/
