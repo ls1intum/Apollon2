@@ -9,6 +9,7 @@ import { NavbarHelp } from "./NavbarHelp"
 import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR, secondary } from "@/constants"
 import { useApollon2Context } from "@/contexts/Apollon2Context"
+import TumLogo from "assets/images/tum-logo.png"
 
 export const DesktopNavbar = () => {
   const { diagramName, setDiagramName, apollon2 } = useApollon2Context()
@@ -22,7 +23,7 @@ export const DesktopNavbar = () => {
       <Toolbar disableGutters sx={{ ml: 2 }}>
         <img
           alt="Logo"
-          src="/assets/images/tum-logo.png"
+          src={TumLogo}
           width="60"
           height="30"
           style={{ marginRight: 10 }}

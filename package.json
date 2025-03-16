@@ -24,12 +24,15 @@
     "lint:fix:lib": "npm run lint:fix --workspace=@apollon2/library",
     "lint:fix:server": "npm run lint:fix --workspace=@apollon2/server",
     "lint:fix:webapp": "npm run lint:fix --workspace=@apollon2/webapp",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|tsx|json)\"",
-    "format:check": "prettier --ignore-path .gitignore --check \"**/*.(js|ts|tsx|json)\"",
+    "format": "prettier --ignore-path .prettierignore --write \"**/*.+(js|ts|tsx|json)\"",
+    "format:check": "prettier --ignore-path .prettierignore --check \"**/*.(js|ts|tsx|json)\"",
     "preview": "husky",
-    "docker:build": "docker build --no-cache --platform=linux/amd64 -t apollon2-webapp:latest .",
-    "docker:start": "docker run -d -p 8080:80 --name apollon2-webapp-test apollon2-webapp:latest",
-    "docker:publish": "docker push egenerse45/apollon2-webapp:latest"
+    "capacitor:add:android": "npx cap add android",
+    "capacitor:add:ios": "npx cap add ios",
+    "capacitor:sync": "npx cap sync",
+    "capacitor:open:android": "npx cap open android",
+    "capacitor:open:ios": "npx cap open ios",
+    "capacitor:assets:generate": "npx capacitor-assets generate"
   },
   "license": "MIT",
   "engines": {
@@ -44,9 +47,16 @@
     "prettier": "3.4.2"
   },
   "dependencies": {
+    "@capacitor/assets": "3.0.5",
+    "@capacitor/android": "7.0.1",
+    "@capacitor/cli": "7.0.1",
+    "@capacitor/core": "7.0.1",
+    "@capacitor/ios": "7.0.1",
+    "@capacitor/splash-screen": "7.0.0",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.0",
     "@mui/material": "6.4.2",
+    "capacitor-plugin-safe-area": "4.0.0",
     "yjs": "13.6.20"
   }
 }

@@ -65,6 +65,45 @@ Ensure you have the following installed:
    ```bash
    npm run start
    ```
+## Setup Instructions for iOS and Android 
+
+1. Install the latest packages
+  ```bash
+   npm i
+   ```
+
+2. Build the application
+    ```bash
+   npm run build
+   ```
+3. For the first time, generate ios and android folder:
+
+   ```bash
+   npm run capacitor:add:ios
+   ```
+
+   ```bash
+   npm run capacitor:add:android
+   ```
+4. Generate assets:
+
+  ```bash
+   npm capacitor:assets:generate
+   ```
+5. Sync the files
+
+  ```bash
+   npm capacitor:sync
+   ```
+
+6. Open the App 
+
+  ```bash
+   npm capacitor:open:ios
+   ```
+   ```bash
+   npm capacitor:open:android
+   ```
 
 ## Verifying Versions
 
