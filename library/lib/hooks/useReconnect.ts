@@ -1,10 +1,10 @@
-import useDiagramStore from "@/store/diagramStore"
+import { useBoundStore } from "@/store"
 import { Edge, Connection } from "@xyflow/react"
 import { useCallback } from "react"
 import { useShallow } from "zustand/shallow"
 
 export const useReconnect = () => {
-  const { setEdges, edges } = useDiagramStore(
+  const { setEdges, edges } = useBoundStore(
     useShallow((state) => ({ setEdges: state.setEdges, edges: state.edges }))
   )
 

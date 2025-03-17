@@ -9,7 +9,7 @@ import { DiagramType, DropNodeData } from "@/types"
 import { createPortal } from "react-dom"
 import { useReactFlow, type Node } from "@xyflow/react"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
-import useDiagramStore from "@/store/diagramStore"
+import { useBoundStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
 
@@ -91,7 +91,7 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
 }) => {
   // Hooks from react-flow and zustand store for node management
   const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
-  const { setNodes, nodes } = useDiagramStore(
+  const { setNodes, nodes } = useBoundStore(
     useShallow((state) => ({ setNodes: state.setNodes, nodes: state.nodes }))
   )
 

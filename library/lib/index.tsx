@@ -9,7 +9,7 @@ import {
   validateParsedJSON,
 } from "./utils"
 import { DiagramType } from "./types"
-import { DiagramStoreData } from "./store/diagramStore"
+import { DiagramStoreData } from "./store/diagramSlice"
 export * from "./types"
 import { WebsocketProvider } from "y-websocket"
 import ydoc from "./sync/ydoc"

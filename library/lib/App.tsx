@@ -23,8 +23,10 @@ import { diagramEdgeTypes } from "./edges"
 import "@/styles/app.css"
 import { DiagramType } from "./types"
 import { useCursorStateSynced } from "./sync"
-import useDiagramStore, { DiagramStoreData } from "./store/diagramStore"
+import { useBoundStore } from "./store"
 import { useDragOver } from "./hooks/useDragOver"
+import { DiagramStoreData } from "./store/diagramSlice"
+import { useShallow } from "zustand/shallow"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -35,7 +37,9 @@ interface AppProps {
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, diagramType }: AppProps) {
-  const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore()
+  const { nodes, onNodesChange, edges, onEdgesChange } = useBoundStore(
+    useShallow((state) => state)
+  )
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
   const [cursors, onMouseMove] = useCursorStateSynced()
@@ -90,8 +94,11 @@ export function AppWithProvider({
   subscribers,
 }: AppProps) {
   subscribers.forEach((subscriber) =>
-    useDiagramStore.subscribe((state) =>
-      subscriber({ nodes: state.nodes, edges: state.edges })
+    useBoundStore.subscribe((state) =>
+      subscriber({
+        nodes: state.nodes,
+        edges: state.edges,
+      })
     )
   )
   return (

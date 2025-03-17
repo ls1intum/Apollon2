@@ -2,12 +2,12 @@ import { useCallback } from "react"
 import { type OnNodeDrag, type Node, useReactFlow } from "@xyflow/react"
 import { getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
-import useDiagramStore from "@/store/diagramStore"
+import { useBoundStore } from "@/store"
 import { useShallow } from "zustand/react/shallow"
 
 export const useNodeDragStop = () => {
   const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
-  const { setNodes, nodes } = useDiagramStore(
+  const { setNodes, nodes } = useBoundStore(
     useShallow((state) => ({ setNodes: state.setNodes, nodes: state.nodes }))
   )
 
