@@ -25,13 +25,11 @@ import { DiagramType } from "./types"
 import { useCursorStateSynced } from "./sync"
 import { useBoundStore } from "./store"
 import { useDragOver } from "./hooks/useDragOver"
-import { DiagramStoreData } from "./store/diagramSlice"
 import { useShallow } from "zustand/shallow"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
   diagramType: DiagramType
-  subscribers: Set<(state: DiagramStoreData) => void>
 }
 
 const proOptions = { hideAttribution: true }
@@ -88,26 +86,10 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
   )
 }
 
-export function AppWithProvider({
-  onReactFlowInit,
-  diagramType,
-  subscribers,
-}: AppProps) {
-  subscribers.forEach((subscriber) =>
-    useBoundStore.subscribe((state) =>
-      subscriber({
-        nodes: state.nodes,
-        edges: state.edges,
-      })
-    )
-  )
+export function AppWithProvider({ onReactFlowInit, diagramType }: AppProps) {
   return (
     <ReactFlowProvider>
-      <App
-        onReactFlowInit={onReactFlowInit}
-        diagramType={diagramType}
-        subscribers={subscribers}
-      />
+      <App onReactFlowInit={onReactFlowInit} diagramType={diagramType} />
     </ReactFlowProvider>
   )
 }
