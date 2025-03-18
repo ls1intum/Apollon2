@@ -2,12 +2,12 @@ import { useCallback } from "react"
 import { type OnNodeDrag, type Node, useReactFlow } from "@xyflow/react"
 import { getPositionOnCanvas, resizeAllParents } from "@/utils"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
-import useDiagramStore from "@/store/diagramStore"
+import { useBoundStore } from "@/store"
 import { useShallow } from "zustand/react/shallow"
 
 export const useNodeDragStop = () => {
   const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
-  const { setNodes, nodes } = useDiagramStore(
+  const { setNodes, nodes } = useBoundStore(
     useShallow((state) => ({ setNodes: state.setNodes, nodes: state.nodes }))
   )
 
@@ -71,9 +71,10 @@ export const useNodeDragStop = () => {
         updatedNode.position.y -= parentsFlowPosition.y
         updatedNode.parentId = parentNode.id
 
+        const updatedNodes = structuredClone(nodes)
         const updatedNodesList = resizeAllParents(
           updatedNode,
-          nodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
+          updatedNodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
         )
 
         setNodes(updatedNodesList)
@@ -81,9 +82,13 @@ export const useNodeDragStop = () => {
       }
 
       if (draggedNode.parentId) {
+        const updatedNodes = structuredClone(nodes)
         const updatedNodesList = resizeAllParents(
           draggedNode,
-          nodes.map((n) => (n.id === draggedNode.id ? { ...draggedNode } : n))
+
+          updatedNodes.map((n) =>
+            n.id === draggedNode.id ? { ...draggedNode } : n
+          )
         )
         setNodes(updatedNodesList)
       }

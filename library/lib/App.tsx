@@ -11,9 +11,9 @@ import {
 } from "@xyflow/react"
 
 import {
-  HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
   MAX_SCALE_TO_ZOOM_IN,
   MIN_SCALE_TO_ZOOM_OUT,
+  SNAP_TO_GRID_PX,
 } from "./constants"
 
 import { Cursors, Sidebar, SvgMarkers } from "@/components"
@@ -23,19 +23,21 @@ import { diagramEdgeTypes } from "./edges"
 import "@/styles/app.css"
 import { DiagramType } from "./types"
 import { useCursorStateSynced } from "./sync"
-import useDiagramStore, { DiagramStoreData } from "./store/diagramStore"
+import { useBoundStore } from "./store"
 import { useDragOver } from "./hooks/useDragOver"
+import { useShallow } from "zustand/shallow"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
   diagramType: DiagramType
-  subscribers: Set<(state: DiagramStoreData) => void>
 }
 
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, diagramType }: AppProps) {
-  const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore()
+  const { nodes, onNodesChange, edges, onEdgesChange } = useBoundStore(
+    useShallow((state) => state)
+  )
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
   const [cursors, onMouseMove] = useCursorStateSynced()
@@ -70,10 +72,7 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
-        snapGrid={[
-          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
-          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
-        ]}
+        snapGrid={[SNAP_TO_GRID_PX / 2, SNAP_TO_GRID_PX / 2]}
       >
         <Cursors cursors={cursors} />
         <Background variant={BackgroundVariant.Lines} />
@@ -84,23 +83,10 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
   )
 }
 
-export function AppWithProvider({
-  onReactFlowInit,
-  diagramType,
-  subscribers,
-}: AppProps) {
-  subscribers.forEach((subscriber) =>
-    useDiagramStore.subscribe((state) =>
-      subscriber({ nodes: state.nodes, edges: state.edges })
-    )
-  )
+export function AppWithProvider({ onReactFlowInit, diagramType }: AppProps) {
   return (
     <ReactFlowProvider>
-      <App
-        onReactFlowInit={onReactFlowInit}
-        diagramType={diagramType}
-        subscribers={subscribers}
-      />
+      <App onReactFlowInit={onReactFlowInit} diagramType={diagramType} />
     </ReactFlowProvider>
   )
 }

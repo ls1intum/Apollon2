@@ -21,7 +21,6 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
   [DiagramType.ClassDiagram]: [
     {
       type: "package",
-
       width: droppedElementWidth,
       height: 120,
       defaultData: { name: "Package" },
@@ -33,7 +32,6 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
       height: 100,
       defaultData: {
         name: "Class",
-
         methods: [{ id: generateUUID(), name: "+ method()" }],
         attributes: [{ id: generateUUID(), name: "+ attribute: Type" }],
       },
@@ -85,7 +83,6 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
   [DiagramType.ObjectDiagram]: [
     {
       type: "class",
-
       width: droppedElementWidth,
       height: 70,
       defaultData: {
