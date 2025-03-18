@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
@@ -17,7 +17,24 @@ import TumLogo from "assets/images/tum-logo.png"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
-  const { diagramName, setDiagramName, apollon2 } = useApollon2Context()
+  const { apollon2 } = useApollon2Context()
+  const [diagramName, setDiagramName] = useState("")
+  const unsubscribe = useRef<() => void>()
+
+  useEffect(() => {
+    if (apollon2 && !unsubscribe.current) {
+      unsubscribe.current = apollon2.subscribeToDiagramNameChange(
+        (diagramName) => {
+          setDiagramName(diagramName)
+        }
+      )
+    }
+    // Cleanup subscription
+    return () => {
+      unsubscribe.current?.()
+    }
+  }, [apollon2])
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
@@ -95,7 +112,9 @@ export default function MobileNavbar() {
                 <Box sx={{ p: 0.5 }}>
                   <TextField
                     value={diagramName}
-                    onChange={(event) => setDiagramName(event.target.value)}
+                    onChange={(event) =>
+                      apollon2?.updateDiagramName(event.target.value)
+                    }
                     placeholder="Diagram Name"
                     fullWidth
                     sx={{ input: { padding: 0.5 } }}

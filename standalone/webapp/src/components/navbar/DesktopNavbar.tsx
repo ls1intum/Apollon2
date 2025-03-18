@@ -10,9 +10,26 @@ import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR, secondary } from "@/constants"
 import { useApollon2Context } from "@/contexts/Apollon2Context"
 import TumLogo from "assets/images/tum-logo.png"
+import { useEffect, useRef, useState } from "react"
 
 export const DesktopNavbar = () => {
-  const { diagramName, setDiagramName, apollon2 } = useApollon2Context()
+  const { apollon2 } = useApollon2Context()
+  const [diagramName, setDiagramName] = useState("")
+  const unsubscribe = useRef<() => void>()
+
+  useEffect(() => {
+    if (apollon2 && !unsubscribe.current) {
+      unsubscribe.current = apollon2.subscribeToDiagramNameChange(
+        (diagramName) => {
+          setDiagramName(diagramName)
+        }
+      )
+    }
+    // Cleanup subscription
+    return () => {
+      unsubscribe.current?.()
+    }
+  }, [apollon2])
 
   return (
     <AppBar
@@ -51,7 +68,10 @@ export const DesktopNavbar = () => {
           <TextField
             sx={{ input: { color: "white", padding: 1 }, marginLeft: 1 }}
             value={diagramName}
-            onChange={(event) => setDiagramName(event.target.value)}
+            // onChange={(event) => setDiagramName(event.target.value)}
+            onChange={(event) => {
+              apollon2?.updateDiagramName(event.target.value)
+            }}
             placeholder="Diagram Name"
             variant="outlined"
           />

@@ -1,10 +1,10 @@
 import { Edge, Connection } from "@xyflow/react"
 import { useCallback } from "react"
 import { generateUUID } from "@/utils"
-import useDiagramStore from "@/store/diagramStore"
+import { useBoundStore } from "@/store"
 
 export const useConnect = () => {
-  const addEdge = useDiagramStore((state) => state.addEdge)
+  const addEdge = useBoundStore((state) => state.addEdge)
 
   const onConnect = useCallback(
     (connection: Connection) => {

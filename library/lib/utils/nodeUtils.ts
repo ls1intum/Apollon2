@@ -57,6 +57,44 @@ export const resizeAllParents = (node: Node, allNodes: Node[]) => {
   return allNodes
 }
 
+export function resizeAllParents2(child: Node, nodes: Node[]) {
+  let currentNode = child
+  while (currentNode.parentId) {
+    const parent = nodes.find((n) => n.id === currentNode.parentId)
+    if (!parent) break
+
+    // Adjust parent position and size if child has negative coordinates
+    const offsetX = Math.min(0, currentNode.position.x)
+    const offsetY = Math.min(0, currentNode.position.y)
+
+    if (offsetX < 0 || offsetY < 0) {
+      // Shift parent to the new top-left corner
+      parent.position.x += offsetX
+      parent.position.y += offsetY
+
+      // Expand parent dimensions to cover the child fully
+      parent.width = Math.max(
+        parent.width || 0,
+        currentNode.position.x + (currentNode.width || 0) - offsetX
+      )
+      parent.height = Math.max(
+        parent.height || 0,
+        currentNode.position.y + (currentNode.height || 0) - offsetY
+      )
+
+      // Adjust all other child nodes within this parent
+      nodes.forEach((n) => {
+        if (n.parentId === parent.id) {
+          n.position.x -= offsetX
+          n.position.y -= offsetY
+        }
+      })
+    }
+
+    currentNode = parent // Move up to next parent in the hierarchy
+  }
+}
+
 export function sortNodesTopologically(nodes: Node[]): Node[] {
   const nodeMap = new Map<string, Node>()
   nodes.forEach((node) => nodeMap.set(node.id, node))
