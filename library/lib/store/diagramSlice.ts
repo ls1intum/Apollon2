@@ -9,7 +9,6 @@ import {
   applyEdgeChanges,
 } from "@xyflow/react"
 
-import { sortNodesTopologically } from "@/utils"
 import { edgesMap, nodesMap } from "."
 
 export type DiagramStoreData = {
@@ -52,8 +51,6 @@ export const createDiagramSlice: StateCreator<DiagramSlice> = (set) => ({
         nodesMap.delete(node.id)
       }
     }
-
-    set({ nodes: sortNodesTopologically(nodes) })
   },
 
   setEdges: (edges) => {
@@ -69,8 +66,6 @@ export const createDiagramSlice: StateCreator<DiagramSlice> = (set) => ({
         edgesMap.delete(edge.id)
       }
     }
-
-    set({ edges })
   },
 
   onNodesChange: (changes) => {

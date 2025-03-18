@@ -71,9 +71,10 @@ export const useNodeDragStop = () => {
         updatedNode.position.y -= parentsFlowPosition.y
         updatedNode.parentId = parentNode.id
 
+        const updatedNodes = structuredClone(nodes)
         const updatedNodesList = resizeAllParents(
           updatedNode,
-          nodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
+          updatedNodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
         )
 
         setNodes(updatedNodesList)
@@ -81,9 +82,13 @@ export const useNodeDragStop = () => {
       }
 
       if (draggedNode.parentId) {
+        const updatedNodes = structuredClone(nodes)
         const updatedNodesList = resizeAllParents(
           draggedNode,
-          nodes.map((n) => (n.id === draggedNode.id ? { ...draggedNode } : n))
+
+          updatedNodes.map((n) =>
+            n.id === draggedNode.id ? { ...draggedNode } : n
+          )
         )
         setNodes(updatedNodesList)
       }

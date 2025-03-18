@@ -8,7 +8,7 @@ import { DividerLine } from "./DividerLine"
 import { DiagramType, DropNodeData } from "@/types"
 import { createPortal } from "react-dom"
 import { useReactFlow, type Node } from "@xyflow/react"
-import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
+import { MOUSE_UP_OFFSET_IN_PIXELS, SNAP_TO_GRID_PX } from "@/constants"
 import { useBoundStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
@@ -141,12 +141,6 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
         offsetY: clickOffset.y / transformScale,
       }
 
-      // Adjust node position based on pointer offset
-      const position = {
-        x: dropPosition.x - dropData.offsetX,
-        y: dropPosition.y - dropData.offsetY,
-      }
-
       // Find potential parent node by checking intersections with "package" type nodes
       const intersectingNodes = getIntersectingNodes({
         x: dropPosition.x,
@@ -154,8 +148,30 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
         width: MOUSE_UP_OFFSET_IN_PIXELS,
         height: MOUSE_UP_OFFSET_IN_PIXELS,
       }).filter((node) => node.type === "package")
+
       const parentNode = intersectingNodes[intersectingNodes.length - 1]
       const parentId = parentNode ? parentNode.id : undefined
+
+      // Adjust node position based on pointer offset
+      const position = screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      })
+
+      // Snap position to grid
+      position.x -=
+        Math.floor(clickOffset.x / transformScale / SNAP_TO_GRID_PX) *
+        SNAP_TO_GRID_PX
+      position.y -=
+        Math.floor(clickOffset.y / transformScale / SNAP_TO_GRID_PX) *
+        SNAP_TO_GRID_PX
+
+      if (parentId) {
+        const parentPositionOnCanvas = getPositionOnCanvas(parentNode, nodes)
+        console.log("Parent position:", parentPositionOnCanvas)
+        position.x -= parentPositionOnCanvas.x
+        position.y -= parentPositionOnCanvas.y
+      }
 
       // Create the new node with a unique ID and calculated position
       const newNode: Node = {
@@ -165,21 +181,17 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
         type: dropData.type,
         position: { ...position },
         data: { ...dropElementConfig.defaultData, ...dropData.data },
-        parentId,
+        parentId: parentId,
       }
 
       // Adjust position relative to parent if a parent exists
-      if (parentId) {
-        const parentPositionOnCanvas = getPositionOnCanvas(parentNode, nodes)
-        newNode.position.x -= parentPositionOnCanvas.x
-        newNode.position.y -= parentPositionOnCanvas.y
-      }
 
       // Update nodes and resize parent nodes if necessary
-      const updatedNodes = [...nodes, newNode]
+      const updatedNodes = structuredClone([...nodes, newNode])
       if (parentId) {
         resizeAllParents(newNode, updatedNodes)
       }
+
       setNodes(updatedNodes)
     },
     [

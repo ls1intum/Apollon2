@@ -11,9 +11,9 @@ import {
 } from "@xyflow/react"
 
 import {
-  HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
   MAX_SCALE_TO_ZOOM_IN,
   MIN_SCALE_TO_ZOOM_OUT,
+  SNAP_TO_GRID_PX,
 } from "./constants"
 
 import { Cursors, Sidebar, SvgMarkers } from "@/components"
@@ -72,10 +72,7 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
-        snapGrid={[
-          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
-          HALF_OF_BACKGROUND_BOX_LENGHT_IN_PX,
-        ]}
+        snapGrid={[SNAP_TO_GRID_PX / 2, SNAP_TO_GRID_PX / 2]}
       >
         <Cursors cursors={cursors} />
         <Background variant={BackgroundVariant.Lines} />
