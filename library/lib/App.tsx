@@ -3,19 +3,22 @@ import {
   ReactFlowProvider,
   Background,
   BackgroundVariant,
-  Controls,
   ConnectionLineType,
   ConnectionMode,
   ReactFlowInstance,
 } from "@xyflow/react"
-
 import {
   MAX_SCALE_TO_ZOOM_IN,
   MIN_SCALE_TO_ZOOM_OUT,
   SNAP_TO_GRID_PX,
 } from "./constants"
-
-import { Cursors, Sidebar, SvgMarkers, CollapsableMiniMap } from "@/components"
+import {
+  Cursors,
+  Sidebar,
+  SvgMarkers,
+  CollapsableMiniMap,
+  ExtendedControls,
+} from "@/components"
 import { diagramNodeTypes } from "./nodes"
 import { useConnect, useReconnect, useNodeDragStop } from "./hooks"
 import { diagramEdgeTypes } from "./edges"
@@ -77,9 +80,8 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
       >
         <Cursors cursors={cursors} />
         <Background variant={BackgroundVariant.Lines} />
-
         <CollapsableMiniMap />
-        <Controls orientation="horizontal" />
+        <ExtendedControls />
       </ReactFlow>
     </div>
   )
