@@ -4,7 +4,6 @@ import {
   Background,
   BackgroundVariant,
   Controls,
-  MiniMap,
   ConnectionLineType,
   ConnectionMode,
   ReactFlowInstance,
@@ -16,7 +15,7 @@ import {
   SNAP_TO_GRID_PX,
 } from "./constants"
 
-import { Cursors, Sidebar, SvgMarkers } from "@/components"
+import { Cursors, Sidebar, SvgMarkers, CollapsableMiniMap } from "@/components"
 import { diagramNodeTypes } from "./nodes"
 import { useConnect, useReconnect, useNodeDragStop } from "./hooks"
 import { diagramEdgeTypes } from "./edges"
@@ -38,6 +37,7 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
   const { nodes, onNodesChange, edges, onEdgesChange } = useBoundStore(
     useShallow((state) => state)
   )
+
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
   const [cursors, onMouseMove] = useCursorStateSynced()
@@ -76,7 +76,8 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
       >
         <Cursors cursors={cursors} />
         <Background variant={BackgroundVariant.Lines} />
-        <MiniMap zoomable pannable />
+
+        <CollapsableMiniMap />
         <Controls orientation="horizontal" />
       </ReactFlow>
     </div>
