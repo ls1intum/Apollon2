@@ -1,8 +1,6 @@
 import {
   ReactFlow,
   ReactFlowProvider,
-  Background,
-  BackgroundVariant,
   ConnectionLineType,
   ConnectionMode,
   ReactFlowInstance,
@@ -16,8 +14,9 @@ import {
   Cursors,
   Sidebar,
   SvgMarkers,
-  CollapsableMiniMap,
-  ExtendedControls,
+  CustomMiniMap,
+  CustomControls,
+  CustomBackground,
 } from "@/components"
 import { diagramNodeTypes } from "./nodes"
 import { useConnect, useReconnect, useNodeDragStop } from "./hooks"
@@ -76,12 +75,12 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
-        snapGrid={[SNAP_TO_GRID_PX / 2, SNAP_TO_GRID_PX / 2]}
+        snapGrid={[SNAP_TO_GRID_PX, SNAP_TO_GRID_PX]}
       >
         <Cursors cursors={cursors} />
-        <Background variant={BackgroundVariant.Lines} />
-        <CollapsableMiniMap />
-        <ExtendedControls />
+        <CustomBackground />
+        <CustomMiniMap />
+        <CustomControls />
       </ReactFlow>
     </div>
   )

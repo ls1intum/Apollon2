@@ -1,7 +1,7 @@
 import { Controls, useReactFlow } from "@xyflow/react"
 import CenterFocusWeakIcon from "@mui/icons-material/CenterFocusWeak"
 
-export const ExtendedControls = () => {
+export const CustomControls = () => {
   const { zoomTo } = useReactFlow()
 
   return (
