@@ -64,9 +64,10 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
         connectionLineType={ConnectionLineType.Step}
         connectionMode={ConnectionMode.Loose}
         onPointerMove={onMouseMove}
-        fitView
         onInit={(instance) => {
-          instance.zoomTo(1)
+          if (instance.getNodes().length > 0) {
+            instance.fitView()
+          }
           onReactFlowInit(instance)
         }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
