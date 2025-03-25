@@ -43,7 +43,7 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
   const [cursors, onMouseMove] = useCursorStateSynced()
-  const { onConnect } = useConnect()
+  const { onConnect, onConnectEnd, onConnectStart } = useConnect()
   const { onReconnect } = useReconnect()
 
   return (
@@ -60,16 +60,15 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
         onDragOver={onDragOver}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onConnectStart={onConnectStart}
         onConnect={onConnect}
+        onConnectEnd={onConnectEnd}
         onNodeDragStop={onNodeDragStop}
         onReconnect={onReconnect}
         connectionLineType={ConnectionLineType.Step}
         connectionMode={ConnectionMode.Loose}
         onPointerMove={onMouseMove}
         onInit={(instance) => {
-          if (instance.getNodes().length > 0) {
-            instance.fitView()
-          }
           onReactFlowInit(instance)
         }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
