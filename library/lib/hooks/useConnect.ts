@@ -116,7 +116,6 @@ export const useConnect = () => {
             (edge) => edge.id === startEdge.current?.id
           )
 
-          console.log("onConnectEnd useCallback updatedEdge", updatedEdge)
           if (!updatedEdge) return
           const newEdge =
             connectionStartParams.current?.handleType === "source"
@@ -133,11 +132,6 @@ export const useConnect = () => {
             )
           )
         } else {
-          console.log(
-            "onConnectEnd useCallback startEdge is not here create a new edge with randomid starteedge and connectionState",
-            startEdge.current,
-            connectionState
-          )
           // No start edge exists: create a new one
           setEdges((eds) =>
             eds.concat({
