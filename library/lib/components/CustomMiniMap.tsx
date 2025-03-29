@@ -39,7 +39,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           }}
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
-          id={id}
+          id={`minimap_${id}`}
           methods={(nodeInfo.data["methods"] as []) || []}
           attributes={(nodeInfo.data["attributes"] as []) || []}
           name={(nodeInfo.data.name as string) || ""}
@@ -50,7 +50,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
         <PackageSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
-          id={id}
+          id={`minimap_${id}`}
           name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{
             x,
