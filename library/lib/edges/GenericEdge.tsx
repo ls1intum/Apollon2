@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState} from "react"
 import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
 import { EdgePopover } from "@/components"
 import {
@@ -16,7 +16,25 @@ import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
+import { IPoint, Connection, tryFindStraightPath } from "./Connection"
+
+
 // Extend the props to include markerEnd and markerPadding.
+export function pointsToSvgPath(points: IPoint[]): string {
+  if (points.length === 0) return '';
+
+  // Start with the first point using the "M" command.
+  const pathCommands = [`M ${points[0].x} ${points[0].y}`];
+
+  // Add "L" command for each subsequent point.
+  for (let i = 1; i < points.length; i++) {
+    pathCommands.push(`L ${points[i].x} ${points[i].y}`);
+  }
+
+  // Combine commands into a single string
+  return pathCommands.join(' ');
+}
+
 
 export const GenericEdge = ({
   id,
@@ -43,7 +61,7 @@ export const GenericEdge = ({
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
-  const { updateEdge } = useReactFlow()
+  const { updateEdge, getNode } = useReactFlow()
 
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
@@ -96,12 +114,34 @@ export const GenericEdge = ({
     multiplicityY: targetMultiplicityY,
   } = calculateEdgeLabels(targetX, targetY, targetPosition)
 
+   const sourceNode = getNode(source)!
+   const targetNode = getNode(target)!
+
+  const path: IPoint[] = Connection.computePath(
+    { position: {x: sourceNode.position.x ,y: sourceNode.position.y}, width: sourceNode.width ?? 100, height: sourceNode.height ?? 160 , direction: sourcePosition },
+    { position: {x: targetNode.position.x ,y: targetNode.position.y}, width: targetNode.width ?? 100, height: targetNode.height ?? 160 , direction: targetPosition },
+    { isStraight: true, isVariable: false }
+  );
+  const svgPath = pointsToSvgPath(path)
+  console.log(edgePath)
+  console.log("source", sourceNode)
+  console.log("target", targetNode)
+  console.log("computed path", path)
+  console.log("svg", svgPath)
+  const straightPath = tryFindStraightPath({ position: {x: sourceNode.position.x ,y: sourceNode.position.y}, width: sourceNode.width ?? 100, height: sourceNode.height ?? 160 , direction: sourcePosition },
+    { position: {x: targetNode.position.x ,y: targetNode.position.y}, width: targetNode.width ?? 100, height: targetNode.height ?? 160 , direction: targetPosition },
+ )
+
+ console.log("Straight path", straightPath, sourcePosition, targetPosition)
+ 
+ const currentPath = straightPath !== null ? straightPath : edgePath;
+ console.log("Current", currentPath)
   return (
     <>
       {/* Render the visible edge (stays black) */}
       <BaseEdge
         id={id}
-        path={edgePath}
+        path={currentPath}
         markerEnd={markerEnd}
         pointerEvents="none"
         strokeDasharray={strokeDashArray}
@@ -109,7 +149,7 @@ export const GenericEdge = ({
 
       {/* Invisible overlay to capture pointer events */}
       <path
-        d={edgePath}
+        d={currentPath}
         fill="none"
         strokeWidth={12}
         pointerEvents="stroke"
@@ -186,3 +226,4 @@ export const GenericEdge = ({
     </>
   )
 }
+
