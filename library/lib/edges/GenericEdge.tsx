@@ -1,4 +1,4 @@
-import { useState} from "react"
+import { useCallback, useEffect, useState} from "react"
 import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
 import { EdgePopover } from "@/components"
 import {
@@ -16,25 +16,122 @@ import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
-import { IPoint, Connection, tryFindStraightPath } from "./Connection"
+import { IPoint, tryFindStraightPath , pointsToSvgPath} from "./Connection"
 
 
-// Extend the props to include markerEnd and markerPadding.
-export function pointsToSvgPath(points: IPoint[]): string {
-  if (points.length === 0) return '';
+// Utilss
+export function simplifySvgPath(path: string, decimals: number = 2): string {
+  const round = (num: number) => Number(num.toFixed(decimals));
 
-  // Start with the first point using the "M" command.
-  const pathCommands = [`M ${points[0].x} ${points[0].y}`];
+   const withSpaces = path.replace(/([MLQ])(?=[-0-9])/gi, "$1 ");
+  const cleaned = withSpaces.replace(/,/g, " ").trim();
+  const tokens = cleaned.split(/\s+/);
+  const outputTokens: string[] = [];
+  let i = 0;
 
-  // Add "L" command for each subsequent point.
-  for (let i = 1; i < points.length; i++) {
-    pathCommands.push(`L ${points[i].x} ${points[i].y}`);
+  while (i < tokens.length) {
+    const token = tokens[i].toUpperCase();
+    if (token === "M" || token === "L") {
+            const x = parseFloat(tokens[i + 1]);
+      const y = parseFloat(tokens[i + 2]);
+      if (!isNaN(x) && !isNaN(y)) {
+        outputTokens.push(token, round(x).toString(), round(y).toString());
+      }
+      i += 3;
+    } else if (token === "Q") {
+          const cx = parseFloat(tokens[i + 1]);
+      const cy = parseFloat(tokens[i + 2]);
+      const ex = parseFloat(tokens[i + 3]);
+      const ey = parseFloat(tokens[i + 4]);
+      if (cx === ex && cy === ey) {
+                outputTokens.push("L", round(ex).toString(), round(ey).toString());
+      } else {
+        outputTokens.push("Q", round(cx).toString(), round(cy).toString(), round(ex).toString(), round(ey).toString());
+      }
+      i += 5;
+    } else {
+       const x = parseFloat(tokens[i]);
+      const y = parseFloat(tokens[i + 1]);
+      if (!isNaN(x) && !isNaN(y)) {
+        outputTokens.push(round(x).toString(), round(y).toString());
+      }
+      i += 2;
+    }
   }
-
-  // Combine commands into a single string
-  return pathCommands.join(' ');
+  return outputTokens.join(" ");
 }
 
+export function simplifyPoints(points: IPoint[]): IPoint[] {
+  if (points.length < 3) return points;
+  const result: IPoint[] = [points[0]];
+  
+  for (let i = 1; i < points.length - 1; i++) {
+    const prev = result[result.length - 1];
+    const curr = points[i];
+    const next = points[i + 1];
+    if (prev.x === curr.x && curr.x === next.x) {
+     continue;
+    }
+     if (prev.y === curr.y && curr.y === next.y) {
+      continue;
+    }
+    result.push(curr);
+  }
+  result.push(points[points.length - 1]);
+  return result;
+}
+
+export function parseSvgPath(path: string): IPoint[] {
+  const tokens = path.replace(/,/g, " ").trim().split(/\s+/);
+  const points: IPoint[] = [];
+  let i = 0;
+  while (i < tokens.length) {
+    const token = tokens[i];
+    if (token === "M" || token === "L") {
+      const x = parseFloat(tokens[i + 1]);
+      const y = parseFloat(tokens[i + 2]);
+      if (!isNaN(x) && !isNaN(y)) {
+        points.push({ x, y });
+      }
+      i += 3;
+    } 
+    else {
+      const x = parseFloat(tokens[i]);
+      const y = parseFloat(tokens[i + 1]);
+      if (!isNaN(x) && !isNaN(y)) {
+        points.push({ x, y });
+      }
+      i += 2;
+    }
+  }
+  return simplifyPoints(points);
+}
+
+export function calculateInnerMidpoints(points: IPoint[], decimals: number = 2): IPoint[] {
+  const round = (num: number) => Number(num.toFixed(decimals));
+  const midpoints: IPoint[] = [];
+  if (points.length < 4) return midpoints;
+   for (let i = 1; i < points.length - 2; i++) {
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    midpoints.push({ x: round((p1.x + p2.x) / 2), y: round((p1.y + p2.y) / 2) });
+  }
+  return midpoints;
+}
+
+export function removeDuplicatePoints(points: IPoint[]): IPoint[] {
+  if (points.length === 0) return points;
+  const filtered: IPoint[] = [points[0]];
+  for (let i = 1; i < points.length; i++) {
+    const prev = filtered[filtered.length - 1];
+    const current = points[i];
+    if (current.x !== prev.x || current.y !== prev.y) {
+      filtered.push(current);
+    }
+  }
+  return filtered;
+}
+//Utils End
 
 export const GenericEdge = ({
   id,
@@ -66,9 +163,7 @@ export const GenericEdge = ({
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
   const padding = markerPadding ?? MARKER_PADDING
-
-  // Use the passed markerPadding when adjusting the target coordinates.
-  const adjustedTargetCoordinates = adjustTargetCoordinates(
+ const adjustedTargetCoordinates = adjustTargetCoordinates(
     targetX,
     targetY,
     targetPosition,
@@ -116,26 +211,76 @@ export const GenericEdge = ({
 
    const sourceNode = getNode(source)!
    const targetNode = getNode(target)!
+  console.log("source, target", adjustedSourceCoordinates.sourceX, adjustedSourceCoordinates.sourceY, adjustedTargetCoordinates.targetX, adjustedTargetCoordinates.targetY)
 
-  const path: IPoint[] = Connection.computePath(
-    { position: {x: sourceNode.position.x ,y: sourceNode.position.y}, width: sourceNode.width ?? 100, height: sourceNode.height ?? 160 , direction: sourcePosition },
-    { position: {x: targetNode.position.x ,y: targetNode.position.y}, width: targetNode.width ?? 100, height: targetNode.height ?? 160 , direction: targetPosition },
-    { isStraight: true, isVariable: false }
-  );
-  const svgPath = pointsToSvgPath(path)
-  console.log(edgePath)
-  console.log("source", sourceNode)
-  console.log("target", targetNode)
-  console.log("computed path", path)
-  console.log("svg", svgPath)
+  const simplifiedpath = simplifySvgPath(edgePath)
   const straightPath = tryFindStraightPath({ position: {x: sourceNode.position.x ,y: sourceNode.position.y}, width: sourceNode.width ?? 100, height: sourceNode.height ?? 160 , direction: sourcePosition },
     { position: {x: targetNode.position.x ,y: targetNode.position.y}, width: targetNode.width ?? 100, height: targetNode.height ?? 160 , direction: targetPosition },
  )
 
- console.log("Straight path", straightPath, sourcePosition, targetPosition)
  
- const currentPath = straightPath !== null ? straightPath : edgePath;
- console.log("Current", currentPath)
+ //const currentPath = straightPath !== null ? straightPath : edgePath;
+ //console.log("Current", currentPath)
+ const parsedPath = parseSvgPath(simplifiedpath)
+ const initialPoints = removeDuplicatePoints(parsedPath)
+ //const midpoints = calculateInnerMidpoints(removedPath)
+ //console.log("Midpoints", midpoints)
+
+ //console.log("Parsed svg path", parsedPath)
+ //console.log("Remove", initialPoints)
+
+  const [points, setPoints] = useState<IPoint[]>(initialPoints)
+  console.log("POINTS", points)
+
+  useEffect(() => {
+    const newPoints = removeDuplicatePoints(parseSvgPath(simplifiedpath))
+    setPoints(newPoints)
+  }, [simplifiedpath])
+
+  const midpoints = calculateInnerMidpoints(points)
+
+
+  const currentPath = straightPath !== null ? straightPath : pointsToSvgPath(points)
+
+  const [draggingIndex, setDraggingIndex] = useState<number | null>(null)
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
+
+  const handleMouseDown = (event: React.MouseEvent, index: number) => {
+    console.log("Handle mouse down", event)
+    const currentMidpoint = midpoints[index]
+    const offsetX = event.clientX - currentMidpoint.x
+    const offsetY = event.clientY - currentMidpoint.y
+    setDraggingIndex(index)
+    setDragOffset({ x: offsetX, y: offsetY })
+    document.addEventListener("mousemove", handleMouseMove)
+    document.addEventListener("mouseup", handleMouseUp, { once: true })
+  }
+
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      console.log("handle mouse move", event, draggingIndex)
+      if (draggingIndex === null) return
+      const newX = event.clientX - dragOffset.x
+      const newY = event.clientY - dragOffset.y
+      console.log("new values", newX, newY)
+      const startIdx = draggingIndex + 1
+      const endIdx = draggingIndex + 2
+      const newPoints = [...points]
+      if (newPoints[startIdx] && newPoints[endIdx]) {
+        newPoints[startIdx] = { ...newPoints[startIdx], x: newX, y: newY }
+        newPoints[endIdx] = { ...newPoints[endIdx], x: newX, y: newY }
+      }
+      setPoints(newPoints)
+      console.log("New points", newPoints)
+         updateEdge(id, { data: { ...data, customPoints: newPoints } })
+    },
+    [draggingIndex, dragOffset, points, updateEdge, id, data]
+  )
+
+  const handleMouseUp = useCallback(() => {
+    setDraggingIndex(null)
+    document.removeEventListener("mousemove", handleMouseMove)
+  }, [handleMouseMove])
   return (
     <>
       {/* Render the visible edge (stays black) */}
@@ -155,8 +300,20 @@ export const GenericEdge = ({
         pointerEvents="stroke"
         style={{ transition: "stroke 0.2s ease-in-out" }}
       />
+      {midpoints.map((point, idx) => (
+        <circle
+          key={idx}
+          cx={point.x}
+          cy={point.y}
+          r={10}
+          fill="lightgray"
+          stroke="none"
+          style={{ cursor: "grab" }}
+          onMouseDown={(e) => handleMouseDown(e, idx)}
+        />
+      ))}
 
-      {/* Render the toolbar if the edge is selected */}
+      
       {selected && (
         <CustomEdgeToolbar
           x={toolbarPosition.x}
@@ -164,7 +321,7 @@ export const GenericEdge = ({
           onEditClick={handleEditIconClick}
           onDeleteClick={handleDelete}
         />
-      )}
+      )} 
 
       {/* Render the popover for editing edge properties */}
       <EdgePopover
