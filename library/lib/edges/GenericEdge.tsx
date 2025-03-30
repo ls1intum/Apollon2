@@ -163,6 +163,7 @@ export const GenericEdge = ({
   //   handleSwap,
   // } = useEdgePopOver({ id, selected: Boolean(selected) })
   const draggingIndexRef = useRef<number>()
+  const dragOffsetRef = useRef<IPoint>({x:0, y:0})
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
@@ -267,10 +268,10 @@ export const GenericEdge = ({
   const currentPath =
     straightPath !== null ? straightPath : pointsToSvgPath(points)
 
-  const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  })
+  // const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({
+  //   x: 0,
+  //   y: 0,
+  // })
 
   const handleMouseDown = (event: React.MouseEvent, index: number) => {
     console.log("Handle mouse down", event)
@@ -279,7 +280,7 @@ export const GenericEdge = ({
     const offsetY = event.clientY - currentMidpoint.y
 
     draggingIndexRef.current = index
-    setDragOffset({ x: offsetX, y: offsetY })
+    dragOffsetRef.current = { x: offsetX, y: offsetY }
     document.addEventListener("mousemove", handleMouseMove)
     document.addEventListener("mouseup", handleMouseUp, { once: true })
   }
@@ -287,24 +288,34 @@ export const GenericEdge = ({
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
       const draggingIndex = draggingIndexRef.current
-      console.log("handle mouse move", event, draggingIndex)
+      console.log("handle mouse move", event, draggingIndex, dragOffsetRef.current)
 
       if (draggingIndex === undefined) return
-      const newX = event.clientX - dragOffset.x
-      const newY = event.clientY - dragOffset.y
+      const newX = event.clientX - dragOffsetRef.current.x
+      const newY = event.clientY - dragOffsetRef.current.y
       console.log("new values", newX, newY)
       const startIdx = draggingIndex + 1
       const endIdx = draggingIndex + 2
       const newPoints = [...points]
-      if (newPoints[startIdx] && newPoints[endIdx]) {
-        newPoints[startIdx] = { ...newPoints[startIdx], x: newX, y: newY }
-        newPoints[endIdx] = { ...newPoints[endIdx], x: newX, y: newY }
+      const linePosition = newPoints[startIdx].x == newPoints[endIdx].x ? "vertical" : "horizontal"
+      switch (linePosition) {
+        case 'horizontal':
+          newPoints[startIdx] = { x: points[startIdx].x, y: newY }
+          newPoints[endIdx] = { x: points[endIdx].x, y: newY }
+          break;
+        case 'vertical':
+          newPoints[startIdx] = { x: newX, y: points[startIdx].y }
+          newPoints[endIdx] = { x: newX, y: points[endIdx].y }
+          break;
+        default:
+          break;
       }
+      
       setPoints(newPoints)
       console.log("New points", newPoints)
       updateEdge(id, { data: { ...data, customPoints: newPoints } })
     },
-    [dragOffset, points, updateEdge, id, data]
+    [dragOffsetRef.current, points, updateEdge, id, data]
   )
 
   const handleMouseUp = useCallback(() => {
@@ -313,6 +324,7 @@ export const GenericEdge = ({
   }, [handleMouseMove])
   return (
     <>
+    <g className="edge-container">
       {/* Render the visible edge (stays black) */}
       <BaseEdge
         id={id}
@@ -324,6 +336,7 @@ export const GenericEdge = ({
 
       {/* Invisible overlay to capture pointer events */}
       <path
+        className="edge-overlay"
         d={currentPath}
         fill="none"
         strokeWidth={12}
@@ -332,6 +345,7 @@ export const GenericEdge = ({
       />
       {midpoints.map((point, idx) => (
         <circle
+          className="edge-handle"
           pointerEvents={"all"}
           key={idx}
           cx={point.x}
@@ -343,7 +357,7 @@ export const GenericEdge = ({
           onMouseDown={(e) => handleMouseDown(e, idx)}
         />
       ))}
-
+    </g>
       {selected && (
         <CustomEdgeToolbar
           x={toolbarPosition.x}

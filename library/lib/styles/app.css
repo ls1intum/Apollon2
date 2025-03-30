@@ -87,6 +87,18 @@ body {
   background-color: rgb(99, 154, 242);
 }
 
+.edge-container:hover .edge-overlay {
+  opacity: 0.4;
+  padding: 4px;
+  stroke: #007bff; /* Blue color for edge */
+}
+
+.edge-container:hover .edge-handle {
+  opacity: 0.4;
+  padding: 4px;
+  fill: #007bff; /* Blue color for handles */
+}
+
 .react-flow__node:hover {
   opacity: 0.9;
 }
