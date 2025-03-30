@@ -18,8 +18,8 @@ export type DiagramStoreData = {
 export interface DiagramSlice {
   nodes: Node[]
   edges: Edge[]
-  setNodes: (nodes: Node[]) => void
-  setEdges: (edges: Edge[]) => void
+  setNodes: (payload: Node[] | ((nodes: Node[]) => Node[])) => void
+  setEdges: (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void
   addEdge: (edge: Edge) => void
   addNode: (node: Node) => void
   onNodesChange: OnNodesChange
@@ -37,7 +37,14 @@ export const createDiagramSlice: StateCreator<DiagramSlice> = (set) => ({
   addNode: (node) => {
     nodesMap.set(node.id, node)
   },
-  setNodes: (nodes) => {
+  setNodes: (payload) => {
+    let nodes: Node[]
+    if (typeof payload === "function") {
+      nodes = payload(Array.from(nodesMap.values()))
+    } else {
+      nodes = payload
+    }
+
     const seen = new Set<string>()
 
     nodes.forEach((node) => {
@@ -53,7 +60,16 @@ export const createDiagramSlice: StateCreator<DiagramSlice> = (set) => ({
     }
   },
 
-  setEdges: (edges) => {
+  setEdges: (payload) => {
+    let edges: Edge[]
+    if (typeof payload === "function") {
+      // If payload is a function, call it with the current edges
+      edges = payload(Array.from(edgesMap.values()))
+    } else {
+      edges = Array.from(edgesMap.values())
+    }
+
+    // If payload is an array, directly set edges
     const seen = new Set<string>()
 
     edges.forEach((edge) => {
