@@ -11,7 +11,7 @@ export const ApollonWithCollaboration: React.FC = () => {
   useEffect(() => {
     if (containerRef.current && !apollon2 && diagramId) {
       const instance = new Apollon2(containerRef.current)
-      instance.makeWebsocketConnection("ws://localhost:4444", diagramId)
+      instance.makeWebsocketConnection("ws://localhost:3000", diagramId)
       setApollon2(instance)
     }
 
