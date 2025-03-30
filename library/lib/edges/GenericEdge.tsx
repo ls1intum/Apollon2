@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState} from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
 import { EdgePopover } from "@/components"
 import {
@@ -16,120 +16,127 @@ import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
-import { IPoint, tryFindStraightPath , pointsToSvgPath} from "./Connection"
-
+import { IPoint, tryFindStraightPath, pointsToSvgPath } from "./Connection"
 
 // Utilss
 export function simplifySvgPath(path: string, decimals: number = 2): string {
-  const round = (num: number) => Number(num.toFixed(decimals));
+  const round = (num: number) => Number(num.toFixed(decimals))
 
-   const withSpaces = path.replace(/([MLQ])(?=[-0-9])/gi, "$1 ");
-  const cleaned = withSpaces.replace(/,/g, " ").trim();
-  const tokens = cleaned.split(/\s+/);
-  const outputTokens: string[] = [];
-  let i = 0;
+  const withSpaces = path.replace(/([MLQ])(?=[-0-9])/gi, "$1 ")
+  const cleaned = withSpaces.replace(/,/g, " ").trim()
+  const tokens = cleaned.split(/\s+/)
+  const outputTokens: string[] = []
+  let i = 0
 
   while (i < tokens.length) {
-    const token = tokens[i].toUpperCase();
+    const token = tokens[i].toUpperCase()
     if (token === "M" || token === "L") {
-            const x = parseFloat(tokens[i + 1]);
-      const y = parseFloat(tokens[i + 2]);
+      const x = parseFloat(tokens[i + 1])
+      const y = parseFloat(tokens[i + 2])
       if (!isNaN(x) && !isNaN(y)) {
-        outputTokens.push(token, round(x).toString(), round(y).toString());
+        outputTokens.push(token, round(x).toString(), round(y).toString())
       }
-      i += 3;
+      i += 3
     } else if (token === "Q") {
-          const cx = parseFloat(tokens[i + 1]);
-      const cy = parseFloat(tokens[i + 2]);
-      const ex = parseFloat(tokens[i + 3]);
-      const ey = parseFloat(tokens[i + 4]);
+      const cx = parseFloat(tokens[i + 1])
+      const cy = parseFloat(tokens[i + 2])
+      const ex = parseFloat(tokens[i + 3])
+      const ey = parseFloat(tokens[i + 4])
       if (cx === ex && cy === ey) {
-                outputTokens.push("L", round(ex).toString(), round(ey).toString());
+        outputTokens.push("L", round(ex).toString(), round(ey).toString())
       } else {
-        outputTokens.push("Q", round(cx).toString(), round(cy).toString(), round(ex).toString(), round(ey).toString());
+        outputTokens.push(
+          "Q",
+          round(cx).toString(),
+          round(cy).toString(),
+          round(ex).toString(),
+          round(ey).toString()
+        )
       }
-      i += 5;
+      i += 5
     } else {
-       const x = parseFloat(tokens[i]);
-      const y = parseFloat(tokens[i + 1]);
+      const x = parseFloat(tokens[i])
+      const y = parseFloat(tokens[i + 1])
       if (!isNaN(x) && !isNaN(y)) {
-        outputTokens.push(round(x).toString(), round(y).toString());
+        outputTokens.push(round(x).toString(), round(y).toString())
       }
-      i += 2;
+      i += 2
     }
   }
-  return outputTokens.join(" ");
+  return outputTokens.join(" ")
 }
 
 export function simplifyPoints(points: IPoint[]): IPoint[] {
-  if (points.length < 3) return points;
-  const result: IPoint[] = [points[0]];
-  
+  if (points.length < 3) return points
+  const result: IPoint[] = [points[0]]
+
   for (let i = 1; i < points.length - 1; i++) {
-    const prev = result[result.length - 1];
-    const curr = points[i];
-    const next = points[i + 1];
+    const prev = result[result.length - 1]
+    const curr = points[i]
+    const next = points[i + 1]
     if (prev.x === curr.x && curr.x === next.x) {
-     continue;
+      continue
     }
-     if (prev.y === curr.y && curr.y === next.y) {
-      continue;
+    if (prev.y === curr.y && curr.y === next.y) {
+      continue
     }
-    result.push(curr);
+    result.push(curr)
   }
-  result.push(points[points.length - 1]);
-  return result;
+  result.push(points[points.length - 1])
+  return result
 }
 
 export function parseSvgPath(path: string): IPoint[] {
-  const tokens = path.replace(/,/g, " ").trim().split(/\s+/);
-  const points: IPoint[] = [];
-  let i = 0;
+  const tokens = path.replace(/,/g, " ").trim().split(/\s+/)
+  const points: IPoint[] = []
+  let i = 0
   while (i < tokens.length) {
-    const token = tokens[i];
+    const token = tokens[i]
     if (token === "M" || token === "L") {
-      const x = parseFloat(tokens[i + 1]);
-      const y = parseFloat(tokens[i + 2]);
+      const x = parseFloat(tokens[i + 1])
+      const y = parseFloat(tokens[i + 2])
       if (!isNaN(x) && !isNaN(y)) {
-        points.push({ x, y });
+        points.push({ x, y })
       }
-      i += 3;
-    } 
-    else {
-      const x = parseFloat(tokens[i]);
-      const y = parseFloat(tokens[i + 1]);
+      i += 3
+    } else {
+      const x = parseFloat(tokens[i])
+      const y = parseFloat(tokens[i + 1])
       if (!isNaN(x) && !isNaN(y)) {
-        points.push({ x, y });
+        points.push({ x, y })
       }
-      i += 2;
+      i += 2
     }
   }
-  return simplifyPoints(points);
+  return simplifyPoints(points)
 }
 
-export function calculateInnerMidpoints(points: IPoint[], decimals: number = 2): IPoint[] {
-  const round = (num: number) => Number(num.toFixed(decimals));
-  const midpoints: IPoint[] = [];
-  if (points.length < 4) return midpoints;
-   for (let i = 1; i < points.length - 2; i++) {
-    const p1 = points[i];
-    const p2 = points[i + 1];
-    midpoints.push({ x: round((p1.x + p2.x) / 2), y: round((p1.y + p2.y) / 2) });
+export function calculateInnerMidpoints(
+  points: IPoint[],
+  decimals: number = 2
+): IPoint[] {
+  const round = (num: number) => Number(num.toFixed(decimals))
+  const midpoints: IPoint[] = []
+  if (points.length < 4) return midpoints
+  for (let i = 1; i < points.length - 2; i++) {
+    const p1 = points[i]
+    const p2 = points[i + 1]
+    midpoints.push({ x: round((p1.x + p2.x) / 2), y: round((p1.y + p2.y) / 2) })
   }
-  return midpoints;
+  return midpoints
 }
 
 export function removeDuplicatePoints(points: IPoint[]): IPoint[] {
-  if (points.length === 0) return points;
-  const filtered: IPoint[] = [points[0]];
+  if (points.length === 0) return points
+  const filtered: IPoint[] = [points[0]]
   for (let i = 1; i < points.length; i++) {
-    const prev = filtered[filtered.length - 1];
-    const current = points[i];
+    const prev = filtered[filtered.length - 1]
+    const current = points[i]
     if (current.x !== prev.x || current.y !== prev.y) {
-      filtered.push(current);
+      filtered.push(current)
     }
   }
-  return filtered;
+  return filtered
 }
 //Utils End
 
@@ -155,6 +162,7 @@ export const GenericEdge = ({
   //   handleEdgeTypeChange,
   //   handleSwap,
   // } = useEdgePopOver({ id, selected: Boolean(selected) })
+  const draggingIndexRef = useRef<number>()
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
@@ -163,7 +171,7 @@ export const GenericEdge = ({
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
   const padding = markerPadding ?? MARKER_PADDING
- const adjustedTargetCoordinates = adjustTargetCoordinates(
+  const adjustedTargetCoordinates = adjustTargetCoordinates(
     targetX,
     targetY,
     targetPosition,
@@ -209,27 +217,44 @@ export const GenericEdge = ({
     multiplicityY: targetMultiplicityY,
   } = calculateEdgeLabels(targetX, targetY, targetPosition)
 
-   const sourceNode = getNode(source)!
-   const targetNode = getNode(target)!
-  console.log("source, target", adjustedSourceCoordinates.sourceX, adjustedSourceCoordinates.sourceY, adjustedTargetCoordinates.targetX, adjustedTargetCoordinates.targetY)
+  const sourceNode = getNode(source)!
+  const targetNode = getNode(target)!
+  console.log(
+    "source, target",
+    adjustedSourceCoordinates.sourceX,
+    adjustedSourceCoordinates.sourceY,
+    adjustedTargetCoordinates.targetX,
+    adjustedTargetCoordinates.targetY
+  )
 
   const simplifiedpath = simplifySvgPath(edgePath)
-  const straightPath = tryFindStraightPath({ position: {x: sourceNode.position.x ,y: sourceNode.position.y}, width: sourceNode.width ?? 100, height: sourceNode.height ?? 160 , direction: sourcePosition },
-    { position: {x: targetNode.position.x ,y: targetNode.position.y}, width: targetNode.width ?? 100, height: targetNode.height ?? 160 , direction: targetPosition },
- )
+  const straightPath = tryFindStraightPath(
+    {
+      position: { x: sourceNode.position.x, y: sourceNode.position.y },
+      width: sourceNode.width ?? 100,
+      height: sourceNode.height ?? 160,
+      direction: sourcePosition,
+    },
+    {
+      position: { x: targetNode.position.x, y: targetNode.position.y },
+      width: targetNode.width ?? 100,
+      height: targetNode.height ?? 160,
+      direction: targetPosition,
+    }
+  )
 
- 
- //const currentPath = straightPath !== null ? straightPath : edgePath;
- //console.log("Current", currentPath)
- const parsedPath = parseSvgPath(simplifiedpath)
- const initialPoints = removeDuplicatePoints(parsedPath)
- //const midpoints = calculateInnerMidpoints(removedPath)
- //console.log("Midpoints", midpoints)
-
- //console.log("Parsed svg path", parsedPath)
- //console.log("Remove", initialPoints)
-
+  //const currentPath = straightPath !== null ? straightPath : edgePath;
+  //console.log("Current", currentPath)
+  const parsedPath = parseSvgPath(simplifiedpath)
+  const initialPoints = removeDuplicatePoints(parsedPath)
   const [points, setPoints] = useState<IPoint[]>(initialPoints)
+
+  //const midpoints = calculateInnerMidpoints(removedPath)
+  //console.log("Midpoints", midpoints)
+
+  //console.log("Parsed svg path", parsedPath)
+  //console.log("Remove", initialPoints)
+
   console.log("POINTS", points)
 
   useEffect(() => {
@@ -239,18 +264,21 @@ export const GenericEdge = ({
 
   const midpoints = calculateInnerMidpoints(points)
 
+  const currentPath =
+    straightPath !== null ? straightPath : pointsToSvgPath(points)
 
-  const currentPath = straightPath !== null ? straightPath : pointsToSvgPath(points)
-
-  const [draggingIndex, setDraggingIndex] = useState<number | null>(null)
-  const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  })
 
   const handleMouseDown = (event: React.MouseEvent, index: number) => {
     console.log("Handle mouse down", event)
     const currentMidpoint = midpoints[index]
     const offsetX = event.clientX - currentMidpoint.x
     const offsetY = event.clientY - currentMidpoint.y
-    setDraggingIndex(index)
+
+    draggingIndexRef.current = index
     setDragOffset({ x: offsetX, y: offsetY })
     document.addEventListener("mousemove", handleMouseMove)
     document.addEventListener("mouseup", handleMouseUp, { once: true })
@@ -258,8 +286,10 @@ export const GenericEdge = ({
 
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
+      const draggingIndex = draggingIndexRef.current
       console.log("handle mouse move", event, draggingIndex)
-      if (draggingIndex === null) return
+
+      if (draggingIndex === undefined) return
       const newX = event.clientX - dragOffset.x
       const newY = event.clientY - dragOffset.y
       console.log("new values", newX, newY)
@@ -272,13 +302,13 @@ export const GenericEdge = ({
       }
       setPoints(newPoints)
       console.log("New points", newPoints)
-         updateEdge(id, { data: { ...data, customPoints: newPoints } })
+      updateEdge(id, { data: { ...data, customPoints: newPoints } })
     },
-    [draggingIndex, dragOffset, points, updateEdge, id, data]
+    [dragOffset, points, updateEdge, id, data]
   )
 
   const handleMouseUp = useCallback(() => {
-    setDraggingIndex(null)
+    draggingIndexRef.current = undefined
     document.removeEventListener("mousemove", handleMouseMove)
   }, [handleMouseMove])
   return (
@@ -302,6 +332,7 @@ export const GenericEdge = ({
       />
       {midpoints.map((point, idx) => (
         <circle
+          pointerEvents={"all"}
           key={idx}
           cx={point.x}
           cy={point.y}
@@ -313,7 +344,6 @@ export const GenericEdge = ({
         />
       ))}
 
-      
       {selected && (
         <CustomEdgeToolbar
           x={toolbarPosition.x}
@@ -321,7 +351,7 @@ export const GenericEdge = ({
           onEditClick={handleEditIconClick}
           onDeleteClick={handleDelete}
         />
-      )} 
+      )}
 
       {/* Render the popover for editing edge properties */}
       <EdgePopover
@@ -383,4 +413,3 @@ export const GenericEdge = ({
     </>
   )
 }
-
