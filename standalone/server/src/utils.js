@@ -17,7 +17,7 @@ const CALLBACK_OBJECTS = process.env.CALLBACK_OBJECTS
   ? JSON.parse(process.env.CALLBACK_OBJECTS)
   : {}
 
-isCallbackSet = !!CALLBACK_URL
+let isCallbackSet = !!CALLBACK_URL
 
 /**
  * @param {Uint8Array} update

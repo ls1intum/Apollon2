@@ -33,7 +33,8 @@
     "capacitor:open:android": "npx cap open android",
     "capacitor:open:ios": "npx cap open ios",
     "capacitor:assets:generate:ios": "npx capacitor-assets generate --ios",
-    "capacitor:assets:generate:android": "npx capacitor-assets generate --android"
+    "capacitor:assets:generate:android": "npx capacitor-assets generate --android",
+    "aa": "npm run build:server && npm run start --workspace=@apollon2/server"
   },
   "license": "MIT",
   "engines": {
