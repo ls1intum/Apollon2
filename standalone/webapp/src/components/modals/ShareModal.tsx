@@ -8,10 +8,10 @@ import { useState } from "react"
 enum DiagramView {
   EDIT = "Edit",
   COLLABORATE = "Collaborate",
-  EMBED = "Embed",
   GIVE_FEEDBACK = "Give Feedback",
   SEE_FEEDBACK = "See Feedback",
 }
+
 export const ShareModal = () => {
   const { closeModal } = useModalContext()
   const [link, setLink] = useState("")
@@ -71,17 +71,6 @@ export const ShareModal = () => {
             variant="outline"
             fullWidth
             onClick={() => {
-              handleShareButtonPress(DiagramView.EMBED, false)
-            }}
-          >
-            Embed
-          </APButton>
-        </div>
-        <div>
-          <APButton
-            variant="outline"
-            fullWidth
-            onClick={() => {
               handleShareButtonPress(DiagramView.GIVE_FEEDBACK, false)
             }}
           >
@@ -108,12 +97,12 @@ export const ShareModal = () => {
             type="text"
             value={link}
             readOnly
-            className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-r-0 rounded-r-none"
+            className="grow h-[42px] px-3 py-2 border rounded-md border-r-0 rounded-r-none"
           />
           <APButton
             onClick={() => copyToClipboard(link)}
             variant="outline"
-            className="flex items-center gap-1 rounded-l-none h-[42px]"
+            className=" rounded-l-none h-[42px]"
           >
             Copy Link
           </APButton>
