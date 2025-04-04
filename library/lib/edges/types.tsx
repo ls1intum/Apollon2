@@ -18,3 +18,8 @@ export const diagramEdgeTypes = Object.fromEntries(
 } satisfies EdgeTypes
 
 export type DiagramEdgeTypeKeys = keyof typeof diagramEdgeTypes
+
+export interface IPoint {
+  x: number
+  y: number
+}
