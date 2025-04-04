@@ -1,40 +1,43 @@
-import express, { Router, Request, Response } from "express"
-import { getYDoc } from "./utils"
+import express, { Router } from "express"
+import { getYDoc, getPersistence, WSSharedDoc } from "./utils"
 import { Item } from "yjs"
 
 const router: Router = express.Router()
 
-interface DiagramData {
-  title: string
-  description: string
-}
-
 // POST /api/setDiagram
-router.post("/setDiagram", (req, res: any) => {
+router.post("/setDiagram", async (req, res: any) => {
   try {
-    const { title, description } = req.body
+    const { nodes, edges, metadata } = req.body
 
-    if (!title || !description) {
+    if (!nodes || !edges || !metadata) {
       return res.status(400).json({
-        error: "Missing required fields: title and description are required",
+        error:
+          "Missing required fields: nodes, edges and metadata are required",
       })
     }
 
-    if (typeof title !== "string" || typeof description !== "string") {
-      return res.status(400).json({
-        error: "Invalid input: title and description must be strings",
-      })
-    }
+    const docName = metadata.id
 
-    const diagramData: DiagramData & { timestamp: string } = {
-      title,
-      description,
-      timestamp: new Date().toISOString(),
-    }
+    const newYDoc = new WSSharedDoc(docName)
+
+    const docNodes = newYDoc.getMap("nodes")
+    const docEdges = newYDoc.getMap("edges")
+    const docMetadata = newYDoc.getMap("diagramMetadata")
+
+    nodes.forEach((node: any) => {
+      docNodes.set(node.id, node)
+    })
+    edges.forEach((edge: any) => {
+      docEdges.set(edge.id, edge)
+    })
+
+    docMetadata.set("diagramName", metadata.diagramName)
+    docMetadata.set("diagramType", metadata.diagramType)
+
+    await getPersistence().writeState(metadata.id, newYDoc)
 
     res.status(200).json({
       message: "Diagram data received successfully",
-      data: diagramData,
     })
   } catch (error) {
     console.error("Error in setDiagram endpoint:", error)
@@ -53,16 +56,31 @@ router.get("/getDiagram/:id", (req, res: any) => {
       })
     }
     const doc = getYDoc(id)
-    // console.log("Shared diagram:", sharedDiagram)
 
-    const nodes = doc.getMap("nodes")._map.values()
-    const nodesArray = Array.from(nodes).filter((node: Item) => !node.deleted)
+    const nodeItems = doc.getMap("nodes")._map.values()
+    const edgeItems = doc.getMap("edges")._map.values()
+    const docMetadata = doc.getMap("diagramMetadata")
 
-    console.log("Shared diagram aaa:", nodesArray)
-    // console.log("Shared diagram stringifid:", JSON.stringify(sharedDiagram))
+    const nodes = Array.from(nodeItems)
+      .filter((node: Item) => !node.deleted)
+      .map((node: Item) => {
+        return node.content.getContent()[0]
+      })
+
+    const edges = Array.from(edgeItems)
+      .filter((edge: Item) => !edge.deleted)
+      .map((edge: Item) => {
+        return edge.content.getContent()[0]
+      })
+
+    const metadata = {
+      diagramName: docMetadata.get("diagramName"),
+      diagramType: docMetadata.get("diagramType"),
+    }
+
     res.status(200).json({
       message: "Diagram data retrieved successfully",
-      data: "2",
+      data: { nodes, edges, metadata },
     })
   } catch (error) {
     console.error("Error in getDiagram endpoint:", error)

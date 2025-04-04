@@ -2,8 +2,9 @@ import { Tooltip, Typography } from "@mui/material"
 import Info from "@mui/icons-material/Info"
 import { APButton } from "../APButton"
 import { toast } from "react-toastify"
-import { useModalContext } from "@/contexts"
+import { useApollon2Context } from "@/contexts"
 import { useState } from "react"
+import { DiagramType } from "@apollon2/library"
 
 enum DiagramView {
   EDIT = "Edit",
@@ -13,17 +14,44 @@ enum DiagramView {
 }
 
 export const ShareModal = () => {
-  const { closeModal } = useModalContext()
+  const { apollon2 } = useApollon2Context()
+  const [diagramId, setDiagramId] = useState("")
+  // const { closeModal } = useModalContext()
   const [link, setLink] = useState("")
-  const handleShareButtonPress = (view: DiagramView, close: boolean) => {
+  const handleShareButtonPress = async (view: DiagramView, close: boolean) => {
     copyToClipboard("somelink-to-share-with-others")
     toast.success(`You have successfuly ${view} a diagram`, {
       autoClose: 10000,
     })
 
-    if (close) {
-      closeModal()
+    const nodes = apollon2?.getNodes()
+    const edges = apollon2?.getEdges()
+    const metadata = {
+      id: diagramId,
+      diagramName: "diagramName",
+      diagramType: DiagramType.ClassDiagram,
     }
+    console.log("close", close)
+    console.log("nodes", nodes)
+    console.log("edges", edges)
+    console.log("metadata", metadata)
+    const data = { nodes, edges, metadata }
+
+    const response = await fetch("http://localhost:3000/diagram/setDiagram", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .catch((err) => {
+        console.error("Error in setDiagram endpoint:", err)
+        toast.error("Error in setDiagram endpoint:", err)
+      })
+
+    console.log("response", response)
+    // if (close) {
+    //   closeModal()
+    // }
   }
 
   const copyToClipboard = (link: string) => {
@@ -90,6 +118,11 @@ export const ShareModal = () => {
         </div>
       </div>
 
+      <input
+        type="text"
+        value={diagramId}
+        onChange={(e) => setDiagramId(e.target.value)}
+      />
       <fieldset className="border border-gray-300 p-2 rounded-xl w-fill ">
         <legend className="text-sm  px-2">Recently shared Diagram:</legend>
         <div className="flex items-center ">
