@@ -122,13 +122,8 @@ let persistence = {
     })
   },
   writeState: async (docName, ydoc) => {
-    console.log("Writing state to persistence layer")
     await ldb.clearDocument(docName)
     const update = Y.encodeStateAsUpdate(ydoc)
-    // Store the update in the persistent database
-    console.log("Cleared document:", docName)
-    // console.log("Cleared document ydoc: ", ydoc)
-    // console.log("Cleared document update: ", update)
     await ldb.storeUpdate(docName, update)
   },
 }

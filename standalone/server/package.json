@@ -2,22 +2,23 @@
   "name": "@apollon2/server",
   "version": "1.0.0",
   "dependencies": {
-    "cors": "^2.8.5",
+    "cors": "2.8.5",
+    "dotenv": "16.4.7",
     "express": "5.1.0",
     "ws": "8.18.1",
     "y-websocket": "1.5.0"
   },
   "scripts": {
     "build": "tsc",
-    "start": "HOST=localhost PORT=3000 WSSPORT=4444 YPERSISTENCE=./dbDir node dist/src/server.js",
+    "start": " node dist/src/server.js",
     "lint": "echo bypass lint in server"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.1",
-    "@types/lodash.debounce": "^4.0.9",
-    "@types/node": "^22.14.0",
-    "@types/ws": "^8.18.1",
-    "typescript": "^5.8.2"
+    "@types/cors": "2.8.17",
+    "@types/express": "5.0.1",
+    "@types/lodash.debounce": "4.0.9",
+    "@types/node": "22.14.0",
+    "@types/ws": "8.18.1",
+    "typescript": "5.8.2"
   }
 }

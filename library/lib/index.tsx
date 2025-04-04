@@ -190,7 +190,13 @@ export class Apollon2 {
     ydoc.getMap<string>("diagramMetadata").set("diagramName", name)
   }
 
-  public getDiagramName(): string {
-    return useBoundStore.getState().diagramName
+  public getDiagramMetadata() {
+    const metadata = ydoc.getMap<string>("diagramMetadata")
+    const diagramName = metadata.get("diagramName")
+    const diagramType = metadata.get("diagramType")
+    return {
+      diagramName,
+      diagramType,
+    }
   }
 }

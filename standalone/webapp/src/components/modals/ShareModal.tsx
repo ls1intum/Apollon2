@@ -2,56 +2,59 @@ import { Tooltip, Typography } from "@mui/material"
 import Info from "@mui/icons-material/Info"
 import { APButton } from "../APButton"
 import { toast } from "react-toastify"
-import { useApollon2Context } from "@/contexts"
-import { useState } from "react"
-import { DiagramType } from "@apollon2/library"
+import { useApollon2Context, useModalContext } from "@/contexts"
 
-enum DiagramView {
-  EDIT = "Edit",
-  COLLABORATE = "Collaborate",
-  GIVE_FEEDBACK = "Give Feedback",
-  SEE_FEEDBACK = "See Feedback",
-}
+import { v4 as uuidv4 } from "uuid"
+import { useNavigate } from "react-router"
+
+// enum DiagramView {
+//   EDIT = "Edit",
+//   COLLABORATE = "Collaborate",
+//   GIVE_FEEDBACK = "Give Feedback",
+//   SEE_FEEDBACK = "See Feedback",
+// }
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
 
 export const ShareModal = () => {
   const { apollon2 } = useApollon2Context()
-  const [diagramId, setDiagramId] = useState("")
-  // const { closeModal } = useModalContext()
-  const [link, setLink] = useState("")
-  const handleShareButtonPress = async (view: DiagramView, close: boolean) => {
-    copyToClipboard("somelink-to-share-with-others")
-    toast.success(`You have successfuly ${view} a diagram`, {
-      autoClose: 10000,
-    })
+  const { closeModal } = useModalContext()
+  const navigate = useNavigate()
 
+  const handleShareButtonPress = async () => {
     const nodes = apollon2?.getNodes()
     const edges = apollon2?.getEdges()
-    const metadata = {
-      id: diagramId,
-      diagramName: "diagramName",
-      diagramType: DiagramType.ClassDiagram,
-    }
-    console.log("close", close)
-    console.log("nodes", nodes)
-    console.log("edges", edges)
-    console.log("metadata", metadata)
-    const data = { nodes, edges, metadata }
+    const metadata = { ...apollon2?.getDiagramMetadata(), diagramId: uuidv4() }
 
-    const response = await fetch("http://localhost:3000/diagram/setDiagram", {
+    const data = { nodes, edges, metadata }
+    await fetch(`${backendUrl}/diagram/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (res.ok) {
+          const diagramID = (await res.json()).newDiagramId
+
+          const newurl = `${window.location.origin}/diagram/${diagramID}`
+          copyToClipboard(newurl)
+          navigate(`/diagram/${diagramID}`)
+
+          toast.success(
+            `The link has been copied to your clipboard and can be shared to collaborate, simply by pasting the link. You can re-access the link by going to share menu.`,
+            {
+              autoClose: 10000,
+            }
+          )
+          closeModal()
+        } else {
+          throw new Error("Network response was not ok")
+        }
+      })
       .catch((err) => {
         console.error("Error in setDiagram endpoint:", err)
         toast.error("Error in setDiagram endpoint:", err)
       })
-
-    console.log("response", response)
-    // if (close) {
-    //   closeModal()
-    // }
   }
 
   const copyToClipboard = (link: string) => {
@@ -75,9 +78,7 @@ export const ShareModal = () => {
           <APButton
             variant="outline"
             fullWidth
-            onClick={() => {
-              handleShareButtonPress(DiagramView.EDIT, false)
-            }}
+            onClick={handleShareButtonPress}
           >
             Edit
           </APButton>
@@ -86,10 +87,7 @@ export const ShareModal = () => {
           <APButton
             variant="outline"
             fullWidth
-            onClick={() => {
-              handleShareButtonPress(DiagramView.COLLABORATE, false)
-              setLink("somelink-to-share-with-others")
-            }}
+            onClick={handleShareButtonPress}
           >
             Collaborate
           </APButton>
@@ -98,9 +96,7 @@ export const ShareModal = () => {
           <APButton
             variant="outline"
             fullWidth
-            onClick={() => {
-              handleShareButtonPress(DiagramView.GIVE_FEEDBACK, false)
-            }}
+            onClick={handleShareButtonPress}
           >
             Give Feedback
           </APButton>
@@ -109,31 +105,23 @@ export const ShareModal = () => {
           <APButton
             variant="outline"
             fullWidth
-            onClick={() => {
-              handleShareButtonPress(DiagramView.SEE_FEEDBACK, false)
-            }}
+            onClick={handleShareButtonPress}
           >
             See Feedback
           </APButton>
         </div>
       </div>
-
-      <input
-        type="text"
-        value={diagramId}
-        onChange={(e) => setDiagramId(e.target.value)}
-      />
       <fieldset className="border border-gray-300 p-2 rounded-xl w-fill ">
         <legend className="text-sm  px-2">Recently shared Diagram:</legend>
         <div className="flex items-center ">
           <input
             type="text"
-            value={link}
+            value={window.location.href}
             readOnly
             className="grow h-[42px] px-3 py-2 border rounded-md border-r-0 rounded-r-none"
           />
           <APButton
-            onClick={() => copyToClipboard(link)}
+            onClick={() => copyToClipboard(window.location.href)}
             variant="outline"
             className=" rounded-l-none h-[42px]"
           >

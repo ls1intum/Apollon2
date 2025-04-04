@@ -1,5 +1,9 @@
+// First load environment variables from .env file
+import dotenv from "dotenv"
+dotenv.config()
+
 import { Server, WebSocket } from "ws"
-import { setupWSConnection, docs } from "./utils" // Assuming utils.ts exists or stays JS
+import { setupWSConnection } from "./utils" // Assuming utils.ts exists or stays JS
 import express, { Express } from "express"
 import cors from "cors"
 import diagramRouter from "./diagramRouter" // Assuming this is the correct path
@@ -8,14 +12,14 @@ const app: Express = express()
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow requests from frontend
+    origin: [process.env.FRONTEND_URL || ""], // Allow requests from frontend
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type"],
   })
 )
 app.use(express.json())
 
-// Mount the router at /api
+// Mount the diagram router
 app.use("/diagram", diagramRouter)
 
 const wss = new Server({ port: Number(process.env.WSSPORT) || 4444 })
