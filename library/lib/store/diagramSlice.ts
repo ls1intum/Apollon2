@@ -25,12 +25,11 @@ export interface DiagramSlice {
   addNode: (node: Node) => void
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
-  updateEdgePoints: (edgeId: string, newPoints: IPoint[]) => void 
+  updateEdgePoints: (edgeId: string, newPoints: IPoint[]) => void
   reset: () => void
 }
 
 export const createDiagramSlice: StateCreator<DiagramSlice> = (set) => ({
-  
   nodes: Array.from(nodesMap.values()),
   edges: Array.from(edgesMap.values()),
 
@@ -142,9 +141,7 @@ export const createDiagramSlice: StateCreator<DiagramSlice> = (set) => ({
           ? { ...edge, data: { ...edge.data, customPoints: points } }
           : edge
       ),
-    
     })),
-    
 
   reset: () => {
     nodesMap.clear()

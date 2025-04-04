@@ -11,21 +11,6 @@ export interface IPoint {
   y: number
 }
 
-export enum Direction {
-  Left = "Left",
-  Right = "Right",
-  Top = "Top",
-  Bottom = "Bottom",
-  Upright = "Upright",
-  Upleft = "Upleft",
-  Downright = "Downright",
-  Downleft = "Downleft",
-  Topright = "Topright",
-  Topleft = "Topleft",
-  Bottomright = "Bottomright",
-  Bottomleft = "Bottomleft",
-}
-
 export interface NodeBounds {
   x: number
   y: number
@@ -87,19 +72,15 @@ export function tryFindStraightPath(
     width: number
     height: number
     direction: Position
-  }
+  },
+  targetPadding: number
 ): string | null {
+  const offset = targetPadding === -8 ? 0 : 15
   const OVERLAP_THRESHOLD = 40
   const sourceHandleEdge = source.direction
   const targetHandleEdge = target.direction
 
-  /*                                                
-        #######              #######              #######    
-        # ~~~ # -----------> # ~~~ # -----------> # ~~~ #   
-        # ~~~ #      |       #######     |----->  # ~~~ #   
-        # ~~~ # -----0                   0----->  # ~~~ #  
-        #######                                   #######  
-    */
+  // Right -> Left case
   if (
     sourceHandleEdge === Position.Right &&
     targetHandleEdge === Position.Left &&
@@ -122,18 +103,16 @@ export function tryFindStraightPath(
         x: source.position.x + source.width,
         y: middleY,
       }
-      const end: IPoint = { x: target.position.x, y: middleY }
+      // Adjust target coordinate: for a left handle, move further left.
+      const end: IPoint = {
+        x: target.position.x - offset,
+        y: middleY,
+      }
       return pointsToSvgPath([start, end])
     }
   }
 
-  /*                                                
-        #######              #######              #######    
-        # ~~~ # <----------- # ~~~ # <----------- # ~~~ #   
-        # ~~~ # <----|       #######     |        # ~~~ #   
-        # ~~~ # <----0                   0------  # ~~~ #  
-        #######                                   #######  
-    */
+  // Left -> Right case
   if (
     sourceHandleEdge === Position.Left &&
     targetHandleEdge === Position.Right &&
@@ -152,44 +131,29 @@ export function tryFindStraightPath(
 
     if (overlapY !== null && overlapY[1] - overlapY[0] >= OVERLAP_THRESHOLD) {
       const middleY = (overlapY[0] + overlapY[1]) / 2
-      const start: IPoint = { x: source.position.x, y: middleY }
+      const start: IPoint = {
+        x: source.position.x,
+        y: middleY,
+      }
+      // Adjust target coordinate: for a right handle, move further right.
       const end: IPoint = {
-        x: target.position.x + target.width,
+        x: target.position.x + target.width + offset,
         y: middleY,
       }
       return pointsToSvgPath([start, end])
     }
   }
 
-  /*
-        ##################
-        # ~~~~~~~~~~~~~~ #
-        ##################
-            |   |   |
-            0---|---0
-                ∨
-            #########
-            # ~~~~~ #
-            #########
-                |
-            0---0---0
-            |       |
-            v       v
-        ##################
-        # ~~~~~~~~~~~~~~ #
-        ##################
-    */
+  // Bottom -> Top case
   if (
     sourceHandleEdge === Position.Bottom &&
     targetHandleEdge === Position.Top &&
     target.position.y >= source.position.y + source.height
   ) {
-    console.log("Here")
     const overlapX = computeOverlap(
       [source.position.x, source.position.x + source.width],
       [target.position.x, target.position.x + target.width]
     )
-    console.log("Overlap", overlapX)
 
     if (overlapX !== null && overlapX[1] - overlapX[0] >= OVERLAP_THRESHOLD) {
       const middleX = (overlapX[0] + overlapX[1]) / 2
@@ -197,31 +161,16 @@ export function tryFindStraightPath(
         x: middleX,
         y: source.position.y + source.height,
       }
-      const end: IPoint = { x: middleX, y: target.position.y }
-      console.log("start end", start, end)
+      // Adjust target coordinate: for a top handle, move upward.
+      const end: IPoint = {
+        x: middleX,
+        y: target.position.y - offset,
+      }
       return pointsToSvgPath([start, end])
     }
   }
 
-  /*
-        ##################
-        # ~~~~~~~~~~~~~~ #
-        ##################
-            ∧   ∧   ∧
-            |   |   |
-            0---|---0
-                |
-            #########
-            # ~~~~~ #
-            #########
-                ∧
-                |
-            0---0---0
-            |       |
-        ##################
-        # ~~~~~~~~~~~~~~ #
-        ##################
-    */
+  // Top -> Bottom case
   if (
     sourceHandleEdge === Position.Top &&
     targetHandleEdge === Position.Bottom &&
@@ -234,10 +183,14 @@ export function tryFindStraightPath(
 
     if (overlapX !== null && overlapX[1] - overlapX[0] >= OVERLAP_THRESHOLD) {
       const middleX = (overlapX[0] + overlapX[1]) / 2
-      const start: IPoint = { x: middleX, y: source.position.y }
+      const start: IPoint = {
+        x: middleX,
+        y: source.position.y,
+      }
+      // Adjust target coordinate: for a bottom handle, move downward.
       const end: IPoint = {
         x: middleX,
-        y: target.position.y + target.height,
+        y: target.position.y + target.height + offset,
       }
       return pointsToSvgPath([start, end])
     }

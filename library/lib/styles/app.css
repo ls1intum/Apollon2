@@ -104,7 +104,11 @@ body {
   padding: 4px;
   stroke: #007bff; /* Blue color for edge */
 }
-
+.react-flow__edge:hover .edge-marker-highlight {
+  opacity: 0.4;
+  padding: 4px;
+  stroke: #007bff; /* Blue color for edge */
+}
 
 .react-flow__edge.selected .edge-circle{
   opacity: 0.4;
@@ -113,6 +117,11 @@ body {
 }
 
 .react-flow__edge.selected .edge-overlay{
+  opacity: 0.4;
+  padding: 4px;
+  stroke: #007bff; /* Blue color for edge */
+}
+.react-flow__edge.selected .edge-marker-highlight{
   opacity: 0.4;
   padding: 4px;
   stroke: #007bff; /* Blue color for edge */

@@ -5,7 +5,7 @@ import {
   RHOMBUS_MARKER_PADDING,
   TRIANGLE_MARKER_PADDING,
 } from "@/constants"
-import { IPoint } from "@/edges/Connection";
+import { IPoint } from "@/edges/Connection"
 import { Position, Rect, XYPosition } from "@xyflow/react"
 /**
  * Adjusts the target coordinates based on the position and marker padding.
@@ -285,7 +285,6 @@ export function findClosestHandle(point: XYPosition, rect: Rect): string {
 
   return closest.label
 }
-// Utilss
 
 export function simplifySvgPath(path: string, decimals: number = 2): string {
   const round = (num: number) => Number(num.toFixed(decimals))
@@ -355,7 +354,7 @@ export function simplifyPoints(points: IPoint[]): IPoint[] {
 }
 
 export function parseSvgPath(path: string): IPoint[] {
-  const tokens = path.replace(/,/g, " ").trim().split(/\s+/)
+  const tokens = simplifySvgPath(path).replace(/,/g, " ").trim().split(/\s+/)
   const points: IPoint[] = []
   let i = 0
   while (i < tokens.length) {
@@ -407,3 +406,35 @@ export function removeDuplicatePoints(points: IPoint[]): IPoint[] {
   return filtered
 }
 
+export function getMarkerSegmentPath(
+  points: IPoint[],
+  markerPadding: number,
+  targetPosition: "top" | "bottom" | "left" | "right"
+): string {
+  if (points.length === 0) return ""
+
+  const lastPoint = points[points.length - 1]
+  let extendedX = lastPoint.x
+  let extendedY = lastPoint.y
+
+  const offset = markerPadding === 3 ? 10 : 15
+
+  switch (targetPosition) {
+    case "top":
+      extendedY = lastPoint.y + offset
+      break
+    case "bottom":
+      extendedY = lastPoint.y - offset
+      break
+    case "left":
+      extendedX = lastPoint.x + offset
+      break
+    case "right":
+      extendedX = lastPoint.x - offset
+      break
+    default:
+      break
+  }
+
+  return `M ${lastPoint.x} ${lastPoint.y} L ${extendedX} ${extendedY}`
+}

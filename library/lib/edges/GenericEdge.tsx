@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
 import { EdgePopover } from "@/components"
 import {
@@ -16,10 +16,14 @@ import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
-import { IPoint, tryFindStraightPath, pointsToSvgPath } from "./Connection"
-import { simplifySvgPath, removeDuplicatePoints, parseSvgPath, calculateInnerMidpoints } from "@/utils/edgeUtils"
-
-
+import { IPoint, pointsToSvgPath, tryFindStraightPath } from "./Connection"
+import {
+  simplifySvgPath,
+  removeDuplicatePoints,
+  parseSvgPath,
+  calculateInnerMidpoints,
+  getMarkerSegmentPath,
+} from "@/utils/edgeUtils"
 
 export const GenericEdge = ({
   id,
@@ -35,16 +39,10 @@ export const GenericEdge = ({
   targetPosition,
   data,
 }: ExtendedEdgeProps) => {
-  // const {
-  //   handleSourceRoleChange,
-  //   handleSourceMultiplicityChange,
-  //   handleTargetRoleChange,
-  //   handleTargetMultiplicityChange,
-  //   handleEdgeTypeChange,
-  //   handleSwap,
-  // } = useEdgePopOver({ id, selected: Boolean(selected) })
+  // Refs for dragging adjustments.
   const draggingIndexRef = useRef<number>()
-  const dragOffsetRef = useRef<IPoint>({x:0, y:0})
+  const dragOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
+
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
@@ -53,6 +51,8 @@ export const GenericEdge = ({
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
   const padding = markerPadding ?? MARKER_PADDING
+
+  // Adjust source and target coordinates based on positions and paddings.
   const adjustedTargetCoordinates = adjustTargetCoordinates(
     targetX,
     targetY,
@@ -66,6 +66,7 @@ export const GenericEdge = ({
     SOURCE_CONNECTION_POINT_PADDING
   )
 
+  // Generate the smooth step edge path.
   const [edgePath] = getSmoothStepPath({
     sourceX: adjustedSourceCoordinates.sourceX,
     sourceY: adjustedSourceCoordinates.sourceY,
@@ -76,6 +77,7 @@ export const GenericEdge = ({
     borderRadius: STEP_BOARDER_RADIUS,
   })
 
+  // Toolbar position computed from adjusted coordinates.
   const toolbarPosition = getToolbarPosition(
     adjustedSourceCoordinates,
     adjustedTargetCoordinates
@@ -85,13 +87,13 @@ export const GenericEdge = ({
     setEdgePopoverAnchor(event.currentTarget)
   }
 
+  // Calculate edge labels for source and target.
   const {
     roleX: sourceRoleX,
     roleY: sourceRoleY,
     multiplicityX: sourceMultiplicityX,
     multiplicityY: sourceMultiplicityY,
   } = calculateEdgeLabels(sourceX, sourceY, sourcePosition)
-
   const {
     roleX: targetRoleX,
     roleY: targetRoleY,
@@ -101,15 +103,8 @@ export const GenericEdge = ({
 
   const sourceNode = getNode(source)!
   const targetNode = getNode(target)!
-  console.log(
-    "source, target",
-    adjustedSourceCoordinates.sourceX,
-    adjustedSourceCoordinates.sourceY,
-    adjustedTargetCoordinates.targetX,
-    adjustedTargetCoordinates.targetY
-  )
 
-  const simplifiedpath = simplifySvgPath(edgePath)
+  // Attempt to compute a straight path (if the nodes are aligned appropriately).
   const straightPath = tryFindStraightPath(
     {
       position: { x: sourceNode.position.x, y: sourceNode.position.y },
@@ -122,123 +117,133 @@ export const GenericEdge = ({
       width: targetNode.width ?? 100,
       height: targetNode.height ?? 160,
       direction: targetPosition,
-    }
+    },
+    padding
   )
 
-  //const currentPath = straightPath !== null ? straightPath : edgePath;
-  //console.log("Current", currentPath)
-  const parsedPath = parseSvgPath(simplifiedpath)
-  const initialPoints = removeDuplicatePoints(parsedPath)
-  const [points, setPoints] = useState<IPoint[]>(initialPoints)
+  //Create a basePath that uses the straightPath if available, otherwise the edgePath.
+  const basePath = straightPath !== null ? straightPath : edgePath
 
-  //const midpoints = calculateInnerMidpoints(removedPath)
-  //console.log("Midpoints", midpoints)
+  //Compute the default points based on the current basePath.
+  const computedPoints = useMemo(() => {
+    const simplifiedPath = simplifySvgPath(basePath)
+    const parsed = parseSvgPath(simplifiedPath)
+    return removeDuplicatePoints(parsed)
+  }, [basePath])
 
-  //console.log("Parsed svg path", parsedPath)
-  //console.log("Remove", initialPoints)
+  //Maintain customPoints for any user adjustments (during dragging).
+  const [customPoints, setCustomPoints] = useState<IPoint[]>([])
 
-  console.log("POINTS", points)
-
+  //When edgePath changes (nodes are dragged), clear customPoints.
   useEffect(() => {
-    const newPoints = removeDuplicatePoints(parseSvgPath(simplifiedpath))
-    setPoints(newPoints)
-  }, [simplifiedpath])
+    if (customPoints.length > 0) {
+      setCustomPoints([])
+    }
+  }, [edgePath])
 
-  const midpoints = calculateInnerMidpoints(points)
+  //Active points: use customPoints if available; otherwise, use computedPoints.
+  const activePoints = customPoints.length ? customPoints : computedPoints
 
-  const currentPath =
-    straightPath !== null ? straightPath : pointsToSvgPath(points)
+  //Generate the current SVG path based on activePoints.
+  const currentPath = pointsToSvgPath(activePoints)
+  const midpoints = calculateInnerMidpoints(activePoints)
+  const markerSegmentPath = getMarkerSegmentPath(
+    activePoints,
+    padding,
+    targetPosition
+  )
 
-  // const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({
-  //   x: 0,
-  //   y: 0,
-  // })
-
-  const handleMouseDown = (event: React.MouseEvent, index: number) => {
-    console.log("Handle mouse down", event)
+  const handlePointerDown = (event: React.MouseEvent, index: number) => {
     const currentMidpoint = midpoints[index]
     const offsetX = event.clientX - currentMidpoint.x
     const offsetY = event.clientY - currentMidpoint.y
-
     draggingIndexRef.current = index
     dragOffsetRef.current = { x: offsetX, y: offsetY }
-    document.addEventListener("mousemove", handleMouseMove)
-    document.addEventListener("mouseup", handleMouseUp, { once: true })
+    document.addEventListener("pointermove", handlePointerMove)
+    document.addEventListener("pointerup", handlePointerUp, { once: true })
   }
 
-  const handleMouseMove = useCallback(
+  const handlePointerMove = useCallback(
     (event: MouseEvent) => {
       const draggingIndex = draggingIndexRef.current
-      console.log("handle mouse move", event, draggingIndex, dragOffsetRef.current)
-
       if (draggingIndex === undefined) return
+
       const newX = event.clientX - dragOffsetRef.current.x
       const newY = event.clientY - dragOffsetRef.current.y
-      console.log("new values", newX, newY)
+
+      // Assuming the relevant segment is between points (draggingIndex+1) and (draggingIndex+2)
       const startIdx = draggingIndex + 1
       const endIdx = draggingIndex + 2
-      const newPoints = [...points]
-      const linePosition = newPoints[startIdx].x == newPoints[endIdx].x ? "vertical" : "horizontal"
-      switch (linePosition) {
-        case 'horizontal':
-          newPoints[startIdx] = { x: points[startIdx].x, y: newY }
-          newPoints[endIdx] = { x: points[endIdx].x, y: newY }
-          break;
-        case 'vertical':
-          newPoints[startIdx] = { x: newX, y: points[startIdx].y }
-          newPoints[endIdx] = { x: newX, y: points[endIdx].y }
-          break;
-        default:
-          break;
+      const newPoints = [...activePoints]
+      const linePosition =
+        newPoints[startIdx].x === newPoints[endIdx].x
+          ? "vertical"
+          : "horizontal"
+      if (linePosition === "horizontal") {
+        newPoints[startIdx] = { x: newPoints[startIdx].x, y: newY }
+        newPoints[endIdx] = { x: newPoints[endIdx].x, y: newY }
+      } else if (linePosition === "vertical") {
+        newPoints[startIdx] = { x: newX, y: newPoints[startIdx].y }
+        newPoints[endIdx] = { x: newX, y: newPoints[endIdx].y }
       }
-      
-      setPoints(newPoints)
-      console.log("New points", newPoints)
+      // Update customPoints to reflect the drag adjustment.
+      setCustomPoints(newPoints)
       updateEdge(id, { data: { ...data, customPoints: newPoints } })
     },
-    [dragOffsetRef.current, points, updateEdge, id, data]
+    [activePoints, updateEdge, id, data]
   )
 
-  const handleMouseUp = useCallback(() => {
+  const handlePointerUp = useCallback(() => {
     draggingIndexRef.current = undefined
-    document.removeEventListener("mousemove", handleMouseMove)
-  }, [handleMouseMove])
+    document.removeEventListener("pointermove", handlePointerMove)
+  }, [handlePointerMove])
+
   return (
     <>
-    <g className="edge-container">
-      {/* Render the visible edge (stays black) */}
-      <BaseEdge
-        id={id}
-        path={currentPath}
-        markerEnd={markerEnd}
-        pointerEvents="none"
-        strokeDasharray={strokeDashArray}
-      />
-
-      {/* Invisible overlay to capture pointer events */}
-      <path
-        className="edge-overlay"
-        d={currentPath}
-        fill="none"
-        strokeWidth={12}
-        pointerEvents="stroke"
-        style={{ transition: "stroke 0.2s ease-in-out" }}
-      />
-      {midpoints.map((point, idx) => (
-        <circle
-          className="edge-circle"
-          pointerEvents={"all"}
-          key={idx}
-          cx={point.x}
-          cy={point.y}
-          r={10}
-          fill="lightgray"
-          stroke="none"
-          style={{ cursor: "grab" }}
-          onMouseDown={(e) => handleMouseDown(e, idx)}
+      <g className="edge-container">
+        {/* Render the visible edge */}
+        <BaseEdge
+          id={id}
+          path={currentPath}
+          markerEnd={markerEnd}
+          pointerEvents="none"
+          strokeDasharray={strokeDashArray}
         />
-      ))}
-    </g>
+
+        {/* Invisible overlay for pointer events */}
+        <path
+          className="edge-overlay"
+          d={currentPath}
+          fill="none"
+          strokeWidth={12}
+          pointerEvents="stroke"
+        />
+
+        {type !== "ClassBidirectional" && (
+          <path
+            className="edge-marker-highlight"
+            d={markerSegmentPath}
+            fill="none"
+            strokeWidth={12}
+            pointerEvents="stroke"
+          />
+        )}
+
+        {midpoints.map((point, idx) => (
+          <circle
+            className="edge-circle"
+            pointerEvents="all"
+            key={idx}
+            cx={point.x}
+            cy={point.y}
+            r={10}
+            fill="lightgray"
+            stroke="none"
+            style={{ cursor: "grab" }}
+            onPointerDown={(e) => handlePointerDown(e, idx)}
+          />
+        ))}
+      </g>
       {selected && (
         <CustomEdgeToolbar
           x={toolbarPosition.x}
@@ -247,8 +252,6 @@ export const GenericEdge = ({
           onDeleteClick={handleDelete}
         />
       )}
-
-      {/* Render the popover for editing edge properties */}
       <EdgePopover
         source={source}
         target={target}
@@ -261,9 +264,6 @@ export const GenericEdge = ({
           updateEdge(id, { selected: false })
         }}
       />
-
-      {/* Render labels directly on the SVG */}
-
       {data?.sourceRole && (
         <text
           x={sourceRoleX}
@@ -284,7 +284,6 @@ export const GenericEdge = ({
           {data?.sourceMultiplicity}
         </text>
       )}
-
       {data?.targetRole && (
         <text
           x={targetRoleX}

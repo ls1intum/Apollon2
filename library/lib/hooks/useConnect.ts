@@ -33,7 +33,7 @@ export const useConnect = () => {
         "changedTouches" in event ? event.changedTouches[0] : event
       return screenToFlowPosition(
         { x: clientX, y: clientY },
-        { snapToGrid: false }
+        { snapToGrid: true }
       )
     },
     [screenToFlowPosition]
