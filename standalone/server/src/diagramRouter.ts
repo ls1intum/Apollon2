@@ -5,16 +5,16 @@ import { database } from "./database"
 
 const router = Router()
 
-router.get("/:id", async (req, res: any) => {
+router.get("/:diagramID", async (req, res: any) => {
   try {
-    const { id } = req.params
-    if (!id) {
+    const { diagramID } = req.params
+    if (!diagramID) {
       return res.status(400).json({
         error: "Missing required parameter: id",
       })
     }
 
-    const doc = await database.getYDoc(id)
+    const doc = await database.getYDoc(diagramID)
 
     const nodeItems = doc.getMap("nodes")._map.values()
     const edgeItems = doc.getMap("edges")._map.values()
@@ -60,7 +60,7 @@ router.post("/", async (req, res: any) => {
       })
     }
 
-    const docName = metadata.diagramId
+    const docName = metadata.diagramID
 
     const newYDoc = new WSSharedDoc(docName)
 
@@ -82,7 +82,7 @@ router.post("/", async (req, res: any) => {
 
     res.status(200).json({
       message: `Diagram data received successfully docName: ${docName}`,
-      newDiagramId: docName,
+      newdiagramID: docName,
     })
   } catch (error) {
     console.error("Error in setDiagram endpoint:", error)

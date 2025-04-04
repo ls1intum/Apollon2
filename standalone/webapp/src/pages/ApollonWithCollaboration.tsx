@@ -6,12 +6,12 @@ import { useParams } from "react-router"
 export const ApollonWithCollaboration: React.FC = () => {
   const { apollon2, setApollon2 } = useApollon2Context()
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const { diagramId } = useParams()
+  const { diagramID } = useParams()
 
   useEffect(() => {
-    if (containerRef.current && !apollon2 && diagramId) {
+    if (containerRef.current && !apollon2 && diagramID) {
       const instance = new Apollon2(containerRef.current)
-      instance.makeWebsocketConnection("ws://localhost:4444", diagramId)
+      instance.makeWebsocketConnection("ws://localhost:4444", diagramID)
       setApollon2(instance)
     }
 

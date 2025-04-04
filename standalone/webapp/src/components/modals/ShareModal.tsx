@@ -24,7 +24,7 @@ export const ShareModal = () => {
   const handleShareButtonPress = async () => {
     const nodes = apollon2?.getNodes()
     const edges = apollon2?.getEdges()
-    const metadata = { ...apollon2?.getDiagramMetadata(), diagramId: uuidv4() }
+    const metadata = { ...apollon2?.getDiagramMetadata(), diagramID: uuidv4() }
 
     const data = { nodes, edges, metadata }
     await fetch(`${backendUrl}/diagram/`, {
@@ -34,7 +34,7 @@ export const ShareModal = () => {
     })
       .then(async (res) => {
         if (res.ok) {
-          const diagramID = (await res.json()).newDiagramId
+          const diagramID = (await res.json()).newDiagramID
 
           const newurl = `${window.location.origin}/diagram/${diagramID}`
           copyToClipboard(newurl)
