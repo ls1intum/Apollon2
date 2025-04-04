@@ -82,7 +82,7 @@ router.post("/", async (req, res: any) => {
 
     res.status(200).json({
       message: `Diagram data received successfully docName: ${docName}`,
-      newdiagramID: docName,
+      newDiagramID: docName,
     })
   } catch (error) {
     console.error("Error in setDiagram endpoint:", error)
