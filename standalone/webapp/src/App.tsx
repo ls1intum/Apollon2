@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router"
 import { AppProviders } from "./AppProviders"
 import { Navbar } from "./components"
 import "@xyflow/react/dist/style.css"
-import { Apollon, ApollonWithCollaboration, ErrorPage } from "@/pages"
+import { Apollon, ApollonWithConnection, ErrorPage } from "@/pages"
 import { SafeArea } from "capacitor-plugin-safe-area"
 import { ToastContainer } from "react-toastify"
 
@@ -38,7 +38,7 @@ function App() {
             <Route path="/" element={<Apollon />} />
             <Route
               path="/diagram/:diagramID"
-              element={<ApollonWithCollaboration />}
+              element={<ApollonWithConnection />}
             />
             <Route path="*" element={<ErrorPage />} />
           </Routes>

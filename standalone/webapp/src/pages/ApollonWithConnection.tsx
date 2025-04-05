@@ -3,7 +3,7 @@ import { useApollon2Context } from "@/contexts"
 import { Apollon2 } from "@apollon2/library"
 import { useParams } from "react-router"
 
-export const ApollonWithCollaboration: React.FC = () => {
+export const ApollonWithConnection: React.FC = () => {
   const { apollon2, setApollon2 } = useApollon2Context()
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { diagramID } = useParams()
