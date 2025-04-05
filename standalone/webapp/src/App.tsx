@@ -31,21 +31,21 @@ SafeArea.getSafeAreaInsets().then(
 function App() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <AppProviders>
-        <Navbar />
-        <BrowserRouter>
+      <BrowserRouter>
+        <AppProviders>
+          <Navbar />
           <Routes>
             <Route path="/" element={<Apollon />} />
             <Route
-              path="/diagram/:diagramId"
+              path="/diagram/:diagramID"
               element={<ApollonWithCollaboration />}
             />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
-        </BrowserRouter>
 
-        <ToastContainer />
-      </AppProviders>
+          <ToastContainer />
+        </AppProviders>
+      </BrowserRouter>
     </div>
   )
 }

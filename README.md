@@ -1,4 +1,4 @@
-# Monorepo Setup
+q# Monorepo Setup
 
 Welcome to the Apollon2 Monorepo! This repository uses **npm workspaces** to manage multiple packages (including a server, webapp, and library) in a single codebase.
 
@@ -55,13 +55,16 @@ Ensure you have the following installed:
    npm install
    ```
 
-4. Build all packages:
+4. Create .env files for standalone/webapp and standalone/server <br>
+  Check .env.examples files and create values
+
+5. Build all packages:
 
    ```bash
    npm run build
    ```
 
-5. Start the project:
+6. Start the project:
    ```bash
    npm run start
    ```
