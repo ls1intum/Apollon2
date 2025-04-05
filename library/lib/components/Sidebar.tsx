@@ -129,7 +129,6 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
         event.clientY > canvasBounding.bottom
 
       if (isOutsideCanvas) {
-        console.warn("Drop cancelled: Outside canvas or on sidebar")
         return
       }
 

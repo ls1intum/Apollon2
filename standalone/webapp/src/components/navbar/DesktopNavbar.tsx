@@ -11,11 +11,13 @@ import { NAVBAR_BACKGROUND_COLOR, secondary } from "@/constants"
 import { useApollon2Context } from "@/contexts/Apollon2Context"
 import TumLogo from "assets/images/tum-logo.png"
 import { useEffect, useRef, useState } from "react"
+import { useModalContext } from "@/contexts"
 
 export const DesktopNavbar = () => {
   const { apollon2 } = useApollon2Context()
   const [diagramName, setDiagramName] = useState("")
   const unsubscribe = useRef<() => void>()
+  const { openModal } = useModalContext()
 
   useEffect(() => {
     if (apollon2 && !unsubscribe.current) {
@@ -58,9 +60,7 @@ export const DesktopNavbar = () => {
           <NavbarFile />
           <Button
             sx={{ textTransform: "none" }} // This removes the uppercase transformation
-            onClick={() =>
-              console.log("DEBUG share getnodes,", apollon2?.getNodes())
-            }
+            onClick={() => openModal("SHARE")}
           >
             <Typography color={secondary}>Share</Typography>
           </Button>

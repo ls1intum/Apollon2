@@ -4,18 +4,16 @@
   font-weight: 400;
 }
 
-html, body {
+html,
+body {
   overflow: hidden;
-  height: 100%;
   touch-action: none; /* Prevent touch gestures */
 }
 
 html,
-body,
-#root {
+body {
   height: 100%;
   margin: 0;
-
 }
 
 .react-flow {
@@ -72,10 +70,15 @@ body,
   background-color: rgb(99, 154, 242);
 }
 
+.react-flow__resize-control line {
+  z-index: 9;
+}
+
 .react-flow__node.selected .react-flow__handle {
   opacity: 0.6;
   padding: 4px;
   background-color: rgb(99, 154, 242);
+  z-index: 10;
 }
 
 .react-flow__node:hover .react-flow__handle {
@@ -84,10 +87,11 @@ body,
   background-color: rgb(99, 154, 242);
 }
 
-.react-flow__node.dragging {
-  opacity: 0.7;
-}
 .react-flow__node:hover {
+  opacity: 0.9;
+}
+
+.react-flow__node.selected {
   opacity: 0.9;
 }
 
@@ -101,7 +105,6 @@ body,
   pointer-events: none;
   user-select: none;
 }
-
 
 .prevent-select {
   -webkit-user-select: none; /* Safari */

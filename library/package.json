@@ -23,7 +23,7 @@
     "@types/node": "22.13.8",
     "@xyflow/react": "12.3.6",
     "html-to-image": "1.11.11",
-    "jspdf": "2.5.2",
+    "pdf-lib": "1.17.1",
     "styled-components": "6.1.14",
     "stylis": "4.3.4",
     "uuid": "11.0.3",
@@ -42,7 +42,7 @@
     "globals": "15.13.0",
     "typescript": "5.7.2",
     "typescript-eslint": "8.18.1",
-    "vite": "6.0.3",
+    "vite": "6.2.4",
     "vite-plugin-dts": "4.3.0",
     "vite-plugin-lib-inject-css": "^2.1.1"
   }

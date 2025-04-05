@@ -7,7 +7,7 @@ import {
   type Viewport,
 } from "@xyflow/react"
 import { toPng, toSvg } from "html-to-image"
-import jsPDF from "jspdf"
+import { PDFDocument } from "pdf-lib"
 import { ExportFileFormat } from "../enums"
 import { ParsedJSON } from "@/types/ParsedJson"
 import { DiagramType } from "@/types"
@@ -137,14 +137,26 @@ export const exportAsPDF = async (
       false // White background
     )
 
-    const pdf = new jsPDF({
-      orientation: width > height ? "landscape" : "portrait",
-      unit: "px",
-      format: [width, height],
+    // Create a new PDF document
+    const pdfDoc = await PDFDocument.create()
+    const page = pdfDoc.addPage([width, height])
+
+    // Embed the image in the PDF
+    const pngImage = await pdfDoc.embedPng(dataUrl)
+    page.drawImage(pngImage, {
+      x: 0,
+      y: 0,
+      width,
+      height,
     })
 
-    pdf.addImage(dataUrl, "PNG", 0, 0, width, height)
-    pdf.save(`${diagramName}.pdf`)
+    // Save the PDF and trigger download
+    const pdfBytes = await pdfDoc.save()
+    const blob = new Blob([pdfBytes], { type: "application/pdf" })
+    const link = document.createElement("a")
+    link.href = URL.createObjectURL(blob)
+    link.download = `${diagramName}.pdf`
+    link.click()
   } catch (error) {
     console.error("Failed to export as PDF:", error)
   }

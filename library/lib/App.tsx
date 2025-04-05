@@ -1,22 +1,23 @@
 import {
   ReactFlow,
   ReactFlowProvider,
-  Background,
-  BackgroundVariant,
-  Controls,
-  MiniMap,
   ConnectionLineType,
   ConnectionMode,
   ReactFlowInstance,
 } from "@xyflow/react"
-
 import {
   MAX_SCALE_TO_ZOOM_IN,
   MIN_SCALE_TO_ZOOM_OUT,
   SNAP_TO_GRID_PX,
 } from "./constants"
-
-import { Cursors, Sidebar, SvgMarkers } from "@/components"
+import {
+  Cursors,
+  Sidebar,
+  SvgMarkers,
+  CustomMiniMap,
+  CustomControls,
+  CustomBackground,
+} from "@/components"
 import { diagramNodeTypes } from "./nodes"
 import { useConnect, useReconnect, useNodeDragStop } from "./hooks"
 import { diagramEdgeTypes } from "./edges"
@@ -38,10 +39,11 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
   const { nodes, onNodesChange, edges, onEdgesChange } = useBoundStore(
     useShallow((state) => state)
   )
+
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
   const [cursors, onMouseMove] = useCursorStateSynced()
-  const { onConnect } = useConnect()
+  const { onConnect, onConnectEnd, onConnectStart } = useConnect()
   const { onReconnect } = useReconnect()
 
   return (
@@ -58,26 +60,26 @@ function App({ onReactFlowInit, diagramType }: AppProps) {
         onDragOver={onDragOver}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onConnectStart={onConnectStart}
         onConnect={onConnect}
+        onConnectEnd={onConnectEnd}
         onNodeDragStop={onNodeDragStop}
         onReconnect={onReconnect}
         connectionLineType={ConnectionLineType.Step}
         connectionMode={ConnectionMode.Loose}
         onPointerMove={onMouseMove}
-        fitView
         onInit={(instance) => {
-          instance.zoomTo(1)
           onReactFlowInit(instance)
         }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
-        snapGrid={[SNAP_TO_GRID_PX / 2, SNAP_TO_GRID_PX / 2]}
+        snapGrid={[SNAP_TO_GRID_PX, SNAP_TO_GRID_PX]}
       >
         <Cursors cursors={cursors} />
-        <Background variant={BackgroundVariant.Lines} />
-        <MiniMap zoomable pannable />
-        <Controls orientation="horizontal" />
+        <CustomBackground />
+        <CustomMiniMap />
+        <CustomControls />
       </ReactFlow>
     </div>
   )

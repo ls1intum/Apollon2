@@ -41,10 +41,6 @@ const observeYjsChanges = () => {
   nodesMap.observe(updateNodes)
   edgesMap.observe(updateEdges)
   diagramMetadata.observe(updateMetaData)
-
-  updateNodes()
-  updateEdges()
-  updateMetaData()
 }
 
 observeYjsChanges()
