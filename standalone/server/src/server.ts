@@ -2,36 +2,28 @@
 import dotenv from "dotenv"
 dotenv.config()
 
-import { Server, WebSocket } from "ws"
-import { setupWSConnection } from "./utils" // Assuming utils.ts exists or stays JS
 import express, { Express } from "express"
-import cors from "cors"
-import diagramRouter from "./diagramRouter" // Assuming this is the correct path
+import { configureMiddleware } from "./middleware"
+import { initializeWebSocketServer } from "./wsSetup"
+import diagramRouter from "./diagramRouter"
+
+// Load environment variables
+dotenv.config()
 
 const app: Express = express()
 
-app.use(
-  cors({
-    origin: [process.env.FRONTEND_URL || ""], // Allow requests from frontend
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type"],
-  })
-)
-app.use(express.json())
+// Configure middleware
+configureMiddleware(app)
 
-// Mount the diagram router
+// Mount routes
 app.use("/diagram", diagramRouter)
 
-const wss = new Server({ port: Number(process.env.WSSPORT) || 4444 })
+// Start WebSocket server
+initializeWebSocketServer()
 
-wss.on("connection", (ws: WebSocket, req: Request) => {
-  console.log("Client connected")
-  setupWSConnection(ws, req)
-})
-
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8000
+const serverHost = process.env.host || "localhost"
+// Start server
 app.listen(PORT, () => {
-  console.log(`HTTP server running on http://localhost:${PORT}`)
+  console.log(`HTTP server running on http://${serverHost}:${PORT}`)
 })
-
-console.log("Yjs WebSocket server running on ws://localhost:4444")
