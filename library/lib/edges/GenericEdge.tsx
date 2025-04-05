@@ -23,6 +23,7 @@ import {
   parseSvgPath,
   calculateInnerMidpoints,
   getMarkerSegmentPath,
+  findClosestHandle,
 } from "@/utils/edgeUtils"
 
 export const GenericEdge = ({
@@ -37,6 +38,7 @@ export const GenericEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
+  targetHandleId,
   data,
 }: ExtendedEdgeProps) => {
   // Refs for dragging adjustments.
@@ -105,7 +107,7 @@ export const GenericEdge = ({
   const targetNode = getNode(target)!
 
   // Attempt to compute a straight path (if the nodes are aligned appropriately).
-  const straightPath = tryFindStraightPath(
+  const straightPathPoints = tryFindStraightPath(
     {
       position: { x: sourceNode.position.x, y: sourceNode.position.y },
       width: sourceNode.width ?? 100,
@@ -122,16 +124,16 @@ export const GenericEdge = ({
   )
 
   //Create a basePath that uses the straightPath if available, otherwise the edgePath.
-  const basePath = straightPath !== null ? straightPath : edgePath
+  const basePath =
+    straightPathPoints !== null ? pointsToSvgPath(straightPathPoints) : edgePath
 
   //Compute the default points based on the current basePath.
   const computedPoints = useMemo(() => {
     const simplifiedPath = simplifySvgPath(basePath)
     const parsed = parseSvgPath(simplifiedPath)
+
     return removeDuplicatePoints(parsed)
   }, [basePath])
-
-  //Maintain customPoints for any user adjustments (during dragging).
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
 
   //When edgePath changes (nodes are dragged), clear customPoints.
@@ -140,6 +142,23 @@ export const GenericEdge = ({
       setCustomPoints([])
     }
   }, [edgePath])
+
+  useEffect(() => {
+    if (straightPathPoints && targetNode) {
+      const newHandle = findClosestHandle(
+        { x: straightPathPoints[1].x, y: straightPathPoints[1].y },
+        {
+          x: targetNode.position.x,
+          y: targetNode.position.y,
+          width: targetNode.width!,
+          height: targetNode.height!,
+        }
+      )
+      if (targetHandleId !== newHandle) {
+        updateEdge(id, { targetHandle: newHandle ?? "" })
+      }
+    }
+  }, [straightPathPoints])
 
   //Active points: use customPoints if available; otherwise, use computedPoints.
   const activePoints = customPoints.length ? customPoints : computedPoints
@@ -229,18 +248,18 @@ export const GenericEdge = ({
           />
         )}
 
-        {midpoints.map((point, idx) => (
+        {midpoints.map((point, midPointIndex) => (
           <circle
             className="edge-circle"
             pointerEvents="all"
-            key={idx}
+            key={`${id}-midpoint-${midPointIndex}`}
             cx={point.x}
             cy={point.y}
             r={10}
             fill="lightgray"
             stroke="none"
             style={{ cursor: "grab" }}
-            onPointerDown={(e) => handlePointerDown(e, idx)}
+            onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
           />
         ))}
       </g>

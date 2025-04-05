@@ -74,8 +74,8 @@ export function tryFindStraightPath(
     direction: Position
   },
   targetPadding: number
-): string | null {
-  const offset = targetPadding === -8 ? 0 : 15
+): IPoint[] | null {
+  const offset = targetPadding === -8 ? 0 : targetPadding === 3 ? 10 : 15
   const OVERLAP_THRESHOLD = 40
   const sourceHandleEdge = source.direction
   const targetHandleEdge = target.direction
@@ -108,7 +108,7 @@ export function tryFindStraightPath(
         x: target.position.x - offset,
         y: middleY,
       }
-      return pointsToSvgPath([start, end])
+      return [start, end]
     }
   }
 
@@ -140,7 +140,7 @@ export function tryFindStraightPath(
         x: target.position.x + target.width + offset,
         y: middleY,
       }
-      return pointsToSvgPath([start, end])
+      return [start, end]
     }
   }
 
@@ -166,7 +166,7 @@ export function tryFindStraightPath(
         x: middleX,
         y: target.position.y - offset,
       }
-      return pointsToSvgPath([start, end])
+      return [start, end]
     }
   }
 
@@ -192,7 +192,7 @@ export function tryFindStraightPath(
         x: middleX,
         y: target.position.y + target.height + offset,
       }
-      return pointsToSvgPath([start, end])
+      return [start, end]
     }
   }
 

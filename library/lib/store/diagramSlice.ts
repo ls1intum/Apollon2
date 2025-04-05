@@ -25,7 +25,6 @@ export interface DiagramSlice {
   addNode: (node: Node) => void
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
-  updateEdgePoints: (edgeId: string, newPoints: IPoint[]) => void
   reset: () => void
 }
 

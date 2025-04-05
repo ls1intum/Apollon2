@@ -416,7 +416,6 @@ export function getMarkerSegmentPath(
   const lastPoint = points[points.length - 1]
   let extendedX = lastPoint.x
   let extendedY = lastPoint.y
-
   const offset = markerPadding === 3 ? 10 : 15
 
   switch (targetPosition) {
