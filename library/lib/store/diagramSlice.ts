@@ -8,7 +8,6 @@ import {
   type OnEdgesChange,
   applyEdgeChanges,
 } from "@xyflow/react"
-
 import { edgesMap, nodesMap } from "."
 
 export type DiagramStoreData = {

@@ -5,6 +5,7 @@ import {
   OnConnectEnd,
   OnConnectStart,
   OnConnectStartParams,
+  OnEdgesDelete,
 } from "@xyflow/react"
 import { useCallback, useRef } from "react"
 import { findClosestHandle, generateUUID } from "@/utils"
@@ -101,6 +102,7 @@ export const useConnect = () => {
         // Choose the node on top (last in array)
         const nodeOnTop = intersectingNodes[intersectingNodes.length - 1]
         const internalNodeData = getInternalNode(nodeOnTop.id)
+
         if (!internalNodeData) return // safeguard against missing internal data
 
         const targetHandle = findClosestHandle(dropPosition, {
@@ -144,12 +146,17 @@ export const useConnect = () => {
             })
           )
         }
-        startEdge.current = null
-        connectionStartParams.current = null
       }
+      startEdge.current = null
+      connectionStartParams.current = null
     },
     [edges, getDropPosition, getIntersectingNodes, setEdges]
   )
 
-  return { onConnect, onConnectEnd, onConnectStart }
+  const onEdgesDelete: OnEdgesDelete = useCallback(() => {
+    startEdge.current = null
+    connectionStartParams.current = null
+  }, [])
+
+  return { onConnect, onConnectEnd, onConnectStart, onEdgesDelete }
 }

@@ -3,7 +3,7 @@ import { subscribeWithSelector } from "zustand/middleware"
 import { createDiagramSlice, DiagramSlice } from "./diagramSlice"
 import ydoc from "@/sync/ydoc"
 import { type Edge, type Node } from "@xyflow/react"
-import { sortNodesTopologically } from "@/utils"
+import { parseDiagramType, sortNodesTopologically } from "@/utils"
 import {
   createDiagramMetadataSlice,
   DiagramMetadataSlice,
@@ -14,10 +14,12 @@ export const nodesMap = ydoc.getMap<Node>("nodes")
 export const edgesMap = ydoc.getMap<Edge>("edges")
 export const diagramMetadata = ydoc.getMap<string>("diagramMetadata")
 
-export const useBoundStore = create<DiagramSlice & DiagramMetadataSlice>()(
-  subscribeWithSelector((...a) => ({
-    ...createDiagramSlice(...a),
-    ...createDiagramMetadataSlice(...a),
+type ApollonStore = DiagramSlice & DiagramMetadataSlice
+
+export const useBoundStore = create<ApollonStore>()(
+  subscribeWithSelector((...args) => ({
+    ...createDiagramSlice(...args),
+    ...createDiagramMetadataSlice(...args),
   }))
 )
 
@@ -35,7 +37,9 @@ const observeYjsChanges = () => {
 
   const updateMetaData = () => {
     useBoundStore.setState({ diagramName: diagramMetadata.get("diagramName") })
-    useBoundStore.setState({ diagramType: diagramMetadata.get("diagramType") })
+    useBoundStore.setState({
+      diagramType: parseDiagramType(diagramMetadata.get("diagramType")),
+    })
   }
 
   nodesMap.observe(updateNodes)
