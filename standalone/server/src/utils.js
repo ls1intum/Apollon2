@@ -1,7 +1,7 @@
 const Y = require("yjs")
 const syncProtocol = require("y-protocols/dist/sync.cjs")
 const awarenessProtocol = require("y-protocols/dist/awareness.cjs")
-
+const { database: ldb } = require("./database")
 const encoding = require("lib0/dist/encoding.cjs")
 const decoding = require("lib0/dist/decoding.cjs")
 const map = require("lib0/dist/map.cjs")
@@ -17,7 +17,7 @@ const CALLBACK_OBJECTS = process.env.CALLBACK_OBJECTS
   ? JSON.parse(process.env.CALLBACK_OBJECTS)
   : {}
 
-isCallbackSet = !!CALLBACK_URL
+let isCallbackSet = !!CALLBACK_URL
 
 /**
  * @param {Uint8Array} update
@@ -106,42 +106,39 @@ const wsReadyStateClosed = 3 // eslint-disable-line
 
 // disable gc when using snapshots!
 const gcEnabled = process.env.GC !== "false" && process.env.GC !== "0"
-const persistenceDir = process.env.YPERSISTENCE
 /**
- * @type {{bindState: function(string,WSSharedDoc):void, writeState:function(string,WSSharedDoc):Promise<any>, provider: any}|null}
+ * @type {{bindState: function(string,WSSharedDoc):void, writeState:function(string,WSSharedDoc):Promise<any>, provider: any}}
  */
-let persistence = null
-if (typeof persistenceDir === "string") {
-  console.info('Persisting documents to "' + persistenceDir + '"')
-  // @ts-ignore
-  const LeveldbPersistence = require("y-leveldb").LeveldbPersistence
-  const ldb = new LeveldbPersistence(persistenceDir)
-  persistence = {
-    provider: ldb,
-    bindState: async (docName, ydoc) => {
-      const persistedYdoc = await ldb.getYDoc(docName)
-      const newUpdates = Y.encodeStateAsUpdate(ydoc)
-      ldb.storeUpdate(docName, newUpdates)
-      Y.applyUpdate(ydoc, Y.encodeStateAsUpdate(persistedYdoc))
-      ydoc.on("update", (update) => {
-        ldb.storeUpdate(docName, update)
-      })
-    },
-    writeState: async (docName, ydoc) => {},
-  }
+
+let persistence = {
+  provider: ldb,
+  bindState: async (docName, ydoc) => {
+    const persistedYdoc = await ldb.getYDoc(docName)
+    const newUpdates = Y.encodeStateAsUpdate(ydoc)
+    ldb.storeUpdate(docName, newUpdates)
+    Y.applyUpdate(ydoc, Y.encodeStateAsUpdate(persistedYdoc))
+    ydoc.on("update", (update) => {
+      ldb.storeUpdate(docName, update)
+    })
+  },
+  writeState: async (docName, ydoc) => {
+    await ldb.clearDocument(docName)
+    const update = Y.encodeStateAsUpdate(ydoc)
+    await ldb.storeUpdate(docName, update)
+  },
 }
 
 /**
  * @param {{bindState: function(string,WSSharedDoc):void,
- * writeState:function(string,WSSharedDoc):Promise<any>,provider:any}|null} persistence_
+ * writeState:function(string,WSSharedDoc):Promise<void>,provider:any}|null} persistence_
  */
 exports.setPersistence = (persistence_) => {
   persistence = persistence_
 }
 
 /**
- * @return {null|{bindState: function(string,WSSharedDoc):void,
- * writeState:function(string,WSSharedDoc):Promise<any>}|null} used persistence layer
+ * @return {{bindState: function(string,WSSharedDoc):void,
+ * writeState:function(string,WSSharedDoc):Promise<any>}} used persistence layer
  */
 exports.getPersistence = () => persistence
 
@@ -230,6 +227,7 @@ class WSSharedDoc extends Y.Doc {
   }
 }
 
+exports.WSSharedDoc = WSSharedDoc
 /**
  * Gets a Y.Doc by name, whether in memory or on disk
  *

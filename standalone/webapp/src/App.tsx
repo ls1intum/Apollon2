@@ -4,7 +4,7 @@ import { Navbar } from "./components"
 import "@xyflow/react/dist/style.css"
 import { Apollon, ApollonWithCollaboration, ErrorPage } from "@/pages"
 import { SafeArea } from "capacitor-plugin-safe-area"
-import "./webapp.css"
+import { ToastContainer } from "react-toastify"
 
 // To set the safe area insets as for mobile devices
 SafeArea.getSafeAreaInsets().then(
@@ -31,19 +31,21 @@ SafeArea.getSafeAreaInsets().then(
 function App() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <AppProviders>
-        <Navbar />
-        <BrowserRouter>
+      <BrowserRouter>
+        <AppProviders>
+          <Navbar />
           <Routes>
             <Route path="/" element={<Apollon />} />
             <Route
-              path="/diagram/:diagramId"
+              path="/diagram/:diagramID"
               element={<ApollonWithCollaboration />}
             />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
-        </BrowserRouter>
-      </AppProviders>
+
+          <ToastContainer />
+        </AppProviders>
+      </BrowserRouter>
     </div>
   )
 }
