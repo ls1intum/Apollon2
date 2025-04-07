@@ -35,8 +35,14 @@ interface AppProps {
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
-  const { nodes, onNodesChange, edges, onEdgesChange, diagramType } =
-    useBoundStore(useShallow((state) => state))
+  const {
+    nodes,
+    onNodesChange,
+    edges,
+    onEdgesChange,
+    diagramType,
+    setInteractiveElementId,
+  } = useBoundStore(useShallow((state) => state))
 
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
@@ -81,6 +87,18 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         elementsSelectable={!readonlyDiagram}
         edgesFocusable={!readonlyDiagram}
         nodesFocusable={!readonlyDiagram}
+        onPointerDown={(event) => {
+          console.log("onPointerDown", event)
+        }}
+        onNodeClick={(_, node) => {
+          setInteractiveElementId(node.id)
+        }}
+        onEdgeClick={(_, edge) => {
+          setInteractiveElementId(edge.id)
+        }}
+        onPaneClick={() => {
+          setInteractiveElementId(null)
+        }}
       >
         <Cursors cursors={cursors} />
         <CustomBackground />

@@ -74,13 +74,6 @@ body {
   z-index: 9;
 }
 
-.react-flow__node.selected .react-flow__handle {
-  opacity: 0.6;
-  padding: 4px;
-  background-color: rgb(99, 154, 242);
-  z-index: 10;
-}
-
 .react-flow__node:hover .react-flow__handle {
   opacity: 0.6;
   padding: 4px;

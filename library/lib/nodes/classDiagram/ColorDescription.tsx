@@ -10,13 +10,14 @@ export function ColorDescription({
   width,
   height,
   data: { description },
+  id,
 }: NodeProps<Props>) {
   if (!width || !height) {
     return null
   }
 
   return (
-    <DefaultNodeWrapper width={width} height={height}>
+    <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <ColorDescriptionSVG
         description={description}
         width={width}
