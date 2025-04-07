@@ -7,21 +7,47 @@ import {
   exportAsPDF,
   exportAsJSON,
   validateParsedJSON,
+  parseDiagramType,
 } from "./utils"
 import { DiagramType } from "./types"
-import { DiagramStoreData } from "./store/diagramSlice"
 export * from "./types"
 import { WebsocketProvider } from "y-websocket"
 import ydoc from "./sync/ydoc"
 import { useBoundStore } from "./store"
+import { edgesMap, nodesMap } from "./store"
+import { ApollonOptions } from "./types/EditorOptions"
+import { DiagramStoreData } from "./store/diagramSlice"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
   private reactFlowInstance: ReactFlowInstance | null = null
   private diagramType: DiagramType = DiagramType.ClassDiagram
+  private readonlyDiagram: boolean = false
 
-  constructor(element: HTMLElement) {
+  constructor(element: HTMLElement, options?: ApollonOptions) {
     this.root = ReactDOM.createRoot(element)
+
+    const diagramName = options?.model?.name || "Untitled Diagram"
+    const diagramType = options?.model?.type || DiagramType.ClassDiagram
+    ydoc.getMap<string>("diagramMetadata").set("diagramName", diagramName)
+    ydoc.getMap<string>("diagramMetadata").set("diagramType", diagramType)
+
+    if (options) {
+      this.diagramType = options?.model?.type || DiagramType.ClassDiagram
+
+      const nodes = options?.model?.nodes || []
+      const edges = options?.model?.edges || []
+
+      for (const node of nodes) {
+        nodesMap.set(node.id, node)
+      }
+      for (const edge of edges) {
+        edgesMap.set(edge.id, edge)
+      }
+
+      this.readonlyDiagram = options?.readonly || false
+    }
+
     this.renderApp()
   }
 
@@ -30,7 +56,7 @@ export class Apollon2 {
       this.root.render(
         <AppWithProvider
           onReactFlowInit={this.setReactFlowInstance.bind(this)}
-          diagramType={this.diagramType} // Pass the diagramType directly as a prop
+          readonlyDiagram={this.readonlyDiagram}
         />
       )
     }
@@ -193,7 +219,7 @@ export class Apollon2 {
   public getDiagramMetadata() {
     const metadata = ydoc.getMap<string>("diagramMetadata")
     const diagramName = metadata.get("diagramName")
-    const diagramType = metadata.get("diagramType")
+    const diagramType = parseDiagramType(metadata.get("diagramType"))
     return {
       diagramName,
       diagramType,
