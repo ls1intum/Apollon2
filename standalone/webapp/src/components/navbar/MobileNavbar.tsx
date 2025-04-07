@@ -14,10 +14,12 @@ import { NAVBAR_BACKGROUND_COLOR } from "@/constants"
 import { useApollon2Context } from "@/contexts/Apollon2Context"
 import TextField from "@mui/material/TextField/TextField"
 import TumLogo from "assets/images/tum-logo.png"
+import { useModalContext } from "@/contexts"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const { apollon2 } = useApollon2Context()
+  const { openModal } = useModalContext()
   const [diagramName, setDiagramName] = useState("")
   const unsubscribe = useRef<() => void>()
 
@@ -100,9 +102,7 @@ export default function MobileNavbar() {
                 <NavbarFile color="black" />
                 <Button
                   sx={{ textTransform: "none" }} // This removes the uppercase transformation
-                  onClick={() =>
-                    console.log("DEBUG share getnodes,", apollon2?.getNodes())
-                  }
+                  onClick={() => openModal("SHARE")}
                 >
                   <Typography color="black">Share</Typography>
                 </Button>

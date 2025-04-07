@@ -8,7 +8,6 @@ import {
   type OnEdgesChange,
   applyEdgeChanges,
 } from "@xyflow/react"
-
 import { edgesMap, nodesMap } from "."
 import { IPoint } from "@/edges/types"
 

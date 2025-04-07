@@ -3,31 +3,23 @@ import Info from "@mui/icons-material/Info"
 import { APButton } from "../APButton"
 import { toast } from "react-toastify"
 import { useApollon2Context, useModalContext } from "@/contexts"
-
 import { v4 as uuidv4 } from "uuid"
 import { useNavigate } from "react-router"
-
-// enum DiagramView {
-//   EDIT = "Edit",
-//   COLLABORATE = "Collaborate",
-//   GIVE_FEEDBACK = "Give Feedback",
-//   SEE_FEEDBACK = "See Feedback",
-// }
-
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
+import { DiagramView } from "@/types"
+import { backendURL } from "@/constants"
 
 export const ShareModal = () => {
   const { apollon2 } = useApollon2Context()
   const { closeModal } = useModalContext()
   const navigate = useNavigate()
 
-  const handleShareButtonPress = async () => {
+  const handleShareButtonPress = async (viewType: DiagramView) => {
     const nodes = apollon2?.getNodes()
     const edges = apollon2?.getEdges()
     const metadata = { ...apollon2?.getDiagramMetadata(), diagramID: uuidv4() }
 
     const data = { nodes, edges, metadata }
-    await fetch(`${backendUrl}/diagram/`, {
+    await fetch(`${backendURL}/diagram/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -36,9 +28,9 @@ export const ShareModal = () => {
         if (res.ok) {
           const diagramID = (await res.json()).newDiagramID
 
-          const newurl = `${window.location.origin}/diagram/${diagramID}`
+          const newurl = `${window.location.origin}/diagram/${diagramID}?view=${viewType}`
           copyToClipboard(newurl)
-          navigate(`/diagram/${diagramID}`)
+          navigate(`/diagram/${diagramID}?view=${viewType}`)
 
           toast.success(
             `The link has been copied to your clipboard and can be shared to collaborate, simply by pasting the link. You can re-access the link by going to share menu.`,
@@ -78,7 +70,7 @@ export const ShareModal = () => {
           <APButton
             variant="outline"
             fullWidth
-            onClick={handleShareButtonPress}
+            onClick={() => handleShareButtonPress(DiagramView.EDIT)}
           >
             Edit
           </APButton>
@@ -87,7 +79,7 @@ export const ShareModal = () => {
           <APButton
             variant="outline"
             fullWidth
-            onClick={handleShareButtonPress}
+            onClick={() => handleShareButtonPress(DiagramView.COLLABORATE)}
           >
             Collaborate
           </APButton>
@@ -96,7 +88,7 @@ export const ShareModal = () => {
           <APButton
             variant="outline"
             fullWidth
-            onClick={handleShareButtonPress}
+            onClick={() => handleShareButtonPress(DiagramView.GIVE_FEEDBACK)}
           >
             Give Feedback
           </APButton>
@@ -105,7 +97,7 @@ export const ShareModal = () => {
           <APButton
             variant="outline"
             fullWidth
-            onClick={handleShareButtonPress}
+            onClick={() => handleShareButtonPress(DiagramView.SEE_FEEDBACK)}
           >
             See Feedback
           </APButton>

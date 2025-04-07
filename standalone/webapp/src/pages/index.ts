@@ -1,3 +1,3 @@
 export * from "./Apollon"
-export * from "./ApollonWithCollaboration"
+export * from "./ApollonWithConnection"
 export * from "./ErrorPage"
