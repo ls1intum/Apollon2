@@ -87,6 +87,46 @@ body {
   background-color: rgb(99, 154, 242);
 }
 
+
+.edge-circle {
+  opacity: 0;
+  background-color: rgb(99, 154, 242);
+}
+
+.react-flow__edge:hover .edge-circle {
+  opacity: 0.4;
+  padding: 4px;
+  fill: #007bff; /* Blue color for handles */
+}
+
+.react-flow__edge:hover .edge-overlay {
+  opacity: 0.4;
+  padding: 4px;
+  stroke: #007bff; /* Blue color for edge */
+}
+.react-flow__edge:hover .edge-marker-highlight {
+  opacity: 0.4;
+  padding: 4px;
+  stroke: #007bff; /* Blue color for edge */
+}
+
+.react-flow__edge.selected .edge-circle{
+  opacity: 0.4;
+  padding: 4px;
+  fill: #007bff; /* Blue color for handles */
+}
+
+.react-flow__edge.selected .edge-overlay{
+  opacity: 0.4;
+  padding: 4px;
+  stroke: #007bff; /* Blue color for edge */
+}
+.react-flow__edge.selected .edge-marker-highlight{
+  opacity: 0.4;
+  padding: 4px;
+  stroke: #007bff; /* Blue color for edge */
+}
+
 .react-flow__node:hover {
   opacity: 0.9;
 }
