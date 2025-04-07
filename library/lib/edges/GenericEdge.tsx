@@ -17,6 +17,7 @@ import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
 import { IPoint, pointsToSvgPath, tryFindStraightPath } from "./Connection"
+import { useReconnect } from "@/hooks/useReconnect";
 import {
   simplifySvgPath,
   removeDuplicatePoints,
@@ -38,7 +39,7 @@ export const GenericEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
-  targetHandleId,
+  sourceHandleId,
   data,
 }: ExtendedEdgeProps) => {
   // Refs for dragging adjustments.
@@ -48,7 +49,9 @@ export const GenericEdge = ({
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
-  const { updateEdge, getNode } = useReactFlow()
+  const { updateEdge, getNode, getEdges,screenToFlowPosition } = useReactFlow()
+
+  const { onReconnect } = useReconnect();
 
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
@@ -143,22 +146,23 @@ export const GenericEdge = ({
     }
   }, [edgePath])
 
-  useEffect(() => {
-    if (straightPathPoints && targetNode) {
-      const newHandle = findClosestHandle(
-        { x: straightPathPoints[1].x, y: straightPathPoints[1].y },
-        {
-          x: targetNode.position.x,
-          y: targetNode.position.y,
-          width: targetNode.width!,
-          height: targetNode.height!,
-        }
-      )
-      if (targetHandleId !== newHandle) {
-        updateEdge(id, { targetHandle: newHandle ?? "" })
-      }
-    }
-  }, [straightPathPoints])
+  // useEffect(() => {
+  //   if (straightPathPoints && targetNode) {
+  //     const newHandle = findClosestHandle(
+  //       { x: straightPathPoints[1].x, y: straightPathPoints[1].y },
+  //       {
+  //         x: targetNode.position.x,
+  //         y: targetNode.position.y,
+  //         width: targetNode.width!,
+  //         height: targetNode.height!,
+  //       }
+  //     )
+  //     if (targetHandleId !== newHandle) {
+  //       console.log(targetHandleId, newHandle)
+  //       updateEdge(id, { targetHandle: newHandle ?? "" })
+  //     }
+  //   }
+  // }, [straightPathPoints])
 
   //Active points: use customPoints if available; otherwise, use computedPoints.
   const activePoints = customPoints.length ? customPoints : computedPoints
@@ -178,6 +182,7 @@ export const GenericEdge = ({
     const offsetY = event.clientY - currentMidpoint.y
     draggingIndexRef.current = index
     dragOffsetRef.current = { x: offsetX, y: offsetY }
+
     document.addEventListener("pointermove", handlePointerMove)
     document.addEventListener("pointerup", handlePointerUp, { once: true })
   }
@@ -217,6 +222,101 @@ export const GenericEdge = ({
     document.removeEventListener("pointermove", handlePointerMove)
   }, [handlePointerMove])
 
+    // --- New reconnect logic using the marker highlight ---
+
+    //const [isReconnecting, setIsReconnecting] = useState(false);
+    const reconnectOffsetRef = useRef<IPoint>({ x: 0, y: 0 });
+    const isReconnecting = useRef<Boolean>(false)
+
+
+  // --- Reconnect logic using the marker highlight as the grab target ---
+
+  const handleMarkerPointerDown = (e: React.PointerEvent) => {
+    if (straightPathPoints === null) return;
+    e.stopPropagation();
+    isReconnecting.current = true
+    // Calculate offset between pointer and current target endpoint.
+    const targetEndpoint = activePoints[activePoints.length - 1];
+    reconnectOffsetRef.current = {
+      x: e.clientX - targetEndpoint.x,
+      y: e.clientY - targetEndpoint.y,
+    };
+
+    document.addEventListener("pointermove", handleMarkerPointerMove);
+    document.addEventListener("pointerup", handleMarkerPointerUp, { once: true });
+  };
+
+  const handleMarkerPointerMove = useCallback(
+    (e: PointerEvent) => {
+      if (!isReconnecting) return;
+      // Update the target endpoint based on pointer position minus the stored offset.
+      const targetIndex = activePoints.length - 1;
+      const newEndpoint = {
+        x: e.clientX - reconnectOffsetRef.current.x,
+        y: e.clientY - reconnectOffsetRef.current.y,
+      };
+      const newPoints = [...activePoints];
+      newPoints[targetIndex] = newEndpoint;
+      setCustomPoints(newPoints);
+
+      console.log("Makrer move")
+    },
+    [activePoints, id, data, isReconnecting, updateEdge]
+  );
+  const getDropPosition = useCallback(
+    (event: MouseEvent | TouchEvent) => {
+      const { clientX, clientY } =
+        "changedTouches" in event ? event.changedTouches[0] : event
+      return screenToFlowPosition(
+        { x: clientX, y: clientY },
+        { snapToGrid: false }
+      )
+    },
+    [screenToFlowPosition]
+  )
+  const handleMarkerPointerUp = useCallback(
+    (e: PointerEvent) => {
+      isReconnecting.current = false
+      document.removeEventListener("pointermove", handleMarkerPointerMove);
+      document.removeEventListener("pointerup", handleMarkerPointerMove);
+      console.log(e)
+      // Finalize reconnect:
+      // • Use e.clientX, e.clientY or activePoints to compute the drop position.
+      // • Determine the intersecting node and the appropriate handle.
+      // • Update the edge (or call your onReconnect callback) accordingly.
+      
+      console.log("Final drop position:", activePoints[activePoints.length - 1]);
+      const dropPosition = getDropPosition(e)
+      const newHandle = findClosestHandle(
+             dropPosition,
+              {
+                x: targetNode.position.x,
+                y: targetNode.position.y,
+                width: targetNode.width!,
+                height: targetNode.height!,
+              }
+            )
+            const newConnection = {
+              source: source, // keep current source
+              target: targetNode.id, // or update if dropping onto a different node
+              sourceHandle: sourceHandleId as string, // preserve current source handle
+              targetHandle: newHandle,
+            };
+            // Get the old edge.
+            const oldEdge = getEdges().find((edge) => edge.id === id);
+            if (oldEdge) {
+              // Call your reconnect hook.
+              onReconnect(oldEdge, newConnection);
+            }
+      
+            //xupdateEdge(id, { targetHandle: newHandle ?? "" })
+            console.log("new handle", newHandle)
+            console.log("Edges", getEdges())
+            
+      // Example: You might call your reconnect hook here.
+    },
+    [activePoints, handleMarkerPointerMove]
+  );
   return (
     <>
       <g className="edge-container">
@@ -238,15 +338,24 @@ export const GenericEdge = ({
           pointerEvents="stroke"
         />
 
-        {type !== "ClassBidirectional" && (
+        
           <path
             className="edge-marker-highlight"
             d={markerSegmentPath}
             fill="none"
             strokeWidth={12}
-            pointerEvents="stroke"
+            pointerEvents="none" // Ensures the whole area is interactive
+            //onPointerDown={handleMarkerPointerDown}
           />
-        )}
+        <path
+            className="target-edge-marker"
+            d={markerSegmentPath}
+            fill="none"
+            strokeWidth={12}
+            pointerEvents="all" // Ensures the whole area is interactive
+            onPointerDown={handleMarkerPointerDown}
+            style={{ cursor: "all-scroll" }}
+          />
 
         {midpoints.map((point, midPointIndex) => (
           <circle
