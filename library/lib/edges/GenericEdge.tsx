@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
+import { BaseEdge, getSmoothStepPath } from "@xyflow/react"
 import { EdgePopover } from "@/components"
 import {
   STEP_BOARDER_RADIUS,
@@ -16,11 +16,13 @@ import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
+import { useShallow } from "zustand/shallow"
+import { useBoundStore } from "@/store"
+
 // Extend the props to include markerEnd and markerPadding.
 
 export const GenericEdge = ({
   id,
-  selected,
   type,
   source,
   target,
@@ -32,18 +34,14 @@ export const GenericEdge = ({
   targetPosition,
   data,
 }: ExtendedEdgeProps) => {
-  // const {
-  //   handleSourceRoleChange,
-  //   handleSourceMultiplicityChange,
-  //   handleTargetRoleChange,
-  //   handleTargetMultiplicityChange,
-  //   handleEdgeTypeChange,
-  //   handleSwap,
-  // } = useEdgePopOver({ id, selected: Boolean(selected) })
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
-  const { updateEdge } = useReactFlow()
+
+  const interactiveElementId = useBoundStore(
+    useShallow((state) => state.interactiveElementId)
+  )
+  const selected = interactiveElementId === id
 
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
@@ -131,12 +129,11 @@ export const GenericEdge = ({
         source={source}
         target={target}
         edgeId={id}
-        selected={Boolean(selected)}
+        selected={selected}
         anchorEl={edgePopoverAnchor}
         open={Boolean(edgePopoverAnchor)}
         onClose={() => {
           setEdgePopoverAnchor(null)
-          updateEdge(id, { selected: false })
         }}
       />
 

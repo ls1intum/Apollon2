@@ -26,24 +26,7 @@ interface EdgePopoverProps {
 
 // Modify EdgePopover to forward refs
 export const EdgePopover = forwardRef<HTMLDivElement, EdgePopoverProps>(
-  (
-    {
-      source,
-      target,
-      edgeId,
-      anchorEl,
-      open,
-      selected,
-      onClose,
-      // onEdgeTypeChange,
-      // onSourceMultiplicityChange,
-      // onTargetMultiplicityChange,
-      // onSourceRoleChange,
-      // onTargetRoleChange,
-      // onSwap,
-    },
-    ref
-  ) => {
+  ({ source, target, edgeId, anchorEl, open, selected, onClose }, ref) => {
     const { getEdge, getNode } = useReactFlow()
     const edge = getEdge(edgeId)!
     const edgeData = edge.data as CustomEdgeProps | undefined

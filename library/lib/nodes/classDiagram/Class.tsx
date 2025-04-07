@@ -14,18 +14,25 @@ import { useClassNode } from "@/hooks"
 import { useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { ClassNodeProps } from "@/types"
+import { useBoundStore } from "@/store"
+import { useShallow } from "zustand/shallow"
 
 export function Class({
   id,
   width,
   height,
-  selected,
+
   data: { methods, attributes, stereotype, name },
 }: NodeProps<Node<ClassNodeProps>>) {
+  const interactiveElementId = useBoundStore(
+    useShallow((state) => state.interactiveElementId)
+  )
   const [{ minHeight, minWidth }, setMinSize] = useState<MinSize>({
     minWidth: 0,
     minHeight: 0,
   })
+
+  const selected = id === interactiveElementId
   const [showEditPopover, setShowEditPopover] = useState(false)
 
   const svgRef = useRef<SVGSVGElement | null>(null)
@@ -43,7 +50,7 @@ export function Class({
   }
 
   return (
-    <DefaultNodeWrapper width={width} height={height}>
+    <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <NodeResizer
         nodeId={id}
         isVisible={selected}
@@ -65,7 +72,8 @@ export function Class({
           />
 
           <EditIcon
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               setShowEditPopover(true)
             }}
             style={{ cursor: "pointer", width: 16, height: 16 }}
