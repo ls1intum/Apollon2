@@ -19,7 +19,12 @@ import {
   CustomBackground,
 } from "@/components"
 import { diagramNodeTypes } from "./nodes"
-import { useConnect, useReconnect, useNodeDragStop } from "./hooks"
+import {
+  useConnect,
+  useReconnect,
+  useNodeDragStop,
+  useCanvasClickEvents,
+} from "./hooks"
 import { diagramEdgeTypes } from "./edges"
 import "@/styles/app.css"
 import { useCursorStateSynced } from "./sync"
@@ -35,20 +40,15 @@ interface AppProps {
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
-  const {
-    nodes,
-    onNodesChange,
-    edges,
-    onEdgesChange,
-    diagramType,
-    setInteractiveElementId,
-  } = useBoundStore(useShallow((state) => state))
+  const { nodes, onNodesChange, edges, onEdgesChange, diagramType } =
+    useBoundStore(useShallow((state) => state))
 
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
   const [cursors, onMouseMove] = useCursorStateSynced()
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =
     useConnect()
+  const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
   const { onReconnect } = useReconnect()
 
   return (
@@ -57,13 +57,13 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
 
       <SvgMarkers />
       <ReactFlow
-        proOptions={proOptions}
         id="react-flow-library"
         nodeTypes={diagramNodeTypes}
         edgeTypes={diagramEdgeTypes}
         nodes={nodes}
         edges={edges}
         onDragOver={onDragOver}
+        onSelectionChange={() => {}}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnectStart={onConnectStart}
@@ -87,18 +87,11 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         elementsSelectable={!readonlyDiagram}
         edgesFocusable={!readonlyDiagram}
         nodesFocusable={!readonlyDiagram}
-        onPointerDown={(event) => {
-          console.log("onPointerDown", event)
-        }}
-        onNodeClick={(_, node) => {
-          setInteractiveElementId(node.id)
-        }}
-        onEdgeClick={(_, edge) => {
-          setInteractiveElementId(edge.id)
-        }}
-        onPaneClick={() => {
-          setInteractiveElementId(null)
-        }}
+        onNodeClick={onNodeClick}
+        onNodeDrag={onNodeClick}
+        onEdgeClick={onEdgeClick}
+        onPaneClick={onPaneClick}
+        proOptions={proOptions}
       >
         <Cursors cursors={cursors} />
         <CustomBackground />
