@@ -18,9 +18,6 @@ configureMiddleware(app)
 // Mount routes
 app.use("/diagram", diagramRouter)
 
-app.get('/health', (req, res) => {
-  res.status(200).send('Ok');
-});
 
 // Start WebSocket server
 initializeWebSocketServer()
