@@ -167,7 +167,6 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
 
       if (parentId) {
         const parentPositionOnCanvas = getPositionOnCanvas(parentNode, nodes)
-        console.log("Parent position:", parentPositionOnCanvas)
         position.x -= parentPositionOnCanvas.x
         position.y -= parentPositionOnCanvas.y
       }

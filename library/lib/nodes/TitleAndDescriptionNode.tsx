@@ -11,6 +11,7 @@ export function TitleAndDesctiption({
   selected,
   width,
   height,
+  id,
   data: { description, title },
 }: NodeProps<Props>) {
   if (!width || !height) {
@@ -18,7 +19,7 @@ export function TitleAndDesctiption({
   }
 
   return (
-    <DefaultNodeWrapper width={width} height={height}>
+    <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <TitleAndDescriptionSVG
         width={width}
         height={height}

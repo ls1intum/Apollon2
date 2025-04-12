@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router"
 import { AppProviders } from "./AppProviders"
 import { Navbar } from "./components"
 import "@xyflow/react/dist/style.css"
-import { Apollon, ApollonWithCollaboration, ErrorPage } from "@/pages"
+import { Apollon, ApollonWithConnection, ErrorPage } from "@/pages"
 import { SafeArea } from "capacitor-plugin-safe-area"
 import { ToastContainer } from "react-toastify"
 
@@ -31,21 +31,21 @@ SafeArea.getSafeAreaInsets().then(
 function App() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <AppProviders>
-        <Navbar />
-        <BrowserRouter>
+      <BrowserRouter>
+        <AppProviders>
+          <Navbar />
           <Routes>
             <Route path="/" element={<Apollon />} />
             <Route
-              path="/diagram/:diagramId"
-              element={<ApollonWithCollaboration />}
+              path="/:diagramID"
+              element={<ApollonWithConnection />}
             />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
-        </BrowserRouter>
 
-        <ToastContainer />
-      </AppProviders>
+          <ToastContainer />
+        </AppProviders>
+      </BrowserRouter>
     </div>
   )
 }

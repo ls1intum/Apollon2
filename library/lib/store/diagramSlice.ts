@@ -8,7 +8,6 @@ import {
   type OnEdgesChange,
   applyEdgeChanges,
 } from "@xyflow/react"
-
 import { edgesMap, nodesMap } from "."
 
 export type DiagramStoreData = {
@@ -25,12 +24,17 @@ export interface DiagramSlice {
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   reset: () => void
+  interactiveElementId: string | null
+  setInteractiveElementId: (elementId: string | null) => void
 }
 
 export const createDiagramSlice: StateCreator<DiagramSlice> = (set) => ({
   nodes: Array.from(nodesMap.values()),
   edges: Array.from(edgesMap.values()),
-
+  interactiveElementId: null,
+  setInteractiveElementId: (interactiveElementId) => {
+    set({ interactiveElementId })
+  },
   addEdge: (edge) => {
     edgesMap.set(edge.id, edge)
   },
