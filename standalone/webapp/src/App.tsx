@@ -37,7 +37,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Apollon />} />
             <Route
-              path="/diagram/:diagramID"
+              path="/:diagramID"
               element={<ApollonWithConnection />}
             />
             <Route path="*" element={<ErrorPage />} />

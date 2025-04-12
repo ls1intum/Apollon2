@@ -18,11 +18,15 @@ configureMiddleware(app)
 // Mount routes
 app.use("/diagram", diagramRouter)
 
+app.get('/health', (req, res) => {
+  res.status(200).send('Ok');
+});
+
 // Start WebSocket server
 initializeWebSocketServer()
 
 const PORT = process.env.PORT || 8000
-const serverHost = process.env.host || "localhost"
+const serverHost = process.env.HOST || "localhost"
 // Start server
 app.listen(PORT, () => {
   console.log(`HTTP server running on http://${serverHost}:${PORT}`)

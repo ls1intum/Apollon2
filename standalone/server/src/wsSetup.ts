@@ -1,7 +1,7 @@
 import { Server, WebSocket } from "ws"
 import { setupWSConnection } from "./utils"
 
-const serverHost = process.env.host || "localhost"
+const serverHost = process.env.HOST || "localhost"
 
 export function initializeWebSocketServer() {
   const wsServerPort = Number(process.env.WS_PORT) || 4444

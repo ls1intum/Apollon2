@@ -1,0 +1,13 @@
+package-lock.json
+
+node_modules/
+dist/
+
+standalone/webapp/dist
+standalone/webapp/node_modules
+
+standalone/server/dist
+standalone/server/node_modules
+
+library/node_modules
+library/dist
