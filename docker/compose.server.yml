@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    expose:
+      - "8000"
+      - "4444"
+    environment:
+     - HOST=0.0.0.0
+     - PORT=8000
+     - WSSPORT=4444
+     - YPERSISTENCE=./dbDir
+     - FRONTEND_URL=https://apollon2.aet.cit.tum.de
+    restart: unless-stopped
+    networks:
+      - shared-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  shared-network:
+    name: shared-network
+    driver: bridge

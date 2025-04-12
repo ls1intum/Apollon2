@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile.webapp
+      args:
+        VITE_BACKEND_URL_WSS: "wss://apollon2.aet.cit.tum.de"
+        VITE_BACKEND_URL: "https://apollon2.aet.cit.tum.de"
+    environment:
+      - VITE_BACKEND_URL_WSS=wss://apollon2.aet.cit.tum.de
+      - VITE_BACKEND_URL=https://apollon2.aet.cit.tum.de
+    restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - shared-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  shared-network:
+    name: shared-network
+    driver: bridge

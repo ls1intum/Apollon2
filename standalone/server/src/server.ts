@@ -18,7 +18,6 @@ configureMiddleware(app)
 // Mount routes
 app.use("/diagram", diagramRouter)
 
-
 // Start WebSocket server
 initializeWebSocketServer()
 

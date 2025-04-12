@@ -8,12 +8,26 @@ on: # Adjust the triggers, conditions, etc. to your needs, see examples below
       - feat/*
       - 97-add-docker-and-github-workflow
 
-
 jobs:
-  # You can also build and push multiple images in parallel using a matrix (see examples)
   build-and-push-workflow:
-    uses: ls1intum/.github/.github/workflows/build-and-push-docker-image.yml@main
+    name: ${{ matrix.name }}
+    if: github.actor != 'dependabot[bot]'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Webapp
+            dockerfile: ./Dockerfile.webapp
+            image: ghcr.io/ls1intum/apollon2/apollon-webapp
+            context: ./standalone/webapp
+          - name: Server
+            dockerfile: ./Dockerfile.server
+            image: ghcr.io/ls1intum/apollon2/apollon-server
+            context: ./standalone/server
+        
+    # Uses https://github.com/ls1intum/.github/pull/16/commits/a35192af6c834a72cb12fe6b772c0cfb70b45eae
+    uses: ls1intum/.github/.github/workflows/build-and-push-docker-image.yml@feat/minor-build-improvements
     with:
-      image-name: ls1intum/apollon2/apollon_reenginerring
-      docker-file: Dockerfile 
-    secrets: inherit
+      image-name: ${{ matrix.image }}
+      docker-file: ${{ matrix.dockerfile }}
+      docker-context: ${{ matrix.context }}
