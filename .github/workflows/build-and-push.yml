@@ -19,11 +19,11 @@ jobs:
           - name: Webapp
             dockerfile: ./Dockerfile.webapp
             image: ghcr.io/ls1intum/apollon2/apollon-webapp
-            context: ./standalone/webapp
+            context: .
           - name: Server
             dockerfile: ./Dockerfile.server
             image: ghcr.io/ls1intum/apollon2/apollon-server
-            context: ./standalone/server
+            context: .
         
     # Uses https://github.com/ls1intum/.github/pull/16/commits/a35192af6c834a72cb12fe6b772c0cfb70b45eae
     uses: ls1intum/.github/.github/workflows/build-and-push-docker-image.yml@feat/minor-build-improvements
