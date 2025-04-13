@@ -59,8 +59,5 @@
     "@emotion/styled": "11.14.0",
     "capacitor-plugin-safe-area": "4.0.0",
     "yjs": "13.6.20"
-  },
-  "optionalDependencies": {
-    "@ast-grep/napi-linux-x64-gnu": "0.36.2"
   }
 }
