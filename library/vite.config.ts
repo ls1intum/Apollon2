@@ -1,13 +1,13 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import dts from "vite-plugin-dts";
-import { resolve } from "path";
-import postcss from "rollup-plugin-postcss";
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import dts from "vite-plugin-dts"
+import { resolve } from "path"
+import postcss from "rollup-plugin-postcss"
 
 export default defineConfig({
   plugins: [
     react(),
-    dts({ include: ["lib"] })
+    dts({ include: ["lib"] }),
     // Removed libInjectCss(), now using rollup-plugin-postcss instead
   ],
   build: {
@@ -26,7 +26,7 @@ export default defineConfig({
       plugins: [
         // Configure postcss to inject CSS into the bundle:
         postcss({
-          inject: true,   // Inject CSS into JavaScript
+          inject: true, // Inject CSS into JavaScript
           extract: false, // Do not output a separate CSS file
           minimize: true, // Optionally minimize the CSS
         }),
@@ -39,4 +39,4 @@ export default defineConfig({
       "@": resolve(__dirname, "lib"),
     },
   },
-});
+})
