@@ -19,7 +19,7 @@ export const ShareModal = () => {
     const metadata = { ...apollon2?.getDiagramMetadata(), diagramID: uuidv4() }
 
     const data = { nodes, edges, metadata }
-    await fetch(`${backendURL}/diagram/`, {
+    await fetch(`${backendURL}/api/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

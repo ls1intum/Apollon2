@@ -16,7 +16,7 @@ const app: Express = express()
 configureMiddleware(app)
 
 // Mount routes
-app.use("/diagram", diagramRouter)
+app.use("/api", diagramRouter)
 
 // Start WebSocket server
 initializeWebSocketServer()

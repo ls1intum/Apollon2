@@ -54,10 +54,11 @@
     "@capacitor/core": "7.0.1",
     "@capacitor/ios": "7.0.1",
     "@capacitor/splash-screen": "7.0.0",
-    "@mui/material": "6.4.2",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.0",
+    "@mui/material": "6.4.2",
     "capacitor-plugin-safe-area": "4.0.0",
+    "rollup-plugin-postcss": "^4.0.2",
     "yjs": "13.6.20"
   }
 }

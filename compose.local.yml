@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile.webapp
+      args:
+        - VITE_BACKEND_URL=http://localhost:8000
+        - VITE_BACKEND_URL_WSS=ws://localhost:4444
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    environment:
+      - APP_HOSTNAME=localhost
+      # These runtime environment variables are important!
+      - VITE_BACKEND_URL=http://localhost:8000  
+      - VITE_BACKEND_URL_WSS=ws://localhost:4444
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "8000:8000"
+      - "4444:4444"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - WSSPORT=4444
+      - YPERSISTENCE=/app/dbDir
+      - FRONTEND_URL=http://localhost
+    volumes:
+      - ./dbDir:/app/dbDir  # Important for data persistence
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -11,8 +11,8 @@ apollon2.aet.cit.tum.de {
     }
   }
 
-   @diagram path /diagram/*
-   reverse_proxy @diagram server:8000
+   @api path /api/*
+   reverse_proxy @api server:8000
 
    reverse_proxy webapp:80
 }
