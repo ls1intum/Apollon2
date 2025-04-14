@@ -5,7 +5,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: Dockerfile.server
+      dockerfile: ./server/Dockerfile
     expose:
       - "8000"
       - "4444"
