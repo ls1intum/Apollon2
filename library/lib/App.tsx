@@ -19,11 +19,16 @@ import {
   CustomBackground,
 } from "@/components"
 import { diagramNodeTypes } from "./nodes"
-import { useConnect, useReconnect, useNodeDragStop } from "./hooks"
+import {
+  useConnect,
+  useReconnect,
+  useNodeDragStop,
+  useCanvasClickEvents,
+} from "./hooks"
 import { diagramEdgeTypes } from "./edges"
 import "@/styles/app.css"
 import { useCursorStateSynced } from "./sync"
-import { useBoundStore } from "./store"
+import { useDiagramStore, useMetadataStore } from "./store"
 import { useDragOver } from "./hooks/useDragOver"
 import { useShallow } from "zustand/shallow"
 
@@ -35,21 +40,26 @@ interface AppProps {
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
-  const {
-    nodes,
-    onNodesChange,
-    edges,
-    onEdgesChange,
-    diagramType,
-    setInteractiveElementId,
-  } = useBoundStore(useShallow((state) => state))
+  const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore()(
+    useShallow((state) => ({
+      nodes: state.nodes,
+      onNodesChange: state.onNodesChange,
+      edges: state.edges,
+      onEdgesChange: state.onEdgesChange,
+      setInteractiveElementId: state.setInteractiveElementId,
+    }))
+  )
 
+  const diagramType = useMetadataStore()(
+    useShallow((state) => state.diagramType)
+  )
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
   const [cursors, onMouseMove] = useCursorStateSynced()
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =
     useConnect()
   const { onReconnect } = useReconnect()
+  const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
 
   return (
     <div style={{ display: "flex", width: "100%", height: "100%" }}>
@@ -57,7 +67,6 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
 
       <SvgMarkers />
       <ReactFlow
-        proOptions={proOptions}
         id="react-flow-library"
         nodeTypes={diagramNodeTypes}
         edgeTypes={diagramEdgeTypes}
@@ -87,18 +96,11 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         elementsSelectable={!readonlyDiagram}
         edgesFocusable={!readonlyDiagram}
         nodesFocusable={!readonlyDiagram}
-        onPointerDown={(event) => {
-          console.log("onPointerDown", event)
-        }}
-        onNodeClick={(_, node) => {
-          setInteractiveElementId(node.id)
-        }}
-        onEdgeClick={(_, edge) => {
-          setInteractiveElementId(edge.id)
-        }}
-        onPaneClick={() => {
-          setInteractiveElementId(null)
-        }}
+        onNodeClick={onNodeClick}
+        onNodeDrag={onNodeClick}
+        onEdgeClick={onEdgeClick}
+        onPaneClick={onPaneClick}
+        proOptions={proOptions}
       >
         <Cursors cursors={cursors} />
         <CustomBackground />

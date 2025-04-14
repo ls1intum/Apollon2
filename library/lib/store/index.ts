@@ -1,50 +1,38 @@
-import { create } from "zustand"
-import { subscribeWithSelector } from "zustand/middleware"
-import { createDiagramSlice, DiagramSlice } from "./diagramSlice"
-import ydoc from "@/sync/ydoc"
-import { type Edge, type Node } from "@xyflow/react"
-import { parseDiagramType, sortNodesTopologically } from "@/utils"
-import {
-  createDiagramMetadataSlice,
-  DiagramMetadataSlice,
-} from "./diagramMetadataSlice"
+import { createDiagramStore } from "./diagramStore"
+import { createMetadataStore } from "./metadataStore"
+import { DiagramStore, MetadataStore } from "./types"
+import { StoreApi, UseBoundStore } from "zustand"
+import { observeYjsChanges } from "./yjsSync"
 
-// Yjs maps for real-time collaboration
-export const nodesMap = ydoc.getMap<Node>("nodes")
-export const edgesMap = ydoc.getMap<Edge>("edges")
-export const diagramMetadata = ydoc.getMap<string>("diagramMetadata")
+type StoreType = {
+  diagramStore: UseBoundStore<StoreApi<DiagramStore>>
+  metadataStore: UseBoundStore<StoreApi<MetadataStore>>
+} | null
 
-type ApollonStore = DiagramSlice & DiagramMetadataSlice
+let useStore: StoreType = null
 
-export const useBoundStore = create<ApollonStore>()(
-  subscribeWithSelector((...args) => ({
-    ...createDiagramSlice(...args),
-    ...createDiagramMetadataSlice(...args),
-  }))
-)
-
-// Sync Zustand store with Yjs changes
-const observeYjsChanges = () => {
-  const updateNodes = () => {
-    useBoundStore.setState({
-      nodes: sortNodesTopologically(Array.from(nodesMap.values())),
-    })
+export const initStore = () => {
+  if (!useStore) {
+    useStore = {
+      diagramStore: createDiagramStore(),
+      metadataStore: createMetadataStore(),
+    }
+    observeYjsChanges()
   }
-
-  const updateEdges = () => {
-    useBoundStore.setState({ edges: Array.from(edgesMap.values()) })
-  }
-
-  const updateMetaData = () => {
-    useBoundStore.setState({ diagramName: diagramMetadata.get("diagramName") })
-    useBoundStore.setState({
-      diagramType: parseDiagramType(diagramMetadata.get("diagramType")),
-    })
-  }
-
-  nodesMap.observe(updateNodes)
-  edgesMap.observe(updateEdges)
-  diagramMetadata.observe(updateMetaData)
+  return useStore
 }
 
-observeYjsChanges()
+export const getStore = () => {
+  if (!useStore) {
+    throw new Error("Store not initialized. Call initStore() first.")
+  }
+  return useStore
+}
+
+export const killStore = () => {
+  useStore = null
+}
+
+// Export hooks for convenience
+export const useDiagramStore = () => getStore().diagramStore
+export const useMetadataStore = () => getStore().metadataStore

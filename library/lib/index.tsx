@@ -13,28 +13,35 @@ import { DiagramType } from "./types"
 export * from "./types"
 import { WebsocketProvider } from "y-websocket"
 import ydoc from "./sync/ydoc"
-import { useBoundStore } from "./store"
-import { edgesMap, nodesMap } from "./store"
+import {
+  initStore,
+  killStore,
+  useDiagramStore,
+  useMetadataStore,
+} from "./store"
+
 import { ApollonOptions } from "./types/EditorOptions"
-import { DiagramStoreData } from "./store/diagramSlice"
+import { edgesMap, nodesMap } from "./store/constants"
+import { DiagramStoreData } from "./store/types"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
   private reactFlowInstance: ReactFlowInstance | null = null
-  private diagramType: DiagramType = DiagramType.ClassDiagram
+  private diagramType: DiagramType
   private readonlyDiagram: boolean = false
 
   constructor(element: HTMLElement, options?: ApollonOptions) {
+    initStore()
     this.root = ReactDOM.createRoot(element)
-
     const diagramName = options?.model?.name || "Untitled Diagram"
     const diagramType = options?.model?.type || DiagramType.ClassDiagram
     ydoc.getMap<string>("diagramMetadata").set("diagramName", diagramName)
     ydoc.getMap<string>("diagramMetadata").set("diagramType", diagramType)
 
+    this.diagramType = parseDiagramType(
+      ydoc.getMap<string>("diagramMetadata").get("diagramType")
+    )
     if (options) {
-      this.diagramType = options?.model?.type || DiagramType.ClassDiagram
-
       const nodes = options?.model?.nodes || []
       const edges = options?.model?.edges || []
 
@@ -93,6 +100,7 @@ export class Apollon2 {
     if (this.root) {
       this.root.unmount()
       this.root = null
+      killStore()
     }
   }
 
@@ -181,7 +189,7 @@ export class Apollon2 {
   public subscribeToModalNodeEdgeChange(
     callback: (state: DiagramStoreData) => void
   ) {
-    return useBoundStore.subscribe((state) =>
+    return useDiagramStore().subscribe((state) =>
       callback({
         nodes: state.nodes,
         edges: state.edges,
@@ -190,12 +198,9 @@ export class Apollon2 {
   }
 
   public subscribeToDiagramNameChange(callback: (diagramName: string) => void) {
-    return useBoundStore.subscribe(
-      (state) => state.diagramName,
-      (diagramName) => {
-        callback(diagramName)
-      }
-    )
+    return useMetadataStore().subscribe((state) => {
+      callback(state.diagramName)
+    })
   }
 
   public makeWebsocketConnection(serverUrl: string, roomname: string) {

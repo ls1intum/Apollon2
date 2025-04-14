@@ -16,8 +16,8 @@ import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
+import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
-import { useBoundStore } from "@/store"
 
 // Extend the props to include markerEnd and markerPadding.
 
@@ -38,7 +38,7 @@ export const GenericEdge = ({
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
 
-  const interactiveElementId = useBoundStore(
+  const interactiveElementId = useDiagramStore()(
     useShallow((state) => state.interactiveElementId)
   )
   const selected = interactiveElementId === id
