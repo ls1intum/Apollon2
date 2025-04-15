@@ -8,8 +8,6 @@ export const observeYjsChanges = () => {
     _events: Y.YEvent<any>[],
     transaction: Y.Transaction
   ) => {
-    console.log("Nodes updated from Yjs _events:", _events)
-    console.log("Nodes updated from Yjs transaction:", transaction)
     if (transaction.origin !== "store") {
       getStore().diagramStore.getState().updateNodesFromYjs()
     }

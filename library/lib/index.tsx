@@ -21,8 +21,7 @@ import {
 } from "./store"
 
 import { ApollonOptions } from "./types/EditorOptions"
-import { edgesMap, nodesMap } from "./store/constants"
-import { DiagramStoreData } from "./store/types"
+import { DiagramStoreData } from "./store/diagramStore"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
@@ -35,8 +34,9 @@ export class Apollon2 {
     this.root = ReactDOM.createRoot(element)
     const diagramName = options?.model?.name || "Untitled Diagram"
     const diagramType = options?.model?.type || DiagramType.ClassDiagram
-    ydoc.getMap<string>("diagramMetadata").set("diagramName", diagramName)
-    ydoc.getMap<string>("diagramMetadata").set("diagramType", diagramType)
+
+    const updateMetaData = useMetadataStore().getState().updateMetaData
+    updateMetaData(diagramName, diagramType)
 
     this.diagramType = parseDiagramType(
       ydoc.getMap<string>("diagramMetadata").get("diagramType")
@@ -45,12 +45,7 @@ export class Apollon2 {
       const nodes = options?.model?.nodes || []
       const edges = options?.model?.edges || []
 
-      for (const node of nodes) {
-        nodesMap.set(node.id, node)
-      }
-      for (const edge of edges) {
-        edgesMap.set(edge.id, edge)
-      }
+      useDiagramStore().getState().setNodesAndEdges(nodes, edges)
 
       this.readonlyDiagram = options?.readonly || false
     }

@@ -4,11 +4,37 @@ import {
   applyNodeChanges,
   applyEdgeChanges,
   getConnectedEdges,
+  type Node,
+  type Edge,
+  type OnNodesChange,
+  type OnEdgesChange,
 } from "@xyflow/react"
 import { nodesMap, edgesMap } from "./constants"
-import { DiagramStore } from "./types"
+
 import { sortNodesTopologically } from "@/utils"
 import ydoc from "@/sync/ydoc"
+
+export type DiagramStoreData = {
+  nodes: Node[]
+  edges: Edge[]
+}
+
+export type DiagramStore = {
+  nodes: Node[]
+  edges: Edge[]
+  setNodes: (payload: Node[] | ((nodes: Node[]) => Node[])) => void
+  setEdges: (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void
+  setNodesAndEdges: (nodes: Node[], edges: Edge[]) => void
+  addEdge: (edge: Edge) => void
+  addNode: (node: Node) => void
+  onNodesChange: OnNodesChange
+  onEdgesChange: OnEdgesChange
+  reset: () => void
+  interactiveElementId: string | null
+  setInteractiveElementId: (elementId: string | null) => void
+  updateNodesFromYjs: () => void
+  updateEdgesFromYjs: () => void
+}
 
 export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
   create<DiagramStore>()(
@@ -54,6 +80,18 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
 
           set({ edges }, undefined, "setEdges")
         },
+
+        setNodesAndEdges: (nodes, edges) => {
+          // Batch Yjs updates in a transaction
+          ydoc.transact(() => {
+            nodesMap.clear()
+            edgesMap.clear()
+            nodes.forEach((node) => nodesMap.set(node.id, node))
+            edges.forEach((edge) => edgesMap.set(edge.id, edge))
+          }, "store")
+          set({ nodes, edges }, undefined, "setNodesAndEdges")
+        },
+        // Set nodes and edges from Yjs
 
         onNodesChange: (changes) => {
           const currentNodes = get().nodes
@@ -112,6 +150,7 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
           }, "store")
           set({ nodes: [], edges: [] }, undefined, "reset")
         },
+
         updateNodesFromYjs: () =>
           set(
             { nodes: sortNodesTopologically(Array.from(nodesMap.values())) },
