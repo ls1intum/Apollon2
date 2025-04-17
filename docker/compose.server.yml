@@ -3,9 +3,7 @@ version: "3.8"
 services:
 
   server:
-    build:
-      context: .
-      dockerfile: ./server/Dockerfile
+    image: "ghcr.io/ls1intum/apollon2/apollon-server:${IMAGE_TAG}"
     expose:
       - "8000"
       - "4444"

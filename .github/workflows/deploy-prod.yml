@@ -29,7 +29,6 @@ jobs:
     secrets: inherit
 
   deploy-proxy:
-    if: ${{ inputs.deploy-proxy }}
     uses: ls1intum/.github/.github/workflows/deploy-docker-compose.yml@main
     with:
       environment: Production

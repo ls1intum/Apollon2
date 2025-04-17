@@ -3,17 +3,12 @@ version: "3.8"
 services:
 
   webapp:
-    build:
-      context: .
-      dockerfile: ./webapp/Dockerfile
-      args:
-        VITE_BACKEND_URL_WSS: "wss://apollon2.aet.cit.tum.de"
-        VITE_BACKEND_URL: "https://apollon2.aet.cit.tum.de"
+    image: "ghcr.io/ls1intum/apollon2/apollon-webapp:${IMAGE_TAG}"
     environment:
       - VITE_BACKEND_URL_WSS=wss://apollon2.aet.cit.tum.de
       - VITE_BACKEND_URL=https://apollon2.aet.cit.tum.de
     restart: unless-stopped
-    expose:
+    ports:
       - "80"
     networks:
       - shared-network

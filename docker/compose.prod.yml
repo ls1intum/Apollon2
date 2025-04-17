@@ -17,8 +17,8 @@ services:
 
   webapp:
     build:
-      context: .
-      dockerfile: Dockerfile.webapp
+      context: ..
+      dockerfile: ./standalone/webapp/Dockerfile
       args:
         VITE_BACKEND_URL_WSS: "wss://apollon2.aet.cit.tum.de"
         VITE_BACKEND_URL: "https://apollon2.aet.cit.tum.de"
@@ -38,8 +38,8 @@ services:
 
   server:
     build:
-      context: .
-      dockerfile: Dockerfile.server
+      context: ..
+      dockerfile: ./standalone/server/Dockerfile
     expose:
       - "8000"
       - "4444"

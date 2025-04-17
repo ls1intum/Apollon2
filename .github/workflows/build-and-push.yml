@@ -15,11 +15,11 @@ jobs:
       matrix:
         include:
           - name: Webapp
-            dockerfile: ./Dockerfile.webapp
+            dockerfile: ./standalone/webapp/Dockerfile
             image: ghcr.io/ls1intum/apollon2/apollon-webapp
             context: .
           - name: Server
-            dockerfile: ./Dockerfile.server
+            dockerfile: ./standalone/server/Dockerfile
             image: ghcr.io/ls1intum/apollon2/apollon-server
             context: .
         
