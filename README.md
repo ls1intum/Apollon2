@@ -187,6 +187,22 @@ Webapp can be build and run with docker. Be sure docker is installed in your dev
   ```
   After running 'npm run docker:start' you can navigate to http://localhost:8080/ and start using the application
 
+## Run Docker locally
+
+Make sure Docker is up and running.
+
+Build image with docker compose:
+
+ ```bash
+  docker compose -f ./docker/compose.local.yml build
+  ```
+
+Run the container with docker compose:
+
+ ```bash
+  docker compose -f ./docker/compose.local.yml up -d
+  ```
+
 ## Troubleshooting
 
 - If you encounter issues with Node.js versions, ensure you have the correct version installed by running:

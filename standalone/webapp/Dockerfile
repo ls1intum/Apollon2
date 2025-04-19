@@ -16,6 +16,7 @@ RUN npm install
 COPY standalone/webapp ./standalone/webapp
 COPY library ./library
 COPY standalone/server ./standalone/server
+COPY plugins plugins
 
 # Also copy any global config used during build
 # Build
