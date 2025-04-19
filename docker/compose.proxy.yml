@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   caddy:
-    image: caddy:alpine
+    image: caddy:latest
     container_name: apollon2-caddy
     restart: unless-stopped
     ports:

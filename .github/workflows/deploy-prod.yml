@@ -35,7 +35,7 @@ jobs:
       docker-compose-file: "./docker/compose.proxy.yml"
       # We just keep the main-image-name and image-tag as placeholders
       main-image-name: caddy
-      image-tag: alpine
+      image-tag: latest
       #deployment-base-path: "/opt/apollon2/proxy"
     secrets: inherit
   
