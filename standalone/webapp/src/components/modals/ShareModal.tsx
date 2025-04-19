@@ -19,7 +19,7 @@ export const ShareModal = () => {
     const metadata = { ...apollon2?.getDiagramMetadata(), diagramID: uuidv4() }
 
     const data = { nodes, edges, metadata }
-    await fetch(`${backendURL}/diagram/`, {
+    await fetch(`${backendURL}/api/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -28,9 +28,9 @@ export const ShareModal = () => {
         if (res.ok) {
           const diagramID = (await res.json()).newDiagramID
 
-          const newurl = `${window.location.origin}/diagram/${diagramID}?view=${viewType}`
+          const newurl = `${window.location.origin}/${diagramID}?view=${viewType}`
           copyToClipboard(newurl)
-          navigate(`/diagram/${diagramID}?view=${viewType}`)
+          navigate(`/${diagramID}?view=${viewType}`)
 
           toast.success(
             `The link has been copied to your clipboard and can be shared to collaborate, simply by pasting the link. You can re-access the link by going to share menu.`,

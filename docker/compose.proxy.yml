@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  caddy:
+    image: caddy:alpine
+    container_name: apollon2-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - shared-network
+
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  shared-network:
+    name: shared-network
+    driver: bridge

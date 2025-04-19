@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  webapp:
+    build:
+      context: ..
+      dockerfile: ./standalone/webapp/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    environment:
+      - APP_HOSTNAME=localhost
+      - VITE_BACKEND_URL=http://localhost:8000  
+      - VITE_BACKEND_URL_WSS=ws://localhost:4444
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: ..
+      dockerfile: ./standalone/server/Dockerfile
+    ports:
+      - "8000:8000"
+      - "4444:4444"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - WSSPORT=4444
+      - YPERSISTENCE=/app/dbDir
+      - FRONTEND_URL=http://localhost
+    volumes:
+      - ./dbDir:/app/dbDir 
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
