@@ -9,7 +9,7 @@ import {
 } from "@xyflow/react"
 import { useCallback, useRef } from "react"
 import { findClosestHandle, generateUUID } from "@/utils"
-import { useBoundStore } from "@/store"
+import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 
 const EDGE_TYPE = "ClassBidirectional"
@@ -19,13 +19,13 @@ export const useConnect = () => {
   const connectionStartParams = useRef<OnConnectStartParams | null>(null)
   const { screenToFlowPosition, getIntersectingNodes, getInternalNode } =
     useReactFlow()
-  const { setEdges, addEdge } = useBoundStore(
+  const { setEdges, addEdge, edges } = useDiagramStore()(
     useShallow((state) => ({
       setEdges: state.setEdges,
       addEdge: state.addEdge,
+      edges: state.edges,
     }))
   )
-  const edges = useBoundStore((state) => state.edges)
 
   // Helper to get drop position from event
   const getDropPosition = useCallback(
