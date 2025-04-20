@@ -52,8 +52,8 @@ export const ApollonWithConnection: React.FC = () => {
             toast.error("WebSocket connection error")
           }
 
-          ws.onclose = () => {
-            console.warn("WebSocket closed")
+          ws.onclose = (closeEnvt) => {
+            console.warn("WebSocket closed, closeEnvt", closeEnvt)
           }
         } catch (error) {
           toast.error("Error loading diagram. Please try again.")
