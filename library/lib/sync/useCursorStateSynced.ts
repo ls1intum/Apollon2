@@ -1,23 +1,17 @@
 import { stringToColor } from "./utils"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useReactFlow } from "@xyflow/react"
-import ydoc from "./ydoc"
-
-const cursorsMap = ydoc.getMap<Cursor>("cursors")
-const cursorId = ydoc.clientID.toString()
-const cursorColor = stringToColor(cursorId)
+import { getCursorsMap, getYDoc } from "./ydoc"
+import { Cursor } from "./type"
 
 const MAX_IDLE_TIME = 10000
 
-export interface Cursor {
-  id: string
-  color: string
-  x: number
-  y: number
-  timestamp: number
-}
-
 export function useCursorStateSynced() {
+  const cursorId = useMemo(
+    () => getYDoc().clientID.toString(),
+    [getYDoc().clientID.toString()]
+  )
+  const cursorColor = useMemo(() => stringToColor(cursorId), [cursorId])
   const [cursors, setCursors] = useState<Cursor[]>([])
   const { screenToFlowPosition } = useReactFlow()
 
@@ -25,9 +19,9 @@ export function useCursorStateSynced() {
   const flush = useCallback(() => {
     const now = Date.now()
 
-    for (const [id, cursor] of cursorsMap) {
+    for (const [id, cursor] of getCursorsMap()) {
       if (now - cursor.timestamp > MAX_IDLE_TIME) {
-        cursorsMap.delete(id)
+        getCursorsMap().delete(id)
       }
     }
   }, [])
@@ -39,7 +33,7 @@ export function useCursorStateSynced() {
         y: event.clientY,
       })
 
-      cursorsMap.set(cursorId, {
+      getCursorsMap().set(cursorId, {
         id: cursorId,
         color: cursorColor,
         x: position.x,
@@ -53,15 +47,15 @@ export function useCursorStateSynced() {
   useEffect(() => {
     const timer = window.setInterval(flush, MAX_IDLE_TIME)
     const observer = () => {
-      setCursors([...cursorsMap.values()])
+      setCursors([...getCursorsMap().values()])
     }
 
     flush()
-    setCursors([...cursorsMap.values()])
-    cursorsMap.observe(observer)
+    setCursors([...getCursorsMap().values()])
+    getCursorsMap().observe(observer)
 
     return () => {
-      cursorsMap.unobserve(observer)
+      getCursorsMap().unobserve(observer)
       window.clearInterval(timer)
     }
   }, [flush])

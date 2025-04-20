@@ -13,6 +13,5 @@ apollon2.aet.cit.tum.de {
 
    @api path /api/*
    reverse_proxy @api server:8000
-
    reverse_proxy webapp:80
 }

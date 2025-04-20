@@ -5,6 +5,7 @@ import "@xyflow/react/dist/style.css"
 import { Apollon, ApollonWithConnection, ErrorPage } from "@/pages"
 import { SafeArea } from "capacitor-plugin-safe-area"
 import { ToastContainer } from "react-toastify"
+import CollabTextArea from "./pages/CollaborativeEditor"
 
 // To set the safe area insets as for mobile devices
 SafeArea.getSafeAreaInsets().then(
@@ -35,6 +36,7 @@ function App() {
         <AppProviders>
           <Navbar />
           <Routes>
+            <Route path="/a" element={<CollabTextArea />} />
             <Route path="/" element={<Apollon />} />
             <Route path="/:diagramID" element={<ApollonWithConnection />} />
             <Route path="*" element={<ErrorPage />} />

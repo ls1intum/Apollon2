@@ -1,6 +1,5 @@
+import { Cursor } from "@/sync/type"
 import { EdgeLabelRenderer, useViewport } from "@xyflow/react"
-import { Cursor } from "../sync/useCursorStateSynced"
-
 export function Cursors({ cursors }: { cursors: Cursor[] }) {
   const viewport = useViewport()
 

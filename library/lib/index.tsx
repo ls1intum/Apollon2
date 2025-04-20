@@ -11,27 +11,33 @@ import {
 } from "./utils"
 import { DiagramType } from "./types"
 export * from "./types"
-import { WebsocketProvider } from "y-websocket"
-import ydoc from "./sync/ydoc"
+import { getYDoc, setYDoc } from "./sync/ydoc"
 import {
   initStore,
   killStore,
   useDiagramStore,
   useMetadataStore,
 } from "./store"
-
 import { ApollonOptions } from "./types/EditorOptions"
 import { DiagramStoreData } from "./store/diagramStore"
+import { YjsSyncClass } from "./store/yjsSync"
 
 export class Apollon2 {
   private root: ReactDOM.Root | null = null
   private reactFlowInstance: ReactFlowInstance | null = null
   private diagramType: DiagramType
   private readonlyDiagram: boolean = false
+  private syncManager: YjsSyncClass
 
   constructor(element: HTMLElement, options?: ApollonOptions) {
+    setYDoc()
     initStore()
-    this.root = ReactDOM.createRoot(element)
+    this.syncManager = new YjsSyncClass()
+
+    this.root = ReactDOM.createRoot(element, {
+      identifierPrefix: "apollon2",
+    })
+
     const diagramName = options?.model?.name || "Untitled Diagram"
     const diagramType = options?.model?.type || DiagramType.ClassDiagram
 
@@ -39,15 +45,14 @@ export class Apollon2 {
     updateMetaData(diagramName, diagramType)
 
     this.diagramType = parseDiagramType(
-      ydoc.getMap<string>("diagramMetadata").get("diagramType")
+      getYDoc().getMap<string>("diagramMetadata").get("diagramType")
     )
     if (options) {
-      const nodes = options?.model?.nodes || []
-      const edges = options?.model?.edges || []
+      const nodes = options.model?.nodes || []
+      const edges = options.model?.edges || []
 
       useDiagramStore().getState().setNodesAndEdges(nodes, edges)
-
-      this.readonlyDiagram = options?.readonly || false
+      this.readonlyDiagram = options.readonly || false
     }
 
     this.renderApp()
@@ -93,6 +98,7 @@ export class Apollon2 {
 
   public dispose() {
     if (this.root) {
+      this.syncManager.stopSync()
       this.root.unmount()
       this.root = null
       killStore()
@@ -141,8 +147,6 @@ export class Apollon2 {
   public async importJson(content: string): Promise<boolean | string> {
     if (this.reactFlowInstance) {
       const parsed = JSON.parse(content)
-
-      // Validate the structure
       const result = validateParsedJSON(parsed)
 
       if (typeof result === "string") {
@@ -152,11 +156,9 @@ export class Apollon2 {
       const { nodes, edges, diagramType } = result
 
       this.diagramType = diagramType
-      // Trigger a re-render by calling renderApp after updating the diagramType
       this.renderApp()
       this.reactFlowInstance.setNodes(nodes)
       this.reactFlowInstance.setEdges(edges)
-      // We need to render the nodes and edges first before fitting the view
       requestAnimationFrame(() => {
         this.reactFlowInstance?.fitView()
       })
@@ -168,7 +170,6 @@ export class Apollon2 {
 
   public createNewDiagram(diagramType: DiagramType) {
     this.diagramType = diagramType
-    // Trigger a re-render by calling renderApp after updating the diagramType
     this.renderApp()
 
     if (this.reactFlowInstance) {
@@ -198,26 +199,24 @@ export class Apollon2 {
     })
   }
 
-  public makeWebsocketConnection(serverUrl: string, roomname: string) {
-    const wsProvider = new WebsocketProvider(serverUrl, roomname, ydoc)
+  public sendBroadcastMessage(sendFn: (data: Uint8Array) => void) {
+    this.syncManager.setSendFunction(sendFn)
+  }
 
-    wsProvider.on("status", ({ status }) => {
-      console.log("WebSocket status:", status)
-    })
-    wsProvider.on("connection-error", (error) => {
-      console.error("WebSocket connection error:", error)
-    })
-    wsProvider.on("connection-close", (event) => {
-      console.log("WebSocket closed:", event)
-    })
+  public receiveBroadcastedMessage(update: Uint8Array) {
+    this.syncManager.handleReceivedData(update)
+  }
+
+  public startSync() {
+    this.syncManager.startSync()
   }
 
   public updateDiagramName(name: string) {
-    ydoc.getMap<string>("diagramMetadata").set("diagramName", name)
+    getYDoc().getMap<string>("diagramMetadata").set("diagramName", name)
   }
 
   public getDiagramMetadata() {
-    const metadata = ydoc.getMap<string>("diagramMetadata")
+    const metadata = getYDoc().getMap<string>("diagramMetadata")
     const diagramName = metadata.get("diagramName")
     const diagramType = parseDiagramType(metadata.get("diagramType"))
     return {

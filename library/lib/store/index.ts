@@ -1,8 +1,6 @@
 import { createDiagramStore, DiagramStore } from "./diagramStore"
 import { createMetadataStore, MetadataStore } from "./metadataStore"
-
 import { StoreApi, UseBoundStore } from "zustand"
-import { observeYjsChanges } from "./yjsSync"
 
 type StoreType = {
   diagramStore: UseBoundStore<StoreApi<DiagramStore>>
@@ -10,7 +8,6 @@ type StoreType = {
 } | null
 
 let useStore: StoreType = null
-let stopYjsObserver: (() => void) | null = null
 
 export const initStore = () => {
   if (!useStore) {
@@ -18,7 +15,6 @@ export const initStore = () => {
       diagramStore: createDiagramStore(),
       metadataStore: createMetadataStore(),
     }
-    stopYjsObserver = observeYjsChanges()
   }
   return useStore
 }
@@ -31,9 +27,6 @@ export const getStore = () => {
 }
 
 export const killStore = () => {
-  if (stopYjsObserver) {
-    stopYjsObserver()
-  }
   useStore = null
 }
 

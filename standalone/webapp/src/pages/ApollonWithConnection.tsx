@@ -1,82 +1,67 @@
 import React, { useEffect, useRef } from "react"
 import { useApollon2Context } from "@/contexts"
-import { Apollon2, DiagramType } from "@apollon2/library"
-import { useParams, useSearchParams } from "react-router"
-import { ApollonOptions } from "@apollon2/library/dist/types/EditorOptions"
-import { DiagramView } from "@/types"
-import { toast } from "react-toastify"
-import { backendURL, backendWSSUrl } from "@/constants"
+import { Apollon2 } from "@apollon2/library"
+import { useParams } from "react-router"
 
-const fetchDiagram = async (diagramID: string) => {
-  const response = await fetch(`${backendURL}/api/${diagramID}`)
-  if (!response.ok) {
-    throw new Error("Failed to fetch diagram")
-  }
-  const data = await response.json()
-  return data
-}
+import { toast } from "react-toastify"
+import { backendWSSUrl } from "@/constants"
 
 export const ApollonWithConnection: React.FC = () => {
   const { apollon2, setApollon2 } = useApollon2Context()
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { diagramID } = useParams()
-  const [searchParams] = useSearchParams()
 
   useEffect(() => {
     const handleSetup = async () => {
       if (containerRef.current && !apollon2 && diagramID) {
         try {
-          let instance: Apollon2
-          const viewType = searchParams.get("view")
-          const validViewTypes: DiagramView[] = [
-            DiagramView.COLLABORATE,
-            DiagramView.GIVE_FEEDBACK,
-            DiagramView.SEE_FEEDBACK,
-            DiagramView.EDIT,
-          ]
-          const isValidView =
-            viewType && validViewTypes.includes(viewType as DiagramView)
-          const makeConnection = isValidView
-            ? viewType === DiagramView.COLLABORATE ||
-              viewType === DiagramView.GIVE_FEEDBACK ||
-              viewType === DiagramView.SEE_FEEDBACK
-            : false
+          console.log("Creating WebSocket connection")
+          // const ws = new WebSocket(`${backendWSSUrl}+/${diagramID}`)
+          const ws = new WebSocket(backendWSSUrl)
 
-          if (makeConnection) {
-            instance = new Apollon2(containerRef.current)
-            instance.makeWebsocketConnection(backendWSSUrl, diagramID)
-            setApollon2(instance)
-
-            return
-          }
-
-          const { data } = await fetchDiagram(diagramID)
-          const nodes = data.nodes
-          const edges = data.edges
-          const metadata = data.metadata
-          const diagramName = metadata.diagramName || "Untitled Diagram"
-          const diagramType = metadata.diagramType || DiagramType.ClassDiagram
-
-          const editorOptions: ApollonOptions = {
-            model: {
-              name: diagramName,
-              id: diagramID,
-              type: diagramType,
-              nodes: nodes,
-              edges: edges,
-            },
-          }
-
-          instance = new Apollon2(containerRef.current, editorOptions)
+          const instance = new Apollon2(containerRef.current)
           setApollon2(instance)
+
+          // Handle incoming Yjs updates
+          ws.onmessage = (event: MessageEvent<Blob>) => {
+            event.data.arrayBuffer().then((buffer: ArrayBuffer) => {
+              const data = new Uint8Array(buffer)
+              instance.receiveBroadcastedMessage(data)
+            })
+          }
+
+          // Wait until socket is open before starting sync
+          ws.onopen = () => {
+            console.log("WebSocket connected")
+
+            // Set send function AFTER open
+            instance.sendBroadcastMessage((data) => {
+              if (ws.readyState === WebSocket.OPEN) {
+                ws.send(data)
+              } else {
+                console.warn("Tried to send while WebSocket not open")
+              }
+            })
+
+            ws.send(new Uint8Array([0])) // your init message
+            instance.startSync()
+          }
+
+          ws.onerror = (err) => {
+            console.error("WebSocket error", err)
+            toast.error("WebSocket connection error")
+          }
+
+          ws.onclose = () => {
+            console.warn("WebSocket closed")
+          }
         } catch (error) {
-          toast.error(
-            "Error fetching diagram. Please check the diagram ID and try again."
-          )
-          console.error("Error fetching diagram:", error)
+          toast.error("Error loading diagram. Please try again.")
+          console.error("Error setting up Apollon2:", error)
         }
       }
     }
+
     handleSetup()
 
     return () => {

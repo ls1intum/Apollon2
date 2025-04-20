@@ -1,45 +1,49 @@
 import {
-  ReactFlow,
   ReactFlowProvider,
+  ReactFlowInstance,
   ConnectionLineType,
   ConnectionMode,
-  ReactFlowInstance,
+  ReactFlow,
 } from "@xyflow/react"
 import {
-  MAX_SCALE_TO_ZOOM_IN,
-  MIN_SCALE_TO_ZOOM_OUT,
-  SNAP_TO_GRID_PX,
-} from "./constants"
-import {
-  Cursors,
+  CustomBackground,
+  CustomControls,
+  CustomMiniMap,
   Sidebar,
   SvgMarkers,
-  CustomMiniMap,
-  CustomControls,
-  CustomBackground,
 } from "@/components"
-import { diagramNodeTypes } from "./nodes"
+import "@/styles/app.css"
+import { useDiagramStore } from "./store"
+import { useShallow } from "zustand/shallow"
+import { DiagramType } from "./types"
 import {
+  MIN_SCALE_TO_ZOOM_OUT,
+  MAX_SCALE_TO_ZOOM_IN,
+  SNAP_TO_GRID_PX,
+} from "./constants"
+import { diagramEdgeTypes } from "./edges"
+import {
+  useNodeDragStop,
   useConnect,
   useReconnect,
-  useNodeDragStop,
   useCanvasClickEvents,
 } from "./hooks"
-import { diagramEdgeTypes } from "./edges"
-import "@/styles/app.css"
-import { useCursorStateSynced } from "./sync"
-import { useDiagramStore, useMetadataStore } from "./store"
 import { useDragOver } from "./hooks/useDragOver"
-import { useShallow } from "zustand/shallow"
+import { diagramNodeTypes } from "./nodes"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
   readonlyDiagram: boolean
 }
-
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
+  // const { textEditor, updateEditor } = useDiagramStore()(
+  //   useShallow((state) => ({
+  //     textEditor: state.textEditor,
+  //     updateEditor: state.updateEditor,
+  //   }))
+  // )
   const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore()(
     useShallow((state) => ({
       nodes: state.nodes,
@@ -50,12 +54,12 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
     }))
   )
 
-  const diagramType = useMetadataStore()(
-    useShallow((state) => state.diagramType)
-  )
+  // const diagramType = useMetadataStore()(
+  //   useShallow((state) => state.diagramType)
+  // )
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
-  const [cursors, onMouseMove] = useCursorStateSynced()
+  // const [cursors, onMouseMove] = useCursorStateSynced()
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =
     useConnect()
   const { onReconnect } = useReconnect()
@@ -63,7 +67,7 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
 
   return (
     <div style={{ display: "flex", width: "100%", height: "100%" }}>
-      <Sidebar selectedDiagramType={diagramType} />
+      <Sidebar selectedDiagramType={DiagramType.ClassDiagram} />
 
       <SvgMarkers />
       <ReactFlow
@@ -83,7 +87,6 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         onReconnect={onReconnect}
         connectionLineType={ConnectionLineType.Step}
         connectionMode={ConnectionMode.Loose}
-        onPointerMove={onMouseMove}
         onInit={(instance) => {
           onReactFlowInit(instance)
         }}
@@ -102,11 +105,57 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         onPaneClick={onPaneClick}
         proOptions={proOptions}
       >
-        <Cursors cursors={cursors} />
         <CustomBackground />
         <CustomMiniMap />
         <CustomControls />
       </ReactFlow>
+
+      {/* <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "10px",
+        }}
+      >
+        <Button
+          onClick={() => {
+            updateEditor(generateUUID(), "test")
+          }}
+        >
+          Add
+        </Button>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: "10px",
+          }}
+        >
+          {textEditor.map((elem) => (
+            <textarea
+              key={elem.id}
+              value={elem.name}
+              onChange={(e) => {
+                updateEditor(elem.id, e.target.value)
+              }}
+              placeholder="Collaborative text area"
+              style={{
+                width: "100%",
+                height: "20px",
+                backgroundColor: "GrayText",
+              }}
+            />
+          ))}
+        </div>
+
+        <div>
+          {textEditor.map((elem) => (
+            <div key={elem.id}>{elem.name}</div>
+          ))}
+        </div>
+      </div> */}
     </div>
   )
 }

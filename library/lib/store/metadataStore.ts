@@ -1,8 +1,7 @@
 import { create, StoreApi, UseBoundStore } from "zustand"
 import { devtools, subscribeWithSelector } from "zustand/middleware"
-import { diagramMetadata } from "./constants"
 import { parseDiagramType } from "@/utils"
-import ydoc from "@/sync/ydoc"
+import { getDiagramMetadata, getYDoc } from "@/sync/ydoc"
 import { DiagramType } from "@/types"
 
 export type MetadataStore = {
@@ -18,27 +17,28 @@ export const createMetadataStore = (): UseBoundStore<StoreApi<MetadataStore>> =>
   create<MetadataStore>()(
     devtools(
       subscribeWithSelector((set) => ({
-        diagramName: diagramMetadata.get("diagramName") || "Untitled Diagram",
-        diagramType: parseDiagramType(diagramMetadata.get("diagramType")),
+        diagramName:
+          getDiagramMetadata().get("diagramName") || "Untitled Diagram",
+        diagramType: parseDiagramType(getDiagramMetadata().get("diagramType")),
 
         updateDiagramName: (name) => {
-          ydoc.transact(() => {
-            diagramMetadata.set("diagramName", name)
+          getYDoc().transact(() => {
+            getDiagramMetadata().set("diagramName", name)
           }, "store")
           set({ diagramName: name }, undefined, "updateDiagramName")
         },
 
         updateDiagramType: (type) => {
-          ydoc.transact(() => {
-            diagramMetadata.set("diagramType", type)
+          getYDoc().transact(() => {
+            getDiagramMetadata().set("diagramType", type)
           }, "store")
           set({ diagramType: type }, undefined, "updateDiagramType")
         },
 
         updateMetaData: (name, type) => {
-          ydoc.transact(() => {
-            diagramMetadata.set("diagramName", name)
-            diagramMetadata.set("diagramType", type)
+          getYDoc().transact(() => {
+            getDiagramMetadata().set("diagramName", name)
+            getDiagramMetadata().set("diagramType", type)
           }, "store")
           set(
             {
@@ -54,8 +54,10 @@ export const createMetadataStore = (): UseBoundStore<StoreApi<MetadataStore>> =>
           set(
             {
               diagramName:
-                diagramMetadata.get("diagramName") || "Untitled Diagram",
-              diagramType: parseDiagramType(diagramMetadata.get("diagramType")),
+                getDiagramMetadata().get("diagramName") || "Untitled Diagram",
+              diagramType: parseDiagramType(
+                getDiagramMetadata().get("diagramType")
+              ),
             },
             undefined,
             "updateMetaDataFromYjs"
