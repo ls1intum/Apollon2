@@ -9,7 +9,7 @@ apollon2.aet.cit.tum.de {
   # Handle WSS connections with proper headers
   reverse_proxy @websockets server:4444 {
     transport http {
-      versions 1.1
+      versions h1.1
     }
     header_up Host {host}
     header_up Connection "Upgrade"
@@ -19,7 +19,7 @@ apollon2.aet.cit.tum.de {
     header_up X-Forwarded-For {remote}
     header_up X-Forwarded-Proto {scheme}
   }
-  
+
   @api path /api/*
   reverse_proxy @api server:8000
 
