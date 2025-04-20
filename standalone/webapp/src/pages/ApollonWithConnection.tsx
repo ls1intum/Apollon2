@@ -43,8 +43,8 @@ export const ApollonWithConnection: React.FC = () => {
               }
             })
 
-            ws.send(new Uint8Array([0])) // your init message
             instance.startSync()
+            ws.send(new Uint8Array([0])) // your init message
           }
 
           ws.onerror = (err) => {

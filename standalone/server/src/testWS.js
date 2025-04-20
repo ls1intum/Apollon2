@@ -40,6 +40,6 @@ export const startTestSocketServer = () => {
   })
 
   console.log(
-    `Yjs WebSocket server running on ws://${serverHost}//${wsServerPort}`
+    `Yjs WebSocket server running on ws://${serverHost}/${wsServerPort}`
   )
 }
