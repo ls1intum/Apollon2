@@ -9,6 +9,14 @@ export const startTestSocketServer = () => {
   })
   const clients = new Set()
 
+  wss.on("error", (error) => {
+    console.error("WebSocket server error:", error)
+    if (error.code === "EADDRINUSE") {
+      console.error(
+        `Port ${wsServerPort} is already in use. Please check if another instance is running.`
+      )
+    }
+  })
   wss.on("connection", (ws, req) => {
     clients.add(ws)
 
@@ -39,7 +47,7 @@ export const startTestSocketServer = () => {
     })
   })
 
-  console.log(`Webscoket address ${wss.address}`)
+  console.log(`Webscoket address ${wss.address()}`)
 
   console.log(
     `Yjs WebSocket server running on ws://${serverHost}/${wsServerPort}`
