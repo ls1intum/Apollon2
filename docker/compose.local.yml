@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   webapp:
@@ -11,8 +11,8 @@ services:
       - server
     environment:
       - APP_HOSTNAME=localhost
-      - VITE_BACKEND_URL=http://localhost:8000  
-      - VITE_BACKEND_URL_WSS=ws://localhost:4444
+      - VITE_BACKEND_URL=http://localhost:8000
+      - VITE_BACKEND_URL_WSS=ws://localhost:4444/ws
     networks:
       - app-network
 
@@ -30,7 +30,7 @@ services:
       - YPERSISTENCE=/app/dbDir
       - FRONTEND_URL=http://localhost
     volumes:
-      - ./dbDir:/app/dbDir 
+      - ./dbDir:/app/dbDir
     networks:
       - app-network
 
