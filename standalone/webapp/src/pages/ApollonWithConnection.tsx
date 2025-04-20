@@ -8,7 +8,7 @@ import { toast } from "react-toastify"
 import { backendURL, backendWSSUrl } from "@/constants"
 
 const fetchDiagram = async (diagramID: string) => {
-  const response = await fetch(`${backendURL}/diagram/${diagramID}`)
+  const response = await fetch(`${backendURL}/api/${diagramID}`)
   if (!response.ok) {
     throw new Error("Failed to fetch diagram")
   }

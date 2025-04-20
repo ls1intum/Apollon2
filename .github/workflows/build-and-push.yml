@@ -1,0 +1,31 @@
+name: Build and Push Docker Image
+
+on: # Adjust the triggers, conditions, etc. to your needs, see examples below
+  pull_request:
+  push:
+    branches: 
+      - main
+
+jobs:
+  build-and-push-workflow:
+    name: ${{ matrix.name }}
+    if: github.actor != 'dependabot[bot]'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Webapp
+            dockerfile: ./standalone/webapp/Dockerfile
+            image: ghcr.io/ls1intum/apollon2/apollon-webapp
+            context: .
+          - name: Server
+            dockerfile: ./standalone/server/Dockerfile
+            image: ghcr.io/ls1intum/apollon2/apollon-server
+            context: .
+        
+    # Uses https://github.com/ls1intum/.github/pull/16/commits/a35192af6c834a72cb12fe6b772c0cfb70b45eae
+    uses: ls1intum/.github/.github/workflows/build-and-push-docker-image.yml@feat/minor-build-improvements
+    with:
+      image-name: ${{ matrix.image }}
+      docker-file: ${{ matrix.dockerfile }}
+      docker-context: ${{ matrix.context }}

@@ -17,14 +17,14 @@ body {
 }
 
 .react-flow {
-  --background: #e2e8f0;
-  --panel-background: #f8fafc;
+
+  --panel-background: #fff;
   --panel-shadow: 0 0 4px 0 rgb(0 0 0 / 0.2);
   --text: #0a0a0a;
   --xy-edge-stroke: black;
 
-  background-color: var(--background);
 }
+
 
 .react-flow.dark {
   --background: #0f172a;

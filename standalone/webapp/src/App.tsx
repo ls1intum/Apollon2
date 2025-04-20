@@ -36,10 +36,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Apollon />} />
-            <Route
-              path="/diagram/:diagramID"
-              element={<ApollonWithConnection />}
-            />
+            <Route path="/:diagramID" element={<ApollonWithConnection />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
 
