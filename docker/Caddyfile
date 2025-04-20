@@ -11,13 +11,7 @@ apollon2.aet.cit.tum.de {
     transport http {
       versions h1.1
     }
-    header_up Host {host}
-    header_up Connection "Upgrade"
-    header_up Upgrade "websocket"
-    header_up Sec-WebSocket-Version "13"
-    header_up X-Real-IP {remote}
-    header_up X-Forwarded-For {remote}
-    header_up X-Forwarded-Proto {scheme}
+
   }
 
   @api path /api/*
