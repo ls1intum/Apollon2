@@ -1,13 +1,8 @@
 apollon2.aet.cit.tum.de {
-  @websockets {
-    path /ws
-    header Connection *Upgrade*
-    header Upgrade websocket
-  }
-
+  @websockets path /ws/*
   reverse_proxy @websockets server:4444 {
     transport http {
-      versions h1.1
+      versions 1.1
     }
   }
 
@@ -15,5 +10,5 @@ apollon2.aet.cit.tum.de {
   reverse_proxy @api server:8000
 
   # fallback for everything else
-  reverse_proxy webapp:80
+  reverse_proxy webapp:3000
 }
