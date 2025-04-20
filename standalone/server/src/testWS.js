@@ -39,6 +39,8 @@ export const startTestSocketServer = () => {
     })
   })
 
+  console.log(`Webscoket address ${wss.address}`)
+
   console.log(
     `Yjs WebSocket server running on ws://${serverHost}/${wsServerPort}`
   )

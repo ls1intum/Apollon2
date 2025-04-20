@@ -1,5 +1,4 @@
 apollon2.aet.cit.tum.de {
-
   @websockets {
     path /ws
     header Connection *Upgrade*
