@@ -10,5 +10,5 @@ apollon2.aet.cit.tum.de {
   reverse_proxy @api server:8000
 
   # fallback for everything else
-  reverse_proxy webapp:3000
+  reverse_proxy webapp:80
 }

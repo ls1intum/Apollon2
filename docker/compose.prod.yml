@@ -23,7 +23,7 @@ services:
         VITE_BACKEND_URL: "https://apollon2.aet.cit.tum.de"
     restart: unless-stopped
     expose:
-      - "3000"
+      - "80"
     networks:
       - shared-network
     logging:
