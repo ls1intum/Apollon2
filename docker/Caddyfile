@@ -2,8 +2,6 @@ apollon2.aet.cit.tum.de {
   # WebSocket matcher specifically for /ws path
   @websockets {
     path /ws*
-    header Connection *Upgrade*
-    header Upgrade *Websocket*
   }
 
   # Handle WSS connections with proper headers
@@ -11,7 +9,6 @@ apollon2.aet.cit.tum.de {
     transport http {
       versions h1.1
     }
-
   }
 
   @api path /api/*
