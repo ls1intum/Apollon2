@@ -26,10 +26,13 @@ import {
   getMarkerSegmentPath,
   findClosestHandle,
 } from "@/utils/edgeUtils"
+import { useShallow } from "zustand/shallow"
+import { useBoundStore } from "@/store"
+
+// Extend the props to include markerEnd and markerPadding.
 
 export const GenericEdge = ({
   id,
-  selected,
   type,
   source,
   target,
@@ -41,6 +44,7 @@ export const GenericEdge = ({
   targetPosition,
   sourceHandleId,
   data,
+  selected
 }: ExtendedEdgeProps) => {
   // Refs for dragging adjustments.
   const draggingIndexRef = useRef<number>()
@@ -52,6 +56,16 @@ export const GenericEdge = ({
   const { updateEdge, getNode, getEdges,screenToFlowPosition } = useReactFlow()
 
   const { onReconnect } = useReconnect();
+
+  // const { handleDelete } = useToolbar({ id })
+  // const [edgePopoverAnchor, setEdgePopoverAnchor] =
+  //   useState<HTMLElement | null>(null)
+
+  // const interactiveElementId = useBoundStore(
+  //   useShallow((state) => state.interactiveElementId)
+  // )
+  // const selected = interactiveElementId === id
+
 
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
@@ -384,12 +398,11 @@ export const GenericEdge = ({
         source={source}
         target={target}
         edgeId={id}
-        selected={Boolean(selected)}
+        selected={selected!}
         anchorEl={edgePopoverAnchor}
         open={Boolean(edgePopoverAnchor)}
         onClose={() => {
           setEdgePopoverAnchor(null)
-          updateEdge(id, { selected: false })
         }}
       />
       {data?.sourceRole && (

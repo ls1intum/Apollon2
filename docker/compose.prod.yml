@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  caddy:
+    image: caddy:alpine
+    container_name: apollon2-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - shared-network
+
+  webapp:
+    build:
+      context: ..
+      dockerfile: ./standalone/webapp/Dockerfile
+      args:
+        VITE_BACKEND_URL_WSS: "wss://apollon2.aet.cit.tum.de"
+        VITE_BACKEND_URL: "https://apollon2.aet.cit.tum.de"
+    environment:
+      - VITE_BACKEND_URL_WSS=wss://apollon2.aet.cit.tum.de
+      - VITE_BACKEND_URL=https://apollon2.aet.cit.tum.de
+    restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - shared-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  server:
+    build:
+      context: ..
+      dockerfile: ./standalone/server/Dockerfile
+    expose:
+      - "8000"
+      - "4444"
+    environment:
+     - HOST=0.0.0.0
+     - PORT=8000
+     - WSSPORT=4444
+     - YPERSISTENCE=./dbDir
+     - FRONTEND_URL=https://apollon2.aet.cit.tum.de
+    restart: unless-stopped
+    networks:
+      - shared-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  shared-network:
+    name: shared-network
+    driver: bridge

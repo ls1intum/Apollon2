@@ -46,7 +46,7 @@ export default function Package({
   }
 
   return (
-    <DefaultNodeWrapper width={width} height={height}>
+    <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <NodeToolbar
         isVisible={selected}
         position={Position.Top}

@@ -17,14 +17,14 @@ body {
 }
 
 .react-flow {
-  --background: #e2e8f0;
-  --panel-background: #f8fafc;
+
+  --panel-background: #fff;
   --panel-shadow: 0 0 4px 0 rgb(0 0 0 / 0.2);
   --text: #0a0a0a;
   --xy-edge-stroke: black;
 
-  background-color: var(--background);
 }
+
 
 .react-flow.dark {
   --background: #0f172a;
@@ -72,13 +72,6 @@ body {
 
 .react-flow__resize-control line {
   z-index: 9;
-}
-
-.react-flow__node.selected .react-flow__handle {
-  opacity: 0.6;
-  padding: 4px;
-  background-color: rgb(99, 154, 242);
-  z-index: 10;
 }
 
 .react-flow__node:hover .react-flow__handle {
