@@ -18,7 +18,7 @@ const diagramTypeToTitle = {
 }
 
 export const NewDiagramModal = () => {
-  const { apollon2, setDiagramName } = useApollon2Context()
+  const { setDiagramName } = useApollon2Context()
   const { closeModal } = useModalContext()
   const [isDiagramNameDefault, setIsDiagramNameDefault] =
     useState<boolean>(true)
@@ -29,7 +29,7 @@ export const NewDiagramModal = () => {
 
   const handleCreateDiagram = () => {
     setDiagramName(newDiagramName)
-    apollon2?.createNewDiagram(selectedDiagramType)
+    window.location.assign(`${window.location.origin}`)
     closeModal()
   }
 

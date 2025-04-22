@@ -11,7 +11,7 @@ import {
 } from "./utils"
 import { DiagramType } from "./types"
 export * from "./types"
-import { getYDoc, setYDoc } from "./sync/ydoc"
+import { clearYDoc, getYDoc, setYDoc } from "./sync/ydoc"
 import {
   initStore,
   killStore,
@@ -97,10 +97,16 @@ export class Apollon2 {
   }
 
   public dispose() {
+    if (!this.root) {
+      console.warn("Apollon2 root is already disposed or not initialized.")
+      return
+    }
+
     if (this.root) {
       this.syncManager.stopSync()
       this.root.unmount()
       this.root = null
+      clearYDoc()
       killStore()
     }
   }
@@ -205,10 +211,6 @@ export class Apollon2 {
 
   public receiveBroadcastedMessage(update: Uint8Array) {
     this.syncManager.handleReceivedData(update)
-  }
-
-  public startSync() {
-    this.syncManager.startSync()
   }
 
   public updateDiagramName(name: string) {

@@ -12,18 +12,23 @@ export const getYDoc = () => {
 }
 
 export const setYDoc = () => {
-  console.log("setYDoc")
   if (!ydoc) {
     ydoc = new Y.Doc()
     console.log("Y.Doc initialized, clientID:", ydoc.clientID)
   }
 }
 
-export const getTextEditor = () =>
-  getYDoc().getMap<{ id: string; name: string }>("textEditor")
 export const getNodesMap = () => getYDoc().getMap<Node>("nodes")
 export const getEdgesMap = () => getYDoc().getMap<Edge>("edges")
 export const getDiagramMetadata = () =>
   getYDoc().getMap<string>("diagramMetadata")
 export const getCursorsMap = () => getYDoc().getMap<Cursor>("cursors")
+
+export const clearYDoc = () => {
+  if (ydoc) {
+    ydoc.destroy()
+    ydoc = null
+  }
+}
+
 export default ydoc

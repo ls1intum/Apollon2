@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react"
 import { useApollon2Context } from "@/contexts"
 import { Apollon2 } from "@apollon2/library"
 import { useParams } from "react-router"
-
 import { toast } from "react-toastify"
 import { backendWSSUrl } from "@/constants"
 
@@ -15,8 +14,6 @@ export const ApollonWithConnection: React.FC = () => {
     const handleSetup = async () => {
       if (containerRef.current && !apollon2 && diagramID) {
         try {
-          console.log("Creating WebSocket connection")
-          // const ws = new WebSocket(`${backendWSSUrl}+/${diagramID}`)
           const ws = new WebSocket(backendWSSUrl)
 
           const instance = new Apollon2(containerRef.current)
@@ -43,7 +40,6 @@ export const ApollonWithConnection: React.FC = () => {
               }
             })
 
-            instance.startSync()
             ws.send(new Uint8Array([0])) // your init message
           }
 

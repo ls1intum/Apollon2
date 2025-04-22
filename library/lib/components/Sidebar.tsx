@@ -10,8 +10,6 @@ import { createPortal } from "react-dom"
 import { useReactFlow, type Node } from "@xyflow/react"
 import { MOUSE_UP_OFFSET_IN_PIXELS, SNAP_TO_GRID_PX } from "@/constants"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
-import { useDiagramStore } from "@/store"
-import { useShallow } from "zustand/shallow"
 
 /* ========================================================================
    Utility functions to manage page scrolling during dragging
@@ -90,13 +88,10 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
   dropElementConfig,
 }) => {
   // Hooks from react-flow and zustand store for node management
-  const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
-  const { setNodes, nodes } = useDiagramStore()(
-    useShallow((state) => ({
-      setNodes: state.setNodes,
-      nodes: state.nodes,
-    }))
-  )
+  const { screenToFlowPosition, getIntersectingNodes, setNodes, getNodes } =
+    useReactFlow()
+
+  const nodes = getNodes()
 
   // Local state to track drag status, ghost position, and pointer offset
   const [isDragging, setIsDragging] = useState(false)

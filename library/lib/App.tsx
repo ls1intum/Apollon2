@@ -38,12 +38,6 @@ interface AppProps {
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
-  // const { textEditor, updateEditor } = useDiagramStore()(
-  //   useShallow((state) => ({
-  //     textEditor: state.textEditor,
-  //     updateEditor: state.updateEditor,
-  //   }))
-  // )
   const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore()(
     useShallow((state) => ({
       nodes: state.nodes,
@@ -54,19 +48,23 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
     }))
   )
 
-  // const diagramType = useMetadataStore()(
-  //   useShallow((state) => state.diagramType)
-  // )
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
-  // const [cursors, onMouseMove] = useCursorStateSynced()
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =
     useConnect()
   const { onReconnect } = useReconnect()
   const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
 
   return (
-    <div style={{ display: "flex", width: "100%", height: "100%" }}>
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        minHeight: 1,
+        minWidth: 1,
+      }}
+    >
       <Sidebar selectedDiagramType={DiagramType.ClassDiagram} />
 
       <SvgMarkers />
@@ -109,53 +107,6 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         <CustomMiniMap />
         <CustomControls />
       </ReactFlow>
-
-      {/* <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "10px",
-        }}
-      >
-        <Button
-          onClick={() => {
-            updateEditor(generateUUID(), "test")
-          }}
-        >
-          Add
-        </Button>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: "10px",
-          }}
-        >
-          {textEditor.map((elem) => (
-            <textarea
-              key={elem.id}
-              value={elem.name}
-              onChange={(e) => {
-                updateEditor(elem.id, e.target.value)
-              }}
-              placeholder="Collaborative text area"
-              style={{
-                width: "100%",
-                height: "20px",
-                backgroundColor: "GrayText",
-              }}
-            />
-          ))}
-        </div>
-
-        <div>
-          {textEditor.map((elem) => (
-            <div key={elem.id}>{elem.name}</div>
-          ))}
-        </div>
-      </div> */}
     </div>
   )
 }

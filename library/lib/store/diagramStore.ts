@@ -2,16 +2,16 @@ import { create, StoreApi, UseBoundStore } from "zustand"
 import { devtools, subscribeWithSelector } from "zustand/middleware"
 import {
   applyNodeChanges,
-  applyEdgeChanges,
   getConnectedEdges,
   type Node,
   type Edge,
   type OnNodesChange,
   type OnEdgesChange,
+  applyEdgeChanges,
 } from "@xyflow/react"
 
 import { sortNodesTopologically } from "@/utils"
-import { getEdgesMap, getNodesMap, getTextEditor, getYDoc } from "@/sync/ydoc"
+import { getEdgesMap, getNodesMap, getYDoc } from "@/sync/ydoc"
 
 export type DiagramStoreData = {
   nodes: Node[]
@@ -21,7 +21,6 @@ export type DiagramStoreData = {
 export type DiagramStore = {
   nodes: Node[]
   edges: Edge[]
-  textEditor: { id: string; name: string }[]
   setNodes: (payload: Node[] | ((nodes: Node[]) => Node[])) => void
   setEdges: (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void
   setNodesAndEdges: (nodes: Node[], edges: Edge[]) => void
@@ -34,33 +33,14 @@ export type DiagramStore = {
   setInteractiveElementId: (elementId: string | null) => void
   updateNodesFromYjs: () => void
   updateEdgesFromYjs: () => void
-  updateTextEditorFromYjs: () => void
-  updateEditor: (id: string, name: string) => void
 }
 
 export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
   create<DiagramStore>()(
     devtools(
       subscribeWithSelector((set, get) => ({
-        updateEditor: (id: string, name: string) => {
-          console.log("zustand updateEditor", id, name)
-          getYDoc().transact(() => {
-            const textEditor = getTextEditor()
-            textEditor.set(id, { id, name })
-          }, "store")
-        },
-        updateTextEditorFromYjs: () => {
-          const textEditor = getTextEditor()
-          const textEditorData = Array.from(textEditor.values())
-          set(
-            { textEditor: textEditorData },
-            undefined,
-            "updateTextEditorFromYjs"
-          )
-        },
-        textEditor: Array.from(getTextEditor().values()),
-        nodes: Array.from(getNodesMap().values()),
-        edges: Array.from(getEdgesMap().values()),
+        nodes: [],
+        edges: [],
         interactiveElementId: null,
 
         setInteractiveElementId: (interactiveElementId) =>
@@ -83,12 +63,11 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
             typeof payload === "function" ? payload(get().nodes) : payload
 
           // Batch Yjs updates in a transaction
+
           getYDoc().transact(() => {
-            // getNodesMap().clear()
+            getNodesMap().clear()
             nodes.forEach((node) => getNodesMap().set(node.id, node))
           }, "store")
-
-          // set({ nodes }, undefined, "setNodes")
         },
 
         setEdges: (payload) => {
@@ -114,15 +93,18 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
           }, "store")
           set({ nodes, edges }, undefined, "setNodesAndEdges")
         },
-        // Set nodes and edges from Yjs
 
         onNodesChange: (changes) => {
           const currentNodes = get().nodes
           const nextNodes = applyNodeChanges(changes, currentNodes)
 
-          // Batch Yjs updates for node changes
           getYDoc().transact(() => {
+            // Select changes are handled with interactiveElementId
             for (const change of changes) {
+              if (change.type === "select") {
+                continue
+              }
+
               if (change.type === "add" || change.type === "replace") {
                 getNodesMap().set(change.item.id, change.item)
               } else if (change.type === "remove") {
@@ -153,13 +135,14 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
 
           getYDoc().transact(() => {
             for (const change of changes) {
+              // Select changes are handled with interactiveElementId
+              if (change.type === "select") {
+                continue
+              }
               if (change.type === "add" || change.type === "replace") {
                 getEdgesMap().set(change.item.id, change.item)
               } else if (change.type === "remove") {
                 getEdgesMap().delete(change.id)
-              } else {
-                const edge = nextEdges.find((e) => e.id === change.id)
-                if (edge) getEdgesMap().set(edge.id, edge)
               }
             }
           }, "store")
@@ -175,14 +158,15 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
           set({ nodes: [], edges: [] }, undefined, "reset")
         },
 
-        updateNodesFromYjs: () =>
+        updateNodesFromYjs: () => {
           set(
             {
               nodes: sortNodesTopologically(Array.from(getNodesMap().values())),
             },
             undefined,
             "updateNodesFromYjs"
-          ),
+          )
+        },
 
         updateEdgesFromYjs: () =>
           set(

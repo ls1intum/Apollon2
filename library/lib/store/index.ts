@@ -10,6 +10,7 @@ type StoreType = {
 let useStore: StoreType = null
 
 export const initStore = () => {
+  console.log("Initializing store, useStore:", useStore)
   if (!useStore) {
     useStore = {
       diagramStore: createDiagramStore(),
