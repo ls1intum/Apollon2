@@ -11,13 +11,8 @@ import {
 } from "./utils"
 import { DiagramType } from "./types"
 export * from "./types"
-import { clearYDoc, getYDoc, setYDoc } from "./sync/ydoc"
-import {
-  initStore,
-  killStore,
-  useDiagramStore,
-  useMetadataStore,
-} from "./store"
+import { clearYDoc, getYDoc } from "./sync/ydoc"
+import { resetZustandStore, useDiagramStore, useMetadataStore } from "./store"
 import { ApollonOptions } from "./types/EditorOptions"
 import { DiagramStoreData } from "./store/diagramStore"
 import { YjsSyncClass } from "./store/yjsSync"
@@ -30,8 +25,6 @@ export class Apollon2 {
   private syncManager: YjsSyncClass
 
   constructor(element: HTMLElement, options?: ApollonOptions) {
-    setYDoc()
-    initStore()
     this.syncManager = new YjsSyncClass()
 
     this.root = ReactDOM.createRoot(element, {
@@ -107,7 +100,7 @@ export class Apollon2 {
       this.root.unmount()
       this.root = null
       clearYDoc()
-      killStore()
+      resetZustandStore()
     }
   }
 

@@ -24,17 +24,17 @@ enum ExportType {
 
 interface Props {
   color?: string
+  handleCloseNavMenu?: () => void
 }
 
-export const NavbarFile: FC<Props> = ({ color }) => {
+export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
+  const { openModal } = useModalContext()
+  const { apollon2, diagramName } = useApollon2Context()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState<null | HTMLElement>(
     null
   )
   const fileInputRef = useRef<HTMLInputElement | null>(null)
-
-  const { openModal } = useModalContext()
-  const { apollon2, diagramName } = useApollon2Context()
 
   const { errorMessage, snackbarOpen, handleImport, handleSnackbarClose } =
     useImportHandler()
@@ -47,6 +47,7 @@ export const NavbarFile: FC<Props> = ({ color }) => {
   }, [])
 
   const closeMainMenu = useCallback(() => {
+    handleCloseNavMenu?.()
     setAnchorEl(null)
     setSubMenuAnchorEl(null)
   }, [])

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create, StoreApi, UseBoundStore } from "zustand"
 import { devtools, subscribeWithSelector } from "zustand/middleware"
 import {
@@ -18,9 +19,22 @@ export type DiagramStoreData = {
   edges: Edge[]
 }
 
+type InitialDiagramState = {
+  nodes: Node[]
+  edges: Edge[]
+  interactiveElementId: string | null
+}
+
+const initialDiagramState: InitialDiagramState = {
+  nodes: [],
+  edges: [],
+  interactiveElementId: null,
+}
+
 export type DiagramStore = {
   nodes: Node[]
   edges: Edge[]
+  interactiveElementId: string | null
   setNodes: (payload: Node[] | ((nodes: Node[]) => Node[])) => void
   setEdges: (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void
   setNodesAndEdges: (nodes: Node[], edges: Edge[]) => void
@@ -29,7 +43,6 @@ export type DiagramStore = {
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   reset: () => void
-  interactiveElementId: string | null
   setInteractiveElementId: (elementId: string | null) => void
   updateNodesFromYjs: () => void
   updateEdgesFromYjs: () => void
@@ -39,12 +52,29 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
   create<DiagramStore>()(
     devtools(
       subscribeWithSelector((set, get) => ({
-        nodes: [],
-        edges: [],
-        interactiveElementId: null,
+        ...initialDiagramState,
 
-        setInteractiveElementId: (interactiveElementId) =>
-          set({ interactiveElementId }, undefined, "setInteractiveElementId"),
+        setInteractiveElementId: (interactiveElementId) => {
+          set(
+            {
+              nodes: get().nodes.map((node) => {
+                if (node.id === interactiveElementId) {
+                  return {
+                    ...node,
+                    selected: true,
+                  }
+                }
+                return {
+                  ...node,
+                  selected: false,
+                }
+              }),
+            },
+            undefined,
+            "setInteractiveElementId"
+          )
+          set({ interactiveElementId }, undefined, "setInteractiveElementId")
+        },
 
         addNode: (node) => {
           getYDoc().transact(() => {
@@ -63,11 +93,11 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
             typeof payload === "function" ? payload(get().nodes) : payload
 
           // Batch Yjs updates in a transaction
-
           getYDoc().transact(() => {
             getNodesMap().clear()
             nodes.forEach((node) => getNodesMap().set(node.id, node))
           }, "store")
+          set({ nodes }, undefined, "setNodes")
         },
 
         setEdges: (payload) => {
@@ -95,16 +125,24 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
         },
 
         onNodesChange: (changes) => {
+          const changesWithoutSelect = changes.filter(
+            (change) => change.type !== "select"
+          )
+
+          if (changesWithoutSelect.length === 0) {
+            return
+          }
           const currentNodes = get().nodes
           const nextNodes = applyNodeChanges(changes, currentNodes)
 
+          if (deepEqual(currentNodes, nextNodes)) {
+            console.log("No changes detected in nodes")
+            return
+          }
+
           getYDoc().transact(() => {
             // Select changes are handled with interactiveElementId
-            for (const change of changes) {
-              if (change.type === "select") {
-                continue
-              }
-
+            for (const change of changesWithoutSelect) {
               if (change.type === "add" || change.type === "replace") {
                 getNodesMap().set(change.item.id, change.item)
               } else if (change.type === "remove") {
@@ -130,6 +168,13 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
         },
 
         onEdgesChange: (changes) => {
+          const changesWithoutSelect = changes.filter(
+            (change) => change.type !== "select"
+          )
+
+          if (changesWithoutSelect.length === 0) {
+            return
+          }
           const currentEdges = get().edges
           const nextEdges = applyEdgeChanges(changes, currentEdges)
 
@@ -151,11 +196,7 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
         },
 
         reset: () => {
-          getYDoc().transact(() => {
-            getNodesMap().clear()
-            getEdgesMap().clear()
-          }, "store")
-          set({ nodes: [], edges: [] }, undefined, "reset")
+          set(initialDiagramState, undefined, "reset")
         },
 
         updateNodesFromYjs: () => {
@@ -178,3 +219,31 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
       { name: "DiagramStore", enabled: true }
     )
   )
+
+function deepEqual(a: any, b: any) {
+  if (a === b) return true
+
+  if (
+    a == null ||
+    typeof a !== "object" ||
+    b == null ||
+    typeof b !== "object"
+  ) {
+    return false
+  }
+
+  // Handle arrays
+  if (Array.isArray(a) !== Array.isArray(b)) return false
+
+  const keysA = Object.keys(a)
+  const keysB = Object.keys(b)
+
+  if (keysA.length !== keysB.length) return false
+
+  for (const key of keysA) {
+    if (!keysB.includes(key)) return false
+    if (!deepEqual(a[key], b[key])) return false
+  }
+
+  return true
+}

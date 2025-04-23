@@ -6,16 +6,10 @@ let ydoc: Y.Doc | null = null
 
 export const getYDoc = () => {
   if (!ydoc) {
-    throw new Error("Y.Doc not initialized. Call initYDoc() first.")
-  }
-  return ydoc
-}
-
-export const setYDoc = () => {
-  if (!ydoc) {
     ydoc = new Y.Doc()
     console.log("Y.Doc initialized, clientID:", ydoc.clientID)
   }
+  return ydoc
 }
 
 export const getNodesMap = () => getYDoc().getMap<Node>("nodes")

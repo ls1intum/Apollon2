@@ -11,15 +11,23 @@ export type MetadataStore = {
   updateDiagramType: (type: DiagramType) => void
   updateMetaData: (name: string, type: DiagramType) => void
   updateMetaDataFromYjs: () => void
+  reset: () => void
+}
+
+type InitialMetadataState = {
+  diagramName: string
+  diagramType: DiagramType
+}
+const initialMetadataState: InitialMetadataState = {
+  diagramName: "Untitled Diagram",
+  diagramType: DiagramType.ClassDiagram,
 }
 
 export const createMetadataStore = (): UseBoundStore<StoreApi<MetadataStore>> =>
   create<MetadataStore>()(
     devtools(
       subscribeWithSelector((set) => ({
-        diagramName:
-          getDiagramMetadata().get("diagramName") || "Untitled Diagram",
-        diagramType: parseDiagramType(getDiagramMetadata().get("diagramType")),
+        ...initialMetadataState,
 
         updateDiagramName: (name) => {
           getYDoc().transact(() => {
@@ -62,6 +70,10 @@ export const createMetadataStore = (): UseBoundStore<StoreApi<MetadataStore>> =>
             undefined,
             "updateMetaDataFromYjs"
           ),
+
+        reset: () => {
+          set(initialMetadataState, undefined, "reset")
+        },
       })),
       { name: "MetadataStore", enabled: true }
     )

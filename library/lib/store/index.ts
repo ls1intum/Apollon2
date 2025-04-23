@@ -9,8 +9,7 @@ type StoreType = {
 
 let useStore: StoreType = null
 
-export const initStore = () => {
-  console.log("Initializing store, useStore:", useStore)
+export const getStore = () => {
   if (!useStore) {
     useStore = {
       diagramStore: createDiagramStore(),
@@ -20,14 +19,9 @@ export const initStore = () => {
   return useStore
 }
 
-export const getStore = () => {
-  if (!useStore) {
-    throw new Error("Store not initialized. Call initStore() first.")
-  }
-  return useStore
-}
-
-export const killStore = () => {
+export const resetZustandStore = () => {
+  useStore?.diagramStore().reset()
+  useStore?.metadataStore().reset()
   useStore = null
 }
 
