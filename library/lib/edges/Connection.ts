@@ -29,10 +29,6 @@ export function getPortsForElement(
   }
 }
 
-// Make sure to import or define these types and functions:
-// - Endpoint, IPoint, Position
-// - determineHandleEdge(sourcePosition: Position): Position
-// - computeOverlap(range1: [number, number], range2: [number, number]): [number, number] | null
 export function computeOverlap(
   range1: [number, number],
   range2: [number, number]
@@ -75,7 +71,7 @@ export function tryFindStraightPath(
   },
   targetPadding: number
 ): IPoint[] | null {
-  const offset = targetPadding === -8 ? 0 : targetPadding === 3 ? 10 : 15
+  const offset = targetPadding === -5 ? 0 : targetPadding === 6 ? 10 : 15
   const OVERLAP_THRESHOLD = 40
   const sourceHandleEdge = source.direction
   const targetHandleEdge = target.direction

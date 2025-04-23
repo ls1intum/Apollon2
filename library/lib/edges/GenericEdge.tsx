@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useEffect, useRef, useState } from "react"
 import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
 import { EdgePopover } from "@/components"
 import {
@@ -17,7 +17,7 @@ import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
 import { IPoint, pointsToSvgPath, tryFindStraightPath } from "./Connection"
-import { useReconnect } from "@/hooks/useReconnect";
+import { useReconnect } from "@/hooks/useReconnect"
 import {
   simplifySvgPath,
   removeDuplicatePoints,
@@ -26,10 +26,6 @@ import {
   getMarkerSegmentPath,
   findClosestHandle,
 } from "@/utils/edgeUtils"
-import { useShallow } from "zustand/shallow"
-import { useBoundStore } from "@/store"
-
-// Extend the props to include markerEnd and markerPadding.
 
 export const GenericEdge = ({
   id,
@@ -43,87 +39,33 @@ export const GenericEdge = ({
   sourcePosition,
   targetPosition,
   sourceHandleId,
+  targetHandleId,
   data,
-  selected
+  selected,
 }: ExtendedEdgeProps) => {
-  // Refs for dragging adjustments.
-  const draggingIndexRef = useRef<number>()
+  // Refs for dragging adjustments to minimize re-renders
+  const draggingIndexRef = useRef<number | null>(null)
   const dragOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
+  const isReconnectingRef = useRef<boolean>(false)
+  const reconnectOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
+  const reconnectingEndRef = useRef<"source" | "target" | null>(null)
 
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
-  const { updateEdge, getNode, getEdges,screenToFlowPosition } = useReactFlow()
-
-  const { onReconnect } = useReconnect();
-
-  // const { handleDelete } = useToolbar({ id })
-  // const [edgePopoverAnchor, setEdgePopoverAnchor] =
-  //   useState<HTMLElement | null>(null)
-
-  // const interactiveElementId = useBoundStore(
-  //   useShallow((state) => state.interactiveElementId)
-  // )
-  // const selected = interactiveElementId === id
-
+  const { getNode, getEdges, screenToFlowPosition, getNodes } = useReactFlow()
+  const [customPoints, setCustomPoints] = useState<IPoint[]>([])
+  const { onReconnect } = useReconnect()
 
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
   const padding = markerPadding ?? MARKER_PADDING
 
-  // Adjust source and target coordinates based on positions and paddings.
-  const adjustedTargetCoordinates = adjustTargetCoordinates(
-    targetX,
-    targetY,
-    targetPosition,
-    padding
-  )
-  const adjustedSourceCoordinates = adjustSourceCoordinates(
-    sourceX,
-    sourceY,
-    sourcePosition,
-    SOURCE_CONNECTION_POINT_PADDING
-  )
-
-  // Generate the smooth step edge path.
-  const [edgePath] = getSmoothStepPath({
-    sourceX: adjustedSourceCoordinates.sourceX,
-    sourceY: adjustedSourceCoordinates.sourceY,
-    sourcePosition,
-    targetX: adjustedTargetCoordinates.targetX,
-    targetY: adjustedTargetCoordinates.targetY,
-    targetPosition,
-    borderRadius: STEP_BOARDER_RADIUS,
-  })
-
-  // Toolbar position computed from adjusted coordinates.
-  const toolbarPosition = getToolbarPosition(
-    adjustedSourceCoordinates,
-    adjustedTargetCoordinates
-  )
-
-  const handleEditIconClick = (event: React.MouseEvent<HTMLElement>) => {
-    setEdgePopoverAnchor(event.currentTarget)
-  }
-
-  // Calculate edge labels for source and target.
-  const {
-    roleX: sourceRoleX,
-    roleY: sourceRoleY,
-    multiplicityX: sourceMultiplicityX,
-    multiplicityY: sourceMultiplicityY,
-  } = calculateEdgeLabels(sourceX, sourceY, sourcePosition)
-  const {
-    roleX: targetRoleX,
-    roleY: targetRoleY,
-    multiplicityX: targetMultiplicityX,
-    multiplicityY: targetMultiplicityY,
-  } = calculateEdgeLabels(targetX, targetY, targetPosition)
-
+  // Memoize expensive computations with careful dependency tracking
   const sourceNode = getNode(source)!
   const targetNode = getNode(target)!
 
-  // Attempt to compute a straight path (if the nodes are aligned appropriately).
+  // Attempt to compute a straight path
   const straightPathPoints = tryFindStraightPath(
     {
       position: { x: sourceNode.position.x, y: sourceNode.position.y },
@@ -140,236 +82,331 @@ export const GenericEdge = ({
     padding
   )
 
-  //Create a basePath that uses the straightPath if available, otherwise the edgePath.
-  const basePath =
-    straightPathPoints !== null ? pointsToSvgPath(straightPathPoints) : edgePath
+  // Adjust source and target coordinates
+  const adjustedTargetCoordinates = adjustTargetCoordinates(
+    targetX,
+    targetY,
+    targetPosition,
+    padding
+  )
+  const adjustedSourceCoordinates = adjustSourceCoordinates(
+    sourceX,
+    sourceY,
+    sourcePosition,
+    SOURCE_CONNECTION_POINT_PADDING
+  )
 
-  //Compute the default points based on the current basePath.
+  // Generate the smooth step edge path
+  const [edgePath] = getSmoothStepPath({
+    sourceX: adjustedSourceCoordinates.sourceX,
+    sourceY: adjustedSourceCoordinates.sourceY,
+    sourcePosition,
+    targetX: adjustedTargetCoordinates.targetX,
+    targetY: adjustedTargetCoordinates.targetY,
+    targetPosition,
+    borderRadius: STEP_BOARDER_RADIUS,
+  })
+
+  // Toolbar position
+  const toolbarPosition = getToolbarPosition(
+    adjustedSourceCoordinates,
+    adjustedTargetCoordinates
+  )
+
+  // Create a basePath that uses the straightPath if available, otherwise the edgePath
+  const basePath = useMemo(
+    () =>
+      straightPathPoints !== null
+        ? pointsToSvgPath(straightPathPoints)
+        : edgePath,
+    [straightPathPoints, edgePath]
+  )
+
+  // Compute the default points based on the current basePath
   const computedPoints = useMemo(() => {
     const simplifiedPath = simplifySvgPath(basePath)
     const parsed = parseSvgPath(simplifiedPath)
-
     return removeDuplicatePoints(parsed)
   }, [basePath])
-  const [customPoints, setCustomPoints] = useState<IPoint[]>([])
 
-  //When edgePath changes (nodes are dragged), clear customPoints.
+  // When edgePath changes (nodes are dragged), clear customPoints
   useEffect(() => {
     if (customPoints.length > 0) {
       setCustomPoints([])
     }
   }, [edgePath])
 
-  // useEffect(() => {
-  //   if (straightPathPoints && targetNode) {
-  //     const newHandle = findClosestHandle(
-  //       { x: straightPathPoints[1].x, y: straightPathPoints[1].y },
-  //       {
-  //         x: targetNode.position.x,
-  //         y: targetNode.position.y,
-  //         width: targetNode.width!,
-  //         height: targetNode.height!,
-  //       }
-  //     )
-  //     if (targetHandleId !== newHandle) {
-  //       console.log(targetHandleId, newHandle)
-  //       updateEdge(id, { targetHandle: newHandle ?? "" })
-  //     }
-  //   }
-  // }, [straightPathPoints])
-
-  //Active points: use customPoints if available; otherwise, use computedPoints.
-  const activePoints = customPoints.length ? customPoints : computedPoints
-
-  //Generate the current SVG path based on activePoints.
-  const currentPath = pointsToSvgPath(activePoints)
-  const midpoints = calculateInnerMidpoints(activePoints)
-  const markerSegmentPath = getMarkerSegmentPath(
-    activePoints,
-    padding,
-    targetPosition
+  // Active points: use customPoints if available; otherwise, use computedPoints
+  const activePoints = useMemo(
+    () => (customPoints.length ? customPoints : computedPoints),
+    [customPoints, computedPoints]
   )
 
-  const handlePointerDown = (event: React.MouseEvent, index: number) => {
-    const currentMidpoint = midpoints[index]
-    const offsetX = event.clientX - currentMidpoint.x
-    const offsetY = event.clientY - currentMidpoint.y
-    draggingIndexRef.current = index
-    dragOffsetRef.current = { x: offsetX, y: offsetY }
+  const currentPath = useMemo(
+    () => pointsToSvgPath(activePoints),
+    [activePoints]
+  )
+  const midpoints = useMemo(
+    () => calculateInnerMidpoints(activePoints),
+    [activePoints]
+  )
+  const markerSegmentPath = useMemo(
+    () => getMarkerSegmentPath(activePoints, padding, targetPosition),
+    [activePoints, padding, targetPosition, type]
+  )
+  const fullHighlightPath = useMemo(() => {
+    return `${currentPath} ${markerSegmentPath}`
+  }, [currentPath, markerSegmentPath])
 
-    document.addEventListener("pointermove", handlePointerMove)
-    document.addEventListener("pointerup", handlePointerUp, { once: true })
-  }
+  // Memoized event handlers to prevent unnecessary re-renders
+  const handlePointerDown = useCallback(
+    (event: React.PointerEvent, index: number) => {
+      const currentMidpoint = midpoints[index]
+      const offsetX = event.clientX - currentMidpoint.x
+      const offsetY = event.clientY - currentMidpoint.y
+      draggingIndexRef.current = index
+      dragOffsetRef.current = { x: offsetX, y: offsetY }
 
-  const handlePointerMove = useCallback(
-    (event: MouseEvent) => {
-      const draggingIndex = draggingIndexRef.current
-      if (draggingIndex === undefined) return
+      const handlePointerMove = (moveEvent: PointerEvent) => {
+        if (draggingIndexRef.current === null) return
 
-      const newX = event.clientX - dragOffsetRef.current.x
-      const newY = event.clientY - dragOffsetRef.current.y
+        const newX = moveEvent.clientX - dragOffsetRef.current.x
+        const newY = moveEvent.clientY - dragOffsetRef.current.y
 
-      // Assuming the relevant segment is between points (draggingIndex+1) and (draggingIndex+2)
-      const startIdx = draggingIndex + 1
-      const endIdx = draggingIndex + 2
-      const newPoints = [...activePoints]
-      const linePosition =
-        newPoints[startIdx].x === newPoints[endIdx].x
-          ? "vertical"
-          : "horizontal"
-      if (linePosition === "horizontal") {
-        newPoints[startIdx] = { x: newPoints[startIdx].x, y: newY }
-        newPoints[endIdx] = { x: newPoints[endIdx].x, y: newY }
-      } else if (linePosition === "vertical") {
-        newPoints[startIdx] = { x: newX, y: newPoints[startIdx].y }
-        newPoints[endIdx] = { x: newX, y: newPoints[endIdx].y }
+        const startIdx = draggingIndexRef.current + 1
+        const endIdx = draggingIndexRef.current + 2
+        const newPoints = [...activePoints]
+        const linePosition =
+          newPoints[startIdx].x === newPoints[endIdx].x
+            ? "vertical"
+            : "horizontal"
+
+        if (linePosition === "horizontal") {
+          newPoints[startIdx] = { x: newPoints[startIdx].x, y: newY }
+          newPoints[endIdx] = { x: newPoints[endIdx].x, y: newY }
+        } else if (linePosition === "vertical") {
+          newPoints[startIdx] = { x: newX, y: newPoints[startIdx].y }
+          newPoints[endIdx] = { x: newX, y: newPoints[endIdx].y }
+        }
+
+        setCustomPoints(newPoints)
       }
-      // Update customPoints to reflect the drag adjustment.
-      setCustomPoints(newPoints)
-      updateEdge(id, { data: { ...data, customPoints: newPoints } })
+
+      const handlePointerUp = () => {
+        draggingIndexRef.current = null
+        document.removeEventListener("pointermove", handlePointerMove)
+        document.removeEventListener("pointerup", handlePointerUp)
+      }
+
+      document.addEventListener("pointermove", handlePointerMove)
+      document.addEventListener("pointerup", handlePointerUp, { once: true })
     },
-    [activePoints, updateEdge, id, data]
+    [midpoints, activePoints]
   )
 
-  const handlePointerUp = useCallback(() => {
-    draggingIndexRef.current = undefined
-    document.removeEventListener("pointermove", handlePointerMove)
-  }, [handlePointerMove])
-
-    // --- New reconnect logic using the marker highlight ---
-
-    //const [isReconnecting, setIsReconnecting] = useState(false);
-    const reconnectOffsetRef = useRef<IPoint>({ x: 0, y: 0 });
-    const isReconnecting = useRef<Boolean>(false)
-
-
-  // --- Reconnect logic using the marker highlight as the grab target ---
-
-  const handleMarkerPointerDown = (e: React.PointerEvent) => {
-    if (straightPathPoints === null) return;
-    e.stopPropagation();
-    isReconnecting.current = true
-    // Calculate offset between pointer and current target endpoint.
-    const targetEndpoint = activePoints[activePoints.length - 1];
-    reconnectOffsetRef.current = {
-      x: e.clientX - targetEndpoint.x,
-      y: e.clientY - targetEndpoint.y,
-    };
-
-    document.addEventListener("pointermove", handleMarkerPointerMove);
-    document.addEventListener("pointerup", handleMarkerPointerUp, { once: true });
-  };
-
-  const handleMarkerPointerMove = useCallback(
-    (e: PointerEvent) => {
-      if (!isReconnecting) return;
-      // Update the target endpoint based on pointer position minus the stored offset.
-      const targetIndex = activePoints.length - 1;
-      const newEndpoint = {
-        x: e.clientX - reconnectOffsetRef.current.x,
-        y: e.clientY - reconnectOffsetRef.current.y,
-      };
-      const newPoints = [...activePoints];
-      newPoints[targetIndex] = newEndpoint;
-      setCustomPoints(newPoints);
-
-      console.log("Makrer move")
-    },
-    [activePoints, id, data, isReconnecting, updateEdge]
-  );
+  // Memoized drop position getter
   const getDropPosition = useCallback(
-    (event: MouseEvent | TouchEvent) => {
-      const { clientX, clientY } =
-        "changedTouches" in event ? event.changedTouches[0] : event
+    (event: PointerEvent) => {
       return screenToFlowPosition(
-        { x: clientX, y: clientY },
+        { x: event.clientX, y: event.clientY },
         { snapToGrid: false }
       )
     },
     [screenToFlowPosition]
   )
-  const handleMarkerPointerUp = useCallback(
-    (e: PointerEvent) => {
-      isReconnecting.current = false
-      document.removeEventListener("pointermove", handleMarkerPointerMove);
-      document.removeEventListener("pointerup", handleMarkerPointerMove);
-      console.log(e)
-      // Finalize reconnect:
-      // • Use e.clientX, e.clientY or activePoints to compute the drop position.
-      // • Determine the intersecting node and the appropriate handle.
-      // • Update the edge (or call your onReconnect callback) accordingly.
-      
-      console.log("Final drop position:", activePoints[activePoints.length - 1]);
-      const dropPosition = getDropPosition(e)
-      const newHandle = findClosestHandle(
-             dropPosition,
-              {
-                x: targetNode.position.x,
-                y: targetNode.position.y,
-                width: targetNode.width!,
-                height: targetNode.height!,
-              }
-            )
-            const newConnection = {
-              source: source, // keep current source
-              target: targetNode.id, // or update if dropping onto a different node
-              sourceHandle: sourceHandleId as string, // preserve current source handle
-              targetHandle: newHandle,
-            };
-            // Get the old edge.
-            const oldEdge = getEdges().find((edge) => edge.id === id);
-            if (oldEdge) {
-              // Call your reconnect hook.
-              onReconnect(oldEdge, newConnection);
-            }
-      
-            //xupdateEdge(id, { targetHandle: newHandle ?? "" })
-            console.log("new handle", newHandle)
-            console.log("Edges", getEdges())
-            
-      // Example: You might call your reconnect hook here.
+
+  // Generic reconnect handler for both source and target endpoints
+  const handleEndpointPointerDown = useCallback(
+    (e: React.PointerEvent, endType: "source" | "target") => {
+      if (straightPathPoints === null) return
+      e.stopPropagation()
+
+      isReconnectingRef.current = true
+      reconnectingEndRef.current = endType
+
+      const endpoint =
+        endType === "source"
+          ? activePoints[0]
+          : activePoints[activePoints.length - 1]
+
+      reconnectOffsetRef.current = {
+        x: e.clientX - endpoint.x,
+        y: e.clientY - endpoint.y,
+      }
+
+      document.addEventListener("pointermove", handleEndpointPointerMove)
+      document.addEventListener("pointerup", handleEndpointPointerUp, {
+        once: true,
+      })
     },
-    [activePoints, handleMarkerPointerMove]
-  );
+    [
+      straightPathPoints,
+      activePoints,
+      source,
+      target,
+      sourceHandleId,
+      targetHandleId,
+      sourceNode,
+      targetNode,
+      id,
+      onReconnect,
+      getEdges,
+      getDropPosition,
+    ]
+  )
+
+  const handleEndpointPointerMove = (moveEvent: PointerEvent) => {
+    if (!isReconnectingRef.current) return
+
+    const endpoint = screenToFlowPosition({
+      x: moveEvent.clientX,
+      y: moveEvent.clientY,
+    })
+
+    const newPoints = [...activePoints]
+
+    // Update the appropriate endpoint
+    if (reconnectingEndRef.current === "source") {
+      newPoints[0] = endpoint
+    } else {
+      newPoints[newPoints.length - 1] = endpoint
+    }
+
+    setCustomPoints(newPoints)
+  }
+
+  const handleEndpointPointerUp = (upEvent: PointerEvent) => {
+    const isReconnectingSource = reconnectingEndRef.current === "source"
+
+    isReconnectingRef.current = false
+    document.removeEventListener("pointermove", handleEndpointPointerMove)
+    document.removeEventListener("pointerup", handleEndpointPointerUp)
+
+    const dropPosition = getDropPosition(upEvent)
+
+    // Find all nodes in the flow
+    const nodes = getNodes()
+
+    // Find if we're hovering over a node
+    const nodeAtPosition = nodes.find((node) => {
+      // Get position and dimensions, handling potential undefined values
+      const x = node.position?.x || 0
+      const y = node.position?.y || 0
+      const width = node.width || 100
+      const height = node.height || 160
+
+      return (
+        dropPosition.x > x &&
+        dropPosition.x < x + width &&
+        dropPosition.y > y &&
+        dropPosition.y < y + height
+      )
+    })
+
+    // If not hovering over a node, abort reconnection
+    if (!nodeAtPosition) {
+      reconnectingEndRef.current = null
+      setCustomPoints([]) // Reset custom points
+      return
+    }
+
+    // Find the closest handle on the node
+    const newHandle = findClosestHandle(dropPosition, {
+      x: nodeAtPosition.position.x,
+      y: nodeAtPosition.position.y,
+      width: nodeAtPosition.width!,
+      height: nodeAtPosition.height!,
+    })
+
+    // Create the appropriate connection based on which end is being reconnected
+    const newConnection = isReconnectingSource
+      ? {
+          source: nodeAtPosition.id, // Use the new source node
+          target: target,
+          sourceHandle: newHandle,
+          targetHandle: targetHandleId as string,
+        }
+      : {
+          source: source,
+          target: nodeAtPosition.id, // Use the new target node
+          sourceHandle: sourceHandleId as string,
+          targetHandle: newHandle,
+        }
+
+    const oldEdge = getEdges().find((edge) => edge.id === id)
+    if (oldEdge) {
+      onReconnect(oldEdge, newConnection)
+    }
+
+    reconnectingEndRef.current = null
+  }
+
+  const {
+    roleX: sourceRoleX,
+    roleY: sourceRoleY,
+    multiplicityX: sourceMultiplicityX,
+    multiplicityY: sourceMultiplicityY,
+  } = calculateEdgeLabels(sourceX, sourceY, sourcePosition)
+
+  const {
+    roleX: targetRoleX,
+    roleY: targetRoleY,
+    multiplicityX: targetMultiplicityX,
+    multiplicityY: targetMultiplicityY,
+  } = calculateEdgeLabels(targetX, targetY, targetPosition)
+
+  // Get the first and last points of the active points
+  const sourcePoint = activePoints[0]
+  const targetPoint = activePoints[activePoints.length - 1]
+
   return (
     <>
       <g className="edge-container">
-        {/* Render the visible edge */}
         <BaseEdge
           id={id}
           path={currentPath}
-          markerEnd={markerEnd}
+          markerEnd={isReconnectingRef.current ? undefined : markerEnd}
           pointerEvents="none"
-          strokeDasharray={strokeDashArray}
+          style={{
+            stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
+            strokeDasharray: isReconnectingRef.current ? "0" : strokeDashArray,
+          }}
         />
 
-        {/* Invisible overlay for pointer events */}
         <path
           className="edge-overlay"
-          d={currentPath}
+          d={fullHighlightPath}
           fill="none"
           strokeWidth={12}
           pointerEvents="stroke"
+          style={{
+            opacity: isReconnectingRef.current ? 0 : 0.4,
+          }}
         />
 
-        
-          <path
-            className="edge-marker-highlight"
-            d={markerSegmentPath}
-            fill="none"
-            strokeWidth={12}
-            pointerEvents="none" // Ensures the whole area is interactive
-            //onPointerDown={handleMarkerPointerDown}
-          />
-        <path
-            className="target-edge-marker"
-            d={markerSegmentPath}
-            fill="none"
-            strokeWidth={12}
-            pointerEvents="all" // Ensures the whole area is interactive
-            onPointerDown={handleMarkerPointerDown}
-            style={{ cursor: "all-scroll" }}
-          />
+        {/* Source endpoint marker grab - for reconnecting the source end */}
+        <circle
+          className="source-edge-marker-grab"
+          cx={sourcePoint.x}
+          cy={sourcePoint.y}
+          r={20}
+          fill="transparent"
+          pointerEvents="all"
+          onPointerDown={(e) => handleEndpointPointerDown(e, "source")}
+          style={{ cursor: "all-scroll" }}
+        />
+
+        {/* Target endpoint marker grab - for reconnecting the target end */}
+        <circle
+          className="target-edge-marker-grab"
+          cx={targetPoint.x}
+          cy={targetPoint.y}
+          r={20}
+          fill="transparent"
+          pointerEvents="all"
+          onPointerDown={(e) => handleEndpointPointerDown(e, "target")}
+          style={{ cursor: "all-scroll" }}
+        />
 
         {midpoints.map((point, midPointIndex) => (
           <circle
@@ -386,25 +423,30 @@ export const GenericEdge = ({
           />
         ))}
       </g>
+
       {selected && (
         <CustomEdgeToolbar
           x={toolbarPosition.x}
           y={toolbarPosition.y}
-          onEditClick={handleEditIconClick}
+          onEditClick={(event: React.MouseEvent<HTMLElement>) =>
+            setEdgePopoverAnchor(event.currentTarget)
+          }
           onDeleteClick={handleDelete}
         />
       )}
-      <EdgePopover
-        source={source}
-        target={target}
-        edgeId={id}
-        selected={selected!}
-        anchorEl={edgePopoverAnchor}
-        open={Boolean(edgePopoverAnchor)}
-        onClose={() => {
-          setEdgePopoverAnchor(null)
-        }}
-      />
+
+      {
+        <EdgePopover
+          source={source}
+          target={target}
+          edgeId={id}
+          selected={selected!}
+          anchorEl={edgePopoverAnchor}
+          open={Boolean(edgePopoverAnchor)}
+          onClose={() => setEdgePopoverAnchor(null)}
+        />
+      }
+
       {data?.sourceRole && (
         <text
           x={sourceRoleX}
@@ -415,6 +457,7 @@ export const GenericEdge = ({
           {data?.sourceRole}
         </text>
       )}
+
       {data?.sourceMultiplicity && (
         <text
           x={sourceMultiplicityX}
@@ -425,6 +468,7 @@ export const GenericEdge = ({
           {data?.sourceMultiplicity}
         </text>
       )}
+
       {data?.targetRole && (
         <text
           x={targetRoleX}
@@ -435,6 +479,7 @@ export const GenericEdge = ({
           {data?.targetRole}
         </text>
       )}
+
       {data?.targetMultiplicity && (
         <text
           x={targetMultiplicityX}

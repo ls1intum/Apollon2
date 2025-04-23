@@ -185,26 +185,31 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
     case "ClassBidirectional":
       return {
         markerPadding: MARKER_PADDING,
+        strokeDashArray: "0",
       }
     case "ClassUnidirectional":
       return {
         markerPadding: ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
+        strokeDashArray: "0",
       }
     case "ClassAggregation":
       return {
         markerPadding: RHOMBUS_MARKER_PADDING,
         markerEnd: "url(#white-rhombus)",
+        strokeDashArray: "0",
       }
     case "ClassComposition":
       return {
         markerPadding: RHOMBUS_MARKER_PADDING,
         markerEnd: "url(#black-rhombus)",
+        strokeDashArray: "0",
       }
     case "ClassInheritance":
       return {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#white-triangle)",
+        strokeDashArray: "0",
       }
     case "ClassDependency":
       return {
@@ -221,6 +226,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
     default:
       return {
         markerPadding: MARKER_PADDING,
+        strokeDashArray: "0",
       }
   }
 }
@@ -410,14 +416,14 @@ export function getMarkerSegmentPath(
   points: IPoint[],
   markerPadding: number,
   targetPosition: "top" | "bottom" | "left" | "right"
+  // type: string,
 ): string {
   if (points.length === 0) return ""
 
   const lastPoint = points[points.length - 1]
   let extendedX = lastPoint.x
   let extendedY = lastPoint.y
-  const offset = markerPadding === 3 ? 10 : 15
-
+  const offset = markerPadding === -5 ? 0 : markerPadding === 6 ? 10 : 15
   switch (targetPosition) {
     case "top":
       extendedY = lastPoint.y + offset
