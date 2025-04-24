@@ -89,7 +89,7 @@ export class YjsSyncClass {
       transaction: Y.Transaction
     ) => {
       if (transaction.origin !== "store") {
-        useMetadataStore().getState().updateMetaDataFromYjs()
+        useDiagramStore().getState().updateEdgesFromYjs()
       }
     }
 

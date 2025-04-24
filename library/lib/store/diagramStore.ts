@@ -136,7 +136,6 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
           const nextNodes = applyNodeChanges(changes, currentNodes)
 
           if (deepEqual(currentNodes, nextNodes)) {
-            console.log("No changes detected in nodes")
             return
           }
 
@@ -178,12 +177,12 @@ export const createDiagramStore = (): UseBoundStore<StoreApi<DiagramStore>> =>
           const currentEdges = get().edges
           const nextEdges = applyEdgeChanges(changes, currentEdges)
 
+          if (deepEqual(currentEdges, nextEdges)) {
+            return
+          }
+
           getYDoc().transact(() => {
             for (const change of changes) {
-              // Select changes are handled with interactiveElementId
-              if (change.type === "select") {
-                continue
-              }
               if (change.type === "add" || change.type === "replace") {
                 getEdgesMap().set(change.item.id, change.item)
               } else if (change.type === "remove") {
