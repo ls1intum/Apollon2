@@ -4,9 +4,8 @@ dotenv.config()
 
 import express, { Express } from "express"
 import { configureMiddleware } from "./middleware"
-import { initializeWebSocketServer } from "./wsSetup"
 import diagramRouter from "./diagramRouter"
-import { startTestSocketServer } from "./testWS"
+import { startTestSocketServer } from "./relaySocketServer"
 
 // Load environment variables
 dotenv.config()
@@ -19,8 +18,6 @@ configureMiddleware(app)
 // Mount routes
 app.use("/api", diagramRouter)
 
-// Start WebSocket server
-// initializeWebSocketServer()
 startTestSocketServer()
 
 const PORT = process.env.PORT || 8000

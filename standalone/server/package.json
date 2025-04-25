@@ -16,7 +16,6 @@
   "devDependencies": {
     "@types/cors": "2.8.17",
     "@types/express": "5.0.1",
-    "@types/lodash.debounce": "4.0.9",
     "@types/node": "22.14.0",
     "@types/ws": "8.18.1",
     "typescript": "5.8.2"
