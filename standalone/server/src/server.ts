@@ -7,9 +7,6 @@ import { configureMiddleware } from "./middleware"
 import diagramRouter from "./diagramRouter"
 import { startSocketServer } from "./relaySocketServer"
 
-// Load environment variables
-dotenv.config()
-
 const app: Express = express()
 
 // Configure middleware
