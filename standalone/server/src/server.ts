@@ -1,13 +1,13 @@
 // First load environment variables from .env file
-import dotenv from "dotenv"
-dotenv.config()
-
-import express, { Express } from "express"
-import { configureMiddleware } from "./middleware"
+import "./loadEnvironment"
+import express from "express"
+import { configureMiddleware } from "./middlewares/middleware"
 import diagramRouter from "./diagramRouter"
 import { startSocketServer } from "./relaySocketServer"
 
-const app: Express = express()
+const PORT = process.env.PORT || 8000
+const serverHost = process.env.HOST || "localhost"
+const app = express()
 
 // Configure middleware
 configureMiddleware(app)
@@ -18,8 +18,6 @@ app.use("/api", diagramRouter)
 // Start WebSocket server
 startSocketServer()
 
-const PORT = process.env.PORT || 8000
-const serverHost = process.env.HOST || "localhost"
 // Start server
 app.listen(PORT, () => {
   console.log(`HTTP server running on http://${serverHost}:${PORT}`)
