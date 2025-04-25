@@ -7,7 +7,6 @@ let ydoc: Y.Doc | null = null
 export const getYDoc = () => {
   if (!ydoc) {
     ydoc = new Y.Doc()
-    console.log("Y.Doc initialized, clientID:", ydoc.clientID)
   }
   return ydoc
 }

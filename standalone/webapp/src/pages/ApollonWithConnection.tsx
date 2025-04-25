@@ -14,7 +14,7 @@ export const ApollonWithConnection: React.FC = () => {
     const handleSetup = async () => {
       if (containerRef.current && !apollon2 && diagramID) {
         try {
-          const ws = new WebSocket(`${backendWSSUrl}?roomId=${diagramID}`)
+          const ws = new WebSocket(`${backendWSSUrl}?diagramId=${diagramID}`)
 
           const instance = new Apollon2(containerRef.current)
           setApollon2(instance)

@@ -3,7 +3,7 @@ import { IncomingMessage } from "http"
 import { URL } from "url"
 
 interface ExtendedWebSocket extends WebSocket {
-  roomId?: string
+  diagramId?: string
 }
 
 export const startSocketServer = (): void => {
@@ -15,7 +15,7 @@ export const startSocketServer = (): void => {
     host: serverHost,
   })
 
-  const rooms: Map<string, Set<ExtendedWebSocket>> = new Map()
+  const diagrams: Map<string, Set<ExtendedWebSocket>> = new Map()
 
   wss.on("error", (error: NodeJS.ErrnoException) => {
     console.error("WebSocket server error:", error)
@@ -28,46 +28,44 @@ export const startSocketServer = (): void => {
 
   wss.on("connection", (ws: ExtendedWebSocket, request: IncomingMessage) => {
     const url = new URL(request.url || "", `http://${request.headers.host}`)
-    const roomId = url.searchParams.get("roomId")
+    const diagramId = url.searchParams.get("diagramId")
 
-    if (!roomId) {
-      ws.close(1008, "Missing roomId")
+    if (!diagramId) {
+      ws.close(1008, "Missing diagramId")
       return
     }
 
     // Assign client to room
-    if (!rooms.has(roomId)) {
-      rooms.set(roomId, new Set())
+    if (!diagrams.has(diagramId)) {
+      diagrams.set(diagramId, new Set())
     }
-    rooms.get(roomId)!.add(ws)
-    ws.roomId = roomId
+    diagrams.get(diagramId)!.add(ws)
+    ws.diagramId = diagramId
 
-    console.log("Client connected to room:", roomId)
+    console.log("Client connected to diagram:", diagramId)
 
     ws.on("message", (message: WebSocket.RawData) => {
-      const clients = rooms.get(ws.roomId!)
+      const clients = diagrams.get(ws.diagramId!)
       if (!clients) return
 
-      let clientNumberMessageHasBeenSend = 0
+      let count = 0
       clients.forEach((client) => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
           client.send(message)
-          clientNumberMessageHasBeenSend++
+          count++
         }
       })
 
-      console.log(
-        `Message sent to ${clientNumberMessageHasBeenSend} clients in room ${ws.roomId}`
-      )
+      console.log(`Message sent to ${count} clients in diagram ${ws.diagramId}`)
     })
 
     ws.on("close", () => {
-      const clients = rooms.get(ws.roomId!)
+      const clients = diagrams.get(ws.diagramId!)
       if (clients) {
         clients.delete(ws)
-        if (clients.size === 0) rooms.delete(ws.roomId!)
+        if (clients.size === 0) diagrams.delete(ws.diagramId!)
       }
-      console.log("Client disconnected from room:", ws.roomId)
+      console.log("Client disconnected from diagram:", ws.diagramId)
     })
 
     ws.on("error", (error: Error) => {
