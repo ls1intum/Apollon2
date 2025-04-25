@@ -2,12 +2,11 @@ import WebSocket, { WebSocketServer } from "ws"
 import { IncomingMessage } from "http"
 import { URL } from "url"
 
-// Augment the WebSocket type to add custom fields like roomId
 interface ExtendedWebSocket extends WebSocket {
   roomId?: string
 }
 
-export const startTestSocketServer = (): void => {
+export const startSocketServer = (): void => {
   const serverHost = process.env.HOST || "localhost"
   const wsServerPort = Number(process.env.WS_PORT) || 4444
 
@@ -76,9 +75,7 @@ export const startTestSocketServer = (): void => {
     })
   })
 
-  const address = wss.address()
-  console.log("WebSocket address:", address)
   console.log(
-    `Yjs WebSocket server running on ws://${serverHost}:${wsServerPort}`
+    `Relay websocket server running on ws://${serverHost}:${wsServerPort}`
   )
 }

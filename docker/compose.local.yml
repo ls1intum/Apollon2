@@ -27,7 +27,6 @@ services:
       - HOST=0.0.0.0
       - PORT=8000
       - WSSPORT=4444
-      - YPERSISTENCE=/app/dbDir
       - FRONTEND_URL=http://localhost
     volumes:
       - ./dbDir:/app/dbDir

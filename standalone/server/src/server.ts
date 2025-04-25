@@ -5,7 +5,7 @@ dotenv.config()
 import express, { Express } from "express"
 import { configureMiddleware } from "./middleware"
 import diagramRouter from "./diagramRouter"
-import { startTestSocketServer } from "./relaySocketServer"
+import { startSocketServer } from "./relaySocketServer"
 
 // Load environment variables
 dotenv.config()
@@ -18,7 +18,8 @@ configureMiddleware(app)
 // Mount routes
 app.use("/api", diagramRouter)
 
-startTestSocketServer()
+// Start WebSocket server
+startSocketServer()
 
 const PORT = process.env.PORT || 8000
 const serverHost = process.env.HOST || "localhost"
