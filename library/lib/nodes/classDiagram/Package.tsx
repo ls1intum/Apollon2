@@ -13,18 +13,22 @@ import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
 import { useEffect, useRef, useState } from "react"
+import { useDiagramStore } from "@/store/context"
+import { useShallow } from "zustand/shallow"
 
 export default function Package({
   id,
   width,
   height,
-  selected,
   data: { name },
   parentId,
 }: NodeProps<Node<PackageNodeProps>>) {
   const { onResize } = useHandleOnResize(parentId)
   const [showEditPopover, setShowEditPopover] = useState(false)
   const svgRef = useRef<SVGSVGElement | null>(null)
+  const selected = useDiagramStore(
+    useShallow((state) => state.interactiveElementId === id)
+  )
 
   useEffect(() => {
     if (!selected) {

@@ -1,18 +1,16 @@
 version: "3.8"
 
 services:
-
   server:
     image: "ghcr.io/ls1intum/apollon2/apollon-server:${IMAGE_TAG}"
     expose:
       - "8000"
       - "4444"
     environment:
-     - HOST=0.0.0.0
-     - PORT=8000
-     - WSSPORT=4444
-     - YPERSISTENCE=./dbDir
-     - FRONTEND_URL=https://apollon2.aet.cit.tum.de
+      - HOST=0.0.0.0
+      - PORT=8000
+      - WSSPORT=4444
+      - FRONTEND_URL=https://apollon2.aet.cit.tum.de
     restart: unless-stopped
     networks:
       - shared-network

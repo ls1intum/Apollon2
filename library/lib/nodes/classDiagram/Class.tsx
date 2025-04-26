@@ -14,7 +14,7 @@ import { useClassNode } from "@/hooks"
 import { useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { ClassNodeProps } from "@/types"
-import { useBoundStore } from "@/store"
+import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
 export function Class({
@@ -24,7 +24,7 @@ export function Class({
 
   data: { methods, attributes, stereotype, name },
 }: NodeProps<Node<ClassNodeProps>>) {
-  const interactiveElementId = useBoundStore(
+  const interactiveElementId = useDiagramStore(
     useShallow((state) => state.interactiveElementId)
   )
   const [{ minHeight, minWidth }, setMinSize] = useState<MinSize>({

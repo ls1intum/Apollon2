@@ -1,14 +1,21 @@
 import { useCallback } from "react"
 import { type OnNodeDrag, type Node, useReactFlow } from "@xyflow/react"
-import { getPositionOnCanvas, resizeAllParents } from "@/utils"
+import {
+  getPositionOnCanvas,
+  resizeAllParents,
+  sortNodesTopologically,
+} from "@/utils"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
-import { useBoundStore } from "@/store"
-import { useShallow } from "zustand/react/shallow"
+import { useDiagramStore } from "@/store/context"
+import { useShallow } from "zustand/shallow"
 
 export const useNodeDragStop = () => {
   const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
-  const { setNodes, nodes } = useBoundStore(
-    useShallow((state) => ({ setNodes: state.setNodes, nodes: state.nodes }))
+  const { nodes, setNodes } = useDiagramStore(
+    useShallow((state) => ({
+      nodes: state.nodes,
+      setNodes: state.setNodes,
+    }))
   )
 
   const onNodeDragStop: OnNodeDrag<Node> = useCallback(
@@ -42,17 +49,16 @@ export const useNodeDragStop = () => {
         : null
 
       if (!parentNode) {
-        setNodes(
-          nodes.map((n) =>
-            n.id === draggedNode.id
-              ? {
-                  ...draggedNode,
-                  position: getPositionOnCanvas(draggedNode, nodes),
-                  parentId: undefined,
-                }
-              : n
-          )
+        const updatedNode = nodes.map((n) =>
+          n.id === draggedNode.id
+            ? {
+                ...draggedNode,
+                position: getPositionOnCanvas(draggedNode, nodes),
+                parentId: undefined,
+              }
+            : n
         )
+        setNodes(updatedNode)
         return
       }
 
@@ -72,9 +78,11 @@ export const useNodeDragStop = () => {
         updatedNode.parentId = parentNode.id
 
         const updatedNodes = structuredClone(nodes)
-        const updatedNodesList = resizeAllParents(
-          updatedNode,
-          updatedNodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
+        const updatedNodesList = sortNodesTopologically(
+          resizeAllParents(
+            updatedNode,
+            updatedNodes.map((n) => (n.id === updatedNode.id ? updatedNode : n))
+          )
         )
 
         setNodes(updatedNodesList)
@@ -83,11 +91,12 @@ export const useNodeDragStop = () => {
 
       if (draggedNode.parentId) {
         const updatedNodes = structuredClone(nodes)
-        const updatedNodesList = resizeAllParents(
-          draggedNode,
-
-          updatedNodes.map((n) =>
-            n.id === draggedNode.id ? { ...draggedNode } : n
+        const updatedNodesList = sortNodesTopologically(
+          resizeAllParents(
+            draggedNode,
+            updatedNodes.map((n) =>
+              n.id === draggedNode.id ? { ...draggedNode } : n
+            )
           )
         )
         setNodes(updatedNodesList)

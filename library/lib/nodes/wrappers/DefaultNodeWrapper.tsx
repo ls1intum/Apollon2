@@ -1,4 +1,4 @@
-import { useBoundStore } from "@/store"
+import { useDiagramStore } from "@/store/context"
 import { Handle, Position } from "@xyflow/react"
 import { useShallow } from "zustand/shallow"
 
@@ -22,7 +22,7 @@ export function DefaultNodeWrapper({
 }: Props) {
   const adjustedWidth = calculateAdjustedQuarter(width)
   const adjustedHeight = calculateAdjustedQuarter(height)
-  const interactiveElementId = useBoundStore(
+  const interactiveElementId = useDiagramStore(
     useShallow((state) => state.interactiveElementId)
   )
 

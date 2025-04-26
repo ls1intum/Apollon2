@@ -1,19 +1,25 @@
-import React, { useEffect, useRef } from "react"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useRef, useState } from "react"
 import { useApollon2Context } from "@/contexts"
-import { Apollon2, DiagramType } from "@apollon2/library"
+import { Apollon2 } from "@apollon2/library"
 import { useParams, useSearchParams } from "react-router"
-import { ApollonOptions } from "@apollon2/library/dist/types/EditorOptions"
-import { DiagramView } from "@/types"
 import { toast } from "react-toastify"
-import { backendURL, backendWSSUrl } from "@/constants"
+import { backendWSSUrl } from "@/constants"
+import { DiagramView } from "@/types"
 
-const fetchDiagram = async (diagramID: string) => {
-  const response = await fetch(`${backendURL}/api/${diagramID}`)
-  if (!response.ok) {
-    throw new Error("Failed to fetch diagram")
-  }
-  const data = await response.json()
-  return data
+const mockFetchDiagramData = (diagramID: string): Promise<any> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log(`Mock fetch completed for diagramID: ${diagramID}`)
+      resolve({
+        version: "apollon2",
+        title: "Default Diagram",
+        diagramType: "ClassDiagram",
+        nodes: [],
+        edges: [],
+      })
+    }, 2000)
+  })
 }
 
 export const ApollonWithConnection: React.FC = () => {
@@ -21,21 +27,34 @@ export const ApollonWithConnection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { diagramID } = useParams()
   const [searchParams] = useSearchParams()
+  const websocketRef = useRef<WebSocket | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  console.log("ApollonWithConnection diagramID", diagramID)
+  console.log("ApollonWithConnection apollon2", apollon2)
 
   useEffect(() => {
-    const handleSetup = async () => {
-      if (containerRef.current && !apollon2 && diagramID) {
+    if (containerRef.current && diagramID) {
+      let instance: Apollon2 | null = null
+      const initializeApollon = async () => {
         try {
-          let instance: Apollon2
+          const mockedDiagram = await mockFetchDiagramData(diagramID)
+
+          console.log("Fetched diagram data:", mockedDiagram)
+
+          instance = new Apollon2(containerRef.current!, {
+            model: mockedDiagram,
+          })
+          setApollon2(instance)
+          setIsLoading(false)
           const viewType = searchParams.get("view")
-          const validViewTypes: DiagramView[] = [
+          const validViewTypes: string[] = [
             DiagramView.COLLABORATE,
             DiagramView.GIVE_FEEDBACK,
             DiagramView.SEE_FEEDBACK,
             DiagramView.EDIT,
           ]
-          const isValidView =
-            viewType && validViewTypes.includes(viewType as DiagramView)
+          const isValidView = viewType && validViewTypes.includes(viewType)
           const makeConnection = isValidView
             ? viewType === DiagramView.COLLABORATE ||
               viewType === DiagramView.GIVE_FEEDBACK ||
@@ -43,50 +62,79 @@ export const ApollonWithConnection: React.FC = () => {
             : false
 
           if (makeConnection) {
-            instance = new Apollon2(containerRef.current)
-            instance.makeWebsocketConnection(backendWSSUrl, diagramID)
-            setApollon2(instance)
+            // Set up the WebSocket connection
+            websocketRef.current = new WebSocket(
+              `${backendWSSUrl}?diagramId=${diagramID}`
+            )
 
-            return
+            // Handle incoming Yjs updates
+            websocketRef.current.onmessage = (event: MessageEvent<Blob>) => {
+              event.data.arrayBuffer().then((buffer: ArrayBuffer) => {
+                const data = new Uint8Array(buffer)
+                instance?.receiveBroadcastedMessage(data)
+              })
+            }
+
+            // Wait until socket is open before starting sync
+            websocketRef.current.onopen = () => {
+              instance?.sendBroadcastMessage((data) => {
+                if (websocketRef.current?.readyState === WebSocket.OPEN) {
+                  websocketRef.current.send(data)
+                } else {
+                  console.warn("Tried to send while WebSocket not open")
+                }
+              })
+              websocketRef.current?.send(new Uint8Array([0])) // Init message
+            }
+
+            websocketRef.current.onerror = (err) => {
+              console.error("WebSocket error", err)
+              toast.error("WebSocket connection error")
+            }
+
+            websocketRef.current.onclose = (closeEnvt) => {
+              console.warn("WebSocket closed, closeEnvt", closeEnvt)
+            }
           }
 
-          const { data } = await fetchDiagram(diagramID)
-          const nodes = data.nodes
-          const edges = data.edges
-          const metadata = data.metadata
-          const diagramName = metadata.diagramName || "Untitled Diagram"
-          const diagramType = metadata.diagramType || DiagramType.ClassDiagram
-
-          const editorOptions: ApollonOptions = {
-            model: {
-              name: diagramName,
-              id: diagramID,
-              type: diagramType,
-              nodes: nodes,
-              edges: edges,
-            },
+          // Return cleanup function for Apollon2 and WebSocket
+          return () => {
+            console.log("Cleaning up ApollonWithConnection")
+            if (instance) {
+              instance.dispose() // Dispose Apollon2 instance
+              instance = null // Clear reference
+            }
+            setApollon2(undefined) // Clear context
+            // Clean up WebSocket
+            if (
+              websocketRef.current &&
+              websocketRef.current.readyState === WebSocket.OPEN
+            ) {
+              console.log("Closing WebSocket connection")
+              websocketRef.current.close()
+              websocketRef.current = null
+            }
           }
-
-          instance = new Apollon2(containerRef.current, editorOptions)
-          setApollon2(instance)
         } catch (error) {
-          toast.error(
-            "Error fetching diagram. Please check the diagram ID and try again."
-          )
-          console.error("Error fetching diagram:", error)
+          toast.error("Error loading diagram. Please try again.")
+          console.error("Error setting up Apollon2:", error)
         }
       }
-    }
-    handleSetup()
 
-    return () => {
-      if (apollon2) {
-        console.log("Disposing Apollon2")
-        apollon2.dispose()
-        setApollon2(undefined)
-      }
+      initializeApollon()
     }
-  }, [apollon2])
+    // Implicitly return undefined if conditions are not met
+  }, [diagramID, searchParams, setApollon2])
 
-  return <div style={{ flex: 1 }} ref={containerRef} />
+  return (
+    <div className="flex  grow">
+      {isLoading && (
+        <div className="flex grow justify-center  items-center ">
+          Preparing the diagram for collaboration...
+        </div>
+      )}
+
+      <div className={isLoading ? "hidden" : "flex grow "} ref={containerRef} />
+    </div>
+  )
 }

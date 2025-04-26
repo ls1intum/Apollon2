@@ -17,14 +17,11 @@ body {
 }
 
 .react-flow {
-
   --panel-background: #fff;
   --panel-shadow: 0 0 4px 0 rgb(0 0 0 / 0.2);
   --text: #0a0a0a;
   --xy-edge-stroke: black;
-
 }
-
 
 .react-flow.dark {
   --background: #0f172a;
@@ -80,7 +77,6 @@ body {
   background-color: rgb(99, 154, 242);
 }
 
-
 .edge-circle {
   opacity: 0;
   background-color: rgb(99, 154, 242);
@@ -91,7 +87,7 @@ body {
   padding: 4px;
   fill: #007bff; /* Blue color for handles */
 }
-.react-flow__edge.selected .edge-circle{
+.react-flow__edge.selected .edge-circle {
   opacity: 0.4;
   padding: 4px;
   fill: #007bff; /* Blue color for handles */
@@ -110,13 +106,13 @@ body {
   stroke-width: 15px;
 }
 
-.react-flow__edge.selected .edge-overlay{
+.react-flow__edge.selected .edge-overlay {
   opacity: 0.4;
   padding: 4px;
   stroke: #007bff; /* Blue color for edge */
   stroke-width: 15px;
 }
-.react-flow__edge.selected .edge-marker-highlight{
+.react-flow__edge.selected .edge-marker-highlight {
   opacity: 0.4;
   padding: 4px;
   stroke: #007bff; /* Blue color for edge */
@@ -131,20 +127,12 @@ body {
   opacity: 0.9;
 }
 
-
 .react-flow__edges {
   z-index: 9999;
 }
 
 .react-flow__node {
   z-index: 9998;
-}
-
-.cursor {
-  position: absolute;
-  z-index: 50;
-  pointer-events: none;
-  user-select: none;
 }
 
 .prevent-select {

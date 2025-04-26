@@ -1,8 +1,11 @@
 import { useMemo } from "react"
 import { useViewport, XYPosition } from "@xyflow/react"
+import { useDiagramStore } from "@/store"
+import { useShallow } from "zustand/shallow"
 
 export const useViewportCenter = (): XYPosition => {
   const viewPort = useViewport()
+  const diagramId = useDiagramStore(useShallow((state) => state.diagramId))
 
   return useMemo((): XYPosition => {
     const pointOfViewportLeftTop = {
@@ -10,7 +13,9 @@ export const useViewportCenter = (): XYPosition => {
       y: (viewPort.y * -1) / viewPort.zoom,
     }
 
-    const canvasElement = window.document.getElementById("react-flow-library")
+    const canvasElement = window.document.getElementById(
+      `react-flow-library-${diagramId}`
+    )
     const center = {
       x:
         pointOfViewportLeftTop.x +

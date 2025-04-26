@@ -16,18 +16,11 @@ COPY standalone/server/tsconfig.json ./standalone/server/tsconfig.json
 # Build the server (TypeScript → JavaScript)
 RUN npm run build:server
 
-# Create persistence directory
-RUN mkdir -p /app/dbDir
-
 # Set environment variables
 ENV HOST=0.0.0.0
 ENV PORT=8000
 ENV WSSPORT=4444
-ENV YPERSISTENCE=./dbDir
 ENV FRONTEND_URL=http://localhost:5173
-
-# Expose required ports
-EXPOSE 8000 4444
 
 # Start the compiled server
 CMD ["node", "standalone/server/dist/src/server.js"]

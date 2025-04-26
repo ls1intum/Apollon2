@@ -99,7 +99,10 @@ export default function MobileNavbar() {
                   alignItems: "flex-start",
                 }}
               >
-                <NavbarFile color="black" />
+                <NavbarFile
+                  color="black"
+                  handleCloseNavMenu={handleCloseNavMenu}
+                />
                 <Button
                   sx={{ textTransform: "none" }} // This removes the uppercase transformation
                   onClick={() => openModal("SHARE")}

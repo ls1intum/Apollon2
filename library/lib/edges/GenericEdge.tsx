@@ -17,6 +17,10 @@ import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
+import { useDiagramStore } from "@/store/context"
+import { useShallow } from "zustand/shallow"
+
+// Extend the props to include markerEnd and markerPadding.
 import { IPoint, pointsToSvgPath, tryFindStraightPath } from "./Connection"
 import { useReconnect } from "@/hooks/useReconnect"
 import {
@@ -42,7 +46,6 @@ export const GenericEdge = ({
   sourceHandleId,
   targetHandleId,
   data,
-  selected,
 }: ExtendedEdgeProps) => {
   // Refs for dragging adjustments to minimize re-renders
   const draggingIndexRef = useRef<number | null>(null)
@@ -54,6 +57,11 @@ export const GenericEdge = ({
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
     useState<HTMLElement | null>(null)
+
+  const interactiveElementId = useDiagramStore(
+    useShallow((state) => state.interactiveElementId)
+  )
+  const selected = interactiveElementId === id
   const { getNode, getEdges, screenToFlowPosition, getNodes } = useReactFlow()
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
   const { onReconnect } = useReconnect()
@@ -445,17 +453,15 @@ export const GenericEdge = ({
         />
       )}
 
-      {
-        <EdgePopover
-          source={source}
-          target={target}
-          edgeId={id}
-          selected={selected!}
-          anchorEl={edgePopoverAnchor}
-          open={Boolean(edgePopoverAnchor)}
-          onClose={() => setEdgePopoverAnchor(null)}
-        />
-      }
+      <EdgePopover
+        source={source}
+        target={target}
+        edgeId={id}
+        selected={selected!}
+        anchorEl={edgePopoverAnchor}
+        open={Boolean(edgePopoverAnchor)}
+        onClose={() => setEdgePopoverAnchor(null)}
+      />
 
       {data?.sourceRole && (
         <text

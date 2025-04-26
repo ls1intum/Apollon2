@@ -9,7 +9,7 @@ import {
 } from "@xyflow/react"
 import { useCallback, useRef } from "react"
 import { findClosestHandle, generateUUID } from "@/utils"
-import { useBoundStore } from "@/store"
+import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
 const EDGE_TYPE = "ClassBidirectional"
@@ -19,13 +19,13 @@ export const useConnect = () => {
   const connectionStartParams = useRef<OnConnectStartParams | null>(null)
   const { screenToFlowPosition, getIntersectingNodes, getInternalNode } =
     useReactFlow()
-  const { setEdges, addEdge } = useBoundStore(
+  const { setEdges, addEdge, edges } = useDiagramStore(
     useShallow((state) => ({
       setEdges: state.setEdges,
       addEdge: state.addEdge,
+      edges: state.edges,
     }))
   )
-  const edges = useBoundStore((state) => state.edges)
 
   // Helper to get drop position from event
   const getDropPosition = useCallback(
@@ -42,6 +42,7 @@ export const useConnect = () => {
 
   const onConnectStart: OnConnectStart = (event, params) => {
     connectionStartParams.current = params
+    startEdge.current = null
     const dropPosition = getDropPosition(event)
 
     const intersectingNodes = getIntersectingNodes({
@@ -67,6 +68,7 @@ export const useConnect = () => {
           intersectingNodesIds.includes(edge.source)
       ),
     ]
+
     if (existingEdges.length > 0) {
       startEdge.current = existingEdges[existingEdges.length - 1]
     }
@@ -129,9 +131,7 @@ export const useConnect = () => {
                 }
 
           setEdges((eds) =>
-            eds.map((edge) =>
-              edge.id === newEdge.id ? { ...edge, ...newEdge } : edge
-            )
+            eds.map((edge) => (edge.id === newEdge.id ? newEdge : edge))
           )
         } else {
           // No start edge exists: create a new one

@@ -11,55 +11,87 @@ import {
 } from "./utils"
 import { DiagramType } from "./types"
 export * from "./types"
-import { WebsocketProvider } from "y-websocket"
-import ydoc from "./sync/ydoc"
-import { useBoundStore } from "./store"
-import { edgesMap, nodesMap } from "./store"
 import { ApollonOptions } from "./types/EditorOptions"
-import { DiagramStoreData } from "./store/diagramSlice"
+import {
+  createDiagramStore,
+  DiagramStore,
+  DiagramStoreData,
+} from "./store/diagramStore"
+import { createMetadataStore, MetadataStore } from "./store/metadataStore"
+import { DiagramStoreContext, MetadataStoreContext } from "./store/context"
+import { YjsSyncClass } from "./store/yjsSync"
+import * as Y from "yjs"
+import { StoreApi } from "zustand"
 
 export class Apollon2 {
-  private root: ReactDOM.Root | null = null
+  private root: ReactDOM.Root
   private reactFlowInstance: ReactFlowInstance | null = null
-  private diagramType: DiagramType = DiagramType.ClassDiagram
+  private diagramType: DiagramType
   private readonlyDiagram: boolean = false
+  private readonly syncManager: YjsSyncClass
+  private readonly ydoc: Y.Doc
+  private readonly diagramStore: StoreApi<DiagramStore>
+  private readonly metadataStore: StoreApi<MetadataStore>
 
   constructor(element: HTMLElement, options?: ApollonOptions) {
-    this.root = ReactDOM.createRoot(element)
+    this.ydoc = new Y.Doc()
+    console.log(
+      "Apollon2 initializing with Yjs document ydoc.clientId",
+      this.ydoc.clientID
+    )
+    this.diagramStore = createDiagramStore(this.ydoc)
+    this.metadataStore = createMetadataStore(this.ydoc)
+    this.syncManager = new YjsSyncClass(
+      this.ydoc,
+      this.diagramStore,
+      this.metadataStore
+    )
 
+    const diagramId =
+      options?.model?.id || Math.random().toString(36).substring(2, 15)
+    console.log("Apollon2 initializing with diagramId", diagramId)
+
+    // Initialize React root
+    this.root = ReactDOM.createRoot(element, {
+      identifierPrefix: `apollon2-${diagramId}`,
+    })
+    this.diagramStore.getState().setDiagramId(diagramId)
+
+    // Initialize metadata and diagram type
     const diagramName = options?.model?.name || "Untitled Diagram"
     const diagramType = options?.model?.type || DiagramType.ClassDiagram
-    ydoc.getMap<string>("diagramMetadata").set("diagramName", diagramName)
-    ydoc.getMap<string>("diagramMetadata").set("diagramType", diagramType)
+    this.metadataStore.getState().updateMetaData(diagramName, diagramType)
+    this.diagramType = parseDiagramType(
+      this.ydoc.getMap<string>("diagramMetadata").get("diagramType") ||
+        diagramType
+    )
 
-    if (options) {
-      this.diagramType = options?.model?.type || DiagramType.ClassDiagram
-
-      const nodes = options?.model?.nodes || []
-      const edges = options?.model?.edges || []
-
-      for (const node of nodes) {
-        nodesMap.set(node.id, node)
-      }
-      for (const edge of edges) {
-        edgesMap.set(edge.id, edge)
-      }
-
-      this.readonlyDiagram = options?.readonly || false
+    // Apply initial nodes and edges if provided
+    if (options?.model) {
+      const nodes = options.model.nodes || []
+      const edges = options.model.edges || []
+      this.diagramStore.getState().setNodesAndEdges(nodes, edges)
+      this.readonlyDiagram = options.readonly || false
     }
 
     this.renderApp()
   }
 
   private renderApp() {
-    if (this.root) {
-      this.root.render(
-        <AppWithProvider
-          onReactFlowInit={this.setReactFlowInstance.bind(this)}
-          readonlyDiagram={this.readonlyDiagram}
-        />
-      )
-    }
+    this.root.render(
+      <div
+        style={{ display: "flex", width: "100%", height: "100%", flexGrow: 1 }}
+      >
+        <DiagramStoreContext.Provider value={this.diagramStore}>
+          <MetadataStoreContext.Provider value={this.metadataStore}>
+            <AppWithProvider
+              onReactFlowInit={this.setReactFlowInstance.bind(this)}
+              readonlyDiagram={this.readonlyDiagram}
+            />
+          </MetadataStoreContext.Provider>
+        </DiagramStoreContext.Provider>
+      </div>
+    )
   }
 
   private setReactFlowInstance(instance: ReactFlowInstance) {
@@ -87,12 +119,21 @@ export class Apollon2 {
       this.reactFlowInstance.setEdges([])
       this.reactFlowInstance.setNodes([])
     }
+    this.diagramStore.getState().setNodesAndEdges([], [])
   }
 
   public dispose() {
-    if (this.root) {
+    const diagramId = this.diagramStore.getState().diagramId
+    console.log("Disposing Apollon2 instance with diagramId", diagramId)
+
+    try {
+      this.syncManager.stopSync()
       this.root.unmount()
-      this.root = null
+      this.ydoc.destroy()
+      this.reactFlowInstance = null
+      // Zustand stores are automatically garbage-collected when references are gone
+    } catch (error) {
+      console.error("Error during Apollon2 disposal:", error)
     }
   }
 
@@ -138,22 +179,18 @@ export class Apollon2 {
   public async importJson(content: string): Promise<boolean | string> {
     if (this.reactFlowInstance) {
       const parsed = JSON.parse(content)
-
-      // Validate the structure
       const result = validateParsedJSON(parsed)
-
-      if (typeof result === "string") {
-        return result
-      }
+      if (typeof result === "string") return result
 
       const { nodes, edges, diagramType } = result
-
       this.diagramType = diagramType
-      // Trigger a re-render by calling renderApp after updating the diagramType
+      this.diagramStore.getState().setNodesAndEdges(nodes, edges)
+      this.metadataStore
+        .getState()
+        .updateMetaData(parsed.name || "Imported Diagram", diagramType)
       this.renderApp()
       this.reactFlowInstance.setNodes(nodes)
       this.reactFlowInstance.setEdges(edges)
-      // We need to render the nodes and edges first before fitting the view
       requestAnimationFrame(() => {
         this.reactFlowInstance?.fitView()
       })
@@ -165,9 +202,11 @@ export class Apollon2 {
 
   public createNewDiagram(diagramType: DiagramType) {
     this.diagramType = diagramType
-    // Trigger a re-render by calling renderApp after updating the diagramType
+    this.metadataStore
+      .getState()
+      .updateMetaData("Untitled Diagram", diagramType)
+    this.diagramStore.getState().setNodesAndEdges([], [])
     this.renderApp()
-
     if (this.reactFlowInstance) {
       this.reactFlowInstance.setNodes([])
       this.reactFlowInstance.setEdges([])
@@ -181,7 +220,7 @@ export class Apollon2 {
   public subscribeToModalNodeEdgeChange(
     callback: (state: DiagramStoreData) => void
   ) {
-    return useBoundStore.subscribe((state) =>
+    return this.diagramStore.subscribe((state) =>
       callback({
         nodes: state.nodes,
         edges: state.edges,
@@ -190,39 +229,23 @@ export class Apollon2 {
   }
 
   public subscribeToDiagramNameChange(callback: (diagramName: string) => void) {
-    return useBoundStore.subscribe(
-      (state) => state.diagramName,
-      (diagramName) => {
-        callback(diagramName)
-      }
-    )
+    return this.metadataStore.subscribe((state) => callback(state.diagramName))
   }
 
-  public makeWebsocketConnection(serverUrl: string, roomname: string) {
-    const wsProvider = new WebsocketProvider(serverUrl, roomname, ydoc)
+  public sendBroadcastMessage(sendFn: (data: Uint8Array) => void) {
+    this.syncManager.setSendFunction(sendFn)
+  }
 
-    wsProvider.on("status", ({ status }) => {
-      console.log("WebSocket status:", status)
-    })
-    wsProvider.on("connection-error", (error) => {
-      console.error("WebSocket connection error:", error)
-    })
-    wsProvider.on("connection-close", (event) => {
-      console.log("WebSocket closed:", event)
-    })
+  public receiveBroadcastedMessage(update: Uint8Array) {
+    this.syncManager.handleReceivedData(update)
   }
 
   public updateDiagramName(name: string) {
-    ydoc.getMap<string>("diagramMetadata").set("diagramName", name)
+    this.metadataStore.getState().updateMetaData(name, this.diagramType)
   }
 
   public getDiagramMetadata() {
-    const metadata = ydoc.getMap<string>("diagramMetadata")
-    const diagramName = metadata.get("diagramName")
-    const diagramType = parseDiagramType(metadata.get("diagramType"))
-    return {
-      diagramName,
-      diagramType,
-    }
+    const { diagramName, diagramType } = this.metadataStore.getState()
+    return { diagramName, diagramType }
   }
 }

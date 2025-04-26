@@ -10,6 +10,7 @@ import { Apollon2 } from "@apollon2/library"
 interface Apollon2ContextType {
   apollon2?: Apollon2
   diagramName: string
+
   setDiagramName: React.Dispatch<React.SetStateAction<string>>
   setApollon2: React.Dispatch<React.SetStateAction<Apollon2 | undefined>>
 }
@@ -44,7 +45,7 @@ export const Apollon2Provider: React.FC<Props> = ({ children }) => {
       diagramName,
       setDiagramName,
     }),
-    [apollon2, diagramName, setDiagramName, setApollon2]
+    [apollon2, setApollon2, diagramName, setDiagramName]
   )
 
   return (

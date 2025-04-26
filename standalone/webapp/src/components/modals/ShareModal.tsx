@@ -26,7 +26,7 @@ export const ShareModal = () => {
     })
       .then(async (res) => {
         if (res.ok) {
-          const diagramID = (await res.json()).newDiagramID
+          const diagramID = (await res.json()).diagramId
 
           const newurl = `${window.location.origin}/${diagramID}?view=${viewType}`
           copyToClipboard(newurl)
