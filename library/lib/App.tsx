@@ -13,7 +13,7 @@ import {
   SvgMarkers,
 } from "@/components"
 import "@/styles/app.css"
-import { useDiagramStore } from "./store"
+import { useDiagramStore } from "./store/context"
 import { useShallow } from "zustand/shallow"
 import { DiagramType } from "./types"
 import {
@@ -38,7 +38,7 @@ interface AppProps {
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
-  const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore()(
+  const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
       onNodesChange: state.onNodesChange,
@@ -47,6 +47,7 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
       setInteractiveElementId: state.setInteractiveElementId,
     }))
   )
+  const diagramId = useDiagramStore(useShallow((state) => state.diagramId))
 
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
@@ -59,17 +60,13 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
     <div
       style={{
         display: "flex",
-        width: "100%",
-        height: "100%",
-        minHeight: 1,
-        minWidth: 1,
+        flexGrow: 1,
       }}
     >
       <Sidebar selectedDiagramType={DiagramType.ClassDiagram} />
-
       <SvgMarkers />
       <ReactFlow
-        id="react-flow-library"
+        id={`react-flow-library-${diagramId}`}
         nodeTypes={diagramNodeTypes}
         edgeTypes={diagramEdgeTypes}
         nodes={nodes}

@@ -17,14 +17,11 @@ body {
 }
 
 .react-flow {
-
   --panel-background: #fff;
   --panel-shadow: 0 0 4px 0 rgb(0 0 0 / 0.2);
   --text: #0a0a0a;
   --xy-edge-stroke: black;
-
 }
-
 
 .react-flow.dark {
   --background: #0f172a;
@@ -90,13 +87,6 @@ body {
 
 .react-flow__edges {
   z-index: 30;
-}
-
-.cursor {
-  position: absolute;
-  z-index: 50;
-  pointer-events: none;
-  user-select: none;
 }
 
 .prevent-select {

@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { useModalContext } from "@/contexts/ModalContext"
 import { DiagramType } from "@apollon2/library"
+import { useNavigate } from "react-router"
 
 const diagramTypes = {
   structural: [DiagramType.ClassDiagram, DiagramType.ObjectDiagram],
@@ -26,10 +27,11 @@ export const NewDiagramModal = () => {
   const [selectedDiagramType, setSelectedDiagramType] = useState<DiagramType>(
     DiagramType.ClassDiagram
   )
+  const navigate = useNavigate()
 
   const handleCreateDiagram = () => {
     setDiagramName(newDiagramName)
-    window.location.assign(`${window.location.origin}`)
+    navigate("/")
     closeModal()
   }
 

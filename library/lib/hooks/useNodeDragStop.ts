@@ -6,12 +6,12 @@ import {
   sortNodesTopologically,
 } from "@/utils"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
-import { useDiagramStore } from "@/store"
+import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
 export const useNodeDragStop = () => {
   const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
-  const { nodes, setNodes } = useDiagramStore()(
+  const { nodes, setNodes } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
       setNodes: state.setNodes,

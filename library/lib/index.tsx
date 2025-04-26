@@ -11,40 +11,66 @@ import {
 } from "./utils"
 import { DiagramType } from "./types"
 export * from "./types"
-import { clearYDoc, getYDoc } from "./sync/ydoc"
-import { resetZustandStore, useDiagramStore, useMetadataStore } from "./store"
 import { ApollonOptions } from "./types/EditorOptions"
-import { DiagramStoreData } from "./store/diagramStore"
+import {
+  createDiagramStore,
+  DiagramStore,
+  DiagramStoreData,
+} from "./store/diagramStore"
+import { createMetadataStore, MetadataStore } from "./store/metadataStore"
+import { DiagramStoreContext, MetadataStoreContext } from "./store/context"
 import { YjsSyncClass } from "./store/yjsSync"
+import * as Y from "yjs"
+import { StoreApi } from "zustand"
 
 export class Apollon2 {
-  private root: ReactDOM.Root | null = null
+  private root: ReactDOM.Root
   private reactFlowInstance: ReactFlowInstance | null = null
   private diagramType: DiagramType
   private readonlyDiagram: boolean = false
-  private syncManager: YjsSyncClass
+  private readonly syncManager: YjsSyncClass
+  private readonly ydoc: Y.Doc
+  private readonly diagramStore: StoreApi<DiagramStore>
+  private readonly metadataStore: StoreApi<MetadataStore>
 
   constructor(element: HTMLElement, options?: ApollonOptions) {
-    this.syncManager = new YjsSyncClass()
+    this.ydoc = new Y.Doc()
+    console.log(
+      "Apollon2 initializing with Yjs document ydoc.clientId",
+      this.ydoc.clientID
+    )
+    this.diagramStore = createDiagramStore(this.ydoc)
+    this.metadataStore = createMetadataStore(this.ydoc)
+    this.syncManager = new YjsSyncClass(
+      this.ydoc,
+      this.diagramStore,
+      this.metadataStore
+    )
 
+    const diagramId =
+      options?.model?.id || Math.random().toString(36).substring(2, 15)
+    console.log("Apollon2 initializing with diagramId", diagramId)
+
+    // Initialize React root
     this.root = ReactDOM.createRoot(element, {
-      identifierPrefix: "apollon2",
+      identifierPrefix: `apollon2-${diagramId}`,
     })
+    this.diagramStore.getState().setDiagramId(diagramId)
 
+    // Initialize metadata and diagram type
     const diagramName = options?.model?.name || "Untitled Diagram"
     const diagramType = options?.model?.type || DiagramType.ClassDiagram
-
-    const updateMetaData = useMetadataStore().getState().updateMetaData
-    updateMetaData(diagramName, diagramType)
-
+    this.metadataStore.getState().updateMetaData(diagramName, diagramType)
     this.diagramType = parseDiagramType(
-      getYDoc().getMap<string>("diagramMetadata").get("diagramType")
+      this.ydoc.getMap<string>("diagramMetadata").get("diagramType") ||
+        diagramType
     )
-    if (options) {
-      const nodes = options.model?.nodes || []
-      const edges = options.model?.edges || []
 
-      useDiagramStore().getState().setNodesAndEdges(nodes, edges)
+    // Apply initial nodes and edges if provided
+    if (options?.model) {
+      const nodes = options.model.nodes || []
+      const edges = options.model.edges || []
+      this.diagramStore.getState().setNodesAndEdges(nodes, edges)
       this.readonlyDiagram = options.readonly || false
     }
 
@@ -52,14 +78,20 @@ export class Apollon2 {
   }
 
   private renderApp() {
-    if (this.root) {
-      this.root.render(
-        <AppWithProvider
-          onReactFlowInit={this.setReactFlowInstance.bind(this)}
-          readonlyDiagram={this.readonlyDiagram}
-        />
-      )
-    }
+    this.root.render(
+      <div
+        style={{ display: "flex", width: "100%", height: "100%", flexGrow: 1 }}
+      >
+        <DiagramStoreContext.Provider value={this.diagramStore}>
+          <MetadataStoreContext.Provider value={this.metadataStore}>
+            <AppWithProvider
+              onReactFlowInit={this.setReactFlowInstance.bind(this)}
+              readonlyDiagram={this.readonlyDiagram}
+            />
+          </MetadataStoreContext.Provider>
+        </DiagramStoreContext.Provider>
+      </div>
+    )
   }
 
   private setReactFlowInstance(instance: ReactFlowInstance) {
@@ -87,20 +119,21 @@ export class Apollon2 {
       this.reactFlowInstance.setEdges([])
       this.reactFlowInstance.setNodes([])
     }
+    this.diagramStore.getState().setNodesAndEdges([], [])
   }
 
   public dispose() {
-    if (!this.root) {
-      console.warn("Apollon2 root is already disposed or not initialized.")
-      return
-    }
+    const diagramId = this.diagramStore.getState().diagramId
+    console.log("Disposing Apollon2 instance with diagramId", diagramId)
 
-    if (this.root) {
+    try {
       this.syncManager.stopSync()
       this.root.unmount()
-      this.root = null
-      clearYDoc()
-      resetZustandStore()
+      this.ydoc.destroy()
+      this.reactFlowInstance = null
+      // Zustand stores are automatically garbage-collected when references are gone
+    } catch (error) {
+      console.error("Error during Apollon2 disposal:", error)
     }
   }
 
@@ -147,14 +180,14 @@ export class Apollon2 {
     if (this.reactFlowInstance) {
       const parsed = JSON.parse(content)
       const result = validateParsedJSON(parsed)
-
-      if (typeof result === "string") {
-        return result
-      }
+      if (typeof result === "string") return result
 
       const { nodes, edges, diagramType } = result
-
       this.diagramType = diagramType
+      this.diagramStore.getState().setNodesAndEdges(nodes, edges)
+      this.metadataStore
+        .getState()
+        .updateMetaData(parsed.name || "Imported Diagram", diagramType)
       this.renderApp()
       this.reactFlowInstance.setNodes(nodes)
       this.reactFlowInstance.setEdges(edges)
@@ -169,8 +202,11 @@ export class Apollon2 {
 
   public createNewDiagram(diagramType: DiagramType) {
     this.diagramType = diagramType
+    this.metadataStore
+      .getState()
+      .updateMetaData("Untitled Diagram", diagramType)
+    this.diagramStore.getState().setNodesAndEdges([], [])
     this.renderApp()
-
     if (this.reactFlowInstance) {
       this.reactFlowInstance.setNodes([])
       this.reactFlowInstance.setEdges([])
@@ -184,7 +220,7 @@ export class Apollon2 {
   public subscribeToModalNodeEdgeChange(
     callback: (state: DiagramStoreData) => void
   ) {
-    return useDiagramStore().subscribe((state) =>
+    return this.diagramStore.subscribe((state) =>
       callback({
         nodes: state.nodes,
         edges: state.edges,
@@ -193,9 +229,7 @@ export class Apollon2 {
   }
 
   public subscribeToDiagramNameChange(callback: (diagramName: string) => void) {
-    return useMetadataStore().subscribe((state) => {
-      callback(state.diagramName)
-    })
+    return this.metadataStore.subscribe((state) => callback(state.diagramName))
   }
 
   public sendBroadcastMessage(sendFn: (data: Uint8Array) => void) {
@@ -207,16 +241,11 @@ export class Apollon2 {
   }
 
   public updateDiagramName(name: string) {
-    getYDoc().getMap<string>("diagramMetadata").set("diagramName", name)
+    this.metadataStore.getState().updateMetaData(name, this.diagramType)
   }
 
   public getDiagramMetadata() {
-    const metadata = getYDoc().getMap<string>("diagramMetadata")
-    const diagramName = metadata.get("diagramName")
-    const diagramType = parseDiagramType(metadata.get("diagramType"))
-    return {
-      diagramName,
-      diagramType,
-    }
+    const { diagramName, diagramType } = this.metadataStore.getState()
+    return { diagramName, diagramType }
   }
 }

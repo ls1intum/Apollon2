@@ -1,7 +1,8 @@
 import { create, StoreApi, UseBoundStore } from "zustand"
 import { devtools, subscribeWithSelector } from "zustand/middleware"
 import { parseDiagramType } from "@/utils"
-import { getDiagramMetadata, getYDoc } from "@/sync/ydoc"
+import * as Y from "yjs"
+import { getDiagramMetadata } from "@/sync/ydoc"
 import { DiagramType } from "@/types"
 
 export type MetadataStore = {
@@ -23,30 +24,32 @@ const initialMetadataState: InitialMetadataState = {
   diagramType: DiagramType.ClassDiagram,
 }
 
-export const createMetadataStore = (): UseBoundStore<StoreApi<MetadataStore>> =>
+export const createMetadataStore = (
+  ydoc: Y.Doc
+): UseBoundStore<StoreApi<MetadataStore>> =>
   create<MetadataStore>()(
     devtools(
       subscribeWithSelector((set) => ({
         ...initialMetadataState,
 
         updateDiagramName: (name) => {
-          getYDoc().transact(() => {
-            getDiagramMetadata().set("diagramName", name)
+          ydoc.transact(() => {
+            getDiagramMetadata(ydoc).set("diagramName", name)
           }, "store")
           set({ diagramName: name }, undefined, "updateDiagramName")
         },
 
         updateDiagramType: (type) => {
-          getYDoc().transact(() => {
-            getDiagramMetadata().set("diagramType", type)
+          ydoc.transact(() => {
+            getDiagramMetadata(ydoc).set("diagramType", type)
           }, "store")
           set({ diagramType: type }, undefined, "updateDiagramType")
         },
 
         updateMetaData: (name, type) => {
-          getYDoc().transact(() => {
-            getDiagramMetadata().set("diagramName", name)
-            getDiagramMetadata().set("diagramType", type)
+          ydoc.transact(() => {
+            getDiagramMetadata(ydoc).set("diagramName", name)
+            getDiagramMetadata(ydoc).set("diagramType", type)
           }, "store")
           set(
             {
@@ -62,9 +65,10 @@ export const createMetadataStore = (): UseBoundStore<StoreApi<MetadataStore>> =>
           set(
             {
               diagramName:
-                getDiagramMetadata().get("diagramName") || "Untitled Diagram",
+                getDiagramMetadata(ydoc).get("diagramName") ||
+                "Untitled Diagram",
               diagramType: parseDiagramType(
-                getDiagramMetadata().get("diagramType")
+                getDiagramMetadata(ydoc).get("diagramType")
               ),
             },
             undefined,

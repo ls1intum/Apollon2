@@ -1,10 +1,10 @@
-import { useDiagramStore } from "@/store"
+import { useDiagramStore } from "@/store/context"
 import { useCallback, MouseEvent } from "react"
 import { useShallow } from "zustand/shallow"
 import { type Node, type Edge } from "@xyflow/react"
 
 export const useCanvasClickEvents = () => {
-  const { interactiveElementId, setInteractiveElementId } = useDiagramStore()(
+  const { interactiveElementId, setInteractiveElementId } = useDiagramStore(
     useShallow((state) => ({
       interactiveElementId: state.interactiveElementId,
       setInteractiveElementId: state.setInteractiveElementId,

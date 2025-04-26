@@ -10,7 +10,7 @@ import { createPortal } from "react-dom"
 import { useReactFlow, type Node } from "@xyflow/react"
 import { MOUSE_UP_OFFSET_IN_PIXELS, SNAP_TO_GRID_PX } from "@/constants"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
-import { useDiagramStore } from "@/store"
+import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
 /* ========================================================================
@@ -89,9 +89,10 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
   children,
   dropElementConfig,
 }) => {
+  const diagramId = useDiagramStore(useShallow((state) => state.diagramId))
   // Hooks from react-flow and zustand store for node management
   const { screenToFlowPosition, getIntersectingNodes } = useReactFlow()
-  const { nodes, setNodes } = useDiagramStore()(
+  const { nodes, setNodes } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
       setNodes: state.setNodes,
@@ -111,7 +112,7 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
     (event: PointerEvent) => {
       event.preventDefault()
 
-      const canvas = document.getElementById("react-flow-library")
+      const canvas = document.getElementById(`react-flow-library-${diagramId}`)
       if (!canvas) {
         console.warn("Canvas element not found")
         return

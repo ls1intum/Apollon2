@@ -9,7 +9,7 @@ import {
 } from "@xyflow/react"
 import { useCallback, useRef } from "react"
 import { findClosestHandle, generateUUID } from "@/utils"
-import { useDiagramStore } from "@/store"
+import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
 const EDGE_TYPE = "ClassBidirectional"
@@ -19,7 +19,7 @@ export const useConnect = () => {
   const connectionStartParams = useRef<OnConnectStartParams | null>(null)
   const { screenToFlowPosition, getIntersectingNodes, getInternalNode } =
     useReactFlow()
-  const { setEdges, addEdge, edges } = useDiagramStore()(
+  const { setEdges, addEdge, edges } = useDiagramStore(
     useShallow((state) => ({
       setEdges: state.setEdges,
       addEdge: state.addEdge,
