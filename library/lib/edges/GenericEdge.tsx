@@ -11,6 +11,7 @@ import {
   adjustTargetCoordinates,
   getToolbarPosition,
   calculateEdgeLabels,
+  getPositionOnCanvas,
 } from "@/utils"
 import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
@@ -64,17 +65,31 @@ export const GenericEdge = ({
   // Memoize expensive computations with careful dependency tracking
   const sourceNode = getNode(source)!
   const targetNode = getNode(target)!
+  const allNodes = getNodes()
+
+
+  const sourceAbsolutePosition = useMemo(() => {
+    if (!sourceNode) return { x: sourceX, y: sourceY }
+    return getPositionOnCanvas(sourceNode, allNodes)
+  }, [sourceNode, allNodes, sourceX, sourceY])
+  
+  const targetAbsolutePosition = useMemo(() => {
+    if (!targetNode) return { x: targetX, y: targetY }
+    return getPositionOnCanvas(targetNode, allNodes)
+  }, [targetNode, allNodes, targetX, targetY])
+
+
 
   // Attempt to compute a straight path
   const straightPathPoints = tryFindStraightPath(
     {
-      position: { x: sourceNode.position.x, y: sourceNode.position.y },
+      position: { x: sourceAbsolutePosition.x, y: sourceAbsolutePosition.y },
       width: sourceNode.width ?? 100,
       height: sourceNode.height ?? 160,
       direction: sourcePosition,
     },
     {
-      position: { x: targetNode.position.x, y: targetNode.position.y },
+      position: { x: targetAbsolutePosition.x, y: targetAbsolutePosition.y },
       width: targetNode.width ?? 100,
       height: targetNode.height ?? 160,
       direction: targetPosition,
@@ -106,7 +121,6 @@ export const GenericEdge = ({
     targetPosition,
     borderRadius: STEP_BOARDER_RADIUS,
   })
-
   // Toolbar position
   const toolbarPosition = getToolbarPosition(
     adjustedSourceCoordinates,
@@ -195,7 +209,6 @@ export const GenericEdge = ({
       const handlePointerUp = () => {
         draggingIndexRef.current = null
         document.removeEventListener("pointermove", handlePointerMove)
-        document.removeEventListener("pointerup", handlePointerUp)
       }
 
       document.addEventListener("pointermove", handlePointerMove)

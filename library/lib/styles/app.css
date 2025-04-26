@@ -131,8 +131,13 @@ body {
   opacity: 0.9;
 }
 
+
 .react-flow__edges {
-  z-index: 30;
+  z-index: 9999;
+}
+
+.react-flow__node {
+  z-index: 9998;
 }
 
 .cursor {
