@@ -44,7 +44,6 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
       onNodesChange: state.onNodesChange,
       edges: state.edges,
       onEdgesChange: state.onEdgesChange,
-      setInteractiveElementId: state.setInteractiveElementId,
     }))
   )
   const diagramId = useDiagramStore(useShallow((state) => state.diagramId))
@@ -95,7 +94,6 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         edgesFocusable={!readonlyDiagram}
         nodesFocusable={!readonlyDiagram}
         onNodeClick={onNodeClick}
-        onNodeDrag={onNodeClick}
         onEdgeClick={onEdgeClick}
         onPaneClick={onPaneClick}
         proOptions={proOptions}

@@ -453,17 +453,15 @@ export const GenericEdge = ({
         />
       )}
 
-      {
-        <EdgePopover
-          source={source}
-          target={target}
-          edgeId={id}
-          selected={selected!}
-          anchorEl={edgePopoverAnchor}
-          open={Boolean(edgePopoverAnchor)}
-          onClose={() => setEdgePopoverAnchor(null)}
-        />
-      }
+      <EdgePopover
+        source={source}
+        target={target}
+        edgeId={id}
+        selected={selected!}
+        anchorEl={edgePopoverAnchor}
+        open={Boolean(edgePopoverAnchor)}
+        onClose={() => setEdgePopoverAnchor(null)}
+      />
 
       {data?.sourceRole && (
         <text

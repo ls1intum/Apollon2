@@ -69,6 +69,10 @@ export const createDiagramStore = (
                 ...node,
                 selected: node.id === interactiveElementId,
               })),
+              edges: get().edges.map((edge) => ({
+                ...edge,
+                selected: edge.id === interactiveElementId,
+              })),
             },
             undefined,
             "setInteractiveElementId"
@@ -160,23 +164,6 @@ export const createDiagramStore = (
             (change) => change.type !== "select"
           )
 
-          const selectionChanges = changes.filter(
-            (change) => change.type === "select"
-          )
-
-          if (selectionChanges.length > 0) {
-            const selectedEdges = changes
-              .filter((change) => change.type === "select")
-              .map((change) => change.id)
-            if (selectedEdges.length !== 0) {
-              set({
-                edges: get().edges.map((edge) => ({
-                  ...edge,
-                  selected: selectedEdges.includes(edge.id),
-                })),
-              })
-            }
-          }
           if (changesWithoutSelect.length === 0) return
 
           const currentEdges = get().edges
