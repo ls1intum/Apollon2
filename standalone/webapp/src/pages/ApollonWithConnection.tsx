@@ -15,45 +15,8 @@ const mockFetchDiagramData = (diagramID: string): Promise<any> => {
         version: "apollon2",
         title: "Default Diagram",
         diagramType: "ClassDiagram",
-        nodes: [
-          {
-            id: "0cc72deb-3e35-43ce-9cc1-25b533f7ffc6",
-            width: 160,
-            height: 100,
-            type: "class",
-            position: { x: 130, y: 170 },
-            data: {
-              name: "Class",
-              methods: [],
-              attributes: [],
-            },
-            measured: { width: 160, height: 100 },
-            selected: false,
-          },
-          {
-            id: "a7e21676-cbd3-4a1a-8a0a-c9fc25a92685",
-            width: 160,
-            height: 120,
-            type: "package",
-            position: { x: 660, y: 270 },
-            data: { name: "Package" },
-            measured: { width: 160, height: 120 },
-            selected: false,
-            dragging: false,
-          },
-        ],
-        edges: [
-          {
-            id: "aac54709-d524-4b47-a12d-dd614616da3c",
-            source: "0cc72deb-3e35-43ce-9cc1-25b533f7ffc6",
-            target: "a7e21676-cbd3-4a1a-8a0a-c9fc25a92685",
-            type: "ClassUnidirectional",
-            sourceHandle: "right",
-            targetHandle: "left-bottom",
-            selected: false,
-            data: { sourceMultiplicity: "2" },
-          },
-        ],
+        nodes: [],
+        edges: [],
       })
     }, 2000)
   })

@@ -42,6 +42,7 @@ export const useConnect = () => {
 
   const onConnectStart: OnConnectStart = (event, params) => {
     connectionStartParams.current = params
+    startEdge.current = null
     const dropPosition = getDropPosition(event)
 
     const intersectingNodes = getIntersectingNodes({
@@ -67,6 +68,7 @@ export const useConnect = () => {
           intersectingNodesIds.includes(edge.source)
       ),
     ]
+
     if (existingEdges.length > 0) {
       startEdge.current = existingEdges[existingEdges.length - 1]
     }

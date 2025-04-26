@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create, StoreApi, UseBoundStore } from "zustand"
 import { devtools, subscribeWithSelector } from "zustand/middleware"
 import {
@@ -13,6 +12,7 @@ import {
 import * as Y from "yjs"
 import { sortNodesTopologically } from "@/utils"
 import { getNodesMap, getEdgesMap } from "@/sync/ydoc"
+import { deepEqual } from "@/utils/storeUtils"
 
 export type DiagramStoreData = {
   nodes: Node[]
@@ -80,12 +80,14 @@ export const createDiagramStore = (
           ydoc.transact(() => {
             getNodesMap(ydoc).set(node.id, node)
           }, "store")
+          set({ nodes: [...get().nodes, node] }, undefined, "addNode")
         },
 
         addEdge: (edge) => {
           ydoc.transact(() => {
             getEdgesMap(ydoc).set(edge.id, edge)
           }, "store")
+          set({ edges: [...get().edges, edge] }, undefined, "addEdge")
         },
 
         setNodes: (payload) => {
@@ -123,8 +125,9 @@ export const createDiagramStore = (
             (change) => change.type !== "select"
           )
           if (changesWithoutSelect.length === 0) return
+
           const currentNodes = get().nodes
-          const nextNodes = applyNodeChanges(changes, currentNodes)
+          const nextNodes = applyNodeChanges(changesWithoutSelect, currentNodes)
           if (deepEqual(currentNodes, nextNodes)) return
 
           ydoc.transact(() => {
@@ -156,9 +159,28 @@ export const createDiagramStore = (
           const changesWithoutSelect = changes.filter(
             (change) => change.type !== "select"
           )
+
+          const selectionChanges = changes.filter(
+            (change) => change.type === "select"
+          )
+
+          if (selectionChanges.length > 0) {
+            const selectedEdges = changes
+              .filter((change) => change.type === "select")
+              .map((change) => change.id)
+            if (selectedEdges.length !== 0) {
+              set({
+                edges: get().edges.map((edge) => ({
+                  ...edge,
+                  selected: selectedEdges.includes(edge.id),
+                })),
+              })
+            }
+          }
           if (changesWithoutSelect.length === 0) return
+
           const currentEdges = get().edges
-          const nextEdges = applyEdgeChanges(changes, currentEdges)
+          const nextEdges = applyEdgeChanges(changesWithoutSelect, currentEdges)
           if (deepEqual(currentEdges, nextEdges)) return
 
           ydoc.transact(() => {
@@ -199,31 +221,3 @@ export const createDiagramStore = (
       { name: "DiagramStore", enabled: true }
     )
   )
-
-function deepEqual(a: any, b: any) {
-  if (a === b) return true
-
-  if (
-    a == null ||
-    typeof a !== "object" ||
-    b == null ||
-    typeof b !== "object"
-  ) {
-    return false
-  }
-
-  // Handle arrays
-  if (Array.isArray(a) !== Array.isArray(b)) return false
-
-  const keysA = Object.keys(a)
-  const keysB = Object.keys(b)
-
-  if (keysA.length !== keysB.length) return false
-
-  for (const key of keysA) {
-    if (!keysB.includes(key)) return false
-    if (!deepEqual(a[key], b[key])) return false
-  }
-
-  return true
-}
