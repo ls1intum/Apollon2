@@ -16,10 +16,19 @@ jobs:
         include:
           - name: Webapp
             dockerfile: ./standalone/webapp/Dockerfile
+            build-args: |
+              VITE_BACKEND_URL_WSS=wss://apollon2.aet.cit.tum.de
+              VITE_BACKEND_URL=https://apollon2.aet.cit.tum.de
             image: ghcr.io/ls1intum/apollon2/apollon-webapp
             context: .
           - name: Server
             dockerfile: ./standalone/server/Dockerfile
+            build-args: |
+              HOST=0.0.0.0
+              PORT=8000
+              WSSPORT=4444
+              YPERSISTENCE=./dbDir
+              FRONTEND_URL=https://apollon2.aet.cit.tum.de
             image: ghcr.io/ls1intum/apollon2/apollon-server
             context: .
         
@@ -29,3 +38,4 @@ jobs:
       image-name: ${{ matrix.image }}
       docker-file: ${{ matrix.dockerfile }}
       docker-context: ${{ matrix.context }}
+      build-args: ${{ matrix.build-args }}
