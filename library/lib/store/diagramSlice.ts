@@ -9,6 +9,7 @@ import {
   applyEdgeChanges,
 } from "@xyflow/react"
 import { edgesMap, nodesMap } from "."
+import { IPoint } from "@/edges/types"
 
 export type DiagramStoreData = {
   nodes: Node[]
@@ -136,6 +137,14 @@ export const createDiagramSlice: StateCreator<DiagramSlice> = (set) => ({
       }
     }
   },
+  updateEdgePoints: (id: string, points: IPoint[]) =>
+    set((state) => ({
+      edges: state.edges.map((edge) =>
+        edge.id === id
+          ? { ...edge, data: { ...edge.data, customPoints: points } }
+          : edge
+      ),
+    })),
 
   reset: () => {
     nodesMap.clear()

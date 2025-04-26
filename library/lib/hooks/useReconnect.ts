@@ -1,14 +1,28 @@
-import { useBoundStore } from "@/store"
-import { OnReconnect, reconnectEdge } from "@xyflow/react"
 import { useCallback } from "react"
-import { useShallow } from "zustand/shallow"
+
+import { useReactFlow, Edge, Connection } from "@xyflow/react"
 
 export const useReconnect = () => {
-  const setEdges = useBoundStore(useShallow((state) => state.setEdges))
+  const { deleteElements, addEdges } = useReactFlow()
 
-  const onReconnect: OnReconnect = useCallback((oldEdge, newConnection) => {
-    setEdges((els) => reconnectEdge(oldEdge, newConnection, els))
-  }, [])
+  const onReconnect = useCallback(
+    (oldEdge: Edge, newConnection: Connection) => {
+      deleteElements({ edges: [oldEdge] })
+
+      // Create a new edge with the same ID but updated properties
+      const newEdge = {
+        ...oldEdge,
+        source: newConnection.source,
+        target: newConnection.target,
+        sourceHandle: newConnection.sourceHandle || oldEdge.sourceHandle,
+        targetHandle: newConnection.targetHandle || oldEdge.targetHandle,
+      }
+
+      // Add the new edge to the graph
+      addEdges([newEdge])
+    },
+    [deleteElements, addEdges]
+  )
 
   return { onReconnect }
 }
