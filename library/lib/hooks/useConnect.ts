@@ -131,9 +131,7 @@ export const useConnect = () => {
                 }
 
           setEdges((eds) =>
-            eds.map((edge) =>
-              edge.id === newEdge.id ? { ...edge, ...newEdge } : edge
-            )
+            eds.map((edge) => (edge.id === newEdge.id ? newEdge : edge))
           )
         } else {
           // No start edge exists: create a new one

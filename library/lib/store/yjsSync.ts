@@ -13,7 +13,7 @@ enum MessageType {
 type SendFunction = (data: Uint8Array) => void
 
 export class YjsSyncClass {
-  private stopYjsObserver: (() => void) | null = null
+  private readonly stopYjsObserver: () => void
   private sendFunction: SendFunction | null = null
   private readonly ydoc: Y.Doc
   private readonly diagramStore: StoreApi<DiagramStore>
@@ -28,21 +28,12 @@ export class YjsSyncClass {
     this.ydoc = ydoc
     this.diagramStore = diagramStore
     this.metadataStore = metadataStore
-    if (!this.stopYjsObserver) {
-      console.log("YjsSyncClass constructor Starting Yjs observer")
-      this.stopYjsObserver = this.startYjsObserver()
-      this.ydoc.on("update", this.handleYjsUpdate)
-    }
+    this.stopYjsObserver = this.startYjsObserver()
   }
 
   public stopSync() {
     console.log("YjsSyncClass stopSync called")
-    this.ydoc.off("update", this.handleYjsUpdate)
-
-    if (this.stopYjsObserver) {
-      this.stopYjsObserver()
-      this.stopYjsObserver = null
-    }
+    this.stopYjsObserver()
   }
 
   public setSendFunction = (sendFn: SendFunction) => {
@@ -51,21 +42,6 @@ export class YjsSyncClass {
 
   public applyUpdate = (update: Uint8Array, transactionOrigin: string) => {
     Y.applyUpdate(this.ydoc, update, transactionOrigin)
-  }
-
-  private handleYjsUpdate: (
-    update: Uint8Array,
-    origin: unknown,
-    doc: Y.Doc,
-    transaction: Y.Transaction
-  ) => void = (_update: Uint8Array, _origin, _doc, transaction) => {
-    if (this.sendFunction && transaction.origin === "store") {
-      const syncMessage = Y.encodeStateAsUpdate(this.ydoc)
-      const fullMessage = new Uint8Array(1 + syncMessage.length)
-      fullMessage[0] = MessageType.YjsUpdate
-      fullMessage.set(syncMessage, 1)
-      this.sendFunction(fullMessage)
-    }
   }
 
   public handleReceivedData = (data: Uint8Array) => {
@@ -113,13 +89,30 @@ export class YjsSyncClass {
       }
     }
 
+    const handleYjsUpdate = (
+      _arg0: unknown,
+      _arg1: unknown,
+      _arg2: Y.Doc,
+      transaction: Y.Transaction
+    ) => {
+      if (this.sendFunction && transaction.origin === "store") {
+        const syncMessage = Y.encodeStateAsUpdate(this.ydoc)
+        const fullMessage = new Uint8Array(1 + syncMessage.length)
+        fullMessage[0] = MessageType.YjsUpdate
+        fullMessage.set(syncMessage, 1)
+        this.sendFunction(fullMessage)
+      }
+    }
+
     getNodesMap(this.ydoc).observe(nodesChangeObserver)
     getEdgesMap(this.ydoc).observe(edgesObserver)
     getDiagramMetadata(this.ydoc).observe(metadataObserver)
+    this.ydoc.on("update", handleYjsUpdate)
     return () => {
       getNodesMap(this.ydoc).unobserve(nodesChangeObserver)
       getEdgesMap(this.ydoc).unobserve(edgesObserver)
       getDiagramMetadata(this.ydoc).unobserve(metadataObserver)
+      this.ydoc.off("update", handleYjsUpdate)
     }
   }
 }
