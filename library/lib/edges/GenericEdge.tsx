@@ -67,18 +67,15 @@ export const GenericEdge = ({
   const targetNode = getNode(target)!
   const allNodes = getNodes()
 
-
   const sourceAbsolutePosition = useMemo(() => {
     if (!sourceNode) return { x: sourceX, y: sourceY }
     return getPositionOnCanvas(sourceNode, allNodes)
   }, [sourceNode, allNodes, sourceX, sourceY])
-  
+
   const targetAbsolutePosition = useMemo(() => {
     if (!targetNode) return { x: targetX, y: targetY }
     return getPositionOnCanvas(targetNode, allNodes)
   }, [targetNode, allNodes, targetX, targetY])
-
-
 
   // Attempt to compute a straight path
   const straightPathPoints = tryFindStraightPath(
