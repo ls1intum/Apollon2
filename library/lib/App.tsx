@@ -53,7 +53,8 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =
     useConnect()
   const { onReconnect } = useReconnect()
-  const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
+  const { onNodeClick, onEdgeClick, onPaneClick, onNodeDrag } =
+    useCanvasClickEvents()
 
   return (
     <div
@@ -94,6 +95,7 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         edgesFocusable={!readonlyDiagram}
         nodesFocusable={!readonlyDiagram}
         onNodeClick={onNodeClick}
+        onNodeDrag={onNodeDrag}
         onEdgeClick={onEdgeClick}
         onPaneClick={onPaneClick}
         proOptions={proOptions}

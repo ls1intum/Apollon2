@@ -63,20 +63,6 @@ export const createDiagramStore = (
           set({ diagramId }, undefined, "setDiagramId")
         },
         setInteractiveElementId: (interactiveElementId) => {
-          set(
-            {
-              nodes: get().nodes.map((node) => ({
-                ...node,
-                selected: node.id === interactiveElementId,
-              })),
-              edges: get().edges.map((edge) => ({
-                ...edge,
-                selected: edge.id === interactiveElementId,
-              })),
-            },
-            undefined,
-            "setInteractiveElementId"
-          )
           set({ interactiveElementId }, undefined, "setInteractiveElementId")
         },
 
@@ -128,11 +114,14 @@ export const createDiagramStore = (
           const changesWithoutSelect = changes.filter(
             (change) => change.type !== "select"
           )
+
           if (changesWithoutSelect.length === 0) return
 
           const currentNodes = get().nodes
           const nextNodes = applyNodeChanges(changesWithoutSelect, currentNodes)
-          if (deepEqual(currentNodes, nextNodes)) return
+          if (deepEqual(currentNodes, nextNodes)) {
+            return
+          }
 
           ydoc.transact(() => {
             for (const change of changesWithoutSelect) {
@@ -150,6 +139,9 @@ export const createDiagramStore = (
                     getEdgesMap(ydoc).delete(edge.id)
                   )
                 }
+              } else if (change.type === "position" && !change.dragging) {
+                // This change happens when user clicks on a node
+                continue
               } else {
                 const node = nextNodes.find((n) => n.id === change.id)
                 if (node) getNodesMap(ydoc).set(change.id, node)
@@ -198,12 +190,13 @@ export const createDiagramStore = (
           )
         },
 
-        updateEdgesFromYjs: () =>
+        updateEdgesFromYjs: () => {
           set(
             { edges: Array.from(getEdgesMap(ydoc).values()) },
             undefined,
             "updateEdgesFromYjs"
-          ),
+          )
+        },
       })),
       { name: "DiagramStore", enabled: true }
     )
