@@ -1,0 +1,14 @@
+services:
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - app-network
+volumes:
+  dbdata:
+networks:
+  app-network:
+    driver: bridge

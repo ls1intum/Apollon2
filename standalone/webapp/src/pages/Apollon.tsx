@@ -17,5 +17,5 @@ export const Apollon: React.FC = () => {
     }
   }, [setApollon2])
 
-  return <div className="flex grow " ref={containerRef} />
+  return <div className="flex grow min-h-20 min-w-20" ref={containerRef} />
 }

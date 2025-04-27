@@ -2,45 +2,48 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useApollon2Context } from "@/contexts"
 import { Apollon2 } from "@apollon2/library"
-import { useParams, useSearchParams } from "react-router"
+import { useNavigate, useParams, useSearchParams } from "react-router"
 import { toast } from "react-toastify"
-import { backendWSSUrl } from "@/constants"
+import { backendURL, backendWSSUrl } from "@/constants"
 import { DiagramView } from "@/types"
 
-const mockFetchDiagramData = (diagramID: string): Promise<any> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log(`Mock fetch completed for diagramID: ${diagramID}`)
-      resolve({
-        version: "apollon2",
-        title: "Default Diagram",
-        diagramType: "ClassDiagram",
-        nodes: [],
-        edges: [],
-      })
-    }, 2000)
+const mockFetchDiagramData = (diagramId: string): Promise<any> => {
+  return fetch(`${backendURL}/api/${diagramId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => {
+    console.log("mockFetchDiagramData res", res)
+    if (res.ok) {
+      return res.json()
+    } else {
+      throw new Error("Failed to fetch diagram data")
+    }
   })
 }
 
 export const ApollonWithConnection: React.FC = () => {
-  const { apollon2, setApollon2 } = useApollon2Context()
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const { diagramID } = useParams()
+  const { diagramId } = useParams()
   const [searchParams] = useSearchParams()
-  const websocketRef = useRef<WebSocket | null>(null)
+  const navigate = useNavigate()
+  const { apollon2, setApollon2 } = useApollon2Context()
   const [isLoading, setIsLoading] = useState(true)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const websocketRef = useRef<WebSocket | null>(null)
 
-  console.log("ApollonWithConnection diagramID", diagramID)
+  console.log("ApollonWithConnection diagramId", diagramId)
   console.log("ApollonWithConnection apollon2", apollon2)
 
   useEffect(() => {
-    if (containerRef.current && diagramID) {
+    if (containerRef.current && diagramId) {
       let instance: Apollon2 | null = null
       const initializeApollon = async () => {
         try {
-          const mockedDiagram = await mockFetchDiagramData(diagramID)
+          const mockedDiagram = await mockFetchDiagramData(diagramId)
 
           console.log("Fetched diagram data:", mockedDiagram)
+          mockedDiagram.id = diagramId
 
           instance = new Apollon2(containerRef.current!, {
             model: mockedDiagram,
@@ -64,7 +67,7 @@ export const ApollonWithConnection: React.FC = () => {
           if (makeConnection) {
             // Set up the WebSocket connection
             websocketRef.current = new WebSocket(
-              `${backendWSSUrl}?diagramId=${diagramID}`
+              `${backendWSSUrl}?diagramId=${diagramId}`
             )
 
             // Handle incoming Yjs updates
@@ -117,6 +120,7 @@ export const ApollonWithConnection: React.FC = () => {
           }
         } catch (error) {
           toast.error("Error loading diagram. Please try again.")
+          navigate("/")
           console.error("Error setting up Apollon2:", error)
         }
       }
@@ -124,7 +128,7 @@ export const ApollonWithConnection: React.FC = () => {
       initializeApollon()
     }
     // Implicitly return undefined if conditions are not met
-  }, [diagramID, searchParams, setApollon2])
+  }, [diagramId, searchParams, setApollon2])
 
   return (
     <div className="flex  grow">
@@ -134,7 +138,10 @@ export const ApollonWithConnection: React.FC = () => {
         </div>
       )}
 
-      <div className={isLoading ? "hidden" : "flex grow "} ref={containerRef} />
+      <div
+        className={isLoading ? "invisible" : "flex grow "}
+        ref={containerRef}
+      />
     </div>
   )
 }

@@ -20,16 +20,22 @@ export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const { apollon2 } = useApollon2Context()
   const { openModal } = useModalContext()
-  const [diagramName, setDiagramName] = useState("")
+  const [diagramTitle, setDiagramTitle] = useState(
+    apollon2?.getDiagramMetadata().diagramTitle || ""
+  )
   const unsubscribe = useRef<() => void>()
 
   useEffect(() => {
     if (apollon2 && !unsubscribe.current) {
       unsubscribe.current = apollon2.subscribeToDiagramNameChange(
-        (diagramName) => {
-          setDiagramName(diagramName)
+        (diagramTitle) => {
+          setDiagramTitle(diagramTitle)
         }
       )
+    }
+    // Update diagram title when apollon2 is available
+    if (apollon2) {
+      setDiagramTitle(apollon2.getDiagramMetadata().diagramTitle || "")
     }
     // Cleanup subscription
     return () => {
@@ -114,15 +120,16 @@ export default function MobileNavbar() {
                 {/* Diagram Name Input Field */}
                 <Box sx={{ p: 0.5 }}>
                   <TextField
-                    value={diagramName}
-                    onChange={(event) =>
-                      apollon2?.updateDiagramName(event.target.value)
-                    }
+                    value={diagramTitle}
+                    onChange={(event) => {
+                      const newTitle = event.target.value
+                      apollon2?.updateDiagramTitle(newTitle)
+                      setDiagramTitle(newTitle)
+                    }}
                     placeholder="Diagram Name"
                     fullWidth
                     sx={{ input: { padding: 0.5 } }}
                     variant="outlined"
-                    // Prevent menu from closing when clicking inside the TextField
                     onClick={(e) => e.stopPropagation()}
                     onFocus={(e) => e.stopPropagation()}
                   />

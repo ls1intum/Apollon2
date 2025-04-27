@@ -1,14 +1,14 @@
 import { DiagramType } from "@/types"
-import { ParsedJSON } from "@/types/ParsedJson"
+import { ApollonDiagram } from "@/types/EditorOptions"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const validateParsedJSON = (json: any): ParsedJSON | string => {
+export const validateParsedJSON = (json: any): ApollonDiagram | string => {
   if (
     typeof json !== "object" ||
     json === null ||
     typeof json.version !== "string" ||
     typeof json.title !== "string" ||
-    typeof json.diagramType !== "string" ||
+    typeof json.type !== "string" ||
     !Array.isArray(json.nodes) ||
     !Array.isArray(json.edges)
   ) {
@@ -51,5 +51,5 @@ export const validateParsedJSON = (json: any): ParsedJSON | string => {
     }
   }
 
-  return json as ParsedJSON
+  return json as ApollonDiagram
 }

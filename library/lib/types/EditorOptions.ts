@@ -1,12 +1,38 @@
-import { type Edge, type Node } from "@xyflow/react"
 import { DiagramType } from "./DiagramType"
 
-export type UMLModel = {
+export type ApollonNode = {
   id: string
-  name: string
+  width: number
+  height: number
+  type: string
+  position: {
+    x: number
+    y: number
+  }
+  data: {
+    [key: string]: unknown
+  }
+  measured: { width: number; height: number }
+}
+
+export type ApollonEdge = {
+  id: string
+  source: string
+  target: string
+  type: string
+  sourceHandle: string
+  targetHandle: string
+  data: {
+    [key: string]: unknown
+  }
+}
+export type ApollonDiagram = {
+  id: string
+  version: string
+  title: string
   type: DiagramType
-  nodes: Node[]
-  edges: Edge[]
+  nodes: ApollonNode[]
+  edges: ApollonEdge[]
 }
 
 export const enum ApollonView {
@@ -25,5 +51,5 @@ export type ApollonOptions = {
   mode?: ApollonMode
   readonly?: boolean
   enablePopups?: boolean
-  model?: UMLModel
+  model?: ApollonDiagram
 }
