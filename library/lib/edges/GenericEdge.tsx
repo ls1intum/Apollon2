@@ -65,6 +65,7 @@ export const GenericEdge = ({
   const { getNode, getEdges, screenToFlowPosition, getNodes } = useReactFlow()
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
   const { onReconnect } = useReconnect()
+  const updateEdge = useDiagramStore((state) => state.updateEdge)
 
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
@@ -177,7 +178,7 @@ export const GenericEdge = ({
     return `${currentPath} ${markerSegmentPath}`
   }, [currentPath, markerSegmentPath])
 
-  // Memoized event handlers to prevent unnecessary re-renders
+  const finalPointsRef = useRef<IPoint[]>([])
   const handlePointerDown = useCallback(
     (event: React.PointerEvent, index: number) => {
       const currentMidpoint = midpoints[index]
@@ -208,10 +209,22 @@ export const GenericEdge = ({
           newPoints[endIdx] = { x: newX, y: newPoints[endIdx].y }
         }
 
+        // Update both the state and the ref
         setCustomPoints(newPoints)
+        finalPointsRef.current = newPoints
       }
 
       const handlePointerUp = () => {
+        if (finalPointsRef.current.length > 0) {
+          updateEdge(id, {
+            data: {
+              ...data,
+              points: finalPointsRef.current,
+            },
+          })
+          console.log("Update edge", data, finalPointsRef.current)
+        }
+
         draggingIndexRef.current = null
         document.removeEventListener("pointermove", handlePointerMove)
       }
@@ -219,7 +232,7 @@ export const GenericEdge = ({
       document.addEventListener("pointermove", handlePointerMove)
       document.addEventListener("pointerup", handlePointerUp, { once: true })
     },
-    [midpoints, activePoints]
+    [midpoints, activePoints, id, data, updateEdge]
   )
 
   // Memoized drop position getter
@@ -232,8 +245,6 @@ export const GenericEdge = ({
     },
     [screenToFlowPosition]
   )
-
-  // Generic reconnect handler for both source and target endpoints
   const handleEndpointPointerDown = useCallback(
     (e: React.PointerEvent, endType: "source" | "target") => {
       if (straightPathPoints === null) return
@@ -283,7 +294,6 @@ export const GenericEdge = ({
 
     const newPoints = [...activePoints]
 
-    // Update the appropriate endpoint
     if (reconnectingEndRef.current === "source") {
       newPoints[0] = endpoint
     } else {
@@ -292,6 +302,11 @@ export const GenericEdge = ({
 
     setCustomPoints(newPoints)
   }
+  useEffect(() => {
+    if (data?.points) {
+      setCustomPoints(data.points)
+    }
+  }, [data?.points])
 
   const handleEndpointPointerUp = (upEvent: PointerEvent) => {
     const isReconnectingSource = reconnectingEndRef.current === "source"
@@ -302,12 +317,9 @@ export const GenericEdge = ({
 
     const dropPosition = getDropPosition(upEvent)
 
-    // Find all nodes in the flow
     const nodes = getNodes()
 
-    // Find if we're hovering over a node
     const nodeAtPosition = nodes.find((node) => {
-      // Get position and dimensions, handling potential undefined values
       const x = node.position?.x || 0
       const y = node.position?.y || 0
       const width = node.width || 100
@@ -328,7 +340,6 @@ export const GenericEdge = ({
       return
     }
 
-    // Find the closest handle on the node
     const newHandle = findClosestHandle(dropPosition, {
       x: nodeAtPosition.position.x,
       y: nodeAtPosition.position.y,
@@ -336,17 +347,16 @@ export const GenericEdge = ({
       height: nodeAtPosition.height!,
     })
 
-    // Create the appropriate connection based on which end is being reconnected
     const newConnection = isReconnectingSource
       ? {
-          source: nodeAtPosition.id, // Use the new source node
+          source: nodeAtPosition.id,
           target: target,
           sourceHandle: newHandle,
           targetHandle: targetHandleId as string,
         }
       : {
           source: source,
-          target: nodeAtPosition.id, // Use the new target node
+          target: nodeAtPosition.id,
           sourceHandle: sourceHandleId as string,
           targetHandle: newHandle,
         }
@@ -373,7 +383,6 @@ export const GenericEdge = ({
     multiplicityY: targetMultiplicityY,
   } = calculateEdgeLabels(targetX, targetY, targetPosition)
 
-  // Get the first and last points of the active points
   const sourcePoint = activePoints[0]
   const targetPoint = activePoints[activePoints.length - 1]
 

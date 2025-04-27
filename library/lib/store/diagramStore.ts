@@ -43,6 +43,7 @@ export type DiagramStore = {
   setEdges: (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void
   setNodesAndEdges: (nodes: Node[], edges: Edge[]) => void
   addEdge: (edge: Edge) => void
+  updateEdge: (edgeId: string, newData: Partial<Edge>) => void
   addNode: (node: Node) => void
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
@@ -92,6 +93,29 @@ export const createDiagramStore = (
             getEdgesMap(ydoc).set(edge.id, edge)
           }, "store")
           set({ edges: [...get().edges, edge] }, undefined, "addEdge")
+        },
+
+        updateEdge: (edgeId, newData) => {
+          const updatedEdges = get().edges.map((edge) => {
+            if (edge.id === edgeId) {
+              const updatedEdge = {
+                ...edge,
+                ...newData,
+                data: {
+                  ...edge.data,
+                  ...newData.data,
+                },
+              }
+              // Update in Yjs
+              ydoc.transact(() => {
+                getEdgesMap(ydoc).set(edgeId, updatedEdge)
+              }, "store")
+              return updatedEdge
+            }
+            return edge
+          })
+
+          set({ edges: updatedEdges }, undefined, "updateEdge")
         },
 
         setNodes: (payload) => {
