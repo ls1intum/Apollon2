@@ -1,7 +1,6 @@
 name: Build and Push Docker Image
 
 on: # Adjust the triggers, conditions, etc. to your needs, see examples below
-  pull_request:
   push:
     branches:
       - main
