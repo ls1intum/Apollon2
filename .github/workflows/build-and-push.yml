@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on: # Adjust the triggers, conditions, etc. to your needs, see examples below
   pull_request:
   push:
-    branches: 
+    branches:
       - main
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
           - name: Webapp
             dockerfile: ./standalone/webapp/Dockerfile
             build-args: |
-              VITE_BACKEND_URL_WSS=wss://apollon2.aet.cit.tum.de
+              VITE_BACKEND_URL_WSS=wss://apollon2.aet.cit.tum.de/ws
               VITE_BACKEND_URL=https://apollon2.aet.cit.tum.de
             image: ghcr.io/ls1intum/apollon2/apollon-webapp
             context: .
@@ -31,7 +31,7 @@ jobs:
               FRONTEND_URL=https://apollon2.aet.cit.tum.de
             image: ghcr.io/ls1intum/apollon2/apollon-server
             context: .
-        
+
     # Uses https://github.com/ls1intum/.github/pull/16/commits/a35192af6c834a72cb12fe6b772c0cfb70b45eae
     uses: ls1intum/.github/.github/workflows/build-and-push-docker-image.yml@feat/minor-build-improvements
     with:
