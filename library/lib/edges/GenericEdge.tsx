@@ -65,7 +65,7 @@ export const GenericEdge = ({
   const { getNode, getEdges, screenToFlowPosition, getNodes } = useReactFlow()
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
   const { onReconnect } = useReconnect()
-  const updateEdge = useDiagramStore((state) => state.updateEdge)
+  const setEdges = useDiagramStore((state) => state.setEdges)
 
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
@@ -213,16 +213,23 @@ export const GenericEdge = ({
         setCustomPoints(newPoints)
         finalPointsRef.current = newPoints
       }
-
+      const currentEdges = getEdges()
+      // Find this edge in the current edges
+      const currentEdge = currentEdges.find((edge) => edge.id === id)
       const handlePointerUp = () => {
         if (finalPointsRef.current.length > 0) {
-          updateEdge(id, {
-            data: {
-              ...data,
-              points: finalPointsRef.current,
-            },
-          })
-          console.log("Update edge", data, finalPointsRef.current)
+          if (currentEdge) {
+            const updatedEdge = {
+              ...currentEdge,
+              data: {
+                ...currentEdge.data,
+                points: finalPointsRef.current,
+              },
+            }
+            setEdges((edges) =>
+              edges.map((edge) => (edge.id === id ? updatedEdge : edge))
+            )
+          }
         }
 
         draggingIndexRef.current = null
@@ -232,7 +239,7 @@ export const GenericEdge = ({
       document.addEventListener("pointermove", handlePointerMove)
       document.addEventListener("pointerup", handlePointerUp, { once: true })
     },
-    [midpoints, activePoints, id, data, updateEdge]
+    [midpoints, activePoints, id, data, setEdges]
   )
 
   // Memoized drop position getter
