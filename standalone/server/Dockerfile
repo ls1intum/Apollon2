@@ -21,6 +21,7 @@ ENV HOST=0.0.0.0
 ENV PORT=8000
 ENV WSSPORT=4444
 ENV FRONTEND_URL=http://localhost:5173
+ENV MONGO_URI=mongodb://localhost:27017/apollon2DB 
 
 # Start the compiled server
 CMD ["node", "standalone/server/dist/src/server.js"]

@@ -2,48 +2,69 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useApollon2Context } from "@/contexts"
 import { Apollon2 } from "@apollon2/library"
-import { useParams, useSearchParams } from "react-router"
+import { useNavigate, useParams, useSearchParams } from "react-router"
 import { toast } from "react-toastify"
-import { backendWSSUrl } from "@/constants"
+import { backendURL, backendWSSUrl } from "@/constants"
 import { DiagramView } from "@/types"
+import { ApollonDiagram } from "@apollon2/library/dist/types/EditorOptions"
 
-const mockFetchDiagramData = (diagramID: string): Promise<any> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log(`Mock fetch completed for diagramID: ${diagramID}`)
-      resolve({
-        version: "apollon2",
-        title: "Default Diagram",
-        diagramType: "ClassDiagram",
-        nodes: [],
-        edges: [],
-      })
-    }, 2000)
+const fetchDiagramData = (diagramId: string): Promise<any> => {
+  return fetch(`${backendURL}/api/${diagramId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => {
+    if (res.ok) {
+      return res.json()
+    } else {
+      throw new Error("Failed to fetch diagram data")
+    }
   })
 }
 
-export const ApollonWithConnection: React.FC = () => {
-  const { apollon2, setApollon2 } = useApollon2Context()
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const { diagramID } = useParams()
-  const [searchParams] = useSearchParams()
-  const websocketRef = useRef<WebSocket | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+const sendPutRequest = async (diagramId: string, data: ApollonDiagram) => {
+  try {
+    const response = await fetch(`${backendURL}/api/${diagramId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+    if (!response.ok) {
+      throw new Error("Failed to send PUT request")
+    }
+    console.log("PUT request successful")
+  } catch (error) {
+    console.error("Error in PUT request:", error)
+    toast.error("Failed to sync diagram data")
+  }
+}
 
-  console.log("ApollonWithConnection diagramID", diagramID)
-  console.log("ApollonWithConnection apollon2", apollon2)
+export const ApollonWithConnection: React.FC = () => {
+  const { diagramId } = useParams()
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const { setApollon2 } = useApollon2Context()
+  const [isLoading, setIsLoading] = useState(true)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const websocketRef = useRef<WebSocket | null>(null)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null) // Ref to store interval ID
+  const diagramIsUpdated = useRef(false)
 
   useEffect(() => {
-    if (containerRef.current && diagramID) {
-      let instance: Apollon2 | null = null
+    let instance: Apollon2 | null = null
+    if (containerRef.current && diagramId) {
       const initializeApollon = async () => {
         try {
-          const mockedDiagram = await mockFetchDiagramData(diagramID)
+          const diagram = await fetchDiagramData(diagramId)
 
-          console.log("Fetched diagram data:", mockedDiagram)
+          console.log("Fetched diagram data:", diagram)
+          diagram.id = diagramId
 
           instance = new Apollon2(containerRef.current!, {
-            model: mockedDiagram,
+            model: diagram,
           })
           setApollon2(instance)
           setIsLoading(false)
@@ -64,7 +85,7 @@ export const ApollonWithConnection: React.FC = () => {
           if (makeConnection) {
             // Set up the WebSocket connection
             websocketRef.current = new WebSocket(
-              `${backendWSSUrl}?diagramId=${diagramID}`
+              `${backendWSSUrl}?diagramId=${diagramId}`
             )
 
             // Handle incoming Yjs updates
@@ -92,39 +113,60 @@ export const ApollonWithConnection: React.FC = () => {
               toast.error("WebSocket connection error")
             }
 
-            websocketRef.current.onclose = (closeEnvt) => {
-              console.warn("WebSocket closed, closeEnvt", closeEnvt)
-            }
+            intervalRef.current = setInterval(() => {
+              if (instance && diagramId && diagramIsUpdated.current) {
+                const diagramData = instance.getDiagram() // Assuming getModel() retrieves current diagram state
+                sendPutRequest(diagramId, diagramData)
+                diagramIsUpdated.current = false
+              }
+            }, 5000)
           }
 
+          instance.subscribeToModalNodeEdgeChange(() => {
+            diagramIsUpdated.current = true
+          })
+
           // Return cleanup function for Apollon2 and WebSocket
-          return () => {
-            console.log("Cleaning up ApollonWithConnection")
-            if (instance) {
-              instance.dispose() // Dispose Apollon2 instance
-              instance = null // Clear reference
-            }
-            setApollon2(undefined) // Clear context
-            // Clean up WebSocket
-            if (
-              websocketRef.current &&
-              websocketRef.current.readyState === WebSocket.OPEN
-            ) {
-              console.log("Closing WebSocket connection")
-              websocketRef.current.close()
-              websocketRef.current = null
-            }
-          }
         } catch (error) {
           toast.error("Error loading diagram. Please try again.")
+          navigate("/")
           console.error("Error setting up Apollon2:", error)
         }
       }
 
       initializeApollon()
     }
+
+    return () => {
+      console.log("Cleaning up ApollonWithConnection")
+      setApollon2(undefined) // Clear context
+
+      // Clear interval if it exists
+
+      if (intervalRef.current) {
+        console.log("Clearing interval")
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+
+      // Clean up WebSocket
+      if (
+        websocketRef.current &&
+        websocketRef.current.readyState === WebSocket.OPEN
+      ) {
+        console.log("Clearing WebSocket connection")
+        websocketRef.current.close()
+        websocketRef.current = null
+      }
+
+      if (instance) {
+        instance.dispose()
+        instance = null
+      }
+    }
+
     // Implicitly return undefined if conditions are not met
-  }, [diagramID, searchParams, setApollon2])
+  }, [diagramId, searchParams, setApollon2])
 
   return (
     <div className="flex  grow">
@@ -134,7 +176,10 @@ export const ApollonWithConnection: React.FC = () => {
         </div>
       )}
 
-      <div className={isLoading ? "hidden" : "flex grow "} ref={containerRef} />
+      <div
+        className={isLoading ? "invisible" : "flex grow "}
+        ref={containerRef}
+      />
     </div>
   )
 }

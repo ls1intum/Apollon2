@@ -6,21 +6,21 @@ import { getDiagramMetadata } from "@/sync/ydoc"
 import { DiagramType } from "@/types"
 
 export type MetadataStore = {
-  diagramName: string
+  diagramTitle: string
   diagramType: DiagramType
-  updateDiagramName: (name: string) => void
-  updateDiagramType: (type: DiagramType) => void
-  updateMetaData: (name: string, type: DiagramType) => void
+  updateDiagramTitle: (diagramTitle: string) => void
+  updateDiagramType: (diagramType: DiagramType) => void
+  updateMetaData: (diagramTitle: string, diagramType: DiagramType) => void
   updateMetaDataFromYjs: () => void
   reset: () => void
 }
 
 type InitialMetadataState = {
-  diagramName: string
+  diagramTitle: string
   diagramType: DiagramType
 }
 const initialMetadataState: InitialMetadataState = {
-  diagramName: "Untitled Diagram",
+  diagramTitle: "Untitled Diagram",
   diagramType: DiagramType.ClassDiagram,
 }
 
@@ -32,11 +32,11 @@ export const createMetadataStore = (
       subscribeWithSelector((set) => ({
         ...initialMetadataState,
 
-        updateDiagramName: (name) => {
+        updateDiagramTitle: (diagramTitle) => {
           ydoc.transact(() => {
-            getDiagramMetadata(ydoc).set("diagramName", name)
+            getDiagramMetadata(ydoc).set("diagramTitle", diagramTitle)
           }, "store")
-          set({ diagramName: name }, undefined, "updateDiagramName")
+          set({ diagramTitle }, undefined, "updateDiagramTitle")
         },
 
         updateDiagramType: (type) => {
@@ -46,15 +46,15 @@ export const createMetadataStore = (
           set({ diagramType: type }, undefined, "updateDiagramType")
         },
 
-        updateMetaData: (name, type) => {
+        updateMetaData: (diagramTitle, diagramType) => {
           ydoc.transact(() => {
-            getDiagramMetadata(ydoc).set("diagramName", name)
-            getDiagramMetadata(ydoc).set("diagramType", type)
+            getDiagramMetadata(ydoc).set("diagramTitle", diagramTitle)
+            getDiagramMetadata(ydoc).set("diagramType", diagramType)
           }, "store")
           set(
             {
-              diagramName: name,
-              diagramType: type,
+              diagramTitle,
+              diagramType,
             },
             undefined,
             "updateMetaData"
@@ -64,8 +64,8 @@ export const createMetadataStore = (
         updateMetaDataFromYjs: () =>
           set(
             {
-              diagramName:
-                getDiagramMetadata(ydoc).get("diagramName") ||
+              diagramTitle:
+                getDiagramMetadata(ydoc).get("diagramTitle") ||
                 "Untitled Diagram",
               diagramType: parseDiagramType(
                 getDiagramMetadata(ydoc).get("diagramType")

@@ -9,8 +9,12 @@ import {
 import { toPng, toSvg } from "html-to-image"
 import { PDFDocument } from "pdf-lib"
 import { ExportFileFormat } from "../enums"
-import { ParsedJSON } from "@/types/ParsedJson"
 import { DiagramType } from "@/types"
+import { ApollonDiagram } from "@/types/EditorOptions"
+import {
+  mapFromReactFlowEdgeToApollonEdge,
+  mapFromReactFlowNodeToApollonNode,
+} from "./diagramTypeUtils"
 
 // Calculate dimensions based on nodes and viewport
 const calculateDimensions = (
@@ -93,21 +97,27 @@ const downloadImage = (
 
 // Export the diagram as JSON
 export const exportAsJSON = (
-  diagramName: string,
+  id: string,
+  diagramTitle: string,
   diagramType: DiagramType,
   reactFlowInstance: ReactFlowInstance<Node, Edge>
 ) => {
-  const data: ParsedJSON = {
+  const data: ApollonDiagram = {
+    id,
     version: "apollon2",
-    title: diagramName,
-    diagramType,
-    nodes: reactFlowInstance.getNodes(),
-    edges: reactFlowInstance.getEdges(),
+    title: diagramTitle,
+    type: diagramType,
+    nodes: reactFlowInstance
+      .getNodes()
+      .map((node) => mapFromReactFlowNodeToApollonNode(node)),
+    edges: reactFlowInstance
+      .getEdges()
+      .map((edge) => mapFromReactFlowEdgeToApollonEdge(edge)),
   }
   const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
     JSON.stringify(data)
   )}`
-  const fileName = `${diagramName}.json`
+  const fileName = `${diagramTitle}.json`
 
   const link = document.createElement("a")
   link.href = jsonString
@@ -117,7 +127,7 @@ export const exportAsJSON = (
 
 // Export the diagram as PDF
 export const exportAsPDF = async (
-  diagramName: string,
+  diagramTitle: string,
   reactFlowInstance: ReactFlowInstance<Node, Edge>
 ) => {
   const { viewport, padding, width, height } =
@@ -155,7 +165,7 @@ export const exportAsPDF = async (
     const blob = new Blob([pdfBytes], { type: "application/pdf" })
     const link = document.createElement("a")
     link.href = URL.createObjectURL(blob)
-    link.download = `${diagramName}.pdf`
+    link.download = `${diagramTitle}.pdf`
     link.click()
   } catch (error) {
     console.error("Failed to export as PDF:", error)
