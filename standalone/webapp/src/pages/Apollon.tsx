@@ -13,7 +13,9 @@ export const Apollon: React.FC = () => {
   useEffect(() => {
     if (containerRef.current) {
       const instance = new Apollon2(containerRef.current)
-      instance.updateDiagramTitle(newDiagramTitle)
+      if (newDiagramTitle) {
+        instance.updateDiagramTitle(newDiagramTitle)
+      }
       setApollon2(instance)
 
       return () => {
