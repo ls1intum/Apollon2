@@ -28,6 +28,7 @@ jobs:
               WSSPORT=4444
               YPERSISTENCE=./dbDir
               FRONTEND_URL=https://apollon2.aet.cit.tum.de
+              MONGO_URI=mongodb://db:27017/apollon2DB
             image: ghcr.io/ls1intum/apollon2/apollon-server
             context: .
 
