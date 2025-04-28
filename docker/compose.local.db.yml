@@ -5,10 +5,5 @@ services:
       - "27017:27017"
     volumes:
       - dbdata:/data/db
-    networks:
-      - shared-network
 volumes:
   dbdata:
-networks:
-  shared-network:
-    driver: bridge
