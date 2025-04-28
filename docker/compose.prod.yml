@@ -68,6 +68,7 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  dbdata:
 
 networks:
   shared-network:
