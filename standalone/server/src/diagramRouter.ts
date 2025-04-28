@@ -64,10 +64,10 @@ router.post("/", async (req: Request, res: Response): Promise<any> => {
 
 router.put("/:diagramID", async (req: Request, res: Response): Promise<any> => {
   try {
-    const { version, title, diagramType, nodes, edges } = req.body
+    const { version, title, type, nodes, edges } = req.body
 
     // Validate required fields
-    if (!version || !title || !diagramType) {
+    if (!version || !title || !type) {
       return res
         .status(400)
         .json({ error: "Version, title, and diagramType are required" })
@@ -80,7 +80,7 @@ router.put("/:diagramID", async (req: Request, res: Response): Promise<any> => {
         $set: {
           version,
           title,
-          diagramType,
+          type,
           nodes: nodes || [],
           edges: edges || [],
         },

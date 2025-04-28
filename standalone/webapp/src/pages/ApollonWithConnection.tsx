@@ -6,6 +6,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router"
 import { toast } from "react-toastify"
 import { backendURL, backendWSSUrl } from "@/constants"
 import { DiagramView } from "@/types"
+import { ApollonDiagram } from "@apollon2/library/dist/types/EditorOptions"
 
 const mockFetchDiagramData = (diagramId: string): Promise<any> => {
   return fetch(`${backendURL}/api/${diagramId}`, {
@@ -23,17 +24,34 @@ const mockFetchDiagramData = (diagramId: string): Promise<any> => {
   })
 }
 
+const sendPutRequest = async (diagramId: string, data: ApollonDiagram) => {
+  try {
+    const response = await fetch(`${backendURL}/api/${diagramId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+    if (!response.ok) {
+      throw new Error("Failed to send PUT request")
+    }
+    console.log("PUT request successful")
+  } catch (error) {
+    console.error("Error in PUT request:", error)
+    toast.error("Failed to sync diagram data")
+  }
+}
+
 export const ApollonWithConnection: React.FC = () => {
   const { diagramId } = useParams()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { apollon2, setApollon2 } = useApollon2Context()
+  const { setApollon2 } = useApollon2Context()
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const websocketRef = useRef<WebSocket | null>(null)
-
-  console.log("ApollonWithConnection diagramId", diagramId)
-  console.log("ApollonWithConnection apollon2", apollon2)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null) // Ref to store interval ID
 
   useEffect(() => {
     if (containerRef.current && diagramId) {
@@ -98,6 +116,13 @@ export const ApollonWithConnection: React.FC = () => {
             websocketRef.current.onclose = (closeEnvt) => {
               console.warn("WebSocket closed, closeEnvt", closeEnvt)
             }
+
+            intervalRef.current = setInterval(() => {
+              if (instance && diagramId) {
+                const diagramData = instance.getDiagram() // Assuming getModel() retrieves current diagram state
+                sendPutRequest(diagramId, diagramData)
+              }
+            }, 5000)
           }
 
           // Return cleanup function for Apollon2 and WebSocket
@@ -107,6 +132,7 @@ export const ApollonWithConnection: React.FC = () => {
               instance.dispose() // Dispose Apollon2 instance
               instance = null // Clear reference
             }
+
             setApollon2(undefined) // Clear context
             // Clean up WebSocket
             if (
@@ -116,6 +142,11 @@ export const ApollonWithConnection: React.FC = () => {
               console.log("Closing WebSocket connection")
               websocketRef.current.close()
               websocketRef.current = null
+            }
+            // Clear interval if it exists
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current)
+              intervalRef.current = null
             }
           }
         } catch (error) {
