@@ -139,9 +139,6 @@ export const createDiagramStore = (
                     getEdgesMap(ydoc).delete(edge.id)
                   )
                 }
-              } else if (change.type === "position" && !change.dragging) {
-                // This change happens when user clicks on a node
-                continue
               } else {
                 const node = nextNodes.find((n) => n.id === change.id)
                 if (node) getNodesMap(ydoc).set(change.id, node)
