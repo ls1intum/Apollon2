@@ -3,7 +3,6 @@ import Info from "@mui/icons-material/Info"
 import { APButton } from "../APButton"
 import { toast } from "react-toastify"
 import { useApollon2Context, useModalContext } from "@/contexts"
-
 import { useNavigate } from "react-router"
 import { DiagramView } from "@/types"
 import { backendURL } from "@/constants"
@@ -19,12 +18,6 @@ export const ShareModal = () => {
       return
     }
     const model = apollon2.getDiagram()
-
-    if (model.nodes.length === 0) {
-      toast.error("The diagram is empty. Please add elements before sharing.")
-      closeModal()
-      return
-    }
 
     await fetch(`${backendURL}/api/`, {
       method: "POST",

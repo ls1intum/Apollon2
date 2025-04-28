@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box"
-import { useApollon2Context } from "@/contexts"
 import Button from "@mui/material/Button/Button"
 import { useModalContext } from "@/contexts/ModalContext"
 import ListItemText from "@mui/material/ListItemText"
@@ -18,7 +17,6 @@ enum TemplateType {
 }
 
 export const NewDiagramFromTemplateModal = () => {
-  const { apollon2, setDiagramName } = useApollon2Context()
   const { closeModal } = useModalContext()
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>(
     TemplateType.Adapter
@@ -38,11 +36,10 @@ export const NewDiagramFromTemplateModal = () => {
         throw new Error("Selected template data not found")
       }
 
-      const JsonDataINStringFormat = JSON.stringify(jsonData)
-      const diagramName = jsonData.title as string
+      // Handle passed diagram model from new page location data
+      // const JsonDataINStringFormat = JSON.stringify(jsonData)
+      // const diagramName = jsonData.title as string
 
-      setDiagramName(diagramName)
-      apollon2?.importJson(JsonDataINStringFormat)
       closeModal()
     } catch (err: unknown) {
       console.error("Error creating diagram from template:", err)
