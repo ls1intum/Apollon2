@@ -24,7 +24,6 @@ export class YjsSyncClass {
     diagramStore: StoreApi<DiagramStore>,
     metadataStore: StoreApi<MetadataStore>
   ) {
-    console.log("YjsSyncClass constructor initialized")
     this.ydoc = ydoc
     this.diagramStore = diagramStore
     this.metadataStore = metadataStore
@@ -32,7 +31,6 @@ export class YjsSyncClass {
   }
 
   public stopSync() {
-    console.log("YjsSyncClass stopSync called")
     this.stopYjsObserver()
   }
 

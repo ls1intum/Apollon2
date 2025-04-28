@@ -42,8 +42,6 @@ export const startSocketServer = (): void => {
     diagrams.get(diagramId)!.add(ws)
     ws.diagramId = diagramId
 
-    console.log("Client connected to diagram:", diagramId)
-
     ws.on("message", (message: WebSocket.RawData) => {
       const clients = diagrams.get(ws.diagramId!)
       if (!clients) return
@@ -65,7 +63,6 @@ export const startSocketServer = (): void => {
         clients.delete(ws)
         if (clients.size === 0) diagrams.delete(ws.diagramId!)
       }
-      console.log("Client disconnected from diagram:", ws.diagramId)
     })
 
     ws.on("error", (error: Error) => {

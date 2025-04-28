@@ -35,16 +35,11 @@ export class Apollon2 {
   private readonly metadataStore: StoreApi<MetadataStore>
 
   constructor(element: HTMLElement, options?: ApollonOptions) {
-    console.log("DEBUG apollon2 construtor with options,", options)
     if (!(element instanceof HTMLElement)) {
       throw new Error("Element is required to initialize Apollon2")
     }
 
     this.ydoc = new Y.Doc()
-    console.log(
-      "Apollon2 initializing with Yjs document ydoc.clientId",
-      this.ydoc.clientID
-    )
     this.diagramStore = createDiagramStore(this.ydoc)
     this.metadataStore = createMetadataStore(this.ydoc)
     this.syncManager = new YjsSyncClass(
@@ -55,8 +50,8 @@ export class Apollon2 {
 
     const diagramId =
       options?.model?.id || Math.random().toString(36).substring(2, 15)
-    console.log("Apollon2 initializing with diagramId", diagramId)
 
+    console.log("Diagram constructor called with diagramId", diagramId)
     // Initialize React root
     this.root = ReactDOM.createRoot(element, {
       identifierPrefix: `apollon2-${diagramId}`,
