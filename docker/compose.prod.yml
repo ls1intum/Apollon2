@@ -46,6 +46,8 @@ services:
       - FRONTEND_URL=https://apollon2.aet.cit.tum.de
       - MONGO_URI=mongodb://db:27017/apollon2DB
     restart: unless-stopped
+    depends_on:
+      - db
     networks:
       - shared-network
     logging:
@@ -53,6 +55,15 @@ services:
       options:
         max-size: "50m"
         max-file: "5"
+
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - shared-network
 
 volumes:
   caddy_data:
