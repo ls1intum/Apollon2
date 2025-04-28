@@ -7,7 +7,6 @@ router.get("/:diagramID", async (req: Request, res: Response): Promise<any> => {
   try {
     console.log("Received request for diagram ID:", req.params.diagramID)
     const diagram = await Diagram.findById(req.params.diagramID)
-    console.log("Found diagram:", diagram)
     if (!diagram) {
       return res.status(404).json({ error: "Diagram not found" })
     }
