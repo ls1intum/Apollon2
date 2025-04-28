@@ -51,6 +51,7 @@ export const ApollonWithConnection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const websocketRef = useRef<WebSocket | null>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null) // Ref to store interval ID
+  const diagramIsUpdated = useRef(false)
 
   useEffect(() => {
     let instance: Apollon2 | null = null
@@ -113,12 +114,17 @@ export const ApollonWithConnection: React.FC = () => {
             }
 
             intervalRef.current = setInterval(() => {
-              if (instance && diagramId) {
+              if (instance && diagramId && diagramIsUpdated.current) {
                 const diagramData = instance.getDiagram() // Assuming getModel() retrieves current diagram state
                 sendPutRequest(diagramId, diagramData)
+                diagramIsUpdated.current = false
               }
             }, 5000)
           }
+
+          instance.subscribeToModalNodeEdgeChange(() => {
+            diagramIsUpdated.current = true
+          })
 
           // Return cleanup function for Apollon2 and WebSocket
         } catch (error) {
