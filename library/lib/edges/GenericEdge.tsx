@@ -213,25 +213,17 @@ export const GenericEdge = ({
         setCustomPoints(newPoints)
         finalPointsRef.current = newPoints
       }
-      const currentEdges = getEdges()
-      // Find this edge in the current edges
-      const currentEdge = currentEdges.find((edge) => edge.id === id)
       const handlePointerUp = () => {
-        if (finalPointsRef.current.length > 0) {
-          if (currentEdge) {
-            const updatedEdge = {
-              ...currentEdge,
-              data: {
-                ...currentEdge.data,
-                points: finalPointsRef.current,
-              },
-            }
-            setEdges((edges) =>
-              edges.map((edge) => (edge.id === id ? updatedEdge : edge))
-            )
-          }
-        }
-
+        setEdges((edges) =>
+          edges.map((edge) =>
+            edge.id === id
+              ? {
+                  ...edge,
+                  data: { ...edge.data, points: finalPointsRef.current },
+                }
+              : edge
+          )
+        )
         draggingIndexRef.current = null
         document.removeEventListener("pointermove", handlePointerMove)
       }

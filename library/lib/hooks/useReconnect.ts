@@ -4,7 +4,6 @@ import { Edge, Connection } from "@xyflow/react"
 
 export const useReconnect = () => {
   const setEdges = useDiagramStore((state) => state.setEdges)
-
   const onReconnect = useCallback(
     (oldEdge: Edge, newConnection: Connection) => {
       const updatedEdge = {
@@ -18,12 +17,12 @@ export const useReconnect = () => {
           points: [],
         },
       }
+
       setEdges((edges) =>
         edges.map((edge) => (edge.id === oldEdge.id ? updatedEdge : edge))
       )
     },
     []
   )
-
   return { onReconnect }
 }
