@@ -6,9 +6,9 @@ services:
     volumes:
       - dbdata:/data/db
     networks:
-      - app-network
+      - shared-network
 volumes:
   dbdata:
 networks:
-  app-network:
+  shared-network:
     driver: bridge
