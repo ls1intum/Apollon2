@@ -31,9 +31,19 @@ export const useCanvasClickEvents = () => {
     }
   }, [interactiveElementId, setInteractiveElementId])
 
+  const onNodeDrag = useCallback(
+    (_event: MouseEvent, node: Node) => {
+      if (node.id !== interactiveElementId) {
+        setInteractiveElementId(node.id)
+      }
+    },
+    [setInteractiveElementId]
+  )
+
   return {
     onNodeClick,
     onEdgeClick,
     onPaneClick,
+    onNodeDrag,
   }
 }

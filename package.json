@@ -16,6 +16,7 @@
     "start:server": "npm run start --workspace=@apollon2/server",
     "start:webapp": "npm run start --workspace=@apollon2/webapp",
     "start:webapp:host": "npm run start:host --workspace=@apollon2/webapp",
+    "start:localdb": "docker-compose -f docker/compose.local.db.yml up -d ",
     "lint": "concurrently \"npm run lint:lib\" \"npm run lint:server\" \"npm run lint:webapp\"",
     "lint:lib": "npm run lint --workspace=@apollon2/library",
     "lint:server": "npm run lint --workspace=@apollon2/server",

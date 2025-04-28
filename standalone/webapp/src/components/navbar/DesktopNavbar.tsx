@@ -15,17 +15,23 @@ import { useModalContext } from "@/contexts"
 
 export const DesktopNavbar = () => {
   const { apollon2 } = useApollon2Context()
-  const [diagramName, setDiagramName] = useState("")
+  const [diagramTitle, setDiagramTitle] = useState(
+    apollon2?.getDiagramMetadata().diagramTitle || ""
+  )
   const unsubscribe = useRef<() => void>()
   const { openModal } = useModalContext()
 
   useEffect(() => {
     if (apollon2 && !unsubscribe.current) {
       unsubscribe.current = apollon2.subscribeToDiagramNameChange(
-        (diagramName) => {
-          setDiagramName(diagramName)
+        (diagramTitle) => {
+          setDiagramTitle(diagramTitle)
         }
       )
+    }
+    // Update diagram title when apollon2 is available
+    if (apollon2) {
+      setDiagramTitle(apollon2.getDiagramMetadata().diagramTitle || "")
     }
     // Cleanup subscription
     return () => {
@@ -67,10 +73,11 @@ export const DesktopNavbar = () => {
           <NavbarHelp />
           <TextField
             sx={{ input: { color: "white", padding: 1 }, marginLeft: 1 }}
-            value={diagramName}
-            // onChange={(event) => setDiagramName(event.target.value)}
+            value={diagramTitle}
             onChange={(event) => {
-              apollon2?.updateDiagramName(event.target.value)
+              const newTitle = event.target.value
+              apollon2?.updateDiagramTitle(newTitle)
+              setDiagramTitle(newTitle)
             }}
             placeholder="Diagram Name"
             variant="outlined"

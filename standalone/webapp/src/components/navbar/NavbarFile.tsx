@@ -66,19 +66,19 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
 
       switch (type) {
         case ExportType.SVG:
-          apollon2.exportImageAsSVG(diagramName)
+          apollon2.exportImageAsSVG()
           break
         case ExportType.PNG_WHITE:
-          apollon2.exportImagePNG(diagramName, false)
+          apollon2.exportImagePNG(false)
           break
         case ExportType.PNG_TRANSPARENT:
-          apollon2.exportImagePNG(diagramName, true)
+          apollon2.exportImagePNG(true)
           break
         case ExportType.JSON:
-          apollon2.exportAsJson(diagramName)
+          apollon2.exportAsJson()
           break
         case ExportType.PDF:
-          apollon2.exportImageAsPDF(diagramName)
+          apollon2.exportImageAsPDF()
           break
         default:
           console.warn(`Unknown export type: ${type}`)
@@ -86,7 +86,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
 
       closeMainMenu()
     },
-    [apollon2, diagramName, closeMainMenu]
+    [apollon2, closeMainMenu]
   )
 
   const handleNewFile = useCallback(() => {

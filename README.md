@@ -56,7 +56,7 @@ Ensure you have the following installed:
    ```
 
 4. Create .env files for standalone/webapp and standalone/server <br>
-  Check .env.examples files and create values
+   Check .env.examples files and create values
 
 5. Build all packages:
 
@@ -64,49 +64,62 @@ Ensure you have the following installed:
    npm run build
    ```
 
-6. Start the project:
+6. Run Docker and start database via docker:
+
+   ```bash
+   npm run start:localdb
+   ```
+
+7. Start the project:
    ```bash
    npm run start
    ```
-## Setup Instructions for iOS and Android 
+
+## Setup Instructions for iOS and Android
 
 1. Install the latest packages
-  ```bash
-   npm i
-   ```
+
+```bash
+ npm i
+```
 
 2. Build the application
-  ```bash
-  npm run build
-  ```
+
+```bash
+npm run build
+```
+
 3. For the first time, generate ios and android folder:
 
-  ```bash
-  npm run capacitor:add:ios
-  ```
+```bash
+npm run capacitor:add:ios
+```
 
-  ```bash
-  npm run capacitor:add:android
-  ```
+```bash
+npm run capacitor:add:android
+```
+
 4. Generate assets:
 
-  ```bash
-   npm run capacitor:assets:generate:ios
-   ```
+```bash
+ npm run capacitor:assets:generate:ios
+```
+
 5. Sync the files
 
-  ```bash
-   npm run capacitor:sync 
-   ```
+```bash
+ npm run capacitor:sync
+```
 
-6. Open the App 
+6. Open the App
 
-  ```bash
-   npm run capacitor:open:ios
-   ```
-   ```bash
-   npm run capacitor:open:android
-   ```
+```bash
+ npm run capacitor:open:ios
+```
+
+```bash
+npm run capacitor:open:android
+```
 
 ## Verifying Versions
 
@@ -193,15 +206,15 @@ Make sure Docker is up and running.
 
 Build image with docker compose:
 
- ```bash
-  docker compose -f ./docker/compose.local.yml build
-  ```
+```bash
+ docker compose -f ./docker/compose.local.yml build
+```
 
 Run the container with docker compose:
 
- ```bash
-  docker compose -f ./docker/compose.local.yml up -d
-  ```
+```bash
+ docker compose -f ./docker/compose.local.yml up -d
+```
 
 ## Troubleshooting
 

@@ -3,7 +3,6 @@ import Info from "@mui/icons-material/Info"
 import { APButton } from "../APButton"
 import { toast } from "react-toastify"
 import { useApollon2Context, useModalContext } from "@/contexts"
-import { v4 as uuidv4 } from "uuid"
 import { useNavigate } from "react-router"
 import { DiagramView } from "@/types"
 import { backendURL } from "@/constants"
@@ -14,19 +13,20 @@ export const ShareModal = () => {
   const navigate = useNavigate()
 
   const handleShareButtonPress = async (viewType: DiagramView) => {
-    const nodes = apollon2?.getNodes()
-    const edges = apollon2?.getEdges()
-    const metadata = { ...apollon2?.getDiagramMetadata(), diagramID: uuidv4() }
+    if (!apollon2) {
+      toast.error("Apollon2 instance is not available.")
+      return
+    }
+    const model = apollon2.getDiagram()
 
-    const data = { nodes, edges, metadata }
     await fetch(`${backendURL}/api/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(model),
     })
       .then(async (res) => {
         if (res.ok) {
-          const diagramID = (await res.json()).diagramId
+          const diagramID = (await res.json())._id
 
           const newurl = `${window.location.origin}/${diagramID}?view=${viewType}`
           copyToClipboard(newurl)

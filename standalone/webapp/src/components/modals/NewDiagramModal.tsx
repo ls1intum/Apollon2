@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
-import { useApollon2Context } from "@/contexts"
 import { useState } from "react"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
@@ -19,19 +18,18 @@ const diagramTypeToTitle = {
 }
 
 export const NewDiagramModal = () => {
-  const { setDiagramName } = useApollon2Context()
   const { closeModal } = useModalContext()
   const [isDiagramNameDefault, setIsDiagramNameDefault] =
     useState<boolean>(true)
-  const [newDiagramName, setNewDiagramName] = useState<string>("Class Diagram")
+  const [newDiagramTitle, setNewDiagramTitle] =
+    useState<string>("Class Diagram")
   const [selectedDiagramType, setSelectedDiagramType] = useState<DiagramType>(
     DiagramType.ClassDiagram
   )
   const navigate = useNavigate()
 
   const handleCreateDiagram = () => {
-    setDiagramName(newDiagramName)
-    navigate("/")
+    navigate("/", { state: { createdAt: Date.now(), newDiagramTitle } })
     closeModal()
   }
 
@@ -42,14 +40,14 @@ export const NewDiagramModal = () => {
   const handleDiagramNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setNewDiagramName(event.target.value)
+    setNewDiagramTitle(event.target.value)
     setIsDiagramNameDefault(false)
   }
 
   const handleDiagramTypeChange = (type: DiagramType) => {
     setSelectedDiagramType(type)
     if (isDiagramNameDefault) {
-      setNewDiagramName(diagramTypeToTitle[type])
+      setNewDiagramTitle(diagramTypeToTitle[type])
     }
   }
 
@@ -74,7 +72,7 @@ export const NewDiagramModal = () => {
         <TextField
           fullWidth
           id="diagram-title"
-          value={newDiagramName}
+          value={newDiagramTitle}
           onChange={handleDiagramNameChange}
           placeholder="Enter diagram title"
           variant="outlined"
