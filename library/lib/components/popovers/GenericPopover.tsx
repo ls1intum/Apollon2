@@ -32,6 +32,9 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
     anchorOrigin={anchorOrigin}
     transformOrigin={transformOrigin}
     style={{ maxHeight, ...style }}
+    onClick={(e) => {
+      e.stopPropagation()
+    }}
   >
     <Box
       sx={{

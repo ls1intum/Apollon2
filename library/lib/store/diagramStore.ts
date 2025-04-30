@@ -83,6 +83,11 @@ export const createDiagramStore = (
         setNodes: (payload) => {
           const nodes =
             typeof payload === "function" ? payload(get().nodes) : payload
+
+          if (deepEqual(get().nodes, nodes)) {
+            return
+          }
+
           ydoc.transact(() => {
             getNodesMap(ydoc).clear()
             nodes.forEach((node) => getNodesMap(ydoc).set(node.id, node))
@@ -93,6 +98,10 @@ export const createDiagramStore = (
         setEdges: (payload) => {
           const edges =
             typeof payload === "function" ? payload(get().edges) : payload
+
+          if (deepEqual(get().edges, edges)) {
+            return
+          }
           ydoc.transact(() => {
             getEdgesMap(ydoc).clear()
             edges.forEach((edge) => getEdgesMap(ydoc).set(edge.id, edge))
@@ -111,20 +120,29 @@ export const createDiagramStore = (
         },
 
         onNodesChange: (changes) => {
-          const changesWithoutSelect = changes.filter(
-            (change) => change.type !== "select"
+          // const changesWithoutSelect = changes.filter(
+          //   (change) => change.type !== "select"
+          // )
+          const filteredChanges = changes.filter(
+            (change) =>
+              !(
+                change.type === "select" ||
+                (change.type === "position" && !change.dragging)
+              )
           )
 
-          if (changesWithoutSelect.length === 0) return
+          console.log("onNodesChange changes", changes)
+          console.log("onNodesChange filteredChanges", filteredChanges)
+          if (filteredChanges.length === 0) return
 
           const currentNodes = get().nodes
-          const nextNodes = applyNodeChanges(changesWithoutSelect, currentNodes)
+          const nextNodes = applyNodeChanges(filteredChanges, currentNodes)
           if (deepEqual(currentNodes, nextNodes)) {
             return
           }
 
           ydoc.transact(() => {
-            for (const change of changesWithoutSelect) {
+            for (const change of filteredChanges) {
               if (change.type === "add" || change.type === "replace") {
                 getNodesMap(ydoc).set(change.item.id, change.item)
               } else if (change.type === "remove") {

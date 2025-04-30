@@ -2,6 +2,8 @@ import React, { useState, KeyboardEvent, ChangeEvent } from "react"
 import { Box, TextField, Typography } from "@mui/material"
 import { generateUUID } from "@/utils"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
+import { useDiagramStore } from "@/store"
+import { useShallow } from "zustand/shallow"
 
 interface EditableListProps {
   title: string
@@ -17,6 +19,7 @@ export const EditableList: React.FC<EditableListProps> = ({
   placeholder,
 }) => {
   const [newItem, setNewItem] = useState("")
+  const setNodes = useDiagramStore(useShallow((state) => state.setNodes))
 
   const handleItemChange = (id: string, newName: string) => {
     const updatedItems = items.map((item) =>
@@ -26,8 +29,7 @@ export const EditableList: React.FC<EditableListProps> = ({
   }
 
   const handleItemDelete = (id: string) => {
-    const updatedItems = items.filter((item) => item.id !== id)
-    onItemsChange(updatedItems)
+    setNodes((nodes) => nodes.filter((node) => node.id !== id))
   }
 
   const handleAddItem = () => {
@@ -79,6 +81,13 @@ export const EditableList: React.FC<EditableListProps> = ({
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setNewItem(e.target.value)
         }
+        onBlur={() => {
+          if (newItem.trim() === "") {
+            setNewItem("")
+          } else {
+            handleAddItem()
+          }
+        }}
         onKeyDown={handleKeyDown}
         sx={{
           backgroundColor: "#fff",

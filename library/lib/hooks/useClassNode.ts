@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { useReactFlow } from "@xyflow/react"
+import { useDiagramStore } from "@/store"
+import { useShallow } from "zustand/shallow"
 
 export function useClassNode({
   id,
@@ -8,7 +9,7 @@ export function useClassNode({
   id: string
   selected: boolean
 }) {
-  const reactFlow = useReactFlow()
+  const setNodes = useDiagramStore(useShallow((state) => state.setNodes))
   const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null)
 
   const handlePopoverClose = () => {
@@ -16,12 +17,23 @@ export function useClassNode({
   }
 
   const handleNameChange = (newName: string) => {
-    reactFlow.updateNodeData(id, { name: newName })
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === id) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              name: newName,
+            },
+          }
+        }
+        return node
+      })
+    )
   }
   const handleDelete = () => {
-    reactFlow.deleteElements({
-      nodes: [{ id }],
-    })
+    setNodes((nodes) => nodes.filter((node) => node.id !== id))
   }
 
   useEffect(() => {
@@ -29,12 +41,6 @@ export function useClassNode({
       handlePopoverClose()
     }
   }, [selected])
-
-  useEffect(() => {
-    if (!anchorEl) {
-      reactFlow.updateNode(id, { selected: false })
-    }
-  }, [anchorEl, reactFlow, id])
 
   return {
     anchorEl,

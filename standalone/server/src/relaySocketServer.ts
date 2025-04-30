@@ -44,6 +44,7 @@ export const startSocketServer = (): void => {
 
     ws.on("message", (message: WebSocket.RawData) => {
       const clients = diagrams.get(ws.diagramId!)
+
       if (!clients) return
 
       let count = 0

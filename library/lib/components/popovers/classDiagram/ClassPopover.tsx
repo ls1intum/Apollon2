@@ -1,16 +1,18 @@
-import { ClassNodeProps, ClassType } from "@/types"
-import { useReactFlow } from "@xyflow/react"
+import { ClassNodeProps } from "@/types"
 import { GenericPopover } from "../GenericPopover"
 import { DividerLine } from "../../DividerLine"
-import { EditableList } from "../../EditableList"
 import { StereotypeButtonGroup } from "../../StereotypeButtonGroup"
 import { TextField } from "@mui/material"
 import { useViewportCenter } from "@/hooks"
 import { getPopoverOrigin, getPositionOnCanvas, getQuadrant } from "@/utils"
+import { useDiagramStore } from "@/store"
+import { useShallow } from "zustand/shallow"
+import { EditableAttributeList } from "./EditableAttributesList"
+import { EditableMethodsList } from "./EditableMethodsList"
 
 interface PopoverComponentProps {
   nodeId: string
-  anchorEl: SVGSVGElement | null
+  anchorEl?: HTMLElement | null
   open: boolean
   onClose: () => void
   onNameChange: (newName: string) => void
@@ -23,33 +25,26 @@ export function ClassPopover({
   onClose,
   onNameChange,
 }: PopoverComponentProps) {
-  const { getNode, updateNodeData, getNodes } = useReactFlow()
+  const { nodes } = useDiagramStore(
+    useShallow((state) => ({
+      nodes: state.nodes,
+      setNodes: state.setNodes,
+    }))
+  )
   const viewportCenter = useViewportCenter()
 
   if (!anchorEl || !open) {
     return null
   }
 
-  const node = getNode(nodeId)!
-  const nodePoistionOnCanvas = getPositionOnCanvas(node, getNodes())
+  const node = nodes.find((node) => node.id === nodeId)
+  if (!node) {
+    return null
+  }
+  const nodePoistionOnCanvas = getPositionOnCanvas(node, nodes)
   const nodeData = node.data as ClassNodeProps
   const quadrant = getQuadrant(nodePoistionOnCanvas, viewportCenter)
   const popoverOrigin = getPopoverOrigin(quadrant)
-  const classStereotype = nodeData.stereotype
-
-  const handleStereotypeChange = (stereotype: ClassType | undefined) => {
-    updateNodeData(nodeId, { stereotype })
-  }
-
-  const handleAttributesChange = (
-    newAttributes: { id: string; name: string }[]
-  ) => {
-    updateNodeData(nodeId, { attributes: newAttributes })
-  }
-
-  const handleMethodsChange = (newMethods: { id: string; name: string }[]) => {
-    updateNodeData(nodeId, { methods: newMethods })
-  }
 
   return (
     <>
@@ -71,27 +66,13 @@ export function ClassPopover({
           sx={{ backgroundColor: "#fff" }}
         />
         <DividerLine width="100%" />
-        {/* Stereotype Selection */}
-        <StereotypeButtonGroup
-          selected={classStereotype}
-          onChange={handleStereotypeChange}
-        />
+
+        <StereotypeButtonGroup nodeId={nodeId} />
         <DividerLine width="100%" />
-        {/* Attributes Section */}
-        <EditableList
-          title="Attributes"
-          items={nodeData.attributes}
-          onItemsChange={handleAttributesChange}
-          placeholder="+ Add attribute"
-        />
+
+        <EditableAttributeList nodeId={nodeId} />
         <DividerLine width="100%" />
-        {/* Methods Section */}
-        <EditableList
-          title="Methods"
-          items={nodeData.methods}
-          onItemsChange={handleMethodsChange}
-          placeholder="+ Add method"
-        />
+        <EditableMethodsList nodeId={nodeId} />
       </GenericPopover>
     </>
   )

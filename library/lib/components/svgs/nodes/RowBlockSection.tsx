@@ -1,9 +1,9 @@
-import { ExtraElement } from "@/types"
+import { ClassNodeElement } from "@/types"
 import { CustomText } from "./CustomText"
 import { FC } from "react"
 
 interface Props {
-  items: ExtraElement[]
+  items: ClassNodeElement[]
   padding: number
   itemHeight: number
   width: number
