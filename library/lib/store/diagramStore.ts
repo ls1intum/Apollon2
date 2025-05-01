@@ -120,9 +120,18 @@ export const createDiagramStore = (
         },
 
         onNodesChange: (changes) => {
-          // const changesWithoutSelect = changes.filter(
-          //   (change) => change.type !== "select"
-          // )
+          const selectChanges = changes.filter(
+            (change) => change.type === "select"
+          )
+          const currentNodes = get().nodes
+
+          if (selectChanges.length > 0) {
+            const selectedNodes = applyNodeChanges(selectChanges, currentNodes)
+            if (!deepEqual(get().nodes, selectedNodes)) {
+              set({ nodes: selectedNodes }, undefined, "onNodesChangeSelect")
+            }
+          }
+
           const filteredChanges = changes.filter(
             (change) =>
               !(
@@ -131,11 +140,7 @@ export const createDiagramStore = (
               )
           )
 
-          console.log("onNodesChange changes", changes)
-          console.log("onNodesChange filteredChanges", filteredChanges)
           if (filteredChanges.length === 0) return
-
-          const currentNodes = get().nodes
           const nextNodes = applyNodeChanges(filteredChanges, currentNodes)
           if (deepEqual(currentNodes, nextNodes)) {
             return

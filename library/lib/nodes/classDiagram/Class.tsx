@@ -85,10 +85,16 @@ export function Class({
       ...attributesTextWidths,
       ...methodsTextWidths,
     ]
-    return Math.max(...allTextWidths, 0) // Ensure at least 0
+
+    const result = Math.max(...allTextWidths, 0)
+    return result // Ensure at least 0
   }, [stereotype, name, attributes, methods, font])
 
-  const minWidth = calculateMinWidth(maxTextWidth, padding)
+  const minWidth = useMemo(() => {
+    const result = calculateMinWidth(maxTextWidth, padding)
+    return result
+  }, [maxTextWidth, padding])
+
   // Calculate minimum dimensions
   const minHeight = useMemo(
     () =>
@@ -109,16 +115,15 @@ export function Class({
   )
 
   useEffect(() => {
-    if (minHeight !== height || minWidth !== width) {
+    if (height && height <= minHeight) {
       setNodes((prev) =>
         prev.map((node) => {
           if (node.id === id) {
             return {
               ...node,
-              width: Math.max(width ?? 0, minWidth),
               height: minHeight,
               measured: {
-                width: Math.max(width ?? 0, minWidth),
+                ...node.measured,
                 height: minHeight,
               },
             }
@@ -127,7 +132,26 @@ export function Class({
         })
       )
     }
-  }, [minHeight, height, id, setNodes, minWidth])
+  }, [minHeight, height, id, setNodes])
+
+  useEffect(() => {
+    if (width && width <= minWidth) {
+      setNodes((prev) =>
+        prev.map((node) => {
+          if (node.id === id) {
+            return {
+              ...node,
+              width: Math.max(width ?? 0, minWidth),
+              measured: {
+                width: Math.max(width ?? 0, minWidth),
+              },
+            }
+          }
+          return node
+        })
+      )
+    }
+  }, [id, setNodes, minWidth])
 
   const finalWidth = Math.max(width ?? 0, minWidth)
   return (

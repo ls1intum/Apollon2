@@ -137,7 +137,6 @@ export const EditableAttributeList: React.FC<Props> = ({ nodeId }) => {
             handleAddItem()
           }
         }}
-        onFocus={(event) => console.log("focus", event)}
         onKeyDown={handleKeyDown}
         sx={{
           backgroundColor: "#fff",
