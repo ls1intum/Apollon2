@@ -126,9 +126,40 @@ export const createDiagramStore = (
           const currentNodes = get().nodes
 
           if (selectChanges.length > 0) {
-            const selectedNodes = applyNodeChanges(selectChanges, currentNodes)
-            if (!deepEqual(get().nodes, selectedNodes)) {
-              set({ nodes: selectedNodes }, undefined, "onNodesChangeSelect")
+            const updatedNodesBySelection = applyNodeChanges(
+              selectChanges,
+              currentNodes
+            )
+
+            if (!deepEqual(currentNodes, updatedNodesBySelection)) {
+              set(
+                { nodes: updatedNodesBySelection },
+                undefined,
+                "onNodesChangeSelect"
+              )
+              const selectedNodes = updatedNodesBySelection.filter(
+                (node) => node.selected
+              )
+              if (selectedNodes.length === 1 && selectedNodes[0].selected) {
+                console.log("DEBUG update selected node changes", changes)
+                set(
+                  { interactiveElementId: selectedNodes[0].id },
+                  undefined,
+                  "onNodesChangeSelect"
+                )
+              }
+            }
+            if (
+              updatedNodesBySelection.reduce(
+                (acc, node) => acc + (node.selected ? 1 : 0),
+                0
+              ) > 1
+            ) {
+              set(
+                { interactiveElementId: null },
+                undefined,
+                "onNodesChangeSelect"
+              )
             }
           }
 
@@ -199,11 +230,20 @@ export const createDiagramStore = (
         },
 
         updateNodesFromYjs: () => {
+          const preserveSelectedNodesAfterYdoc = sortNodesTopologically(
+            Array.from(getNodesMap(ydoc).values())
+          ).map((node) => {
+            const currentNode = get().nodes.find((n) => n.id === node.id)
+            if (currentNode) {
+              return { ...node, selected: currentNode.selected }
+            } else {
+              return node
+            }
+          })
+
           set(
             {
-              nodes: sortNodesTopologically(
-                Array.from(getNodesMap(ydoc).values())
-              ),
+              nodes: preserveSelectedNodesAfterYdoc,
             },
             undefined,
             "updateNodesFromYjs"
@@ -211,8 +251,18 @@ export const createDiagramStore = (
         },
 
         updateEdgesFromYjs: () => {
+          const preserveSelectedEdgesAfterYdoc = Array.from(
+            getEdgesMap(ydoc).values()
+          ).map((edge) => {
+            const currentEdge = get().edges.find((e) => e.id === edge.id)
+            if (currentEdge) {
+              return { ...edge, selected: currentEdge.selected }
+            } else {
+              return edge
+            }
+          })
           set(
-            { edges: Array.from(getEdgesMap(ydoc).values()) },
+            { edges: preserveSelectedEdgesAfterYdoc },
             undefined,
             "updateEdgesFromYjs"
           )
