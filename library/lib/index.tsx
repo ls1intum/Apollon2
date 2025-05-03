@@ -28,7 +28,6 @@ import { StoreApi } from "zustand"
 export class Apollon2 {
   private root: ReactDOM.Root
   private reactFlowInstance: ReactFlowInstance | null = null
-  private readonlyDiagram: boolean = false
   private readonly syncManager: YjsSyncClass
   private readonly ydoc: Y.Doc
   private readonly diagramStore: StoreApi<DiagramStore>
@@ -70,7 +69,16 @@ export class Apollon2 {
       const nodes = options.model.nodes || []
       const edges = options.model.edges || []
       this.diagramStore.getState().setNodesAndEdges(nodes, edges)
-      this.readonlyDiagram = options.readonly || false
+    }
+
+    if (options?.mode) {
+      this.metadataStore.getState().setMode(options.mode)
+    }
+    if (options?.enablePopups) {
+      this.metadataStore.getState().setPopupEnabled(options.enablePopups)
+    }
+    if (options?.readonly) {
+      this.metadataStore.getState().setReadonly(options.readonly)
     }
 
     this.renderApp()
@@ -82,7 +90,6 @@ export class Apollon2 {
         <MetadataStoreContext.Provider value={this.metadataStore}>
           <AppWithProvider
             onReactFlowInit={this.setReactFlowInstance.bind(this)}
-            readonlyDiagram={this.readonlyDiagram}
           />
         </MetadataStoreContext.Provider>
       </DiagramStoreContext.Provider>

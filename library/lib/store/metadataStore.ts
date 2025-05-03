@@ -4,10 +4,17 @@ import { parseDiagramType } from "@/utils"
 import * as Y from "yjs"
 import { getDiagramMetadata } from "@/sync/ydoc"
 import { DiagramType } from "@/types"
+import { ApollonMode } from "@/types/EditorOptions"
 
 export type MetadataStore = {
   diagramTitle: string
   diagramType: DiagramType
+  mode: ApollonMode
+  readonly: boolean
+  popupEnabled: boolean
+  setPopupEnabled: (isPopupEnabled: boolean) => void
+  setMode: (mode: ApollonMode) => void
+  setReadonly: (readonly: boolean) => void
   updateDiagramTitle: (diagramTitle: string) => void
   updateDiagramType: (diagramType: DiagramType) => void
   updateMetaData: (diagramTitle: string, diagramType: DiagramType) => void
@@ -18,10 +25,16 @@ export type MetadataStore = {
 type InitialMetadataState = {
   diagramTitle: string
   diagramType: DiagramType
+  mode: ApollonMode
+  readonly: boolean
+  popupEnabled: boolean
 }
 const initialMetadataState: InitialMetadataState = {
   diagramTitle: "Untitled Diagram",
   diagramType: DiagramType.ClassDiagram,
+  mode: ApollonMode.Modelling,
+  readonly: false,
+  popupEnabled: true,
 }
 
 export const createMetadataStore = (
@@ -74,6 +87,18 @@ export const createMetadataStore = (
             undefined,
             "updateMetaDataFromYjs"
           ),
+
+        setMode: (mode) => {
+          set({ mode }, undefined, "setMode")
+        },
+
+        setReadonly: (readonly) => {
+          set({ readonly }, undefined, "setReadonly")
+        },
+
+        setPopupEnabled: (popupEnabled) => {
+          set({ popupEnabled }, undefined, "setPopupEnabled")
+        },
 
         reset: () => {
           set(initialMetadataState, undefined, "reset")

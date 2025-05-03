@@ -1,13 +1,22 @@
 import { Controls, useReactFlow } from "@xyflow/react"
-import CenterFocusWeakIcon from "@mui/icons-material/CenterFocusWeak"
 
 export const CustomControls = () => {
   const { zoomTo } = useReactFlow()
 
   return (
-    <Controls orientation="horizontal">
-      <div style={{ backgroundColor: "white" }} onClick={() => zoomTo(1)}>
-        <CenterFocusWeakIcon />
+    <Controls orientation="horizontal" showInteractive={false}>
+      <div
+        style={{
+          backgroundColor: "white",
+          border: "1px solid black",
+          borderRadius: 8,
+          paddingLeft: 1.5,
+          paddingRight: 1.5,
+          cursor: "pointer",
+        }}
+        onClick={() => zoomTo(1)}
+      >
+        100%
       </div>
     </Controls>
   )

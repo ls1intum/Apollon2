@@ -35,13 +35,13 @@ export type ApollonDiagram = {
   edges: ApollonEdge[]
 }
 
-export const enum ApollonView {
+export enum ApollonView {
   Modelling = "Modelling",
   Exporting = "Exporting",
   Highlight = "Highlight",
 }
 
-export const enum ApollonMode {
+export enum ApollonMode {
   Modelling = "Modelling",
   Exporting = "Exporting",
   Assessment = "Assessment",

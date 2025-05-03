@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react"
 import { useApollon2Context } from "@/contexts"
-import { Apollon2 } from "@apollon2/library"
+import {
+  Apollon2,
+  ApollonDiagram,
+  ApollonMode,
+  ApollonOptions,
+} from "@apollon2/library"
 import { useNavigate, useParams, useSearchParams } from "react-router"
 import { toast } from "react-toastify"
 import { backendURL, backendWSSUrl } from "@/constants"
 import { DiagramView } from "@/types"
-import { ApollonDiagram } from "@apollon2/library/dist/types/EditorOptions"
 
 const fetchDiagramData = (diagramId: string): Promise<any> => {
   return fetch(`${backendURL}/api/${diagramId}`, {
@@ -58,16 +62,6 @@ export const ApollonWithConnection: React.FC = () => {
     if (containerRef.current && diagramId) {
       const initializeApollon = async () => {
         try {
-          const diagram = await fetchDiagramData(diagramId)
-
-          console.log("Fetched diagram data:", diagram)
-          diagram.id = diagramId
-
-          instance = new Apollon2(containerRef.current!, {
-            model: diagram,
-          })
-          setApollon2(instance)
-          setIsLoading(false)
           const viewType = searchParams.get("view")
           const validViewTypes: string[] = [
             DiagramView.COLLABORATE,
@@ -81,6 +75,38 @@ export const ApollonWithConnection: React.FC = () => {
               viewType === DiagramView.GIVE_FEEDBACK ||
               viewType === DiagramView.SEE_FEEDBACK
             : false
+
+          if (!isValidView) {
+            toast.error("Invalid view type")
+            navigate("/")
+            return
+          }
+
+          const diagram = await fetchDiagramData(diagramId)
+
+          console.log("Fetched diagram data:", diagram)
+          diagram.id = diagramId
+          const editorOptions: ApollonOptions = {
+            model: diagram,
+          }
+
+          if (viewType === DiagramView.GIVE_FEEDBACK) {
+            editorOptions.mode = ApollonMode.Assessment
+            editorOptions.readonly = false
+          } else if (viewType === DiagramView.SEE_FEEDBACK) {
+            editorOptions.mode = ApollonMode.Assessment
+            editorOptions.readonly = true
+          } else if (viewType === DiagramView.EDIT) {
+            editorOptions.mode = ApollonMode.Modelling
+            editorOptions.readonly = false
+          } else {
+            editorOptions.mode = ApollonMode.Modelling
+            editorOptions.readonly = false
+          }
+
+          instance = new Apollon2(containerRef.current!, editorOptions)
+          setApollon2(instance)
+          setIsLoading(false)
 
           if (makeConnection) {
             // Set up the WebSocket connection

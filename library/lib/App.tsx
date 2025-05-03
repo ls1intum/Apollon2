@@ -13,9 +13,9 @@ import {
   SvgMarkers,
 } from "@/components"
 import "@/styles/app.css"
-import { useDiagramStore } from "./store/context"
+import { useDiagramStore, useMetadataStore } from "./store/context"
 import { useShallow } from "zustand/shallow"
-import { DiagramType } from "./types"
+import { ApollonMode, DiagramType } from "./types"
 import {
   MIN_SCALE_TO_ZOOM_OUT,
   MAX_SCALE_TO_ZOOM_IN,
@@ -33,20 +33,26 @@ import { diagramNodeTypes } from "./nodes"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
-  readonlyDiagram: boolean
 }
 const proOptions = { hideAttribution: true }
 
-function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
-  const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore(
+function App({ onReactFlowInit }: AppProps) {
+  const { nodes, onNodesChange, edges, onEdgesChange, diagramId } =
+    useDiagramStore(
+      useShallow((state) => ({
+        nodes: state.nodes,
+        onNodesChange: state.onNodesChange,
+        edges: state.edges,
+        onEdgesChange: state.onEdgesChange,
+        diagramId: state.diagramId,
+      }))
+    )
+  const { readonlyDiagram, diagramMode } = useMetadataStore(
     useShallow((state) => ({
-      nodes: state.nodes,
-      onNodesChange: state.onNodesChange,
-      edges: state.edges,
-      onEdgesChange: state.onEdgesChange,
+      readonlyDiagram: state.readonly,
+      diagramMode: state.mode,
     }))
   )
-  const diagramId = useDiagramStore(useShallow((state) => state.diagramId))
 
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
@@ -62,7 +68,9 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         flexGrow: 1,
       }}
     >
-      <Sidebar selectedDiagramType={DiagramType.ClassDiagram} />
+      {diagramMode === ApollonMode.Modelling && (
+        <Sidebar selectedDiagramType={DiagramType.ClassDiagram} />
+      )}
       <SvgMarkers />
       <ReactFlow
         id={`react-flow-library-${diagramId}`}
