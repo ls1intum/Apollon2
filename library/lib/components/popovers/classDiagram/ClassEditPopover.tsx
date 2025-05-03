@@ -15,17 +15,15 @@ interface PopoverComponentProps {
   anchorEl?: HTMLElement | null
   open: boolean
   onClose: () => void
-  onNameChange: (newName: string) => void
 }
 
-export function ClassPopover({
+export function ClassEditPopover({
   nodeId,
   anchorEl,
   open,
   onClose,
-  onNameChange,
 }: PopoverComponentProps) {
-  const { nodes } = useDiagramStore(
+  const { nodes, setNodes } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
       setNodes: state.setNodes,
@@ -46,6 +44,23 @@ export function ClassPopover({
   const quadrant = getQuadrant(nodePoistionOnCanvas, viewportCenter)
   const popoverOrigin = getPopoverOrigin(quadrant)
 
+  const handleNameChange = (newName: string) => {
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === nodeId) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              name: newName,
+            },
+          }
+        }
+        return node
+      })
+    )
+  }
+
   return (
     <>
       <GenericPopover
@@ -60,7 +75,7 @@ export function ClassPopover({
         <TextField
           id="outlined-basic"
           variant="outlined"
-          onChange={(event) => onNameChange(event.target.value)}
+          onChange={(event) => handleNameChange(event.target.value)}
           size="small"
           value={nodeData.name}
           sx={{ backgroundColor: "#fff" }}

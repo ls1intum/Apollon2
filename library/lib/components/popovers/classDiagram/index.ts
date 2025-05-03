@@ -1,2 +1,2 @@
-export * from "./ClassPopover"
+export * from "./ClassEditPopover"
 export * from "./PackagePopover"

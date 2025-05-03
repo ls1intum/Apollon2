@@ -6,10 +6,9 @@ import {
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
-import { ClassPopover, ClassSVG } from "@/components"
+import { ClassEditPopover, ClassSVG } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import { useClassNode } from "@/hooks"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { ClassNodeProps, ClassType } from "@/types"
@@ -33,7 +32,6 @@ export function Class({
   id,
   width,
   height,
-
   data: { methods, attributes, stereotype, name },
 }: NodeProps<Node<ClassNodeProps>>) {
   const { interactiveElementId, setNodes } = useDiagramStore(
@@ -47,10 +45,9 @@ export function Class({
 
   const selected = id === interactiveElementId
 
-  const { handleNameChange, handleDelete } = useClassNode({
-    id,
-    selected: Boolean(selected),
-  })
+  const handleDelete = () => {
+    setNodes((nodes) => nodes.filter((node) => node.id !== id))
+  }
 
   const handlePopoverClose = () => {
     setShowEditPopover(false)
@@ -200,12 +197,11 @@ export function Class({
           id={id}
         />
       </div>
-      <ClassPopover
+      <ClassEditPopover
         nodeId={id}
         anchorEl={classSvgWrapperRef.current}
         open={Boolean(showEditPopover)}
         onClose={handlePopoverClose}
-        onNameChange={handleNameChange}
       />
     </DefaultNodeWrapper>
   )
