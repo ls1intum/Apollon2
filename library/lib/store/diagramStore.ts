@@ -11,8 +11,9 @@ import {
 } from "@xyflow/react"
 import * as Y from "yjs"
 import { sortNodesTopologically } from "@/utils"
-import { getNodesMap, getEdgesMap } from "@/sync/ydoc"
+import { getNodesMap, getEdgesMap, getAssessments } from "@/sync/ydoc"
 import { deepEqual } from "@/utils/storeUtils"
+import { Assessment } from "@/types"
 
 export type DiagramStoreData = {
   nodes: Node[]
@@ -24,6 +25,7 @@ type InitialDiagramState = {
   edges: Edge[]
   interactiveElementId: string | null
   diagramId: string
+  assessments: Assessment[]
 }
 
 const initialDiagramState: InitialDiagramState = {
@@ -31,6 +33,7 @@ const initialDiagramState: InitialDiagramState = {
   edges: [],
   interactiveElementId: null,
   diagramId: Math.random().toString(36).substring(2, 15),
+  assessments: [],
 }
 
 export type DiagramStore = {
@@ -39,6 +42,7 @@ export type DiagramStore = {
   interactiveElementId: string | null
   diagramId: string
   setDiagramId: (diagramId: string) => void
+  assessments: Assessment[]
   setNodes: (payload: Node[] | ((nodes: Node[]) => Node[])) => void
   setEdges: (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void
   setNodesAndEdges: (nodes: Node[], edges: Edge[]) => void
@@ -48,8 +52,12 @@ export type DiagramStore = {
   onEdgesChange: OnEdgesChange
   reset: () => void
   setInteractiveElementId: (elementId: string | null) => void
+  setAssessments: (
+    assessment: Assessment[] | ((assessment: Assessment[]) => Assessment[])
+  ) => void
   updateNodesFromYjs: () => void
   updateEdgesFromYjs: () => void
+  updateAssessmentFromYjs: () => void
 }
 
 export const createDiagramStore = (
@@ -267,6 +275,27 @@ export const createDiagramStore = (
             "updateEdgesFromYjs"
           )
         },
+        setAssessments: (payload) => {
+          const assessments =
+            typeof payload === "function" ? payload(get().assessments) : payload
+
+          ydoc.transact(() => {
+            getAssessments(ydoc).clear()
+            assessments.forEach((assessment) =>
+              getAssessments(ydoc).set(assessment.modelElementId, assessment)
+            )
+          }, "store")
+          set({ assessments }, undefined, "setAssesstments")
+        },
+
+        updateAssessmentFromYjs: () =>
+          set(
+            {
+              assessments: Array.from(getAssessments(ydoc).values()),
+            },
+            undefined,
+            "updateAssessmentFromYjs"
+          ),
       })),
       { name: "DiagramStore", enabled: true }
     )

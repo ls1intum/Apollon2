@@ -1,3 +1,4 @@
+import { Assessment } from "./Assessments"
 import { DiagramType } from "./DiagramType"
 
 export type ApollonNode = {
@@ -33,6 +34,7 @@ export type ApollonDiagram = {
   type: DiagramType
   nodes: ApollonNode[]
   edges: ApollonEdge[]
+  assessments: Assessment[]
 }
 
 export enum ApollonView {

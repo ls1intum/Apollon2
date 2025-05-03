@@ -257,6 +257,7 @@ export class Apollon2 {
       type: diagramType,
       nodes: nodes.map((node) => mapFromReactFlowNodeToApollonNode(node)),
       edges: edges.map((edge) => mapFromReactFlowEdgeToApollonEdge(edge)),
+      assessments: this.diagramStore.getState().assessments,
     }
   }
 }

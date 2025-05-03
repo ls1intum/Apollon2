@@ -2,8 +2,14 @@ import * as Y from "yjs"
 import { StoreApi } from "zustand"
 import { DiagramStore } from "./diagramStore"
 import { MetadataStore } from "./metadataStore"
-import { getDiagramMetadata, getEdgesMap, getNodesMap } from "@/sync/ydoc"
+import {
+  getAssessments,
+  getDiagramMetadata,
+  getEdgesMap,
+  getNodesMap,
+} from "@/sync/ydoc"
 import { Edge, Node } from "@xyflow/react"
+import { Assessment } from "@/types"
 
 enum MessageType {
   YjsSYNC = 0,
@@ -87,6 +93,15 @@ export class YjsSyncClass {
       }
     }
 
+    const assessmentObserver = (
+      _event: Y.YMapEvent<Assessment>,
+      transaction: Y.Transaction
+    ) => {
+      if (transaction.origin !== "store") {
+        this.diagramStore.getState().updateAssessmentFromYjs()
+      }
+    }
+
     const handleYjsUpdate = (
       _arg0: unknown,
       _arg1: unknown,
@@ -104,11 +119,13 @@ export class YjsSyncClass {
 
     getNodesMap(this.ydoc).observe(nodesChangeObserver)
     getEdgesMap(this.ydoc).observe(edgesObserver)
+    getAssessments(this.ydoc).observe(assessmentObserver)
     getDiagramMetadata(this.ydoc).observe(metadataObserver)
     this.ydoc.on("update", handleYjsUpdate)
     return () => {
       getNodesMap(this.ydoc).unobserve(nodesChangeObserver)
       getEdgesMap(this.ydoc).unobserve(edgesObserver)
+      getAssessments(this.ydoc).unobserve(assessmentObserver)
       getDiagramMetadata(this.ydoc).unobserve(metadataObserver)
       this.ydoc.off("update", handleYjsUpdate)
     }
