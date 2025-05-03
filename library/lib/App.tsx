@@ -27,6 +27,7 @@ import {
   useConnect,
   useReconnect,
   useCanvasClickEvents,
+  useElementInteractions,
 } from "./hooks"
 import { useDragOver } from "./hooks/useDragOver"
 import { diagramNodeTypes } from "./nodes"
@@ -60,6 +61,7 @@ function App({ onReactFlowInit }: AppProps) {
     useConnect()
   const { onReconnect } = useReconnect()
   const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
+  const { onBeforeDelete } = useElementInteractions()
 
   return (
     <div
@@ -105,6 +107,7 @@ function App({ onReactFlowInit }: AppProps) {
         onEdgeClick={onEdgeClick}
         onPaneClick={onPaneClick}
         proOptions={proOptions}
+        onBeforeDelete={onBeforeDelete}
       >
         <CustomBackground />
         <CustomMiniMap />

@@ -109,7 +109,10 @@ export class Apollon2 {
   }
 
   public getNodes(): Node[] {
-    return this.reactFlowInstance ? this.reactFlowInstance.getNodes() : []
+    if (this.reactFlowInstance) {
+      return this.reactFlowInstance.getNodes()
+    }
+    return []
   }
 
   public getEdges(): Edge[] {

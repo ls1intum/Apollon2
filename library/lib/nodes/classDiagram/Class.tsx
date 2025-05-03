@@ -27,6 +27,7 @@ import {
   DEFAULT_HEADER_HEIGHT,
   DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE,
 } from "@/constants"
+import { useHandleDelete } from "@/hooks/useHandleDelete"
 
 export function Class({
   id,
@@ -42,12 +43,9 @@ export function Class({
   )
   const classSvgWrapperRef = useRef<HTMLDivElement | null>(null)
   const [showEditPopover, setShowEditPopover] = useState(false)
+  const handleDelete = useHandleDelete(id)
 
   const selected = id === interactiveElementId
-
-  const handleDelete = () => {
-    setNodes((nodes) => nodes.filter((node) => node.id !== id))
-  }
 
   const handlePopoverClose = () => {
     setShowEditPopover(false)

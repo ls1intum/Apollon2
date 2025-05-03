@@ -15,6 +15,7 @@ import EditIcon from "@mui/icons-material/Edit"
 import { useEffect, useRef, useState } from "react"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
+import { useHandleDelete } from "@/hooks/useHandleDelete"
 
 export default function Package({
   id,
@@ -26,6 +27,8 @@ export default function Package({
   const { onResize } = useHandleOnResize(parentId)
   const [showEditPopover, setShowEditPopover] = useState(false)
   const svgRef = useRef<SVGSVGElement | null>(null)
+  const handleDelete = useHandleDelete(id)
+
   const { interactiveElementId, setNodes } = useDiagramStore(
     useShallow((state) => ({
       setNodes: state.setNodes,
@@ -44,9 +47,6 @@ export default function Package({
     setShowEditPopover(false)
   }
 
-  const handleDelete = () => {
-    setNodes((nodes) => nodes.filter((node) => node.id !== id))
-  }
   const handleNameChange = (newName: string) => {
     setNodes((nodes) =>
       nodes.map((node) => {
