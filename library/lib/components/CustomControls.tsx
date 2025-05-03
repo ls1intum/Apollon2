@@ -1,7 +1,9 @@
-import { Controls, useReactFlow } from "@xyflow/react"
+import { Controls, useReactFlow, useStore } from "@xyflow/react"
 
 export const CustomControls = () => {
   const { zoomTo } = useReactFlow()
+  const zoomLevel = useStore((state) => state.transform[2])
+  const zoomLevelPercent = Math.round(zoomLevel * 100)
 
   return (
     <Controls orientation="horizontal" showInteractive={false}>
@@ -16,7 +18,7 @@ export const CustomControls = () => {
         }}
         onClick={() => zoomTo(1)}
       >
-        100%
+        {zoomLevelPercent}%
       </div>
     </Controls>
   )
