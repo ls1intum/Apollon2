@@ -7,7 +7,7 @@ import {
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
 import { PackagePopover, PackageSVG } from "@/components"
-import { useClassNode, useHandleOnResize } from "@/hooks"
+import { useHandleOnResize } from "@/hooks"
 import { PackageNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
@@ -26,9 +26,13 @@ export default function Package({
   const { onResize } = useHandleOnResize(parentId)
   const [showEditPopover, setShowEditPopover] = useState(false)
   const svgRef = useRef<SVGSVGElement | null>(null)
-  const selected = useDiagramStore(
-    useShallow((state) => state.interactiveElementId === id)
+  const { interactiveElementId, setNodes } = useDiagramStore(
+    useShallow((state) => ({
+      setNodes: state.setNodes,
+      interactiveElementId: state.interactiveElementId,
+    }))
   )
+  const selected = id === interactiveElementId
 
   useEffect(() => {
     if (!selected) {
@@ -40,10 +44,25 @@ export default function Package({
     setShowEditPopover(false)
   }
 
-  const { handleNameChange, handleDelete } = useClassNode({
-    id,
-    selected: Boolean(selected),
-  })
+  const handleDelete = () => {
+    setNodes((nodes) => nodes.filter((node) => node.id !== id))
+  }
+  const handleNameChange = (newName: string) => {
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === id) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              name: newName,
+            },
+          }
+        }
+        return node
+      })
+    )
+  }
 
   if (!width || !height) {
     return null

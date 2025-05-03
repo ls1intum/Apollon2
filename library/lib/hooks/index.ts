@@ -1,4 +1,3 @@
-export * from "./useClassNode"
 export * from "./useViewPointCenter"
 export * from "./useReconnect"
 export * from "./useConnect"
