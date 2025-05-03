@@ -24,6 +24,14 @@ export const StereotypeButtonGroup: React.FC<StereotypeButtonGroupProps> = ({
     ?.stereotype
 
   const handleStereotypeChange = (stereotype: ClassType | undefined) => {
+    const needExpand =
+      selectedStereotype !== stereotype &&
+      selectedStereotype === undefined &&
+      stereotype !== undefined
+    const needShrink =
+      selectedStereotype !== undefined && stereotype === undefined
+    const nodeHeightDifference = needExpand ? 10 : needShrink ? -10 : 0
+
     setNodes((nodes) =>
       nodes.map((node) => {
         if (node.id === nodeId) {
@@ -33,10 +41,10 @@ export const StereotypeButtonGroup: React.FC<StereotypeButtonGroupProps> = ({
               ...node.data,
               stereotype,
             },
-            height: node.height! + (stereotype ? 10 : -10),
+            height: node.height! + nodeHeightDifference,
             measured: {
               ...node.measured,
-              height: node.height! + (stereotype ? 10 : -10),
+              height: node.height! + nodeHeightDifference,
             },
           }
         }
