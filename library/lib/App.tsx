@@ -48,7 +48,7 @@ function App({ onReactFlowInit }: AppProps) {
         diagramId: state.diagramId,
       }))
     )
-  const { readonlyDiagram, diagramMode } = useMetadataStore(
+  const { diagramMode } = useMetadataStore(
     useShallow((state) => ({
       readonlyDiagram: state.readonly,
       diagramMode: state.mode,
@@ -61,7 +61,8 @@ function App({ onReactFlowInit }: AppProps) {
     useConnect()
   const { onReconnect } = useReconnect()
   const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
-  const { onBeforeDelete } = useElementInteractions()
+  const { onBeforeDelete, isDiagramUpdatable, onNodeDoubleClick } =
+    useElementInteractions()
 
   return (
     <div
@@ -98,12 +99,11 @@ function App({ onReactFlowInit }: AppProps) {
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
         snapGrid={[SNAP_TO_GRID_PX, SNAP_TO_GRID_PX]}
-        nodesDraggable={!readonlyDiagram}
-        nodesConnectable={!readonlyDiagram}
-        elementsSelectable={!readonlyDiagram}
-        edgesFocusable={!readonlyDiagram}
-        nodesFocusable={!readonlyDiagram}
+        nodesConnectable={isDiagramUpdatable}
+        draggable={isDiagramUpdatable}
+        nodesDraggable={isDiagramUpdatable}
         onNodeClick={onNodeClick}
+        onNodeDoubleClick={onNodeDoubleClick}
         onEdgeClick={onEdgeClick}
         onPaneClick={onPaneClick}
         proOptions={proOptions}

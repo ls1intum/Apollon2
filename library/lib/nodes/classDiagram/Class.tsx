@@ -6,13 +6,17 @@ import {
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
-import { ClassEditPopover, ClassSVG } from "@/components"
+import { ClassSVG } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { Box } from "@mui/material"
-import { ClassNodeProps, ClassType } from "@/types"
-import { useDiagramStore } from "@/store/context"
+import { ApollonMode, ClassNodeProps, ClassType } from "@/types"
+import {
+  useDiagramStore,
+  useMetadataStore,
+  usePopoverStore,
+} from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import {
   measureTextWidth,
@@ -28,6 +32,7 @@ import {
   DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE,
 } from "@/constants"
 import { useHandleDelete } from "@/hooks/useHandleDelete"
+import { ClassPopoverManager } from "@/components/popovers/classDiagram/ClassPopoverManager"
 
 export function Class({
   id,
@@ -41,16 +46,19 @@ export function Class({
       setNodes: state.setNodes,
     }))
   )
+  const setPopOverElementId = usePopoverStore(
+    useShallow((state) => state.setPopOverElementId)
+  )
+  const { mode } = useMetadataStore(
+    useShallow((state) => ({
+      mode: state.mode,
+    }))
+  )
+
   const classSvgWrapperRef = useRef<HTMLDivElement | null>(null)
-  const [showEditPopover, setShowEditPopover] = useState(false)
   const handleDelete = useHandleDelete(id)
 
   const selected = id === interactiveElementId
-
-  const handlePopoverClose = () => {
-    setShowEditPopover(false)
-  }
-
   const showStereotype = stereotype
     ? stereotype !== ClassType.ObjectClass
     : false
@@ -82,7 +90,7 @@ export function Class({
     ]
 
     const result = Math.max(...allTextWidths, 0)
-    return result // Ensure at least 0
+    return result
   }, [stereotype, name, attributes, methods, font])
 
   const minWidth = useMemo(() => {
@@ -149,11 +157,12 @@ export function Class({
   }, [id, setNodes, minWidth])
 
   const finalWidth = Math.max(width ?? 0, minWidth)
+
   return (
     <DefaultNodeWrapper width={finalWidth} height={minHeight} elementId={id}>
       <NodeResizer
         nodeId={id}
-        isVisible={selected}
+        isVisible={selected && mode === ApollonMode.Modelling}
         minWidth={minWidth}
         minHeight={minHeight}
         maxHeight={minHeight}
@@ -170,21 +179,17 @@ export function Class({
             onClick={handleDelete}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />
-
           <EditIcon
             onClick={(e) => {
               e.stopPropagation()
-              setShowEditPopover(true)
+              setPopOverElementId(id)
             }}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />
         </Box>
       </NodeToolbar>
 
-      <div
-        ref={classSvgWrapperRef}
-        onDoubleClick={() => setShowEditPopover(true)}
-      >
+      <div ref={classSvgWrapperRef}>
         <ClassSVG
           width={finalWidth}
           height={minHeight}
@@ -195,12 +200,7 @@ export function Class({
           id={id}
         />
       </div>
-      <ClassEditPopover
-        nodeId={id}
-        anchorEl={classSvgWrapperRef.current}
-        open={Boolean(showEditPopover)}
-        onClose={handlePopoverClose}
-      />
+      <ClassPopoverManager nodeId={id} anchorEl={classSvgWrapperRef.current} />
     </DefaultNodeWrapper>
   )
 }

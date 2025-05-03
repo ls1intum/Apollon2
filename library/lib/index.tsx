@@ -20,10 +20,16 @@ import {
   DiagramStoreData,
 } from "./store/diagramStore"
 import { createMetadataStore, MetadataStore } from "./store/metadataStore"
-import { DiagramStoreContext, MetadataStoreContext } from "./store/context"
+import {
+  DiagramStoreContext,
+  MetadataStoreContext,
+  PopoverStoreContext,
+} from "./store/context"
 import { YjsSyncClass } from "./store/yjsSync"
 import * as Y from "yjs"
 import { StoreApi } from "zustand"
+import { createPopoverStore } from "./store"
+import { PopoverStore } from "./store/popoverStore"
 
 export class Apollon2 {
   private root: ReactDOM.Root
@@ -32,6 +38,7 @@ export class Apollon2 {
   private readonly ydoc: Y.Doc
   private readonly diagramStore: StoreApi<DiagramStore>
   private readonly metadataStore: StoreApi<MetadataStore>
+  private readonly popoverStore: StoreApi<PopoverStore>
 
   constructor(element: HTMLElement, options?: ApollonOptions) {
     if (!(element instanceof HTMLElement)) {
@@ -41,6 +48,7 @@ export class Apollon2 {
     this.ydoc = new Y.Doc()
     this.diagramStore = createDiagramStore(this.ydoc)
     this.metadataStore = createMetadataStore(this.ydoc)
+    this.popoverStore = createPopoverStore()
     this.syncManager = new YjsSyncClass(
       this.ydoc,
       this.diagramStore,
@@ -88,9 +96,11 @@ export class Apollon2 {
     this.root.render(
       <DiagramStoreContext.Provider value={this.diagramStore}>
         <MetadataStoreContext.Provider value={this.metadataStore}>
-          <AppWithProvider
-            onReactFlowInit={this.setReactFlowInstance.bind(this)}
-          />
+          <PopoverStoreContext.Provider value={this.popoverStore}>
+            <AppWithProvider
+              onReactFlowInit={this.setReactFlowInstance.bind(this)}
+            />
+          </PopoverStoreContext.Provider>
         </MetadataStoreContext.Provider>
       </DiagramStoreContext.Provider>
     )

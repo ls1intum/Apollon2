@@ -1,6 +1,7 @@
 import { useMetadataStore } from "@/store"
+import { usePopoverStore } from "@/store/context"
 import { ApollonMode } from "@/types"
-import { OnBeforeDelete } from "@xyflow/react"
+import { NodeMouseHandler, OnBeforeDelete, type Node } from "@xyflow/react"
 import { useShallow } from "zustand/shallow"
 
 export const useElementInteractions = () => {
@@ -10,18 +11,28 @@ export const useElementInteractions = () => {
       diagramMode: state.mode,
     }))
   )
+  const { setPopOverElementId } = usePopoverStore(
+    useShallow((state) => ({
+      setPopOverElementId: state.setPopOverElementId,
+    }))
+  )
+
+  const isDiagramUpdatable =
+    diagramMode === ApollonMode.Modelling && !readonlyDiagram
 
   const onBeforeDelete: OnBeforeDelete = () => {
-    if (readonlyDiagram) {
-      return new Promise((resolve) => resolve(false))
+    if (isDiagramUpdatable) {
+      return new Promise((resolve) => resolve(true))
     }
-    if (diagramMode === ApollonMode.Assessment) {
-      return new Promise((resolve) => resolve(false))
-    }
-    return new Promise((resolve) => resolve(true))
+    return new Promise((resolve) => resolve(false))
   }
 
+  const onNodeDoubleClick: NodeMouseHandler<Node> = (_event, node) => {
+    setPopOverElementId(node.id)
+  }
   return {
+    isDiagramUpdatable,
     onBeforeDelete,
+    onNodeDoubleClick,
   }
 }

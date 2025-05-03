@@ -1,4 +1,5 @@
 import { useDiagramStore, useMetadataStore } from "@/store"
+import { ApollonMode } from "@/types"
 import { useShallow } from "zustand/shallow"
 
 export const useHandleDelete = (elementId: string) => {
@@ -9,14 +10,21 @@ export const useHandleDelete = (elementId: string) => {
       setNodesAndEdges: state.setNodesAndEdges,
     }))
   )
-  const { readonlyDiagram } = useMetadataStore(
+
+  const { readonlyDiagram, diagramMode } = useMetadataStore(
     useShallow((state) => ({
       readonlyDiagram: state.readonly,
+      diagramMode: state.mode,
     }))
   )
 
   const handleDelete = () => {
-    if (readonlyDiagram) return
+    if (
+      readonlyDiagram ||
+      diagramMode === ApollonMode.Assessment ||
+      diagramMode === ApollonMode.Exporting
+    )
+      return
     const newNodes = nodes.filter((node) => node.id !== elementId)
     const newEdges = edges.filter((edge) => edge.id !== elementId)
     setNodesAndEdges(newNodes, newEdges)
