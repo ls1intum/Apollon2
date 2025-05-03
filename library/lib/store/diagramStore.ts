@@ -285,7 +285,7 @@ export const createDiagramStore = (
               getAssessments(ydoc).set(assessment.modelElementId, assessment)
             )
           }, "store")
-          set({ assessments }, undefined, "setAssesstments")
+          set({ assessments }, undefined, "setAssessments")
         },
 
         updateAssessmentFromYjs: () =>

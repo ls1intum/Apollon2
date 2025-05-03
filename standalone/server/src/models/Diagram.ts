@@ -7,6 +7,7 @@ export interface IDiagram extends Document {
   type: string
   nodes: any[] // JSON array for nodes
   edges: any[] // JSON array for edges
+  assessments?: any[] // Optional JSON array for assessments
 }
 
 const diagramSchema: Schema = new Schema({
@@ -16,6 +17,7 @@ const diagramSchema: Schema = new Schema({
   type: { type: String, required: true },
   nodes: { type: [Schema.Types.Mixed], default: [] }, // Flexible JSON array
   edges: { type: [Schema.Types.Mixed], default: [] }, // Flexible JSON array
+  assessments: { type: [Schema.Types.Mixed], default: [] }, // Flexible JSON array
 })
 
 // Disable auto-generated _id

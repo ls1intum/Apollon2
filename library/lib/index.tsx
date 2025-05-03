@@ -77,6 +77,7 @@ export class Apollon2 {
       const nodes = options.model.nodes || []
       const edges = options.model.edges || []
       this.diagramStore.getState().setNodesAndEdges(nodes, edges)
+      this.diagramStore.getState().setAssessments(options.model.assessments)
     }
 
     if (options?.mode) {

@@ -113,6 +113,7 @@ export const exportAsJSON = (
     edges: reactFlowInstance
       .getEdges()
       .map((edge) => mapFromReactFlowEdgeToApollonEdge(edge)),
+    assessments: [],
   }
   const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
     JSON.stringify(data)
