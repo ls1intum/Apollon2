@@ -13,6 +13,7 @@ export type ApollonNode = {
   data: {
     [key: string]: unknown
   }
+  parentId?: string
   measured: { width: number; height: number }
 }
 
