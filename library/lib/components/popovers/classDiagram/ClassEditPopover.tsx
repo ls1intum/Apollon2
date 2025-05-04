@@ -83,7 +83,10 @@ export const ClassEditPopover = ({
         sx={{ backgroundColor: "#fff" }}
       />
       <DividerLine width="100%" />
-      <StereotypeButtonGroup nodeId={nodeId} />
+      <StereotypeButtonGroup
+        nodeId={nodeId}
+        selectedStereotype={nodeData.stereotype}
+      />
       <DividerLine width="100%" />
       <EditableAttributeList nodeId={nodeId} />
       <DividerLine width="100%" />
