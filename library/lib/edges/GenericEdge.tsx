@@ -30,6 +30,7 @@ import {
   getMarkerSegmentPath,
   findClosestHandle,
 } from "@/utils/edgeUtils"
+import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 
 export const GenericEdge = ({
   id,
@@ -53,6 +54,7 @@ export const GenericEdge = ({
   const reconnectOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
   const reconnectingEndRef = useRef<"source" | "target" | null>(null)
   const pathRef = useRef<SVGPathElement | null>(null)
+  const isDiagramModifiable = useDiagramModifiable()
 
   const [toolbarPosition, setToolbarPosition] = useState<IPoint>({ x: 0, y: 0 })
 
@@ -441,20 +443,21 @@ export const GenericEdge = ({
           style={{ cursor: "all-scroll" }}
         />
 
-        {midpoints.map((point, midPointIndex) => (
-          <circle
-            className="edge-circle"
-            pointerEvents="all"
-            key={`${id}-midpoint-${midPointIndex}`}
-            cx={point.x}
-            cy={point.y}
-            r={10}
-            fill="lightgray"
-            stroke="none"
-            style={{ cursor: "grab" }}
-            onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
-          />
-        ))}
+        {isDiagramModifiable &&
+          midpoints.map((point, midPointIndex) => (
+            <circle
+              className="edge-circle"
+              pointerEvents="all"
+              key={`${id}-midpoint-${midPointIndex}`}
+              cx={point.x}
+              cy={point.y}
+              r={10}
+              fill="lightgray"
+              stroke="none"
+              style={{ cursor: "grab" }}
+              onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
+            />
+          ))}
       </g>
 
       {selected && (
