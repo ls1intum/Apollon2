@@ -11,12 +11,8 @@ import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import { useEffect, useMemo, useRef } from "react"
 import { Box } from "@mui/material"
-import { ApollonMode, ClassNodeProps, ClassType } from "@/types"
-import {
-  useDiagramStore,
-  useMetadataStore,
-  usePopoverStore,
-} from "@/store/context"
+import { ClassNodeProps, ClassType } from "@/types"
+import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import {
   measureTextWidth,
@@ -33,6 +29,7 @@ import {
 } from "@/constants"
 import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
+import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 
 export function Class({
   id,
@@ -50,11 +47,7 @@ export function Class({
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
-  const { mode } = useMetadataStore(
-    useShallow((state) => ({
-      mode: state.mode,
-    }))
-  )
+  const isDiagramModifiable = useDiagramModifiable()
 
   const classSvgWrapperRef = useRef<HTMLDivElement | null>(null)
   const handleDelete = useHandleDelete(id)
@@ -163,14 +156,14 @@ export function Class({
     <DefaultNodeWrapper width={finalWidth} height={minHeight} elementId={id}>
       <NodeResizer
         nodeId={id}
-        isVisible={selected && mode === ApollonMode.Modelling}
+        isVisible={isDiagramModifiable && selected}
         minWidth={minWidth}
         minHeight={minHeight}
         maxHeight={minHeight}
         handleStyle={{ width: 8, height: 8 }}
       />
       <NodeToolbar
-        isVisible={selected}
+        isVisible={isDiagramModifiable && selected}
         position={Position.Top}
         align="end"
         offset={10}

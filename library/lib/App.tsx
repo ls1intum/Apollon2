@@ -110,6 +110,7 @@ function App({ onReactFlowInit }: AppProps) {
         onNodeClick={onNodeClick}
         onNodeDoubleClick={onNodeDoubleClick}
         onEdgeClick={onEdgeClick}
+        edgesReconnectable={isDiagramModifiable}
         onPaneClick={onPaneClick}
         proOptions={proOptions}
         onBeforeDelete={onBeforeDelete}

@@ -17,6 +17,7 @@ import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
+import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 
 export default function Package({
   id,
@@ -26,8 +27,9 @@ export default function Package({
   parentId,
   type,
 }: NodeProps<Node<PackageNodeProps>>) {
-  const { onResize } = useHandleOnResize(parentId)
   const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
+  const { onResize } = useHandleOnResize(parentId)
+  const isDiagramModifiable = useDiagramModifiable()
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
@@ -39,16 +41,16 @@ export default function Package({
       interactiveElementId: state.interactiveElementId,
     }))
   )
-  const selected = id === interactiveElementId
 
   if (!width || !height) {
     return null
   }
+  const selected = id === interactiveElementId
 
   return (
     <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <NodeToolbar
-        isVisible={selected}
+        isVisible={isDiagramModifiable && selected}
         position={Position.Top}
         align="end"
         offset={10}
@@ -68,7 +70,7 @@ export default function Package({
         </Box>
       </NodeToolbar>
       <NodeResizer
-        isVisible={Boolean(selected)}
+        isVisible={isDiagramModifiable && selected}
         onResize={onResize}
         minHeight={50}
         minWidth={50}
@@ -83,14 +85,6 @@ export default function Package({
         nodeId={id}
         type={type as "package"}
       />
-      {/*       
-      <PackagePopover
-        nodeId={id}
-        anchorEl={showEditPopover ? svgRef.current : null}
-        open={showEditPopover}
-        onClose={handlePopoverClose}
-        onNameChange={handleNameChange}
-      /> */}
     </DefaultNodeWrapper>
   )
 }
