@@ -9,7 +9,6 @@ import {
 import {
   adjustSourceCoordinates,
   adjustTargetCoordinates,
-  getToolbarPosition,
   calculateEdgeLabels,
   getPositionOnCanvas,
 } from "@/utils"
@@ -53,6 +52,9 @@ export const GenericEdge = ({
   const isReconnectingRef = useRef<boolean>(false)
   const reconnectOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
   const reconnectingEndRef = useRef<"source" | "target" | null>(null)
+  const pathRef = useRef<SVGPathElement | null>(null)
+
+  const [toolbarPosition, setToolbarPosition] = useState<IPoint>({ x: 0, y: 0 })
 
   const { handleDelete } = useToolbar({ id })
   const [edgePopoverAnchor, setEdgePopoverAnchor] =
@@ -127,11 +129,6 @@ export const GenericEdge = ({
     targetPosition,
     borderRadius: STEP_BOARDER_RADIUS,
   })
-  // Toolbar position
-  const toolbarPosition = getToolbarPosition(
-    adjustedSourceCoordinates,
-    adjustedTargetCoordinates
-  )
 
   // Create a basePath that uses the straightPath if available, otherwise the edgePath
   const basePath = useMemo(
@@ -166,6 +163,15 @@ export const GenericEdge = ({
     () => pointsToSvgPath(activePoints),
     [activePoints]
   )
+
+  useEffect(() => {
+    if (pathRef.current) {
+      const totalLength = pathRef.current.getTotalLength()
+      const halfLength = totalLength / 2
+      const point = pathRef.current.getPointAtLength(halfLength)
+      setToolbarPosition({ x: point.x, y: point.y })
+    }
+  }, [currentPath])
   const midpoints = useMemo(
     () => calculateInnerMidpoints(activePoints),
     [activePoints]
@@ -400,6 +406,7 @@ export const GenericEdge = ({
         />
 
         <path
+          ref={pathRef}
           className="edge-overlay"
           d={fullHighlightPath}
           fill="none"

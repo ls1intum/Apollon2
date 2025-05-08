@@ -62,7 +62,8 @@ function App({ onReactFlowInit }: AppProps) {
     useConnect()
   const { onReconnect } = useReconnect()
   const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
-  const { onBeforeDelete, onNodeDoubleClick } = useElementInteractions()
+  const { onBeforeDelete, onNodeDoubleClick, onEdgeDoubleClick } =
+    useElementInteractions()
 
   const isDiagramModifiable = useDiagramModifiable()
 
@@ -102,18 +103,19 @@ function App({ onReactFlowInit }: AppProps) {
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
         snapGrid={[SNAP_TO_GRID_PX, SNAP_TO_GRID_PX]}
+        onNodeClick={onNodeClick}
+        onEdgeClick={onEdgeClick}
+        onNodeDoubleClick={onNodeDoubleClick}
+        onEdgeDoubleClick={onEdgeDoubleClick}
+        onPaneClick={onPaneClick}
+        onBeforeDelete={onBeforeDelete}
+        proOptions={proOptions}
+        edgesReconnectable={isDiagramModifiable}
         nodesConnectable={isDiagramModifiable}
         nodesDraggable={isDiagramModifiable}
         elementsSelectable={isDiagramModifiable}
         edgesFocusable={isDiagramModifiable}
         nodesFocusable={isDiagramModifiable}
-        onNodeClick={onNodeClick}
-        onNodeDoubleClick={onNodeDoubleClick}
-        onEdgeClick={onEdgeClick}
-        edgesReconnectable={isDiagramModifiable}
-        onPaneClick={onPaneClick}
-        proOptions={proOptions}
-        onBeforeDelete={onBeforeDelete}
       >
         <CustomBackground />
         <CustomMiniMap />

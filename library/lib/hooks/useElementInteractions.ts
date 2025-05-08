@@ -1,5 +1,11 @@
 import { usePopoverStore } from "@/store/context"
-import { NodeMouseHandler, OnBeforeDelete, type Node } from "@xyflow/react"
+import {
+  NodeMouseHandler,
+  OnBeforeDelete,
+  type Node,
+  type Edge,
+  EdgeMouseHandler,
+} from "@xyflow/react"
 import { useShallow } from "zustand/shallow"
 import { useDiagramModifiable } from "./useDiagramModifiable"
 
@@ -21,8 +27,13 @@ export const useElementInteractions = () => {
   const onNodeDoubleClick: NodeMouseHandler<Node> = (_event, node) => {
     setPopOverElementId(node.id)
   }
+
+  const onEdgeDoubleClick: EdgeMouseHandler<Edge> = (_event, edge) => {
+    setPopOverElementId(edge.id)
+  }
   return {
     onBeforeDelete,
     onNodeDoubleClick,
+    onEdgeDoubleClick,
   }
 }
