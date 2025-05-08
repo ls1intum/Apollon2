@@ -88,6 +88,7 @@ function App({ onReactFlowInit }: AppProps) {
         onConnect={onConnect}
         onEdgesDelete={onEdgesDelete}
         onConnectEnd={onConnectEnd}
+        zoomOnDoubleClick={false}
         onNodeDragStop={onNodeDragStop}
         onReconnect={onReconnect}
         connectionLineType={ConnectionLineType.Step}

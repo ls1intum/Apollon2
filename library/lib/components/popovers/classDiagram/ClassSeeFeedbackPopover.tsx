@@ -1,31 +1,23 @@
-import { useViewportCenter } from "@/hooks"
 import { useDiagramStore } from "@/store"
-import { getPositionOnCanvas, getQuadrant, getPopoverOrigin } from "@/utils"
 import { Box, Typography } from "@mui/material"
 import { useShallow } from "zustand/shallow"
 import { GenericPopover } from "../GenericPopover"
 import { Assessment, ClassNodeProps } from "@/types"
-
-interface PopoverComponentProps {
-  nodeId: string
-  anchorEl: HTMLElement | null
-  open: boolean
-  onClose: () => void
-}
+import { PopoverProps } from "../types"
 
 export const ClassSeeFeedbackPopover = ({
   nodeId,
   anchorEl,
   open,
   onClose,
-}: PopoverComponentProps) => {
+  popoverOrigin,
+}: PopoverProps) => {
   const { nodes, assessments } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
       assessments: state.assessments,
     }))
   )
-  const viewportCenter = useViewportCenter()
 
   if (!anchorEl || !open) {
     return null
@@ -37,9 +29,6 @@ export const ClassSeeFeedbackPopover = ({
   }
 
   const nodeData = node.data as ClassNodeProps
-  const nodePositionOnCanvas = getPositionOnCanvas(node, nodes)
-  const quadrant = getQuadrant(nodePositionOnCanvas, viewportCenter)
-  const popoverOrigin = getPopoverOrigin(quadrant)
 
   // Collect assessments for node, attributes, and methods
   const nodeAssessment = assessments.find(
@@ -58,27 +47,6 @@ export const ClassSeeFeedbackPopover = ({
     attributeAssessments.length > 0 ||
     methodAssessments.length > 0
 
-  const renderAssessmentBox = (
-    assessment: Assessment,
-    name: string,
-    type: string
-  ) => (
-    <Box
-      key={assessment.modelElementId}
-      sx={{ p: 2, mb: 2, bgcolor: "grey.100", borderRadius: 1 }}
-    >
-      <Typography variant="subtitle1">{`${type}: ${name}`}</Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-        <strong>Score:</strong> {assessment.score}
-      </Typography>
-      {assessment.feedback && (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          <strong>Feedback:</strong> {assessment.feedback}
-        </Typography>
-      )}
-    </Box>
-  )
-
   return (
     <GenericPopover
       id={`see-feedback-popover-${nodeId}`}
@@ -87,7 +55,7 @@ export const ClassSeeFeedbackPopover = ({
       onClose={onClose}
       anchorOrigin={popoverOrigin.anchorOrigin}
       transformOrigin={popoverOrigin.transformOrigin}
-      maxHeight={400}
+      maxHeight={700}
     >
       <Box sx={{ p: 2, maxWidth: 400 }}>
         {!hasAssessments ? (
@@ -122,3 +90,24 @@ export const ClassSeeFeedbackPopover = ({
     </GenericPopover>
   )
 }
+
+const renderAssessmentBox = (
+  assessment: Assessment,
+  name: string,
+  type: string
+) => (
+  <Box
+    key={assessment.modelElementId}
+    sx={{ p: 2, mb: 2, bgcolor: "grey.100", borderRadius: 1 }}
+  >
+    <Typography variant="subtitle1">{`${type}: ${name}`}</Typography>
+    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+      <strong>Score:</strong> {assessment.score}
+    </Typography>
+    {assessment.feedback && (
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+        <strong>Feedback:</strong> {assessment.feedback}
+      </Typography>
+    )}
+  </Box>
+)

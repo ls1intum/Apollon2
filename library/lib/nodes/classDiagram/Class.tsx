@@ -32,12 +32,13 @@ import {
   DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE,
 } from "@/constants"
 import { useHandleDelete } from "@/hooks/useHandleDelete"
-import { ClassPopoverManager } from "@/components/popovers/classDiagram/ClassPopoverManager"
+import { PopoverManager } from "@/components/popovers/PopoverManager"
 
 export function Class({
   id,
   width,
   height,
+  type,
   data: { methods, attributes, stereotype, name },
 }: NodeProps<Node<ClassNodeProps>>) {
   const { interactiveElementId, setNodes } = useDiagramStore(
@@ -200,7 +201,11 @@ export function Class({
           id={id}
         />
       </div>
-      <ClassPopoverManager nodeId={id} anchorEl={classSvgWrapperRef.current} />
+      <PopoverManager
+        anchorEl={classSvgWrapperRef.current}
+        nodeId={id}
+        type={type as "class"}
+      />
     </DefaultNodeWrapper>
   )
 }

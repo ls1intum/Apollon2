@@ -28,6 +28,7 @@ export const useElementInteractions = () => {
   }
 
   const onNodeDoubleClick: NodeMouseHandler<Node> = (_event, node) => {
+    console.log("Node double clicked:", node)
     setPopOverElementId(node.id)
   }
   return {

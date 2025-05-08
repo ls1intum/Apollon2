@@ -1,25 +1,18 @@
-import { useViewportCenter } from "@/hooks"
 import { useDiagramStore } from "@/store"
-import { getPositionOnCanvas, getQuadrant, getPopoverOrigin } from "@/utils"
 import { Button, TextField, Box, Typography } from "@mui/material"
 import { useState } from "react"
 import { useShallow } from "zustand/shallow"
 import { GenericPopover } from "../GenericPopover"
 import { Assessment, ClassNodeProps } from "@/types"
-
-interface PopoverComponentProps {
-  nodeId: string
-  anchorEl: HTMLElement | null
-  open: boolean
-  onClose: () => void
-}
+import { PopoverProps } from "../types"
 
 export const ClassGiveFeedbackPopover = ({
   nodeId,
   anchorEl,
   open,
   onClose,
-}: PopoverComponentProps) => {
+  popoverOrigin,
+}: PopoverProps) => {
   const { nodes, assessments, setAssessments } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
@@ -28,7 +21,6 @@ export const ClassGiveFeedbackPopover = ({
     }))
   )
 
-  const viewportCenter = useViewportCenter()
   const [localAssessments, setLocalAssessments] = useState<
     Record<string, { score: string; feedback: string }>
   >({})
@@ -43,9 +35,6 @@ export const ClassGiveFeedbackPopover = ({
   }
 
   const nodeData = node.data as ClassNodeProps
-  const nodePositionOnCanvas = getPositionOnCanvas(node, nodes)
-  const quadrant = getQuadrant(nodePositionOnCanvas, viewportCenter)
-  const popoverOrigin = getPopoverOrigin(quadrant)
 
   const handleAssessmentChange = (
     elementId: string,
@@ -180,7 +169,7 @@ export const ClassGiveFeedbackPopover = ({
       onClose={onClose}
       anchorOrigin={popoverOrigin.anchorOrigin}
       transformOrigin={popoverOrigin.transformOrigin}
-      maxHeight={400}
+      maxHeight={700}
     >
       <Box sx={{ p: 2, maxWidth: 400 }}>
         {/* Node assessment */}

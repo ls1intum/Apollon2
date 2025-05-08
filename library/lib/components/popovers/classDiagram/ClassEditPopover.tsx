@@ -3,36 +3,27 @@ import {
   GenericPopover,
   StereotypeButtonGroup,
 } from "@/components"
-import { useViewportCenter } from "@/hooks"
 import { useDiagramStore } from "@/store"
 import { ClassNodeProps } from "@/types"
-import { getPositionOnCanvas, getQuadrant, getPopoverOrigin } from "@/utils"
 import { TextField } from "@mui/material"
 import { useShallow } from "zustand/shallow"
 import { EditableAttributeList } from "./EditableAttributesList"
 import { EditableMethodsList } from "./EditableMethodsList"
+import { PopoverProps } from "../types"
 
-interface PopoverComponentProps {
-  nodeId: string
-  anchorEl: HTMLElement | null
-  open: boolean
-  onClose: () => void
-}
-
-// Popover for editing class details
-export const ClassEditPopover = ({
+export const ClassEditPopover: React.FC<PopoverProps> = ({
   nodeId,
   anchorEl,
   open,
   onClose,
-}: PopoverComponentProps) => {
+  popoverOrigin,
+}) => {
   const { nodes, setNodes } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
       setNodes: state.setNodes,
     }))
   )
-  const viewportCenter = useViewportCenter()
 
   if (!anchorEl || !open) {
     return null
@@ -42,10 +33,8 @@ export const ClassEditPopover = ({
   if (!node) {
     return null
   }
-  const nodePositionOnCanvas = getPositionOnCanvas(node, nodes)
+
   const nodeData = node.data as ClassNodeProps
-  const quadrant = getQuadrant(nodePositionOnCanvas, viewportCenter)
-  const popoverOrigin = getPopoverOrigin(quadrant)
 
   const handleNameChange = (newName: string) => {
     setNodes((nodes) =>
