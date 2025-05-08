@@ -31,6 +31,7 @@ import {
 } from "./hooks"
 import { useDragOver } from "./hooks/useDragOver"
 import { diagramNodeTypes } from "./nodes"
+import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -61,8 +62,9 @@ function App({ onReactFlowInit }: AppProps) {
     useConnect()
   const { onReconnect } = useReconnect()
   const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
-  const { onBeforeDelete, isDiagramUpdatable, onNodeDoubleClick } =
-    useElementInteractions()
+  const { onBeforeDelete, onNodeDoubleClick } = useElementInteractions()
+
+  const isDiagramModifiable = useDiagramModifiable()
 
   return (
     <div
@@ -100,9 +102,11 @@ function App({ onReactFlowInit }: AppProps) {
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
         snapGrid={[SNAP_TO_GRID_PX, SNAP_TO_GRID_PX]}
-        nodesConnectable={isDiagramUpdatable}
-        draggable={isDiagramUpdatable}
-        nodesDraggable={isDiagramUpdatable}
+        nodesConnectable={isDiagramModifiable}
+        nodesDraggable={isDiagramModifiable}
+        elementsSelectable={isDiagramModifiable}
+        edgesFocusable={isDiagramModifiable}
+        nodesFocusable={isDiagramModifiable}
         onNodeClick={onNodeClick}
         onNodeDoubleClick={onNodeDoubleClick}
         onEdgeClick={onEdgeClick}

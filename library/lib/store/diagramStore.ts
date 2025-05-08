@@ -139,11 +139,16 @@ export const createDiagramStore = (
               currentNodes
             )
 
-            if (!deepEqual(currentNodes, updatedNodesBySelection)) {
+            const isNodesArrayEqualAfterAppliedChanges = deepEqual(
+              currentNodes,
+              updatedNodesBySelection
+            )
+
+            if (!isNodesArrayEqualAfterAppliedChanges) {
               set(
                 { nodes: updatedNodesBySelection },
                 undefined,
-                "onNodesChangeSelect"
+                "onNodesChangeSelect updatedNodesBySelection"
               )
               const selectedNodes = updatedNodesBySelection.filter(
                 (node) => node.selected
@@ -153,7 +158,7 @@ export const createDiagramStore = (
                 set(
                   { interactiveElementId: selectedNodes[0].id },
                   undefined,
-                  "onNodesChangeSelect"
+                  "onNodesChangeSelect interactiveElementId"
                 )
               }
             }
@@ -166,7 +171,7 @@ export const createDiagramStore = (
               set(
                 { interactiveElementId: null },
                 undefined,
-                "onNodesChangeSelect"
+                "onNodesChangeSelect interactiveElementId reset"
               )
             }
           }
