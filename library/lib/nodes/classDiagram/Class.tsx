@@ -35,7 +35,6 @@ export function Class({
   id,
   width,
   height,
-  type,
   data: { methods, attributes, stereotype, name },
 }: NodeProps<Node<ClassNodeProps>>) {
   const { interactiveElementId, setNodes } = useDiagramStore(
@@ -197,7 +196,7 @@ export function Class({
       <PopoverManager
         anchorEl={classSvgWrapperRef.current}
         elementId={id}
-        type={type as "class"}
+        type={"class" as const}
       />
     </DefaultNodeWrapper>
   )

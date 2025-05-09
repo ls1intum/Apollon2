@@ -14,36 +14,47 @@ import { PopoverProps } from "./types"
 import { GenericPopover } from "./GenericPopover"
 import { PackageGiveFeedbackPopover } from "./classDiagram/PackageGiveFeedbackPopover"
 import { PackageSeeFeedbackPopover } from "./classDiagram/PackageSeeFeedbackPopover"
+import {
+  EdgeEditPopover,
+  EdgeGiveFeedbackPopover,
+  EdgeSeeFeedbackPopover,
+} from "./edgePopovers"
 
-type PopoverType = "class" | "package"
+type PopoverType = "class" | "package" | "edge"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
   package: React.FC<PopoverProps>
+  edge: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   package: PackageEditPopover,
+  edge: EdgeEditPopover,
 }
 
 const giveFeedbackPopovers: {
   class: React.FC<PopoverProps>
   package: React.FC<PopoverProps>
+  edge: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   package: PackageGiveFeedbackPopover,
+  edge: EdgeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
   class: React.FC<PopoverProps>
   package: React.FC<PopoverProps>
+  edge: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   package: PackageSeeFeedbackPopover,
+  edge: EdgeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {
   elementId: string
-  anchorEl: HTMLElement | null
+  anchorEl: HTMLElement | SVGSVGElement | null
   type: PopoverType
 }
 
@@ -53,7 +64,12 @@ export const PopoverManager = ({
   type,
 }: PopoverManagerProps) => {
   const viewportCenter = useViewportCenter()
-  const nodes = useDiagramStore(useShallow((state) => state.nodes))
+  const { nodes, setInteractiveElementId } = useDiagramStore(
+    useShallow((state) => ({
+      nodes: state.nodes,
+      setInteractiveElementId: state.setInteractiveElementId,
+    }))
+  )
   const { diagramMode, readonly } = useMetadataStore(
     useShallow((state) => ({
       diagramMode: state.mode,
@@ -72,7 +88,10 @@ export const PopoverManager = ({
   }
 
   const open = popoverElementId === elementId
-  const onClose = () => setPopOverElementId(null)
+  const onClose = () => {
+    setInteractiveElementId(null)
+    setPopOverElementId(null)
+  }
 
   let popoverOrigin: LocationPopover = {
     anchorOrigin: { vertical: "top", horizontal: "right" },

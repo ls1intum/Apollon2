@@ -30,7 +30,7 @@ import {
   findClosestHandle,
 } from "@/utils/edgeUtils"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
-import { EdgePopoverManager } from "@/components/popovers/edgePopovers/EdgePopoverManager"
+import { PopoverManager } from "@/components/popovers/PopoverManager"
 
 export const GenericEdge = ({
   id,
@@ -464,8 +464,6 @@ export const GenericEdge = ({
         onDeleteClick={handleDelete}
       />
 
-      <EdgePopoverManager edgeId={id} anchorEl={anchorRef.current} />
-
       {data?.sourceRole && (
         <text
           x={sourceRoleX}
@@ -509,6 +507,11 @@ export const GenericEdge = ({
           {data?.targetMultiplicity}
         </text>
       )}
+      <PopoverManager
+        elementId={id}
+        anchorEl={anchorRef.current}
+        type={"edge" as const}
+      />
     </>
   )
 }
