@@ -22,6 +22,7 @@ export const SeeFeedbackAssessmentBox = ({
       <div
         style={{
           display: "flex",
+          flex: 1,
           gap: "8px",
           marginTop: "8px",
           justifyContent: "space-between",

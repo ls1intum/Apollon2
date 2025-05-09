@@ -168,7 +168,6 @@ export const GenericEdge = ({
       const halfLength = totalLength / 2
       const point = pathRef.current.getPointAtLength(halfLength)
       setToolbarPosition({ x: point.x, y: point.y })
-      console.log(`Toolbar position for edge ${id}: (${point.x}, ${point.y})`)
     }
   }, [currentPath])
   const midpoints = useMemo(

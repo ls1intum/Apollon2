@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react"
-import { Popover, Box, PopoverOrigin } from "@mui/material"
+import { Popover, PopoverOrigin, Paper } from "@mui/material"
 
 interface GenericPopoverProps {
   id: string
@@ -33,21 +33,26 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
     onClose={onClose}
     anchorOrigin={anchorOrigin}
     transformOrigin={transformOrigin}
-    style={{ maxHeight, maxWidth, ...style }}
+    style={{ width: "100%", ...style }}
     onClick={(e) => {
       e.stopPropagation()
     }}
   >
-    <Box
+    <Paper
+      elevation={2}
       sx={{
+        width: "100%",
+        maxWidth,
+        maxHeight,
         px: 1,
         py: 1.25,
         display: "flex",
+        flex: 1,
         flexDirection: "column",
         bgcolor: "#f7f9fb",
       }}
     >
       {children}
-    </Box>
+    </Paper>
   </Popover>
 )

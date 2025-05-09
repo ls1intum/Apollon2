@@ -53,20 +53,13 @@ export const PopoverManager = ({
   type,
 }: PopoverManagerProps) => {
   const viewportCenter = useViewportCenter()
-
-  const { nodes } = useDiagramStore(
-    useShallow((state) => ({
-      nodes: state.nodes,
-    }))
-  )
-
+  const nodes = useDiagramStore(useShallow((state) => state.nodes))
   const { diagramMode, readonly } = useMetadataStore(
     useShallow((state) => ({
       diagramMode: state.mode,
       readonly: state.readonly,
     }))
   )
-
   const { popoverElementId, setPopOverElementId } = usePopoverStore(
     useShallow((state) => ({
       popoverElementId: state.popoverElementId,
@@ -74,15 +67,19 @@ export const PopoverManager = ({
     }))
   )
 
+  if (!anchorEl) {
+    return null
+  }
+
   const open = popoverElementId === elementId
   const onClose = () => setPopOverElementId(null)
 
-  const node = nodes.find((node) => node.id === elementId)
   let popoverOrigin: LocationPopover = {
     anchorOrigin: { vertical: "top", horizontal: "right" },
     transformOrigin: { vertical: "top", horizontal: "left" },
   }
 
+  const node = nodes.find((node) => node.id === elementId)
   if (node && anchorEl && open) {
     const nodePositionOnCanvas = getPositionOnCanvas(node, nodes)
     const quadrant = getQuadrant(nodePositionOnCanvas, viewportCenter)
