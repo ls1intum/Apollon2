@@ -27,8 +27,9 @@ export const StereotypeButtonGroup: React.FC<StereotypeButtonGroupProps> = ({
     const nextStereotype =
       selectedStereotype === stereotype ? undefined : stereotype
 
-    const needExpand = !!nextStereotype
-    const nodeHeightDifference = needExpand ? 10 : -10
+    const needsShrink = !!selectedStereotype && !nextStereotype
+    const needExpand = !!nextStereotype && !selectedStereotype
+    const nodeHeightDifference = needExpand ? 10 : needsShrink ? -10 : 0
 
     setNodes((nodes) =>
       nodes.map((node) => {
