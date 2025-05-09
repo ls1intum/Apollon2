@@ -21,7 +21,7 @@ export const createPopoverStore = (): UseBoundStore<StoreApi<PopoverStore>> =>
         ...initialPopoverState,
 
         setPopOverElementId: (value: string | null) => {
-          set({ popoverElementId: value })
+          set({ popoverElementId: value }, undefined, "setPopOverElementId")
         },
 
         reset: () => {

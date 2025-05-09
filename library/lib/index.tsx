@@ -76,8 +76,9 @@ export class Apollon2 {
     if (options?.model) {
       const nodes = options.model.nodes || []
       const edges = options.model.edges || []
+      const assessments = options.model.assessments || {}
       this.diagramStore.getState().setNodesAndEdges(nodes, edges)
-      this.diagramStore.getState().setAssessments(options.model.assessments)
+      this.diagramStore.getState().setAssessments(assessments)
     }
 
     if (options?.mode) {
@@ -148,10 +149,9 @@ export class Apollon2 {
   public exportAsJson() {
     if (this.reactFlowInstance) {
       this.deSelectAllNodes()
-      const diagramId = this.diagramStore.getState().diagramId
       const diagramTitle = this.metadataStore.getState().diagramTitle
-      const diagramType = this.metadataStore.getState().diagramType
-      exportAsJSON(diagramId, diagramTitle, diagramType, this.reactFlowInstance)
+      const diagram = this.getDiagram()
+      exportAsJSON(diagram, diagramTitle)
     } else {
       console.error("ReactFlowInstance is not available for exporting JSON.")
     }

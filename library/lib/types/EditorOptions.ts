@@ -35,7 +35,7 @@ export type ApollonDiagram = {
   type: DiagramType
   nodes: ApollonNode[]
   edges: ApollonEdge[]
-  assessments: Assessment[]
+  assessments: Record<string, Assessment>
 }
 
 export enum ApollonView {

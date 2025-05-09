@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useEffect, useRef, useState } from "react"
 import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
-import { EdgePopover } from "@/components"
 import {
   STEP_BOARDER_RADIUS,
   MARKER_PADDING,
@@ -16,7 +15,7 @@ import { useToolbar } from "@/hooks"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
-import { useDiagramStore } from "@/store/context"
+import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
 // Extend the props to include markerEnd and markerPadding.
@@ -31,6 +30,7 @@ import {
   findClosestHandle,
 } from "@/utils/edgeUtils"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
+import { EdgePopoverManager } from "@/components/popovers/edgePopovers/EdgePopoverManager"
 
 export const GenericEdge = ({
   id,
@@ -54,22 +54,18 @@ export const GenericEdge = ({
   const reconnectOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
   const reconnectingEndRef = useRef<"source" | "target" | null>(null)
   const pathRef = useRef<SVGPathElement | null>(null)
+  const anchorRef = useRef<SVGSVGElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
-
+  const setPopOverElementId = usePopoverStore(
+    useShallow((state) => state.setPopOverElementId)
+  )
   const [toolbarPosition, setToolbarPosition] = useState<IPoint>({ x: 0, y: 0 })
 
   const { handleDelete } = useToolbar({ id })
-  const [edgePopoverAnchor, setEdgePopoverAnchor] =
-    useState<HTMLElement | null>(null)
-
-  const interactiveElementId = useDiagramStore(
-    useShallow((state) => state.interactiveElementId)
-  )
-  const selected = interactiveElementId === id
   const { getNode, getEdges, screenToFlowPosition, getNodes } = useReactFlow()
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
   const { onReconnect } = useReconnect()
-  const setEdges = useDiagramStore((state) => state.setEdges)
+  const setEdges = useDiagramStore(useShallow((state) => state.setEdges))
 
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
@@ -172,6 +168,7 @@ export const GenericEdge = ({
       const halfLength = totalLength / 2
       const point = pathRef.current.getPointAtLength(halfLength)
       setToolbarPosition({ x: point.x, y: point.y })
+      console.log(`Toolbar position for edge ${id}: (${point.x}, ${point.y})`)
     }
   }, [currentPath])
   const midpoints = useMemo(
@@ -460,26 +457,15 @@ export const GenericEdge = ({
           ))}
       </g>
 
-      {selected && (
-        <CustomEdgeToolbar
-          x={toolbarPosition.x}
-          y={toolbarPosition.y}
-          onEditClick={(event: React.MouseEvent<HTMLElement>) =>
-            setEdgePopoverAnchor(event.currentTarget)
-          }
-          onDeleteClick={handleDelete}
-        />
-      )}
-
-      <EdgePopover
-        source={source}
-        target={target}
+      <CustomEdgeToolbar
         edgeId={id}
-        selected={selected!}
-        anchorEl={edgePopoverAnchor}
-        open={Boolean(edgePopoverAnchor)}
-        onClose={() => setEdgePopoverAnchor(null)}
+        ref={anchorRef}
+        position={toolbarPosition}
+        onEditClick={() => setPopOverElementId(id)}
+        onDeleteClick={handleDelete}
       />
+
+      <EdgePopoverManager edgeId={id} anchorEl={anchorRef.current} />
 
       {data?.sourceRole && (
         <text

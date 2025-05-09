@@ -2,8 +2,9 @@ import { useDiagramStore } from "@/store"
 import { Box, Typography } from "@mui/material"
 import { useShallow } from "zustand/shallow"
 import { GenericPopover } from "../GenericPopover"
-import { Assessment, ClassNodeProps } from "@/types"
+import { ClassNodeProps } from "@/types"
 import { PopoverProps } from "../types"
+import { SeeFeedbackAssessmentBox } from "../SeeFeedbackAssessmentBox"
 
 export const ClassSeeFeedbackPopover = ({
   nodeId,
@@ -19,33 +20,32 @@ export const ClassSeeFeedbackPopover = ({
     }))
   )
 
-  if (!anchorEl || !open) {
-    return null
-  }
+  if (!anchorEl || !open) return null
 
   const node = nodes.find((node) => node.id === nodeId)
-  if (!node) {
-    return null
-  }
+  if (!node) return null
 
   const nodeData = node.data as ClassNodeProps
 
-  // Collect assessments for node, attributes, and methods
-  const nodeAssessment = assessments.find(
-    (ass) => ass.modelElementId === nodeId
-  )
-  const attributeAssessments = assessments.filter((ass) =>
-    nodeData.attributes.some((attr) => attr.id === ass.modelElementId)
-  )
-  const methodAssessments = assessments.filter((ass) =>
-    nodeData.methods.some((method) => method.id === ass.modelElementId)
-  )
+  const nodeAssessment = assessments[nodeId]
+  const attributeAssessments = nodeData.attributes
+    .map((attr) => ({
+      assessment: assessments[attr.id],
+      name: attr.name,
+      id: attr.id,
+    }))
+    .filter((a) => a.assessment)
 
-  // Check if there are any assessments to display
+  const methodAssessments = nodeData.methods
+    .map((method) => ({
+      assessment: assessments[method.id],
+      name: method.name,
+      id: method.id,
+    }))
+    .filter((m) => m.assessment)
+
   const hasAssessments =
-    nodeAssessment ||
-    attributeAssessments.length > 0 ||
-    methodAssessments.length > 0
+    nodeAssessment || attributeAssessments.length || methodAssessments.length
 
   return (
     <GenericPopover
@@ -64,50 +64,34 @@ export const ClassSeeFeedbackPopover = ({
           </Typography>
         ) : (
           <>
-            {nodeAssessment &&
-              renderAssessmentBox(nodeAssessment, nodeData.name, "Node")}
+            {nodeAssessment && (
+              <SeeFeedbackAssessmentBox
+                assessment={nodeAssessment}
+                name={nodeData.name}
+                type="Node"
+              />
+            )}
 
-            {attributeAssessments.map((ass) => {
-              const attr = nodeData.attributes.find(
-                (a) => a.id === ass.modelElementId
-              )
-              return attr
-                ? renderAssessmentBox(ass, attr.name, "Attribute")
-                : null
-            })}
+            {attributeAssessments.map(({ assessment, name, id }) => (
+              <SeeFeedbackAssessmentBox
+                key={id}
+                assessment={assessment!}
+                name={name}
+                type="Attribute"
+              />
+            ))}
 
-            {methodAssessments.map((ass) => {
-              const method = nodeData.methods.find(
-                (m) => m.id === ass.modelElementId
-              )
-              return method
-                ? renderAssessmentBox(ass, method.name, "Method")
-                : null
-            })}
+            {methodAssessments.map(({ assessment, name, id }) => (
+              <SeeFeedbackAssessmentBox
+                key={id}
+                assessment={assessment!}
+                name={name}
+                type="Method"
+              />
+            ))}
           </>
         )}
       </Box>
     </GenericPopover>
   )
 }
-
-const renderAssessmentBox = (
-  assessment: Assessment,
-  name: string,
-  type: string
-) => (
-  <Box
-    key={assessment.modelElementId}
-    sx={{ p: 2, mb: 2, bgcolor: "grey.100", borderRadius: 1 }}
-  >
-    <Typography variant="subtitle1">{`${type}: ${name}`}</Typography>
-    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-      <strong>Score:</strong> {assessment.score}
-    </Typography>
-    {assessment.feedback && (
-      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-        <strong>Feedback:</strong> {assessment.feedback}
-      </Typography>
-    )}
-  </Box>
-)

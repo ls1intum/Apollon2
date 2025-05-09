@@ -25,7 +25,7 @@ type InitialDiagramState = {
   edges: Edge[]
   interactiveElementId: string | null
   diagramId: string
-  assessments: Assessment[]
+  assessments: Record<string, Assessment>
 }
 
 const initialDiagramState: InitialDiagramState = {
@@ -33,7 +33,7 @@ const initialDiagramState: InitialDiagramState = {
   edges: [],
   interactiveElementId: null,
   diagramId: Math.random().toString(36).substring(2, 15),
-  assessments: [],
+  assessments: {},
 }
 
 export type DiagramStore = {
@@ -42,7 +42,7 @@ export type DiagramStore = {
   interactiveElementId: string | null
   diagramId: string
   setDiagramId: (diagramId: string) => void
-  assessments: Assessment[]
+  assessments: Record<string, Assessment>
   setNodes: (payload: Node[] | ((nodes: Node[]) => Node[])) => void
   setEdges: (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void
   setNodesAndEdges: (nodes: Node[], edges: Edge[]) => void
@@ -52,8 +52,11 @@ export type DiagramStore = {
   onEdgesChange: OnEdgesChange
   reset: () => void
   setInteractiveElementId: (elementId: string | null) => void
+  getAssessment: (id: string) => Assessment | undefined
   setAssessments: (
-    assessment: Assessment[] | ((assessment: Assessment[]) => Assessment[])
+    assessments:
+      | Record<string, Assessment>
+      | ((prev: Record<string, Assessment>) => Record<string, Assessment>)
   ) => void
   updateNodesFromYjs: () => void
   updateEdgesFromYjs: () => void
@@ -285,22 +288,28 @@ export const createDiagramStore = (
             typeof payload === "function" ? payload(get().assessments) : payload
 
           ydoc.transact(() => {
-            getAssessments(ydoc).clear()
-            assessments.forEach((assessment) =>
-              getAssessments(ydoc).set(assessment.modelElementId, assessment)
-            )
+            const yMap = getAssessments(ydoc)
+            yMap.clear()
+            Object.entries(assessments).forEach(([id, assessment]) => {
+              yMap.set(id, assessment)
+            })
           }, "store")
+
           set({ assessments }, undefined, "setAssessments")
         },
+        updateAssessmentFromYjs: () => {
+          const yMap = getAssessments(ydoc)
+          const assessments: Record<string, Assessment> = {}
 
-        updateAssessmentFromYjs: () =>
-          set(
-            {
-              assessments: Array.from(getAssessments(ydoc).values()),
-            },
-            undefined,
-            "updateAssessmentFromYjs"
-          ),
+          yMap.forEach((value, key) => {
+            assessments[key] = value
+          })
+
+          set({ assessments }, undefined, "updateAssessmentFromYjs")
+        },
+        getAssessment: (id) => {
+          return get().assessments[id]
+        },
       })),
       { name: "DiagramStore", enabled: true }
     )

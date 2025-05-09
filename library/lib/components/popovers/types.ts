@@ -7,3 +7,12 @@ export interface PopoverProps {
   onClose: () => void
   popoverOrigin: LocationPopover
 }
+
+export interface EdgePopoverProps {
+  source: string
+  target: string
+  edgeId: string
+  anchorEl: HTMLElement | SVGSVGElement | null | SVGPathElement
+  open: boolean
+  onClose: () => void
+}

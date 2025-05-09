@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Router, Request, Response } from "express"
 import Diagram from "./models/Diagram"
 
@@ -45,7 +46,7 @@ router.post("/", async (req: Request, res: Response): Promise<any> => {
       type,
       nodes: nodes || [],
       edges: edges || [],
-      assessments: assessments || [],
+      assessments: assessments || {},
     })
 
     const savedDiagram = await newDiagram.save()
@@ -77,7 +78,7 @@ router.put("/:diagramID", async (req: Request, res: Response): Promise<any> => {
           type,
           nodes: nodes || [],
           edges: edges || [],
-          assessments: assessments || [],
+          assessments: assessments || {},
         },
       },
       {

@@ -9,12 +9,7 @@ import {
 import { toPng, toSvg } from "html-to-image"
 import { PDFDocument } from "pdf-lib"
 import { ExportFileFormat } from "../enums"
-import { DiagramType } from "@/types"
 import { ApollonDiagram } from "@/types/EditorOptions"
-import {
-  mapFromReactFlowEdgeToApollonEdge,
-  mapFromReactFlowNodeToApollonNode,
-} from "./diagramTypeUtils"
 
 // Calculate dimensions based on nodes and viewport
 const calculateDimensions = (
@@ -96,27 +91,9 @@ const downloadImage = (
 }
 
 // Export the diagram as JSON
-export const exportAsJSON = (
-  id: string,
-  diagramTitle: string,
-  diagramType: DiagramType,
-  reactFlowInstance: ReactFlowInstance<Node, Edge>
-) => {
-  const data: ApollonDiagram = {
-    id,
-    version: "apollon2",
-    title: diagramTitle,
-    type: diagramType,
-    nodes: reactFlowInstance
-      .getNodes()
-      .map((node) => mapFromReactFlowNodeToApollonNode(node)),
-    edges: reactFlowInstance
-      .getEdges()
-      .map((edge) => mapFromReactFlowEdgeToApollonEdge(edge)),
-    assessments: [],
-  }
+export const exportAsJSON = (diagram: ApollonDiagram, diagramTitle: string) => {
   const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
-    JSON.stringify(data)
+    JSON.stringify(diagram)
   )}`
   const fileName = `${diagramTitle}.json`
 
