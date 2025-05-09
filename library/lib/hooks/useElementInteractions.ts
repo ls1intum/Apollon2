@@ -1,4 +1,4 @@
-import { usePopoverStore } from "@/store/context"
+import { useDiagramStore, usePopoverStore } from "@/store/context"
 import {
   NodeMouseHandler,
   OnBeforeDelete,
@@ -16,6 +16,11 @@ export const useElementInteractions = () => {
       setPopOverElementId: state.setPopOverElementId,
     }))
   )
+  const { setInteractiveElementId } = useDiagramStore(
+    useShallow((state) => ({
+      setInteractiveElementId: state.setInteractiveElementId,
+    }))
+  )
 
   const onBeforeDelete: OnBeforeDelete = () => {
     if (isDiagramModifiable) {
@@ -25,10 +30,12 @@ export const useElementInteractions = () => {
   }
 
   const onNodeDoubleClick: NodeMouseHandler<Node> = (_event, node) => {
+    setInteractiveElementId(node.id)
     setPopOverElementId(node.id)
   }
 
   const onEdgeDoubleClick: EdgeMouseHandler<Edge> = (_event, edge) => {
+    setInteractiveElementId(edge.id)
     setPopOverElementId(edge.id)
   }
   return {

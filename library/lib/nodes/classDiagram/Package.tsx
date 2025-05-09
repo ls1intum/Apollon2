@@ -82,7 +82,7 @@ export default function Package({
 
       <PopoverManager
         anchorEl={packageSvgWrapperRef.current}
-        nodeId={id}
+        elementId={id}
         type={type as "package"}
       />
     </DefaultNodeWrapper>

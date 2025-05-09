@@ -1,8 +1,4 @@
-import {
-  DividerLine,
-  GenericPopover,
-  StereotypeButtonGroup,
-} from "@/components"
+import { DividerLine, StereotypeButtonGroup } from "@/components"
 import { useDiagramStore } from "@/store"
 import { ClassNodeProps } from "@/types"
 import { TextField } from "@mui/material"
@@ -11,13 +7,7 @@ import { EditableAttributeList } from "./EditableAttributesList"
 import { EditableMethodsList } from "./EditableMethodsList"
 import { PopoverProps } from "../types"
 
-export const ClassEditPopover: React.FC<PopoverProps> = ({
-  nodeId,
-  anchorEl,
-  open,
-  onClose,
-  popoverOrigin,
-}) => {
+export const ClassEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
   const { nodes, setNodes } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
@@ -25,11 +15,7 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({
     }))
   )
 
-  if (!anchorEl || !open) {
-    return null
-  }
-
-  const node = nodes.find((node) => node.id === nodeId)
+  const node = nodes.find((node) => node.id === elementId)
   if (!node) {
     return null
   }
@@ -39,7 +25,7 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({
   const handleNameChange = (newName: string) => {
     setNodes((nodes) =>
       nodes.map((node) => {
-        if (node.id === nodeId) {
+        if (node.id === elementId) {
           return {
             ...node,
             data: {
@@ -54,15 +40,7 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({
   }
 
   return (
-    <GenericPopover
-      id={`class-popover-${nodeId}`}
-      open={open}
-      anchorEl={anchorEl}
-      onClose={onClose}
-      anchorOrigin={popoverOrigin.anchorOrigin}
-      transformOrigin={popoverOrigin.transformOrigin}
-      maxHeight={700}
-    >
+    <>
       <TextField
         id="outlined-basic"
         variant="outlined"
@@ -73,13 +51,13 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({
       />
       <DividerLine width="100%" />
       <StereotypeButtonGroup
-        nodeId={nodeId}
+        nodeId={elementId}
         selectedStereotype={nodeData.stereotype}
       />
       <DividerLine width="100%" />
-      <EditableAttributeList nodeId={nodeId} />
+      <EditableAttributeList nodeId={elementId} />
       <DividerLine width="100%" />
-      <EditableMethodsList nodeId={nodeId} />
-    </GenericPopover>
+      <EditableMethodsList nodeId={elementId} />
+    </>
   )
 }

@@ -11,6 +11,7 @@ import {
 import { useViewportCenter } from "@/hooks"
 import { getPopoverOrigin, getPositionOnCanvas, getQuadrant } from "@/utils"
 import { PopoverProps } from "./types"
+import { GenericPopover } from "./GenericPopover"
 
 type PopoverType = "class" | "package"
 
@@ -39,13 +40,13 @@ const seeFeedbackPopovers: {
 }
 
 interface PopoverManagerProps {
-  nodeId: string
+  elementId: string
   anchorEl: HTMLElement | null
   type: PopoverType
 }
 
 export const PopoverManager = ({
-  nodeId,
+  elementId,
   anchorEl,
   type,
 }: PopoverManagerProps) => {
@@ -71,10 +72,10 @@ export const PopoverManager = ({
     }))
   )
 
-  const open = popoverElementId === nodeId
+  const open = popoverElementId === elementId
   const onClose = () => setPopOverElementId(null)
 
-  const node = nodes.find((node) => node.id === nodeId)
+  const node = nodes.find((node) => node.id === elementId)
   let popoverOrigin: LocationPopover = {
     anchorOrigin: { vertical: "top", horizontal: "right" },
     transformOrigin: { vertical: "top", horizontal: "left" },
@@ -97,12 +98,16 @@ export const PopoverManager = ({
   }
 
   return Component ? (
-    <Component
-      nodeId={nodeId}
-      anchorEl={anchorEl}
+    <GenericPopover
+      id={`popover-${elementId}`}
       open={open}
+      anchorEl={anchorEl}
       onClose={onClose}
-      popoverOrigin={popoverOrigin}
-    />
+      anchorOrigin={popoverOrigin.anchorOrigin}
+      transformOrigin={popoverOrigin.transformOrigin}
+      maxHeight={700}
+    >
+      <Component elementId={elementId} />
+    </GenericPopover>
   ) : null
 }
