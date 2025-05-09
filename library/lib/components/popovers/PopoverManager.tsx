@@ -12,6 +12,8 @@ import { useViewportCenter } from "@/hooks"
 import { getPopoverOrigin, getPositionOnCanvas, getQuadrant } from "@/utils"
 import { PopoverProps } from "./types"
 import { GenericPopover } from "./GenericPopover"
+import { PackageGiveFeedbackPopover } from "./classDiagram/PackageGiveFeedbackPopover"
+import { PackageSeeFeedbackPopover } from "./classDiagram/PackageSeeFeedbackPopover"
 
 type PopoverType = "class" | "package"
 
@@ -28,7 +30,7 @@ const giveFeedbackPopovers: {
   package: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
-  package: PackageEditPopover,
+  package: PackageGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -36,7 +38,7 @@ const seeFeedbackPopovers: {
   package: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
-  package: PackageEditPopover,
+  package: PackageSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {
@@ -89,12 +91,16 @@ export const PopoverManager = ({
 
   let Component: React.ComponentType<PopoverProps> | null = null
 
-  if (diagramMode === ApollonMode.Modelling && !readonly) {
+  const isEditing = diagramMode === ApollonMode.Modelling && !readonly
+  const isGivingFeedback = diagramMode === ApollonMode.Assessment && !readonly
+  const isSeeingFeedback = diagramMode === ApollonMode.Assessment && readonly
+
+  if (isEditing) {
     Component = editPopovers[type] ?? null
-  } else if (diagramMode === ApollonMode.Assessment) {
-    Component = readonly
-      ? (seeFeedbackPopovers[type] ?? null)
-      : (giveFeedbackPopovers[type] ?? null)
+  } else if (isGivingFeedback) {
+    Component = giveFeedbackPopovers[type] ?? null
+  } else if (isSeeingFeedback) {
+    Component = seeFeedbackPopovers[type] ?? null
   }
 
   return Component ? (
@@ -106,6 +112,7 @@ export const PopoverManager = ({
       anchorOrigin={popoverOrigin.anchorOrigin}
       transformOrigin={popoverOrigin.transformOrigin}
       maxHeight={700}
+      maxWidth={isEditing ? 500 : 400}
     >
       <Component elementId={elementId} />
     </GenericPopover>

@@ -10,6 +10,7 @@ interface GenericPopoverProps {
   anchorOrigin?: PopoverOrigin
   transformOrigin?: PopoverOrigin
   maxHeight?: number
+  maxWidth?: number
   style?: React.CSSProperties
 }
 
@@ -22,6 +23,7 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
   anchorOrigin = { vertical: "top", horizontal: "right" },
   transformOrigin = { vertical: "top", horizontal: "left" },
   maxHeight = 500,
+  maxWidth = 500,
   style,
 }) => (
   <Popover
@@ -31,18 +33,18 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
     onClose={onClose}
     anchorOrigin={anchorOrigin}
     transformOrigin={transformOrigin}
-    style={{ maxHeight, ...style }}
+    style={{ maxHeight, maxWidth, ...style }}
     onClick={(e) => {
       e.stopPropagation()
     }}
   >
     <Box
       sx={{
-        p: 1,
+        px: 1,
+        py: 1.25,
         display: "flex",
         flexDirection: "column",
-        gap: 0.5,
-        bgcolor: "#F8F9FA",
+        bgcolor: "#f7f9fb",
       }}
     >
       {children}

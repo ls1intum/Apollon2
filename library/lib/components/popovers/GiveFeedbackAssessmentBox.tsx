@@ -1,8 +1,8 @@
-import { TextField, Box, Typography } from "@mui/material"
 import { useState } from "react"
 import { useDiagramStore } from "@/store"
 import { Assessment } from "@/types"
 import { useShallow } from "zustand/shallow"
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 
 interface Props {
   elementId: string
@@ -39,36 +39,84 @@ export const GiveFeedbackAssessmentBox = ({ elementId, name, type }: Props) => {
       [elementId]: updated,
     }))
   }
+  const handleDelete = () => {
+    setAssessments((prev) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [elementId]: _, ...rest } = prev
+      return rest
+    })
+    setScore("")
+    setFeedback("")
+  }
 
   return (
-    <Box sx={{ p: 2, mb: 2, bgcolor: "grey.200", borderRadius: 1 }}>
-      <Typography variant="subtitle1">{`${type}: ${name}`}</Typography>
-      <TextField
-        label="Score"
-        type="number"
-        value={score}
-        onChange={(e) => {
-          const value = e.target.value
-          setScore(value)
-          updateAssessment(value, feedback)
+    <>
+      <div>{`Assessment for ${type} "${name}"`}</div>
+      <div
+        style={{
+          display: "flex",
+          gap: "4px",
+          marginTop: "px",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
-        fullWidth
-        margin="normal"
-        inputProps={{ step: "any" }}
-      />
-      <TextField
-        label="Feedback"
-        multiline
-        rows={3}
-        value={feedback}
-        onChange={(e) => {
-          const value = e.target.value
-          setFeedback(value)
-          updateAssessment(score, value)
+      >
+        <div
+          style={{ display: "flex", gap: "4px", alignItems: "center", flex: 1 }}
+        >
+          <div>Points:</div>
+          <input
+            style={{
+              border: "1px solid black",
+              borderRadius: "4px",
+              padding: "4px",
+              flex: 1,
+            }}
+            maxLength={20}
+            type="number"
+            value={score}
+            onChange={(e) => {
+              const value = e.target.value
+              setScore(value)
+              updateAssessment(value, feedback)
+            }}
+          />
+        </div>
+
+        <DeleteOutlineOutlinedIcon onClick={handleDelete} />
+      </div>
+      <div style={{ marginTop: "8px" }}>
+        <div>Feedback:</div>
+        <div style={{ display: "flex" }}>
+          <textarea
+            style={{
+              border: "1px solid black",
+              borderRadius: "4px",
+              padding: "4px",
+              flex: 1,
+              resize: "vertical",
+            }}
+            placeholder="You can enter feedback here..."
+            maxLength={500}
+            rows={3}
+            value={feedback}
+            onChange={(e) => {
+              const value = e.target.value
+              setFeedback(value)
+              updateAssessment(score, value)
+            }}
+          />
+        </div>
+      </div>
+      <div
+        style={{
+          marginTop: "12px",
+          marginBottom: "12px",
+          width: "100%",
+          height: "1px",
+          backgroundColor: "#ccc",
         }}
-        fullWidth
-        margin="normal"
       />
-    </Box>
+    </>
   )
 }

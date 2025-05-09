@@ -1,27 +1,48 @@
-import { Box, Typography } from "@mui/material"
-import { Assessment } from "@/types"
+import { Typography } from "@mui/material"
+import { useDiagramStore } from "@/store"
+import { useShallow } from "zustand/shallow"
 
 export const SeeFeedbackAssessmentBox = ({
-  assessment,
-  name,
   type,
+  name,
+  elementId,
 }: {
-  assessment: Assessment
-  name: string
   type: string
-}) => (
-  <Box
-    key={assessment.modelElementId}
-    sx={{ p: 2, mb: 2, bgcolor: "grey.100", borderRadius: 1 }}
-  >
-    <Typography variant="subtitle1">{`${type}: ${name}`}</Typography>
-    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-      <strong>Score:</strong> {assessment.score}
-    </Typography>
-    {assessment.feedback && (
-      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-        <strong>Feedback:</strong> {assessment.feedback}
-      </Typography>
-    )}
-  </Box>
-)
+  name: string
+  elementId: string
+}) => {
+  const getAssessment = useDiagramStore(
+    useShallow((state) => state.getAssessment)
+  )
+  const assessment = getAssessment(elementId)
+
+  return (
+    <>
+      <Typography variant="subtitle1">{`Assessment for ${type} "${name}"`}</Typography>
+      <div
+        style={{
+          display: "flex",
+          gap: "8px",
+          marginTop: "8px",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography>Score:</Typography>
+        <Typography>{assessment?.score ?? "-"}</Typography>
+      </div>
+
+      <Typography>Feedback:</Typography>
+      <Typography>{assessment?.feedback}</Typography>
+      <div
+        style={{
+          marginTop: "12px",
+          marginBottom: "12px",
+          width: "100%",
+          height: "1px",
+          backgroundColor: "#ccc",
+        }}
+      />
+    </>
+  )
+}
