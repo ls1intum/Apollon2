@@ -20,19 +20,25 @@ import {
   DiagramStoreData,
 } from "./store/diagramStore"
 import { createMetadataStore, MetadataStore } from "./store/metadataStore"
-import { DiagramStoreContext, MetadataStoreContext } from "./store/context"
+import {
+  DiagramStoreContext,
+  MetadataStoreContext,
+  PopoverStoreContext,
+} from "./store/context"
 import { YjsSyncClass } from "./store/yjsSync"
 import * as Y from "yjs"
 import { StoreApi } from "zustand"
+import { createPopoverStore } from "./store"
+import { PopoverStore } from "./store/popoverStore"
 
 export class Apollon2 {
   private root: ReactDOM.Root
   private reactFlowInstance: ReactFlowInstance | null = null
-  private readonlyDiagram: boolean = false
   private readonly syncManager: YjsSyncClass
   private readonly ydoc: Y.Doc
   private readonly diagramStore: StoreApi<DiagramStore>
   private readonly metadataStore: StoreApi<MetadataStore>
+  private readonly popoverStore: StoreApi<PopoverStore>
 
   constructor(element: HTMLElement, options?: ApollonOptions) {
     if (!(element instanceof HTMLElement)) {
@@ -42,6 +48,7 @@ export class Apollon2 {
     this.ydoc = new Y.Doc()
     this.diagramStore = createDiagramStore(this.ydoc)
     this.metadataStore = createMetadataStore(this.ydoc)
+    this.popoverStore = createPopoverStore()
     this.syncManager = new YjsSyncClass(
       this.ydoc,
       this.diagramStore,
@@ -69,8 +76,19 @@ export class Apollon2 {
     if (options?.model) {
       const nodes = options.model.nodes || []
       const edges = options.model.edges || []
+      const assessments = options.model.assessments || {}
       this.diagramStore.getState().setNodesAndEdges(nodes, edges)
-      this.readonlyDiagram = options.readonly || false
+      this.diagramStore.getState().setAssessments(assessments)
+    }
+
+    if (options?.mode) {
+      this.metadataStore.getState().setMode(options.mode)
+    }
+    if (options?.enablePopups) {
+      this.metadataStore.getState().setPopupEnabled(options.enablePopups)
+    }
+    if (options?.readonly) {
+      this.metadataStore.getState().setReadonly(options.readonly)
     }
 
     this.renderApp()
@@ -80,10 +98,11 @@ export class Apollon2 {
     this.root.render(
       <DiagramStoreContext.Provider value={this.diagramStore}>
         <MetadataStoreContext.Provider value={this.metadataStore}>
-          <AppWithProvider
-            onReactFlowInit={this.setReactFlowInstance.bind(this)}
-            readonlyDiagram={this.readonlyDiagram}
-          />
+          <PopoverStoreContext.Provider value={this.popoverStore}>
+            <AppWithProvider
+              onReactFlowInit={this.setReactFlowInstance.bind(this)}
+            />
+          </PopoverStoreContext.Provider>
         </MetadataStoreContext.Provider>
       </DiagramStoreContext.Provider>
     )
@@ -102,7 +121,10 @@ export class Apollon2 {
   }
 
   public getNodes(): Node[] {
-    return this.reactFlowInstance ? this.reactFlowInstance.getNodes() : []
+    if (this.reactFlowInstance) {
+      return this.reactFlowInstance.getNodes()
+    }
+    return []
   }
 
   public getEdges(): Edge[] {
@@ -127,10 +149,9 @@ export class Apollon2 {
   public exportAsJson() {
     if (this.reactFlowInstance) {
       this.deSelectAllNodes()
-      const diagramId = this.diagramStore.getState().diagramId
       const diagramTitle = this.metadataStore.getState().diagramTitle
-      const diagramType = this.metadataStore.getState().diagramType
-      exportAsJSON(diagramId, diagramTitle, diagramType, this.reactFlowInstance)
+      const diagram = this.getDiagram()
+      exportAsJSON(diagram, diagramTitle)
     } else {
       console.error("ReactFlowInstance is not available for exporting JSON.")
     }
@@ -237,6 +258,7 @@ export class Apollon2 {
       type: diagramType,
       nodes: nodes.map((node) => mapFromReactFlowNodeToApollonNode(node)),
       edges: edges.map((edge) => mapFromReactFlowEdgeToApollonEdge(edge)),
+      assessments: this.diagramStore.getState().assessments,
     }
   }
 }

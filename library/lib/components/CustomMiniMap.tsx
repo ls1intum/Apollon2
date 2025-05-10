@@ -17,7 +17,6 @@ export const CustomMiniMap = () => {
   return (
     <MiniMap
       zoomable
-      pannable
       onClick={() => setMinimapCollapsed(true)}
       nodeComponent={MiniMapNode}
     />

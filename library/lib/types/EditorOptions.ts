@@ -1,3 +1,4 @@
+import { Assessment } from "./Assessments"
 import { DiagramType } from "./DiagramType"
 
 export type ApollonNode = {
@@ -12,6 +13,7 @@ export type ApollonNode = {
   data: {
     [key: string]: unknown
   }
+  parentId?: string
   measured: { width: number; height: number }
 }
 
@@ -33,15 +35,16 @@ export type ApollonDiagram = {
   type: DiagramType
   nodes: ApollonNode[]
   edges: ApollonEdge[]
+  assessments: Record<string, Assessment>
 }
 
-export const enum ApollonView {
+export enum ApollonView {
   Modelling = "Modelling",
   Exporting = "Exporting",
   Highlight = "Highlight",
 }
 
-export const enum ApollonMode {
+export enum ApollonMode {
   Modelling = "Modelling",
   Exporting = "Exporting",
   Assessment = "Assessment",

@@ -1,15 +1,16 @@
 import React, { ReactNode } from "react"
-import { Popover, Box, PopoverOrigin } from "@mui/material"
+import { Popover, PopoverOrigin, Paper } from "@mui/material"
 
 interface GenericPopoverProps {
   id: string
-  anchorEl: HTMLElement | SVGSVGElement | null
+  anchorEl: HTMLElement | SVGSVGElement | null | SVGPathElement
   open: boolean
   onClose: () => void
   children: ReactNode
   anchorOrigin?: PopoverOrigin
   transformOrigin?: PopoverOrigin
   maxHeight?: number
+  maxWidth?: number
   style?: React.CSSProperties
 }
 
@@ -22,6 +23,7 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
   anchorOrigin = { vertical: "top", horizontal: "right" },
   transformOrigin = { vertical: "top", horizontal: "left" },
   maxHeight = 500,
+  maxWidth = 500,
   style,
 }) => (
   <Popover
@@ -31,21 +33,26 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
     onClose={onClose}
     anchorOrigin={anchorOrigin}
     transformOrigin={transformOrigin}
-    style={{ maxHeight, ...style }}
+    style={{ width: "100%", ...style }}
     onClick={(e) => {
       e.stopPropagation()
     }}
   >
-    <Box
+    <Paper
+      elevation={2}
       sx={{
-        p: 1,
+        width: "100%",
+        maxWidth,
+        maxHeight,
+        px: 1,
+        py: 1.25,
         display: "flex",
+        flex: 1,
         flexDirection: "column",
-        gap: 0.5,
-        bgcolor: "#F8F9FA",
+        bgcolor: "#f7f9fb",
       }}
     >
       {children}
-    </Box>
+    </Paper>
   </Popover>
 )

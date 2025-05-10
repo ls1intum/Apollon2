@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Router, Request, Response } from "express"
 import Diagram from "./models/Diagram"
 
@@ -19,7 +20,7 @@ router.get("/:diagramID", async (req: Request, res: Response): Promise<any> => {
 
 router.post("/", async (req: Request, res: Response): Promise<any> => {
   try {
-    const { id, version, title, type, nodes, edges } = req.body
+    const { id, version, title, type, nodes, edges, assessments } = req.body
 
     if (!id || !version || !title || !type) {
       return res
@@ -45,6 +46,7 @@ router.post("/", async (req: Request, res: Response): Promise<any> => {
       type,
       nodes: nodes || [],
       edges: edges || [],
+      assessments: assessments || {},
     })
 
     const savedDiagram = await newDiagram.save()
@@ -57,7 +59,7 @@ router.post("/", async (req: Request, res: Response): Promise<any> => {
 
 router.put("/:diagramID", async (req: Request, res: Response): Promise<any> => {
   try {
-    const { version, title, type, nodes, edges } = req.body
+    const { version, title, type, nodes, edges, assessments } = req.body
 
     // Validate required fields
     if (!version || !title || !type) {
@@ -76,6 +78,7 @@ router.put("/:diagramID", async (req: Request, res: Response): Promise<any> => {
           type,
           nodes: nodes || [],
           edges: edges || [],
+          assessments: assessments || {},
         },
       },
       {

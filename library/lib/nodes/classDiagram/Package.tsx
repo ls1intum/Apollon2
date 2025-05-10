@@ -6,15 +6,18 @@ import {
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
-import { PackagePopover, PackageSVG } from "@/components"
+import { PackageSVG } from "@/components"
 import { useHandleOnResize } from "@/hooks"
 import { PackageNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
-import { useEffect, useRef, useState } from "react"
-import { useDiagramStore } from "@/store/context"
+import { useRef } from "react"
+import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
+import { useHandleDelete } from "@/hooks/useHandleDelete"
+import { PopoverManager } from "@/components/popovers/PopoverManager"
+import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 
 export default function Package({
   id,
@@ -22,56 +25,32 @@ export default function Package({
   height,
   data: { name },
   parentId,
+  type,
 }: NodeProps<Node<PackageNodeProps>>) {
+  const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
   const { onResize } = useHandleOnResize(parentId)
-  const [showEditPopover, setShowEditPopover] = useState(false)
-  const svgRef = useRef<SVGSVGElement | null>(null)
-  const { interactiveElementId, setNodes } = useDiagramStore(
+  const isDiagramModifiable = useDiagramModifiable()
+  const setPopOverElementId = usePopoverStore(
+    useShallow((state) => state.setPopOverElementId)
+  )
+  const handleDelete = useHandleDelete(id)
+
+  const { interactiveElementId } = useDiagramStore(
     useShallow((state) => ({
       setNodes: state.setNodes,
       interactiveElementId: state.interactiveElementId,
     }))
   )
-  const selected = id === interactiveElementId
-
-  useEffect(() => {
-    if (!selected) {
-      setShowEditPopover(false)
-    }
-  }, [selected])
-
-  const handlePopoverClose = () => {
-    setShowEditPopover(false)
-  }
-
-  const handleDelete = () => {
-    setNodes((nodes) => nodes.filter((node) => node.id !== id))
-  }
-  const handleNameChange = (newName: string) => {
-    setNodes((nodes) =>
-      nodes.map((node) => {
-        if (node.id === id) {
-          return {
-            ...node,
-            data: {
-              ...node.data,
-              name: newName,
-            },
-          }
-        }
-        return node
-      })
-    )
-  }
 
   if (!width || !height) {
     return null
   }
+  const selected = id === interactiveElementId
 
   return (
     <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <NodeToolbar
-        isVisible={selected}
+        isVisible={isDiagramModifiable && selected}
         position={Position.Top}
         align="end"
         offset={10}
@@ -84,32 +63,27 @@ export default function Package({
 
           <EditIcon
             onClick={() => {
-              setShowEditPopover(true)
+              setPopOverElementId(id)
             }}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />
         </Box>
       </NodeToolbar>
       <NodeResizer
-        isVisible={Boolean(selected)}
+        isVisible={isDiagramModifiable && selected}
         onResize={onResize}
         minHeight={50}
         minWidth={50}
         handleStyle={{ width: 8, height: 8 }}
       />
-      <PackageSVG
-        ref={svgRef}
-        width={width}
-        height={height}
-        name={name}
-        id={id}
-      />
-      <PackagePopover
-        nodeId={id}
-        anchorEl={showEditPopover ? svgRef.current : null}
-        open={showEditPopover}
-        onClose={handlePopoverClose}
-        onNameChange={handleNameChange}
+      <div ref={packageSvgWrapperRef}>
+        <PackageSVG width={width} height={height} name={name} id={id} />
+      </div>
+
+      <PopoverManager
+        anchorEl={packageSvgWrapperRef.current}
+        elementId={id}
+        type={type as "package"}
       />
     </DefaultNodeWrapper>
   )

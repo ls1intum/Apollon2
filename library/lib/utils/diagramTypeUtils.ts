@@ -24,6 +24,7 @@ export const mapFromReactFlowNodeToApollonNode = (node: Node): ApollonNode => {
       x: node.position.x,
       y: node.position.y,
     },
+    parentId: node.parentId,
     data: node.data,
     measured: {
       width: node.measured?.width ?? 0,

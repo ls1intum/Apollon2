@@ -13,9 +13,9 @@ import {
   SvgMarkers,
 } from "@/components"
 import "@/styles/app.css"
-import { useDiagramStore } from "./store/context"
+import { useDiagramStore, useMetadataStore } from "./store/context"
 import { useShallow } from "zustand/shallow"
-import { DiagramType } from "./types"
+import { ApollonMode, DiagramType } from "./types"
 import {
   MIN_SCALE_TO_ZOOM_OUT,
   MAX_SCALE_TO_ZOOM_IN,
@@ -27,26 +27,34 @@ import {
   useConnect,
   useReconnect,
   useCanvasClickEvents,
+  useElementInteractions,
 } from "./hooks"
 import { useDragOver } from "./hooks/useDragOver"
 import { diagramNodeTypes } from "./nodes"
+import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
-  readonlyDiagram: boolean
 }
 const proOptions = { hideAttribution: true }
 
-function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
-  const { nodes, onNodesChange, edges, onEdgesChange } = useDiagramStore(
+function App({ onReactFlowInit }: AppProps) {
+  const { nodes, onNodesChange, edges, onEdgesChange, diagramId } =
+    useDiagramStore(
+      useShallow((state) => ({
+        nodes: state.nodes,
+        onNodesChange: state.onNodesChange,
+        edges: state.edges,
+        onEdgesChange: state.onEdgesChange,
+        diagramId: state.diagramId,
+      }))
+    )
+  const { diagramMode } = useMetadataStore(
     useShallow((state) => ({
-      nodes: state.nodes,
-      onNodesChange: state.onNodesChange,
-      edges: state.edges,
-      onEdgesChange: state.onEdgesChange,
+      readonlyDiagram: state.readonly,
+      diagramMode: state.mode,
     }))
   )
-  const diagramId = useDiagramStore(useShallow((state) => state.diagramId))
 
   const { onNodeDragStop } = useNodeDragStop()
   const { onDragOver } = useDragOver()
@@ -54,6 +62,10 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
     useConnect()
   const { onReconnect } = useReconnect()
   const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
+  const { onBeforeDelete, onNodeDoubleClick, onEdgeDoubleClick } =
+    useElementInteractions()
+
+  const isDiagramModifiable = useDiagramModifiable()
 
   return (
     <div
@@ -62,7 +74,9 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         flexGrow: 1,
       }}
     >
-      <Sidebar selectedDiagramType={DiagramType.ClassDiagram} />
+      {diagramMode === ApollonMode.Modelling && (
+        <Sidebar selectedDiagramType={DiagramType.ClassDiagram} />
+      )}
       <SvgMarkers />
       <ReactFlow
         id={`react-flow-library-${diagramId}`}
@@ -77,6 +91,7 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         onConnect={onConnect}
         onEdgesDelete={onEdgesDelete}
         onConnectEnd={onConnectEnd}
+        zoomOnDoubleClick={false}
         onNodeDragStop={onNodeDragStop}
         onReconnect={onReconnect}
         connectionLineType={ConnectionLineType.Step}
@@ -88,15 +103,19 @@ function App({ onReactFlowInit, readonlyDiagram }: AppProps) {
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
         snapGrid={[SNAP_TO_GRID_PX, SNAP_TO_GRID_PX]}
-        nodesDraggable={!readonlyDiagram}
-        nodesConnectable={!readonlyDiagram}
-        elementsSelectable={!readonlyDiagram}
-        edgesFocusable={!readonlyDiagram}
-        nodesFocusable={!readonlyDiagram}
         onNodeClick={onNodeClick}
         onEdgeClick={onEdgeClick}
+        onNodeDoubleClick={onNodeDoubleClick}
+        onEdgeDoubleClick={onEdgeDoubleClick}
         onPaneClick={onPaneClick}
+        onBeforeDelete={onBeforeDelete}
         proOptions={proOptions}
+        edgesReconnectable={isDiagramModifiable}
+        nodesConnectable={isDiagramModifiable}
+        nodesDraggable={isDiagramModifiable}
+        elementsSelectable={isDiagramModifiable}
+        edgesFocusable={isDiagramModifiable}
+        nodesFocusable={isDiagramModifiable}
       >
         <CustomBackground />
         <CustomMiniMap />

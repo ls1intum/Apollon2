@@ -1,3 +1,4 @@
+import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useDiagramStore } from "@/store/context"
 import { Handle, Position } from "@xyflow/react"
 import { useShallow } from "zustand/shallow"
@@ -25,6 +26,7 @@ export function DefaultNodeWrapper({
   const interactiveElementId = useDiagramStore(
     useShallow((state) => state.interactiveElementId)
   )
+  const isDiagramModifiable = useDiagramModifiable()
 
   const selectedHandleStyle = {
     opacity: 0.6,
@@ -44,12 +46,14 @@ export function DefaultNodeWrapper({
           left: adjustedWidth,
           ...(selected ? selectedHandleStyle : {}),
         }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="top"
         type="source"
         position={Position.Top}
         style={{ border: "0px", ...(selected ? selectedHandleStyle : {}) }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="top-right"
@@ -60,6 +64,7 @@ export function DefaultNodeWrapper({
           left: width - adjustedWidth,
           ...(selected ? selectedHandleStyle : {}),
         }}
+        isConnectable={isDiagramModifiable}
       />
 
       <Handle
@@ -71,12 +76,14 @@ export function DefaultNodeWrapper({
           top: adjustedHeight,
           ...(selected ? selectedHandleStyle : {}),
         }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="right"
         type="source"
         position={Position.Right}
         style={{ border: "0px", ...(selected ? selectedHandleStyle : {}) }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="right-bottom"
@@ -87,6 +94,7 @@ export function DefaultNodeWrapper({
           top: height - adjustedHeight,
           ...(selected ? selectedHandleStyle : {}),
         }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="bottom-right"
@@ -97,12 +105,14 @@ export function DefaultNodeWrapper({
           left: width - adjustedWidth,
           ...(selected ? selectedHandleStyle : {}),
         }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="bottom"
         type="source"
         position={Position.Bottom}
         style={{ border: "0px", ...(selected ? selectedHandleStyle : {}) }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="bottom-left"
@@ -113,6 +123,7 @@ export function DefaultNodeWrapper({
           left: adjustedWidth,
           ...(selected ? selectedHandleStyle : {}),
         }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="left-bottom"
@@ -123,12 +134,14 @@ export function DefaultNodeWrapper({
           top: height - adjustedHeight,
           ...(selected ? selectedHandleStyle : {}),
         }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="left"
         type="source"
         position={Position.Left}
         style={{ border: "0px", ...(selected ? selectedHandleStyle : {}) }}
+        isConnectable={isDiagramModifiable}
       />
       <Handle
         id="left-top"
@@ -139,6 +152,7 @@ export function DefaultNodeWrapper({
           top: adjustedHeight,
           ...(selected ? selectedHandleStyle : {}),
         }}
+        isConnectable={isDiagramModifiable}
       />
       {children}
     </>

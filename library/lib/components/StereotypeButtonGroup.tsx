@@ -6,6 +6,7 @@ import { useDiagramStore } from "@/store"
 
 interface StereotypeButtonGroupProps {
   nodeId: string
+  selectedStereotype?: ClassType
 }
 
 const stereotypes: ClassType[] = [
@@ -16,21 +17,19 @@ const stereotypes: ClassType[] = [
 
 export const StereotypeButtonGroup: React.FC<StereotypeButtonGroupProps> = ({
   nodeId,
+  selectedStereotype,
 }) => {
-  const { nodes, setNodes } = useDiagramStore(
-    useShallow((state) => ({ nodes: state.nodes, setNodes: state.setNodes }))
+  const { setNodes } = useDiagramStore(
+    useShallow((state) => ({ setNodes: state.setNodes }))
   )
-  const selectedStereotype = nodes.find((node) => node.id === nodeId)?.data
-    ?.stereotype
 
   const handleStereotypeChange = (stereotype: ClassType | undefined) => {
-    const needExpand =
-      selectedStereotype !== stereotype &&
-      selectedStereotype === undefined &&
-      stereotype !== undefined
-    const needShrink =
-      selectedStereotype !== undefined && stereotype === undefined
-    const nodeHeightDifference = needExpand ? 10 : needShrink ? -10 : 0
+    const nextStereotype =
+      selectedStereotype === stereotype ? undefined : stereotype
+
+    const needsShrink = !!selectedStereotype && !nextStereotype
+    const needExpand = !!nextStereotype && !selectedStereotype
+    const nodeHeightDifference = needExpand ? 10 : needsShrink ? -10 : 0
 
     setNodes((nodes) =>
       nodes.map((node) => {
@@ -39,7 +38,7 @@ export const StereotypeButtonGroup: React.FC<StereotypeButtonGroupProps> = ({
             ...node,
             data: {
               ...node.data,
-              stereotype,
+              stereotype: nextStereotype,
             },
             height: node.height! + nodeHeightDifference,
             measured: {

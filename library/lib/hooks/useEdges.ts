@@ -1,20 +1,7 @@
-import { useEffect, useState } from "react"
 import { useReactFlow } from "@xyflow/react"
 
-export function useEdgePopOver({
-  id,
-  selected,
-}: {
-  id: string
-  selected: boolean
-}) {
+export function useEdgePopOver(id: string) {
   const reactFlow = useReactFlow()
-
-  const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null)
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null)
-  }
 
   const handleEdgeTypeChange = (newType: string) => {
     reactFlow.updateEdge(id, { type: newType })
@@ -45,18 +32,6 @@ export function useEdgePopOver({
   const handleSourceMultiplicityChange = (newMultiplicity: string) => {
     reactFlow.updateEdgeData(id, { sourceMultiplicity: newMultiplicity })
   }
-
-  useEffect(() => {
-    if (!selected) {
-      handlePopoverClose()
-    }
-  }, [selected])
-
-  useEffect(() => {
-    if (!anchorEl) {
-      reactFlow.updateNode(id, { selected: false })
-    }
-  }, [anchorEl, reactFlow, id])
 
   return {
     handleSourceRoleChange,

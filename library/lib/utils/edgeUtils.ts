@@ -61,29 +61,6 @@ export const adjustSourceCoordinates = (
   return { sourceX, sourceY }
 }
 
-/**
- * Calculates the toolbar position based on the source and target coordinates.
- *
- * @param adjustedSourceCoordinates - The source coordinates with properties `sourceX` and `sourceY`.
- * @param adjustedTargetCoordinates - The target coordinates with properties `targetX` and `targetY`.
- * @returns The toolbar position with `x` and `y` properties.
- */
-export function getToolbarPosition(
-  adjustedSourceCoordinates: { sourceX: number; sourceY: number },
-  adjustedTargetCoordinates: { targetX: number; targetY: number }
-): { x: number; y: number } {
-  const x =
-    (adjustedSourceCoordinates.sourceX + adjustedTargetCoordinates.targetX) /
-      2 +
-    40
-  const y =
-    (adjustedSourceCoordinates.sourceY + adjustedTargetCoordinates.targetY) /
-      2 -
-    80
-
-  return { x, y }
-}
-
 interface TextPlacement {
   roleX: number
   roleY: number

@@ -1,6 +1,6 @@
 import { SVGComponentProps, CustomText } from "@/components"
 import { LINE_WIDTH, LINE_WIDTH_ON_EDGE } from "@/constants"
-import { FC, forwardRef, SVGAttributes } from "react"
+import { FC, SVGAttributes } from "react"
 
 export type PackageSVGProps = SVGComponentProps & {
   width: number
@@ -13,46 +13,46 @@ export type PackageSVGProps = SVGComponentProps & {
 const leftTopBoxHeight = 10
 const padding = 5
 
-export const PackageSVG = forwardRef<SVGSVGElement, PackageSVGProps>(
-  function PackageSVG(
-    { width, height, name, svgAttributes, transformScale }: PackageSVGProps,
-    ref
-  ) {
-    return (
-      <svg
-        ref={ref}
-        width={width}
-        height={height}
-        style={{
-          transformOrigin: "left top",
-          transformBox: "content-box",
-          transform: transformScale ? `scale(${transformScale})` : undefined,
-        }}
-        {...svgAttributes}
-      >
-        <g>
-          <LeftTopBox leftTopBoxHeight={leftTopBoxHeight} />
-          <MainBox
-            width={width}
-            height={height}
-            leftTopBoxHeight={leftTopBoxHeight}
-          />
+export const PackageSVG: React.FC<PackageSVGProps> = ({
+  width,
+  height,
+  name,
+  svgAttributes,
+  transformScale,
+}) => {
+  return (
+    <svg
+      width={width}
+      height={height}
+      style={{
+        transformOrigin: "left top",
+        transformBox: "content-box",
+        transform: transformScale ? `scale(${transformScale})` : undefined,
+      }}
+      {...svgAttributes}
+    >
+      <g>
+        <LeftTopBox leftTopBoxHeight={leftTopBoxHeight} />
+        <MainBox
+          width={width}
+          height={height}
+          leftTopBoxHeight={leftTopBoxHeight}
+        />
 
-          {/* Name Text */}
-          <CustomText
-            x={width / 2}
-            y={leftTopBoxHeight + padding}
-            textAnchor="middle"
-            fontWeight="600"
-            dominantBaseline="hanging"
-          >
-            {name}
-          </CustomText>
-        </g>
-      </svg>
-    )
-  }
-)
+        {/* Name Text */}
+        <CustomText
+          x={width / 2}
+          y={leftTopBoxHeight + padding}
+          textAnchor="middle"
+          fontWeight="600"
+          dominantBaseline="hanging"
+        >
+          {name}
+        </CustomText>
+      </g>
+    </svg>
+  )
+}
 
 // Sub-components for better modularity
 

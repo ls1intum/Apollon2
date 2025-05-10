@@ -1,7 +1,7 @@
 import { Quadrant } from "@/enums"
-import { LocationPopOver } from "@/types"
+import { LocationPopover } from "@/types"
 
-const originMap: Record<Quadrant, LocationPopOver> = {
+const originMap: Record<Quadrant, LocationPopover> = {
   [Quadrant.TopRight]: {
     anchorOrigin: { vertical: "top", horizontal: "left" },
     transformOrigin: { vertical: "top", horizontal: "right" },
@@ -20,6 +20,6 @@ const originMap: Record<Quadrant, LocationPopOver> = {
   },
 }
 
-export const getPopoverOrigin = (quadrant: Quadrant): LocationPopOver => {
+export const getPopoverOrigin = (quadrant: Quadrant): LocationPopover => {
   return originMap[quadrant]
 }

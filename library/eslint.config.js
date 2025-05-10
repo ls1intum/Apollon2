@@ -18,5 +18,8 @@ export default [
         version: "detect",
       },
     },
+    rules: {
+      "react/prop-types": "off",
+    },
   },
 ]
