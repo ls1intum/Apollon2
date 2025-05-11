@@ -1,6 +1,9 @@
 import { SVGComponentProps, CustomText } from "@/components"
-import { LINE_WIDTH, LINE_WIDTH_ON_EDGE } from "@/constants"
+import { LINE_WIDTH } from "@/constants"
+import { useDiagramStore } from "@/store"
 import { FC, SVGAttributes } from "react"
+import { useShallow } from "zustand/shallow"
+import AssessmentIcon from "../../AssessmentIcon"
 
 export type PackageSVGProps = SVGComponentProps & {
   width: number
@@ -8,22 +11,36 @@ export type PackageSVGProps = SVGComponentProps & {
   name: string
   transformScale?: number
   svgAttributes?: SVGAttributes<SVGElement>
+  showAssessmentResults?: boolean
 }
 
 const leftTopBoxHeight = 10
 const padding = 5
 
 export const PackageSVG: React.FC<PackageSVGProps> = ({
+  id,
   width,
   height,
   name,
   svgAttributes,
   transformScale,
+  showAssessmentResults = false,
 }) => {
+  const assessments = useDiagramStore(useShallow((state) => state.assessments))
+  const svgWidth = showAssessmentResults ? width + 20 : width
+  const svgHeight = showAssessmentResults ? height + 20 : height
+
+  const nodeScore = assessments[id]?.score
+
   return (
     <svg
-      width={width}
-      height={height}
+      width={svgWidth}
+      height={svgHeight}
+      viewBox={
+        showAssessmentResults
+          ? `0 -20 ${svgWidth} ${svgHeight}`
+          : `0 0 ${svgWidth} ${svgHeight}`
+      }
       style={{
         transformOrigin: "left top",
         transformBox: "content-box",
@@ -50,6 +67,10 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
           {name}
         </CustomText>
       </g>
+
+      {showAssessmentResults && (
+        <AssessmentIcon x={width - 15} y={-5} score={nodeScore} />
+      )}
     </svg>
   )
 }
@@ -63,52 +84,13 @@ type LeftTopBoxProps = {
 const LeftTopBox: FC<LeftTopBoxProps> = ({ leftTopBoxHeight }) => {
   return (
     <g>
+      <rect fill="black" x={0} y={0} width={40} height={leftTopBoxHeight} />
       <rect
-        x="0"
-        y="0"
-        width={40}
-        height={leftTopBoxHeight}
+        x={1}
+        y={1}
+        width={40 - 2 * LINE_WIDTH}
+        height={leftTopBoxHeight - LINE_WIDTH}
         fill="white"
-        stroke="none"
-      />
-      {/* Top Side */}
-      <line
-        x1="0"
-        y1="0"
-        x2="40"
-        y2="0"
-        stroke="black"
-        strokeWidth={LINE_WIDTH_ON_EDGE}
-      />
-
-      {/* Right Side  */}
-      <line
-        x1="40"
-        y1="0"
-        x2="40"
-        y2="10"
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-      />
-
-      {/* Bottom Side */}
-      <line
-        x1="40"
-        y1="10"
-        x2="0"
-        y2="10"
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-      />
-
-      {/* Left Side  */}
-      <line
-        x1="0"
-        y1="10"
-        x2="0"
-        y2="0"
-        stroke="black"
-        strokeWidth={LINE_WIDTH_ON_EDGE}
       />
     </g>
   )
@@ -124,52 +106,18 @@ const MainBox: FC<MainBoxProps> = ({ width, height, leftTopBoxHeight }) => {
   return (
     <g>
       <rect
-        x="0"
+        x={0}
         y={leftTopBoxHeight}
         width={width}
         height={height - leftTopBoxHeight}
+        fill="black"
+      />
+      <rect
+        x={1}
+        y={leftTopBoxHeight + 1}
+        width={width - 2 * LINE_WIDTH}
+        height={height - leftTopBoxHeight - 2 * LINE_WIDTH}
         fill="white"
-        stroke="none"
-      />
-
-      {/* Top Side */}
-      <line
-        x1="0"
-        y1={leftTopBoxHeight}
-        x2={width}
-        y2={leftTopBoxHeight}
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-      />
-
-      {/* Right Side with strokeWidth */}
-      <line
-        x1={width}
-        y1={leftTopBoxHeight}
-        x2={width}
-        y2={height}
-        stroke="black"
-        strokeWidth={LINE_WIDTH_ON_EDGE}
-      />
-
-      {/* Bottom Side with strokeWidth*/}
-      <line
-        x1={width}
-        y1={height}
-        x2="0"
-        y2={height}
-        stroke="black"
-        strokeWidth={LINE_WIDTH_ON_EDGE}
-      />
-
-      {/* Left Side with strokeWidth*/}
-      <line
-        x1="0"
-        y1={height}
-        x2="0"
-        y2={leftTopBoxHeight}
-        stroke="black"
-        strokeWidth={LINE_WIDTH_ON_EDGE}
       />
     </g>
   )

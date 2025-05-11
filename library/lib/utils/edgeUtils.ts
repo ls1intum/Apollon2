@@ -270,6 +270,7 @@ export function findClosestHandle(point: XYPosition, rect: Rect): string {
 }
 
 export function simplifySvgPath(path: string, decimals: number = 2): string {
+  console.log("simplifying path", path)
   const round = (num: number) => Number(num.toFixed(decimals))
 
   const withSpaces = path.replace(/([MLQ])(?=[-0-9])/gi, "$1 ")
@@ -313,7 +314,10 @@ export function simplifySvgPath(path: string, decimals: number = 2): string {
       i += 2
     }
   }
-  return outputTokens.join(" ")
+
+  const result = outputTokens.join(" ")
+  console.log("simplified path", result)
+  return result
 }
 
 export function simplifyPoints(points: IPoint[]): IPoint[] {

@@ -64,12 +64,14 @@ export const PopoverManager = ({
   type,
 }: PopoverManagerProps) => {
   const viewportCenter = useViewportCenter()
-  const { nodes, setInteractiveElementId } = useDiagramStore(
-    useShallow((state) => ({
-      nodes: state.nodes,
-      setInteractiveElementId: state.setInteractiveElementId,
-    }))
-  )
+  const { nodes, interactiveElementId, setInteractiveElementId } =
+    useDiagramStore(
+      useShallow((state) => ({
+        nodes: state.nodes,
+        interactiveElementId: state.interactiveElementId,
+        setInteractiveElementId: state.setInteractiveElementId,
+      }))
+    )
   const { diagramMode, readonly } = useMetadataStore(
     useShallow((state) => ({
       diagramMode: state.mode,
@@ -87,7 +89,8 @@ export const PopoverManager = ({
     return null
   }
 
-  const open = popoverElementId === elementId
+  const open =
+    popoverElementId === elementId && elementId === interactiveElementId
   const onClose = () => {
     setInteractiveElementId(null)
     setPopOverElementId(null)
