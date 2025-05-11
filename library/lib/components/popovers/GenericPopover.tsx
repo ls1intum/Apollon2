@@ -33,7 +33,7 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
     onClose={onClose}
     anchorOrigin={anchorOrigin}
     transformOrigin={transformOrigin}
-    style={{ width: "100%", ...style }}
+    style={{ maxHeight, width: "100%", ...style }}
     onClick={(e) => {
       e.stopPropagation()
     }}
@@ -43,7 +43,6 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
       sx={{
         width: "100%",
         maxWidth,
-        maxHeight,
         px: 1,
         py: 1.25,
         display: "flex",
