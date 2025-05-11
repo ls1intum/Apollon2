@@ -136,10 +136,31 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
         return
       }
 
+      // Deep clone defaultData to avoid mutating the original config
+      const defaultData = structuredClone(dropElementConfig.defaultData)
+
+      // Assign new IDs to methods and attributes
+      if (defaultData.methods) {
+        defaultData.methods = (defaultData.methods as Array<object>).map(
+          (method) => ({
+            ...method,
+            id: generateUUID(),
+          })
+        )
+      }
+      if (defaultData.attributes) {
+        defaultData.attributes = (defaultData.attributes as Array<object>).map(
+          (attribute) => ({
+            ...attribute,
+            id: generateUUID(),
+          })
+        )
+      }
+
       // Prepare the drop data including offset adjustments
       const dropData: DropNodeData = {
         type: dropElementConfig.type,
-        data: dropElementConfig.defaultData,
+        data: defaultData,
         offsetX: clickOffset.x / transformScale,
         offsetY: clickOffset.y / transformScale,
       }
@@ -182,7 +203,7 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
         height: dropElementConfig.height,
         type: dropData.type,
         position: { ...position },
-        data: { ...dropElementConfig.defaultData, ...dropData.data },
+        data: { ...defaultData, ...dropData.data },
         parentId: parentId,
         measured: {
           width: dropElementConfig.width,
@@ -190,8 +211,6 @@ const DraggableGhost: React.FC<DraggableGhostProps> = ({
         },
         selected: false,
       }
-
-      // Adjust position relative to parent if a parent exists
 
       // Update nodes and resize parent nodes if necessary
       const updatedNodes = structuredClone([...nodes, newNode])
