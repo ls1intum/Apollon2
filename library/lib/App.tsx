@@ -12,6 +12,7 @@ import {
   Sidebar,
   SvgMarkers,
 } from "@/components"
+import "@xyflow/react/dist/style.css"
 import "@/styles/app.css"
 import { useDiagramStore, useMetadataStore } from "./store/context"
 import { useShallow } from "zustand/shallow"

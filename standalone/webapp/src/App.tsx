@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router"
 import { AppProviders } from "./AppProviders"
 import { Navbar } from "./components"
-import "@xyflow/react/dist/style.css"
 import { Apollon, ApollonWithConnection, ErrorPage } from "@/pages"
 import { SafeArea } from "capacitor-plugin-safe-area"
 import { ToastContainer } from "react-toastify"
