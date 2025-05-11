@@ -5,8 +5,8 @@ import { useShallow } from "zustand/shallow"
 
 interface Props {
   children: React.ReactNode
-  width: number
-  height: number
+  width?: number
+  height?: number
   elementId: string
 }
 
@@ -18,25 +18,40 @@ function calculateAdjustedQuarter(x: number): number {
 export function DefaultNodeWrapper({
   elementId,
   children,
-  width,
-  height,
+  width = 0,
+  height = 0,
 }: Props) {
-  const adjustedWidth = calculateAdjustedQuarter(width)
-  const adjustedHeight = calculateAdjustedQuarter(height)
   const interactiveElementId = useDiagramStore(
     useShallow((state) => state.interactiveElementId)
   )
-  const isDiagramModifiable = useDiagramModifiable()
 
-  const selectedHandleStyle = {
-    opacity: 0.6,
-    padding: 4,
-    backgroundColor: "rgb(99, 154, 242)",
-    zIndex: 10,
-  }
+  const adjustedWidth = calculateAdjustedQuarter(width)
+  const adjustedHeight = calculateAdjustedQuarter(height)
+
+  const isDiagramModifiable = useDiagramModifiable()
+  const verticalOffset = isDiagramModifiable ? 0 : 20
+
   const selected = elementId === interactiveElementId
+
+  const selectedHandleStyle =
+    selected && isDiagramModifiable
+      ? {
+          opacity: 0.6,
+          padding: 4,
+          backgroundColor: "rgb(99, 154, 242)",
+          zIndex: 10,
+        }
+      : {}
+
   return (
-    <>
+    <div
+      className={
+        isDiagramModifiable
+          ? "react-flow-node-default"
+          : "react-flow-node-assessment"
+      }
+      style={{ width, height }}
+    >
       <Handle
         id="top-left"
         type="source"
@@ -44,7 +59,8 @@ export function DefaultNodeWrapper({
         style={{
           border: "0px",
           left: adjustedWidth,
-          ...(selected ? selectedHandleStyle : {}),
+          top: verticalOffset,
+          ...selectedHandleStyle,
         }}
         isConnectable={isDiagramModifiable}
       />
@@ -52,7 +68,12 @@ export function DefaultNodeWrapper({
         id="top"
         type="source"
         position={Position.Top}
-        style={{ border: "0px", ...(selected ? selectedHandleStyle : {}) }}
+        style={{
+          border: "0px",
+          top: verticalOffset,
+          left: width / 2,
+          ...selectedHandleStyle,
+        }}
         isConnectable={isDiagramModifiable}
       />
       <Handle
@@ -61,8 +82,9 @@ export function DefaultNodeWrapper({
         position={Position.Top}
         style={{
           border: "0px",
-          left: width - adjustedWidth,
-          ...(selected ? selectedHandleStyle : {}),
+          left: adjustedWidth + width / 2,
+          top: verticalOffset,
+          ...selectedHandleStyle,
         }}
         isConnectable={isDiagramModifiable}
       />
@@ -73,8 +95,8 @@ export function DefaultNodeWrapper({
         position={Position.Right}
         style={{
           border: "0px",
-          top: adjustedHeight,
-          ...(selected ? selectedHandleStyle : {}),
+          top: adjustedHeight + verticalOffset,
+          ...selectedHandleStyle,
         }}
         isConnectable={isDiagramModifiable}
       />
@@ -82,7 +104,11 @@ export function DefaultNodeWrapper({
         id="right"
         type="source"
         position={Position.Right}
-        style={{ border: "0px", ...(selected ? selectedHandleStyle : {}) }}
+        style={{
+          border: "0px",
+          top: height / 2 + verticalOffset,
+          ...selectedHandleStyle,
+        }}
         isConnectable={isDiagramModifiable}
       />
       <Handle
@@ -91,8 +117,8 @@ export function DefaultNodeWrapper({
         position={Position.Right}
         style={{
           border: "0px",
-          top: height - adjustedHeight,
-          ...(selected ? selectedHandleStyle : {}),
+          top: height - adjustedHeight + verticalOffset,
+          ...selectedHandleStyle,
         }}
         isConnectable={isDiagramModifiable}
       />
@@ -102,8 +128,9 @@ export function DefaultNodeWrapper({
         position={Position.Bottom}
         style={{
           border: "0px",
-          left: width - adjustedWidth,
-          ...(selected ? selectedHandleStyle : {}),
+          left: width / 2 + adjustedWidth,
+          bottom: -1 * verticalOffset,
+          ...selectedHandleStyle,
         }}
         isConnectable={isDiagramModifiable}
       />
@@ -111,7 +138,11 @@ export function DefaultNodeWrapper({
         id="bottom"
         type="source"
         position={Position.Bottom}
-        style={{ border: "0px", ...(selected ? selectedHandleStyle : {}) }}
+        style={{
+          border: "0px",
+          bottom: -1 * verticalOffset,
+          ...selectedHandleStyle,
+        }}
         isConnectable={isDiagramModifiable}
       />
       <Handle
@@ -121,7 +152,8 @@ export function DefaultNodeWrapper({
         style={{
           border: "0px",
           left: adjustedWidth,
-          ...(selected ? selectedHandleStyle : {}),
+          bottom: -1 * verticalOffset,
+          ...selectedHandleStyle,
         }}
         isConnectable={isDiagramModifiable}
       />
@@ -131,8 +163,8 @@ export function DefaultNodeWrapper({
         position={Position.Left}
         style={{
           border: "0px",
-          top: height - adjustedHeight,
-          ...(selected ? selectedHandleStyle : {}),
+          top: height - adjustedHeight + verticalOffset,
+          ...selectedHandleStyle,
         }}
         isConnectable={isDiagramModifiable}
       />
@@ -140,7 +172,11 @@ export function DefaultNodeWrapper({
         id="left"
         type="source"
         position={Position.Left}
-        style={{ border: "0px", ...(selected ? selectedHandleStyle : {}) }}
+        style={{
+          border: "0px",
+          top: height / 2 + verticalOffset,
+          ...selectedHandleStyle,
+        }}
         isConnectable={isDiagramModifiable}
       />
       <Handle
@@ -149,12 +185,12 @@ export function DefaultNodeWrapper({
         position={Position.Left}
         style={{
           border: "0px",
-          top: adjustedHeight,
-          ...(selected ? selectedHandleStyle : {}),
+          top: adjustedHeight + verticalOffset,
+          ...selectedHandleStyle,
         }}
         isConnectable={isDiagramModifiable}
       />
       {children}
-    </>
+    </div>
   )
 }

@@ -31,6 +31,7 @@ import {
 } from "@/utils/edgeUtils"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
+import AssessmentIcon from "@/components/svgs/AssessmentIcon"
 
 export const GenericEdge = ({
   id,
@@ -65,7 +66,12 @@ export const GenericEdge = ({
   const { getNode, getEdges, screenToFlowPosition, getNodes } = useReactFlow()
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
   const { onReconnect } = useReconnect()
-  const setEdges = useDiagramStore(useShallow((state) => state.setEdges))
+  const { setEdges, assessments } = useDiagramStore(
+    useShallow((state) => ({
+      setEdges: state.setEdges,
+      assessments: state.assessments,
+    }))
+  )
 
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
@@ -141,8 +147,16 @@ export const GenericEdge = ({
   const computedPoints = useMemo(() => {
     const simplifiedPath = simplifySvgPath(basePath)
     const parsed = parseSvgPath(simplifiedPath)
-    return removeDuplicatePoints(parsed)
-  }, [basePath])
+    let result = removeDuplicatePoints(parsed)
+
+    if (result.length === 2 && !isDiagramModifiable) {
+      result = result.map((point) => ({
+        ...point,
+        y: point.y + 20,
+      }))
+    }
+    return result
+  }, [basePath, isDiagramModifiable])
 
   // When edgePath changes (nodes are dragged), clear customPoints
   useEffect(() => {
@@ -239,53 +253,37 @@ export const GenericEdge = ({
   )
 
   // Memoized drop position getter
-  const getDropPosition = useCallback(
-    (event: PointerEvent) => {
-      return screenToFlowPosition(
-        { x: event.clientX, y: event.clientY },
-        { snapToGrid: false }
-      )
-    },
-    [screenToFlowPosition]
-  )
-  const handleEndpointPointerDown = useCallback(
-    (e: React.PointerEvent, endType: "source" | "target") => {
-      if (straightPathPoints === null) return
-      e.stopPropagation()
+  const getDropPosition = (event: PointerEvent) => {
+    return screenToFlowPosition(
+      { x: event.clientX, y: event.clientY },
+      { snapToGrid: false }
+    )
+  }
+  const handleEndpointPointerDown = (
+    e: React.PointerEvent,
+    endType: "source" | "target"
+  ) => {
+    if (straightPathPoints === null || !isDiagramModifiable) return
+    e.stopPropagation()
 
-      isReconnectingRef.current = true
-      reconnectingEndRef.current = endType
+    isReconnectingRef.current = true
+    reconnectingEndRef.current = endType
 
-      const endpoint =
-        endType === "source"
-          ? activePoints[0]
-          : activePoints[activePoints.length - 1]
+    const endpoint =
+      endType === "source"
+        ? activePoints[0]
+        : activePoints[activePoints.length - 1]
 
-      reconnectOffsetRef.current = {
-        x: e.clientX - endpoint.x,
-        y: e.clientY - endpoint.y,
-      }
+    reconnectOffsetRef.current = {
+      x: e.clientX - endpoint.x,
+      y: e.clientY - endpoint.y,
+    }
 
-      document.addEventListener("pointermove", handleEndpointPointerMove)
-      document.addEventListener("pointerup", handleEndpointPointerUp, {
-        once: true,
-      })
-    },
-    [
-      straightPathPoints,
-      activePoints,
-      source,
-      target,
-      sourceHandleId,
-      targetHandleId,
-      sourceNode,
-      targetNode,
-      id,
-      onReconnect,
-      getEdges,
-      getDropPosition,
-    ]
-  )
+    document.addEventListener("pointermove", handleEndpointPointerMove)
+    document.addEventListener("pointerup", handleEndpointPointerUp, {
+      once: true,
+    })
+  }
 
   const handleEndpointPointerMove = (moveEvent: PointerEvent) => {
     if (!isReconnectingRef.current) return
@@ -305,6 +303,7 @@ export const GenericEdge = ({
 
     setCustomPoints(newPoints)
   }
+
   useEffect(() => {
     if (data?.points) {
       setCustomPoints(data.points)
@@ -388,6 +387,8 @@ export const GenericEdge = ({
 
   const sourcePoint = activePoints[0]
   const targetPoint = activePoints[activePoints.length - 1]
+
+  const nodeScore = assessments[id]?.score
 
   return (
     <>
@@ -507,6 +508,15 @@ export const GenericEdge = ({
           {data?.targetMultiplicity}
         </text>
       )}
+
+      {!isDiagramModifiable && (
+        <AssessmentIcon
+          x={toolbarPosition.x - 15}
+          y={toolbarPosition.y - 15}
+          score={nodeScore}
+        />
+      )}
+
       <PopoverManager
         elementId={id}
         anchorEl={anchorRef.current}

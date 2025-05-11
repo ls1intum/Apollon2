@@ -313,6 +313,7 @@ export function simplifySvgPath(path: string, decimals: number = 2): string {
       i += 2
     }
   }
+
   return outputTokens.join(" ")
 }
 

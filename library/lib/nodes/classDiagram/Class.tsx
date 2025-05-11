@@ -152,7 +152,7 @@ export function Class({
   const finalWidth = Math.max(width ?? 0, minWidth)
 
   return (
-    <DefaultNodeWrapper width={finalWidth} height={minHeight} elementId={id}>
+    <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <NodeResizer
         nodeId={id}
         isVisible={isDiagramModifiable && selected}
@@ -191,6 +191,7 @@ export function Class({
           stereotype={stereotype}
           name={name}
           id={id}
+          showAssessmentResults={!isDiagramModifiable}
         />
       </div>
       <PopoverManager

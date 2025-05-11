@@ -77,7 +77,13 @@ export default function Package({
         handleStyle={{ width: 8, height: 8 }}
       />
       <div ref={packageSvgWrapperRef}>
-        <PackageSVG width={width} height={height} name={name} id={id} />
+        <PackageSVG
+          width={width}
+          height={height}
+          name={name}
+          id={id}
+          showAssessmentResults={!isDiagramModifiable}
+        />
       </div>
 
       <PopoverManager

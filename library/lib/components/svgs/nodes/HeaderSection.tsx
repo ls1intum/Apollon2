@@ -20,31 +20,29 @@ export const HeaderSection: FC<HeaderSectionProps> = ({
   headerHeight,
 }) => {
   return (
-    <g>
-      <CustomText
-        x={width / 2}
-        y={headerHeight / 2}
-        dominantBaseline="middle"
-        textAnchor="middle"
-        font={font}
-        fontWeight="bold"
-        textDecoration={
-          stereotype === ClassType.ObjectClass ? "underline" : "normal"
-        }
-      >
-        {showStereotype && (
-          <tspan x={width / 2} dy="-8" fontSize="85%">
-            {`«${stereotype}»`}
-          </tspan>
-        )}
-        <tspan
-          x={width / 2}
-          dy={showStereotype ? "18" : "0"}
-          fontStyle={stereotype === ClassType.Abstract ? "italic" : "normal"}
-        >
-          {name}
+    <CustomText
+      x={width / 2}
+      y={headerHeight / 2}
+      dominantBaseline="middle"
+      textAnchor="middle"
+      font={font}
+      fontWeight="bold"
+      textDecoration={
+        stereotype === ClassType.ObjectClass ? "underline" : "normal"
+      }
+    >
+      {showStereotype && (
+        <tspan x={width / 2} dy="-8" fontSize="85%">
+          {`«${stereotype}»`}
         </tspan>
-      </CustomText>
-    </g>
+      )}
+      <tspan
+        x={width / 2}
+        dy={showStereotype ? "18" : "0"}
+        fontStyle={stereotype === ClassType.Abstract ? "italic" : "normal"}
+      >
+        {name}
+      </tspan>
+    </CustomText>
   )
 }
