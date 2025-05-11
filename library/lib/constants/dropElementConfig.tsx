@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ClassSVG, PackageSVG } from "@/components"
-import { DiagramType, ClassType } from "@/types"
+import { generateUUID } from "@/utils"
+import { ClassType, DiagramType } from "@/types"
 import { DiagramNodeTypeKeys } from "@/nodes"
 
 export * from "./layoutConstants"
@@ -31,8 +32,8 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
       height: 100,
       defaultData: {
         name: "Class",
-        methods: [{ name: "+ method()" }], // No id here
-        attributes: [{ name: "+ attribute: Type" }], // No id here
+        methods: [{ id: generateUUID(), name: "+ method()" }],
+        attributes: [{ id: generateUUID(), name: "+ attribute: Type" }],
       },
       svg: (props) => <ClassSVG {...props} />,
     },
@@ -43,8 +44,8 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
       defaultData: {
         name: "Abstract",
         stereotype: ClassType.Abstract,
-        methods: [{ name: "+ method()" }],
-        attributes: [{ name: "+ attribute: Type" }],
+        methods: [{ id: generateUUID(), name: "+ method()" }],
+        attributes: [{ id: generateUUID(), name: "+ attribute: Type" }],
       },
       svg: (props) => <ClassSVG {...props} />,
     },
@@ -57,9 +58,9 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
         stereotype: ClassType.Enumeration,
         methods: [],
         attributes: [
-          { name: "Case 1" },
-          { name: "Case 2" },
-          { name: "Case 3" },
+          { id: generateUUID(), name: "Case 1" },
+          { id: generateUUID(), name: "Case 2" },
+          { id: generateUUID(), name: "Case 3" },
         ],
       },
       svg: (props) => <ClassSVG {...props} />,
@@ -71,8 +72,8 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
       defaultData: {
         name: "Interface",
         stereotype: ClassType.Interface,
-        methods: [{ name: "+ method()" }],
-        attributes: [{ name: "+ attribute: Type" }],
+        methods: [{ id: generateUUID(), name: "+ method()" }],
+        attributes: [{ id: generateUUID(), name: "+ attribute: Type" }],
       },
       svg: (props) => <ClassSVG {...props} />,
     },
@@ -85,7 +86,7 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
       defaultData: {
         name: "Object",
         stereotype: ClassType.ObjectClass,
-        attributes: [{ name: "attribute = value" }],
+        attributes: [{ id: generateUUID(), name: "attribute = value" }],
         methods: [],
       },
       svg: (props) => <ClassSVG {...props} />,
