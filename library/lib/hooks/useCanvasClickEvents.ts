@@ -13,7 +13,6 @@ export const useCanvasClickEvents = () => {
 
   const onNodeClick = useCallback(
     (_: MouseEvent, node: Node) => {
-      console.log("Node clicked:", node)
       setInteractiveElementId(node.id)
     },
     [setInteractiveElementId]
@@ -27,7 +26,6 @@ export const useCanvasClickEvents = () => {
   )
 
   const onPaneClick = useCallback(() => {
-    console.log("Pane clicked")
     if (interactiveElementId) {
       setInteractiveElementId(null)
     }

@@ -148,7 +148,7 @@ export const GenericEdge = ({
     const simplifiedPath = simplifySvgPath(basePath)
     const parsed = parseSvgPath(simplifiedPath)
     let result = removeDuplicatePoints(parsed)
-    console.log("DEBUG computedPoints", result)
+
     if (result.length === 2 && !isDiagramModifiable) {
       result = result.map((point) => ({
         ...point,
@@ -166,16 +166,15 @@ export const GenericEdge = ({
   }, [edgePath])
 
   // Active points: use customPoints if available; otherwise, use computedPoints
-  const activePoints = useMemo(() => {
-    console.log("DEBUG customPoints", customPoints)
-    return customPoints.length ? customPoints : computedPoints
-  }, [customPoints, computedPoints])
+  const activePoints = useMemo(
+    () => (customPoints.length ? customPoints : computedPoints),
+    [customPoints, computedPoints]
+  )
 
-  const currentPath = useMemo(() => {
-    const svgPoints = pointsToSvgPath(activePoints)
-    console.log("DEBUG svgPoints", svgPoints)
-    return svgPoints
-  }, [activePoints])
+  const currentPath = useMemo(
+    () => pointsToSvgPath(activePoints),
+    [activePoints]
+  )
 
   useEffect(() => {
     if (pathRef.current) {

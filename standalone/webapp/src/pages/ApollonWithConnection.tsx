@@ -39,7 +39,6 @@ const sendPutRequest = async (diagramId: string, data: ApollonDiagram) => {
     if (!response.ok) {
       throw new Error("Failed to send PUT request")
     }
-    console.log("PUT request successful")
   } catch (error) {
     console.error("Error in PUT request:", error)
     toast.error("Failed to sync diagram data")
@@ -84,7 +83,6 @@ export const ApollonWithConnection: React.FC = () => {
 
           const diagram = await fetchDiagramData(diagramId)
 
-          console.log("Fetched diagram data:", diagram)
           diagram.id = diagramId
           const editorOptions: ApollonOptions = {
             model: diagram,
@@ -164,13 +162,10 @@ export const ApollonWithConnection: React.FC = () => {
     }
 
     return () => {
-      console.log("Cleaning up ApollonWithConnection")
       setApollon2(undefined) // Clear context
 
       // Clear interval if it exists
-
       if (intervalRef.current) {
-        console.log("Clearing interval")
         clearInterval(intervalRef.current)
         intervalRef.current = null
       }
