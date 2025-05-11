@@ -23,13 +23,6 @@ body {
   --xy-edge-stroke: black;
 }
 
-.react-flow.dark {
-  --background: #0f172a;
-  --panel-background: #1e293b;
-  --panel-shadow: 0 0 8px 0 rgb(0 0 0 / 0.4);
-  --text: #fafafa;
-}
-
 .react-flow__panel,
 .react-flow__node-toolbar {
   background-color: var(--panel-background);
@@ -133,6 +126,11 @@ body {
 
 .react-flow__node {
   z-index: 9998;
+}
+
+.react-flow__minimap-mask {
+  fill: "#f2f2f2";
+  opacity: 0.6;
 }
 
 .prevent-select {
