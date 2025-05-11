@@ -39,7 +39,7 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
   const targetName = (targetNode?.data?.name as string) ?? "Target"
 
   return (
-    <>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
       {/* Swap icon for source/target swap */}
       {handleSwap && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -112,6 +112,6 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
         size="small"
         fullWidth
       />
-    </>
+    </Box>
   )
 }

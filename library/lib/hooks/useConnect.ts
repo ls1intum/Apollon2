@@ -80,7 +80,7 @@ export const useConnect = () => {
         ...connection,
         id: generateUUID(),
         type: EDGE_TYPE,
-        selected: true,
+        selected: false,
       }
 
       addEdge(newEdge)
@@ -156,7 +156,7 @@ export const useConnect = () => {
   const onEdgesDelete: OnEdgesDelete = useCallback(() => {
     startEdge.current = null
     connectionStartParams.current = null
-  }, [])
+  }, [setEdges])
 
   return { onConnect, onConnectEnd, onConnectStart, onEdgesDelete }
 }

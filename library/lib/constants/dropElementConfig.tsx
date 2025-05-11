@@ -51,7 +51,6 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
     },
     {
       type: "class",
-
       width: droppedElementWidth,
       height: 140,
       defaultData: {
@@ -68,7 +67,6 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
     },
     {
       type: "class",
-
       width: droppedElementWidth,
       height: 110,
       defaultData: {
