@@ -33,6 +33,11 @@ const enableScroll = () => {
 
 export const Sidebar = () => {
   const diagramType = useMetadataStore(useShallow((state) => state.diagramType))
+
+  if (dropElementConfigs[diagramType].length === 0) {
+    return null
+  }
+
   return (
     <aside style={{ height: "100%", backgroundColor: "#f0f0f0" }}>
       <div

@@ -19,7 +19,6 @@ export const ShareModal = () => {
     }
     const model = apollon2.getDiagram()
 
-    console.log("Model to be shared:", model)
     await fetch(`${backendURL}/api/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

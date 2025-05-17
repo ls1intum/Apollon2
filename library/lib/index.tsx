@@ -143,7 +143,6 @@ export class Apollon2 {
   public dispose() {
     const diagramId = this.diagramStore.getState().diagramId
     console.log("Disposing Apollon2 instance with diagramId", diagramId)
-
     try {
       this.syncManager.stopSync()
       this.root.unmount()

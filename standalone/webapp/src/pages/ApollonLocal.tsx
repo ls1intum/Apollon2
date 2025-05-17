@@ -5,7 +5,7 @@ import { useLocation } from "react-router"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
 
-export const Apollon: React.FC = () => {
+export const ApollonLocal: React.FC = () => {
   const { setApollon2 } = useApollon2Context()
   const location = useLocation()
   const createdAt = location.state?.createdAt
