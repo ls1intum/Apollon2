@@ -45,16 +45,6 @@ export type Selection = {
   edges: { [id: string]: boolean }
 }
 
-// export type UMLModel = {
-//   version: `3.${number}.${number}`;
-//   type: UMLDiagramType;
-//   size: { width: number; height: number };
-//   elements: { [id: string]: UMLElement };
-//   interactive: Selection;
-//   relationships: { [id: string]: UMLRelationship };
-//   assessments: { [id: string]: Assessment };
-// };
-
 export type UMLModel = {
   version: `4.${number}.${number}`
   id: string
@@ -63,7 +53,6 @@ export type UMLModel = {
   nodes: ApollonNode[]
   edges: ApollonEdge[]
   assessments: { [id: string]: Assessment }
-  // assessments: Record<string, Assessment>
 }
 
 export enum ApollonView {
