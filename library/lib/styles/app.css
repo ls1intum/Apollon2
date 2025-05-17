@@ -21,6 +21,7 @@ body {
   --panel-shadow: 0 0 4px 0 rgb(0 0 0 / 0.2);
   --text: #0a0a0a;
   --xy-edge-stroke: black;
+  --xy-minimap-mask-background-color-props: #00000020;
 }
 
 .react-flow__panel,
@@ -33,11 +34,6 @@ body {
 
 .react-flow svg {
   display: block;
-}
-
-.react-flow__minimap-mask {
-  fill: var(--background);
-  fill-opacity: 0.85;
 }
 
 .react-flow__node-toolbar {

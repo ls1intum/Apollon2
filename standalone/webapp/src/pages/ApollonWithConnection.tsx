@@ -3,9 +3,9 @@ import React, { useEffect, useRef, useState } from "react"
 import { useApollon2Context } from "@/contexts"
 import {
   Apollon2,
-  ApollonDiagram,
   ApollonMode,
   ApollonOptions,
+  UMLModel,
 } from "@apollon2/library"
 import { useNavigate, useParams, useSearchParams } from "react-router"
 import { toast } from "react-toastify"
@@ -27,7 +27,7 @@ const fetchDiagramData = (diagramId: string): Promise<any> => {
   })
 }
 
-const sendPutRequest = async (diagramId: string, data: ApollonDiagram) => {
+const sendPutRequest = async (diagramId: string, data: UMLModel) => {
   try {
     const response = await fetch(`${backendURL}/api/${diagramId}`, {
       method: "PUT",
@@ -146,7 +146,7 @@ export const ApollonWithConnection: React.FC = () => {
             }, 5000)
           }
 
-          instance.subscribeToModalNodeEdgeChange(() => {
+          instance.subscribeToModelChange(() => {
             diagramIsUpdated.current = true
           })
 

@@ -1,7 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router"
 import { AppProviders } from "./AppProviders"
 import { Navbar } from "./components"
-import { Apollon, ApollonWithConnection, ErrorPage } from "@/pages"
+import {
+  ApollonLocal,
+  ApollonPlayground,
+  ApollonWithConnection,
+  ErrorPage,
+} from "@/pages"
 import { SafeArea } from "capacitor-plugin-safe-area"
 import { ToastContainer } from "react-toastify"
 
@@ -34,7 +39,8 @@ function App() {
         <AppProviders>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Apollon />} />
+            <Route path="/" element={<ApollonLocal />} />
+            <Route path="/playground" element={<ApollonPlayground />} />
             <Route path="/:diagramId" element={<ApollonWithConnection />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>

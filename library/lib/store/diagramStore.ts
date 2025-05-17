@@ -41,8 +41,8 @@ export type DiagramStore = {
   edges: Edge[]
   interactiveElementId: string | null
   diagramId: string
-  setDiagramId: (diagramId: string) => void
   assessments: Record<string, Assessment>
+  setDiagramId: (diagramId: string) => void
   setNodes: (payload: Node[] | ((nodes: Node[]) => Node[])) => void
   setEdges: (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void
   setNodesAndEdges: (nodes: Node[], edges: Edge[]) => void

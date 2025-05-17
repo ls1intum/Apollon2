@@ -3,12 +3,12 @@ import { devtools, subscribeWithSelector } from "zustand/middleware"
 import { parseDiagramType } from "@/utils"
 import * as Y from "yjs"
 import { getDiagramMetadata } from "@/sync/ydoc"
-import { DiagramType } from "@/types"
+import { UMLDiagramType } from "@/types"
 import { ApollonMode } from "@/types/EditorOptions"
 
 export type MetadataStore = {
   diagramTitle: string
-  diagramType: DiagramType
+  diagramType: UMLDiagramType
   mode: ApollonMode
   readonly: boolean
   popupEnabled: boolean
@@ -16,22 +16,22 @@ export type MetadataStore = {
   setMode: (mode: ApollonMode) => void
   setReadonly: (readonly: boolean) => void
   updateDiagramTitle: (diagramTitle: string) => void
-  updateDiagramType: (diagramType: DiagramType) => void
-  updateMetaData: (diagramTitle: string, diagramType: DiagramType) => void
+  updateDiagramType: (diagramType: UMLDiagramType) => void
+  updateMetaData: (diagramTitle: string, diagramType: UMLDiagramType) => void
   updateMetaDataFromYjs: () => void
   reset: () => void
 }
 
 type InitialMetadataState = {
   diagramTitle: string
-  diagramType: DiagramType
+  diagramType: UMLDiagramType
   mode: ApollonMode
   readonly: boolean
   popupEnabled: boolean
 }
 const initialMetadataState: InitialMetadataState = {
   diagramTitle: "Untitled Diagram",
-  diagramType: DiagramType.ClassDiagram,
+  diagramType: UMLDiagramType.ClassDiagram,
   mode: ApollonMode.Modelling,
   readonly: false,
   popupEnabled: true,

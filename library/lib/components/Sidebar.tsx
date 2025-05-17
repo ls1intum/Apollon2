@@ -1,16 +1,16 @@
-import React, { FC, useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
   DropElementConfig,
   dropElementConfigs,
   transformScale,
 } from "@/constants/dropElementConfig"
 import { DividerLine } from "./DividerLine"
-import { DiagramType, DropNodeData } from "@/types"
+import { DropNodeData } from "@/types"
 import { createPortal } from "react-dom"
 import { useReactFlow, type Node } from "@xyflow/react"
 import { MOUSE_UP_OFFSET_IN_PIXELS, SNAP_TO_GRID_PX } from "@/constants"
 import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
-import { useDiagramStore } from "@/store/context"
+import { useDiagramStore, useMetadataStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
 /* ========================================================================
@@ -30,11 +30,14 @@ const enableScroll = () => {
    Sidebar Component
    Renders the draggable elements based on the selected diagram type.
    ======================================================================== */
-interface SidebarProps {
-  selectedDiagramType: DiagramType
-}
 
-export const Sidebar: FC<SidebarProps> = ({ selectedDiagramType }) => {
+export const Sidebar = () => {
+  const diagramType = useMetadataStore(useShallow((state) => state.diagramType))
+
+  if (dropElementConfigs[diagramType].length === 0) {
+    return null
+  }
+
   return (
     <aside style={{ height: "100%", backgroundColor: "#f0f0f0" }}>
       <div
@@ -45,7 +48,7 @@ export const Sidebar: FC<SidebarProps> = ({ selectedDiagramType }) => {
           margin: "10px",
         }}
       >
-        {dropElementConfigs[selectedDiagramType].map((config) => (
+        {dropElementConfigs[diagramType].map((config) => (
           <React.Fragment key={`${config.type}_${config.defaultData.name}`}>
             {config.type === "colorDescription" && (
               <DividerLine style={{ margin: "3px 0" }} height={2} />

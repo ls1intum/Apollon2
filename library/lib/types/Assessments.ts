@@ -8,7 +8,7 @@ export type Assessment = {
   elementType: string
   score: number
   feedback?: string
-  // dropInfo?: any;
+  dropInfo?: unknown
   label?: string
   labelColor?: string
   correctionStatus?: FeedbackCorrectionStatus

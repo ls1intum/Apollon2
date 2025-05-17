@@ -11,9 +11,8 @@ import {
   mapFromReactFlowNodeToApollonNode,
   mapFromReactFlowEdgeToApollonEdge,
 } from "./utils"
-import { DiagramType } from "./types"
-export * from "./types"
-import { ApollonDiagram, ApollonOptions } from "./types/EditorOptions"
+import { UMLDiagramType } from "./types"
+import { ApollonOptions, UMLModel } from "./types/EditorOptions"
 import {
   createDiagramStore,
   DiagramStore,
@@ -31,6 +30,12 @@ import { StoreApi } from "zustand"
 import { createPopoverStore } from "./store"
 import { PopoverStore } from "./store/popoverStore"
 
+export * from "./types"
+
+type Subscribers = {
+  [key: number]: () => void
+}
+
 export class Apollon2 {
   private root: ReactDOM.Root
   private reactFlowInstance: ReactFlowInstance | null = null
@@ -39,7 +44,7 @@ export class Apollon2 {
   private readonly diagramStore: StoreApi<DiagramStore>
   private readonly metadataStore: StoreApi<MetadataStore>
   private readonly popoverStore: StoreApi<PopoverStore>
-
+  private subscribers: Subscribers = {}
   constructor(element: HTMLElement, options?: ApollonOptions) {
     if (!(element instanceof HTMLElement)) {
       throw new Error("Element is required to initialize Apollon2")
@@ -58,7 +63,6 @@ export class Apollon2 {
     const diagramId =
       options?.model?.id || Math.random().toString(36).substring(2, 15)
 
-    console.log("Diagram constructor called with diagramId", diagramId)
     // Initialize React root
     this.root = ReactDOM.createRoot(element, {
       identifierPrefix: `apollon2-${diagramId}`,
@@ -68,7 +72,7 @@ export class Apollon2 {
 
     // Initialize metadata and diagram type
     const diagramName = options?.model?.title || "Untitled Diagram"
-    const diagramType = options?.model?.type || DiagramType.ClassDiagram
+    const diagramType = options?.model?.type || UMLDiagramType.ClassDiagram
     this.metadataStore
       .getState()
       .updateMetaData(diagramName, parseDiagramType(diagramType))
@@ -131,10 +135,14 @@ export class Apollon2 {
     return this.reactFlowInstance ? this.reactFlowInstance.getEdges() : []
   }
 
+  set diagramType(type: UMLDiagramType) {
+    this.metadataStore.getState().updateDiagramType(type)
+    this.diagramStore.getState().setNodesAndEdges([], [])
+  }
+
   public dispose() {
     const diagramId = this.diagramStore.getState().diagramId
     console.log("Disposing Apollon2 instance with diagramId", diagramId)
-
     try {
       this.syncManager.stopSync()
       this.root.unmount()
@@ -214,15 +222,21 @@ export class Apollon2 {
     }
   }
 
-  public subscribeToModalNodeEdgeChange(
+  private getNewSubscriptionId(subscribers: Subscribers): number {
+    // largest key + 1
+    if (Object.keys(subscribers).length === 0) return 0
+    return Math.max(...Object.keys(subscribers).map((key) => parseInt(key))) + 1
+  }
+
+  public subscribeToModelChange(
     callback: (state: DiagramStoreData) => void
-  ) {
-    return this.diagramStore.subscribe((state) =>
-      callback({
-        nodes: state.nodes,
-        edges: state.edges,
-      })
+  ): number {
+    const subscriberId = this.getNewSubscriptionId(this.subscribers)
+    const unsubscribeCallback = this.diagramStore.subscribe(() =>
+      callback(this.getDiagram())
     )
+    this.subscribers[subscriberId] = unsubscribeCallback
+    return subscriberId
   }
 
   public subscribeToDiagramNameChange(
@@ -248,12 +262,12 @@ export class Apollon2 {
     return { diagramTitle, diagramType }
   }
 
-  public getDiagram(): ApollonDiagram {
+  public getDiagram(): UMLModel {
     const { nodes, edges, diagramId } = this.diagramStore.getState()
     const { diagramTitle, diagramType } = this.metadataStore.getState()
     return {
       id: diagramId,
-      version: "2.0",
+      version: "4.0.0",
       title: diagramTitle,
       type: diagramType,
       nodes: nodes.map((node) => mapFromReactFlowNodeToApollonNode(node)),

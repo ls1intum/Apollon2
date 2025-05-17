@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ClassSVG, PackageSVG } from "@/components"
 import { generateUUID } from "@/utils"
-import { ClassType, DiagramType } from "@/types"
+import { ClassType, UMLDiagramType } from "@/types"
 import { DiagramNodeTypeKeys } from "@/nodes"
 
 export * from "./layoutConstants"
@@ -17,8 +17,8 @@ export type DropElementConfig = {
   svg: React.FC<any>
 }
 
-export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
-  [DiagramType.ClassDiagram]: [
+export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
+  [UMLDiagramType.ClassDiagram]: [
     {
       type: "package",
       width: droppedElementWidth,
@@ -78,7 +78,7 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
       svg: (props) => <ClassSVG {...props} />,
     },
   ],
-  [DiagramType.ObjectDiagram]: [
+  [UMLDiagramType.ObjectDiagram]: [
     {
       type: "class",
       width: droppedElementWidth,
@@ -92,4 +92,14 @@ export const dropElementConfigs: Record<DiagramType, DropElementConfig[]> = {
       svg: (props) => <ClassSVG {...props} />,
     },
   ],
+  [UMLDiagramType.ActivityDiagram]: [],
+  [UMLDiagramType.BPMN]: [],
+  [UMLDiagramType.CommunicationDiagram]: [],
+  [UMLDiagramType.ComponentDiagram]: [],
+  [UMLDiagramType.DeploymentDiagram]: [],
+  [UMLDiagramType.PetriNet]: [],
+  [UMLDiagramType.ReachabilityGraph]: [],
+  [UMLDiagramType.SyntaxTree]: [],
+  [UMLDiagramType.UseCaseDiagram]: [],
+  [UMLDiagramType.Flowchart]: [],
 }
