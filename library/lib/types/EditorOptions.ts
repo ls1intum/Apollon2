@@ -1,5 +1,16 @@
 import { Assessment } from "./Assessments"
-import { DiagramType } from "./DiagramType"
+import { UMLDiagramType } from "./DiagramType"
+
+export enum Locale {
+  en = "en",
+  de = "de",
+}
+
+export enum ApollonMode {
+  Modelling = "Modelling",
+  Exporting = "Exporting",
+  Assessment = "Assessment",
+}
 
 export type ApollonNode = {
   id: string
@@ -28,14 +39,31 @@ export type ApollonEdge = {
     [key: string]: unknown
   }
 }
-export type ApollonDiagram = {
+
+export type Selection = {
+  nodes: { [id: string]: boolean }
+  edges: { [id: string]: boolean }
+}
+
+// export type UMLModel = {
+//   version: `3.${number}.${number}`;
+//   type: UMLDiagramType;
+//   size: { width: number; height: number };
+//   elements: { [id: string]: UMLElement };
+//   interactive: Selection;
+//   relationships: { [id: string]: UMLRelationship };
+//   assessments: { [id: string]: Assessment };
+// };
+
+export type UMLModel = {
+  version: `4.${number}.${number}`
   id: string
-  version: string
   title: string
-  type: DiagramType
+  type: UMLDiagramType
   nodes: ApollonNode[]
   edges: ApollonEdge[]
-  assessments: Record<string, Assessment>
+  assessments: { [id: string]: Assessment }
+  // assessments: Record<string, Assessment>
 }
 
 export enum ApollonView {
@@ -44,15 +72,15 @@ export enum ApollonView {
   Highlight = "Highlight",
 }
 
-export enum ApollonMode {
-  Modelling = "Modelling",
-  Exporting = "Exporting",
-  Assessment = "Assessment",
-}
-
 export type ApollonOptions = {
+  type?: UMLDiagramType
   mode?: ApollonMode
   readonly?: boolean
   enablePopups?: boolean
-  model?: ApollonDiagram
+  model?: UMLModel
+  theme?: Partial<Record<string, string>>
+  locale?: Locale
+  copyPasteToClipboard?: boolean
+  colorEnabled?: boolean
+  scale?: number
 }

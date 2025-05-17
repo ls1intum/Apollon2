@@ -1,8 +1,8 @@
-import { DiagramType } from "@/types"
-import { ApollonDiagram } from "@/types/EditorOptions"
+import { UMLDiagramType } from "@/types"
+import { UMLModel } from "@/types/EditorOptions"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const validateParsedJSON = (json: any): ApollonDiagram | string => {
+export const validateParsedJSON = (json: any): UMLModel | string => {
   if (
     typeof json !== "object" ||
     json === null ||
@@ -16,7 +16,7 @@ export const validateParsedJSON = (json: any): ApollonDiagram | string => {
   }
 
   //Validate diagramType
-  if (!(json.diagramType in DiagramType)) {
+  if (!(json.diagramType in UMLDiagramType)) {
     return "Invalid diagram type"
   }
 
@@ -51,5 +51,5 @@ export const validateParsedJSON = (json: any): ApollonDiagram | string => {
     }
   }
 
-  return json as ApollonDiagram
+  return json
 }

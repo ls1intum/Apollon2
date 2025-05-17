@@ -16,7 +16,7 @@ import "@xyflow/react/dist/style.css"
 import "@/styles/app.css"
 import { useDiagramStore, useMetadataStore } from "./store/context"
 import { useShallow } from "zustand/shallow"
-import { ApollonMode, DiagramType } from "./types"
+import { ApollonMode } from "./types"
 import {
   MIN_SCALE_TO_ZOOM_OUT,
   MAX_SCALE_TO_ZOOM_IN,
@@ -75,9 +75,7 @@ function App({ onReactFlowInit }: AppProps) {
         flexGrow: 1,
       }}
     >
-      {diagramMode === ApollonMode.Modelling && (
-        <Sidebar selectedDiagramType={DiagramType.ClassDiagram} />
-      )}
+      {diagramMode === ApollonMode.Modelling && <Sidebar />}
       <SvgMarkers />
       <ReactFlow
         id={`react-flow-library-${diagramId}`}

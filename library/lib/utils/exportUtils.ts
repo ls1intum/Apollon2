@@ -9,7 +9,7 @@ import {
 import { toPng, toSvg } from "html-to-image"
 import { PDFDocument } from "pdf-lib"
 import { ExportFileFormat } from "../enums"
-import { ApollonDiagram } from "@/types/EditorOptions"
+import { UMLModel } from "@/types/EditorOptions"
 
 // Calculate dimensions based on nodes and viewport
 const calculateDimensions = (
@@ -91,9 +91,9 @@ const downloadImage = (
 }
 
 // Export the diagram as JSON
-export const exportAsJSON = (diagram: ApollonDiagram, diagramTitle: string) => {
+export const exportAsJSON = (model: UMLModel, diagramTitle: string) => {
   const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
-    JSON.stringify(diagram)
+    JSON.stringify(model)
   )}`
   const fileName = `${diagramTitle}.json`
 

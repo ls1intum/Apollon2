@@ -1,16 +1,16 @@
-import { DiagramType } from "@/types"
+import { UMLDiagramType } from "@/types"
 import { ApollonEdge, ApollonNode } from "@/types/EditorOptions"
 import { type Node, type Edge } from "@xyflow/react"
-const diagramTypeValues = new Set(Object.values(DiagramType))
+const diagramTypeValues = new Set(Object.values(UMLDiagramType))
 
-const isDiagramType = (value: unknown): value is DiagramType => {
-  return diagramTypeValues.has(value as DiagramType)
+const isDiagramType = (value: unknown): value is UMLDiagramType => {
+  return diagramTypeValues.has(value as UMLDiagramType)
 }
 
 export const parseDiagramType = (
   value: unknown,
-  fallback: DiagramType = DiagramType.ClassDiagram
-): DiagramType => {
+  fallback: UMLDiagramType = UMLDiagramType.ClassDiagram
+): UMLDiagramType => {
   return isDiagramType(value) ? value : fallback
 }
 

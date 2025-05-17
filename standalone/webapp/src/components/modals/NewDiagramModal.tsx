@@ -4,17 +4,27 @@ import { useState } from "react"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { useModalContext } from "@/contexts/ModalContext"
-import { DiagramType } from "@apollon2/library"
+import { UMLDiagramType } from "@apollon2/library"
 import { useNavigate } from "react-router"
 
 const diagramTypes = {
-  structural: [DiagramType.ClassDiagram, DiagramType.ObjectDiagram],
+  structural: [UMLDiagramType.ClassDiagram, UMLDiagramType.ObjectDiagram],
   behavioral: [],
 }
 
-const diagramTypeToTitle = {
-  [DiagramType.ClassDiagram]: "Class Diagram",
-  [DiagramType.ObjectDiagram]: "Object Diagram",
+const diagramTypeToTitle: Record<UMLDiagramType, string> = {
+  ClassDiagram: "Class Diagram",
+  ObjectDiagram: "Object Diagram",
+  ActivityDiagram: "",
+  UseCaseDiagram: "",
+  CommunicationDiagram: "",
+  ComponentDiagram: "",
+  DeploymentDiagram: "",
+  PetriNet: "",
+  ReachabilityGraph: "",
+  SyntaxTree: "",
+  Flowchart: "",
+  BPMN: "",
 }
 
 export const NewDiagramModal = () => {
@@ -23,17 +33,18 @@ export const NewDiagramModal = () => {
     useState<boolean>(true)
   const [newDiagramTitle, setNewDiagramTitle] =
     useState<string>("Class Diagram")
-  const [selectedDiagramType, setSelectedDiagramType] = useState<DiagramType>(
-    DiagramType.ClassDiagram
-  )
+  const [selectedDiagramType, setSelectedDiagramType] =
+    useState<UMLDiagramType>(UMLDiagramType.ClassDiagram)
   const navigate = useNavigate()
 
   const handleCreateDiagram = () => {
-    navigate("/", { state: { createdAt: Date.now(), newDiagramTitle } })
+    navigate("/", {
+      state: { createdAt: Date.now(), newDiagramTitle, selectedDiagramType },
+    })
     closeModal()
   }
 
-  const handleSelectDiagramType = (type: DiagramType) => {
+  const handleSelectDiagramType = (type: UMLDiagramType) => {
     setSelectedDiagramType(type)
   }
 
@@ -44,7 +55,7 @@ export const NewDiagramModal = () => {
     setIsDiagramNameDefault(false)
   }
 
-  const handleDiagramTypeChange = (type: DiagramType) => {
+  const handleDiagramTypeChange = (type: UMLDiagramType) => {
     setSelectedDiagramType(type)
     if (isDiagramNameDefault) {
       setNewDiagramTitle(diagramTypeToTitle[type])
