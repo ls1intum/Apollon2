@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import { Apollon2, UMLDiagramType } from "@apollon2/library"
+import { ApollonEditor, UMLDiagramType } from "@apollon2/library"
 import { useApollon2Context } from "@/contexts"
 import { useLocation } from "react-router"
 
@@ -15,7 +15,7 @@ export const ApollonLocal: React.FC = () => {
 
   useEffect(() => {
     if (containerRef.current) {
-      const instance = new Apollon2(containerRef.current)
+      const instance = new ApollonEditor(containerRef.current)
       if (newDiagramTitle) {
         instance.updateDiagramTitle(newDiagramTitle)
       } else {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import {
-  Apollon2,
+  ApollonEditor,
   ApollonMode,
   Locale,
   UMLDiagramType,
@@ -30,7 +30,7 @@ export const ApollonPlayground: React.FC = () => {
 
   useEffect(() => {
     if (containerRef.current) {
-      const instance = new Apollon2(containerRef.current, apollonOptions)
+      const instance = new ApollonEditor(containerRef.current, apollonOptions)
       setApollon2(instance)
 
       return () => {

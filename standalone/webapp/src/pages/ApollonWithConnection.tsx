@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useApollon2Context } from "@/contexts"
 import {
-  Apollon2,
+  ApollonEditor,
   ApollonMode,
   ApollonOptions,
   UMLModel,
@@ -57,7 +57,7 @@ export const ApollonWithConnection: React.FC = () => {
   const diagramIsUpdated = useRef(false)
 
   useEffect(() => {
-    let instance: Apollon2 | null = null
+    let instance: ApollonEditor | null = null
     if (containerRef.current && diagramId) {
       const initializeApollon = async () => {
         try {
@@ -102,7 +102,7 @@ export const ApollonWithConnection: React.FC = () => {
             editorOptions.readonly = false
           }
 
-          instance = new Apollon2(containerRef.current!, editorOptions)
+          instance = new ApollonEditor(containerRef.current!, editorOptions)
           setApollon2(instance)
           setIsLoading(false)
 

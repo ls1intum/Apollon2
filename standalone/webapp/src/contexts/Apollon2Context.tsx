@@ -5,14 +5,14 @@ import React, {
   ReactNode,
   useMemo,
 } from "react"
-import { Apollon2 } from "@apollon2/library"
+import { ApollonEditor } from "@apollon2/library"
 
 interface Apollon2ContextType {
-  apollon2?: Apollon2
+  apollon2?: ApollonEditor
   diagramName: string
 
   setDiagramName: React.Dispatch<React.SetStateAction<string>>
-  setApollon2: React.Dispatch<React.SetStateAction<Apollon2 | undefined>>
+  setApollon2: React.Dispatch<React.SetStateAction<ApollonEditor | undefined>>
 }
 
 export const Apollon2Context = createContext<Apollon2ContextType | undefined>(
@@ -35,7 +35,7 @@ interface Props {
 }
 
 export const Apollon2Provider: React.FC<Props> = ({ children }) => {
-  const [apollon2, setApollon2] = useState<Apollon2>()
+  const [apollon2, setApollon2] = useState<ApollonEditor>()
   const [diagramName, setDiagramName] = useState("Default Diagram")
 
   const contextValue = useMemo(
