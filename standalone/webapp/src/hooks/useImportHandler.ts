@@ -1,11 +1,11 @@
 import { useState, useCallback } from "react"
 import { readFileContent } from "@/utils/readFileContent" // Assume you move readFileContent to utils
-import { useApollon2Context } from "@/contexts"
+import { useEditorContext } from "@/contexts"
 
 export const useImportHandler = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
-  const { apollon2 } = useApollon2Context()
+  const { editor } = useEditorContext()
 
   const handleImport = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +30,7 @@ export const useImportHandler = () => {
         const content = await readFileContent(file)
         event.target.value = ""
 
-        const result = await apollon2?.importJson(content)
+        const result = await editor?.importJson(content)
         if (typeof result === "string") {
           setErrorMessage(result)
           setSnackbarOpen(true)
@@ -41,7 +41,7 @@ export const useImportHandler = () => {
         setSnackbarOpen(true)
       }
     },
-    [apollon2]
+    [editor]
   )
 
   const handleSnackbarClose = (

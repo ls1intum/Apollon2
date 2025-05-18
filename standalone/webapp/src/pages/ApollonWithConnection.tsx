@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react"
-import { useApollon2Context } from "@/contexts"
+import { useEditorContext } from "@/contexts"
 import {
-  Apollon2,
+  ApollonEditor,
   ApollonMode,
   ApollonOptions,
   UMLModel,
-} from "@apollon2/library"
+} from "@tumaet/apollon"
 import { useNavigate, useParams, useSearchParams } from "react-router"
 import { toast } from "react-toastify"
 import { backendURL, backendWSSUrl } from "@/constants"
@@ -49,7 +49,7 @@ export const ApollonWithConnection: React.FC = () => {
   const { diagramId } = useParams()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { setApollon2 } = useApollon2Context()
+  const { setEditor } = useEditorContext()
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const websocketRef = useRef<WebSocket | null>(null)
@@ -57,7 +57,7 @@ export const ApollonWithConnection: React.FC = () => {
   const diagramIsUpdated = useRef(false)
 
   useEffect(() => {
-    let instance: Apollon2 | null = null
+    let instance: ApollonEditor | null = null
     if (containerRef.current && diagramId) {
       const initializeApollon = async () => {
         try {
@@ -102,8 +102,8 @@ export const ApollonWithConnection: React.FC = () => {
             editorOptions.readonly = false
           }
 
-          instance = new Apollon2(containerRef.current!, editorOptions)
-          setApollon2(instance)
+          instance = new ApollonEditor(containerRef.current!, editorOptions)
+          setEditor(instance)
           setIsLoading(false)
 
           if (makeConnection) {
@@ -162,7 +162,7 @@ export const ApollonWithConnection: React.FC = () => {
     }
 
     return () => {
-      setApollon2(undefined) // Clear context
+      setEditor(undefined) // Clear context
 
       // Clear interval if it exists
       if (intervalRef.current) {
@@ -187,7 +187,7 @@ export const ApollonWithConnection: React.FC = () => {
     }
 
     // Implicitly return undefined if conditions are not met
-  }, [diagramId, searchParams, setApollon2])
+  }, [diagramId, searchParams, setEditor])
 
   return (
     <div className="flex  grow">

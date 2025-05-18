@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from "react"
 import {
-  Apollon2,
+  ApollonEditor,
   ApollonMode,
   Locale,
   UMLDiagramType,
   ApollonOptions,
-} from "@apollon2/library"
-import { useApollon2Context } from "@/contexts"
+} from "@tumaet/apollon"
+import { useEditorContext } from "@/contexts"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
 
 export const ApollonPlayground: React.FC = () => {
-  const { setApollon2 } = useApollon2Context()
+  const { setEditor } = useEditorContext()
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [apollonOptions, setApollonOptions] = useState<ApollonOptions>({
     mode: ApollonMode.Modelling,
@@ -30,8 +30,8 @@ export const ApollonPlayground: React.FC = () => {
 
   useEffect(() => {
     if (containerRef.current) {
-      const instance = new Apollon2(containerRef.current, apollonOptions)
-      setApollon2(instance)
+      const instance = new ApollonEditor(containerRef.current, apollonOptions)
+      setEditor(instance)
 
       return () => {
         console.log("disposing instance")

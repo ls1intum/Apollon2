@@ -2,7 +2,7 @@
 import { ClassSVG, PackageSVG } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
-import { DiagramNodeTypeKeys } from "@/nodes"
+import { DiagramNodeType } from "@/nodes"
 
 export * from "./layoutConstants"
 export const transformScale = 0.8
@@ -10,7 +10,7 @@ export const transformScale = 0.8
 const droppedElementWidth = 160
 
 export type DropElementConfig = {
-  type: DiagramNodeTypeKeys
+  type: DiagramNodeType
   width: number
   height: number
   defaultData: Record<string, unknown>

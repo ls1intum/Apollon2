@@ -13,7 +13,7 @@ import * as Y from "yjs"
 import { sortNodesTopologically } from "@/utils"
 import { getNodesMap, getEdgesMap, getAssessments } from "@/sync/ydoc"
 import { deepEqual } from "@/utils/storeUtils"
-import { Assessment } from "@/types"
+import { Assessment } from "@/typings"
 
 export type DiagramStoreData = {
   nodes: Node[]
@@ -157,7 +157,6 @@ export const createDiagramStore = (
                 (node) => node.selected
               )
               if (selectedNodes.length === 1 && selectedNodes[0].selected) {
-                console.log("DEBUG update selected node changes", changes)
                 set(
                   { interactiveElementId: selectedNodes[0].id },
                   undefined,

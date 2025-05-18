@@ -11,37 +11,36 @@ import { NavbarHelp } from "./NavbarHelp"
 import Button from "@mui/material/Button/Button"
 import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR } from "@/constants"
-import { useApollon2Context } from "@/contexts/Apollon2Context"
+import { useEditorContext, useModalContext } from "@/contexts"
 import TextField from "@mui/material/TextField/TextField"
 import TumLogo from "assets/images/tum-logo.png"
-import { useModalContext } from "@/contexts"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
-  const { apollon2 } = useApollon2Context()
+  const { editor } = useEditorContext()
   const { openModal } = useModalContext()
   const [diagramTitle, setDiagramTitle] = useState(
-    apollon2?.getDiagramMetadata().diagramTitle || ""
+    editor?.getDiagramMetadata().diagramTitle || ""
   )
   const unsubscribe = useRef<() => void>()
 
   useEffect(() => {
-    if (apollon2 && !unsubscribe.current) {
-      unsubscribe.current = apollon2.subscribeToDiagramNameChange(
+    if (editor && !unsubscribe.current) {
+      unsubscribe.current = editor.subscribeToDiagramNameChange(
         (diagramTitle) => {
           setDiagramTitle(diagramTitle)
         }
       )
     }
-    // Update diagram title when apollon2 is available
-    if (apollon2) {
-      setDiagramTitle(apollon2.getDiagramMetadata().diagramTitle || "")
+    // Update diagram title when editor is available
+    if (editor) {
+      setDiagramTitle(editor.getDiagramMetadata().diagramTitle || "")
     }
     // Cleanup subscription
     return () => {
       unsubscribe.current?.()
     }
-  }, [apollon2])
+  }, [editor])
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -123,7 +122,7 @@ export default function MobileNavbar() {
                     value={diagramTitle}
                     onChange={(event) => {
                       const newTitle = event.target.value
-                      apollon2?.updateDiagramTitle(newTitle)
+                      editor?.updateDiagramTitle(newTitle)
                       setDiagramTitle(newTitle)
                     }}
                     placeholder="Diagram Name"

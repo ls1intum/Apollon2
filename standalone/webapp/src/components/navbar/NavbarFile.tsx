@@ -5,11 +5,8 @@ import MenuItem from "@mui/material/MenuItem"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
-
 import { secondary } from "@/constants"
-import { useModalContext } from "@/contexts/ModalContext"
-import { useApollon2Context } from "@/contexts"
-
+import { useModalContext, useEditorContext } from "@/contexts"
 import { useImportHandler } from "@/hooks/useImportHandler"
 import { HiddenFileInput } from "./HiddenFileInput"
 import { SnackbarMessage } from "./SnackbarMessage"
@@ -29,7 +26,7 @@ interface Props {
 
 export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
   const { openModal } = useModalContext()
-  const { apollon2, diagramName } = useApollon2Context()
+  const { editor, diagramName } = useEditorContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState<null | HTMLElement>(
     null
@@ -58,27 +55,27 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
 
   const handleExport = useCallback(
     (type: ExportType) => {
-      if (!apollon2 || !diagramName) {
-        console.error("Apollon2 context is not available")
+      if (!editor || !diagramName) {
+        console.error("editor context is not available")
         closeMainMenu()
         return
       }
 
       switch (type) {
         case ExportType.SVG:
-          apollon2.exportImageAsSVG()
+          editor.exportImageAsSVG()
           break
         case ExportType.PNG_WHITE:
-          apollon2.exportImagePNG(false)
+          editor.exportImagePNG(false)
           break
         case ExportType.PNG_TRANSPARENT:
-          apollon2.exportImagePNG(true)
+          editor.exportImagePNG(true)
           break
         case ExportType.JSON:
-          apollon2.exportAsJson()
+          editor.exportAsJson()
           break
         case ExportType.PDF:
-          apollon2.exportImageAsPDF()
+          editor.exportImageAsPDF()
           break
         default:
           console.warn(`Unknown export type: ${type}`)
@@ -86,7 +83,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
 
       closeMainMenu()
     },
-    [apollon2, closeMainMenu]
+    [editor, closeMainMenu]
   )
 
   const handleNewFile = useCallback(() => {
