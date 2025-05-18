@@ -42,7 +42,6 @@ export const LoadDiagramModal = () => {
   const isCurrentModelOnTop = currentModelIndex === 0
   const isCurrentModelOnBottom = currentModelIndex === modelsList.length - 1
 
-  console.log("modelsList", modelsList[0])
   return (
     <div className="flex flex-col border border-gray-300 rounded-lg  ">
       {modelsList.map((model, index) => {
