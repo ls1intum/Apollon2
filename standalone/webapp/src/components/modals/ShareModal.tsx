@@ -2,22 +2,22 @@ import { Tooltip, Typography } from "@mui/material"
 import Info from "@mui/icons-material/Info"
 import { APButton } from "../APButton"
 import { toast } from "react-toastify"
-import { useApollon2Context, useModalContext } from "@/contexts"
+import { useEditorContext, useModalContext } from "@/contexts"
 import { useNavigate } from "react-router"
 import { DiagramView } from "@/types"
 import { backendURL } from "@/constants"
 
 export const ShareModal = () => {
-  const { apollon2 } = useApollon2Context()
+  const { editor } = useEditorContext()
   const { closeModal } = useModalContext()
   const navigate = useNavigate()
 
   const handleShareButtonPress = async (viewType: DiagramView) => {
-    if (!apollon2) {
+    if (!editor) {
       toast.error("Apollon2 instance is not available.")
       return
     }
-    const model = apollon2.getDiagram()
+    const model = editor.getDiagram()
 
     await fetch(`${backendURL}/api/`, {
       method: "POST",

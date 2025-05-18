@@ -22,7 +22,7 @@ export const BrandAndVersion = () => {
         Apollon2
       </Typography>
       <Typography variant="body2" sx={{ color: secondary }}>
-        v{appVersion}
+        {appVersion}
       </Typography>
     </Box>
   )

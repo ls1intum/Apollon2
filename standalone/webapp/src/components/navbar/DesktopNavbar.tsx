@@ -8,36 +8,35 @@ import { NavbarFile } from "./NavbarFile"
 import { NavbarHelp } from "./NavbarHelp"
 import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR, secondary } from "@/constants"
-import { useApollon2Context } from "@/contexts/Apollon2Context"
 import TumLogo from "assets/images/tum-logo.png"
 import { useEffect, useRef, useState } from "react"
-import { useModalContext } from "@/contexts"
+import { useModalContext, useEditorContext } from "@/contexts"
 
 export const DesktopNavbar = () => {
-  const { apollon2 } = useApollon2Context()
+  const { editor } = useEditorContext()
   const [diagramTitle, setDiagramTitle] = useState(
-    apollon2?.getDiagramMetadata().diagramTitle || ""
+    editor?.getDiagramMetadata().diagramTitle || ""
   )
   const unsubscribe = useRef<() => void>()
   const { openModal } = useModalContext()
 
   useEffect(() => {
-    if (apollon2 && !unsubscribe.current) {
-      unsubscribe.current = apollon2.subscribeToDiagramNameChange(
+    if (editor && !unsubscribe.current) {
+      unsubscribe.current = editor.subscribeToDiagramNameChange(
         (diagramTitle) => {
           setDiagramTitle(diagramTitle)
         }
       )
     }
-    // Update diagram title when apollon2 is available
-    if (apollon2) {
-      setDiagramTitle(apollon2.getDiagramMetadata().diagramTitle || "")
+    // Update diagram title when editor is available
+    if (editor) {
+      setDiagramTitle(editor.getDiagramMetadata().diagramTitle || "")
     }
     // Cleanup subscription
     return () => {
       unsubscribe.current?.()
     }
-  }, [apollon2])
+  }, [editor])
 
   return (
     <AppBar
@@ -76,7 +75,7 @@ export const DesktopNavbar = () => {
             value={diagramTitle}
             onChange={(event) => {
               const newTitle = event.target.value
-              apollon2?.updateDiagramTitle(newTitle)
+              editor?.updateDiagramTitle(newTitle)
               setDiagramTitle(newTitle)
             }}
             placeholder="Diagram Name"

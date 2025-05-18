@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react"
-import { useApollon2Context } from "@/contexts"
+import { useEditorContext } from "@/contexts"
 import {
   ApollonEditor,
   ApollonMode,
@@ -49,7 +49,7 @@ export const ApollonWithConnection: React.FC = () => {
   const { diagramId } = useParams()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { setApollon2 } = useApollon2Context()
+  const { setEditor } = useEditorContext()
   const [isLoading, setIsLoading] = useState(true)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const websocketRef = useRef<WebSocket | null>(null)
@@ -103,7 +103,7 @@ export const ApollonWithConnection: React.FC = () => {
           }
 
           instance = new ApollonEditor(containerRef.current!, editorOptions)
-          setApollon2(instance)
+          setEditor(instance)
           setIsLoading(false)
 
           if (makeConnection) {
@@ -162,7 +162,7 @@ export const ApollonWithConnection: React.FC = () => {
     }
 
     return () => {
-      setApollon2(undefined) // Clear context
+      setEditor(undefined) // Clear context
 
       // Clear interval if it exists
       if (intervalRef.current) {
@@ -187,7 +187,7 @@ export const ApollonWithConnection: React.FC = () => {
     }
 
     // Implicitly return undefined if conditions are not met
-  }, [diagramId, searchParams, setApollon2])
+  }, [diagramId, searchParams, setEditor])
 
   return (
     <div className="flex  grow">
