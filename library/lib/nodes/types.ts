@@ -10,4 +10,4 @@ export const diagramNodeTypes = {
   titleAndDesctiption: TitleAndDesctiption,
 } satisfies NodeTypes
 
-export type DiagramNodeTypeKeys = keyof typeof diagramNodeTypes
+export type DiagramNodeType = keyof typeof diagramNodeTypes

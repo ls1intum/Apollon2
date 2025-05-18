@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { UMLModel, UMLDiagramType } from "@apollon2/library"
+import { UMLModel, UMLDiagramType } from "@tumaet/apollon"
 import { v4 as uuidv4 } from "uuid"
 import { persist, devtools } from "zustand/middleware"
 

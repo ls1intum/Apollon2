@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react"
-import { Apollon2Provider, ModalProvider } from "@/contexts"
+import { EditorProvider, ModalProvider } from "@/contexts"
 
 interface Props {
   children: ReactNode
@@ -7,8 +7,8 @@ interface Props {
 
 export const AppProviders: React.FC<Props> = ({ children }) => {
   return (
-    <Apollon2Provider>
+    <EditorProvider>
       <ModalProvider>{children}</ModalProvider>
-    </Apollon2Provider>
+    </EditorProvider>
   )
 }

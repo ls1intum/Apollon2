@@ -4,7 +4,7 @@ import { parseDiagramType } from "@/utils"
 import * as Y from "yjs"
 import { getDiagramMetadata } from "@/sync/ydoc"
 import { UMLDiagramType } from "@/types"
-import { ApollonMode } from "@/types/EditorOptions"
+import { ApollonMode } from "@/typings"
 
 export type MetadataStore = {
   diagramTitle: string

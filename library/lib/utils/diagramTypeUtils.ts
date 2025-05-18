@@ -1,5 +1,10 @@
 import { UMLDiagramType } from "@/types"
-import { ApollonEdge, ApollonNode } from "@/types/EditorOptions"
+import {
+  ApollonEdge,
+  ApollonNode,
+  DiagramEdgeType,
+  DiagramNodeType,
+} from "@/typings"
 import { type Node, type Edge } from "@xyflow/react"
 const diagramTypeValues = new Set(Object.values(UMLDiagramType))
 
@@ -19,7 +24,7 @@ export const mapFromReactFlowNodeToApollonNode = (node: Node): ApollonNode => {
     id: node.id,
     width: node.width ?? 0,
     height: node.height ?? 0,
-    type: node.type ?? "",
+    type: node.type! as DiagramNodeType,
     position: {
       x: node.position.x,
       y: node.position.y,
@@ -38,7 +43,7 @@ export const mapFromReactFlowEdgeToApollonEdge = (edge: Edge): ApollonEdge => {
     id: edge.id,
     source: edge.source,
     target: edge.target,
-    type: edge.type ?? "",
+    type: edge.type! as DiagramEdgeType,
     sourceHandle: edge.sourceHandle ?? "",
     targetHandle: edge.targetHandle ?? "",
     data: edge.data ?? {},

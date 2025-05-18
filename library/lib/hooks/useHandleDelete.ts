@@ -1,5 +1,5 @@
 import { useDiagramStore, useMetadataStore } from "@/store"
-import { ApollonMode } from "@/types"
+import { ApollonMode } from "@/typings"
 import { useShallow } from "zustand/shallow"
 
 export const useHandleDelete = (elementId: string) => {

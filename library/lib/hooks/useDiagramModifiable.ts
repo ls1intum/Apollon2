@@ -1,5 +1,5 @@
 import { useMetadataStore } from "@/store"
-import { ApollonMode } from "@/types"
+import { ApollonMode } from "@/typings"
 import { useMemo } from "react"
 import { useShallow } from "zustand/shallow"
 

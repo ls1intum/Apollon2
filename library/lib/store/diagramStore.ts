@@ -13,7 +13,7 @@ import * as Y from "yjs"
 import { sortNodesTopologically } from "@/utils"
 import { getNodesMap, getEdgesMap, getAssessments } from "@/sync/ydoc"
 import { deepEqual } from "@/utils/storeUtils"
-import { Assessment } from "@/types"
+import { Assessment } from "@/typings"
 
 export type DiagramStoreData = {
   nodes: Node[]

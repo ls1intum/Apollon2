@@ -1,5 +1,5 @@
 import { UMLDiagramType } from "@/types"
-import { UMLModel } from "@/types/EditorOptions"
+import { UMLModel } from "@/typings"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const validateParsedJSON = (json: any): UMLModel | string => {

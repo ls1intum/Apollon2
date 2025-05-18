@@ -1,4 +1,4 @@
-import { Assessment } from "@/types"
+import { Assessment } from "@/typings"
 import { Node, Edge } from "@xyflow/react"
 import * as Y from "yjs"
 

@@ -1,2 +1,2 @@
-export * from "./Apollon2Context"
+export * from "./EditorContext"
 export * from "./ModalContext"

@@ -1,11 +1,11 @@
 import { usePersistenceModelStore } from "@/components/stores/usePersistenceModelStore"
-import { useApollon2Context } from "@/contexts"
-import { Apollon2, UMLDiagramType } from "@apollon2/library"
+import { useEditorContext } from "@/contexts"
+import { ApollonEditor, UMLDiagramType } from "@tumaet/apollon"
 import React, { useEffect, useRef } from "react"
 
 export const ApollonLocal: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const { setApollon2 } = useApollon2Context()
+  const { setEditor } = useEditorContext()
 
   const currentModelId = usePersistenceModelStore(
     (store) => store.currentModelId
@@ -19,18 +19,13 @@ export const ApollonLocal: React.FC = () => {
   useEffect(() => {
     if (!diagram && containerRef.current) {
       // Create a default diagram on first visit
-      const id = createModel("Class Diagram", UMLDiagramType.ClassDiagram)
-      console.log(`Created default diagram with ID: ${id}`)
+      createModel("Class Diagram", UMLDiagramType.ClassDiagram)
       return
     }
 
-    console.log("Creating Apollon2 instance")
-    console.log("Diagram:", diagram)
-    console.log("currentModelId:", currentModelId)
-
     if (!containerRef.current || !diagram) return
 
-    const instance = new Apollon2(containerRef.current, {
+    const instance = new ApollonEditor(containerRef.current, {
       model: diagram.model,
     })
 
@@ -38,7 +33,7 @@ export const ApollonLocal: React.FC = () => {
       updateModel(model)
     })
 
-    setApollon2(instance)
+    setEditor(instance)
 
     return () => {
       console.log("Cleaning up Apollon2 instance")
