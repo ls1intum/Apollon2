@@ -7,7 +7,7 @@ COPY package*.json ./
 COPY standalone/server/package*.json ./standalone/server/
 
 # Install server-only dependencies using workspaces
-RUN npm install --workspace=@apollon2/server
+RUN npm install --workspace=@aet/server
 
 # Copy server source and tsconfig only (no node_modules!)
 COPY standalone/server/src ./standalone/server/src
