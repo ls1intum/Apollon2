@@ -6,6 +6,7 @@ import Button from "@mui/material/Button"
 import { useModalContext } from "@/contexts/ModalContext"
 import { UMLDiagramType } from "@apollon2/library"
 import { useNavigate } from "react-router"
+import { usePersistenceModelStore } from "../stores/usePersistenceModelStore"
 
 const diagramTypes = {
   structural: [UMLDiagramType.ClassDiagram, UMLDiagramType.ObjectDiagram],
@@ -36,11 +37,11 @@ export const NewDiagramModal = () => {
   const [selectedDiagramType, setSelectedDiagramType] =
     useState<UMLDiagramType>(UMLDiagramType.ClassDiagram)
   const navigate = useNavigate()
+  const createModel = usePersistenceModelStore((state) => state.createModel)
 
   const handleCreateDiagram = () => {
-    navigate("/", {
-      state: { createdAt: Date.now(), newDiagramTitle, selectedDiagramType },
-    })
+    createModel(newDiagramTitle, selectedDiagramType)
+    navigate("/")
     closeModal()
   }
 

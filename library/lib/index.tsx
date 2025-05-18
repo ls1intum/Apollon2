@@ -13,11 +13,7 @@ import {
 } from "./utils"
 import { UMLDiagramType } from "./types"
 import { ApollonOptions, UMLModel } from "./types/EditorOptions"
-import {
-  createDiagramStore,
-  DiagramStore,
-  DiagramStoreData,
-} from "./store/diagramStore"
+import { createDiagramStore, DiagramStore } from "./store/diagramStore"
 import { createMetadataStore, MetadataStore } from "./store/metadataStore"
 import {
   DiagramStoreContext,
@@ -70,9 +66,10 @@ export class Apollon2 {
 
     this.diagramStore.getState().setDiagramId(diagramId)
 
-    // Initialize metadata and diagram type
+    // Initialize metadata store
     const diagramName = options?.model?.title || "Untitled Diagram"
-    const diagramType = options?.model?.type || UMLDiagramType.ClassDiagram
+    const diagramType =
+      options?.type || options?.model?.type || UMLDiagramType.ClassDiagram
     this.metadataStore
       .getState()
       .updateMetaData(diagramName, parseDiagramType(diagramType))
@@ -228,9 +225,7 @@ export class Apollon2 {
     return Math.max(...Object.keys(subscribers).map((key) => parseInt(key))) + 1
   }
 
-  public subscribeToModelChange(
-    callback: (state: DiagramStoreData) => void
-  ): number {
+  public subscribeToModelChange(callback: (model: UMLModel) => void): number {
     const subscriberId = this.getNewSubscriptionId(this.subscribers)
     const unsubscribeCallback = this.diagramStore.subscribe(() =>
       callback(this.getDiagram())

@@ -1,36 +1,46 @@
-import React, { useEffect, useRef } from "react"
-import { Apollon2, UMLDiagramType } from "@apollon2/library"
+import { usePersistenceModelStore } from "@/components/stores/usePersistenceModelStore"
 import { useApollon2Context } from "@/contexts"
-import { useLocation } from "react-router"
-
-const UMLDiagramTypes = Object.values(UMLDiagramType)
+import { Apollon2, UMLDiagramType } from "@apollon2/library"
+import React, { useEffect, useRef } from "react"
 
 export const ApollonLocal: React.FC = () => {
-  const { setApollon2 } = useApollon2Context()
-  const location = useLocation()
-  const createdAt = location.state?.createdAt
-  const newDiagramTitle = location.state?.newDiagramTitle
-  const selectedDiagramType = location.state?.selectedDiagramType
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const { setApollon2 } = useApollon2Context()
+
+  const currentModelId = usePersistenceModelStore(
+    (store) => store.currentModelId
+  )
+  const diagram = usePersistenceModelStore((store) =>
+    currentModelId ? store.models[currentModelId] : null
+  )
+  const createModel = usePersistenceModelStore((store) => store.createModel)
+  const updateModel = usePersistenceModelStore((store) => store.updateModel)
 
   useEffect(() => {
-    if (containerRef.current) {
-      const instance = new Apollon2(containerRef.current)
-      if (newDiagramTitle) {
-        instance.updateDiagramTitle(newDiagramTitle)
-      } else {
-        instance.updateDiagramTitle("Class Diagram")
-      }
-      if (UMLDiagramTypes.includes(selectedDiagramType)) {
-        instance.diagramType = selectedDiagramType as UMLDiagramType
-      }
-      setApollon2(instance)
-
-      return () => {
-        instance.dispose()
-      }
+    if (!diagram && containerRef.current) {
+      // Create a default diagram on first visit
+      const id = createModel("Class Diagram", UMLDiagramType.ClassDiagram)
+      console.log(`Created default diagram with ID: ${id}`)
+      return
     }
-  }, [newDiagramTitle, createdAt, setApollon2])
 
-  return <div className="flex grow min-h-20 min-w-20" ref={containerRef} />
+    if (!containerRef.current || !diagram) return
+
+    const instance = new Apollon2(containerRef.current, {
+      model: diagram,
+    })
+
+    instance.updateDiagramTitle(diagram.title)
+    instance.diagramType = diagram.type
+
+    instance.subscribeToModelChange((model) => {
+      updateModel(model)
+    })
+
+    setApollon2(instance)
+
+    return () => instance.dispose()
+  }, [diagram?.id])
+
+  return <div className="flex grow" ref={containerRef} />
 }
