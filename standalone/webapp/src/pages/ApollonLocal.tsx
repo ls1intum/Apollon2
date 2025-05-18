@@ -24,14 +24,15 @@ export const ApollonLocal: React.FC = () => {
       return
     }
 
+    console.log("Creating Apollon2 instance")
+    console.log("Diagram:", diagram)
+    console.log("currentModelId:", currentModelId)
+
     if (!containerRef.current || !diagram) return
 
     const instance = new Apollon2(containerRef.current, {
-      model: diagram,
+      model: diagram.model,
     })
-
-    instance.updateDiagramTitle(diagram.title)
-    instance.diagramType = diagram.type
 
     instance.subscribeToModelChange((model) => {
       updateModel(model)
@@ -39,7 +40,10 @@ export const ApollonLocal: React.FC = () => {
 
     setApollon2(instance)
 
-    return () => instance.dispose()
+    return () => {
+      console.log("Cleaning up Apollon2 instance")
+      instance.dispose()
+    }
   }, [diagram?.id])
 
   return <div className="flex grow" ref={containerRef} />
