@@ -6,7 +6,7 @@ import {
   ApollonMode,
   ApollonOptions,
   UMLModel,
-} from "@apollon2/library"
+} from "@tumaet/apollon"
 import { useNavigate, useParams, useSearchParams } from "react-router"
 import { toast } from "react-toastify"
 import { backendURL, backendWSSUrl } from "@/constants"

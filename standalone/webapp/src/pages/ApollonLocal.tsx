@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import { ApollonEditor, UMLDiagramType } from "@apollon2/library"
+import { ApollonEditor, UMLDiagramType } from "@tumaet/apollon"
 import { useApollon2Context } from "@/contexts"
 import { useLocation } from "react-router"
 

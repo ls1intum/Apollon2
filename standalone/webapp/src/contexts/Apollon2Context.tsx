@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useMemo,
 } from "react"
-import { ApollonEditor } from "@apollon2/library"
+import { ApollonEditor } from "@tumaet/apollon"
 
 interface Apollon2ContextType {
   apollon2?: ApollonEditor

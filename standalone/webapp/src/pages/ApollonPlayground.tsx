@@ -5,7 +5,7 @@ import {
   Locale,
   UMLDiagramType,
   ApollonOptions,
-} from "@apollon2/library"
+} from "@tumaet/apollon"
 import { useApollon2Context } from "@/contexts"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
