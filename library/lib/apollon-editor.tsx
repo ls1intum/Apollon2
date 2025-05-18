@@ -222,7 +222,8 @@ export class ApollonEditor {
     }
   }
 
-  private getNewSubscriptionId(subscribers: Subscribers): number {
+  private getNewSubscriptionId(): number {
+    const subscribers = this.subscribers
     // largest key + 1
     if (Object.keys(subscribers).length === 0) return 0
     return Math.max(...Object.keys(subscribers).map((key) => parseInt(key))) + 1
@@ -231,7 +232,7 @@ export class ApollonEditor {
   public subscribeToModelChange(
     callback: (state: DiagramStoreData) => void
   ): number {
-    const subscriberId = this.getNewSubscriptionId(this.subscribers)
+    const subscriberId = this.getNewSubscriptionId()
     const unsubscribeCallback = this.diagramStore.subscribe(() =>
       callback(this.getDiagram())
     )
@@ -243,6 +244,18 @@ export class ApollonEditor {
     callback: (diagramTitle: string) => void
   ) {
     return this.metadataStore.subscribe((state) => callback(state.diagramTitle))
+  }
+
+  unsubscribeFromModelChange(subscriberId: number) {
+    const unsubscribeCallback = this.subscribers[subscriberId]
+    if (unsubscribeCallback) {
+      unsubscribeCallback()
+      delete this.subscribers[subscriberId]
+    } else {
+      console.warn(
+        `No subscriber found with ID ${subscriberId}. Unable to unsubscribe.`
+      )
+    }
   }
 
   public sendBroadcastMessage(sendFn: (data: Uint8Array) => void) {
