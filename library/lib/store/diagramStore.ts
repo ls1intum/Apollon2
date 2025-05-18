@@ -157,7 +157,6 @@ export const createDiagramStore = (
                 (node) => node.selected
               )
               if (selectedNodes.length === 1 && selectedNodes[0].selected) {
-                console.log("DEBUG update selected node changes", changes)
                 set(
                   { interactiveElementId: selectedNodes[0].id },
                   undefined,
