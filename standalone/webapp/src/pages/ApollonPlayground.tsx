@@ -72,7 +72,7 @@ export const ApollonPlayground: React.FC = () => {
             className="border-2 border-gray-400 p-1 rounded-md flex w-[200px] bg-white"
             onChange={(e) => {
               const selectedLocale = e.target.value as Locale
-              console.log("selected loacale", selectedLocale)
+              console.log("DEBUG selectedLocale", selectedLocale)
             }}
           >
             <option value={Locale.en}>English</option>
@@ -90,7 +90,7 @@ export const ApollonPlayground: React.FC = () => {
                 ...prev!,
                 mode: selectedMode,
               }))
-              console.log("selected selectedMode", selectedMode)
+              console.log("DEBUG selectedMode", selectedMode)
             }}
           >
             <option value={ApollonMode.Assessment}>Assessment</option>

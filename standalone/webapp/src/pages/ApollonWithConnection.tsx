@@ -69,11 +69,6 @@ export const ApollonWithConnection: React.FC = () => {
             DiagramView.EDIT,
           ]
           const isValidView = viewType && validViewTypes.includes(viewType)
-          const makeConnection = isValidView
-            ? viewType === DiagramView.COLLABORATE ||
-              viewType === DiagramView.GIVE_FEEDBACK ||
-              viewType === DiagramView.SEE_FEEDBACK
-            : false
 
           if (!isValidView) {
             toast.error("Invalid view type")
@@ -83,7 +78,6 @@ export const ApollonWithConnection: React.FC = () => {
 
           const diagram = await fetchDiagramData(diagramId)
 
-          diagram.id = diagramId
           const editorOptions: ApollonOptions = {
             model: diagram,
           }
@@ -105,6 +99,11 @@ export const ApollonWithConnection: React.FC = () => {
           instance = new ApollonEditor(containerRef.current!, editorOptions)
           setEditor(instance)
           setIsLoading(false)
+
+          const makeConnection =
+            viewType === DiagramView.COLLABORATE ||
+            viewType === DiagramView.GIVE_FEEDBACK ||
+            viewType === DiagramView.SEE_FEEDBACK
 
           if (makeConnection) {
             // Set up the WebSocket connection

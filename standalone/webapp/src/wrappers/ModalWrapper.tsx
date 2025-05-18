@@ -2,8 +2,9 @@ import React from "react"
 import {
   NewDiagramModal,
   NewDiagramFromTemplateModal,
+  LoadDiagramModal,
+  ShareModal,
 } from "@/components/modals"
-import { ShareModal } from "@/components/modals/ShareModal"
 import { useModalContext } from "@/contexts"
 import { ModalName, ModalProps } from "@/types"
 import { Modal, Paper, Box, Typography, Button, Divider } from "@mui/material"
@@ -20,6 +21,7 @@ const MODAL_COMPONENTS: Record<ModalName, React.ComponentType<unknown>> = {
   NEW_DIAGRAM: NewDiagramModal,
   NEW_DIAGRAM_FROM_TEMPLATE: NewDiagramFromTemplateModal,
   SHARE: ShareModal,
+  LOAD_DIAGRAM: LoadDiagramModal, // Assuming LoadDiagramModal is similar to NewDiagramModal
   // Add other modals here
 }
 
@@ -27,6 +29,7 @@ const MODAL_TITLES: Record<ModalName, string> = {
   NEW_DIAGRAM: "Create new Diagram",
   NEW_DIAGRAM_FROM_TEMPLATE: "Create new Diagram from Template",
   SHARE: "Share",
+  LOAD_DIAGRAM: "Load Diagram",
   // Add other modals here
 }
 
@@ -36,13 +39,12 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   display: "flex",
-  flex: 1,
   flexDirection: "column",
-  minWidth: 350,
-  maxWidth: window.innerWidth * 0.6,
+  minWidth: "20vw", // or use a specific pixel value like "600px"
+  maxWidth: "90vw", // to limit on very large screens
+  width: "50vw", // ensures it's at least half screen
   gap: 1,
 }
-
 export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
   const SpecificModal = MODAL_COMPONENTS[name]
   const { closeModal } = useModalContext()

@@ -1,36 +1,45 @@
-import React, { useEffect, useRef } from "react"
-import { ApollonEditor, UMLDiagramType } from "@tumaet/apollon"
+import { usePersistenceModelStore } from "@/components/stores/usePersistenceModelStore"
 import { useEditorContext } from "@/contexts"
-import { useLocation } from "react-router"
-
-const UMLDiagramTypes = Object.values(UMLDiagramType)
+import { ApollonEditor, UMLDiagramType } from "@tumaet/apollon"
+import React, { useEffect, useRef } from "react"
 
 export const ApollonLocal: React.FC = () => {
-  const { setEditor } = useEditorContext()
-  const location = useLocation()
-  const createdAt = location.state?.createdAt
-  const newDiagramTitle = location.state?.newDiagramTitle
-  const selectedDiagramType = location.state?.selectedDiagramType
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const { setEditor } = useEditorContext()
+
+  const currentModelId = usePersistenceModelStore(
+    (store) => store.currentModelId
+  )
+  const diagram = usePersistenceModelStore((store) =>
+    currentModelId ? store.models[currentModelId] : null
+  )
+  const createModel = usePersistenceModelStore((store) => store.createModel)
+  const updateModel = usePersistenceModelStore((store) => store.updateModel)
 
   useEffect(() => {
-    if (containerRef.current) {
-      const instance = new ApollonEditor(containerRef.current)
-      if (newDiagramTitle) {
-        instance.updateDiagramTitle(newDiagramTitle)
-      } else {
-        instance.updateDiagramTitle("Class Diagram")
-      }
-      if (UMLDiagramTypes.includes(selectedDiagramType)) {
-        instance.diagramType = selectedDiagramType as UMLDiagramType
-      }
-      setEditor(instance)
-
-      return () => {
-        instance.dispose()
-      }
+    if (!diagram && containerRef.current) {
+      // Create a default diagram on first visit
+      createModel("Class Diagram", UMLDiagramType.ClassDiagram)
+      return
     }
-  }, [newDiagramTitle, createdAt, setEditor])
 
-  return <div className="flex grow min-h-20 min-w-20" ref={containerRef} />
+    if (!containerRef.current || !diagram) return
+
+    const instance = new ApollonEditor(containerRef.current, {
+      model: diagram.model,
+    })
+
+    instance.subscribeToModelChange((model) => {
+      updateModel(model)
+    })
+
+    setEditor(instance)
+
+    return () => {
+      console.log("Cleaning up Apollon2 instance")
+      instance.dispose()
+    }
+  }, [diagram?.id])
+
+  return <div className="flex grow" ref={containerRef} />
 }

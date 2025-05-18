@@ -134,6 +134,9 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         <MenuItem onClick={handleStartFromTemplate}>
           Start from Template
         </MenuItem>
+        <MenuItem onClick={() => openModal("LOAD_DIAGRAM")}>
+          Load Diagram
+        </MenuItem>
         <MenuItem onClick={handleImportClick}>Import</MenuItem>
         <MenuItem
           onClick={openSubMenu}

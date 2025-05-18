@@ -14,7 +14,7 @@ export const ShareModal = () => {
 
   const handleShareButtonPress = async (viewType: DiagramView) => {
     if (!editor) {
-      toast.error("Apollon2 instance is not available.")
+      toast.error("Editor instance is not available.")
       return
     }
     const model = editor.getDiagram()
