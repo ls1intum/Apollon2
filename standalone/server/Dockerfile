@@ -1,4 +1,4 @@
-FROM node:20.18.0-slim
+FROM node:22.14.0-slim AS builder
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ COPY package*.json ./
 COPY standalone/server/package*.json ./standalone/server/
 
 # Install server-only dependencies using workspaces
-RUN npm install --workspace=@aet/server
+RUN npm install --workspace=@tumaet/server
 
 # Copy server source and tsconfig only (no node_modules!)
 COPY standalone/server/src ./standalone/server/src
