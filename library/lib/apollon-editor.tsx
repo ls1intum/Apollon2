@@ -12,7 +12,7 @@ import {
   mapFromReactFlowEdgeToApollonEdge,
 } from "./utils"
 import { UMLDiagramType } from "./types"
-import { ApollonOptions, UMLModel } from "./types/EditorOptions"
+
 import {
   createDiagramStore,
   DiagramStore,
@@ -29,12 +29,7 @@ import * as Y from "yjs"
 import { StoreApi } from "zustand"
 import { createPopoverStore } from "./store"
 import { PopoverStore } from "./store/popoverStore"
-
-export * from "./types"
-
-type Subscribers = {
-  [key: number]: () => void
-}
+import { Subscribers, ApollonOptions, UMLModel } from "./typings"
 
 export class ApollonEditor {
   private root: ReactDOM.Root

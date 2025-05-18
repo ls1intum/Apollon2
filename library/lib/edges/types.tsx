@@ -17,7 +17,7 @@ export const diagramEdgeTypes = Object.fromEntries(
   [K in (typeof edgeTypeKeys)[number]]: typeof GenericEdge
 } satisfies EdgeTypes
 
-export type DiagramEdgeTypeKeys = keyof typeof diagramEdgeTypes
+export type DiagramEdgeType = keyof typeof diagramEdgeTypes
 
 export interface IPoint {
   x: number

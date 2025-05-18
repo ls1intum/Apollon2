@@ -1,5 +1,15 @@
-import { Assessment } from "./Assessments"
-import { UMLDiagramType } from "./DiagramType"
+import { DiagramEdgeType } from "./edges/types"
+import { DiagramNodeType } from "./nodes/types"
+import { UMLDiagramType } from "./types/DiagramType"
+
+export { UMLDiagramType, type DiagramNodeType, type DiagramEdgeType }
+export type Unsubscriber = () => void
+
+export type Subscribers = {
+  [key: number]: Unsubscriber
+}
+
+export type UMLModelElementType = DiagramNodeType | DiagramEdgeType
 
 export enum Locale {
   en = "en",
@@ -16,7 +26,7 @@ export type ApollonNode = {
   id: string
   width: number
   height: number
-  type: string
+  type: DiagramNodeType
   position: {
     x: number
     y: number
@@ -32,7 +42,7 @@ export type ApollonEdge = {
   id: string
   source: string
   target: string
-  type: string
+  type: DiagramEdgeType
   sourceHandle: string
   targetHandle: string
   data: {
@@ -72,4 +82,39 @@ export type ApollonOptions = {
   copyPasteToClipboard?: boolean
   colorEnabled?: boolean
   scale?: number
+}
+
+export type FeedbackCorrectionStatus = {
+  description?: string
+  status: "CORRECT" | "INCORRECT" | "NOT_VALIDATED"
+}
+
+export type Assessment = {
+  modelElementId: string
+  elementType: string
+  score: number
+  feedback?: string
+  dropInfo?: unknown
+  label?: string
+  labelColor?: string
+  correctionStatus?: FeedbackCorrectionStatus
+}
+
+export type ExportOptions = {
+  margin?:
+    | number
+    | { top?: number; right?: number; bottom?: number; left?: number }
+  keepOriginalSize?: boolean
+  include?: string[]
+  exclude?: string[]
+}
+
+export type SVG = {
+  svg: string
+  clip: {
+    x: number
+    y: number
+    width: number
+    height: number
+  }
 }

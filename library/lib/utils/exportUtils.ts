@@ -9,7 +9,7 @@ import {
 import { toPng, toSvg } from "html-to-image"
 import { PDFDocument } from "pdf-lib"
 import { ExportFileFormat } from "../enums"
-import { UMLModel } from "@/types/EditorOptions"
+import { UMLModel } from "@/typings"
 
 // Calculate dimensions based on nodes and viewport
 const calculateDimensions = (

@@ -16,7 +16,6 @@ import "@xyflow/react/dist/style.css"
 import "@/styles/app.css"
 import { useDiagramStore, useMetadataStore } from "./store/context"
 import { useShallow } from "zustand/shallow"
-import { ApollonMode } from "./types"
 import {
   MIN_SCALE_TO_ZOOM_OUT,
   MAX_SCALE_TO_ZOOM_IN,
@@ -33,6 +32,7 @@ import {
 import { useDragOver } from "./hooks/useDragOver"
 import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
+import { ApollonMode } from "./typings"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void

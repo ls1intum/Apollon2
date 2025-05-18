@@ -1,6 +1,6 @@
 import { useMetadataStore } from "@/store"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
-import { ApollonMode, LocationPopover } from "@/types"
+import { ApollonMode } from "@/typings"
 import { useShallow } from "zustand/shallow"
 import {
   ClassEditPopover,
@@ -19,6 +19,7 @@ import {
   EdgeGiveFeedbackPopover,
   EdgeSeeFeedbackPopover,
 } from "./edgePopovers"
+import { LocationPopover } from "@/types"
 
 type PopoverType = "class" | "package" | "edge"
 

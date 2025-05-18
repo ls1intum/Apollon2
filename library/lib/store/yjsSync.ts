@@ -9,7 +9,7 @@ import {
   getNodesMap,
 } from "@/sync/ydoc"
 import { Edge, Node } from "@xyflow/react"
-import { Assessment } from "@/types"
+import { Assessment } from "@/typings"
 
 enum MessageType {
   YjsSYNC = 0,

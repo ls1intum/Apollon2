@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useDiagramStore } from "@/store"
-import { Assessment } from "@/types"
+import { Assessment } from "@/typings"
 import { useShallow } from "zustand/shallow"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 
