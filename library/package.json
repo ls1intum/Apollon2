@@ -28,9 +28,7 @@
     "stylis": "4.3.4",
     "uuid": "11.0.3",
     "y-websocket": "2.1.0",
-    "zustand": "5.0.3"
-  },
-  "peerDependencies": {
+    "zustand": "5.0.3",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
