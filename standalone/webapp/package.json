@@ -15,8 +15,6 @@
     "@tumaet/apollon": "4.0.0-alpha.0",
     "@tailwindcss/vite": "4.0.17",
     "@types/node": "22.13.8",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
     "react-router": "7.5.2",
     "tailwindcss": "4.0.17",
     "zustand": "5.0.3"
