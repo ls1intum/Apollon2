@@ -17,7 +17,7 @@ export const ShareModal = () => {
       toast.error("Editor instance is not available.")
       return
     }
-    const model = editor.getDiagram()
+    const model = editor.model
 
     await fetch(`${backendURL}/api/`, {
       method: "POST",

@@ -150,7 +150,7 @@ export class ApollonEditor {
     if (this.reactFlowInstance) {
       this.deSelectAllNodes()
       const diagramTitle = this.metadataStore.getState().diagramTitle
-      const diagram = this.getDiagram()
+      const diagram = this.model
       exportAsJSON(diagram, diagramTitle)
     } else {
       console.error("ReactFlowInstance is not available for exporting JSON.")
@@ -224,7 +224,7 @@ export class ApollonEditor {
   public subscribeToModelChange(callback: (state: UMLModel) => void): number {
     const subscriberId = this.getNewSubscriptionId()
     const unsubscribeCallback = this.diagramStore.subscribe(() =>
-      callback(this.getDiagram())
+      callback(this.model)
     )
     this.subscribers[subscriberId] = unsubscribeCallback
     return subscriberId
@@ -265,7 +265,7 @@ export class ApollonEditor {
     return { diagramTitle, diagramType }
   }
 
-  public getDiagram(): UMLModel {
+  get model(): UMLModel {
     const { nodes, edges, diagramId } = this.diagramStore.getState()
     const { diagramTitle, diagramType } = this.metadataStore.getState()
     return {
