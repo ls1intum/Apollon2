@@ -138,7 +138,7 @@ export const ApollonWithConnection: React.FC = () => {
 
             intervalRef.current = setInterval(() => {
               if (instance && diagramId && diagramIsUpdated.current) {
-                const diagramData = instance.getDiagram()
+                const diagramData = instance.model
                 sendPutRequest(diagramId, diagramData)
                 diagramIsUpdated.current = false
               }
