@@ -69,12 +69,7 @@ function App({ onReactFlowInit }: AppProps) {
   const isDiagramModifiable = useDiagramModifiable()
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexGrow: 1,
-      }}
-    >
+    <div style={{ display: "flex", flex: 1 }}>
       {diagramMode === ApollonMode.Modelling && <Sidebar />}
       <SvgMarkers />
       <ReactFlow
@@ -96,6 +91,7 @@ function App({ onReactFlowInit }: AppProps) {
         connectionLineType={ConnectionLineType.Step}
         connectionMode={ConnectionMode.Loose}
         onInit={(instance) => {
+          instance.fitView({ maxZoom: 1.0, minZoom: 1.0 })
           onReactFlowInit(instance)
         }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}

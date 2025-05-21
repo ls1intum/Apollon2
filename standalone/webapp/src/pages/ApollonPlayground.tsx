@@ -7,30 +7,38 @@ import {
   ApollonOptions,
 } from "@tumaet/apollon"
 import { useEditorContext } from "@/contexts"
+import { useExportSVG } from "@/hooks/useExportAsSVG"
+import { useExportPNG } from "@/hooks/useExportPNG"
+import { usePersistenceModelStore } from "@/components/stores/usePersistenceModelStore"
+import { PlaygroundDefaultModel } from "@/constants/playgroundDefaultDiagram"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
 
 export const ApollonPlayground: React.FC = () => {
   const { setEditor } = useEditorContext()
+  const exportAsSvg = useExportSVG()
+  const exportAsPNG = useExportPNG()
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const diagram = usePersistenceModelStore(
+    (store) => store.models[PlaygroundDefaultModel.id]
+  )
+  const updateModel = usePersistenceModelStore((store) => store.updateModel)
+
   const [apollonOptions, setApollonOptions] = useState<ApollonOptions>({
     mode: ApollonMode.Modelling,
     locale: Locale.en,
     readonly: false,
-    model: {
-      version: "4.0.0",
-      id: Math.random().toString(36).substring(2, 15),
-      type: UMLDiagramType.ClassDiagram,
-      assessments: {},
-      edges: [],
-      nodes: [],
-      title: "Class Diagram",
-    },
+    model: diagram.model,
   })
 
   useEffect(() => {
     if (containerRef.current) {
       const instance = new ApollonEditor(containerRef.current, apollonOptions)
+
+      instance.subscribeToModelChange((model) => {
+        updateModel(model)
+      })
+
       setEditor(instance)
 
       return () => {
@@ -112,9 +120,20 @@ export const ApollonPlayground: React.FC = () => {
           />
           <label className="font-semibold ">Readonly</label>
         </div>
+
+        <button onClick={exportAsSvg} className="border p-1 rounded-sm">
+          export as SVG
+        </button>
+        <button
+          onClick={() => exportAsPNG({ setWhiteBackground: false })}
+          className="border p-1 rounded-sm"
+        >
+          export as PNG
+        </button>
       </div>
 
       <div className="flex grow min-h-20 min-w-20 " ref={containerRef} />
+      <canvas id="canvas" className="hidden" />
     </div>
   )
 }

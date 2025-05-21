@@ -29,15 +29,9 @@ export const useImportHandler = () => {
       try {
         const content = await readFileContent(file)
         event.target.value = ""
-
-        const result = await editor?.importJson(content)
-        if (typeof result === "string") {
-          setErrorMessage(result)
-          setSnackbarOpen(true)
-        }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        setErrorMessage(error.message || "An error occurred during import.")
+        console.log("Importing content:", content)
+      } catch {
+        setErrorMessage("An error occurred during import.")
         setSnackbarOpen(true)
       }
     },

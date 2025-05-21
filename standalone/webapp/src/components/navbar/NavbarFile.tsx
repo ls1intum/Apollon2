@@ -10,6 +10,7 @@ import { useModalContext, useEditorContext } from "@/contexts"
 import { useImportHandler } from "@/hooks/useImportHandler"
 import { HiddenFileInput } from "./HiddenFileInput"
 import { SnackbarMessage } from "./SnackbarMessage"
+import { useExportSVG } from "@/hooks/useExportAsSVG"
 
 enum ExportType {
   SVG = "SVG",
@@ -26,6 +27,7 @@ interface Props {
 
 export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
   const { openModal } = useModalContext()
+  const exportAsSvg = useExportSVG()
   const { editor, diagramName } = useEditorContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState<null | HTMLElement>(
@@ -61,26 +63,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         return
       }
 
-      switch (type) {
-        case ExportType.SVG:
-          editor.exportImageAsSVG()
-          break
-        case ExportType.PNG_WHITE:
-          editor.exportImagePNG(false)
-          break
-        case ExportType.PNG_TRANSPARENT:
-          editor.exportImagePNG(true)
-          break
-        case ExportType.JSON:
-          editor.exportAsJson()
-          break
-        case ExportType.PDF:
-          editor.exportImageAsPDF()
-          break
-        default:
-          console.warn(`Unknown export type: ${type}`)
-      }
-
+      console.log("Exporting as:", type)
       closeMainMenu()
     },
     [editor, closeMainMenu]
@@ -164,7 +147,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
           "aria-labelledby": "export-sub-menu-button",
         }}
       >
-        <MenuItem onClick={() => handleExport(ExportType.SVG)}>As SVG</MenuItem>
+        <MenuItem onClick={exportAsSvg}>As SVG</MenuItem>
         <MenuItem onClick={() => handleExport(ExportType.PNG_WHITE)}>
           As PNG (White Background)
         </MenuItem>

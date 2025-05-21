@@ -1,8 +1,12 @@
 import { DiagramEdgeType } from "./edges/types"
 import { DiagramNodeType } from "./nodes/types"
 import { UMLDiagramType } from "./types/DiagramType"
+import { Styles } from "./styles/theme"
+import { DeepPartial } from "./utils"
 
 export { UMLDiagramType, type DiagramNodeType, type DiagramEdgeType }
+export { type Styles }
+
 export type Unsubscriber = () => void
 
 export type Subscribers = {
@@ -77,7 +81,7 @@ export type ApollonOptions = {
   readonly?: boolean
   enablePopups?: boolean
   model?: UMLModel
-  theme?: Partial<Record<string, string>>
+  theme?: DeepPartial<Styles>
   locale?: Locale
   copyPasteToClipboard?: boolean
   colorEnabled?: boolean

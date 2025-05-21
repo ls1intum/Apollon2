@@ -2,6 +2,7 @@ import { create } from "zustand"
 import { UMLModel, UMLDiagramType } from "@tumaet/apollon"
 import { v4 as uuidv4 } from "uuid"
 import { persist, devtools } from "zustand/middleware"
+import { PlaygroundDefaultModel } from "@/constants/playgroundDefaultDiagram"
 
 type PersistentModelEntity = {
   id: string
@@ -31,7 +32,13 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
   devtools(
     persist(
       (set) => ({
-        models: {},
+        models: {
+          playgroundModelId: {
+            id: "playgroundModelId",
+            model: PlaygroundDefaultModel,
+            lastModifiedAt: new Date().toISOString(),
+          },
+        },
         currentModelId: null,
 
         setCurrentModelId: (id) =>

@@ -16,7 +16,7 @@ export const HeaderSection: FC<HeaderSectionProps> = ({
   stereotype,
   name,
   width,
-  font,
+  // font,
   headerHeight,
 }) => {
   return (
@@ -25,7 +25,7 @@ export const HeaderSection: FC<HeaderSectionProps> = ({
       y={headerHeight / 2}
       dominantBaseline="middle"
       textAnchor="middle"
-      font={font}
+      // font={font}
       fontWeight="bold"
       textDecoration={
         stereotype === ClassType.ObjectClass ? "underline" : "normal"

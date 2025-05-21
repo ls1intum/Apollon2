@@ -1,5 +1,4 @@
 export * from "./svgs/nodes/CustomText"
-export * from "./ThemedElements"
 export * from "./Sidebar"
 export * from "./DividerLine"
 export * from "./popovers"

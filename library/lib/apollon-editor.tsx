@@ -2,14 +2,12 @@ import ReactDOM from "react-dom/client"
 import { AppWithProvider } from "./App"
 import { ReactFlowInstance, type Node, type Edge } from "@xyflow/react"
 import {
-  exportAsPNG,
-  exportAsSVG,
-  exportAsPDF,
-  exportAsJSON,
-  validateParsedJSON,
   parseDiagramType,
   mapFromReactFlowNodeToApollonNode,
   mapFromReactFlowEdgeToApollonEdge,
+  DeepPartial,
+  getSVG,
+  getDiagramBounds,
 } from "./utils"
 import { UMLDiagramType } from "./types"
 import { createDiagramStore, DiagramStore } from "./store/diagramStore"
@@ -24,7 +22,7 @@ import * as Y from "yjs"
 import { StoreApi } from "zustand"
 import { createPopoverStore } from "./store"
 import { PopoverStore } from "./store/popoverStore"
-import { Subscribers, ApollonOptions, UMLModel } from "./typings"
+import * as Apollon from "./typings"
 
 export class ApollonEditor {
   private root: ReactDOM.Root
@@ -34,8 +32,8 @@ export class ApollonEditor {
   private readonly diagramStore: StoreApi<DiagramStore>
   private readonly metadataStore: StoreApi<MetadataStore>
   private readonly popoverStore: StoreApi<PopoverStore>
-  private subscribers: Subscribers = {}
-  constructor(element: HTMLElement, options?: ApollonOptions) {
+  private subscribers: Apollon.Subscribers = {}
+  constructor(element: HTMLElement, options?: Apollon.ApollonOptions) {
     if (!(element instanceof HTMLElement)) {
       throw new Error("Element is required to initialize Apollon2")
     }
@@ -86,10 +84,6 @@ export class ApollonEditor {
       this.metadataStore.getState().setReadonly(options.readonly)
     }
 
-    this.renderApp()
-  }
-
-  private renderApp() {
     this.root.render(
       <DiagramStoreContext.Provider value={this.diagramStore}>
         <MetadataStoreContext.Provider value={this.metadataStore}>
@@ -105,14 +99,6 @@ export class ApollonEditor {
 
   private setReactFlowInstance(instance: ReactFlowInstance) {
     this.reactFlowInstance = instance
-  }
-
-  private deSelectAllNodes = () => {
-    if (this.reactFlowInstance) {
-      this.reactFlowInstance.setNodes((nodes) =>
-        nodes.map((node) => ({ ...node, selected: false }))
-      )
-    }
   }
 
   public getNodes(): Node[] {
@@ -146,72 +132,104 @@ export class ApollonEditor {
     }
   }
 
-  public exportAsJson() {
-    if (this.reactFlowInstance) {
-      this.deSelectAllNodes()
-      const diagramTitle = this.metadataStore.getState().diagramTitle
-      const diagram = this.model
-      exportAsJSON(diagram, diagramTitle)
-    } else {
-      console.error("ReactFlowInstance is not available for exporting JSON.")
+  /**
+   * renders a model as a svg and returns it. Therefore the svg is temporarily added to the dom and removed after it has been rendered.
+   * @param model the apollon model to export as a svg
+   * @param options options to change the export behavior (add margin, exclude element ...)
+   * @param theme the theme which should be applied on the svg
+   */
+  static async exportModelAsSvg(
+    model: Apollon.UMLModel,
+    options?: Apollon.ExportOptions,
+    theme?: DeepPartial<Apollon.Styles>
+  ): Promise<Apollon.SVG> {
+    console.log("Exporting model as SVG options", options)
+    console.log("Exporting model as SVG theme", theme)
+    const container = document.createElement("div")
+    container.style.display = "flex"
+    container.style.width = "100px"
+    container.style.height = "100px"
+    container.style.position = "absolute"
+    container.style.left = "-99px"
+    document.body.appendChild(container)
+
+    const ydoc = new Y.Doc()
+    const diagramStore = createDiagramStore(ydoc)
+    const metadataStore = createMetadataStore(ydoc)
+    const popoverStore = createPopoverStore()
+    const diagramId = Math.random().toString(36).substring(2, 15)
+
+    let setReactFlowInstance: (instance: ReactFlowInstance) => void = () => {}
+
+    const reactFlowInstancePromise = new Promise<ReactFlowInstance>(
+      (resolve) => {
+        setReactFlowInstance = resolve
+      }
+    )
+
+    const svgRoot = ReactDOM.createRoot(container, {
+      identifierPrefix: `apollon2-exportAsSVG-${diagramId}`,
+    })
+
+    diagramStore.getState().setNodesAndEdges(model.nodes, model.edges)
+    diagramStore.getState().setAssessments(model.assessments)
+
+    // Render the component
+    svgRoot.render(
+      <DiagramStoreContext.Provider value={diagramStore}>
+        <MetadataStoreContext.Provider value={metadataStore}>
+          <PopoverStoreContext.Provider value={popoverStore}>
+            <AppWithProvider onReactFlowInit={setReactFlowInstance} />
+          </PopoverStoreContext.Provider>
+        </MetadataStoreContext.Provider>
+      </DiagramStoreContext.Provider>
+    )
+
+    // Wait for React Flow to initialize
+    // Create a timeout promise that resolves to undefined after 3 seconds
+    const timeoutPromise = new Promise<null>((resolve) => {
+      setTimeout(() => resolve(null), 3000)
+    })
+
+    const reactFlowInstance = await Promise.race([
+      reactFlowInstancePromise,
+      timeoutPromise,
+    ])
+
+    if (!reactFlowInstance) {
+      document.body.removeChild(container)
+      console.error("React Flow instance not initialized during SVG export")
+      throw new Error("React Flow instance not initialized")
+    }
+
+    const bounds = getDiagramBounds(reactFlowInstance)
+    const margin = 10
+    const clip = {
+      x: bounds.x - margin,
+      y: bounds.y - margin,
+      width: bounds.width + 2 * margin,
+      height: bounds.height + 2 * margin,
+    }
+
+    const svgString = await getSVG(container, clip)
+
+    // Clean up
+    svgRoot.unmount()
+    document.body.removeChild(container)
+    ydoc.destroy()
+
+    return {
+      svg: svgString,
+      clip,
     }
   }
 
-  public exportImagePNG(isBackgroundTransparent: boolean = false) {
-    if (this.reactFlowInstance) {
-      const diagramTitle = this.metadataStore.getState().diagramTitle
-      this.deSelectAllNodes()
-
-      exportAsPNG(diagramTitle, this.reactFlowInstance, isBackgroundTransparent)
-    } else {
-      console.error("ReactFlowInstance is not available for exporting PNG.")
-    }
-  }
-
-  public exportImageAsSVG() {
-    if (this.reactFlowInstance) {
-      this.deSelectAllNodes()
-      const diagramTitle = this.metadataStore.getState().diagramTitle
-
-      exportAsSVG(diagramTitle, this.reactFlowInstance)
-    } else {
-      console.error("ReactFlowInstance is not available for exporting SVG.")
-    }
-  }
-
-  public exportImageAsPDF() {
-    if (this.reactFlowInstance) {
-      this.deSelectAllNodes()
-      const diagramTitle = this.metadataStore.getState().diagramTitle
-
-      exportAsPDF(diagramTitle, this.reactFlowInstance)
-    } else {
-      console.error("ReactFlowInstance is not available for exporting PDF.")
-    }
-  }
-
-  public async importJson(content: string): Promise<boolean | string> {
-    if (this.reactFlowInstance) {
-      const parsed = JSON.parse(content)
-      const result = validateParsedJSON(parsed)
-      if (typeof result === "string") return result
-
-      const { nodes, edges, type, title } = result
-
-      this.diagramStore.getState().setNodesAndEdges(nodes, edges)
-      this.metadataStore
-        .getState()
-        .updateMetaData(title || "Imported Diagram", type)
-      this.renderApp()
-      this.reactFlowInstance.setNodes(nodes)
-      this.reactFlowInstance.setEdges(edges)
-      requestAnimationFrame(() => {
-        this.reactFlowInstance?.fitView()
-      })
-      return true
-    } else {
-      return "ReactFlowInstance is not available for importing JSON."
-    }
+  /**
+   * exports current model as svg
+   * @param options options to change the export behavior (add margin, exclude element ...)
+   */
+  exportAsSVG(options?: Apollon.ExportOptions): Promise<Apollon.SVG> {
+    return ApollonEditor.exportModelAsSvg(this.model, options)
   }
 
   private getNewSubscriptionId(): number {
@@ -221,7 +239,9 @@ export class ApollonEditor {
     return Math.max(...Object.keys(subscribers).map((key) => parseInt(key))) + 1
   }
 
-  public subscribeToModelChange(callback: (state: UMLModel) => void): number {
+  public subscribeToModelChange(
+    callback: (state: Apollon.UMLModel) => void
+  ): number {
     const subscriberId = this.getNewSubscriptionId()
     const unsubscribeCallback = this.diagramStore.subscribe(() =>
       callback(this.model)
@@ -265,7 +285,7 @@ export class ApollonEditor {
     return { diagramTitle, diagramType }
   }
 
-  get model(): UMLModel {
+  get model(): Apollon.UMLModel {
     const { nodes, edges, diagramId } = this.diagramStore.getState()
     const { diagramTitle, diagramType } = this.metadataStore.getState()
     return {

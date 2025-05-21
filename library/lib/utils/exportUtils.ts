@@ -1,65 +1,45 @@
+import { IPoint } from "@/edges/types"
 import {
   ReactFlowInstance,
   getViewportForBounds,
-  getNodesBounds,
   type Node,
   type Edge,
-  type Viewport,
+  Rect,
 } from "@xyflow/react"
-import { toPng, toSvg } from "html-to-image"
-import { PDFDocument } from "pdf-lib"
-import { ExportFileFormat } from "../enums"
-import { UMLModel } from "@/typings"
+import { toSvg } from "html-to-image"
 
-// Calculate dimensions based on nodes and viewport
-const calculateDimensions = (
-  reactFlowInstance: ReactFlowInstance<Node, Edge>
-) => {
-  const nodesBounds = getNodesBounds(reactFlowInstance.getNodes())
+export const getSVG = async (
+  container: HTMLElement,
+  bounds: Rect
+): Promise<string> => {
+  const emptySVG = "<svg></svg>"
+
   const viewport = getViewportForBounds(
-    nodesBounds,
-    nodesBounds.width,
-    nodesBounds.height,
+    bounds,
+    bounds.width,
+    bounds.height,
     1,
     1,
     10
   )
 
   const padding = 50
-  const width = nodesBounds.width + 2 * padding
-  const height = nodesBounds.height + 2 * padding
+  const width = bounds.width + 2 * padding
+  const height = bounds.height + 2 * padding
 
-  return { nodesBounds, viewport, padding, width, height }
-}
-
-// Prepare the download document by appending SVG markers
-export const prepareDownloadDocument = (): HTMLElement | null => {
-  const downloadDocument = document.querySelector(
+  const downloadDocument = container.querySelector(
     ".react-flow__viewport"
   ) as HTMLElement
 
-  if (!downloadDocument) return null
+  if (!downloadDocument) return emptySVG
 
   const svgMarkers = document.getElementById("apollon2_svg-markers")
   if (svgMarkers) {
     downloadDocument.appendChild(svgMarkers)
   }
 
-  return downloadDocument
-}
-
-// Capture the element as an image (PNG or SVG)
-const captureAsImage = (
-  element: HTMLElement,
-  format: ExportFileFormat,
-  width: number,
-  height: number,
-  viewport: Viewport,
-  padding: number,
-  isBackgroundTransparent?: boolean
-): Promise<string> => {
   const options = {
-    backgroundColor: isBackgroundTransparent ? "transparent" : "white",
+    backgroundColor: "white",
     width,
     height,
     style: {
@@ -69,139 +49,63 @@ const captureAsImage = (
     },
   }
 
-  if (format === ExportFileFormat.SVG) {
-    return toSvg(element, options)
-  } else {
-    return toPng(element, options)
-  }
-}
-
-// Trigger the download of the image
-const downloadImage = (
-  dataUrl: string,
-  diagramName: string,
-  fileFormat: ExportFileFormat
-) => {
-  const fileName = `${diagramName}.${fileFormat.toLowerCase()}`
-
-  const link = document.createElement("a")
-  link.href = dataUrl
-  link.download = fileName
-  link.click()
-}
-
-// Export the diagram as JSON
-export const exportAsJSON = (model: UMLModel, diagramTitle: string) => {
-  const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
-    JSON.stringify(model)
-  )}`
-  const fileName = `${diagramTitle}.json`
-
-  const link = document.createElement("a")
-  link.href = jsonString
-  link.download = fileName
-  link.click()
-}
-
-// Export the diagram as PDF
-export const exportAsPDF = async (
-  diagramTitle: string,
-  reactFlowInstance: ReactFlowInstance<Node, Edge>
-) => {
-  const { viewport, padding, width, height } =
-    calculateDimensions(reactFlowInstance)
-  const downloadDocument = prepareDownloadDocument()
-
-  if (!downloadDocument) return
-
   try {
-    const dataUrl = await captureAsImage(
-      downloadDocument,
-      ExportFileFormat.PNG, // Capture as PNG for PDF
-      width,
-      height,
-      viewport,
-      padding,
-      false // White background
-    )
-
-    // Create a new PDF document
-    const pdfDoc = await PDFDocument.create()
-    const page = pdfDoc.addPage([width, height])
-
-    // Embed the image in the PDF
-    const pngImage = await pdfDoc.embedPng(dataUrl)
-    page.drawImage(pngImage, {
-      x: 0,
-      y: 0,
-      width,
-      height,
-    })
-
-    // Save the PDF and trigger download
-    const pdfBytes = await pdfDoc.save()
-    const blob = new Blob([pdfBytes], { type: "application/pdf" })
-    const link = document.createElement("a")
-    link.href = URL.createObjectURL(blob)
-    link.download = `${diagramTitle}.pdf`
-    link.click()
-  } catch (error) {
-    console.error("Failed to export as PDF:", error)
+    const dataUrl = await toSvg(downloadDocument, options)
+    const prefix = "data:image/svg+xml;charset=utf-8,"
+    const encodedSvg = dataUrl.replace(prefix, "")
+    return decodeURIComponent(encodedSvg)
+  } catch {
+    console.error("Failed to export as SVG:")
+    return emptySVG
   }
 }
 
-// Export the diagram as PNG
-export const exportAsPNG = (
-  diagramName: string,
-  reactFlowInstance: ReactFlowInstance<Node, Edge>,
-  isBackgroundTransparent: boolean = false
-) => {
-  const { viewport, padding, width, height } =
-    calculateDimensions(reactFlowInstance)
-  const downloadDocument = prepareDownloadDocument()
-
-  if (!downloadDocument) return
-
-  captureAsImage(
-    downloadDocument,
-    ExportFileFormat.PNG,
-    width,
-    height,
-    viewport,
-    padding,
-    isBackgroundTransparent
+function getBoundingBox(edges: Edge[]) {
+  const allPoints: IPoint[] = edges.flatMap(
+    (edge) => (edge.data?.points as IPoint[]) ?? []
   )
-    .then((dataUrl) =>
-      downloadImage(dataUrl, diagramName, ExportFileFormat.PNG)
-    )
-    .catch((error) => {
-      console.error("Failed to export as PNG:", error)
-    })
+
+  if (allPoints.length === 0) {
+    return undefined // No points to calculate bounds
+  }
+
+  const xs = allPoints.map((p) => p.x)
+  const ys = allPoints.map((p) => p.y)
+
+  const minX = Math.min(...xs)
+  const maxX = Math.max(...xs)
+  const minY = Math.min(...ys)
+  const maxY = Math.max(...ys)
+
+  return {
+    x: minX,
+    y: minY,
+    width: maxX - minX,
+    height: maxY - minY,
+  }
 }
 
-// Export the diagram as SVG
-export const exportAsSVG = (
-  diagramName: string,
-  reactFlowInstance: ReactFlowInstance<Node, Edge>
-) => {
-  const { viewport, padding, width, height } =
-    calculateDimensions(reactFlowInstance)
-  const downloadDocument = prepareDownloadDocument()
+function mergeBounds(a: Rect, b: Rect): Rect {
+  const minX = Math.min(a.x, b.x)
+  const minY = Math.min(a.y, b.y)
+  const maxX = Math.max(a.x + a.width, b.x + b.width)
+  const maxY = Math.max(a.y + a.height, b.y + b.height)
 
-  if (!downloadDocument) return
+  return {
+    x: minX,
+    y: minY,
+    width: maxX - minX,
+    height: maxY - minY,
+  }
+}
 
-  captureAsImage(
-    downloadDocument,
-    ExportFileFormat.SVG,
-    width,
-    height,
-    viewport,
-    padding
-  )
-    .then((dataUrl) =>
-      downloadImage(dataUrl, diagramName, ExportFileFormat.SVG)
-    )
-    .catch((error) => {
-      console.error("Failed to export as SVG:", error)
-    })
+export function getDiagramBounds(
+  reactFlow: ReactFlowInstance<Node, Edge>
+): Rect {
+  const nodeBounds = reactFlow.getNodesBounds(reactFlow.getNodes())
+  const edgeBounds = getBoundingBox(reactFlow.getEdges())
+
+  if (!edgeBounds) return nodeBounds
+
+  return mergeBounds(nodeBounds, edgeBounds)
 }
