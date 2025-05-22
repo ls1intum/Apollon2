@@ -2,6 +2,7 @@ import { create } from "zustand"
 import { UMLModel, UMLDiagramType } from "@tumaet/apollon"
 import { v4 as uuidv4 } from "uuid"
 import { persist, devtools } from "zustand/middleware"
+import { PlaygroundDefaultModel } from "@/constants/playgroundDefaultDiagram"
 
 type PersistentModelEntity = {
   id: string
@@ -16,6 +17,7 @@ type PersistenceModelStore = {
   createModel: (title: string, type: UMLDiagramType) => string
   updateModel: (model: UMLModel) => void
   deleteModel: (id: string) => void
+  getCurrentModel: () => PersistentModelEntity | null
 }
 const populateNewModel = () => ({
   id: uuidv4(),
@@ -30,8 +32,14 @@ const populateNewModel = () => ({
 export const usePersistenceModelStore = create<PersistenceModelStore>()(
   devtools(
     persist(
-      (set) => ({
-        models: {},
+      (set, get) => ({
+        models: {
+          playgroundModelId: {
+            id: "playgroundModelId",
+            model: PlaygroundDefaultModel,
+            lastModifiedAt: new Date().toISOString(),
+          },
+        },
         currentModelId: null,
 
         setCurrentModelId: (id) =>
@@ -96,6 +104,11 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
             false,
             "deleteModel"
           )
+        },
+        getCurrentModel: () => {
+          const currentModelId = get().currentModelId
+          if (!currentModelId) return null
+          return get().models[currentModelId]
         },
       }),
       {

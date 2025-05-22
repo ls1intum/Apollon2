@@ -1,4 +1,4 @@
-import { usePersistenceModelStore } from "@/components/stores/usePersistenceModelStore"
+import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { useEditorContext } from "@/contexts"
 import { ApollonEditor, UMLDiagramType } from "@tumaet/apollon"
 import React, { useEffect, useRef } from "react"

@@ -1,4 +1,3 @@
-import { ThemedPath } from "@/components/ThemedElements"
 import { CustomText } from "@/components/svgs/nodes/CustomText"
 import { SVGAttributes } from "react"
 
@@ -35,16 +34,18 @@ export function ColorDescriptionSVG({
     >
       <g transform={`translate(${margin}, ${margin})`}>
         {/* Main Path */}
-        <ThemedPath
+        <path
           d={`M 0 0 L ${innerWidth - 15} 0 L ${innerWidth} 15 L ${innerWidth} ${innerHeight} L 0 ${innerHeight} L 0 0 Z`}
           strokeWidth={strokeWidth}
           strokeMiterlimit="10"
+          stroke="black"
         />
         {/* Small Path for Top-Right Corner */}
-        <ThemedPath
+        <path
           d={`M ${innerWidth - 15} 0 L ${innerWidth - 15} 15 L ${innerWidth} 15`}
           strokeWidth={strokeWidth}
           strokeMiterlimit="10"
+          stroke="black"
         />
         {/* Description Text */}
         <CustomText

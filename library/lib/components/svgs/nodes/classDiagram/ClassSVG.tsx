@@ -1,5 +1,4 @@
 import React from "react"
-import { ThemedRect } from "@/components/ThemedElements"
 import { ClassType, ClassNodeElement } from "@/types"
 import {
   DEFAULT_FONT,
@@ -95,13 +94,14 @@ export const ClassSVG = ({
     >
       <g>
         {/* Outer Rectangle */}
-        <ThemedRect
+        <rect
           x={LINE_WIDTH}
           y={LINE_WIDTH}
           width={width - 2 * LINE_WIDTH}
           height={height - 2 * LINE_WIDTH}
           stroke="black"
           strokeWidth={LINE_WIDTH}
+          fill="white"
         />
 
         {/* Header Section */}
