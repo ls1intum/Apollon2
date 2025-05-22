@@ -7,22 +7,23 @@ import {
   ApollonOptions,
 } from "@tumaet/apollon"
 import { useEditorContext } from "@/contexts"
-import { useExportSVG } from "@/hooks/useExportAsSVG"
-import { useExportPNG } from "@/hooks/useExportPNG"
 import { usePersistenceModelStore } from "@/components/stores/usePersistenceModelStore"
 import { PlaygroundDefaultModel } from "@/constants/playgroundDefaultDiagram"
+import { useExportAsSVG, useExportAsPNG } from "@/hooks"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
 
 export const ApollonPlayground: React.FC = () => {
   const { setEditor } = useEditorContext()
-  const exportAsSvg = useExportSVG()
-  const exportAsPNG = useExportPNG()
+  const exportAsSvg = useExportAsSVG()
+  const exportAsPNG = useExportAsPNG()
   const containerRef = useRef<HTMLDivElement | null>(null)
   const diagram = usePersistenceModelStore(
     (store) => store.models[PlaygroundDefaultModel.id]
   )
   const updateModel = usePersistenceModelStore((store) => store.updateModel)
+
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const [apollonOptions, setApollonOptions] = useState<ApollonOptions>({
     mode: ApollonMode.Modelling,
@@ -49,8 +50,8 @@ export const ApollonPlayground: React.FC = () => {
   }, [apollonOptions])
 
   return (
-    <div className="flex flex-row grow">
-      <div className="flex flex-col p-4 gap-2">
+    <div className="flex flex-row grow ">
+      <div className="flex flex-col p-4 gap-2 overflow-scroll max-w-[300px]">
         <div>
           <label className="font-semibold ">Select Diagram Type</label>
           <select
@@ -130,10 +131,15 @@ export const ApollonPlayground: React.FC = () => {
         >
           export as PNG
         </button>
+        <div id="testing"></div>
+        <canvas ref={canvasRef} id="canvas"></canvas>
       </div>
 
-      <div className="flex grow min-h-20 min-w-20 " ref={containerRef} />
-      <canvas id="canvas" className="hidden" />
+      <div
+        id="playground"
+        className="flex grow min-h-20 min-w-20 "
+        ref={containerRef}
+      />
     </div>
   )
 }

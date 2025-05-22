@@ -2,18 +2,18 @@ import { useCallback } from "react"
 
 interface FileDownloadPayload {
   file: File | Blob
-  filename?: string
+  fileName?: string
 }
 
 export const useFileDownload = () => {
   const downloadFile = useCallback(
-    ({ file, filename }: FileDownloadPayload) => {
+    ({ file, fileName }: FileDownloadPayload) => {
       const link = document.createElement("a")
       link.href = window.URL.createObjectURL(file)
 
       // Set the file name for download
-      if (filename) {
-        link.download = filename
+      if (fileName) {
+        link.download = fileName
       } else if (file instanceof File) {
         link.download = file.name
       } else {

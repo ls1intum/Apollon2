@@ -29,7 +29,7 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
         const iconX = width - 15
 
         return (
-          <g key={item.id}>
+          <g key={item.id} id={item.id}>
             <CustomText
               key={item.id}
               x={padding}

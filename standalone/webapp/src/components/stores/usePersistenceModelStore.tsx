@@ -17,6 +17,7 @@ type PersistenceModelStore = {
   createModel: (title: string, type: UMLDiagramType) => string
   updateModel: (model: UMLModel) => void
   deleteModel: (id: string) => void
+  getCurrentModel: () => PersistentModelEntity | null
 }
 const populateNewModel = () => ({
   id: uuidv4(),
@@ -31,7 +32,7 @@ const populateNewModel = () => ({
 export const usePersistenceModelStore = create<PersistenceModelStore>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         models: {
           playgroundModelId: {
             id: "playgroundModelId",
@@ -103,6 +104,11 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
             false,
             "deleteModel"
           )
+        },
+        getCurrentModel: () => {
+          const currentModelId = get().currentModelId
+          if (!currentModelId) return null
+          return get().models[currentModelId]
         },
       }),
       {

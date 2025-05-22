@@ -1,8 +1,7 @@
-import { sanitizeSVG } from "@/utils/svgUtils"
 import { useFileDownload } from "./useFileDownload"
 import { useEditorContext } from "@/contexts"
 
-export const useExportSVG = () => {
+export const useExportAsSVG = () => {
   const { editor } = useEditorContext()
   const downloadFile = useFileDownload()
 
@@ -13,15 +12,14 @@ export const useExportSVG = () => {
       return
     }
 
-    const sanitizedSVG = sanitizeSVG(apollonSVG.svg)
     const diagramTitle = editor?.model.title || "diagram"
     const fileName = `${diagramTitle}.svg`
 
-    const fileToDownload = new File([sanitizedSVG], fileName, {
+    const fileToDownload = new File([apollonSVG.svg], fileName, {
       type: "image/svg+xml",
     })
 
-    downloadFile({ file: fileToDownload, filename: fileName })
+    downloadFile({ file: fileToDownload, fileName })
   }
 
   return exportSVG

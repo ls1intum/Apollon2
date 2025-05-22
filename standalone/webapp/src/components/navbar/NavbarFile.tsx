@@ -10,7 +10,7 @@ import { useModalContext, useEditorContext } from "@/contexts"
 import { useImportHandler } from "@/hooks/useImportHandler"
 import { HiddenFileInput } from "./HiddenFileInput"
 import { SnackbarMessage } from "./SnackbarMessage"
-import { useExportSVG } from "@/hooks/useExportAsSVG"
+import { useExportAsJSON, useExportAsPNG, useExportAsSVG } from "@/hooks"
 
 enum ExportType {
   SVG = "SVG",
@@ -27,7 +27,9 @@ interface Props {
 
 export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
   const { openModal } = useModalContext()
-  const exportAsSvg = useExportSVG()
+  const exportAsSvg = useExportAsSVG()
+  const exportAsPng = useExportAsPNG()
+  const exportAsJSON = useExportAsJSON()
   const { editor, diagramName } = useEditorContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState<null | HTMLElement>(
@@ -148,15 +150,13 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         }}
       >
         <MenuItem onClick={exportAsSvg}>As SVG</MenuItem>
-        <MenuItem onClick={() => handleExport(ExportType.PNG_WHITE)}>
+        <MenuItem onClick={() => exportAsPng({ setWhiteBackground: true })}>
           As PNG (White Background)
         </MenuItem>
-        <MenuItem onClick={() => handleExport(ExportType.PNG_TRANSPARENT)}>
+        <MenuItem onClick={() => exportAsPng({ setWhiteBackground: false })}>
           As PNG (Transparent Background)
         </MenuItem>
-        <MenuItem onClick={() => handleExport(ExportType.JSON)}>
-          As JSON
-        </MenuItem>
+        <MenuItem onClick={exportAsJSON}>As JSON</MenuItem>
         <MenuItem onClick={() => handleExport(ExportType.PDF)}>As PDF</MenuItem>
       </Menu>
 

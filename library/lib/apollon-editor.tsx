@@ -211,7 +211,7 @@ export class ApollonEditor {
       height: bounds.height + 2 * margin,
     }
 
-    const svgString = await getSVG(container, clip)
+    const svgString = getSVG(container, clip)
 
     // Clean up
     svgRoot.unmount()
