@@ -133,6 +133,12 @@ export const ApollonPlayground: React.FC = () => {
           Export as SVG
         </button>
         <button
+          onClick={() => exportAsPNG({ setWhiteBackground: true })}
+          className="border p-1 rounded-sm"
+        >
+          Export as PNG(White Background)
+        </button>
+        <button
           onClick={() => exportAsPNG({ setWhiteBackground: false })}
           className="border p-1 rounded-sm"
         >
