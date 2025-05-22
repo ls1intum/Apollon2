@@ -6,7 +6,7 @@ import Button from "@mui/material/Button"
 import { useModalContext } from "@/contexts/ModalContext"
 import { UMLDiagramType } from "@tumaet/apollon"
 import { useNavigate } from "react-router"
-import { usePersistenceModelStore } from "../stores/usePersistenceModelStore"
+import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 
 const diagramTypes = {
   structural: [UMLDiagramType.ClassDiagram, UMLDiagramType.ObjectDiagram],

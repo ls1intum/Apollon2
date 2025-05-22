@@ -1,6 +1,6 @@
 import { useModalContext } from "@/contexts/ModalContext"
 import { useNavigate } from "react-router"
-import { usePersistenceModelStore } from "../stores/usePersistenceModelStore"
+import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import { formatUpadtedDate } from "@/utils/date"
 

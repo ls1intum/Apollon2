@@ -1,4 +1,4 @@
-import { usePersistenceModelStore } from "@/components/stores/usePersistenceModelStore"
+import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { useFileDownload } from "./useFileDownload"
 import { useEditorContext } from "@/contexts"
 

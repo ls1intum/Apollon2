@@ -7,7 +7,7 @@ import {
   ApollonOptions,
 } from "@tumaet/apollon"
 import { useEditorContext } from "@/contexts"
-import { usePersistenceModelStore } from "@/components/stores/usePersistenceModelStore"
+import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { PlaygroundDefaultModel } from "@/constants/playgroundDefaultDiagram"
 import { useExportAsSVG, useExportAsPNG } from "@/hooks"
 
