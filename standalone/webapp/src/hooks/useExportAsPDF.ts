@@ -8,6 +8,7 @@ export const useExportAsPDF = () => {
     if (!editor) return
 
     const ApollonSVG = await editor.exportAsSVG()
+
     const blob = new Blob([ApollonSVG.svg], {
       type: "image/svg+xml;charset=utf-8",
     })
@@ -38,7 +39,9 @@ export const useExportAsPDF = () => {
 
       const pdf = new jsPDF("l", "pt", [width, height])
       pdf.addImage(pngData, "PNG", 0, 0, width, height)
-      pdf.save("download.pdf")
+
+      const fileName = editor.getDiagramMetadata().diagramTitle || "diagram"
+      pdf.save(`${fileName}.pdf`)
 
       URL.revokeObjectURL(url)
     }
