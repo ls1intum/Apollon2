@@ -6,19 +6,16 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "@/constants"
-import { useModalContext, useEditorContext } from "@/contexts"
+import { useModalContext } from "@/contexts"
 import { useImportHandler } from "@/hooks/useImportHandler"
 import { HiddenFileInput } from "./HiddenFileInput"
 import { SnackbarMessage } from "./SnackbarMessage"
-import { useExportAsJSON, useExportAsPNG, useExportAsSVG } from "@/hooks"
-
-enum ExportType {
-  SVG = "SVG",
-  PNG_WHITE = "PNG_WHITE",
-  PNG_TRANSPARENT = "PNG_TRANSPARENT",
-  JSON = "JSON",
-  PDF = "PDF",
-}
+import {
+  useExportAsJSON,
+  useExportAsPNG,
+  useExportAsSVG,
+  useExportAsPDF,
+} from "@/hooks"
 
 interface Props {
   color?: string
@@ -30,15 +27,14 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
   const exportAsSvg = useExportAsSVG()
   const exportAsPng = useExportAsPNG()
   const exportAsJSON = useExportAsJSON()
-  const { editor, diagramName } = useEditorContext()
+  const exportAsPDF = useExportAsPDF()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState<null | HTMLElement>(
     null
   )
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
-
   const { errorMessage, snackbarOpen, handleImport, handleSnackbarClose } =
     useImportHandler()
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const isMenuOpen = Boolean(anchorEl)
   const isSubMenuOpen = Boolean(subMenuAnchorEl)
@@ -56,20 +52,6 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
   const openSubMenu = useCallback((event: MouseEvent<HTMLElement>) => {
     setSubMenuAnchorEl(event.currentTarget)
   }, [])
-
-  const handleExport = useCallback(
-    (type: ExportType) => {
-      if (!editor || !diagramName) {
-        console.error("editor context is not available")
-        closeMainMenu()
-        return
-      }
-
-      console.log("Exporting as:", type)
-      closeMainMenu()
-    },
-    [editor, closeMainMenu]
-  )
 
   const handleNewFile = useCallback(() => {
     openModal("NEW_DIAGRAM")
@@ -157,7 +139,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
           As PNG (Transparent Background)
         </MenuItem>
         <MenuItem onClick={exportAsJSON}>As JSON</MenuItem>
-        <MenuItem onClick={() => handleExport(ExportType.PDF)}>As PDF</MenuItem>
+        <MenuItem onClick={exportAsPDF}>As PDF</MenuItem>
       </Menu>
 
       {/* Hidden File Input for Import */}

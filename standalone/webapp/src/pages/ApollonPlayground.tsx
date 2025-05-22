@@ -9,7 +9,12 @@ import {
 import { useEditorContext } from "@/contexts"
 import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { PlaygroundDefaultModel } from "@/constants/playgroundDefaultDiagram"
-import { useExportAsSVG, useExportAsPNG } from "@/hooks"
+import {
+  useExportAsSVG,
+  useExportAsPNG,
+  useExportAsJSON,
+  useExportAsPDF,
+} from "@/hooks"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
 
@@ -17,6 +22,8 @@ export const ApollonPlayground: React.FC = () => {
   const { setEditor } = useEditorContext()
   const exportAsSvg = useExportAsSVG()
   const exportAsPNG = useExportAsPNG()
+  const exportAsJSON = useExportAsJSON()
+  const exportAsPDF = useExportAsPDF()
   const containerRef = useRef<HTMLDivElement | null>(null)
   const diagram = usePersistenceModelStore(
     (store) => store.models[PlaygroundDefaultModel.id]
@@ -123,13 +130,19 @@ export const ApollonPlayground: React.FC = () => {
         </div>
 
         <button onClick={exportAsSvg} className="border p-1 rounded-sm">
-          export as SVG
+          Export as SVG
         </button>
         <button
           onClick={() => exportAsPNG({ setWhiteBackground: false })}
           className="border p-1 rounded-sm"
         >
-          export as PNG
+          Export as PNG
+        </button>
+        <button onClick={exportAsJSON} className="border p-1 rounded-sm">
+          Export as JSON
+        </button>
+        <button onClick={exportAsPDF} className="border p-1 rounded-sm">
+          Export as PDF
         </button>
         <div id="testing"></div>
         <canvas ref={canvasRef} id="canvas"></canvas>
