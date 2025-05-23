@@ -25,7 +25,6 @@ export default function Package({
   height,
   data: { name },
   parentId,
-  type,
 }: NodeProps<Node<PackageNodeProps>>) {
   const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
   const { onResize } = useHandleOnResize(parentId)
@@ -89,7 +88,7 @@ export default function Package({
       <PopoverManager
         anchorEl={packageSvgWrapperRef.current}
         elementId={id}
-        type={type as "package"}
+        type="Package"
       />
     </DefaultNodeWrapper>
   )

@@ -517,11 +517,7 @@ export const GenericEdge = ({
         />
       )}
 
-      <PopoverManager
-        elementId={id}
-        anchorEl={anchorRef.current}
-        type={"edge" as const}
-      />
+      <PopoverManager elementId={id} anchorEl={anchorRef.current} type="Edge" />
     </>
   )
 }

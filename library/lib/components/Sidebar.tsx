@@ -50,7 +50,7 @@ export const Sidebar = () => {
       >
         {dropElementConfigs[diagramType].map((config) => (
           <React.Fragment key={`${config.type}_${config.defaultData.name}`}>
-            {config.type === "colorDescription" && (
+            {config.type === "ColorDescription" && (
               <DividerLine style={{ margin: "3px 0" }} height={2} />
             )}
             <DraggableGhost dropElementConfig={config}>

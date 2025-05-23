@@ -197,7 +197,7 @@ export function Class({
       <PopoverManager
         anchorEl={classSvgWrapperRef.current}
         elementId={id}
-        type={"class" as const}
+        type="Class"
       />
     </DefaultNodeWrapper>
   )

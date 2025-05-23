@@ -21,36 +21,36 @@ import {
 } from "./edgePopovers"
 import { LocationPopover } from "@/types"
 
-type PopoverType = "class" | "package" | "edge"
+type PopoverType = "Class" | "Package" | "Edge"
 
 const editPopovers: {
-  class: React.FC<PopoverProps>
-  package: React.FC<PopoverProps>
-  edge: React.FC<PopoverProps>
+  Class: React.FC<PopoverProps>
+  Package: React.FC<PopoverProps>
+  Edge: React.FC<PopoverProps>
 } = {
-  class: ClassEditPopover,
-  package: PackageEditPopover,
-  edge: EdgeEditPopover,
+  Class: ClassEditPopover,
+  Package: PackageEditPopover,
+  Edge: EdgeEditPopover,
 }
 
 const giveFeedbackPopovers: {
-  class: React.FC<PopoverProps>
-  package: React.FC<PopoverProps>
-  edge: React.FC<PopoverProps>
+  Class: React.FC<PopoverProps>
+  Package: React.FC<PopoverProps>
+  Edge: React.FC<PopoverProps>
 } = {
-  class: ClassGiveFeedbackPopover,
-  package: PackageGiveFeedbackPopover,
-  edge: EdgeGiveFeedbackPopover,
+  Class: ClassGiveFeedbackPopover,
+  Package: PackageGiveFeedbackPopover,
+  Edge: EdgeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
-  class: React.FC<PopoverProps>
-  package: React.FC<PopoverProps>
-  edge: React.FC<PopoverProps>
+  Class: React.FC<PopoverProps>
+  Package: React.FC<PopoverProps>
+  Edge: React.FC<PopoverProps>
 } = {
-  class: ClassSeeFeedbackPopover,
-  package: PackageSeeFeedbackPopover,
-  edge: EdgeSeeFeedbackPopover,
+  Class: ClassSeeFeedbackPopover,
+  Package: PackageSeeFeedbackPopover,
+  Edge: EdgeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

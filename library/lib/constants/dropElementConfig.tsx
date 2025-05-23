@@ -20,14 +20,14 @@ export type DropElementConfig = {
 export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
   [UMLDiagramType.ClassDiagram]: [
     {
-      type: "package",
+      type: "Package",
       width: droppedElementWidth,
       height: 120,
       defaultData: { name: "Package" },
       svg: (props) => <PackageSVG {...props} />,
     },
     {
-      type: "class",
+      type: "Class",
       width: droppedElementWidth,
       height: 100,
       defaultData: {
@@ -38,7 +38,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <ClassSVG {...props} />,
     },
     {
-      type: "class",
+      type: "Class",
       width: droppedElementWidth,
       height: 110,
       defaultData: {
@@ -50,7 +50,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <ClassSVG {...props} />,
     },
     {
-      type: "class",
+      type: "Class",
       width: droppedElementWidth,
       height: 140,
       defaultData: {
@@ -66,7 +66,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <ClassSVG {...props} />,
     },
     {
-      type: "class",
+      type: "Class",
       width: droppedElementWidth,
       height: 110,
       defaultData: {
@@ -80,7 +80,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
   ],
   [UMLDiagramType.ObjectDiagram]: [
     {
-      type: "class",
+      type: "Class",
       width: droppedElementWidth,
       height: 70,
       defaultData: {

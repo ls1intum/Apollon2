@@ -40,7 +40,7 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
             lastModifiedAt: new Date().toISOString(),
           },
         },
-        currentModelId: null,
+        currentModelId: "7a0d5f4d-d452-429b-9d41-7f1cf3ada657",
 
         setCurrentModelId: (id) =>
           set({ currentModelId: id }, false, "setCurrentModelId"),
