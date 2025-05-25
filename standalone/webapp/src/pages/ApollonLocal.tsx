@@ -37,7 +37,7 @@ export const ApollonLocal: React.FC = () => {
 
     return () => {
       console.log("Cleaning up Apollon2 instance")
-      instance.dispose()
+      instance.destroy()
     }
   }, [diagram?.id])
 

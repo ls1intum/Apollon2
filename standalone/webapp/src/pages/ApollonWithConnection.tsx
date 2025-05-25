@@ -180,7 +180,7 @@ export const ApollonWithConnection: React.FC = () => {
       }
 
       if (instance) {
-        instance.dispose()
+        instance.destroy()
         instance = null
       }
     }

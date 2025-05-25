@@ -51,7 +51,7 @@ export const ApollonPlayground: React.FC = () => {
 
       return () => {
         console.log("disposing instance")
-        instance.dispose()
+        instance.destroy()
       }
     }
   }, [apollonOptions])

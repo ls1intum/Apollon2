@@ -118,7 +118,7 @@ export class ApollonEditor {
     this.diagramStore.getState().setAssessments({})
   }
 
-  public dispose() {
+  public destroy() {
     const diagramId = this.diagramStore.getState().diagramId
     console.log("Disposing Apollon2 instance with diagramId", diagramId)
     try {
@@ -297,5 +297,18 @@ export class ApollonEditor {
       edges: edges.map((edge) => mapFromReactFlowEdgeToApollonEdge(edge)),
       assessments: this.diagramStore.getState().assessments,
     }
+  }
+
+  set model(model: Apollon.UMLModel) {
+    const { nodes, edges, assessments } = model
+    this.diagramStore.getState().setNodesAndEdges(nodes, edges)
+    this.diagramStore.getState().setAssessments(assessments)
+    this.metadataStore
+      .getState()
+      .updateMetaData(model.title, parseDiagramType(model.type))
+  }
+
+  public addOrUpdateAssessment(assessment: Apollon.Assessment): void {
+    this.diagramStore.getState().addOrUpdateAssessment(assessment)
   }
 }
