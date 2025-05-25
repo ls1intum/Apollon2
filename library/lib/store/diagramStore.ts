@@ -61,6 +61,7 @@ export type DiagramStore = {
   updateNodesFromYjs: () => void
   updateEdgesFromYjs: () => void
   updateAssessmentFromYjs: () => void
+  addOrUpdateAssessment: (assessment: Assessment) => void
 }
 
 export const createDiagramStore = (
@@ -308,6 +309,22 @@ export const createDiagramStore = (
         },
         getAssessment: (id) => {
           return get().assessments[id]
+        },
+
+        addOrUpdateAssessment: (assessment) => {
+          ydoc.transact(() => {
+            getAssessments(ydoc).set(assessment.modelElementId, assessment)
+          }, "store")
+          set(
+            (state) => ({
+              assessments: {
+                ...state.assessments,
+                [assessment.modelElementId]: assessment,
+              },
+            }),
+            undefined,
+            "addOrUpdateAssessment"
+          )
         },
       })),
       { name: "DiagramStore", enabled: true }
