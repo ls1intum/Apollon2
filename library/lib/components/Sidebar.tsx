@@ -39,42 +39,42 @@ export const Sidebar = () => {
   }
 
   return (
-    <aside style={{ height: "100%", backgroundColor: "#f0f0f0" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-          margin: "10px",
-        }}
-      >
-        {dropElementConfigs[diagramType].map((config) => (
-          <React.Fragment key={`${config.type}_${config.defaultData.name}`}>
-            {config.type === "colorDescription" && (
-              <DividerLine style={{ margin: "3px 0" }} height={2} />
-            )}
-            <DraggableGhost dropElementConfig={config}>
-              <div
-                className="prevent-select"
-                style={{
-                  width: config.width * transformScale,
-                  height: config.height * transformScale,
-                  overflow: "hidden",
-                  zIndex: 2,
-                }}
-              >
-                {React.createElement(config.svg, {
-                  width: config.width,
-                  height: config.height,
-                  ...config.defaultData,
-                  transformScale,
-                  id: "2",
-                })}
-              </div>
-            </DraggableGhost>
-          </React.Fragment>
-        ))}
-      </div>
+    <aside
+      style={{
+        height: "100%",
+        backgroundColor: "#f0f0f0",
+        display: "flex",
+        flexDirection: "column",
+        padding: "10px",
+        gap: "8px",
+      }}
+    >
+      {dropElementConfigs[diagramType].map((config) => (
+        <React.Fragment key={`${config.type}_${config.defaultData.name}`}>
+          {config.type === "colorDescription" && (
+            <DividerLine style={{ margin: "3px 0" }} height={2} />
+          )}
+          <DraggableGhost dropElementConfig={config}>
+            <div
+              className="prevent-select"
+              style={{
+                width: config.width * transformScale,
+                height: config.height * transformScale,
+                overflow: "hidden",
+                zIndex: 2,
+              }}
+            >
+              {React.createElement(config.svg, {
+                width: config.width,
+                height: config.height,
+                ...config.defaultData,
+                transformScale,
+                id: "2",
+              })}
+            </div>
+          </DraggableGhost>
+        </React.Fragment>
+      ))}
     </aside>
   )
 }

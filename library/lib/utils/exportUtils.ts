@@ -1,11 +1,5 @@
 import { IPoint } from "@/edges/types"
-import {
-  ReactFlowInstance,
-  getViewportForBounds,
-  type Node,
-  type Edge,
-  Rect,
-} from "@xyflow/react"
+import { ReactFlowInstance, type Node, type Edge, Rect } from "@xyflow/react"
 
 export const getSVG = (container: HTMLElement, bounds: Rect): string => {
   const emptySVG = "<svg></svg>"
@@ -18,15 +12,6 @@ export const getSVG = (container: HTMLElement, bounds: Rect): string => {
     height: bounds.height + 2 * margin,
   }
 
-  const viewport = getViewportForBounds(
-    bounds,
-    bounds.width,
-    bounds.height,
-    1,
-    1,
-    10
-  )
-
   const padding = 50
   const width = bounds.width + 2 * padding
   const height = bounds.height + 2 * padding
@@ -35,7 +20,8 @@ export const getSVG = (container: HTMLElement, bounds: Rect): string => {
 
   if (!vp) return emptySVG
 
-  const mainSVG = document.createElement("svg")
+  const SVG_NS = "http://www.w3.org/2000/svg"
+  const mainSVG = document.createElementNS(SVG_NS, "svg")
   mainSVG.setAttribute("xmlns", "http://www.w3.org/2000/svg")
   mainSVG.setAttribute(
     "viewBox",
@@ -52,20 +38,11 @@ export const getSVG = (container: HTMLElement, bounds: Rect): string => {
     mainSVG.appendChild(svgMarkers)
   }
 
-  const viewPointTranformation = document.createElement("g")
-  viewPointTranformation.setAttribute(
-    "transform",
-    `translate(${viewport.x + padding}, ${viewport.y + padding}) scale(${viewport.zoom})`
-  )
-  mainSVG.appendChild(viewPointTranformation)
-
-  // All nodoes and edges should be inside the viewPointTranformation
-
   const handles = vp.querySelectorAll(".react-flow__handle")
   handles.forEach((handle) => handle.remove())
 
   const MainNodesGTag = document.createElement("g")
-  viewPointTranformation.appendChild(MainNodesGTag)
+  mainSVG.appendChild(MainNodesGTag)
   const allNodes = vp.querySelectorAll(".react-flow__node")
 
   allNodes.forEach((node) => {
@@ -85,7 +62,7 @@ export const getSVG = (container: HTMLElement, bounds: Rect): string => {
   const allEdges = vp.querySelectorAll(".react-flow__edge-path")
 
   const MainEdgesGTag = document.createElement("g")
-  viewPointTranformation.appendChild(MainEdgesGTag)
+  mainSVG.appendChild(MainEdgesGTag)
 
   allEdges.forEach((edge) => MainEdgesGTag.appendChild(edge))
 
