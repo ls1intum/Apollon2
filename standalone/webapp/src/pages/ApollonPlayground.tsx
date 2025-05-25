@@ -154,11 +154,7 @@ export const ApollonPlayground: React.FC = () => {
         <canvas ref={canvasRef} id="canvas"></canvas>
       </div>
 
-      <div
-        id="playground"
-        className="flex grow min-h-20 min-w-20 "
-        ref={containerRef}
-      />
+      <div id="playground" className="flex flex-1" ref={containerRef} />
     </div>
   )
 }

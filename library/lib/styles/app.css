@@ -4,18 +4,6 @@
   font-weight: 400;
 }
 
-html,
-body {
-  overflow: hidden;
-  touch-action: none; /* Prevent touch gestures */
-}
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
 .react-flow {
   --panel-background: #fff;
   --panel-shadow: 0 0 4px 0 rgb(0 0 0 / 0.2);
