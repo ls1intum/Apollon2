@@ -35,8 +35,8 @@
     "capacitor:open:ios": "npx cap open ios",
     "capacitor:assets:generate:ios": "npx capacitor-assets generate --ios",
     "capacitor:assets:generate:android": "npx capacitor-assets generate --android",
-    "publish:patch": "./scripts/publish-library-patch.sh",
-    "publish:minor": "./scripts/publish-library-minor.sh"
+    "publish:library:patch": "./scripts/publish-library-patch.sh",
+    "publish:library:minor": "./scripts/publish-library-minor.sh"
   },
   "license": "MIT",
   "engines": {
