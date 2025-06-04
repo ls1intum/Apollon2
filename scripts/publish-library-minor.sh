@@ -9,6 +9,6 @@ cd "$LIB_DIR"
 
 npm version preminor --no-git-tag-version --preid=alpha
 npm run build
-npm publish --access public
+npm publish --access public --tag alpha
 
 echo "✅ Minor version published: $(jq -r .version package.json)"
