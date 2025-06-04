@@ -1,0 +1,40 @@
+name: Publish Library Patch Version
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-patch:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: library
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # needed for pushing changes
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+
+      - run: npm install
+
+      - name: Bump patch version
+        run: |
+          npm version prepatch --no-git-tag-version --preid=alpha
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add package.json package-lock.json
+          git commit -m "chore(release): bump prepatch version to $(node -p "require('./package.json').version")"
+          git push
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

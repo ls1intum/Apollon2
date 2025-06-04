@@ -1,0 +1,40 @@
+name: Publish Library Minor Version
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-minor:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: library
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+
+      - run: npm install
+
+      - name: Bump minor version
+        run: |
+          npm version preminor --no-git-tag-version --preid=alpha
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add package.json package-lock.json
+          git commit -m "chore(release): bump preminor version to $(node -p "require('./package.json').version")"
+          git push
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
