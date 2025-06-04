@@ -12,7 +12,7 @@ echo "New version: $new_version"
 
 # 2. build
 npm run build
-npm publish --access public --tag alpha
+npm publish --access public --tag latest
 
 
 # 4. create a sanitized branch name
