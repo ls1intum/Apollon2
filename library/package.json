@@ -1,9 +1,12 @@
 {
   "name": "@tumaet/apollon",
-  "version": "4.0.0-alpha.0",
+  "version": "4.0.3-alpha.0",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist"
   ],
@@ -22,11 +25,11 @@
     "@mui/material": "6.3.1",
     "@types/node": "22.13.8",
     "@xyflow/react": "12.3.6",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "uuid": "11.0.3",
     "y-websocket": "2.1.0",
-    "zustand": "5.0.3",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "zustand": "5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "9.17.0",

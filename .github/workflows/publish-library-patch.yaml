@@ -1,0 +1,76 @@
+name: Publish Library Patch Version
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-patch:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: library
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # Needed for pushing changes and creating PR
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies in root
+        run: npm install
+        working-directory: ..
+
+      - name: Bump patch version and create branch
+        run: |
+          # Bump version in library/package.json
+          npm version prepatch --no-git-tag-version --preid=alpha > /dev/null
+          new_version=$(node -p "require('./package.json').version")
+          echo "New version: $new_version"
+
+          # Create and checkout new branch
+          branch_name="chore/version-bump-patch-${new_version}"
+          git checkout -b "$branch_name"
+
+          # Configure git
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          # Add package.json from library and package-lock.json from root
+          files_to_add="package.json"
+          root_package_lock="../package-lock.json"
+          if [ -f "$root_package_lock" ]; then
+            files_to_add="$files_to_add $root_package_lock"
+          else
+            echo "Warning: $root_package_lock not found in root directory"
+          fi
+          git add $files_to_add
+          git commit -m "chore(release): bump prepatch version to $new_version"
+
+          # Push new branch
+          git push origin "$branch_name"
+
+          # Store branch name and version for next steps
+          echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV
+          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish to npm
+        run: npm publish --access public --tag latest
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Pull Request
+        run: |
+          gh pr create \
+            --base main \
+            --head "${{ env.BRANCH_NAME }}" \
+            --title "chore: bump patch version to ${{ env.NEW_VERSION }}" \
+            --body "Automated version bump to ${{ env.NEW_VERSION }} and npm publish with alpha tag"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
