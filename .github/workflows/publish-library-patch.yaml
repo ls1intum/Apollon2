@@ -30,6 +30,9 @@ jobs:
           new_version=$(node -p "require('./package.json').version")
           echo "New version: $new_version"
 
+          # Go back to the root directory
+          cd ..
+
           # Create and checkout new branch
           branch_name="chore/version-bump-patch-${new_version}"
           git checkout -b "$branch_name"
