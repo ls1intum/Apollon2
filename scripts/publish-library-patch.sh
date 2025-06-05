@@ -13,7 +13,7 @@ echo "New version: $new_version"
 
 # 2. Build and publish
 npm run build > /dev/null
-npm publish --access public --tag latest 
+# npm publish --access public --tag latest 
 
 # 3. Create a branch
 branch_name="chore/version-bump-patch-${new_version}"
