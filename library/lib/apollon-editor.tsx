@@ -203,12 +203,13 @@ export class ApollonEditor {
     }
 
     const bounds = getDiagramBounds(reactFlowInstance)
-    const margin = 10
+
+    const margin = 20
     const clip = {
       x: bounds.x - margin,
       y: bounds.y - margin,
-      width: bounds.width + 2 * margin,
-      height: bounds.height + 2 * margin,
+      width: bounds.width + margin * 2,
+      height: bounds.height + margin * 2,
     }
 
     const svgString = getSVG(container, clip)
