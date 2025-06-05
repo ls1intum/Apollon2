@@ -1,20 +1,11 @@
 import { IPoint } from "@/edges/types"
 import { ReactFlowInstance, type Node, type Edge, Rect } from "@xyflow/react"
 
-export const getSVG = (container: HTMLElement, bounds: Rect): string => {
+export const getSVG = (container: HTMLElement, clip: Rect): string => {
   const emptySVG = "<svg></svg>"
 
-  const margin = 10
-  const clip = {
-    x: bounds.x - margin,
-    y: bounds.y - margin,
-    width: bounds.width + 2 * margin,
-    height: bounds.height + 2 * margin,
-  }
-
-  const padding = 50
-  const width = bounds.width + 2 * padding
-  const height = bounds.height + 2 * padding
+  const width = clip.width
+  const height = clip.height
 
   const vp = container.querySelector(".react-flow__viewport")
 
@@ -23,10 +14,7 @@ export const getSVG = (container: HTMLElement, bounds: Rect): string => {
   const SVG_NS = "http://www.w3.org/2000/svg"
   const mainSVG = document.createElementNS(SVG_NS, "svg")
   mainSVG.setAttribute("xmlns", "http://www.w3.org/2000/svg")
-  mainSVG.setAttribute(
-    "viewBox",
-    `${clip.x} ${clip.y} ${clip.width} ${clip.height}`
-  )
+  mainSVG.setAttribute("viewBox", `${clip.x} ${clip.y} ${width} ${height}`)
   mainSVG.setAttribute("width", `${width}`)
   mainSVG.setAttribute("height", `${height}`)
 

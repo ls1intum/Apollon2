@@ -21,15 +21,15 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@mui/icons-material": "6.3.1",
-    "@mui/material": "6.3.1",
+    "@mui/icons-material": "6.4.2",
+    "@mui/material": "6.4.2",
     "@types/node": "22.13.8",
     "@xyflow/react": "12.3.6",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "uuid": "11.0.3",
-    "y-websocket": "2.1.0",
-    "zustand": "5.0.3"
+    "zustand": "5.0.3",
+    "yjs": "13.6.20"
   },
   "devDependencies": {
     "@eslint/js": "9.17.0",

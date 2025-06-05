@@ -39,6 +39,12 @@ function convertRenderedSVGToPNG(
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const { width, height } = renderedSVG.clip
+    const margin = 0 // Add margin if needed
+    const scale = 1.5 // Adjust scale for higher resolution
+
+    // Add margin to canvas dimensions
+    const canvasWidth = width * scale + margin * 2
+    const canvasHeight = height * scale + margin * 2
 
     const blob = new Blob([renderedSVG.svg], { type: "image/svg+xml" })
     const blobUrl = URL.createObjectURL(blob)
@@ -46,23 +52,22 @@ function convertRenderedSVGToPNG(
     const image = new Image()
     image.width = width
     image.height = height
-    image.src = blobUrl
 
     image.onload = () => {
       const canvas = document.createElement("canvas")
-      const scale = 1.5 // Adjust scale if necessary
-      canvas.width = width * scale + 100
-      canvas.height = height * scale + 100
+      canvas.width = canvasWidth
+      canvas.height = canvasHeight
 
       const context = canvas.getContext("2d")!
 
       if (whiteBackground) {
         context.fillStyle = "white"
-        context.fillRect(0, 0, canvas.width, canvas.height)
+        context.fillRect(0, 0, canvasWidth, canvasHeight)
       }
 
+      // Apply scale and draw image with margin offset
       context.scale(scale, scale)
-      context.drawImage(image, 0, 0)
+      context.drawImage(image, margin, margin)
 
       canvas.toBlob((blob) => {
         URL.revokeObjectURL(blobUrl) // Cleanup the blob URL
@@ -73,5 +78,6 @@ function convertRenderedSVGToPNG(
     image.onerror = (error) => {
       reject(error)
     }
+    image.src = blobUrl
   })
 }
