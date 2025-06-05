@@ -6,29 +6,38 @@ cd "$LIB_DIR"
 
 echo "📦 Bumping patch version and preparing PR"
 
-# 1. bump version (no tag/commit)
-new_version=$(npm version prepatch --no-git-tag-version --preid=alpha)
+# 1. Bump version (no tag/commit)
+npm version prepatch --no-git-tag-version --preid=alpha > /dev/null
+new_version=$(node -p "require('./package.json').version")
 echo "New version: $new_version"
 
-# 2. build
-npm run build
-npm publish --access public --tag latest
+# 2. Build and publish
+npm run build > /dev/null
+npm publish --access public --tag latest 
 
-
-# 4. create a sanitized branch name
-# Remove @tumaet/apollon prefix and invalid characters, replace spaces and slashes
-sanitized_version=$(echo "$new_version" | sed 's/@tumaet\/apollon//g' | sed 's/[^a-zA-Z0-9.-]/-/g')
-branch_name="chore/version-bump-patch-${sanitized_version}"
+# 3. Create a branch
+branch_name="chore/version-bump-patch-${new_version}"
 git checkout -b "$branch_name"
 
-# 5. add and commit changes
-git add package.json package-lock.json dist/
+# 4. Add and commit changes
+# Add package.json from the library directory
+# Add package-lock.json from the root directory
+files_to_add="package.json"
+root_package_lock="../package-lock.json"
+if [ -f "$root_package_lock" ]; then
+  files_to_add="$files_to_add $root_package_lock"
+else
+  echo "Warning: $root_package_lock not found in root directory"
+fi
+git add $files_to_add
 git commit -m "chore: bump patch version to $new_version"
 
-# 6. push branch
+echo "✅ Changes committed to branch: $branch_name"
+
+# 5. Push branch
 git push -u origin "$branch_name"
 
-# 7. suggest PR URL
+# 6. Suggest PR URL
 repo_url=$(git config --get remote.origin.url | sed 's/.git$//' | sed 's/git@github.com:/https:\/\/github.com\//' | sed 's#^git://#https://#')
 pr_url="${repo_url}/compare/main...${branch_name}?expand=1"
 

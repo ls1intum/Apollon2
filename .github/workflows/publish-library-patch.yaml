@@ -25,14 +25,12 @@ jobs:
       - name: Bump patch version and create branch
         run: |
           # Get current version and bump to prepatch
-          new_version=$(npm version prepatch --no-git-tag-version --preid=alpha)
+          npm version prepatch --no-git-tag-version --preid=alpha
+          new_version=$(node -p "require('./package.json').version")
           echo "New version: $new_version"
           
-          # Sanitize version for branch name
-          sanitized_version=$(echo "$new_version" | sed 's/@tumaet\/apollon//g' | sed 's/[^a-zA-Z0-9.-]/-/g')
-          branch_name="chore/version-bump-patch-${sanitized_version}"
-          
           # Create and checkout new branch
+          branch_name="chore/version-bump-patch-${version}"
           git checkout -b "$branch_name"
           
           # Configure git
