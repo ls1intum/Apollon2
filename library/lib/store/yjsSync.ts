@@ -16,7 +16,7 @@ enum MessageType {
   YjsUpdate = 1,
 }
 
-type SendFunction = (data: Uint8Array) => void
+type SendFunction = (data: string) => void
 
 export class YjsSyncClass {
   private readonly stopYjsObserver: () => void
@@ -44,15 +44,17 @@ export class YjsSyncClass {
     this.sendFunction = sendFn
   }
 
-  public applyUpdate = (update: Uint8Array, transactionOrigin: string) => {
+  private applyUpdate = (update: Uint8Array, transactionOrigin: string) => {
     Y.applyUpdate(this.ydoc, update, transactionOrigin)
   }
 
-  public handleReceivedData = (data: Uint8Array) => {
-    const messageType = data[0]
+  public handleReceivedData = (base64Data: string) => {
+    // Decode the base64 string to Uint8Array
+    const decodedData = this.base64ToUint8(base64Data)
+    const messageType = decodedData[0]
 
     if (messageType === MessageType.YjsUpdate) {
-      const update = data.slice(1)
+      const update = decodedData.slice(1)
       this.applyUpdate(update, "remote")
     } else if (messageType === MessageType.YjsSYNC) {
       if (this.sendFunction) {
@@ -60,7 +62,9 @@ export class YjsSyncClass {
         const fullMessage = new Uint8Array(1 + syncMessage.length)
         fullMessage[0] = MessageType.YjsUpdate
         fullMessage.set(syncMessage, 1)
-        this.sendFunction(fullMessage)
+
+        const base64Message = YjsSyncClass.uint8ToBase64(fullMessage)
+        this.sendFunction(base64Message)
       }
     }
   }
@@ -113,7 +117,8 @@ export class YjsSyncClass {
         const fullMessage = new Uint8Array(1 + syncMessage.length)
         fullMessage[0] = MessageType.YjsUpdate
         fullMessage.set(syncMessage, 1)
-        this.sendFunction(fullMessage)
+        const base64Message = YjsSyncClass.uint8ToBase64(fullMessage)
+        this.sendFunction(base64Message)
       }
     }
 
@@ -129,5 +134,24 @@ export class YjsSyncClass {
       getDiagramMetadata(this.ydoc).unobserve(metadataObserver)
       this.ydoc.off("update", handleYjsUpdate)
     }
+  }
+
+  /**
+   *  Convert Uint8Array to Base64 string
+   */
+  static uint8ToBase64(uint8: Uint8Array): string {
+    return btoa(String.fromCharCode(...uint8))
+  }
+
+  /**
+   * Convert Base64 string to Uint8Array
+   */
+  private base64ToUint8(base64: string): Uint8Array {
+    const binary = atob(base64)
+    const bytes = new Uint8Array(binary.length)
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i)
+    }
+    return bytes
   }
 }
