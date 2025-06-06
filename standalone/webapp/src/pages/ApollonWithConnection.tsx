@@ -10,7 +10,7 @@ import {
 import { useNavigate, useParams, useSearchParams } from "react-router"
 import { toast } from "react-toastify"
 import { backendURL, backendWSSUrl } from "@/constants"
-import { DiagramView } from "@/types"
+import { DiagramView, WebSocketMessage } from "@/types"
 
 const fetchDiagramData = (diagramId: string): Promise<any> => {
   return fetch(`${backendURL}/api/${diagramId}`, {
@@ -112,23 +112,33 @@ export const ApollonWithConnection: React.FC = () => {
             )
 
             // Handle incoming Yjs updates
-            websocketRef.current.onmessage = (event: MessageEvent<Blob>) => {
-              event.data.arrayBuffer().then((buffer: ArrayBuffer) => {
-                const data = new Uint8Array(buffer)
-                instance?.receiveBroadcastedMessage(data)
-              })
+            websocketRef.current.onmessage = (event: MessageEvent<string>) => {
+              const receiveWebSocketMessage = JSON.parse(
+                event.data
+              ) as WebSocketMessage
+              instance?.receiveBroadcastedMessage(
+                receiveWebSocketMessage.diagramData
+              )
             }
 
             // Wait until socket is open before starting sync
             websocketRef.current.onopen = () => {
-              instance?.sendBroadcastMessage((data) => {
+              instance?.sendBroadcastMessage((diagramData) => {
                 if (websocketRef.current?.readyState === WebSocket.OPEN) {
-                  websocketRef.current.send(data)
+                  const sendData = { diagramData }
+                  websocketRef.current.send(JSON.stringify(sendData))
                 } else {
                   console.warn("Tried to send while WebSocket not open")
                 }
               })
-              websocketRef.current?.send(new Uint8Array([0])) // Init message
+
+              const initialSyncMessageInUintArray = instance?.uint8ToBase64(
+                new Uint8Array([0])
+              )
+              const initialMessage = JSON.stringify({
+                diagramData: initialSyncMessageInUintArray,
+              })
+              websocketRef.current?.send(initialMessage)
             }
 
             websocketRef.current.onerror = (err) => {

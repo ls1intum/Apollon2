@@ -269,12 +269,12 @@ export class ApollonEditor {
     }
   }
 
-  public sendBroadcastMessage(sendFn: (data: Uint8Array) => void) {
+  public sendBroadcastMessage(sendFn: (base64Data: string) => void) {
     this.syncManager.setSendFunction(sendFn)
   }
 
-  public receiveBroadcastedMessage(update: Uint8Array) {
-    this.syncManager.handleReceivedData(update)
+  public receiveBroadcastedMessage(base64Data: string) {
+    this.syncManager.handleReceivedData(base64Data)
   }
 
   public updateDiagramTitle(name: string) {
@@ -312,4 +312,5 @@ export class ApollonEditor {
   public addOrUpdateAssessment(assessment: Apollon.Assessment): void {
     this.diagramStore.getState().addOrUpdateAssessment(assessment)
   }
+  public uint8ToBase64 = YjsSyncClass.uint8ToBase64
 }

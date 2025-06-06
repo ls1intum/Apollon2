@@ -44,13 +44,22 @@ export const startSocketServer = (): void => {
 
     ws.on("message", (message: WebSocket.RawData) => {
       const clients = diagrams.get(ws.diagramId!)
-
       if (!clients) return
+
+      // Convert message to string if it's a Buffer or string
+      // This is necessary because WebSocket messages can be sent as Buffer or string
+      // and we want to ensure we send a string to all clients
+      const messageString =
+        typeof message === "string"
+          ? message
+          : message instanceof Buffer
+            ? message.toString("utf-8")
+            : ""
 
       let count = 0
       clients.forEach((client) => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
-          client.send(message)
+          client.send(messageString)
           count++
         }
       })
