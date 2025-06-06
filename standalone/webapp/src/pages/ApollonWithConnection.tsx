@@ -132,11 +132,10 @@ export const ApollonWithConnection: React.FC = () => {
                 }
               })
 
-              const initialSyncMessageInUintArray = instance?.uint8ToBase64(
-                new Uint8Array([0])
-              )
+              const initialSyncMessage =
+                ApollonEditor.generateInitialSyncMessage()
               const initialMessage = JSON.stringify({
-                diagramData: initialSyncMessageInUintArray,
+                diagramData: initialSyncMessage,
               })
               websocketRef.current?.send(initialMessage)
             }

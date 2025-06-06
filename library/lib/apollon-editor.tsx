@@ -312,5 +312,9 @@ export class ApollonEditor {
   public addOrUpdateAssessment(assessment: Apollon.Assessment): void {
     this.diagramStore.getState().addOrUpdateAssessment(assessment)
   }
-  public uint8ToBase64 = YjsSyncClass.uint8ToBase64
+
+  static generateInitialSyncMessage(): string {
+    const syncMessage = new Uint8Array(new Uint8Array([0]))
+    return YjsSyncClass.uint8ToBase64(syncMessage)
+  }
 }
