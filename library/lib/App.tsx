@@ -26,7 +26,6 @@ import {
   useNodeDragStop,
   useConnect,
   useReconnect,
-  useCanvasClickEvents,
   useElementInteractions,
 } from "./hooks"
 import { useDragOver } from "./hooks/useDragOver"
@@ -62,7 +61,6 @@ function App({ onReactFlowInit }: AppProps) {
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =
     useConnect()
   const { onReconnect } = useReconnect()
-  const { onNodeClick, onEdgeClick, onPaneClick } = useCanvasClickEvents()
   const { onBeforeDelete, onNodeDoubleClick, onEdgeDoubleClick } =
     useElementInteractions()
 
@@ -98,19 +96,13 @@ function App({ onReactFlowInit }: AppProps) {
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
         snapGrid={[SNAP_TO_GRID_PX, SNAP_TO_GRID_PX]}
-        onNodeClick={onNodeClick}
-        onEdgeClick={onEdgeClick}
         onNodeDoubleClick={onNodeDoubleClick}
         onEdgeDoubleClick={onEdgeDoubleClick}
-        onPaneClick={onPaneClick}
         onBeforeDelete={onBeforeDelete}
         proOptions={proOptions}
         edgesReconnectable={isDiagramModifiable}
         nodesConnectable={isDiagramModifiable}
         nodesDraggable={isDiagramModifiable}
-        elementsSelectable={isDiagramModifiable}
-        edgesFocusable={isDiagramModifiable}
-        nodesFocusable={isDiagramModifiable}
       >
         <CustomBackground />
         <CustomMiniMap />

@@ -19,7 +19,12 @@ export function TitleAndDesctiption({
   }
 
   return (
-    <DefaultNodeWrapper width={width} height={height} elementId={id}>
+    <DefaultNodeWrapper
+      width={width}
+      height={height}
+      elementId={id}
+      selected={!!selected}
+    >
       <TitleAndDescriptionSVG
         width={width}
         height={height}
@@ -27,7 +32,7 @@ export function TitleAndDesctiption({
         description={description || ""}
       />
       <NodeResizer
-        isVisible={selected}
+        isVisible={!!selected}
         minHeight={200}
         handleStyle={{ width: 8, height: 8 }}
       />

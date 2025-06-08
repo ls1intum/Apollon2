@@ -1,5 +1,8 @@
-import { useMetadataStore } from "@/store"
-import { useDiagramStore, usePopoverStore } from "@/store/context"
+import {
+  useDiagramStore,
+  usePopoverStore,
+  useMetadataStore,
+} from "@/store/context"
 import { ApollonMode } from "@/typings"
 import { useShallow } from "zustand/shallow"
 import {
@@ -65,14 +68,11 @@ export const PopoverManager = ({
   type,
 }: PopoverManagerProps) => {
   const viewportCenter = useViewportCenter()
-  const { nodes, interactiveElementId, setInteractiveElementId } =
-    useDiagramStore(
-      useShallow((state) => ({
-        nodes: state.nodes,
-        interactiveElementId: state.interactiveElementId,
-        setInteractiveElementId: state.setInteractiveElementId,
-      }))
-    )
+  const { nodes } = useDiagramStore(
+    useShallow((state) => ({
+      nodes: state.nodes,
+    }))
+  )
 
   const { diagramMode, readonly } = useMetadataStore(
     useShallow((state) => ({
@@ -93,10 +93,8 @@ export const PopoverManager = ({
     return null
   }
 
-  const open =
-    popoverElementId === elementId && elementId === interactiveElementId
+  const open = popoverElementId === elementId
   const onClose = () => {
-    setInteractiveElementId(null)
     setPopOverElementId(null)
   }
 
