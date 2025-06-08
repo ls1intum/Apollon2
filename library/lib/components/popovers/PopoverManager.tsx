@@ -73,20 +73,23 @@ export const PopoverManager = ({
         setInteractiveElementId: state.setInteractiveElementId,
       }))
     )
+
   const { diagramMode, readonly } = useMetadataStore(
     useShallow((state) => ({
       diagramMode: state.mode,
       readonly: state.readonly,
     }))
   )
-  const { popoverElementId, setPopOverElementId } = usePopoverStore(
-    useShallow((state) => ({
-      popoverElementId: state.popoverElementId,
-      setPopOverElementId: state.setPopOverElementId,
-    }))
-  )
+  const { popoverElementId, popupEnabled, setPopOverElementId } =
+    usePopoverStore(
+      useShallow((state) => ({
+        popoverElementId: state.popoverElementId,
+        popupEnabled: state.popupEnabled,
+        setPopOverElementId: state.setPopOverElementId,
+      }))
+    )
 
-  if (!anchorEl) {
+  if (!anchorEl || !popupEnabled) {
     return null
   }
 

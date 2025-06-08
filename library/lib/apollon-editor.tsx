@@ -77,10 +77,10 @@ export class ApollonEditor {
     if (options?.mode) {
       this.metadataStore.getState().setMode(options.mode)
     }
-    if (options?.enablePopups) {
-      this.metadataStore.getState().setPopupEnabled(options.enablePopups)
+    if (options?.enablePopups !== undefined) {
+      this.popoverStore.getState().setPopupEnabled(options.enablePopups)
     }
-    if (options?.readonly) {
+    if (options?.readonly !== undefined) {
       this.metadataStore.getState().setReadonly(options.readonly)
     }
 

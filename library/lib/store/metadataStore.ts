@@ -11,8 +11,6 @@ export type MetadataStore = {
   diagramType: UMLDiagramType
   mode: ApollonMode
   readonly: boolean
-  popupEnabled: boolean
-  setPopupEnabled: (isPopupEnabled: boolean) => void
   setMode: (mode: ApollonMode) => void
   setReadonly: (readonly: boolean) => void
   updateDiagramTitle: (diagramTitle: string) => void
@@ -27,14 +25,12 @@ type InitialMetadataState = {
   diagramType: UMLDiagramType
   mode: ApollonMode
   readonly: boolean
-  popupEnabled: boolean
 }
 const initialMetadataState: InitialMetadataState = {
   diagramTitle: "Untitled Diagram",
   diagramType: UMLDiagramType.ClassDiagram,
   mode: ApollonMode.Modelling,
   readonly: false,
-  popupEnabled: true,
 }
 
 export const createMetadataStore = (
@@ -94,10 +90,6 @@ export const createMetadataStore = (
 
         setReadonly: (readonly) => {
           set({ readonly }, undefined, "setReadonly")
-        },
-
-        setPopupEnabled: (popupEnabled) => {
-          set({ popupEnabled }, undefined, "setPopupEnabled")
         },
 
         reset: () => {
