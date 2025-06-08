@@ -10,18 +10,17 @@ import {
   getDiagramBounds,
 } from "./utils"
 import { UMLDiagramType } from "./types"
-import { createDiagramStore, DiagramStore } from "./store/diagramStore"
-import { createMetadataStore, MetadataStore } from "./store/metadataStore"
+import { createDiagramStore, DiagramStore } from "@/store/diagramStore"
+import { createMetadataStore, MetadataStore } from "@/store/metadataStore"
+import { createPopoverStore, PopoverStore } from "@/store/popoverStore"
 import {
   DiagramStoreContext,
   MetadataStoreContext,
   PopoverStoreContext,
 } from "./store/context"
-import { YjsSyncClass } from "./store/yjsSync"
+import { YjsSyncClass } from "@/sync/yjsSyncClass"
 import * as Y from "yjs"
 import { StoreApi } from "zustand"
-import { createPopoverStore } from "./store"
-import { PopoverStore } from "./store/popoverStore"
 import * as Apollon from "./typings"
 
 export class ApollonEditor {

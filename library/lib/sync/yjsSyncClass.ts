@@ -1,7 +1,7 @@
 import * as Y from "yjs"
 import { StoreApi } from "zustand"
-import { DiagramStore } from "./diagramStore"
-import { MetadataStore } from "./metadataStore"
+import { DiagramStore } from "@/store/diagramStore"
+import { MetadataStore } from "@/store/metadataStore"
 import {
   getAssessments,
   getDiagramMetadata,
