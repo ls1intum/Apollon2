@@ -107,9 +107,6 @@ export const createDiagramStore = (
             typeof payload === "function" ? payload(get().nodes) : payload
 
           if (deepEqual(get().nodes, nodes)) {
-            console.log(
-              "No setNodeschanges in nodes, skipping update deepEqual"
-            )
             return
           }
 
@@ -125,9 +122,6 @@ export const createDiagramStore = (
             typeof payload === "function" ? payload(get().edges) : payload
 
           if (deepEqual(get().edges, edges)) {
-            console.log(
-              "No changes in edges setEdges, skipping update deepEqual"
-            )
             return
           }
           ydoc.transact(() => {
@@ -148,7 +142,6 @@ export const createDiagramStore = (
         },
 
         onNodesChange: (changes) => {
-          console.log("onNodesChange", changes)
           const selectChanges = changes.filter(
             (change) => change.type === "select"
           )
@@ -206,10 +199,6 @@ export const createDiagramStore = (
 
           const nextNodes = applyNodeChanges(filteredChanges, currentNodes)
           if (deepEqual(currentNodes, nextNodes)) {
-            console.log(
-              "No changes in nodes, skipping update, changes",
-              changes
-            )
             return
           }
 
@@ -289,11 +278,6 @@ export const createDiagramStore = (
           const currentEdges = get().edges
           const nextEdges = applyEdgeChanges(changesWithoutSelect, currentEdges)
           if (deepEqual(currentEdges, nextEdges)) {
-            console.log(
-              "No changes in edges, skipping update, changes",
-              changes
-            )
-
             return
           }
 
