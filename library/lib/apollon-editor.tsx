@@ -18,7 +18,11 @@ import {
   MetadataStoreContext,
   PopoverStoreContext,
 } from "./store/context"
-import { YjsSyncClass } from "@/sync/yjsSyncClass"
+import {
+  MessageType,
+  SendBroadcastMessage,
+  YjsSyncClass,
+} from "@/sync/yjsSyncClass"
 import * as Y from "yjs"
 import { StoreApi } from "zustand"
 import * as Apollon from "./typings"
@@ -268,8 +272,8 @@ export class ApollonEditor {
     }
   }
 
-  public sendBroadcastMessage(sendFn: (base64Data: string) => void) {
-    this.syncManager.setSendFunction(sendFn)
+  public sendBroadcastMessage(sendFn: SendBroadcastMessage) {
+    this.syncManager.setSendBroadcastMessage(sendFn)
   }
 
   public receiveBroadcastedMessage(base64Data: string) {
@@ -313,7 +317,7 @@ export class ApollonEditor {
   }
 
   static generateInitialSyncMessage(): string {
-    const syncMessage = new Uint8Array(new Uint8Array([0]))
+    const syncMessage = new Uint8Array(new Uint8Array([MessageType.YjsSYNC]))
     return YjsSyncClass.uint8ToBase64(syncMessage)
   }
 }
