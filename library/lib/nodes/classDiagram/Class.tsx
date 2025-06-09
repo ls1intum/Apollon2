@@ -112,10 +112,6 @@ export function Class({
 
   useEffect(() => {
     if (height && height <= minHeight) {
-      console.warn(
-        `Node ${id} height is less than minimum height. Setting to minimum height: ${minHeight}`
-      )
-      // Update the node height to the minimum height
       setNodes((prev) =>
         prev.map((node) => {
           if (node.id === id) {
@@ -136,9 +132,6 @@ export function Class({
 
   useEffect(() => {
     if (width && width <= minWidth) {
-      console.warn(
-        `Node ${id} width is less than minimum width. Setting to minimum width: ${minWidth}`
-      )
       setNodes((prev) =>
         prev.map((node) => {
           if (node.id === id) {
