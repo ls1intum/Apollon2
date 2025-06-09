@@ -13,11 +13,12 @@ import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
 import { useRef } from "react"
-import { useDiagramStore, usePopoverStore } from "@/store/context"
+import { usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
+import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 
 export default function Package({
   id,
@@ -30,27 +31,25 @@ export default function Package({
   const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
   const { onResize } = useHandleOnResize(parentId)
   const isDiagramModifiable = useDiagramModifiable()
+  const selected = useIsOnlyThisElementSelected(id)
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
   const handleDelete = useHandleDelete(id)
 
-  const { interactiveElementId } = useDiagramStore(
-    useShallow((state) => ({
-      setNodes: state.setNodes,
-      interactiveElementId: state.interactiveElementId,
-    }))
-  )
-
   if (!width || !height) {
     return null
   }
-  const selected = id === interactiveElementId
 
   return (
-    <DefaultNodeWrapper width={width} height={height} elementId={id}>
+    <DefaultNodeWrapper
+      width={width}
+      height={height}
+      elementId={id}
+      selected={!!selected}
+    >
       <NodeToolbar
-        isVisible={isDiagramModifiable && selected}
+        isVisible={isDiagramModifiable && !!selected}
         position={Position.Top}
         align="end"
         offset={10}
@@ -70,7 +69,7 @@ export default function Package({
         </Box>
       </NodeToolbar>
       <NodeResizer
-        isVisible={isDiagramModifiable && selected}
+        isVisible={isDiagramModifiable && !!selected}
         onResize={onResize}
         minHeight={50}
         minWidth={50}

@@ -1,11 +1,10 @@
 import { IPoint } from "@/edges"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
-import { useDiagramStore } from "@/store"
+import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
 import { Box } from "@mui/material"
 import { forwardRef, ForwardedRef } from "react"
-import { useShallow } from "zustand/shallow"
 
 interface CustomEdgeToolbarProps {
   edgeId: string
@@ -20,12 +19,10 @@ export const CustomEdgeToolbar = forwardRef(
     { edgeId, position, onEditClick, onDeleteClick }: CustomEdgeToolbarProps,
     ref: ForwardedRef<SVGForeignObjectElement>
   ) => {
-    const interactiveElementId = useDiagramStore(
-      useShallow((state) => state.interactiveElementId)
-    )
     const isDiagramModifiable = useDiagramModifiable()
 
-    const selected = interactiveElementId === edgeId
+    const selected = useIsOnlyThisElementSelected(edgeId)
+
     const showToolbar = selected && isDiagramModifiable
     const foreignObjectStyle = showToolbar
       ? { borderRadius: 8, boxShadow: "0 0 4px 0 rgb(0 0 0 / .2)" }

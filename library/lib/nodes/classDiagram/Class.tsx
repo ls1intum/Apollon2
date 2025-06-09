@@ -30,6 +30,7 @@ import {
 import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
+import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 
 export function Class({
   id,
@@ -37,21 +38,20 @@ export function Class({
   height,
   data: { methods, attributes, stereotype, name },
 }: NodeProps<Node<ClassNodeProps>>) {
-  const { interactiveElementId, setNodes } = useDiagramStore(
+  const { setNodes } = useDiagramStore(
     useShallow((state) => ({
-      interactiveElementId: state.interactiveElementId,
       setNodes: state.setNodes,
     }))
   )
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
+  const selected = useIsOnlyThisElementSelected(id)
   const isDiagramModifiable = useDiagramModifiable()
 
   const classSvgWrapperRef = useRef<HTMLDivElement | null>(null)
   const handleDelete = useHandleDelete(id)
 
-  const selected = id === interactiveElementId
   const showStereotype = stereotype
     ? stereotype !== ClassType.ObjectClass
     : false
@@ -112,6 +112,10 @@ export function Class({
 
   useEffect(() => {
     if (height && height <= minHeight) {
+      console.warn(
+        `Node ${id} height is less than minimum height. Setting to minimum height: ${minHeight}`
+      )
+      // Update the node height to the minimum height
       setNodes((prev) =>
         prev.map((node) => {
           if (node.id === id) {
@@ -132,6 +136,9 @@ export function Class({
 
   useEffect(() => {
     if (width && width <= minWidth) {
+      console.warn(
+        `Node ${id} width is less than minimum width. Setting to minimum width: ${minWidth}`
+      )
       setNodes((prev) =>
         prev.map((node) => {
           if (node.id === id) {
@@ -152,17 +159,22 @@ export function Class({
   const finalWidth = Math.max(width ?? 0, minWidth)
 
   return (
-    <DefaultNodeWrapper width={width} height={height} elementId={id}>
+    <DefaultNodeWrapper
+      width={width}
+      height={height}
+      elementId={id}
+      selected={!!selected}
+    >
       <NodeResizer
         nodeId={id}
-        isVisible={isDiagramModifiable && selected}
+        isVisible={isDiagramModifiable && !!selected}
         minWidth={minWidth}
         minHeight={minHeight}
         maxHeight={minHeight}
         handleStyle={{ width: 8, height: 8 }}
       />
       <NodeToolbar
-        isVisible={isDiagramModifiable && selected}
+        isVisible={isDiagramModifiable && !!selected}
         position={Position.Top}
         align="end"
         offset={10}

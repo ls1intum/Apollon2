@@ -10,18 +10,21 @@ import {
   getDiagramBounds,
 } from "./utils"
 import { UMLDiagramType } from "./types"
-import { createDiagramStore, DiagramStore } from "./store/diagramStore"
-import { createMetadataStore, MetadataStore } from "./store/metadataStore"
+import { createDiagramStore, DiagramStore } from "@/store/diagramStore"
+import { createMetadataStore, MetadataStore } from "@/store/metadataStore"
+import { createPopoverStore, PopoverStore } from "@/store/popoverStore"
 import {
   DiagramStoreContext,
   MetadataStoreContext,
   PopoverStoreContext,
 } from "./store/context"
-import { YjsSyncClass } from "./store/yjsSync"
+import {
+  MessageType,
+  SendBroadcastMessage,
+  YjsSyncClass,
+} from "@/sync/yjsSyncClass"
 import * as Y from "yjs"
 import { StoreApi } from "zustand"
-import { createPopoverStore } from "./store"
-import { PopoverStore } from "./store/popoverStore"
 import * as Apollon from "./typings"
 
 export class ApollonEditor {
@@ -77,10 +80,10 @@ export class ApollonEditor {
     if (options?.mode) {
       this.metadataStore.getState().setMode(options.mode)
     }
-    if (options?.enablePopups) {
-      this.metadataStore.getState().setPopupEnabled(options.enablePopups)
+    if (options?.enablePopups !== undefined) {
+      this.popoverStore.getState().setPopupEnabled(options.enablePopups)
     }
-    if (options?.readonly) {
+    if (options?.readonly !== undefined) {
       this.metadataStore.getState().setReadonly(options.readonly)
     }
 
@@ -269,8 +272,8 @@ export class ApollonEditor {
     }
   }
 
-  public sendBroadcastMessage(sendFn: (base64Data: string) => void) {
-    this.syncManager.setSendFunction(sendFn)
+  public sendBroadcastMessage(sendFn: SendBroadcastMessage) {
+    this.syncManager.setSendBroadcastMessage(sendFn)
   }
 
   public receiveBroadcastedMessage(base64Data: string) {
@@ -314,7 +317,7 @@ export class ApollonEditor {
   }
 
   static generateInitialSyncMessage(): string {
-    const syncMessage = new Uint8Array(new Uint8Array([0]))
+    const syncMessage = new Uint8Array(new Uint8Array([MessageType.YjsSYNC]))
     return YjsSyncClass.uint8ToBase64(syncMessage)
   }
 }

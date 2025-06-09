@@ -1,7 +1,7 @@
 import * as Y from "yjs"
 import { StoreApi } from "zustand"
-import { DiagramStore } from "./diagramStore"
-import { MetadataStore } from "./metadataStore"
+import { DiagramStore } from "@/store/diagramStore"
+import { MetadataStore } from "@/store/metadataStore"
 import {
   getAssessments,
   getDiagramMetadata,
@@ -11,16 +11,16 @@ import {
 import { Edge, Node } from "@xyflow/react"
 import { Assessment } from "@/typings"
 
-enum MessageType {
+export enum MessageType {
   YjsSYNC = 0,
   YjsUpdate = 1,
 }
 
-type SendFunction = (data: string) => void
+export type SendBroadcastMessage = (base64data: string) => void
 
 export class YjsSyncClass {
   private readonly stopYjsObserver: () => void
-  private sendFunction: SendFunction | null = null
+  private sendBroadcastMessage: SendBroadcastMessage | null = null
   private readonly ydoc: Y.Doc
   private readonly diagramStore: StoreApi<DiagramStore>
   private readonly metadataStore: StoreApi<MetadataStore>
@@ -40,8 +40,8 @@ export class YjsSyncClass {
     this.stopYjsObserver()
   }
 
-  public setSendFunction = (sendFn: SendFunction) => {
-    this.sendFunction = sendFn
+  public setSendBroadcastMessage = (sendFn: SendBroadcastMessage) => {
+    this.sendBroadcastMessage = sendFn
   }
 
   private applyUpdate = (update: Uint8Array, transactionOrigin: string) => {
@@ -57,14 +57,14 @@ export class YjsSyncClass {
       const update = decodedData.slice(1)
       this.applyUpdate(update, "remote")
     } else if (messageType === MessageType.YjsSYNC) {
-      if (this.sendFunction) {
+      if (this.sendBroadcastMessage) {
         const syncMessage = Y.encodeStateAsUpdate(this.ydoc)
         const fullMessage = new Uint8Array(1 + syncMessage.length)
         fullMessage[0] = MessageType.YjsUpdate
         fullMessage.set(syncMessage, 1)
 
         const base64Message = YjsSyncClass.uint8ToBase64(fullMessage)
-        this.sendFunction(base64Message)
+        this.sendBroadcastMessage(base64Message)
       }
     }
   }
@@ -112,13 +112,13 @@ export class YjsSyncClass {
       _arg2: Y.Doc,
       transaction: Y.Transaction
     ) => {
-      if (this.sendFunction && transaction.origin === "store") {
+      if (this.sendBroadcastMessage && transaction.origin === "store") {
         const syncMessage = Y.encodeStateAsUpdate(this.ydoc)
         const fullMessage = new Uint8Array(1 + syncMessage.length)
         fullMessage[0] = MessageType.YjsUpdate
         fullMessage.set(syncMessage, 1)
         const base64Message = YjsSyncClass.uint8ToBase64(fullMessage)
-        this.sendFunction(base64Message)
+        this.sendBroadcastMessage(base64Message)
       }
     }
 

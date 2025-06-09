@@ -1,13 +1,14 @@
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
-import { useDiagramStore } from "@/store/context"
+// import { useDiagramStore } from "@/store/context"
 import { Handle, Position } from "@xyflow/react"
-import { useShallow } from "zustand/shallow"
+// import { useShallow } from "zustand/shallow"
 
 interface Props {
   children: React.ReactNode
+  elementId: string
+  selected: boolean
   width?: number
   height?: number
-  elementId: string
 }
 
 function calculateAdjustedQuarter(x: number): number {
@@ -16,14 +17,15 @@ function calculateAdjustedQuarter(x: number): number {
 }
 
 export function DefaultNodeWrapper({
-  elementId,
+  // elementId,
   children,
+  selected,
   width = 0,
   height = 0,
 }: Props) {
-  const interactiveElementId = useDiagramStore(
-    useShallow((state) => state.interactiveElementId)
-  )
+  // const interactiveElementId = useDiagramStore(
+  //   useShallow((state) => state.interactiveElementId)
+  // )
 
   const adjustedWidth = calculateAdjustedQuarter(width)
   const adjustedHeight = calculateAdjustedQuarter(height)
@@ -31,7 +33,7 @@ export function DefaultNodeWrapper({
   const isDiagramModifiable = useDiagramModifiable()
   const verticalOffset = isDiagramModifiable ? 0 : 20
 
-  const selected = elementId === interactiveElementId
+  // const selected = elementId === interactiveElementId
 
   const selectedHandleStyle =
     selected && isDiagramModifiable

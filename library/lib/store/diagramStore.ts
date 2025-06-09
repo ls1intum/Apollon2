@@ -23,7 +23,7 @@ export type DiagramStoreData = {
 type InitialDiagramState = {
   nodes: Node[]
   edges: Edge[]
-  interactiveElementId: string | null
+  selectedElementIds: string[]
   diagramId: string
   assessments: Record<string, Assessment>
 }
@@ -31,7 +31,7 @@ type InitialDiagramState = {
 const initialDiagramState: InitialDiagramState = {
   nodes: [],
   edges: [],
-  interactiveElementId: null,
+  selectedElementIds: [],
   diagramId: Math.random().toString(36).substring(2, 15),
   assessments: {},
 }
@@ -39,7 +39,7 @@ const initialDiagramState: InitialDiagramState = {
 export type DiagramStore = {
   nodes: Node[]
   edges: Edge[]
-  interactiveElementId: string | null
+  selectedElementIds: string[]
   diagramId: string
   assessments: Record<string, Assessment>
   setDiagramId: (diagramId: string) => void
@@ -51,7 +51,7 @@ export type DiagramStore = {
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   reset: () => void
-  setInteractiveElementId: (elementId: string | null) => void
+  setSelectedElementsId: (elementId: string | null) => void
   getAssessment: (id: string) => Assessment | undefined
   setAssessments: (
     assessments:
@@ -74,10 +74,20 @@ export const createDiagramStore = (
         setDiagramId: (diagramId) => {
           set({ diagramId }, undefined, "setDiagramId")
         },
-        setInteractiveElementId: (interactiveElementId) => {
-          set({ interactiveElementId }, undefined, "setInteractiveElementId")
-        },
 
+        setSelectedElementsId: (elementId) => {
+          if (elementId === null) {
+            set({ selectedElementIds: [] }, undefined, "setSelectedElementsId")
+          } else {
+            set(
+              (state) => ({
+                selectedElementIds: [...state.selectedElementIds, elementId],
+              }),
+              undefined,
+              "setSelectedElementsId"
+            )
+          }
+        },
         addNode: (node) => {
           ydoc.transact(() => {
             getNodesMap(ydoc).set(node.id, node)
@@ -135,50 +145,47 @@ export const createDiagramStore = (
           const selectChanges = changes.filter(
             (change) => change.type === "select"
           )
-          const currentNodes = get().nodes
 
           if (selectChanges.length > 0) {
-            const updatedNodesBySelection = applyNodeChanges(
-              selectChanges,
-              currentNodes
-            )
-
-            const isNodesArrayEqualAfterAppliedChanges = deepEqual(
-              currentNodes,
-              updatedNodesBySelection
-            )
-
-            if (!isNodesArrayEqualAfterAppliedChanges) {
-              set(
-                { nodes: updatedNodesBySelection },
-                undefined,
-                "onNodesChangeSelect updatedNodesBySelection"
-              )
-              const selectedNodes = updatedNodesBySelection.filter(
-                (node) => node.selected
-              )
-              if (selectedNodes.length === 1 && selectedNodes[0].selected) {
+            selectChanges.forEach((change) => {
+              if (change.selected) {
                 set(
-                  { interactiveElementId: selectedNodes[0].id },
+                  (state) => ({
+                    selectedElementIds: [
+                      ...state.selectedElementIds,
+                      change.id,
+                    ],
+                  }),
                   undefined,
-                  "onNodesChangeSelect interactiveElementId"
+                  "onNodesChange-select"
+                )
+              } else {
+                set(
+                  (state) => ({
+                    selectedElementIds: state.selectedElementIds.filter(
+                      (id) => id !== change.id
+                    ),
+                  }),
+                  undefined,
+                  "onNodesChange-deselect"
                 )
               }
-            }
-            if (
-              updatedNodesBySelection.reduce(
-                (acc, node) => acc + (node.selected ? 1 : 0),
-                0
-              ) > 1
-            ) {
               set(
-                { interactiveElementId: null },
+                (state) => ({
+                  nodes: state.nodes.map((node) =>
+                    node.id === change.id
+                      ? { ...node, selected: change.selected }
+                      : node
+                  ),
+                }),
                 undefined,
-                "onNodesChangeSelect interactiveElementId reset"
+                "onNodesChange-select-deselect-sync"
               )
-            }
+            })
           }
 
+          // Select changes are handled previously
+          // Position with dragging false means onNodeDragStop and this is handled seperately
           const filteredChanges = changes.filter(
             (change) =>
               !(
@@ -188,6 +195,8 @@ export const createDiagramStore = (
           )
 
           if (filteredChanges.length === 0) return
+          const currentNodes = get().nodes
+
           const nextNodes = applyNodeChanges(filteredChanges, currentNodes)
           if (deepEqual(currentNodes, nextNodes)) {
             return
@@ -219,6 +228,47 @@ export const createDiagramStore = (
         },
 
         onEdgesChange: (changes) => {
+          const selectChanges = changes.filter(
+            (change) => change.type === "select"
+          )
+          if (selectChanges.length > 0) {
+            selectChanges.forEach((change) => {
+              if (change.selected) {
+                set(
+                  (state) => ({
+                    selectedElementIds: [
+                      ...state.selectedElementIds,
+                      change.id,
+                    ],
+                  }),
+                  undefined,
+                  "onEdgesChange-select"
+                )
+              } else {
+                set(
+                  (state) => ({
+                    selectedElementIds: state.selectedElementIds.filter(
+                      (id) => id !== change.id
+                    ),
+                  }),
+                  undefined,
+                  "onEdgesChange-deselect"
+                )
+              }
+              set(
+                (state) => ({
+                  edges: state.edges.map((edge) =>
+                    edge.id === change.id
+                      ? { ...edge, selected: change.selected }
+                      : edge
+                  ),
+                }),
+                undefined,
+                "onEdgesChange-select-deselect-sync"
+              )
+            })
+          }
+
           const changesWithoutSelect = changes.filter(
             (change) => change.type !== "select"
           )
@@ -227,7 +277,9 @@ export const createDiagramStore = (
 
           const currentEdges = get().edges
           const nextEdges = applyEdgeChanges(changesWithoutSelect, currentEdges)
-          if (deepEqual(currentEdges, nextEdges)) return
+          if (deepEqual(currentEdges, nextEdges)) {
+            return
+          }
 
           ydoc.transact(() => {
             for (const change of changes) {
