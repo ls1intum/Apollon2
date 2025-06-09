@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Router, Request, Response } from "express"
-import Diagram from "./models/Diagram"
+import Diagram from "./database/models/Diagram"
 
 const router = Router()
 
