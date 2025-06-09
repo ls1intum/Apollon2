@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 import { useEditorContext, useModalContext } from "@/contexts"
 import { useNavigate } from "react-router"
 import { DiagramView } from "@/types"
-import { backendURL } from "@/constants"
+import { DiagramAPIManager } from "@/services/DiagramAPIManager"
 
 export const ShareModal = () => {
   const { editor } = useEditorContext()
@@ -17,36 +17,26 @@ export const ShareModal = () => {
       toast.error("Editor instance is not available.")
       return
     }
-    const model = editor.model
 
-    await fetch(`${backendURL}/api/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(model),
-    })
-      .then(async (res) => {
-        if (res.ok) {
-          const diagramID = (await res.json())._id
+    try {
+      const model = editor.model
+      const { id: diagramID } = await DiagramAPIManager.createDiagram(model)
 
-          const newurl = `${window.location.origin}/${diagramID}?view=${viewType}`
-          copyToClipboard(newurl)
-          navigate(`/${diagramID}?view=${viewType}`)
+      const newurl = `${window.location.origin}/${diagramID}?view=${viewType}`
+      copyToClipboard(newurl)
+      navigate(`/${diagramID}?view=${viewType}`)
 
-          toast.success(
-            `The link has been copied to your clipboard and can be shared to collaborate, simply by pasting the link. You can re-access the link by going to share menu.`,
-            {
-              autoClose: 10000,
-            }
-          )
-          closeModal()
-        } else {
-          throw new Error("Network response was not ok")
+      toast.success(
+        `The link has been copied to your clipboard and can be shared to collaborate, simply by pasting the link. You can re-access the link by going to share menu.`,
+        {
+          autoClose: 10000,
         }
-      })
-      .catch((err) => {
-        console.error("Error in setDiagram endpoint:", err)
-        toast.error("Error in setDiagram endpoint:", err)
-      })
+      )
+      closeModal()
+    } catch (err) {
+      console.error("Error creating diagram:", err)
+      toast.error("Could not create diagram.")
+    }
   }
 
   const copyToClipboard = (link: string) => {
