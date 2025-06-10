@@ -207,6 +207,15 @@ export const createDiagramStore = (
               if (change.type === "add" || change.type === "replace") {
                 getNodesMap(ydoc).set(change.item.id, change.item)
               } else if (change.type === "remove") {
+                set(
+                  (state) => ({
+                    selectedElementIds: state.selectedElementIds.filter(
+                      (id) => id !== change.id
+                    ),
+                  }),
+                  undefined,
+                  "onNodesChange-remove"
+                )
                 const deletedNode = getNodesMap(ydoc).get(change.id)
                 if (deletedNode) {
                   const connectedEdges = getConnectedEdges(
@@ -286,6 +295,15 @@ export const createDiagramStore = (
               if (change.type === "add" || change.type === "replace") {
                 getEdgesMap(ydoc).set(change.item.id, change.item)
               } else if (change.type === "remove") {
+                set(
+                  (state) => ({
+                    selectedElementIds: state.selectedElementIds.filter(
+                      (id) => id !== change.id
+                    ),
+                  }),
+                  undefined,
+                  "onNodesChange-remove"
+                )
                 getEdgesMap(ydoc).delete(change.id)
               }
             }
