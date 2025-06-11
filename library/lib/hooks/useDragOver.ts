@@ -6,5 +6,5 @@ export const useDragOver = () => {
     event.dataTransfer.dropEffect = "move"
   }, [])
 
-  return { onDragOver }
+  return onDragOver
 }
