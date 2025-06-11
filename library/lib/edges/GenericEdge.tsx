@@ -65,7 +65,7 @@ export const GenericEdge = ({
   const { handleDelete } = useToolbar({ id })
   const { getNode, getEdges, screenToFlowPosition, getNodes } = useReactFlow()
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
-  const { onReconnect } = useReconnect()
+  const onReconnect = useReconnect()
   const { setEdges, assessments } = useDiagramStore(
     useShallow((state) => ({
       setEdges: state.setEdges,

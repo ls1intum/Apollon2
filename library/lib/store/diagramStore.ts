@@ -51,7 +51,9 @@ export type DiagramStore = {
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
   reset: () => void
-  setSelectedElementsId: (elementId: string | null) => void
+  setSelectedElementsId: (
+    payload: string[] | ((edges: string[]) => string[])
+  ) => void
   getAssessment: (id: string) => Assessment | undefined
   setAssessments: (
     assessments:
@@ -75,18 +77,13 @@ export const createDiagramStore = (
           set({ diagramId }, undefined, "setDiagramId")
         },
 
-        setSelectedElementsId: (elementId) => {
-          if (elementId === null) {
-            set({ selectedElementIds: [] }, undefined, "setSelectedElementsId")
-          } else {
-            set(
-              (state) => ({
-                selectedElementIds: [...state.selectedElementIds, elementId],
-              }),
-              undefined,
-              "setSelectedElementsId"
-            )
-          }
+        setSelectedElementsId: (payload) => {
+          const selectedElementIds =
+            typeof payload === "function"
+              ? payload(get().selectedElementIds)
+              : payload
+
+          set({ selectedElementIds }, undefined, "setNodes")
         },
         addNode: (node) => {
           ydoc.transact(() => {
@@ -207,6 +204,15 @@ export const createDiagramStore = (
               if (change.type === "add" || change.type === "replace") {
                 getNodesMap(ydoc).set(change.item.id, change.item)
               } else if (change.type === "remove") {
+                set(
+                  (state) => ({
+                    selectedElementIds: state.selectedElementIds.filter(
+                      (id) => id !== change.id
+                    ),
+                  }),
+                  undefined,
+                  "onNodesChange-remove-selectedElementIds"
+                )
                 const deletedNode = getNodesMap(ydoc).get(change.id)
                 if (deletedNode) {
                   const connectedEdges = getConnectedEdges(
@@ -286,6 +292,15 @@ export const createDiagramStore = (
               if (change.type === "add" || change.type === "replace") {
                 getEdgesMap(ydoc).set(change.item.id, change.item)
               } else if (change.type === "remove") {
+                set(
+                  (state) => ({
+                    selectedElementIds: state.selectedElementIds.filter(
+                      (id) => id !== change.id
+                    ),
+                  }),
+                  undefined,
+                  "onNodesChange-remove"
+                )
                 getEdgesMap(ydoc).delete(change.id)
               }
             }
@@ -309,6 +324,27 @@ export const createDiagramStore = (
             }
           })
 
+          // Find removed nodes that are not in the Yjs document
+          // and remove them from the selectedElementIds
+          // This is necessary to keep the selection in sync with the Yjs document
+          // and to avoid selecting nodes that are no longer present in state
+          const removedNodes = get().nodes.filter(
+            (node) =>
+              !preserveSelectedNodesAfterYdoc.some((n) => n.id === node.id)
+          )
+          if (removedNodes.length > 0) {
+            set(
+              (state) => ({
+                selectedElementIds: state.selectedElementIds.filter(
+                  (id) =>
+                    !removedNodes.some((removedNode) => removedNode.id === id)
+                ),
+              }),
+              undefined,
+              "updateNodesFromYjs-selection-remove"
+            )
+          }
+
           set(
             {
               nodes: preserveSelectedNodesAfterYdoc,
@@ -329,6 +365,28 @@ export const createDiagramStore = (
               return edge
             }
           })
+
+          // Find removed edges that are not in the Yjs document
+          // and remove them from the selectedElementIds
+          // This is necessary to keep the selection in sync with the Yjs document
+          // and to avoid selecting edges that are no longer present in state
+          const removedEdges = get().edges.filter(
+            (edge) =>
+              !preserveSelectedEdgesAfterYdoc.some((e) => e.id === edge.id)
+          )
+          if (removedEdges.length > 0) {
+            set(
+              (state) => ({
+                selectedElementIds: state.selectedElementIds.filter(
+                  (id) =>
+                    !removedEdges.some((removedEdge) => removedEdge.id === id)
+                ),
+              }),
+              undefined,
+              "updateEdgesFromYjs-selection-remove"
+            )
+          }
+
           set(
             { edges: preserveSelectedEdgesAfterYdoc },
             undefined,

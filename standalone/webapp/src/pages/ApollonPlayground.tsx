@@ -36,12 +36,18 @@ export const ApollonPlayground: React.FC = () => {
     mode: ApollonMode.Modelling,
     locale: Locale.en,
     readonly: false,
-    model: diagram.model,
   })
 
   useEffect(() => {
     if (containerRef.current) {
-      const instance = new ApollonEditor(containerRef.current, apollonOptions)
+      const createApollonOptions: ApollonOptions = {
+        ...apollonOptions,
+        model: diagram.model,
+      }
+      const instance = new ApollonEditor(
+        containerRef.current,
+        createApollonOptions
+      )
 
       instance.subscribeToModelChange((model) => {
         updateModel(model)
@@ -106,7 +112,6 @@ export const ApollonPlayground: React.FC = () => {
                 ...prev!,
                 mode: selectedMode,
               }))
-              console.log("DEBUG selectedMode", selectedMode)
             }}
           >
             <option value={ApollonMode.Assessment}>Assessment</option>
