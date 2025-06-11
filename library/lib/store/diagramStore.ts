@@ -211,7 +211,7 @@ export const createDiagramStore = (
                     ),
                   }),
                   undefined,
-                  "onNodesChange-remove"
+                  "onNodesChange-remove-selectedElementIds"
                 )
                 const deletedNode = getNodesMap(ydoc).get(change.id)
                 if (deletedNode) {
