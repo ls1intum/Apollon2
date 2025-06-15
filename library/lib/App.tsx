@@ -49,22 +49,17 @@ function App({ onReactFlowInit }: AppProps) {
         diagramId: state.diagramId,
       }))
     )
-  const { diagramMode } = useMetadataStore(
-    useShallow((state) => ({
-      readonlyDiagram: state.readonly,
-      diagramMode: state.mode,
-    }))
-  )
 
-  const { onNodeDragStop } = useNodeDragStop()
-  const { onDragOver } = useDragOver()
+  const diagramMode = useMetadataStore(useShallow((state) => state.mode))
+  const isDiagramModifiable = useDiagramModifiable()
+
+  const onNodeDragStop = useNodeDragStop()
+  const onDragOver = useDragOver()
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =
     useConnect()
-  const { onReconnect } = useReconnect()
+  const onReconnect = useReconnect()
   const { onBeforeDelete, onNodeDoubleClick, onEdgeDoubleClick } =
     useElementInteractions()
-
-  const isDiagramModifiable = useDiagramModifiable()
 
   return (
     <div style={{ display: "flex", flex: 1 }}>

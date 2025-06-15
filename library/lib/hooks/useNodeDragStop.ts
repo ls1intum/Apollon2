@@ -105,5 +105,5 @@ export const useNodeDragStop = () => {
     [screenToFlowPosition, nodes, getIntersectingNodes, setNodes]
   )
 
-  return { onNodeDragStop }
+  return onNodeDragStop
 }
