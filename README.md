@@ -1,4 +1,4 @@
-q# Monorepo Setup
+# Apollon2 Re-Engineering
 
 Welcome to the Apollon2 Monorepo! This repository uses **npm workspaces** to manage multiple packages (including a server, webapp, and library) in a single codebase.
 
