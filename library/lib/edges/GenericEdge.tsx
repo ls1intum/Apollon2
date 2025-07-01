@@ -162,8 +162,19 @@ export const GenericEdge = ({
   useEffect(() => {
     if (customPoints.length > 0) {
       setCustomPoints([])
+      setEdges((edges) =>
+          edges.map((edge) =>
+            edge.id === id
+              ? {
+                  ...edge,
+                  data: { ...edge.data, points: customPoints },
+                }
+              : edge
+          )
+        )
     }
-  }, [edgePath])
+    
+  }, [edgePath, customPoints])
 
   // Active points: use customPoints if available; otherwise, use computedPoints
   const activePoints = useMemo(
