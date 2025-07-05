@@ -174,7 +174,7 @@ export const GenericEdge = ({
         )
     }
     
-  }, [edgePath, customPoints])
+  }, [edgePath, customPoints, id, setEdges])
 
   // Active points: use customPoints if available; otherwise, use computedPoints
   const activePoints = useMemo(
