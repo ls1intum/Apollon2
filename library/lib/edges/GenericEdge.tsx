@@ -163,17 +163,16 @@ export const GenericEdge = ({
     if (customPoints.length > 0) {
       setCustomPoints([])
       setEdges((edges) =>
-          edges.map((edge) =>
-            edge.id === id
-              ? {
-                  ...edge,
-                  data: { ...edge.data, points: customPoints },
-                }
-              : edge
-          )
+        edges.map((edge) =>
+          edge.id === id
+            ? {
+                ...edge,
+                data: { ...edge.data, points: customPoints },
+              }
+            : edge
         )
+      )
     }
-    
   }, [edgePath, customPoints, id, setEdges])
 
   // Active points: use customPoints if available; otherwise, use computedPoints
