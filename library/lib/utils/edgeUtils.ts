@@ -113,42 +113,68 @@ export const calculateTextPlacement = (
   }
 }
 
-export const calculateEdgeLabels = (
+export const calculateEdgeLabelsWithDirection = (
   x: number,
   y: number,
-  Position: Position
-): {
-  roleX: number
-  roleY: number
-  multiplicityX: number
-  multiplicityY: number
-} => {
-  let roleX = x
-  let roleY = y
-  let multiplicityX = x
-  let multiplicityY = y
-  if (Position === "left") {
-    roleX = x - 8 // Move role to the left
-    roleY = y - 10 // Place role above the marker
-    multiplicityX = x - 8 // Move multiplicity to the left
-    multiplicityY = y + 18 // Place multiplicity below the marker
-  } else if (Position === "right") {
-    roleX = x + 8 // Move role to the right
-    roleY = y - 10 // Place role above the marker
-    multiplicityX = x + 8 // Move multiplicity to the right
-    multiplicityY = y + 18 // Place multiplicity below the marker
-  } else if (Position === "top") {
-    roleX = x - 10 // Shift role slightly to the left
-    roleY = y - 3 // Move role below the marker
-    multiplicityX = x + 10 // Shift multiplicity to the right
-    multiplicityY = y - 3 // Keep multiplicity below the marker
-  } else if (Position === "bottom") {
-    roleX = x - 10 // Move role to the left
-    roleY = y + 10 // Place role above the marker
-    multiplicityX = x + 10 // Move multiplicity to the left
-    multiplicityY = y + 10 // Place multiplicity below the marker
+  position: Position
+) => {
+  switch (position) {
+    case Position.Top:
+      return {
+        // Role goes to the left
+        roleX: x - 10,
+        roleY: y - 5,
+        roleTextAnchor: "end" as const,
+        // Multiplicity goes to the right
+        multiplicityX: x + 10,
+        multiplicityY: y - 5,
+        multiplicityTextAnchor: "start" as const,
+      }
+
+    case Position.Bottom:
+      return {
+        // Role goes to the left
+        roleX: x - 10,
+        roleY: y + 15,
+        roleTextAnchor: "end" as const,
+        // Multiplicity goes to the right
+        multiplicityX: x + 10,
+        multiplicityY: y + 15,
+        multiplicityTextAnchor: "start" as const,
+      }
+
+    case Position.Left:
+      return {
+        // Both role and multiplicity go to the left (stacked)
+        roleX: x - 5,
+        roleY: y - 10,
+        roleTextAnchor: "end" as const,
+        multiplicityX: x - 5,
+        multiplicityY: y + 20,
+        multiplicityTextAnchor: "end" as const,
+      }
+
+    case Position.Right:
+      return {
+        // Both role and multiplicity go to the right (stacked)
+        roleX: x + 5,
+        roleY: y - 10,
+        roleTextAnchor: "start" as const,
+        multiplicityX: x + 5,
+        multiplicityY: y + 20,
+        multiplicityTextAnchor: "start" as const,
+      }
+
+    default:
+      return {
+        roleX: x,
+        roleY: y - 10,
+        roleTextAnchor: "middle" as const,
+        multiplicityX: x,
+        multiplicityY: y + 10,
+        multiplicityTextAnchor: "middle" as const,
+      }
   }
-  return { roleX, roleY, multiplicityX, multiplicityY }
 }
 
 export interface EdgeMarkerStyles {
