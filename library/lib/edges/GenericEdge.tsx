@@ -8,7 +8,6 @@ import {
 import {
   adjustSourceCoordinates,
   adjustTargetCoordinates,
-  calculateEdgeLabels,
   getPositionOnCanvas,
 } from "@/utils"
 import { useToolbar } from "@/hooks"
@@ -28,10 +27,13 @@ import {
   calculateInnerMidpoints,
   getMarkerSegmentPath,
   findClosestHandle,
+  calculateEdgeLabelsWithDirection,
 } from "@/utils/edgeUtils"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import AssessmentIcon from "@/components/svgs/AssessmentIcon"
+
+// Enhanced calculateEdgeLabels function with directional positioning
 
 export const GenericEdge = ({
   id,
@@ -123,7 +125,7 @@ export const GenericEdge = ({
     SOURCE_CONNECTION_POINT_PADDING
   )
 
-  // Generate the smooth step edge path
+  // Generate the smooth step edge path with offset to avoid label collisions
   const [edgePath] = getSmoothStepPath({
     sourceX: adjustedSourceCoordinates.sourceX,
     sourceY: adjustedSourceCoordinates.sourceY,
@@ -132,6 +134,7 @@ export const GenericEdge = ({
     targetY: adjustedTargetCoordinates.targetY,
     targetPosition,
     borderRadius: STEP_BOARDER_RADIUS,
+    offset: 30,
   })
 
   // Create a basePath that uses the straightPath if available, otherwise the edgePath
@@ -163,17 +166,16 @@ export const GenericEdge = ({
     if (customPoints.length > 0) {
       setCustomPoints([])
       setEdges((edges) =>
-          edges.map((edge) =>
-            edge.id === id
-              ? {
-                  ...edge,
-                  data: { ...edge.data, points: customPoints },
-                }
-              : edge
-          )
+        edges.map((edge) =>
+          edge.id === id
+            ? {
+                ...edge,
+                data: { ...edge.data, points: customPoints },
+              }
+            : edge
         )
+      )
     }
-    
   }, [edgePath, customPoints, id, setEdges])
 
   // Active points: use customPoints if available; otherwise, use computedPoints
@@ -382,19 +384,18 @@ export const GenericEdge = ({
     reconnectingEndRef.current = null
   }
 
-  const {
-    roleX: sourceRoleX,
-    roleY: sourceRoleY,
-    multiplicityX: sourceMultiplicityX,
-    multiplicityY: sourceMultiplicityY,
-  } = calculateEdgeLabels(sourceX, sourceY, sourcePosition)
+  // Calculate directional label positions
+  const sourceLabels = calculateEdgeLabelsWithDirection(
+    sourceX,
+    sourceY,
+    sourcePosition
+  )
 
-  const {
-    roleX: targetRoleX,
-    roleY: targetRoleY,
-    multiplicityX: targetMultiplicityX,
-    multiplicityY: targetMultiplicityY,
-  } = calculateEdgeLabels(targetX, targetY, targetPosition)
+  const targetLabels = calculateEdgeLabelsWithDirection(
+    targetX,
+    targetY,
+    targetPosition
+  )
 
   const sourcePoint = activePoints[0]
   const targetPoint = activePoints[activePoints.length - 1]
@@ -478,10 +479,14 @@ export const GenericEdge = ({
 
       {data?.sourceRole && (
         <text
-          x={sourceRoleX}
-          y={sourceRoleY}
-          textAnchor="middle"
-          style={{ fontSize: "16px", fill: "black", userSelect: "none" }}
+          x={sourceLabels.roleX}
+          y={sourceLabels.roleY}
+          textAnchor={sourceLabels.roleTextAnchor}
+          style={{
+            fontSize: "16px",
+            fill: "black",
+            userSelect: "none",
+          }}
         >
           {data?.sourceRole}
         </text>
@@ -489,10 +494,14 @@ export const GenericEdge = ({
 
       {data?.sourceMultiplicity && (
         <text
-          x={sourceMultiplicityX}
-          y={sourceMultiplicityY}
-          textAnchor="middle"
-          style={{ fontSize: "16px", fill: "black", userSelect: "none" }}
+          x={sourceLabels.multiplicityX}
+          y={sourceLabels.multiplicityY}
+          textAnchor={sourceLabels.multiplicityTextAnchor}
+          style={{
+            fontSize: "16px",
+            fill: "black",
+            userSelect: "none",
+          }}
         >
           {data?.sourceMultiplicity}
         </text>
@@ -500,10 +509,14 @@ export const GenericEdge = ({
 
       {data?.targetRole && (
         <text
-          x={targetRoleX}
-          y={targetRoleY}
-          textAnchor="middle"
-          style={{ fontSize: "16px", fill: "black", userSelect: "none" }}
+          x={targetLabels.roleX}
+          y={targetLabels.roleY}
+          textAnchor={targetLabels.roleTextAnchor}
+          style={{
+            fontSize: "16px",
+            fill: "black",
+            userSelect: "none",
+          }}
         >
           {data?.targetRole}
         </text>
@@ -511,10 +524,14 @@ export const GenericEdge = ({
 
       {data?.targetMultiplicity && (
         <text
-          x={targetMultiplicityX}
-          y={targetMultiplicityY}
-          textAnchor="middle"
-          style={{ fontSize: "16px", fill: "black", userSelect: "none" }}
+          x={targetLabels.multiplicityX}
+          y={targetLabels.multiplicityY}
+          textAnchor={targetLabels.multiplicityTextAnchor}
+          style={{
+            fontSize: "16px",
+            fill: "black",
+            userSelect: "none",
+          }}
         >
           {data?.targetMultiplicity}
         </text>
