@@ -1,6 +1,8 @@
 {
-  "version": "apollon2",
-  "title": "Observer",
+  "id": "d4fd3979-d1bb-451b-b3a4-e4dea94a90c1",
+  "version": "4.0.0",
+  "title": "Observer Diagram",
+  "type": "ClassDiagram",
   "nodes": [
     {
       "width": 225,
@@ -96,7 +98,7 @@
       "target": "ea2576c6-d132-47d0-8caa-8f4a6df78256",
       "targetHandle": "bottom",
       "id": "1737998028042-db6efc15-44dc-427e-9352-1a4bed4d239b-ea2576c6-d132-47d0-8caa-8f4a6df78256",
-      "type": "inheritance",
+      "type": "ClassInheritance",
       "selected": false
     },
     {
@@ -105,7 +107,7 @@
       "target": "b399bebd-10a6-444d-9c09-cf14f41aec7d",
       "targetHandle": "left-top",
       "id": "1737998083879-ea2576c6-d132-47d0-8caa-8f4a6df78256-b399bebd-10a6-444d-9c09-cf14f41aec7d",
-      "type": "biassociation",
+      "type": "ClassBidirectional",
       "selected": false
     },
     {
@@ -114,8 +116,9 @@
       "target": "b399bebd-10a6-444d-9c09-cf14f41aec7d",
       "targetHandle": "bottom",
       "id": "1737998095406-659c7ab7-a771-400c-bd7c-ef061f1668f3-b399bebd-10a6-444d-9c09-cf14f41aec7d",
-      "type": "inheritance",
+      "type": "ClassInheritance",
       "selected": false
     }
-  ]
+  ],
+  "assessments": {}
 }
