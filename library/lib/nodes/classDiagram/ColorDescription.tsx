@@ -1,7 +1,6 @@
 import { NodeProps, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
 import { ColorDescriptionSVG } from "@/components"
-import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 
 type Props = Node<{
   description: string
@@ -17,15 +16,8 @@ export function ColorDescription({
     return null
   }
 
-  const selected = useIsOnlyThisElementSelected(id)
-
   return (
-    <DefaultNodeWrapper
-      width={width}
-      height={height}
-      elementId={id}
-      selected={!!selected}
-    >
+    <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <ColorDescriptionSVG
         description={description}
         width={width}

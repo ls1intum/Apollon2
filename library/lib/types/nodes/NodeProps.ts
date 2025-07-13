@@ -15,3 +15,7 @@ export type ClassNodeProps = {
 export type PackageNodeProps = {
   name: string
 }
+
+export type ActivityNodeProps = {
+  name: string
+}

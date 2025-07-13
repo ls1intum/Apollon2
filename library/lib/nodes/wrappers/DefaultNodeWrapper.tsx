@@ -7,7 +7,6 @@ interface Props {
   width?: number
   height?: number
   elementId: string
-  selected?: boolean
 }
 
 function calculateAdjustedQuarter(x: number): number {

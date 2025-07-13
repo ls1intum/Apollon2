@@ -6,9 +6,8 @@ import {
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
-import { PackageSVG } from "@/components"
 import { useHandleOnResize } from "@/hooks"
-import { PackageNodeProps } from "@/types"
+import { ActivityNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
@@ -19,15 +18,16 @@ import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
+import { ActivitySVG } from "@/components/svgs/nodes/activityDiagram/ActivitySVG"
 
-export default function Package({
+export function Activity({
   id,
   width,
   height,
   data: { name },
   parentId,
   type,
-}: NodeProps<Node<PackageNodeProps>>) {
+}: NodeProps<Node<ActivityNodeProps>>) {
   const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
   const { onResize } = useHandleOnResize(parentId)
   const isDiagramModifiable = useDiagramModifiable()
@@ -71,7 +71,7 @@ export default function Package({
         handleStyle={{ width: 8, height: 8 }}
       />
       <div ref={packageSvgWrapperRef}>
-        <PackageSVG
+        <ActivitySVG
           width={width}
           height={height}
           name={name}

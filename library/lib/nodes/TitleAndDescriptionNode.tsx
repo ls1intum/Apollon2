@@ -19,12 +19,7 @@ export function TitleAndDesctiption({
   }
 
   return (
-    <DefaultNodeWrapper
-      width={width}
-      height={height}
-      elementId={id}
-      selected={!!selected}
-    >
+    <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <TitleAndDescriptionSVG
         width={width}
         height={height}

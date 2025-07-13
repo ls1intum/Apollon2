@@ -3,6 +3,7 @@ import { ClassSVG, PackageSVG } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
 import { DiagramNodeType } from "@/nodes"
+import { ActivitySVG } from "@/components/svgs/nodes/activityDiagram/ActivitySVG"
 
 export * from "./layoutConstants"
 export const transformScale = 0.7
@@ -92,7 +93,80 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <ClassSVG {...props} />,
     },
   ],
-  [UMLDiagramType.ActivityDiagram]: [],
+  [UMLDiagramType.ActivityDiagram]: [
+    {
+      type: "activity",
+      width: droppedElementWidth,
+      height: 120,
+      defaultData: {
+        name: "Activity",
+      },
+      svg: (props) => <ActivitySVG {...props} />,
+    },
+    // {
+    //   type: "ActivityInitialNode",
+    //   width: droppedElementWidth,
+    //   height: 70,
+    //   defaultData: {
+    //     name: "ActivityInitialNode",
+    //   },
+    //   svg: (props) => <ClassSVG {...props} />,
+    // },
+    // {
+    //   type: "ActivityFinalNode",
+    //   width: droppedElementWidth,
+    //   height: 70,
+    //   defaultData: {
+    //     name: "ActivityFinalNode",
+    //   },
+    //   svg: (props) => <ClassSVG {...props} />,
+    // },
+    // {
+    //   type: "ActivityActionNode",
+    //   width: droppedElementWidth,
+    //   height: 70,
+    //   defaultData: {
+    //     name: "ActivityActionNode",
+    //   },
+    //   svg: (props) => <ClassSVG {...props} />,
+    // },
+    // {
+    //   type: "ActivityObjectNode",
+    //   width: droppedElementWidth,
+    //   height: 70,
+    //   defaultData: {
+    //     name: "ActivityObjectNode",
+    //   },
+    //   svg: (props) => <ClassSVG {...props} />,
+    // },
+    // {
+    //   type: "ActivityMergeNode",
+    //   width: droppedElementWidth,
+    //   height: 70,
+    //   defaultData: {
+    //     name: "ActivityMergeNode",
+    //   },
+    //   svg: (props) => <ClassSVG {...props} />,
+    // },
+    // {
+    //   type: "ActivityForkNode",
+    //   width: droppedElementWidth,
+    //   height: 70,
+    //   defaultData: {
+    //     name: "ActivityForkNode",
+    //   },
+    //   svg: (props) => <ClassSVG {...props} />,
+    // },
+    // {
+    //   type: "ActivityForkNodeHorizontal",
+    //   width: droppedElementWidth,
+    //   height: 70,
+    //   defaultData: {
+    //     name: "ActivityForkNodeHorizontal",
+    //   },
+    //   svg: (props) => <ClassSVG {...props} />,
+    // },
+  ],
   [UMLDiagramType.BPMN]: [],
   [UMLDiagramType.CommunicationDiagram]: [],
   [UMLDiagramType.ComponentDiagram]: [],
