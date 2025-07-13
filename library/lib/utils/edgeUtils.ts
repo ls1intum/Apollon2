@@ -122,7 +122,7 @@ export const calculateDynamicEdgeLabels = (
   const textOffset = 15
 
   switch (direction) {
-    case "top":
+    case "top": {
       // If it's a target on top handle, move labels UPWARD (away from node)
       const topYOffset = -5
       return {
@@ -133,8 +133,8 @@ export const calculateDynamicEdgeLabels = (
         multiplicityY: y + topYOffset,
         multiplicityTextAnchor: "start" as const,
       }
-
-    case "bottom":
+    }
+    case "bottom": {
       // If it's a target on bottom handle, move labels DOWNWARD (away from node)
       const bottomYOffset = textOffset
       return {
@@ -145,8 +145,8 @@ export const calculateDynamicEdgeLabels = (
         multiplicityY: y + bottomYOffset,
         multiplicityTextAnchor: "start" as const,
       }
-
-    case "left":
+    }
+    case "left": {
       // If it's a target on left handle, move labels LEFTWARD (away from node)
       const leftXOffset = -5
       return {
@@ -157,8 +157,8 @@ export const calculateDynamicEdgeLabels = (
         multiplicityY: y + 20,
         multiplicityTextAnchor: "end" as const,
       }
-
-    case "right":
+    }
+    case "right": {
       return {
         roleX: x + 5,
         roleY: y - offset,
@@ -167,8 +167,8 @@ export const calculateDynamicEdgeLabels = (
         multiplicityY: y + 20,
         multiplicityTextAnchor: "start" as const,
       }
-
-    default:
+    }
+    default: {
       return {
         roleX: x,
         roleY: y - offset,
@@ -177,6 +177,7 @@ export const calculateDynamicEdgeLabels = (
         multiplicityY: y + offset,
         multiplicityTextAnchor: "middle" as const,
       }
+    }
   }
 }
 
