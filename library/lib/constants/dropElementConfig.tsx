@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  ActivityFinalNodeSVG,
   ActivityInitialNodeSVG,
   ActivitySVG,
   ClassSVG,
@@ -116,15 +117,15 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       },
       svg: (props) => <ActivityInitialNodeSVG {...props} />,
     },
-    // {
-    //   type: "ActivityFinalNode",
-    //   width: droppedElementWidth,
-    //   height: 70,
-    //   defaultData: {
-    //     name: "ActivityFinalNode",
-    //   },
-    //   svg: (props) => <ClassSVG {...props} />,
-    // },
+    {
+      type: "activityFinalNode",
+      width: 50,
+      height: 50,
+      defaultData: {
+        name: "ActivityFinalNode",
+      },
+      svg: (props) => <ActivityFinalNodeSVG {...props} />,
+    },
     // {
     //   type: "ActivityActionNode",
     //   width: droppedElementWidth,

@@ -4,13 +4,13 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 
-export type ActivityInitialNodeSVGProps = SVGComponentProps & {
+export type ActivityFinalNodeSVGProps = SVGComponentProps & {
   transformScale?: number
   svgAttributes?: SVGAttributes<SVGElement>
   showAssessmentResults?: boolean
 }
 
-export const ActivityInitialNodeSVG: React.FC<ActivityInitialNodeSVGProps> = ({
+export const ActivityFinalNodeSVG: React.FC<ActivityFinalNodeSVGProps> = ({
   id,
   svgAttributes,
   transformScale,
@@ -32,6 +32,14 @@ export const ActivityInitialNodeSVG: React.FC<ActivityInitialNodeSVGProps> = ({
       {...svgAttributes}
     >
       <circle cx={width / 2} cy={height / 2} r={width / 2} fill="black" />
+      <circle
+        cx={width / 2}
+        cy={height / 2}
+        r={(width / 2) * 0.8}
+        fill="black"
+        stroke="white"
+        strokeWidth={2}
+      />
 
       {showAssessmentResults && (
         <AssessmentIcon x={width - 15} y={-5} score={nodeScore} />
