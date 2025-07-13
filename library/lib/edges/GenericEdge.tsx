@@ -163,25 +163,41 @@ export const GenericEdge = ({
     source: { x: number; y: number; parentId?: string }
     target: { x: number; y: number; parentId?: string }
   }>({
-    source: { x: sourceNode.position.x, y: sourceNode.position.y, parentId: sourceNode.parentId },
-    target: { x: targetNode.position.x, y: targetNode.position.y, parentId: targetNode.parentId }
+    source: {
+      x: sourceNode.position.x,
+      y: sourceNode.position.y,
+      parentId: sourceNode.parentId,
+    },
+    target: {
+      x: targetNode.position.x,
+      y: targetNode.position.y,
+      parentId: targetNode.parentId,
+    },
   })
 
   // Enhanced effect to handle node position changes - clear custom points when nodes move
   useEffect(() => {
-    const currentSourcePos = { x: sourceNode.position.x, y: sourceNode.position.y, parentId: sourceNode.parentId }
-    const currentTargetPos = { x: targetNode.position.x, y: targetNode.position.y, parentId: targetNode.parentId }
+    const currentSourcePos = {
+      x: sourceNode.position.x,
+      y: sourceNode.position.y,
+      parentId: sourceNode.parentId,
+    }
+    const currentTargetPos = {
+      x: targetNode.position.x,
+      y: targetNode.position.y,
+      parentId: targetNode.parentId,
+    }
     const prevSourcePos = prevNodePositionsRef.current.source
     const prevTargetPos = prevNodePositionsRef.current.target
 
     // Check if any node has moved or changed parent
-    const sourceChanged = 
-      currentSourcePos.x !== prevSourcePos.x || 
+    const sourceChanged =
+      currentSourcePos.x !== prevSourcePos.x ||
       currentSourcePos.y !== prevSourcePos.y ||
       currentSourcePos.parentId !== prevSourcePos.parentId
 
-    const targetChanged = 
-      currentTargetPos.x !== prevTargetPos.x || 
+    const targetChanged =
+      currentTargetPos.x !== prevTargetPos.x ||
       currentTargetPos.y !== prevTargetPos.y ||
       currentTargetPos.parentId !== prevTargetPos.parentId
 
@@ -189,13 +205,13 @@ export const GenericEdge = ({
       // Update the ref with current positions
       prevNodePositionsRef.current = {
         source: currentSourcePos,
-        target: currentTargetPos
+        target: currentTargetPos,
       }
 
       // Always clear custom points when nodes move - force recalculation
       if (customPoints.length > 0) {
         setCustomPoints([])
-        
+
         // Update the edge data to remove custom points
         setEdges((edges) =>
           edges.map((edge) =>
@@ -210,15 +226,15 @@ export const GenericEdge = ({
       }
     }
   }, [
-    sourceNode.position.x, 
-    sourceNode.position.y, 
+    sourceNode.position.x,
+    sourceNode.position.y,
     sourceNode.parentId,
-    targetNode.position.x, 
-    targetNode.position.y, 
+    targetNode.position.x,
+    targetNode.position.y,
     targetNode.parentId,
     customPoints,
     id,
-    setEdges
+    setEdges,
   ])
 
   // Active points: use customPoints if available; otherwise, use computedPoints
@@ -271,7 +287,7 @@ export const GenericEdge = ({
         const startIdx = draggingIndexRef.current + 1
         const endIdx = draggingIndexRef.current + 2
         const newPoints = [...activePoints]
-        
+
         // Determine if this is a horizontal or vertical line segment
         const linePosition =
           Math.abs(newPoints[startIdx].x - newPoints[endIdx].x) < 1
@@ -293,7 +309,7 @@ export const GenericEdge = ({
         setCustomPoints(newPoints)
         finalPointsRef.current = newPoints
       }
-      
+
       const handlePointerUp = () => {
         setEdges((edges) =>
           edges.map((edge) =>
