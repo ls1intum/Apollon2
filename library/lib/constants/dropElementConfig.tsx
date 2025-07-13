@@ -5,7 +5,7 @@ import { ClassType, UMLDiagramType } from "@/types"
 import { DiagramNodeType } from "@/nodes"
 
 export * from "./layoutConstants"
-export const transformScale = 0.8
+export const transformScale = 0.7
 
 const droppedElementWidth = 160
 

@@ -27,24 +27,18 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
   showAssessmentResults = false,
 }) => {
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
-  const svgWidth = showAssessmentResults ? width + 20 : width
-  const svgHeight = showAssessmentResults ? height + 20 : height
-
   const nodeScore = assessments[id]?.score
+
+  const scaledWidth = width * (transformScale ?? 1)
+  const scaledHeight = height * (transformScale ?? 1)
 
   return (
     <svg
-      width={svgWidth}
-      height={svgHeight}
-      viewBox={
-        showAssessmentResults
-          ? `0 -20 ${svgWidth} ${svgHeight}`
-          : `0 0 ${svgWidth} ${svgHeight}`
-      }
+      width={scaledWidth}
+      height={scaledHeight}
+      viewBox={`0 0 ${width} ${height}`}
       style={{
-        transformOrigin: "left top",
-        transformBox: "content-box",
-        transform: transformScale ? `scale(${transformScale})` : undefined,
+        overflow: "visible",
       }}
       {...svgAttributes}
     >

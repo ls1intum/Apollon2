@@ -21,14 +21,16 @@ export function ColorDescriptionSVG({
   const innerHeight = height - 2 * margin // Adjusted content height
   const strokeWidth = 0.5
 
+  const scaledWidth = width * (transformScale ?? 1)
+  const scaledHeight = height * (transformScale ?? 1)
+
   return (
     <svg
-      width={width}
-      height={height}
+      width={scaledWidth}
+      height={scaledHeight}
+      viewBox={`0 0 ${width} ${height}`}
       style={{
-        transformOrigin: "left top",
-        transformBox: "content-box",
-        transform: transformScale ? `scale(${transformScale})` : undefined,
+        overflow: "visible",
       }}
       {...svgAttributes}
     >

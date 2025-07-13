@@ -42,7 +42,6 @@ export const Sidebar = () => {
               style={{
                 width: config.width * transformScale,
                 height: config.height * transformScale,
-                overflow: "hidden",
                 zIndex: 2,
               }}
             >
