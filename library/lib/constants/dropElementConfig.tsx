@@ -2,6 +2,7 @@
 import {
   ActivityActionNodeSVG,
   ActivityFinalNodeSVG,
+  ActivityForkNodeHorizontalSVG,
   ActivityForkNodeSVG,
   ActivityInitialNodeSVG,
   ActivityMergeNodeSVG,
@@ -23,7 +24,7 @@ export type DropElementConfig = {
   type: DiagramNodeType
   width: number
   height: number
-  defaultData: Record<string, unknown>
+  defaultData?: Record<string, unknown>
   svg: React.FC<any>
 }
 
@@ -159,22 +160,19 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
     },
     {
       type: "activityForkNode",
-      width: 30,
+      width: 20,
       height: 100,
       defaultData: {
         name: "ActivityForkNode",
       },
       svg: (props) => <ActivityForkNodeSVG {...props} />,
     },
-    // {
-    //   type: "ActivityForkNodeHorizontal",
-    //   width: droppedElementWidth,
-    //   height: 70,
-    //   defaultData: {
-    //     name: "ActivityForkNodeHorizontal",
-    //   },
-    //   svg: (props) => <ClassSVG {...props} />,
-    // },
+    {
+      type: "activityForkNodeHorizontal",
+      width: 100,
+      height: 20,
+      svg: (props) => <ActivityForkNodeHorizontalSVG {...props} />,
+    },
   ],
   [UMLDiagramType.BPMN]: [],
   [UMLDiagramType.CommunicationDiagram]: [],

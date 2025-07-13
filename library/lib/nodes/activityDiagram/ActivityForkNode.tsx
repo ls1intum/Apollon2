@@ -5,7 +5,7 @@ import {
   Position,
   type Node,
 } from "@xyflow/react"
-import { DefaultNodeWrapper } from "../wrappers"
+import { DefaultNodeWrapper, HandleId } from "../wrappers"
 import { useHandleOnResize } from "@/hooks"
 import { DefaultNodeProps } from "@/types"
 import Box from "@mui/material/Box"
@@ -41,7 +41,17 @@ export function ActivityForkNode({
   }
 
   return (
-    <DefaultNodeWrapper width={width} height={height} elementId={id}>
+    <DefaultNodeWrapper
+      width={width}
+      height={height}
+      elementId={id}
+      hiddenHandles={[
+        HandleId.TopLeft,
+        HandleId.TopRight,
+        HandleId.BottomLeft,
+        HandleId.BottomRight,
+      ]}
+    >
       <NodeToolbar
         isVisible={isDiagramModifiable && !!selected}
         position={Position.Top}
@@ -65,8 +75,8 @@ export function ActivityForkNode({
       <NodeResizer
         isVisible={isDiagramModifiable && !!selected}
         onResize={onResize}
-        minHeight={50}
-        minWidth={50}
+        minWidth={20}
+        maxWidth={20}
         handleStyle={{ width: 8, height: 8 }}
       />
       <div ref={svgWrapperRef}>

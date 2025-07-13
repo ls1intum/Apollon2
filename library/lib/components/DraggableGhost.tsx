@@ -85,7 +85,7 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
       }
 
       // Deep clone defaultData to avoid mutating the original config
-      const defaultData = structuredClone(dropElementConfig.defaultData)
+      const defaultData = structuredClone(dropElementConfig.defaultData ?? {})
 
       // Assign new IDs to methods and attributes
       if (defaultData.methods) {

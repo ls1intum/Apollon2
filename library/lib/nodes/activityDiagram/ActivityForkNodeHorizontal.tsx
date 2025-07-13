@@ -1,6 +1,12 @@
-import { NodeProps, NodeToolbar, Position, type Node } from "@xyflow/react"
+import {
+  NodeProps,
+  NodeResizer,
+  NodeToolbar,
+  Position,
+  type Node,
+} from "@xyflow/react"
 import { DefaultNodeWrapper, HandleId } from "../wrappers"
-
+import { useHandleOnResize } from "@/hooks"
 import { DefaultNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
@@ -12,15 +18,17 @@ import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
-import { ActivityFinalNodeSVG } from "@/components"
+import { ActivityForkNodeHorizontalSVG } from "@/components/svgs/nodes"
 
-export function ActivityFinalNode({
+export function ActivityForkNodeHorizontal({
   id,
   width,
   height,
+  data: { name },
+  parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
-
+  const { onResize } = useHandleOnResize(parentId)
   const isDiagramModifiable = useDiagramModifiable()
   const selected = useIsOnlyThisElementSelected(id)
   const setPopOverElementId = usePopoverStore(
@@ -31,20 +39,17 @@ export function ActivityFinalNode({
   if (!width || !height) {
     return null
   }
+
   return (
     <DefaultNodeWrapper
-      elementId={id}
       width={width}
       height={height}
+      elementId={id}
       hiddenHandles={[
-        HandleId.TopLeft,
-        HandleId.TopRight,
+        HandleId.LeftTop,
+        HandleId.LeftBottom,
         HandleId.RightTop,
         HandleId.RightBottom,
-        HandleId.BottomRight,
-        HandleId.BottomLeft,
-        HandleId.LeftBottom,
-        HandleId.LeftTop,
       ]}
     >
       <NodeToolbar
@@ -67,11 +72,18 @@ export function ActivityFinalNode({
           />
         </Box>
       </NodeToolbar>
-
+      <NodeResizer
+        isVisible={isDiagramModifiable && !!selected}
+        onResize={onResize}
+        minHeight={20}
+        maxHeight={20}
+        handleStyle={{ width: 8, height: 8 }}
+      />
       <div ref={svgWrapperRef}>
-        <ActivityFinalNodeSVG
+        <ActivityForkNodeHorizontalSVG
           width={width}
           height={height}
+          name={name}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

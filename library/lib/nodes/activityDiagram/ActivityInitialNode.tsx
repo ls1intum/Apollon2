@@ -1,5 +1,5 @@
 import { NodeProps, NodeToolbar, Position, type Node } from "@xyflow/react"
-import { DefaultNodeWrapper } from "../wrappers"
+import { DefaultNodeWrapper, HandleId } from "../wrappers"
 
 import { DefaultNodeProps } from "@/types"
 import Box from "@mui/material/Box"
@@ -32,7 +32,21 @@ export function ActivityInitialNode({
     return null
   }
   return (
-    <DefaultNodeWrapper elementId={id} width={width} height={height}>
+    <DefaultNodeWrapper
+      elementId={id}
+      width={width}
+      height={height}
+      hiddenHandles={[
+        HandleId.TopLeft,
+        HandleId.TopRight,
+        HandleId.RightTop,
+        HandleId.RightBottom,
+        HandleId.BottomRight,
+        HandleId.BottomLeft,
+        HandleId.LeftBottom,
+        HandleId.LeftTop,
+      ]}
+    >
       <NodeToolbar
         isVisible={isDiagramModifiable && !!selected}
         position={Position.Top}

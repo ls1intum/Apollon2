@@ -2,11 +2,28 @@ import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 import { Handle, Position } from "@xyflow/react"
 
+// Define enum for handle IDs
+export enum HandleId {
+  TopLeft = "top-left",
+  Top = "top",
+  TopRight = "top-right",
+  RightTop = "right-top",
+  Right = "right",
+  RightBottom = "right-bottom",
+  BottomRight = "bottom-right",
+  Bottom = "bottom",
+  BottomLeft = "bottom-left",
+  LeftBottom = "left-bottom",
+  Left = "left",
+  LeftTop = "left-top",
+}
+
 interface Props {
   children: React.ReactNode
   width?: number
   height?: number
   elementId: string
+  hiddenHandles?: HandleId[] // Type-safe hiddenHandles prop
 }
 
 function calculateAdjustedQuarter(x: number): number {
@@ -19,6 +36,7 @@ export function DefaultNodeWrapper({
   children,
   width = 0,
   height = 0,
+  hiddenHandles = [], // Default to empty array
 }: Props) {
   const adjustedWidth = calculateAdjustedQuarter(width)
   const adjustedHeight = calculateAdjustedQuarter(height)
@@ -35,124 +53,85 @@ export function DefaultNodeWrapper({
 
   const handleStyle = selected ? selectedHandleStyle : { border: "0px" }
 
+  // Define all handles with their properties
+  const handles = [
+    {
+      id: HandleId.TopLeft,
+      position: Position.Top,
+      style: { left: adjustedWidth, ...handleStyle },
+    },
+    {
+      id: HandleId.Top,
+      position: Position.Top,
+      style: { ...handleStyle },
+    },
+    {
+      id: HandleId.TopRight,
+      position: Position.Top,
+      style: { left: width - adjustedWidth, ...handleStyle },
+    },
+    {
+      id: HandleId.RightTop,
+      position: Position.Right,
+      style: { top: adjustedHeight, ...handleStyle },
+    },
+    {
+      id: HandleId.Right,
+      position: Position.Right,
+      style: { ...handleStyle },
+    },
+    {
+      id: HandleId.RightBottom,
+      position: Position.Right,
+      style: { top: height - adjustedHeight, ...handleStyle },
+    },
+    {
+      id: HandleId.BottomRight,
+      position: Position.Bottom,
+      style: { left: width - adjustedWidth, ...handleStyle },
+    },
+    {
+      id: HandleId.Bottom,
+      position: Position.Bottom,
+      style: { ...handleStyle },
+    },
+    {
+      id: HandleId.BottomLeft,
+      position: Position.Bottom,
+      style: { left: adjustedWidth, ...handleStyle },
+    },
+    {
+      id: HandleId.LeftBottom,
+      position: Position.Left,
+      style: { top: height - adjustedHeight, ...handleStyle },
+    },
+    {
+      id: HandleId.Left,
+      position: Position.Left,
+      style: { ...handleStyle },
+    },
+    {
+      id: HandleId.LeftTop,
+      position: Position.Left,
+      style: { top: adjustedHeight, ...handleStyle },
+    },
+  ]
+
   return (
     <>
-      <Handle
-        id="top-left"
-        type="source"
-        position={Position.Top}
-        style={{
-          left: adjustedWidth,
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="top"
-        type="source"
-        position={Position.Top}
-        style={{
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="top-right"
-        type="source"
-        position={Position.Top}
-        style={{
-          left: width - adjustedWidth,
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="right-top"
-        type="source"
-        position={Position.Right}
-        style={{
-          top: adjustedHeight,
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="right"
-        type="source"
-        position={Position.Right}
-        style={{
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="right-bottom"
-        type="source"
-        position={Position.Right}
-        style={{
-          top: height - adjustedHeight,
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="bottom-right"
-        type="source"
-        position={Position.Bottom}
-        style={{
-          left: width - adjustedWidth,
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="bottom"
-        type="source"
-        position={Position.Bottom}
-        style={{
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="bottom-left"
-        type="source"
-        position={Position.Bottom}
-        style={{
-          left: adjustedWidth,
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="left-bottom"
-        type="source"
-        position={Position.Left}
-        style={{
-          top: height - adjustedHeight,
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="left"
-        type="source"
-        position={Position.Left}
-        style={{
-          ...handleStyle,
-        }}
-        isConnectable={isDiagramModifiable}
-      />
-      <Handle
-        id="left-top"
-        type="source"
-        position={Position.Left}
-        style={{
-          top: adjustedHeight,
-          ...(selected ? selectedHandleStyle : {}),
-        }}
-        isConnectable={isDiagramModifiable}
-      />
+      {handles.map(
+        (handle) =>
+          !hiddenHandles.includes(handle.id) && (
+            <Handle
+              key={handle.id}
+              id={handle.id}
+              type="source"
+              position={handle.position}
+              style={handle.style}
+              isConnectable={isDiagramModifiable}
+            />
+          )
+      )}
       {children}
     </>
   )
