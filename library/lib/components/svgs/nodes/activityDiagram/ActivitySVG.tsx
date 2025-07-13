@@ -1,9 +1,10 @@
-import { SVGComponentProps, CustomText } from "@/components"
+import { CustomText } from "@/components"
 import { LINE_WIDTH } from "@/constants"
 import { useDiagramStore } from "@/store"
 import { SVGAttributes } from "react"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
+import { SVGComponentProps } from "@/types/SVG"
 
 export type ActivitySVGProps = SVGComponentProps & {
   width: number
