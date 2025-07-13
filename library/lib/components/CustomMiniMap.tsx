@@ -1,8 +1,20 @@
 import { useState } from "react"
 import { MiniMap, MiniMapNodeProps, Panel, useReactFlow } from "@xyflow/react"
-import { ClassSVG, PackageSVG } from "./svgs"
+import {
+  ClassSVG,
+  PackageSVG,
+  ActivitySVG,
+  ActivityInitialNodeSVG,
+  ActivityFinalNodeSVG,
+  ActivityActionNodeSVG,
+  ActivityObjectNodeSVG,
+  ActivityMergeNodeSVG,
+  ActivityForkNodeSVG,
+  ActivityForkNodeHorizontalSVG,
+} from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
+import { DiagramNodeType } from "@/typings"
 
 export const CustomMiniMap = () => {
   const [minimapCollapsed, setMinimapCollapsed] = useState(true)
@@ -57,14 +69,11 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
   const nodeInfo = getNode(id)
   if (!nodeInfo) return null
 
-  switch (nodeInfo.type) {
+  switch (nodeInfo.type as DiagramNodeType) {
     case "class":
       return (
         <ClassSVG
-          svgAttributes={{
-            x,
-            y,
-          }}
+          svgAttributes={{ x, y }}
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
@@ -80,13 +89,85 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           name={(nodeInfo.data.name as string) || ""}
-          svgAttributes={{
-            x,
-            y,
-          }}
+          svgAttributes={{ x, y }}
         />
       )
-
+    case "activity":
+      return (
+        <ActivitySVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          name={(nodeInfo.data.name as string) || ""}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "activityInitialNode":
+      return (
+        <ActivityInitialNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "activityFinalNode":
+      return (
+        <ActivityFinalNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "activityActionNode":
+      return (
+        <ActivityActionNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          name={(nodeInfo.data.name as string) || ""}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "activityObjectNode":
+      return (
+        <ActivityObjectNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          name={(nodeInfo.data.name as string) || ""}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "activityMergeNode":
+      return (
+        <ActivityMergeNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "activityForkNode":
+      return (
+        <ActivityForkNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "activityForkNodeHorizontal":
+      return (
+        <ActivityForkNodeHorizontalSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+        />
+      )
     default:
       return <rect x={x} y={y} width={100} height={100} fill="gray" />
   }
