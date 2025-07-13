@@ -37,10 +37,12 @@ export const NewDiagramModal = () => {
   const [selectedDiagramType, setSelectedDiagramType] =
     useState<UMLDiagramType>(UMLDiagramType.ClassDiagram)
   const navigate = useNavigate()
-  const createModel = usePersistenceModelStore((state) => state.createModel)
+  const createModelByTitleAndType = usePersistenceModelStore(
+    (state) => state.createModelByTitleAndType
+  )
 
   const handleCreateDiagram = () => {
-    createModel(newDiagramTitle, selectedDiagramType)
+    createModelByTitleAndType(newDiagramTitle, selectedDiagramType)
     navigate("/")
     closeModal()
   }

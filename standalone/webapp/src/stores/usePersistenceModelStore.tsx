@@ -14,7 +14,8 @@ type PersistenceModelStore = {
   models: Record<string, PersistentModelEntity>
   currentModelId: string | null
   setCurrentModelId: (id: string) => void
-  createModel: (title: string, type: UMLDiagramType) => string
+  createModel: (model: UMLModel) => void
+  createModelByTitleAndType: (title: string, type: UMLDiagramType) => string
   updateModel: (model: UMLModel) => void
   deleteModel: (id: string) => void
   getCurrentModel: () => PersistentModelEntity | null
@@ -45,7 +46,7 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
         setCurrentModelId: (id) =>
           set({ currentModelId: id }, false, "setCurrentModelId"),
 
-        createModel: (title, type) => {
+        createModelByTitleAndType: (title, type) => {
           const now = new Date().toISOString()
           const model: UMLModel = {
             ...populateNewModel(),
@@ -71,8 +72,26 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
           return model.id
         },
 
-        updateModel: (model) => {
+        createModel: (model) => {
           const now = new Date().toISOString()
+          const persistentEntity: PersistentModelEntity = {
+            id: model.id,
+            model,
+            lastModifiedAt: now,
+          }
+
+          set(
+            (state) => ({
+              models: { ...state.models, [model.id]: persistentEntity },
+              currentModelId: model.id,
+            }),
+            false,
+            "createModel"
+          )
+        },
+
+        updateModel: (model) => {
+          const lastModifiedAt = new Date().toISOString()
 
           set(
             (state) => {
@@ -85,7 +104,7 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
                   [model.id]: {
                     id: model.id,
                     model,
-                    lastModifiedAt: now,
+                    lastModifiedAt,
                   },
                 },
               }
@@ -94,6 +113,7 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
             "updateModel"
           )
         },
+
         deleteModel: (id) => {
           set(
             (state) => {
@@ -105,6 +125,7 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
             "deleteModel"
           )
         },
+
         getCurrentModel: () => {
           const currentModelId = get().currentModelId
           if (!currentModelId) return null
