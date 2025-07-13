@@ -7,6 +7,7 @@ import {
   ActivityInitialNode,
   ActivityFinalNode,
   ActivityActionNode,
+  ActivityObjectNode,
 } from "./activityDiagram"
 
 export const diagramNodeTypes = {
@@ -18,6 +19,7 @@ export const diagramNodeTypes = {
   activityInitialNode: ActivityInitialNode,
   activityFinalNode: ActivityFinalNode,
   activityActionNode: ActivityActionNode,
+  activityObjectNode: ActivityObjectNode,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -33,4 +35,5 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   activityInitialNode: "activityInitialNode",
   activityFinalNode: "activityFinalNode",
   activityActionNode: "activityActionNode",
+  activityObjectNode: "activityObjectNode",
 } as const
