@@ -26,7 +26,6 @@ export type ClassSVGProps = SVGComponentProps & {
   attributes: ClassNodeElement[]
   stereotype?: ClassType
   name: string
-  showAssessmentResults?: boolean
 }
 
 export const ClassSVG = ({

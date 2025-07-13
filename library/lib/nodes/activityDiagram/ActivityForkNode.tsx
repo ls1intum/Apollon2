@@ -24,7 +24,6 @@ export function ActivityForkNode({
   id,
   width,
   height,
-  data: { name },
   parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -83,7 +82,6 @@ export function ActivityForkNode({
         <ActivityForkNodeSVG
           width={width}
           height={height}
-          name={name}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

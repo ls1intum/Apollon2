@@ -1,18 +1,12 @@
 import { CustomText } from "@/components"
 import { LINE_WIDTH } from "@/constants"
 import { useDiagramStore } from "@/store"
-import { SVGAttributes } from "react"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 
 export type PackageSVGProps = SVGComponentProps & {
-  width: number
-  height: number
   name: string
-  transformScale?: number
-  svgAttributes?: SVGAttributes<SVGElement>
-  showAssessmentResults?: boolean
 }
 
 const leftTopBoxHeight = 10

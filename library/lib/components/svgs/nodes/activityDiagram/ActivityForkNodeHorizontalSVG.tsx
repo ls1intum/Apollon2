@@ -1,19 +1,9 @@
 import { useDiagramStore } from "@/store"
-import { SVGAttributes } from "react"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 
-type Props = SVGComponentProps & {
-  width: number
-  height: number
-  name: string
-  transformScale?: number
-  svgAttributes?: SVGAttributes<SVGElement>
-  showAssessmentResults?: boolean
-}
-
-export const ActivityForkNodeHorizontalSVG: React.FC<Props> = ({
+export const ActivityForkNodeHorizontalSVG: React.FC<SVGComponentProps> = ({
   id,
   width,
   height,
