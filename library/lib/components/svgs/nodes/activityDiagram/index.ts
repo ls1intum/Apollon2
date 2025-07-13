@@ -1,3 +1,4 @@
 export * from "./ActivitySVG"
 export * from "./ActivityInitialNodeSVG"
 export * from "./ActivityFinalNodeSVG"
+export * from "./ActivityActionNodeSVG"

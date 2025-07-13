@@ -18,7 +18,7 @@ export const CustomText: FC<Props & Record<string, unknown>> = ({
   fill,
   x = "50%",
   y = "50%",
-  dominantBaseline = "middle",
+  dominantBaseline = "central",
   textAnchor = "middle",
   fontWeight = "400",
   pointerEvents = "none",

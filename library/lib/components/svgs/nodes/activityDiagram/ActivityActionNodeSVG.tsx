@@ -6,7 +6,7 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 
-export type ActivitySVGProps = SVGComponentProps & {
+export type ActivityActionNodeSVGProps = SVGComponentProps & {
   width: number
   height: number
   name: string
@@ -15,7 +15,7 @@ export type ActivitySVGProps = SVGComponentProps & {
   showAssessmentResults?: boolean
 }
 
-export const ActivitySVG: React.FC<ActivitySVGProps> = ({
+export const ActivityActionNodeSVG: React.FC<ActivityActionNodeSVGProps> = ({
   id,
   width,
   height,
@@ -53,10 +53,9 @@ export const ActivitySVG: React.FC<ActivitySVGProps> = ({
         {/* Name Text */}
         <CustomText
           x={width / 2}
-          y={20}
+          y={height / 2}
           textAnchor="middle"
-          fontWeight="600"
-          dominantBaseline="hanging"
+          fontWeight="bold"
         >
           {name}
         </CustomText>

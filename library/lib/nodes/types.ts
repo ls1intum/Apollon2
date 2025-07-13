@@ -6,6 +6,7 @@ import {
   Activity,
   ActivityInitialNode,
   ActivityFinalNode,
+  ActivityActionNode,
 } from "./activityDiagram"
 
 export const diagramNodeTypes = {
@@ -15,7 +16,8 @@ export const diagramNodeTypes = {
   titleAndDesctiption: TitleAndDesctiption,
   activity: Activity,
   activityInitialNode: ActivityInitialNode,
-  activityFinalNode: ActivityFinalNode, // Placeholder for the actual component
+  activityFinalNode: ActivityFinalNode,
+  activityActionNode: ActivityActionNode,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -30,4 +32,5 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   activity: "activity",
   activityInitialNode: "activityInitialNode",
   activityFinalNode: "activityFinalNode",
+  activityActionNode: "activityActionNode",
 } as const
