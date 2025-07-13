@@ -17,8 +17,6 @@ import { CustomEdgeToolbar } from "@/components"
 import { getEdgeMarkerStyles } from "@/utils"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
-
-// Extend the props to include markerEnd and markerPadding.
 import { IPoint, pointsToSvgPath, tryFindStraightPath } from "./Connection"
 import { useReconnect } from "@/hooks/useReconnect"
 import {
@@ -76,8 +74,6 @@ export const GenericEdge = ({
   const { markerPadding, markerEnd, strokeDashArray } =
     getEdgeMarkerStyles(type)
   const padding = markerPadding ?? MARKER_PADDING
-
-  // Memoize expensive computations with careful dependency tracking
   const sourceNode = getNode(source)!
   const targetNode = getNode(target)!
   const allNodes = getNodes()
@@ -92,7 +88,6 @@ export const GenericEdge = ({
     return getPositionOnCanvas(targetNode, allNodes)
   }, [targetNode, allNodes, targetX, targetY])
 
-  // Attempt to compute a straight path
   const straightPathPoints = tryFindStraightPath(
     {
       position: { x: sourceAbsolutePosition.x, y: sourceAbsolutePosition.y },
@@ -123,7 +118,6 @@ export const GenericEdge = ({
     SOURCE_CONNECTION_POINT_PADDING
   )
 
-  // Generate the smooth step edge path
   const [edgePath] = getSmoothStepPath({
     sourceX: adjustedSourceCoordinates.sourceX,
     sourceY: adjustedSourceCoordinates.sourceY,
@@ -380,8 +374,6 @@ export const GenericEdge = ({
     } else {
       newPoints[newPoints.length - 1] = endpoint
     }
-
-    //setCustomPoints(newPoints)
   }
 
   useEffect(() => {
