@@ -158,22 +158,68 @@ export const GenericEdge = ({
     return result
   }, [basePath, isDiagramModifiable])
 
-  // When edgePath changes (nodes are dragged), clear customPoints
+  // Track previous node positions to detect when nodes have moved
+  const prevNodePositionsRef = useRef<{
+    source: { x: number; y: number; parentId?: string }
+    target: { x: number; y: number; parentId?: string }
+  }>({
+    source: { x: sourceNode.position.x, y: sourceNode.position.y, parentId: sourceNode.parentId },
+    target: { x: targetNode.position.x, y: targetNode.position.y, parentId: targetNode.parentId }
+  })
+
+  // Enhanced effect to handle node position changes - clear custom points when nodes move
   useEffect(() => {
-    if (customPoints.length > 0) {
-      setCustomPoints([])
-      setEdges((edges) =>
-        edges.map((edge) =>
-          edge.id === id
-            ? {
-                ...edge,
-                data: { ...edge.data, points: customPoints },
-              }
-            : edge
+    const currentSourcePos = { x: sourceNode.position.x, y: sourceNode.position.y, parentId: sourceNode.parentId }
+    const currentTargetPos = { x: targetNode.position.x, y: targetNode.position.y, parentId: targetNode.parentId }
+    const prevSourcePos = prevNodePositionsRef.current.source
+    const prevTargetPos = prevNodePositionsRef.current.target
+
+    // Check if any node has moved or changed parent
+    const sourceChanged = 
+      currentSourcePos.x !== prevSourcePos.x || 
+      currentSourcePos.y !== prevSourcePos.y ||
+      currentSourcePos.parentId !== prevSourcePos.parentId
+
+    const targetChanged = 
+      currentTargetPos.x !== prevTargetPos.x || 
+      currentTargetPos.y !== prevTargetPos.y ||
+      currentTargetPos.parentId !== prevTargetPos.parentId
+
+    if (sourceChanged || targetChanged) {
+      // Update the ref with current positions
+      prevNodePositionsRef.current = {
+        source: currentSourcePos,
+        target: currentTargetPos
+      }
+
+      // Always clear custom points when nodes move - force recalculation
+      if (customPoints.length > 0) {
+        setCustomPoints([])
+        
+        // Update the edge data to remove custom points
+        setEdges((edges) =>
+          edges.map((edge) =>
+            edge.id === id
+              ? {
+                  ...edge,
+                  data: { ...edge.data, points: undefined },
+                }
+              : edge
+          )
         )
-      )
+      }
     }
-  }, [edgePath, customPoints, id, setEdges])
+  }, [
+    sourceNode.position.x, 
+    sourceNode.position.y, 
+    sourceNode.parentId,
+    targetNode.position.x, 
+    targetNode.position.y, 
+    targetNode.parentId,
+    customPoints,
+    id,
+    setEdges
+  ])
 
   // Active points: use customPoints if available; otherwise, use computedPoints
   const activePoints = useMemo(
@@ -194,6 +240,7 @@ export const GenericEdge = ({
       setToolbarPosition({ x: point.x, y: point.y })
     }
   }, [currentPath])
+
   const midpoints = useMemo(
     () => calculateInnerMidpoints(activePoints),
     [activePoints]
@@ -224,15 +271,20 @@ export const GenericEdge = ({
         const startIdx = draggingIndexRef.current + 1
         const endIdx = draggingIndexRef.current + 2
         const newPoints = [...activePoints]
+        
+        // Determine if this is a horizontal or vertical line segment
         const linePosition =
-          newPoints[startIdx].x === newPoints[endIdx].x
+          Math.abs(newPoints[startIdx].x - newPoints[endIdx].x) < 1
             ? "vertical"
             : "horizontal"
 
+        // Only allow movement perpendicular to the line direction
         if (linePosition === "horizontal") {
+          // For horizontal lines, only allow vertical movement
           newPoints[startIdx] = { x: newPoints[startIdx].x, y: newY }
           newPoints[endIdx] = { x: newPoints[endIdx].x, y: newY }
         } else if (linePosition === "vertical") {
+          // For vertical lines, only allow horizontal movement
           newPoints[startIdx] = { x: newX, y: newPoints[startIdx].y }
           newPoints[endIdx] = { x: newX, y: newPoints[endIdx].y }
         }
@@ -241,6 +293,7 @@ export const GenericEdge = ({
         setCustomPoints(newPoints)
         finalPointsRef.current = newPoints
       }
+      
       const handlePointerUp = () => {
         setEdges((edges) =>
           edges.map((edge) =>
@@ -254,6 +307,7 @@ export const GenericEdge = ({
         )
         draggingIndexRef.current = null
         document.removeEventListener("pointermove", handlePointerMove)
+        document.removeEventListener("pointerup", handlePointerUp)
       }
 
       document.addEventListener("pointermove", handlePointerMove)
@@ -311,7 +365,7 @@ export const GenericEdge = ({
       newPoints[newPoints.length - 1] = endpoint
     }
 
-    setCustomPoints(newPoints)
+    //setCustomPoints(newPoints)
   }
 
   useEffect(() => {
