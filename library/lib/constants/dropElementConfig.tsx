@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ClassSVG, PackageSVG } from "@/components"
+import {
+  ActivityInitialNodeSVG,
+  ActivitySVG,
+  ClassSVG,
+  PackageSVG,
+} from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
 import { DiagramNodeType } from "@/nodes"
-import { ActivitySVG } from "@/components/svgs/nodes/activityDiagram/ActivitySVG"
 
 export * from "./layoutConstants"
 export const transformScale = 0.7
@@ -103,15 +107,15 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       },
       svg: (props) => <ActivitySVG {...props} />,
     },
-    // {
-    //   type: "ActivityInitialNode",
-    //   width: droppedElementWidth,
-    //   height: 70,
-    //   defaultData: {
-    //     name: "ActivityInitialNode",
-    //   },
-    //   svg: (props) => <ClassSVG {...props} />,
-    // },
+    {
+      type: "activityInitialNode",
+      width: 50,
+      height: 50,
+      defaultData: {
+        name: "ActivityInitialNode",
+      },
+      svg: (props) => <ActivityInitialNodeSVG {...props} />,
+    },
     // {
     //   type: "ActivityFinalNode",
     //   width: droppedElementWidth,

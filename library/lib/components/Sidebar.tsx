@@ -29,6 +29,7 @@ export const Sidebar = () => {
         flexDirection: "column",
         padding: "10px",
         gap: "8px",
+        alignItems: "center",
       }}
     >
       {dropElementConfigs[diagramType].map((config) => (

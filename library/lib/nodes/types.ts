@@ -2,7 +2,7 @@ import { NodeTypes } from "@xyflow/react" // Explicitly differentiate imported t
 import { Class, ColorDescription } from "./classDiagram"
 import { TitleAndDesctiption } from "./TitleAndDescriptionNode"
 import Package from "./classDiagram/Package"
-import { Activity } from "./activityDiagram"
+import { Activity, ActivityInitialNode } from "./activityDiagram"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -10,6 +10,7 @@ export const diagramNodeTypes = {
   colorDescription: ColorDescription,
   titleAndDesctiption: TitleAndDesctiption,
   activity: Activity,
+  activityInitialNode: ActivityInitialNode,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -22,4 +23,5 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   colorDescription: "colorDescription",
   titleAndDesctiption: "titleAndDesctiption",
   activity: "activity",
+  activityInitialNode: "activityInitialNode",
 } as const
