@@ -1,10 +1,12 @@
-import React, { useMemo, useCallback } from "react"
+import React, { useMemo, useCallback, SVGAttributes } from "react"
 
 interface TitleAndDescriptionSVGProps {
   width: number
   height: number
   title: string
   description: string
+  transformScale?: number
+  svgAttributes?: SVGAttributes<SVGElement>
 }
 
 export const TitleAndDescriptionSVG: React.FC<TitleAndDescriptionSVGProps> = ({
@@ -12,6 +14,8 @@ export const TitleAndDescriptionSVG: React.FC<TitleAndDescriptionSVGProps> = ({
   height,
   title,
   description,
+  transformScale,
+  svgAttributes,
 }) => {
   const padding = 10 // Padding inside the SVG
   const titleHeight = 30 // Fixed height for the title
@@ -61,8 +65,17 @@ export const TitleAndDescriptionSVG: React.FC<TitleAndDescriptionSVGProps> = ({
     return wrappedLines
   }, [description, maxTextWidth, maxDescriptionHeight, lineHeight, wrapText])
 
+  const scaledWidth = width * (transformScale ?? 1)
+  const scaledHeight = height * (transformScale ?? 1)
+
   return (
-    <svg width={width} height={height}>
+    <svg
+      width={scaledWidth}
+      height={scaledHeight}
+      viewBox={`0 0 ${width} ${height}`}
+      overflow="visible"
+      {...svgAttributes}
+    >
       {/* Outer Border */}
       <rect
         x={padding / 2}

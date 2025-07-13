@@ -74,31 +74,24 @@ export const ClassSVG = ({
   const processedMethods = processElements(methods)
   const nodeScore = assessments[id]?.score
 
-  const svgWidth = showAssessmentResults ? width + 20 : width
-  const svgHeight = showAssessmentResults ? height + 20 : height
+  const scaledWidth = width * (transformScale ?? 1)
+  const scaledHeight = height * (transformScale ?? 1)
+
   return (
     <svg
-      width={svgWidth}
-      height={svgHeight}
-      viewBox={
-        showAssessmentResults
-          ? `0 -20 ${svgWidth} ${svgHeight}`
-          : `0 0 ${svgWidth} ${svgHeight}`
-      }
-      style={{
-        transformOrigin: "left top",
-        transformBox: "content-box",
-        transform: transformScale ? `scale(${transformScale})` : undefined,
-      }}
+      width={scaledWidth}
+      height={scaledHeight}
+      viewBox={`0 0 ${width} ${height}`}
+      overflow="visible"
       {...svgAttributes}
     >
       <g>
         {/* Outer Rectangle */}
         <rect
-          x={LINE_WIDTH}
-          y={LINE_WIDTH}
-          width={width - 2 * LINE_WIDTH}
-          height={height - 2 * LINE_WIDTH}
+          x={0}
+          y={0}
+          width={width}
+          height={height}
           stroke="black"
           strokeWidth={LINE_WIDTH}
           fill="white"
