@@ -73,9 +73,7 @@ export const TitleAndDescriptionSVG: React.FC<TitleAndDescriptionSVGProps> = ({
       width={scaledWidth}
       height={scaledHeight}
       viewBox={`0 0 ${width} ${height}`}
-      style={{
-        overflow: "visible",
-      }}
+      overflow="visible"
       {...svgAttributes}
     >
       {/* Outer Border */}

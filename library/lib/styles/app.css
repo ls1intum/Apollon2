@@ -104,14 +104,6 @@
   opacity: 0.9;
 }
 
-.react-flow__edges {
-  z-index: 9999;
-}
-
-.react-flow__node {
-  z-index: 9998;
-}
-
 .react-flow__minimap-mask {
   fill: "#f2f2f2";
   opacity: 0.6;

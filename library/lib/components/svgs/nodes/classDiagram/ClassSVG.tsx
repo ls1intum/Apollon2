@@ -82,9 +82,7 @@ export const ClassSVG = ({
       width={scaledWidth}
       height={scaledHeight}
       viewBox={`0 0 ${width} ${height}`}
-      style={{
-        overflow: "visible",
-      }}
+      overflow="visible"
       {...svgAttributes}
     >
       <g>
