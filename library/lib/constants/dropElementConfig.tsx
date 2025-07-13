@@ -3,6 +3,7 @@ import {
   ActivityActionNodeSVG,
   ActivityFinalNodeSVG,
   ActivityInitialNodeSVG,
+  ActivityMergeNodeSVG,
   ActivityObjectNodeSVG,
   ActivitySVG,
   ClassSVG,
@@ -146,15 +147,15 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       },
       svg: (props) => <ActivityObjectNodeSVG {...props} />,
     },
-    // {
-    //   type: "ActivityMergeNode",
-    //   width: droppedElementWidth,
-    //   height: 70,
-    //   defaultData: {
-    //     name: "ActivityMergeNode",
-    //   },
-    //   svg: (props) => <ClassSVG {...props} />,
-    // },
+    {
+      type: "activityMergeNode",
+      width: droppedElementWidth,
+      height: 120,
+      defaultData: {
+        name: "Condition",
+      },
+      svg: (props) => <ActivityMergeNodeSVG {...props} />,
+    },
     // {
     //   type: "ActivityForkNode",
     //   width: droppedElementWidth,
