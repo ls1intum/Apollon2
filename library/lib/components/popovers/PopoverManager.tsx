@@ -9,14 +9,14 @@ import {
   ClassEditPopover,
   ClassGiveFeedbackPopover,
   ClassSeeFeedbackPopover,
-  PackageEditPopover,
+  DefaultNodeEditPopover,
+  DefaultNodeGiveFeedbackPopover,
+  DefaultNodeSeeFeedbackPopover,
 } from "./classDiagram"
 import { useViewportCenter } from "@/hooks"
 import { getPopoverOrigin, getPositionOnCanvas, getQuadrant } from "@/utils"
 import { PopoverProps } from "./types"
 import { GenericPopover } from "./GenericPopover"
-import { PackageGiveFeedbackPopover } from "./classDiagram/PackageGiveFeedbackPopover"
-import { PackageSeeFeedbackPopover } from "./classDiagram/PackageSeeFeedbackPopover"
 import {
   EdgeEditPopover,
   EdgeGiveFeedbackPopover,
@@ -24,35 +24,35 @@ import {
 } from "./edgePopovers"
 import { LocationPopover } from "@/types"
 
-type PopoverType = "class" | "package" | "edge"
+type PopoverType = "class" | "edge" | "default"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
-  package: React.FC<PopoverProps>
+  default: React.FC<PopoverProps>
   edge: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
-  package: PackageEditPopover,
+  default: DefaultNodeEditPopover,
   edge: EdgeEditPopover,
 }
 
 const giveFeedbackPopovers: {
   class: React.FC<PopoverProps>
-  package: React.FC<PopoverProps>
+  default: React.FC<PopoverProps>
   edge: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
-  package: PackageGiveFeedbackPopover,
+  default: DefaultNodeGiveFeedbackPopover,
   edge: EdgeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
   class: React.FC<PopoverProps>
-  package: React.FC<PopoverProps>
+  default: React.FC<PopoverProps>
   edge: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
-  package: PackageSeeFeedbackPopover,
+  default: DefaultNodeSeeFeedbackPopover,
   edge: EdgeSeeFeedbackPopover,
 }
 

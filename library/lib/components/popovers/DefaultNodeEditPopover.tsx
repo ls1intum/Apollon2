@@ -1,10 +1,12 @@
 import { TextField } from "@mui/material"
-import { PackageNodeProps } from "@/types"
+import { DefaultNodeProps } from "@/types"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
-import { PopoverProps } from "../types"
+import { PopoverProps } from "./types"
 
-export const PackageEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
+export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
+  elementId,
+}) => {
   const { nodes, setNodes } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
@@ -34,7 +36,7 @@ export const PackageEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
     return null
   }
 
-  const nodeData = node.data as PackageNodeProps
+  const nodeData = node.data as DefaultNodeProps
 
   return (
     <TextField

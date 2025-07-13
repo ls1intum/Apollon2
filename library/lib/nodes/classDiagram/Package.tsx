@@ -8,7 +8,7 @@ import {
 import { DefaultNodeWrapper } from "../wrappers"
 import { PackageSVG } from "@/components"
 import { useHandleOnResize } from "@/hooks"
-import { PackageNodeProps } from "@/types"
+import { DefaultNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
@@ -26,8 +26,7 @@ export default function Package({
   height,
   data: { name },
   parentId,
-  type,
-}: NodeProps<Node<PackageNodeProps>>) {
+}: NodeProps<Node<DefaultNodeProps>>) {
   const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
   const { onResize } = useHandleOnResize(parentId)
   const isDiagramModifiable = useDiagramModifiable()
@@ -83,7 +82,7 @@ export default function Package({
       <PopoverManager
         anchorEl={packageSvgWrapperRef.current}
         elementId={id}
-        type={type as "package"}
+        type="default"
       />
     </DefaultNodeWrapper>
   )
