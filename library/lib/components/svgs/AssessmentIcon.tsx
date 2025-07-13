@@ -8,9 +8,8 @@ interface AssessmentIconProps {
 }
 
 const AssessmentIcon: React.FC<AssessmentIconProps> = ({ score, x, y }) => {
-  if (score === undefined) {
-    return null
-  }
+  if (score === undefined) return null
+
   const RADIUS = 15
   const ICON_SIZE = 20
   const centerX = x + RADIUS
@@ -23,51 +22,31 @@ const AssessmentIcon: React.FC<AssessmentIconProps> = ({ score, x, y }) => {
     y: centerY - ICON_SIZE / 2,
   }
 
-  if (score > 0) {
-    return (
-      <g>
-        <circle
-          cx={centerX}
-          cy={centerY}
-          r={RADIUS}
-          fill="#f0f0f0"
-          stroke="#ccc"
-          opacity={0.7}
-        />
-        <CheckIcon {...iconProps} fill="green" />
-      </g>
-    )
-  } else if (score < 0) {
-    return (
-      <g>
-        <circle
-          cx={centerX}
-          cy={centerY}
-          r={RADIUS}
-          fill="#f0f0f0"
-          stroke="#ccc"
-          opacity={0.7}
-        />
-        <Cross {...iconProps} fill="red" />
-      </g>
-    )
-  } else if (score === 0) {
-    return (
-      <g>
-        <circle
-          cx={centerX}
-          cy={centerY}
-          r={RADIUS}
-          fill="#f0f0f0"
-          stroke="#ccc"
-          opacity={0.7}
-        />
-        <ExclamationIcon {...iconProps} fill="blue" />
-      </g>
-    )
+  const getIconConfig = () => {
+    if (score > 0) {
+      return { Icon: CheckIcon, fill: "green" }
+    } else if (score < 0) {
+      return { Icon: Cross, fill: "red" }
+    } else {
+      return { Icon: ExclamationIcon, fill: "blue" }
+    }
   }
 
-  return null
+  const { Icon, fill } = getIconConfig()
+
+  return (
+    <g className="apollon2-assessment-icon">
+      <circle
+        cx={centerX}
+        cy={centerY}
+        r={RADIUS}
+        fill="#f0f0f0"
+        stroke="#ccc"
+        opacity={0.7}
+      />
+      <Icon {...iconProps} fill={fill} />
+    </g>
+  )
 }
 
 export default AssessmentIcon
