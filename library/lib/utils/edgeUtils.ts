@@ -113,42 +113,72 @@ export const calculateTextPlacement = (
   }
 }
 
-export const calculateEdgeLabels = (
+export const calculateDynamicEdgeLabels = (
   x: number,
   y: number,
-  Position: Position
-): {
-  roleX: number
-  roleY: number
-  multiplicityX: number
-  multiplicityY: number
-} => {
-  let roleX = x
-  let roleY = y
-  let multiplicityX = x
-  let multiplicityY = y
-  if (Position === "left") {
-    roleX = x - 8 // Move role to the left
-    roleY = y - 10 // Place role above the marker
-    multiplicityX = x - 8 // Move multiplicity to the left
-    multiplicityY = y + 18 // Place multiplicity below the marker
-  } else if (Position === "right") {
-    roleX = x + 8 // Move role to the right
-    roleY = y - 10 // Place role above the marker
-    multiplicityX = x + 8 // Move multiplicity to the right
-    multiplicityY = y + 18 // Place multiplicity below the marker
-  } else if (Position === "top") {
-    roleX = x - 10 // Shift role slightly to the left
-    roleY = y - 3 // Move role below the marker
-    multiplicityX = x + 10 // Shift multiplicity to the right
-    multiplicityY = y - 3 // Keep multiplicity below the marker
-  } else if (Position === "bottom") {
-    roleX = x - 10 // Move role to the left
-    roleY = y + 10 // Place role above the marker
-    multiplicityX = x + 10 // Move multiplicity to the left
-    multiplicityY = y + 10 // Place multiplicity below the marker
+  direction: string
+) => {
+  const offset = 10
+  const textOffset = 15
+
+  switch (direction) {
+    case "top": {
+      // If it's a target on top handle, move labels UPWARD (away from node)
+      const topYOffset = -5
+      return {
+        roleX: x - offset,
+        roleY: y + topYOffset,
+        roleTextAnchor: "end" as const,
+        multiplicityX: x + offset,
+        multiplicityY: y + topYOffset,
+        multiplicityTextAnchor: "start" as const,
+      }
+    }
+    case "bottom": {
+      // If it's a target on bottom handle, move labels DOWNWARD (away from node)
+      const bottomYOffset = textOffset
+      return {
+        roleX: x - offset,
+        roleY: y + bottomYOffset,
+        roleTextAnchor: "end" as const,
+        multiplicityX: x + offset,
+        multiplicityY: y + bottomYOffset,
+        multiplicityTextAnchor: "start" as const,
+      }
+    }
+    case "left": {
+      // If it's a target on left handle, move labels LEFTWARD (away from node)
+      const leftXOffset = -5
+      return {
+        roleX: x + leftXOffset,
+        roleY: y - offset,
+        roleTextAnchor: "end" as const,
+        multiplicityX: x + leftXOffset,
+        multiplicityY: y + 20,
+        multiplicityTextAnchor: "end" as const,
+      }
+    }
+    case "right": {
+      return {
+        roleX: x + 5,
+        roleY: y - offset,
+        roleTextAnchor: "start" as const,
+        multiplicityX: x + 5,
+        multiplicityY: y + 20,
+        multiplicityTextAnchor: "start" as const,
+      }
+    }
+    default: {
+      return {
+        roleX: x,
+        roleY: y - offset,
+        roleTextAnchor: "middle" as const,
+        multiplicityX: x,
+        multiplicityY: y + offset,
+        multiplicityTextAnchor: "middle" as const,
+      }
+    }
   }
-  return { roleX, roleY, multiplicityX, multiplicityY }
 }
 
 export interface EdgeMarkerStyles {
