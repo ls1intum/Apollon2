@@ -113,52 +113,55 @@ export const calculateTextPlacement = (
   }
 }
 
-export const calculateEdgeLabelsWithDirection = (
+export const calculateDynamicEdgeLabels = (
   x: number,
   y: number,
-  position: Position
+  direction: string
 ) => {
-  switch (position) {
-    case Position.Top:
+  const offset = 10
+  const textOffset = 15
+
+  switch (direction) {
+    case "top":
+      // If it's a target on top handle, move labels UPWARD (away from node)
+      const topYOffset = -5
       return {
-        // Role goes to the left
-        roleX: x - 10,
-        roleY: y - 5,
+        roleX: x - offset,
+        roleY: y + topYOffset,
         roleTextAnchor: "end" as const,
-        // Multiplicity goes to the right
-        multiplicityX: x + 10,
-        multiplicityY: y - 5,
+        multiplicityX: x + offset,
+        multiplicityY: y + topYOffset,
         multiplicityTextAnchor: "start" as const,
       }
 
-    case Position.Bottom:
+    case "bottom":
+      // If it's a target on bottom handle, move labels DOWNWARD (away from node)
+      const bottomYOffset = textOffset
       return {
-        // Role goes to the left
-        roleX: x - 10,
-        roleY: y + 15,
+        roleX: x - offset,
+        roleY: y + bottomYOffset,
         roleTextAnchor: "end" as const,
-        // Multiplicity goes to the right
-        multiplicityX: x + 10,
-        multiplicityY: y + 15,
+        multiplicityX: x + offset,
+        multiplicityY: y + bottomYOffset,
         multiplicityTextAnchor: "start" as const,
       }
 
-    case Position.Left:
+    case "left":
+      // If it's a target on left handle, move labels LEFTWARD (away from node)
+      const leftXOffset = -5
       return {
-        // Both role and multiplicity go to the left (stacked)
-        roleX: x - 5,
-        roleY: y - 10,
+        roleX: x + leftXOffset,
+        roleY: y - offset,
         roleTextAnchor: "end" as const,
-        multiplicityX: x - 5,
+        multiplicityX: x + leftXOffset,
         multiplicityY: y + 20,
         multiplicityTextAnchor: "end" as const,
       }
 
-    case Position.Right:
+    case "right":
       return {
-        // Both role and multiplicity go to the right (stacked)
         roleX: x + 5,
-        roleY: y - 10,
+        roleY: y - offset,
         roleTextAnchor: "start" as const,
         multiplicityX: x + 5,
         multiplicityY: y + 20,
@@ -168,10 +171,10 @@ export const calculateEdgeLabelsWithDirection = (
     default:
       return {
         roleX: x,
-        roleY: y - 10,
+        roleY: y - offset,
         roleTextAnchor: "middle" as const,
         multiplicityX: x,
-        multiplicityY: y + 10,
+        multiplicityY: y + offset,
         multiplicityTextAnchor: "middle" as const,
       }
   }

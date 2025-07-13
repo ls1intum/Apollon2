@@ -25,13 +25,11 @@ import {
   calculateInnerMidpoints,
   getMarkerSegmentPath,
   findClosestHandle,
-  calculateEdgeLabelsWithDirection,
+  calculateDynamicEdgeLabels,
 } from "@/utils/edgeUtils"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import AssessmentIcon from "@/components/svgs/AssessmentIcon"
-
-// Enhanced calculateEdgeLabels function with directional positioning
 
 export const GenericEdge = ({
   id,
@@ -48,7 +46,6 @@ export const GenericEdge = ({
   targetHandleId,
   data,
 }: ExtendedEdgeProps) => {
-  // Refs for dragging adjustments to minimize re-renders
   const draggingIndexRef = useRef<number | null>(null)
   const dragOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
   const isReconnectingRef = useRef<boolean>(false)
@@ -61,6 +58,10 @@ export const GenericEdge = ({
     useShallow((state) => state.setPopOverElementId)
   )
   const [toolbarPosition, setToolbarPosition] = useState<IPoint>({ x: 0, y: 0 })
+  // Add state for temporary reconnection points
+  const [tempReconnectPoints, setTempReconnectPoints] = useState<
+    IPoint[] | null
+  >(null)
 
   const { handleDelete } = useToolbar({ id })
   const { getNode, getEdges, screenToFlowPosition, getNodes } = useReactFlow()
@@ -105,8 +106,6 @@ export const GenericEdge = ({
     },
     padding
   )
-
-  // Adjust source and target coordinates
   const adjustedTargetCoordinates = adjustTargetCoordinates(
     targetX,
     targetY,
@@ -131,7 +130,6 @@ export const GenericEdge = ({
     offset: 30,
   })
 
-  // Create a basePath that uses the straightPath if available, otherwise the edgePath
   const basePath = useMemo(
     () =>
       straightPathPoints !== null
@@ -140,7 +138,6 @@ export const GenericEdge = ({
     [straightPathPoints, edgePath]
   )
 
-  // Compute the default points based on the current basePath
   const computedPoints = useMemo(() => {
     const simplifiedPath = simplifySvgPath(basePath)
     const parsed = parseSvgPath(simplifiedPath)
@@ -155,7 +152,6 @@ export const GenericEdge = ({
     return result
   }, [basePath, isDiagramModifiable])
 
-  // Track previous node positions to detect when nodes have moved
   const prevNodePositionsRef = useRef<{
     source: { x: number; y: number; parentId?: string }
     target: { x: number; y: number; parentId?: string }
@@ -172,7 +168,6 @@ export const GenericEdge = ({
     },
   })
 
-  // Enhanced effect to handle node position changes - clear custom points when nodes move
   useEffect(() => {
     const currentSourcePos = {
       x: sourceNode.position.x,
@@ -187,7 +182,6 @@ export const GenericEdge = ({
     const prevSourcePos = prevNodePositionsRef.current.source
     const prevTargetPos = prevNodePositionsRef.current.target
 
-    // Check if any node has moved or changed parent
     const sourceChanged =
       currentSourcePos.x !== prevSourcePos.x ||
       currentSourcePos.y !== prevSourcePos.y ||
@@ -199,17 +193,13 @@ export const GenericEdge = ({
       currentTargetPos.parentId !== prevTargetPos.parentId
 
     if (sourceChanged || targetChanged) {
-      // Update the ref with current positions
       prevNodePositionsRef.current = {
         source: currentSourcePos,
         target: currentTargetPos,
       }
 
-      // Always clear custom points when nodes move - force recalculation
       if (customPoints.length > 0) {
         setCustomPoints([])
-
-        // Update the edge data to remove custom points
         setEdges((edges) =>
           edges.map((edge) =>
             edge.id === id
@@ -234,16 +224,46 @@ export const GenericEdge = ({
     setEdges,
   ])
 
-  // Active points: use customPoints if available; otherwise, use computedPoints
-  const activePoints = useMemo(
-    () => (customPoints.length ? customPoints : computedPoints),
-    [customPoints, computedPoints]
-  )
+  // Use temp reconnect points if available, otherwise use regular active points
+  const activePoints = useMemo(() => {
+    if (tempReconnectPoints) return tempReconnectPoints
+    return customPoints.length ? customPoints : computedPoints
+  }, [customPoints, computedPoints, tempReconnectPoints])
 
   const currentPath = useMemo(
     () => pointsToSvgPath(activePoints),
     [activePoints]
   )
+
+  // Calculate label positions based on actual edge points and their directions
+  const sourceLabels = useMemo(() => {
+    if (activePoints.length < 2) {
+      return calculateDynamicEdgeLabels(sourceX, sourceY, sourcePosition)
+    }
+
+    const sourcePoint = activePoints[0]
+    const nextPoint = activePoints[1]
+    const deltaX = nextPoint.x - sourcePoint.x
+    const deltaY = nextPoint.y - sourcePoint.y
+
+    let direction: string
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      direction = deltaX > 0 ? "right" : "left"
+    } else {
+      direction = deltaY > 0 ? "bottom" : "top"
+    }
+    return calculateDynamicEdgeLabels(sourcePoint.x, sourcePoint.y, direction)
+  }, [activePoints, sourceX, sourceY, sourcePosition])
+
+  const targetLabels = useMemo(() => {
+    const targetPoint = activePoints[activePoints.length - 1]
+
+    return calculateDynamicEdgeLabels(
+      targetPoint.x,
+      targetPoint.y,
+      targetPosition
+    )
+  }, [activePoints, targetPosition])
 
   useEffect(() => {
     if (pathRef.current) {
@@ -285,24 +305,19 @@ export const GenericEdge = ({
         const endIdx = draggingIndexRef.current + 2
         const newPoints = [...activePoints]
 
-        // Determine if this is a horizontal or vertical line segment
         const linePosition =
           Math.abs(newPoints[startIdx].x - newPoints[endIdx].x) < 1
             ? "vertical"
             : "horizontal"
 
-        // Only allow movement perpendicular to the line direction
         if (linePosition === "horizontal") {
-          // For horizontal lines, only allow vertical movement
           newPoints[startIdx] = { x: newPoints[startIdx].x, y: newY }
           newPoints[endIdx] = { x: newPoints[endIdx].x, y: newY }
         } else if (linePosition === "vertical") {
-          // For vertical lines, only allow horizontal movement
           newPoints[startIdx] = { x: newX, y: newPoints[startIdx].y }
           newPoints[endIdx] = { x: newX, y: newPoints[endIdx].y }
         }
 
-        // Update both the state and the ref
         setCustomPoints(newPoints)
         finalPointsRef.current = newPoints
       }
@@ -329,13 +344,19 @@ export const GenericEdge = ({
     [midpoints, activePoints, id, data, setEdges]
   )
 
-  // Memoized drop position getter
+  useEffect(() => {
+    if (data?.points) {
+      setCustomPoints(data.points)
+    }
+  }, [data?.points])
+
   const getDropPosition = (event: PointerEvent) => {
     return screenToFlowPosition(
       { x: event.clientX, y: event.clientY },
       { snapToGrid: false }
     )
   }
+
   const handleEndpointPointerDown = (
     e: React.PointerEvent,
     endType: "source" | "target"
@@ -377,18 +398,18 @@ export const GenericEdge = ({
     } else {
       newPoints[newPoints.length - 1] = endpoint
     }
-  }
 
-  useEffect(() => {
-    if (data?.points) {
-      setCustomPoints(data.points)
-    }
-  }, [data?.points])
+    // Update temp reconnect points to show visual feedback
+    setTempReconnectPoints(newPoints)
+  }
 
   const handleEndpointPointerUp = (upEvent: PointerEvent) => {
     const isReconnectingSource = reconnectingEndRef.current === "source"
 
     isReconnectingRef.current = false
+    // Clear temp reconnect points
+    setTempReconnectPoints(null)
+
     document.removeEventListener("pointermove", handleEndpointPointerMove)
     document.removeEventListener("pointerup", handleEndpointPointerUp)
 
@@ -446,22 +467,8 @@ export const GenericEdge = ({
     reconnectingEndRef.current = null
   }
 
-  // Calculate directional label positions
-  const sourceLabels = calculateEdgeLabelsWithDirection(
-    sourceX,
-    sourceY,
-    sourcePosition
-  )
-
-  const targetLabels = calculateEdgeLabelsWithDirection(
-    targetX,
-    targetY,
-    targetPosition
-  )
-
   const sourcePoint = activePoints[0]
   const targetPoint = activePoints[activePoints.length - 1]
-
   const nodeScore = assessments[id]?.score
 
   return (
@@ -515,6 +522,7 @@ export const GenericEdge = ({
         />
 
         {isDiagramModifiable &&
+          !isReconnectingRef.current &&
           midpoints.map((point, midPointIndex) => (
             <circle
               className="edge-circle"
@@ -539,6 +547,7 @@ export const GenericEdge = ({
         onDeleteClick={handleDelete}
       />
 
+      {/* Updated label rendering with dynamic positioning */}
       {data?.sourceRole && (
         <text
           x={sourceLabels.roleX}
