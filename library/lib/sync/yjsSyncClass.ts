@@ -74,7 +74,9 @@ export class YjsSyncClass {
       _event: Y.YMapEvent<Node>,
       transaction: Y.Transaction
     ) => {
-      if (transaction.origin !== "store") {
+      // Don't update from Yjs if the transaction originated from the store
+      // or if it's an undo/redo operation
+      if (transaction.origin !== "store" && !this.isUndoRedoTransaction(transaction)) {
         this.diagramStore.getState().updateNodesFromYjs()
       }
     }
@@ -83,7 +85,7 @@ export class YjsSyncClass {
       _event: Y.YMapEvent<Edge>,
       transaction: Y.Transaction
     ) => {
-      if (transaction.origin !== "store") {
+      if (transaction.origin !== "store" && !this.isUndoRedoTransaction(transaction)) {
         this.diagramStore.getState().updateEdgesFromYjs()
       }
     }
@@ -92,7 +94,7 @@ export class YjsSyncClass {
       _event: Y.YMapEvent<string>,
       transaction: Y.Transaction
     ) => {
-      if (transaction.origin !== "store") {
+      if (transaction.origin !== "store" && !this.isUndoRedoTransaction(transaction)) {
         this.metadataStore.getState().updateMetaDataFromYjs()
       }
     }
@@ -101,7 +103,7 @@ export class YjsSyncClass {
       _event: Y.YMapEvent<Assessment>,
       transaction: Y.Transaction
     ) => {
-      if (transaction.origin !== "store") {
+      if (transaction.origin !== "store" && !this.isUndoRedoTransaction(transaction)) {
         this.diagramStore.getState().updateAssessmentFromYjs()
       }
     }
@@ -112,13 +114,23 @@ export class YjsSyncClass {
       _arg2: Y.Doc,
       transaction: Y.Transaction
     ) => {
-      if (this.sendBroadcastMessage && transaction.origin === "store") {
+      // Send updates for store operations and undo/redo operations
+      if (this.sendBroadcastMessage && 
+          (transaction.origin === "store" || this.isUndoRedoTransaction(transaction))) {
         const syncMessage = Y.encodeStateAsUpdate(this.ydoc)
         const fullMessage = new Uint8Array(1 + syncMessage.length)
         fullMessage[0] = MessageType.YjsUpdate
         fullMessage.set(syncMessage, 1)
         const base64Message = YjsSyncClass.uint8ToBase64(fullMessage)
         this.sendBroadcastMessage(base64Message)
+      }
+
+      // Update store state for undo/redo operations
+      if (this.isUndoRedoTransaction(transaction)) {
+        this.diagramStore.getState().updateNodesFromYjs()
+        this.diagramStore.getState().updateEdgesFromYjs()
+        this.diagramStore.getState().updateAssessmentFromYjs()
+        this.diagramStore.getState().updateUndoRedoState()
       }
     }
 
@@ -127,6 +139,7 @@ export class YjsSyncClass {
     getAssessments(this.ydoc).observe(assessmentObserver)
     getDiagramMetadata(this.ydoc).observe(metadataObserver)
     this.ydoc.on("update", handleYjsUpdate)
+    
     return () => {
       getNodesMap(this.ydoc).unobserve(nodesChangeObserver)
       getEdgesMap(this.ydoc).unobserve(edgesObserver)
@@ -134,6 +147,12 @@ export class YjsSyncClass {
       getDiagramMetadata(this.ydoc).unobserve(metadataObserver)
       this.ydoc.off("update", handleYjsUpdate)
     }
+  }
+
+  // Helper method to check if a transaction is from undo/redo
+  private isUndoRedoTransaction(transaction: Y.Transaction): boolean {
+    const undoManager = this.diagramStore.getState().undoManager
+    return undoManager ? undoManager === transaction.origin : false
   }
 
   /**

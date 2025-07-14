@@ -26,6 +26,8 @@ type InitialDiagramState = {
   selectedElementIds: string[]
   diagramId: string
   assessments: Record<string, Assessment>
+  canUndo: boolean
+  canRedo: boolean
 }
 
 const initialDiagramState: InitialDiagramState = {
@@ -34,6 +36,8 @@ const initialDiagramState: InitialDiagramState = {
   selectedElementIds: [],
   diagramId: Math.random().toString(36).substring(2, 15),
   assessments: {},
+  canUndo: false,
+  canRedo: false,
 }
 
 export type DiagramStore = {
@@ -42,6 +46,9 @@ export type DiagramStore = {
   selectedElementIds: string[]
   diagramId: string
   assessments: Record<string, Assessment>
+  canUndo: boolean
+  canRedo: boolean
+  undoManager: Y.UndoManager | null
   setDiagramId: (diagramId: string) => void
   setNodes: (payload: Node[] | ((nodes: Node[]) => Node[])) => void
   setEdges: (payload: Edge[] | ((edges: Edge[]) => Edge[])) => void
@@ -64,6 +71,10 @@ export type DiagramStore = {
   updateEdgesFromYjs: () => void
   updateAssessmentFromYjs: () => void
   addOrUpdateAssessment: (assessment: Assessment) => void
+  undo: () => void
+  redo: () => void
+  initializeUndoManager: () => void
+  updateUndoRedoState: () => void
 }
 
 export const createDiagramStore = (
@@ -73,6 +84,62 @@ export const createDiagramStore = (
     devtools(
       subscribeWithSelector((set, get) => ({
         ...initialDiagramState,
+        undoManager: null,
+
+        initializeUndoManager: () => {
+          const nodesMap = getNodesMap(ydoc)
+          const edgesMap = getEdgesMap(ydoc)
+          const assessmentsMap = getAssessments(ydoc)
+          
+          // Create undo manager with all the maps you want to track
+          const undoManager = new Y.UndoManager([nodesMap, edgesMap, assessmentsMap], {
+            // Capture timeout - how long to wait before creating a new undo step
+            captureTimeout: 500,
+            // Track operations that originate from 'store'
+            trackedOrigins: new Set(['store'])
+          })
+
+          // Listen to undo manager state changes
+          undoManager.on('stack-item-added', () => {
+            get().updateUndoRedoState()
+          })
+
+          undoManager.on('stack-item-popped', () => {
+            get().updateUndoRedoState()
+          })
+
+          undoManager.on('stack-cleared', () => {
+            get().updateUndoRedoState()
+          })
+
+          set({ undoManager }, undefined, "initializeUndoManager")
+          get().updateUndoRedoState()
+        },
+
+        updateUndoRedoState: () => {
+          const { undoManager } = get()
+          if (!undoManager) return
+
+          set({
+            canUndo: undoManager.undoStack.length > 0,
+            canRedo: undoManager.redoStack.length > 0
+          }, undefined, "updateUndoRedoState")
+        },
+
+        undo: () => {
+          const { undoManager } = get()
+          if (!undoManager || !undoManager.canUndo()) return
+          
+          undoManager.undo()
+        },
+
+        redo: () => {
+          const { undoManager } = get()
+          if (!undoManager || !undoManager.canRedo()) return
+          
+          undoManager.redo()
+        },
+
         setDiagramId: (diagramId) => {
           set({ diagramId }, undefined, "setDiagramId")
         },
@@ -83,8 +150,9 @@ export const createDiagramStore = (
               ? payload(get().selectedElementIds)
               : payload
 
-          set({ selectedElementIds }, undefined, "setNodes")
+          set({ selectedElementIds }, undefined, "setSelectedElementsId")
         },
+
         addNode: (node) => {
           ydoc.transact(() => {
             getNodesMap(ydoc).set(node.id, node)
@@ -299,7 +367,7 @@ export const createDiagramStore = (
                     ),
                   }),
                   undefined,
-                  "onNodesChange-remove"
+                  "onEdgesChange-remove"
                 )
                 getEdgesMap(ydoc).delete(change.id)
               }
@@ -309,6 +377,10 @@ export const createDiagramStore = (
         },
 
         reset: () => {
+          const { undoManager } = get()
+          if (undoManager) {
+            undoManager.clear()
+          }
           set(initialDiagramState, undefined, "reset")
         },
 
@@ -393,6 +465,7 @@ export const createDiagramStore = (
             "updateEdgesFromYjs"
           )
         },
+
         setAssessments: (payload) => {
           const assessments =
             typeof payload === "function" ? payload(get().assessments) : payload
@@ -407,6 +480,7 @@ export const createDiagramStore = (
 
           set({ assessments }, undefined, "setAssessments")
         },
+
         updateAssessmentFromYjs: () => {
           const yMap = getAssessments(ydoc)
           const assessments: Record<string, Assessment> = {}
@@ -417,6 +491,7 @@ export const createDiagramStore = (
 
           set({ assessments }, undefined, "updateAssessmentFromYjs")
         },
+
         getAssessment: (id) => {
           return get().assessments[id]
         },
