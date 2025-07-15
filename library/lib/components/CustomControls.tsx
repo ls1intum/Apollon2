@@ -26,35 +26,34 @@ export const CustomControls = () => {
     redo()
   }
 
-
   return (
     <Controls orientation="horizontal" showInteractive={false}>
-            {/* Undo Button */}
+      {/* Undo Button */}
       {/* Undo Button */}
       <button
-        className={`control-button ${!canUndo ? 'disabled' : ''}`}
+        className={`control-button ${!canUndo ? "disabled" : ""}`}
         onClick={handleUndo}
         disabled={!canUndo}
         title="Undo (Ctrl+Z)"
       >
-        <UndoIcon 
-          width={16} 
+        <UndoIcon
+          width={16}
           height={16}
-          className={canUndo ? 'icon-enabled' : 'icon-disabled'}
+          className={canUndo ? "icon-enabled" : "icon-disabled"}
         />
       </button>
 
       {/* Redo Button */}
       <button
-        className={`control-button ${!canRedo ? 'disabled' : ''}`}
+        className={`control-button ${!canRedo ? "disabled" : ""}`}
         onClick={handleRedo}
         disabled={!canRedo}
         title="Redo (Ctrl+Y or Ctrl+Shift+Z)"
       >
-        <RedoIcon 
-          width={16} 
+        <RedoIcon
+          width={16}
           height={16}
-          className={canRedo ? 'icon-enabled' : 'icon-disabled'}
+          className={canRedo ? "icon-enabled" : "icon-disabled"}
         />
       </button>
 

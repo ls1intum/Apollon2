@@ -98,7 +98,7 @@ export const createDiagramStore = (
               // Capture timeout - how long to wait before creating a new undo step
               captureTimeout: 500,
               // Track operations that originate from 'store'
-              trackedOrigins: new Set(["store",  'remote']),
+              trackedOrigins: new Set(["store", "remote"]),
             }
           )
 

@@ -41,21 +41,16 @@ interface AppProps {
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit }: AppProps) {
-  const {
-    nodes,
-    onNodesChange,
-    edges,
-    onEdgesChange,
-    diagramId,
-  } = useDiagramStore(
-    useShallow((state) => ({
-      nodes: state.nodes,
-      onNodesChange: state.onNodesChange,
-      edges: state.edges,
-      onEdgesChange: state.onEdgesChange,
-      diagramId: state.diagramId
-    }))
-  )
+  const { nodes, onNodesChange, edges, onEdgesChange, diagramId } =
+    useDiagramStore(
+      useShallow((state) => ({
+        nodes: state.nodes,
+        onNodesChange: state.onNodesChange,
+        edges: state.edges,
+        onEdgesChange: state.onEdgesChange,
+        diagramId: state.diagramId,
+      }))
+    )
 
   const diagramMode = useMetadataStore(useShallow((state) => state.mode))
   const isDiagramModifiable = useDiagramModifiable()
