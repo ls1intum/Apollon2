@@ -1,6 +1,8 @@
 import { Controls, useReactFlow, useStore } from "@xyflow/react"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
+import { UndoIcon } from "./Icon/UndoIcon"
+import { RedoIcon } from "./Icon/RedoIcon"
 
 export const CustomControls = () => {
   const { zoomTo } = useReactFlow()
@@ -24,78 +26,38 @@ export const CustomControls = () => {
     redo()
   }
 
-  const buttonStyle = (enabled: boolean): React.CSSProperties => ({
-    backgroundColor: "white",
-    border: "1px solid black",
-    borderRadius: 8,
-    padding: "6px 8px",
-    cursor: enabled ? "pointer" : "not-allowed",
-    opacity: enabled ? 1 : 0.5,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: "32px",
-    height: "32px",
-    fontSize: "14px",
-    fontWeight: "bold",
-  })
 
   return (
     <Controls orientation="horizontal" showInteractive={false}>
+            {/* Undo Button */}
+      {/* Undo Button */}
       <button
-        style={buttonStyle(canUndo)}
+        className={`control-button ${!canUndo ? 'disabled' : ''}`}
         onClick={handleUndo}
         disabled={!canUndo}
         title="Undo (Ctrl+Z)"
-        onMouseEnter={(e) => {
-          if (canUndo) {
-            e.currentTarget.style.backgroundColor = "#f0f0f0"
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (canUndo) {
-            e.currentTarget.style.backgroundColor = "white"
-          }
-        }}
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill={canUndo ? "#000000" : "#999"}
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M6,3.6V0L0,6l6,6V8c6-.27,7.53,3.76,7.88,5.77a.27.27,0,0,0,.53,0C17.08,2.86,6,3.6,6,3.6Z" />
-        </svg>
+        <UndoIcon 
+          width={16} 
+          height={16}
+          className={canUndo ? 'icon-enabled' : 'icon-disabled'}
+        />
       </button>
 
       {/* Redo Button */}
       <button
-        style={buttonStyle(canRedo)}
+        className={`control-button ${!canRedo ? 'disabled' : ''}`}
         onClick={handleRedo}
         disabled={!canRedo}
         title="Redo (Ctrl+Y or Ctrl+Shift+Z)"
-        onMouseEnter={(e) => {
-          if (canRedo) {
-            e.currentTarget.style.backgroundColor = "#f0f0f0"
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (canRedo) {
-            e.currentTarget.style.backgroundColor = "white"
-          }
-        }}
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill={canRedo ? "#000000" : "#999"}
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M16,6,10,0V3.6S-1.08,2.86,1.59,13.78a.27.27,0,0,0,.53,0c.35-2,1.9-6,7.88-5.77v4Z" />
-        </svg>
+        <RedoIcon 
+          width={16} 
+          height={16}
+          className={canRedo ? 'icon-enabled' : 'icon-disabled'}
+        />
       </button>
+
       <div
         style={{
           backgroundColor: "white",

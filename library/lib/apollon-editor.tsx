@@ -50,6 +50,7 @@ export class ApollonEditor {
       this.diagramStore,
       this.metadataStore
     )
+    this.diagramStore.getState().initializeUndoManager()
 
     const diagramId =
       options?.model?.id || Math.random().toString(36).substring(2, 15)

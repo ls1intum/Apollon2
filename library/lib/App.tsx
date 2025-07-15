@@ -33,7 +33,7 @@ import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts"
 import { ApollonMode } from "./typings"
-import { useEffect } from "react"
+//import { useEffect } from "react"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -47,15 +47,13 @@ function App({ onReactFlowInit }: AppProps) {
     edges,
     onEdgesChange,
     diagramId,
-    initializeUndoManager,
   } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
       onNodesChange: state.onNodesChange,
       edges: state.edges,
       onEdgesChange: state.onEdgesChange,
-      diagramId: state.diagramId,
-      initializeUndoManager: state.initializeUndoManager,
+      diagramId: state.diagramId
     }))
   )
 
@@ -70,9 +68,9 @@ function App({ onReactFlowInit }: AppProps) {
   const { onBeforeDelete, onNodeDoubleClick, onEdgeDoubleClick } =
     useElementInteractions()
 
-  useEffect(() => {
-    initializeUndoManager()
-  }, [initializeUndoManager])
+  // useEffect(() => {
+  //   initializeUndoManager()
+  // }, [initializeUndoManager])
 
   useKeyboardShortcuts()
 
