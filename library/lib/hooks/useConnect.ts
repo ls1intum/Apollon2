@@ -8,11 +8,9 @@ import {
   OnEdgesDelete,
 } from "@xyflow/react"
 import { useCallback, useRef } from "react"
-import { findClosestHandle, generateUUID } from "@/utils"
-import { useDiagramStore } from "@/store/context"
+import { findClosestHandle, generateUUID, getDefaultEdgeType } from "@/utils"
+import { useDiagramStore, useMetadataStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
-
-const EDGE_TYPE = "ClassBidirectional"
 
 export const useConnect = () => {
   const startEdge = useRef<Edge | null>(null)
@@ -27,6 +25,9 @@ export const useConnect = () => {
     }))
   )
 
+  const diagramType = useMetadataStore(useShallow((state) => state.diagramType))
+
+  const defaultEdgeType = getDefaultEdgeType(diagramType)
   // Helper to get drop position from event
   const getDropPosition = useCallback(
     (event: MouseEvent | TouchEvent) => {
@@ -79,13 +80,13 @@ export const useConnect = () => {
       const newEdge: Edge = {
         ...connection,
         id: generateUUID(),
-        type: EDGE_TYPE,
+        type: defaultEdgeType,
         selected: false,
       }
 
       addEdge(newEdge)
     },
-    [addEdge]
+    [addEdge, defaultEdgeType]
   )
 
   const onConnectEnd: OnConnectEnd = useCallback(
@@ -140,7 +141,7 @@ export const useConnect = () => {
               id: generateUUID(),
               source: connectionState.fromNode!.id,
               target: nodeOnTop.id,
-              type: EDGE_TYPE,
+              type: defaultEdgeType,
               sourceHandle: connectionState.fromHandle?.id,
               targetHandle,
             })
@@ -150,7 +151,7 @@ export const useConnect = () => {
       startEdge.current = null
       connectionStartParams.current = null
     },
-    [edges, getDropPosition, getIntersectingNodes, setEdges]
+    [edges, getDropPosition, getIntersectingNodes, setEdges, defaultEdgeType]
   )
 
   const onEdgesDelete: OnEdgesDelete = useCallback(() => {

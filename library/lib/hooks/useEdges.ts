@@ -33,12 +33,17 @@ export function useEdgePopOver(id: string) {
     reactFlow.updateEdgeData(id, { sourceMultiplicity: newMultiplicity })
   }
 
+  const handleLabelChange = (newLabel: string) => {
+    reactFlow.updateEdgeData(id, { label: newLabel })
+  }
+
   return {
     handleSourceRoleChange,
     handleSourceMultiplicityChange,
     handleTargetRoleChange,
     handleTargetMultiplicityChange,
     handleEdgeTypeChange,
+    handleLabelChange,
     handleSwap,
   }
 }

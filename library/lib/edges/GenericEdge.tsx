@@ -31,6 +31,7 @@ import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import AssessmentIcon from "@/components/svgs/AssessmentIcon"
 import { EdgeLabel } from "@/components/EdgeLabel"
+import { DiagramEdgeType } from "."
 
 export const GenericEdge = ({
   id,
@@ -635,10 +636,14 @@ export const GenericEdge = ({
       <EdgeLabel
         isMiddlePathHorizontal={isMiddlePathHorizontal}
         pathMiddlePosition={pathMiddlePosition}
-        label={"test Label"}
+        label={data?.label}
       />
 
-      <PopoverManager elementId={id} anchorEl={anchorRef.current} type="edge" />
+      <PopoverManager
+        elementId={id}
+        anchorEl={anchorRef.current}
+        type={type as DiagramEdgeType}
+      />
     </>
   )
 }

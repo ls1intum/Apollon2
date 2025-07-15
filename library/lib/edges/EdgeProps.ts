@@ -7,6 +7,7 @@ export type CustomEdgeProps = {
   targetRole: string | null
   targetMultiplicity: string | null
   points: IPoint[]
+  label?: string | null
 }
 
 export type ExtendedEdgeProps = EdgeProps<Edge<CustomEdgeProps>> & {

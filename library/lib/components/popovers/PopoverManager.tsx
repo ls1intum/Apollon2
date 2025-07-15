@@ -3,7 +3,7 @@ import {
   usePopoverStore,
   useMetadataStore,
 } from "@/store/context"
-import { ApollonMode } from "@/typings"
+import { ApollonMode, DiagramEdgeType } from "@/typings"
 import { useShallow } from "zustand/shallow"
 import {
   ClassEditPopover,
@@ -18,42 +18,85 @@ import { getPopoverOrigin, getPositionOnCanvas, getQuadrant } from "@/utils"
 import { PopoverProps } from "./types"
 import { GenericPopover } from "./GenericPopover"
 import {
+  ActivityDiagramEdgeEditPopover,
   EdgeEditPopover,
   EdgeGiveFeedbackPopover,
   EdgeSeeFeedbackPopover,
 } from "./edgePopovers"
 import { LocationPopover } from "@/types"
 
-type PopoverType = "class" | "edge" | "default"
+type PopoverType = "class" | "default" | DiagramEdgeType
 
 const editPopovers: {
   class: React.FC<PopoverProps>
   default: React.FC<PopoverProps>
-  edge: React.FC<PopoverProps>
+  ClassAggregation: React.FC<PopoverProps>
+  ClassInheritance: React.FC<PopoverProps>
+  ClassRealization: React.FC<PopoverProps>
+  ClassComposition: React.FC<PopoverProps>
+  ClassBidirectional: React.FC<PopoverProps>
+  ClassUnidirectional: React.FC<PopoverProps>
+  ClassDependency: React.FC<PopoverProps>
+  ActivityControlFlow: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   default: DefaultNodeEditPopover,
-  edge: EdgeEditPopover,
+  ClassAggregation: EdgeEditPopover,
+  ClassInheritance: EdgeEditPopover,
+  ClassRealization: EdgeEditPopover,
+  ClassComposition: EdgeEditPopover,
+  ClassBidirectional: EdgeEditPopover,
+  ClassUnidirectional: EdgeEditPopover,
+  ClassDependency: EdgeEditPopover,
+  ActivityControlFlow: ActivityDiagramEdgeEditPopover,
 }
 
 const giveFeedbackPopovers: {
   class: React.FC<PopoverProps>
   default: React.FC<PopoverProps>
-  edge: React.FC<PopoverProps>
+  ClassAggregation: React.FC<PopoverProps>
+  ClassInheritance: React.FC<PopoverProps>
+  ClassRealization: React.FC<PopoverProps>
+  ClassComposition: React.FC<PopoverProps>
+  ClassBidirectional: React.FC<PopoverProps>
+  ClassUnidirectional: React.FC<PopoverProps>
+  ClassDependency: React.FC<PopoverProps>
+  ActivityControlFlow: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
-  edge: EdgeGiveFeedbackPopover,
+  ClassAggregation: EdgeGiveFeedbackPopover,
+  ClassInheritance: EdgeGiveFeedbackPopover,
+  ClassRealization: EdgeGiveFeedbackPopover,
+  ClassComposition: EdgeGiveFeedbackPopover,
+  ClassBidirectional: EdgeGiveFeedbackPopover,
+  ClassUnidirectional: EdgeGiveFeedbackPopover,
+  ClassDependency: EdgeGiveFeedbackPopover,
+  ActivityControlFlow: EdgeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
   class: React.FC<PopoverProps>
   default: React.FC<PopoverProps>
-  edge: React.FC<PopoverProps>
+  ClassAggregation: React.FC<PopoverProps>
+  ClassInheritance: React.FC<PopoverProps>
+  ClassRealization: React.FC<PopoverProps>
+  ClassComposition: React.FC<PopoverProps>
+  ClassBidirectional: React.FC<PopoverProps>
+  ClassUnidirectional: React.FC<PopoverProps>
+  ClassDependency: React.FC<PopoverProps>
+  ActivityControlFlow: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
-  edge: EdgeSeeFeedbackPopover,
+  ClassAggregation: EdgeSeeFeedbackPopover,
+  ClassInheritance: EdgeSeeFeedbackPopover,
+  ClassRealization: EdgeSeeFeedbackPopover,
+  ClassComposition: EdgeSeeFeedbackPopover,
+  ClassBidirectional: EdgeSeeFeedbackPopover,
+  ClassUnidirectional: EdgeSeeFeedbackPopover,
+  ClassDependency: EdgeSeeFeedbackPopover,
+  ActivityControlFlow: EdgeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {
