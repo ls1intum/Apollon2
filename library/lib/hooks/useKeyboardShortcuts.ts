@@ -68,22 +68,3 @@ export const useKeyboardShortcuts = () => {
     }
   }, [undo, redo, canUndo, canRedo, undoManager])
 }
-
-// Debug version of useUndoRedo
-export const useUndoRedo = () => {
-  const state = useDiagramStore(
-    useShallow((state) => ({
-      canUndo: state.canUndo,
-      canRedo: state.canRedo,
-      undo: state.undo,
-      redo: state.redo,
-      undoManager: state.undoManager,
-    }))
-  )
-  
-  useEffect(() => {
-    console.log("🔍 UndoRedo state:", state)
-  }, [state])
-  
-  return state
-}
