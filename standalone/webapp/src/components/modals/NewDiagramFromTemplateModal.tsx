@@ -7,6 +7,8 @@ import MenuList from "@mui/material/MenuList"
 import Divider from "@mui/material/Divider"
 import { Typography } from "@mui/material"
 import { useState } from "react"
+import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
+import { useNavigate } from "react-router"
 
 enum TemplateType {
   Adapter = "Adapter",
@@ -21,6 +23,8 @@ export const NewDiagramFromTemplateModal = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>(
     TemplateType.Adapter
   )
+  const createModel = usePersistenceModelStore((store) => store.createModel)
+  const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
 
   const handleCreate = async () => {
@@ -35,6 +39,13 @@ export const NewDiagramFromTemplateModal = () => {
       if (!jsonData) {
         throw new Error("Selected template data not found")
       }
+      const timeStapToCreate = new Date().getTime()
+
+      createModel(jsonData)
+      navigate("..", {
+        relative: "route",
+        state: { timeStapToCreate },
+      })
 
       // Handle passed diagram model from new page location data
       // const JsonDataINStringFormat = JSON.stringify(jsonData)

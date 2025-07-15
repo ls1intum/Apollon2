@@ -1,6 +1,8 @@
 {
-  "version": "apollon2",
-  "title": "Bridge",
+  "id": "d4fd3979-d1bb-451b-b3a4-e4dea94a90c4",
+  "version": "4.0.0",
+  "title": "Bridge Diagram",
+  "type": "ClassDiagram",
   "nodes": [
     {
       "width": 190,
@@ -137,7 +139,7 @@
       "sourceHandle": "right",
       "target": "2eb1ceb2-266e-4669-89f1-c61e246cb10c",
       "targetHandle": "left",
-      "type": "biassociation",
+      "type": "ClassBidirectional",
       "selected": false,
       "id": "xy-edge__286257b1-ebd3-424f-b3e4-c1c2a722531bright-2eb1ceb2-266e-4669-89f1-c61e246cb10cleft"
     },
@@ -147,7 +149,7 @@
       "target": "2eb1ceb2-266e-4669-89f1-c61e246cb10c",
       "targetHandle": "bottom",
       "id": "1737993042486-7052e703-263f-4df5-95e0-3558793849af-2eb1ceb2-266e-4669-89f1-c61e246cb10c",
-      "type": "inheritance",
+      "type": "ClassInheritance",
       "selected": false
     },
     {
@@ -156,7 +158,7 @@
       "target": "2eb1ceb2-266e-4669-89f1-c61e246cb10c",
       "targetHandle": "bottom",
       "id": "1737993045593-2fecb039-1b0d-4de9-8820-fa120c51f4f6-2eb1ceb2-266e-4669-89f1-c61e246cb10c",
-      "type": "inheritance",
+      "type": "ClassInheritance",
       "selected": false
     },
     {
@@ -165,7 +167,7 @@
       "target": "889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
       "targetHandle": "bottom",
       "id": "1737993203512-2e018906-a3db-4308-977b-175ace3c3185-889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
-      "type": "inheritance",
+      "type": "ClassInheritance",
       "selected": false
     },
     {
@@ -174,7 +176,7 @@
       "target": "889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
       "targetHandle": "bottom",
       "id": "1737993210921-1bb3eed4-bcc2-45af-9b6e-62020b9c439d-889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
-      "type": "inheritance",
+      "type": "ClassInheritance",
       "selected": false
     },
     {
@@ -183,8 +185,9 @@
       "target": "889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
       "targetHandle": "left",
       "id": "1737993220311-2eb1ceb2-266e-4669-89f1-c61e246cb10c-889cb1f6-175a-45c0-ae06-d1acab5dcbdc",
-      "type": "biassociation",
+      "type": "ClassBidirectional",
       "selected": false
     }
-  ]
+  ],
+  "assessments": {}
 }

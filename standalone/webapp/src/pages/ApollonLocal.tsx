@@ -2,10 +2,12 @@ import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { useEditorContext } from "@/contexts"
 import { ApollonEditor, UMLDiagramType } from "@tumaet/apollon"
 import React, { useEffect, useRef } from "react"
+import { useLocation } from "react-router"
 
 export const ApollonLocal: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { setEditor } = useEditorContext()
+  const { state } = useLocation()
 
   const currentModelId = usePersistenceModelStore(
     (store) => store.currentModelId
@@ -13,13 +15,15 @@ export const ApollonLocal: React.FC = () => {
   const diagram = usePersistenceModelStore((store) =>
     currentModelId ? store.models[currentModelId] : null
   )
-  const createModel = usePersistenceModelStore((store) => store.createModel)
+  const createModelByTitleAndType = usePersistenceModelStore(
+    (store) => store.createModelByTitleAndType
+  )
   const updateModel = usePersistenceModelStore((store) => store.updateModel)
 
   useEffect(() => {
-    if (!diagram && containerRef.current) {
+    if (!diagram) {
       // Create a default diagram on first visit
-      createModel("Class Diagram", UMLDiagramType.ClassDiagram)
+      createModelByTitleAndType("Class Diagram", UMLDiagramType.ClassDiagram)
       return
     }
 
@@ -39,7 +43,7 @@ export const ApollonLocal: React.FC = () => {
       console.log("Cleaning up Apollon2 instance")
       instance.destroy()
     }
-  }, [diagram?.id])
+  }, [diagram?.id, state?.timeStapToCreate])
 
   return <div className="flex grow" ref={containerRef} />
 }
