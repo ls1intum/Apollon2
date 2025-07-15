@@ -17,12 +17,10 @@ export const CustomControls = () => {
   )
 
   const handleUndo = () => {
-    console.log("🔄 Controls: Triggering undo")
     undo()
   }
 
   const handleRedo = () => {
-    console.log("🔄 Controls: Triggering redo")
     redo()
   }
 
