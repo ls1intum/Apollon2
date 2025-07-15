@@ -90,25 +90,28 @@ export const createDiagramStore = (
           const nodesMap = getNodesMap(ydoc)
           const edgesMap = getEdgesMap(ydoc)
           const assessmentsMap = getAssessments(ydoc)
-          
+
           // Create undo manager with all the maps you want to track
-          const undoManager = new Y.UndoManager([nodesMap, edgesMap, assessmentsMap], {
-            // Capture timeout - how long to wait before creating a new undo step
-            captureTimeout: 500,
-            // Track operations that originate from 'store'
-            trackedOrigins: new Set(['store'])
-          })
+          const undoManager = new Y.UndoManager(
+            [nodesMap, edgesMap, assessmentsMap],
+            {
+              // Capture timeout - how long to wait before creating a new undo step
+              captureTimeout: 500,
+              // Track operations that originate from 'store'
+              trackedOrigins: new Set(["store"]),
+            }
+          )
 
           // Listen to undo manager state changes
-          undoManager.on('stack-item-added', () => {
+          undoManager.on("stack-item-added", () => {
             get().updateUndoRedoState()
           })
 
-          undoManager.on('stack-item-popped', () => {
+          undoManager.on("stack-item-popped", () => {
             get().updateUndoRedoState()
           })
 
-          undoManager.on('stack-cleared', () => {
+          undoManager.on("stack-cleared", () => {
             get().updateUndoRedoState()
           })
 
@@ -120,23 +123,27 @@ export const createDiagramStore = (
           const { undoManager } = get()
           if (!undoManager) return
 
-          set({
-            canUndo: undoManager.undoStack.length > 0,
-            canRedo: undoManager.redoStack.length > 0
-          }, undefined, "updateUndoRedoState")
+          set(
+            {
+              canUndo: undoManager.undoStack.length > 0,
+              canRedo: undoManager.redoStack.length > 0,
+            },
+            undefined,
+            "updateUndoRedoState"
+          )
         },
 
         undo: () => {
           const { undoManager } = get()
           if (!undoManager || !undoManager.canUndo()) return
-          
+
           undoManager.undo()
         },
 
         redo: () => {
           const { undoManager } = get()
           if (!undoManager || !undoManager.canRedo()) return
-          
+
           undoManager.redo()
         },
 

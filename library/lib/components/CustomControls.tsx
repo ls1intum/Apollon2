@@ -1,4 +1,3 @@
-
 import { Controls, useReactFlow, useStore } from "@xyflow/react"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
@@ -61,10 +60,10 @@ export const CustomControls = () => {
           }
         }}
       >
-        <svg 
-          width="16" 
-          height="16" 
-          viewBox="0 0 16 16" 
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
           fill={canUndo ? "#000000" : "#999"}
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -89,10 +88,10 @@ export const CustomControls = () => {
           }
         }}
       >
-        <svg 
-          width="16" 
-          height="16" 
-          viewBox="0 0 16 16" 
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
           fill={canRedo ? "#000000" : "#999"}
           xmlns="http://www.w3.org/2000/svg"
         >

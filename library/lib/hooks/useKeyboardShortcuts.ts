@@ -21,19 +21,19 @@ export const useKeyboardShortcuts = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Check if Ctrl (or Cmd on Mac) is pressed
       const isModifierPressed = event.ctrlKey || event.metaKey
-      
+
       console.log("⌨️ Key pressed:", {
         key: event.key,
         ctrlKey: event.ctrlKey,
         metaKey: event.metaKey,
         shiftKey: event.shiftKey,
-        isModifierPressed
+        isModifierPressed,
       })
-      
+
       if (!isModifierPressed) return
 
       switch (event.key.toLowerCase()) {
-        case 'z':
+        case "z":
           console.log("🎯 Z key detected")
           event.preventDefault()
           if (event.shiftKey) {
@@ -44,7 +44,7 @@ export const useKeyboardShortcuts = () => {
             undo()
           }
           break
-        case 'y':
+        case "y":
           console.log("🎯 Y key detected")
           if (!event.shiftKey) {
             event.preventDefault()
@@ -58,12 +58,12 @@ export const useKeyboardShortcuts = () => {
     }
 
     // Add event listener
-    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener("keydown", handleKeyDown)
     console.log("👂 Event listener added")
 
     // Cleanup
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener("keydown", handleKeyDown)
       console.log("🧹 Event listener removed")
     }
   }, [undo, redo, canUndo, canRedo, undoManager])
