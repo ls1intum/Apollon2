@@ -31,6 +31,7 @@ import {
 import { useDragOver } from "./hooks/useDragOver"
 import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
+import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts"
 import { ApollonMode } from "./typings"
 
 interface AppProps {
@@ -60,6 +61,8 @@ function App({ onReactFlowInit }: AppProps) {
   const onReconnect = useReconnect()
   const { onBeforeDelete, onNodeDoubleClick, onEdgeDoubleClick } =
     useElementInteractions()
+
+  useKeyboardShortcuts()
 
   return (
     <div style={{ display: "flex", flex: 1 }}>

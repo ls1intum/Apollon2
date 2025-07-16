@@ -87,6 +87,9 @@ export class ApollonEditor {
       this.metadataStore.getState().setReadonly(options.readonly)
     }
 
+    if (this.metadataStore.getState().mode === Apollon.ApollonMode.Modelling) {
+      this.diagramStore.getState().initializeUndoManager()
+    }
     this.root.render(
       <DiagramStoreContext.Provider value={this.diagramStore}>
         <MetadataStoreContext.Provider value={this.metadataStore}>
