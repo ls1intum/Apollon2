@@ -1,13 +1,20 @@
 import { Controls, useReactFlow, useStore } from "@xyflow/react"
-import { useDiagramStore } from "@/store/context"
+import { useDiagramStore, useMetadataStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { UndoIcon } from "./Icon/UndoIcon"
 import { RedoIcon } from "./Icon/RedoIcon"
+import { Tooltip } from "@mui/material"
+import { ApollonMode } from "@/typings"
 
 export const CustomControls = () => {
   const { zoomTo } = useReactFlow()
   const zoomLevel = useStore((state) => state.transform[2])
   const zoomLevelPercent = Math.round(zoomLevel * 100)
+
+  const mode = useMetadataStore(useShallow((state) => state.mode))
+
+  // Create condition for showing undo/redo buttons
+  const showUndoRedo = mode === ApollonMode.Modelling
 
   const { canUndo, canRedo, undo, redo } = useDiagramStore(
     useShallow((state) => ({
@@ -29,34 +36,37 @@ export const CustomControls = () => {
   return (
     <Controls orientation="horizontal" showInteractive={false}>
       {/* Undo Button */}
-      {/* Undo Button */}
-      <button
-        className={`control-button ${!canUndo ? "disabled" : ""}`}
-        onClick={handleUndo}
-        disabled={!canUndo}
-        title="Undo (Ctrl+Z)"
-      >
-        <UndoIcon
-          width={16}
-          height={16}
-          className={canUndo ? "icon-enabled" : "icon-disabled"}
-        />
-      </button>
-
+      {showUndoRedo && (
+        <Tooltip title="Undo (Ctrl+Z)">
+          <button
+            className={`control-button ${!canUndo ? "disabled" : ""}`}
+            onClick={handleUndo}
+            disabled={!canUndo}
+          >
+            <UndoIcon
+              width={16}
+              height={16}
+              className={canUndo ? "icon-enabled" : "icon-disabled"}
+            />
+          </button>
+        </Tooltip>
+      )}
       {/* Redo Button */}
-      <button
-        className={`control-button ${!canRedo ? "disabled" : ""}`}
-        onClick={handleRedo}
-        disabled={!canRedo}
-        title="Redo (Ctrl+Y or Ctrl+Shift+Z)"
-      >
-        <RedoIcon
-          width={16}
-          height={16}
-          className={canRedo ? "icon-enabled" : "icon-disabled"}
-        />
-      </button>
-
+      {showUndoRedo && (
+        <Tooltip title="Redo (Ctrl+Y or Ctrl+Shift+Z)">
+          <button
+            className={`control-button ${!canRedo ? "disabled" : ""}`}
+            onClick={handleRedo}
+            disabled={!canRedo}
+          >
+            <RedoIcon
+              width={16}
+              height={16}
+              className={canRedo ? "icon-enabled" : "icon-disabled"}
+            />
+          </button>
+        </Tooltip>
+      )}
       <div
         style={{
           backgroundColor: "white",

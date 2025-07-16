@@ -123,8 +123,6 @@
   user-select: none; /* Standard syntax */
 }
 
-/* CustomControls.css */
-
 .control-button {
   background-color: white;
   border: 1px solid black;
@@ -168,27 +166,10 @@
   transition: background-color 0.2s ease;
 }
 
-.zoom-control:hover {
-  background-color: #f0f0f0;
-}
-
 .icon-enabled {
   color: #000000;
 }
 
 .icon-disabled {
   color: #999;
-}
-
-/* Alternative approach using CSS custom properties for more flexibility */
-.control-button {
-  --button-bg: white;
-  --button-bg-hover: #f0f0f0;
-  --button-border: black;
-  background-color: var(--button-bg);
-  border: 1px solid var(--button-border);
-}
-
-.control-button:hover:not(.disabled) {
-  background-color: var(--button-bg-hover);
 }

@@ -1,15 +1,11 @@
 import { SVGAttributes } from "react"
 
 export const RedoIcon = ({
-  x = 0,
-  y = 0,
   width = 16,
   height = 16,
   ...props
 }: SVGAttributes<SVGSVGElement>) => (
   <svg
-    x={x}
-    y={y}
     width={width}
     height={height}
     viewBox="0 0 16 16"

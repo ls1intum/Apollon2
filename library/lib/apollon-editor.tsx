@@ -50,7 +50,6 @@ export class ApollonEditor {
       this.diagramStore,
       this.metadataStore
     )
-    this.diagramStore.getState().initializeUndoManager()
 
     const diagramId =
       options?.model?.id || Math.random().toString(36).substring(2, 15)
@@ -88,6 +87,9 @@ export class ApollonEditor {
       this.metadataStore.getState().setReadonly(options.readonly)
     }
 
+    if (this.metadataStore.getState().mode === Apollon.ApollonMode.Modelling) {
+      this.diagramStore.getState().initializeUndoManager()
+    }
     this.root.render(
       <DiagramStoreContext.Provider value={this.diagramStore}>
         <MetadataStoreContext.Provider value={this.metadataStore}>
