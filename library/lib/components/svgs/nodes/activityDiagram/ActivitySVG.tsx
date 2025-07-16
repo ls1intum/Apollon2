@@ -5,14 +5,11 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 
-export type PackageSVGProps = SVGComponentProps & {
+export type ActivitySVGProps = SVGComponentProps & {
   name: string
 }
 
-const leftTopBoxHeight = 10
-const padding = 5
-
-export const PackageSVG: React.FC<PackageSVGProps> = ({
+export const ActivitySVG: React.FC<ActivitySVGProps> = ({
   id,
   width,
   height,
@@ -23,7 +20,6 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
 }) => {
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
-
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
 
@@ -36,32 +32,22 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
       {...svgAttributes}
     >
       <g>
-        {/* Left-Top Box */}
         <rect
           x={0}
           y={0}
-          width={40}
-          height={leftTopBoxHeight}
-          stroke="black"
-          strokeWidth={LINE_WIDTH}
-          fill="white"
-        />
-
-        {/* Main Box */}
-        <rect
-          x={0}
-          y={leftTopBoxHeight}
           width={width}
-          height={height - leftTopBoxHeight}
+          height={height}
           stroke="black"
           strokeWidth={LINE_WIDTH}
           fill="white"
+          rx={10}
+          ry={10}
         />
 
         {/* Name Text */}
         <CustomText
           x={width / 2}
-          y={leftTopBoxHeight + padding}
+          y={20}
           textAnchor="middle"
           fontWeight="600"
           dominantBaseline="hanging"

@@ -10,13 +10,13 @@ import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 
 const diagramTypes = {
   structural: [UMLDiagramType.ClassDiagram, UMLDiagramType.ObjectDiagram],
-  behavioral: [],
+  behavioral: [UMLDiagramType.ActivityDiagram],
 }
 
 const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   ClassDiagram: "Class Diagram",
   ObjectDiagram: "Object Diagram",
-  ActivityDiagram: "",
+  ActivityDiagram: "Activity Diagram",
   UseCaseDiagram: "",
   CommunicationDiagram: "",
   ComponentDiagram: "",
@@ -45,10 +45,6 @@ export const NewDiagramModal = () => {
     createModelByTitleAndType(newDiagramTitle, selectedDiagramType)
     navigate("/")
     closeModal()
-  }
-
-  const handleSelectDiagramType = (type: UMLDiagramType) => {
-    setSelectedDiagramType(type)
   }
 
   const handleDiagramNameChange = (
@@ -125,11 +121,19 @@ export const NewDiagramModal = () => {
             <Typography variant="h6" className="card-header">
               Behavioral Diagrams
             </Typography>
-            <Box className="list-group list-group-flush">
+            <Box
+              className="list-group list-group-flush"
+              sx={{ gap: 1, flexDirection: "column", display: "flex" }}
+            >
               {diagramTypes.behavioral.map((type) => (
                 <Button
                   key={type}
-                  onClick={() => handleSelectDiagramType(type)}
+                  onClick={() => handleDiagramTypeChange(type)}
+                  onDoubleClick={handleCreateDiagram}
+                  variant={
+                    selectedDiagramType === type ? "contained" : "outlined"
+                  }
+                  style={{ justifyContent: "flex-start" }}
                   className={`list-group-item list-group-item-action ${
                     selectedDiagramType === type ? "active" : ""
                   }`}

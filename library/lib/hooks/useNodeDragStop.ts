@@ -2,6 +2,7 @@ import { useCallback } from "react"
 import { type OnNodeDrag, type Node, useReactFlow } from "@xyflow/react"
 import {
   getPositionOnCanvas,
+  isParentNodeType,
   resizeAllParents,
   sortNodesTopologically,
 } from "@/utils"
@@ -40,7 +41,7 @@ export const useNodeDragStop = () => {
         y: draggedLastPoint.y,
         width: MOUSE_UP_OFFSET_IN_PIXELS,
         height: MOUSE_UP_OFFSET_IN_PIXELS,
-      }).filter((n) => n.type === "package" && n.id !== draggedNode.id)
+      }).filter((n) => isParentNodeType(n.type) && n.id !== draggedNode.id)
 
       const parentNode = intersectionsWithDroppedLocation.length
         ? intersectionsWithDroppedLocation[

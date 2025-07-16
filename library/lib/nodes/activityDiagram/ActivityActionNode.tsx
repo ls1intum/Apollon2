@@ -6,7 +6,6 @@ import {
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
-import { PackageSVG } from "@/components"
 import { useHandleOnResize } from "@/hooks"
 import { DefaultNodeProps } from "@/types"
 import Box from "@mui/material/Box"
@@ -19,15 +18,16 @@ import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
+import { ActivityActionNodeSVG } from "@/components/svgs/nodes"
 
-export default function Package({
+export function ActivityActionNode({
   id,
   width,
   height,
   data: { name },
   parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
-  const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
+  const svgWrapperRef = useRef<HTMLDivElement | null>(null)
   const { onResize } = useHandleOnResize(parentId)
   const isDiagramModifiable = useDiagramModifiable()
   const selected = useIsOnlyThisElementSelected(id)
@@ -69,8 +69,8 @@ export default function Package({
         minWidth={50}
         handleStyle={{ width: 8, height: 8 }}
       />
-      <div ref={packageSvgWrapperRef}>
-        <PackageSVG
+      <div ref={svgWrapperRef}>
+        <ActivityActionNodeSVG
           width={width}
           height={height}
           name={name}
@@ -80,7 +80,7 @@ export default function Package({
       </div>
 
       <PopoverManager
-        anchorEl={packageSvgWrapperRef.current}
+        anchorEl={svgWrapperRef.current}
         elementId={id}
         type="default"
       />

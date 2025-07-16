@@ -1,3 +1,4 @@
+import { DiagramNodeTypeRecord } from "@/nodes"
 import { XYPosition, type Node } from "@xyflow/react"
 
 export const getPositionOnCanvas = (
@@ -96,4 +97,15 @@ export function sortNodesTopologically(nodes: Node[]): Node[] {
   })
 
   return sorted
+}
+
+export const isParentNodeType = (nodeType?: string) => {
+  if (!nodeType) {
+    return false
+  }
+
+  return (
+    nodeType === DiagramNodeTypeRecord.package ||
+    nodeType === DiagramNodeTypeRecord.activity
+  )
 }

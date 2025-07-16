@@ -6,6 +6,7 @@ import {
   TRIANGLE_MARKER_PADDING,
 } from "@/constants"
 import { IPoint } from "@/edges/Connection"
+import { DiagramEdgeType, UMLDiagramType } from "@/typings"
 import { Position, Rect, XYPosition } from "@xyflow/react"
 /**
  * Adjusts the target coordinates based on the position and marker padding.
@@ -194,6 +195,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "0",
       }
+    case "ActivityControlFlow":
     case "ClassUnidirectional":
       return {
         markerPadding: ARROW_MARKER_PADDING,
@@ -450,4 +452,17 @@ export function getMarkerSegmentPath(
   }
 
   return `M ${lastPoint.x} ${lastPoint.y} L ${extendedX} ${extendedY}`
+}
+
+export const getDefaultEdgeType = (
+  diagramType: UMLDiagramType
+): DiagramEdgeType => {
+  switch (diagramType) {
+    case "ClassDiagram":
+      return "ClassUnidirectional"
+    case "ActivityDiagram":
+      return "ActivityControlFlow"
+    default:
+      return "ClassUnidirectional"
+  }
 }

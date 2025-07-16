@@ -5,8 +5,7 @@ import {
   Position,
   type Node,
 } from "@xyflow/react"
-import { DefaultNodeWrapper } from "../wrappers"
-import { PackageSVG } from "@/components"
+import { DefaultNodeWrapper, HandleId } from "../wrappers"
 import { useHandleOnResize } from "@/hooks"
 import { DefaultNodeProps } from "@/types"
 import Box from "@mui/material/Box"
@@ -19,15 +18,15 @@ import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
+import { ActivityForkNodeHorizontalSVG } from "@/components/svgs/nodes"
 
-export default function Package({
+export function ActivityForkNodeHorizontal({
   id,
   width,
   height,
-  data: { name },
   parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
-  const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
+  const svgWrapperRef = useRef<HTMLDivElement | null>(null)
   const { onResize } = useHandleOnResize(parentId)
   const isDiagramModifiable = useDiagramModifiable()
   const selected = useIsOnlyThisElementSelected(id)
@@ -41,7 +40,17 @@ export default function Package({
   }
 
   return (
-    <DefaultNodeWrapper width={width} height={height} elementId={id}>
+    <DefaultNodeWrapper
+      width={width}
+      height={height}
+      elementId={id}
+      hiddenHandles={[
+        HandleId.LeftTop,
+        HandleId.LeftBottom,
+        HandleId.RightTop,
+        HandleId.RightBottom,
+      ]}
+    >
       <NodeToolbar
         isVisible={isDiagramModifiable && !!selected}
         position={Position.Top}
@@ -65,22 +74,21 @@ export default function Package({
       <NodeResizer
         isVisible={isDiagramModifiable && !!selected}
         onResize={onResize}
-        minHeight={50}
-        minWidth={50}
+        minHeight={20}
+        maxHeight={20}
         handleStyle={{ width: 8, height: 8 }}
       />
-      <div ref={packageSvgWrapperRef}>
-        <PackageSVG
+      <div ref={svgWrapperRef}>
+        <ActivityForkNodeHorizontalSVG
           width={width}
           height={height}
-          name={name}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />
       </div>
 
       <PopoverManager
-        anchorEl={packageSvgWrapperRef.current}
+        anchorEl={svgWrapperRef.current}
         elementId={id}
         type="default"
       />

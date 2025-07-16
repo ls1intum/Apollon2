@@ -9,6 +9,7 @@ const edgeTypeKeys = [
   "ClassBidirectional",
   "ClassUnidirectional",
   "ClassDependency",
+  "ActivityControlFlow",
 ] as const
 
 export const diagramEdgeTypes = Object.fromEntries(

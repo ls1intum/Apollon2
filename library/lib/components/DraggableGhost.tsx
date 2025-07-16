@@ -7,7 +7,12 @@ import { DropNodeData } from "@/types"
 import { createPortal } from "react-dom"
 import { useReactFlow, type Node } from "@xyflow/react"
 import { MOUSE_UP_OFFSET_IN_PIXELS, SNAP_TO_GRID_PX } from "@/constants"
-import { generateUUID, getPositionOnCanvas, resizeAllParents } from "@/utils"
+import {
+  generateUUID,
+  getPositionOnCanvas,
+  isParentNodeType,
+  resizeAllParents,
+} from "@/utils"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
@@ -85,7 +90,7 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
       }
 
       // Deep clone defaultData to avoid mutating the original config
-      const defaultData = structuredClone(dropElementConfig.defaultData)
+      const defaultData = structuredClone(dropElementConfig.defaultData ?? {})
 
       // Assign new IDs to methods and attributes
       if (defaultData.methods) {
@@ -113,13 +118,13 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
         offsetY: clickOffset.y / transformScale,
       }
 
-      // Find potential parent node by checking intersections with "package" type nodes
+      // Find potential parent node by checking intersections with a potential Parent node type
       const intersectingNodes = getIntersectingNodes({
         x: dropPosition.x,
         y: dropPosition.y,
         width: MOUSE_UP_OFFSET_IN_PIXELS,
         height: MOUSE_UP_OFFSET_IN_PIXELS,
-      }).filter((node) => node.type === "package")
+      }).filter((node) => isParentNodeType(node.type))
 
       const parentNode = intersectingNodes[intersectingNodes.length - 1]
       const parentId = parentNode ? parentNode.id : undefined

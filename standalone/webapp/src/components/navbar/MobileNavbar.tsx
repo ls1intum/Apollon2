@@ -14,11 +14,13 @@ import { NAVBAR_BACKGROUND_COLOR } from "@/constants"
 import { useEditorContext, useModalContext } from "@/contexts"
 import TextField from "@mui/material/TextField/TextField"
 import TumLogo from "assets/images/tum-logo.png"
+import { useNavigate } from "react-router"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const { editor } = useEditorContext()
   const { openModal } = useModalContext()
+  const navigate = useNavigate()
   const [diagramTitle, setDiagramTitle] = useState(
     editor?.getDiagramMetadata().diagramTitle || ""
   )
@@ -50,6 +52,9 @@ export default function MobileNavbar() {
     setAnchorElNav(null)
   }
 
+  const goHome = () => {
+    navigate("/")
+  }
   return (
     <AppBar
       position="static"
@@ -138,7 +143,9 @@ export default function MobileNavbar() {
           </Box>
 
           {/* Mobile Title and Version */}
-          <BrandAndVersion />
+          <div onClick={goHome}>
+            <BrandAndVersion />
+          </div>
 
           <div />
         </Box>

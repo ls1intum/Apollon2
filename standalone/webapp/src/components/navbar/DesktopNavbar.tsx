@@ -11,6 +11,7 @@ import { NAVBAR_BACKGROUND_COLOR, secondary } from "@/constants"
 import TumLogo from "assets/images/tum-logo.png"
 import { useEffect, useRef, useState } from "react"
 import { useModalContext, useEditorContext } from "@/contexts"
+import { useNavigate } from "react-router"
 
 export const DesktopNavbar = () => {
   const { editor } = useEditorContext()
@@ -19,7 +20,11 @@ export const DesktopNavbar = () => {
   )
   const unsubscribe = useRef<() => void>()
   const { openModal } = useModalContext()
+  const navigate = useNavigate()
 
+  const goHome = () => {
+    navigate("/")
+  }
   useEffect(() => {
     if (editor && !unsubscribe.current) {
       unsubscribe.current = editor.subscribeToDiagramNameChange(
@@ -45,15 +50,20 @@ export const DesktopNavbar = () => {
       elevation={0}
     >
       <Toolbar disableGutters sx={{ ml: 2 }}>
-        <img
-          alt="Logo"
-          src={TumLogo}
-          width="60"
-          height="30"
-          style={{ marginRight: 10 }}
-        />
+        <div
+          onClick={goHome}
+          style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+        >
+          <img
+            alt="Logo"
+            src={TumLogo}
+            width="60"
+            height="30"
+            style={{ marginRight: 10 }}
+          />
 
-        <BrandAndVersion />
+          <BrandAndVersion />
+        </div>
 
         {/* Spacer */}
         <Box

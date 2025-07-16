@@ -29,10 +29,11 @@ export const Sidebar = () => {
         flexDirection: "column",
         padding: "10px",
         gap: "8px",
+        alignItems: "center",
       }}
     >
       {dropElementConfigs[diagramType].map((config) => (
-        <React.Fragment key={`${config.type}_${config.defaultData.name}`}>
+        <React.Fragment key={`${config.type}_${config.defaultData?.name}`}>
           {config.type === "colorDescription" && (
             <DividerLine style={{ margin: "3px 0" }} height={2} />
           )}

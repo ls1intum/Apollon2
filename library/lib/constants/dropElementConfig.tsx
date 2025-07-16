@@ -1,11 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ClassSVG, PackageSVG } from "@/components"
+import {
+  ActivityActionNodeSVG,
+  ActivityFinalNodeSVG,
+  ActivityForkNodeHorizontalSVG,
+  ActivityForkNodeSVG,
+  ActivityInitialNodeSVG,
+  ActivityMergeNodeSVG,
+  ActivityObjectNodeSVG,
+  ActivitySVG,
+  ClassSVG,
+  PackageSVG,
+} from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
 import { DiagramNodeType } from "@/nodes"
 
 export * from "./layoutConstants"
-export const transformScale = 0.7
+export const transformScale = 0.8
 
 const droppedElementWidth = 160
 
@@ -13,7 +24,7 @@ export type DropElementConfig = {
   type: DiagramNodeType
   width: number
   height: number
-  defaultData: Record<string, unknown>
+  defaultData?: Record<string, unknown>
   svg: React.FC<any>
 }
 
@@ -92,7 +103,77 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <ClassSVG {...props} />,
     },
   ],
-  [UMLDiagramType.ActivityDiagram]: [],
+  [UMLDiagramType.ActivityDiagram]: [
+    {
+      type: "activity",
+      width: droppedElementWidth,
+      height: 120,
+      defaultData: {
+        name: "Activity",
+      },
+      svg: (props) => <ActivitySVG {...props} />,
+    },
+    {
+      type: "activityInitialNode",
+      width: 50,
+      height: 50,
+      defaultData: {
+        name: "ActivityInitialNode",
+      },
+      svg: (props) => <ActivityInitialNodeSVG {...props} />,
+    },
+    {
+      type: "activityFinalNode",
+      width: 50,
+      height: 50,
+      defaultData: {
+        name: "ActivityFinalNode",
+      },
+      svg: (props) => <ActivityFinalNodeSVG {...props} />,
+    },
+    {
+      type: "activityActionNode",
+      width: droppedElementWidth,
+      height: 120,
+      defaultData: {
+        name: "Action",
+      },
+      svg: (props) => <ActivityActionNodeSVG {...props} />,
+    },
+    {
+      type: "activityObjectNode",
+      width: droppedElementWidth,
+      height: 120,
+      defaultData: {
+        name: "Object",
+      },
+      svg: (props) => <ActivityObjectNodeSVG {...props} />,
+    },
+    {
+      type: "activityMergeNode",
+      width: droppedElementWidth,
+      height: 120,
+      defaultData: {
+        name: "Condition",
+      },
+      svg: (props) => <ActivityMergeNodeSVG {...props} />,
+    },
+    {
+      type: "activityForkNode",
+      width: 20,
+      height: 100,
+      defaultData: {
+        name: "ActivityForkNode",
+      },
+      svg: (props) => <ActivityForkNodeSVG {...props} />,
+    },
+    {
+      type: "activityForkNodeHorizontal",
+      width: 100,
+      height: 20,
+      svg: (props) => <ActivityForkNodeHorizontalSVG {...props} />,
+    },
+  ],
   [UMLDiagramType.BPMN]: [],
   [UMLDiagramType.CommunicationDiagram]: [],
   [UMLDiagramType.ComponentDiagram]: [],

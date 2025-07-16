@@ -1,13 +1,6 @@
-import {
-  NodeProps,
-  NodeResizer,
-  NodeToolbar,
-  Position,
-  type Node,
-} from "@xyflow/react"
-import { DefaultNodeWrapper } from "../wrappers"
-import { PackageSVG } from "@/components"
-import { useHandleOnResize } from "@/hooks"
+import { NodeProps, NodeToolbar, Position, type Node } from "@xyflow/react"
+import { DefaultNodeWrapper, HandleId } from "../wrappers"
+
 import { DefaultNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
@@ -19,16 +12,15 @@ import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
+import { ActivityInitialNodeSVG } from "@/components/svgs/nodes"
 
-export default function Package({
+export function ActivityInitialNode({
   id,
   width,
   height,
-  data: { name },
-  parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
-  const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
-  const { onResize } = useHandleOnResize(parentId)
+  const svgWrapperRef = useRef<HTMLDivElement | null>(null)
+
   const isDiagramModifiable = useDiagramModifiable()
   const selected = useIsOnlyThisElementSelected(id)
   const setPopOverElementId = usePopoverStore(
@@ -39,9 +31,22 @@ export default function Package({
   if (!width || !height) {
     return null
   }
-
   return (
-    <DefaultNodeWrapper width={width} height={height} elementId={id}>
+    <DefaultNodeWrapper
+      elementId={id}
+      width={width}
+      height={height}
+      hiddenHandles={[
+        HandleId.TopLeft,
+        HandleId.TopRight,
+        HandleId.RightTop,
+        HandleId.RightBottom,
+        HandleId.BottomRight,
+        HandleId.BottomLeft,
+        HandleId.LeftBottom,
+        HandleId.LeftTop,
+      ]}
+    >
       <NodeToolbar
         isVisible={isDiagramModifiable && !!selected}
         position={Position.Top}
@@ -62,25 +67,18 @@ export default function Package({
           />
         </Box>
       </NodeToolbar>
-      <NodeResizer
-        isVisible={isDiagramModifiable && !!selected}
-        onResize={onResize}
-        minHeight={50}
-        minWidth={50}
-        handleStyle={{ width: 8, height: 8 }}
-      />
-      <div ref={packageSvgWrapperRef}>
-        <PackageSVG
+
+      <div ref={svgWrapperRef}>
+        <ActivityInitialNodeSVG
           width={width}
           height={height}
-          name={name}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />
       </div>
 
       <PopoverManager
-        anchorEl={packageSvgWrapperRef.current}
+        anchorEl={svgWrapperRef.current}
         elementId={id}
         type="default"
       />

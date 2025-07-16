@@ -9,6 +9,7 @@ export const CustomControls = () => {
     <Controls orientation="horizontal" showInteractive={false}>
       <div
         style={{
+          userSelect: "none",
           backgroundColor: "white",
           border: "1px solid black",
           borderRadius: 8,

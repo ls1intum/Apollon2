@@ -30,6 +30,8 @@ import {
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import AssessmentIcon from "@/components/svgs/AssessmentIcon"
+import { EdgeLabel } from "@/components/EdgeLabel"
+import { DiagramEdgeType } from "."
 
 export const GenericEdge = ({
   id,
@@ -57,7 +59,13 @@ export const GenericEdge = ({
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
-  const [toolbarPosition, setToolbarPosition] = useState<IPoint>({ x: 0, y: 0 })
+  const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>({
+    x: 0,
+    y: 0,
+  })
+  const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] =
+    useState<boolean>(true)
+
   // Add state for temporary reconnection points
   const [tempReconnectPoints, setTempReconnectPoints] = useState<
     IPoint[] | null
@@ -269,8 +277,17 @@ export const GenericEdge = ({
     if (pathRef.current) {
       const totalLength = pathRef.current.getTotalLength()
       const halfLength = totalLength / 2
-      const point = pathRef.current.getPointAtLength(halfLength)
-      setToolbarPosition({ x: point.x, y: point.y })
+      const middlePoint = pathRef.current.getPointAtLength(halfLength)
+      const pointOnCloseToMiddle = pathRef.current.getPointAtLength(
+        halfLength + 2
+      ) // 2 pixels away from the middle
+      const isHorizontal =
+        Math.abs(pointOnCloseToMiddle.x - middlePoint.x) >
+        Math.abs(pointOnCloseToMiddle.y - middlePoint.y)
+
+      setIsMiddlePathHorizontal(isHorizontal)
+
+      setPathMiddlePosition({ x: middlePoint.x, y: middlePoint.y })
     }
   }, [currentPath])
 
@@ -542,7 +559,7 @@ export const GenericEdge = ({
       <CustomEdgeToolbar
         edgeId={id}
         ref={anchorRef}
-        position={toolbarPosition}
+        position={pathMiddlePosition}
         onEditClick={() => setPopOverElementId(id)}
         onDeleteClick={handleDelete}
       />
@@ -610,16 +627,22 @@ export const GenericEdge = ({
 
       {!isDiagramModifiable && (
         <AssessmentIcon
-          x={toolbarPosition.x - 15}
-          y={toolbarPosition.y - 15}
+          x={pathMiddlePosition.x - 15}
+          y={pathMiddlePosition.y - 15}
           score={nodeScore}
         />
       )}
 
+      <EdgeLabel
+        isMiddlePathHorizontal={isMiddlePathHorizontal}
+        pathMiddlePosition={pathMiddlePosition}
+        label={data?.label}
+      />
+
       <PopoverManager
         elementId={id}
         anchorEl={anchorRef.current}
-        type={"edge" as const}
+        type={type as DiagramEdgeType}
       />
     </>
   )

@@ -1,4 +1,6 @@
 export * from "./ClassEditPopover"
 export * from "./ClassGiveFeedbackPopover"
 export * from "./ClassSeeFeedbackPopover"
-export * from "./PackageEditPopover"
+export * from "../DefaultNodeEditPopover"
+export * from "../DefaultNodeGiveFeedbackPopover"
+export * from "../DefaultNodeSeeFeedbackPopover"

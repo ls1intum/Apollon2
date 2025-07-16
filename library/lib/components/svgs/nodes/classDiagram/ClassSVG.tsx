@@ -1,4 +1,3 @@
-import React from "react"
 import { ClassType, ClassNodeElement } from "@/types"
 import {
   DEFAULT_FONT,
@@ -15,19 +14,11 @@ import { RowBlockSection } from "../RowBlockSection"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
+import { SVGComponentProps } from "@/types/SVG"
 
 export interface MinSize {
   minWidth: number
   minHeight: number
-}
-
-export interface SVGComponentProps {
-  width: number
-  height: number
-  transformScale?: number
-  svgAttributes?: React.SVGAttributes<SVGElement>
-  setMinSize?: React.Dispatch<React.SetStateAction<MinSize>>
-  id: string
 }
 
 export type ClassSVGProps = SVGComponentProps & {
@@ -35,7 +26,6 @@ export type ClassSVGProps = SVGComponentProps & {
   attributes: ClassNodeElement[]
   stereotype?: ClassType
   name: string
-  showAssessmentResults?: boolean
 }
 
 export const ClassSVG = ({
