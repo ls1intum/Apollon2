@@ -3,13 +3,15 @@ import { ApollonMode } from "@/typings"
 import { useShallow } from "zustand/shallow"
 
 export const useHandleDelete = (elementId: string) => {
-  const { nodes, edges, setNodesAndEdges } = useDiagramStore(
-    useShallow((state) => ({
-      nodes: state.nodes,
-      edges: state.edges,
-      setNodesAndEdges: state.setNodesAndEdges,
-    }))
-  )
+  const { nodes, edges, setNodesAndEdges, setSelectedElementsId } =
+    useDiagramStore(
+      useShallow((state) => ({
+        nodes: state.nodes,
+        edges: state.edges,
+        setNodesAndEdges: state.setNodesAndEdges,
+        setSelectedElementsId: state.setSelectedElementsId,
+      }))
+    )
 
   const { readonlyDiagram, diagramMode } = useMetadataStore(
     useShallow((state) => ({
@@ -28,6 +30,7 @@ export const useHandleDelete = (elementId: string) => {
     const newNodes = nodes.filter((node) => node.id !== elementId)
     const newEdges = edges.filter((edge) => edge.id !== elementId)
     setNodesAndEdges(newNodes, newEdges)
+    setSelectedElementsId([])
   }
 
   return handleDelete
