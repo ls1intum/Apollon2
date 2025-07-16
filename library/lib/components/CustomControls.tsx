@@ -1,27 +1,23 @@
 import { Controls, useReactFlow, useStore } from "@xyflow/react"
-import { useDiagramStore, useMetadataStore } from "@/store/context"
+import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { UndoIcon } from "./Icon/UndoIcon"
 import { RedoIcon } from "./Icon/RedoIcon"
 import { Tooltip } from "@mui/material"
-import { ApollonMode } from "@/typings"
 
 export const CustomControls = () => {
   const { zoomTo } = useReactFlow()
   const zoomLevel = useStore((state) => state.transform[2])
   const zoomLevelPercent = Math.round(zoomLevel * 100)
 
-  const mode = useMetadataStore(useShallow((state) => state.mode))
-
-  // Create condition for showing undo/redo buttons
-  const showUndoRedo = mode === ApollonMode.Modelling
-
-  const { canUndo, canRedo, undo, redo } = useDiagramStore(
+  const { canUndo, canRedo, undo, redo, undoManagerExist } = useDiagramStore(
     useShallow((state) => ({
       canUndo: state.canUndo,
       canRedo: state.canRedo,
+      undoManager: state.undoManager,
       undo: state.undo,
       redo: state.redo,
+      undoManagerExist: state.undoManager !== null,
     }))
   )
 
@@ -36,7 +32,7 @@ export const CustomControls = () => {
   return (
     <Controls orientation="horizontal" showInteractive={false}>
       {/* Undo Button */}
-      {showUndoRedo && (
+      {undoManagerExist && (
         <Tooltip title="Undo (Ctrl+Z)">
           <button
             className={`control-button ${!canUndo ? "disabled" : ""}`}
@@ -52,7 +48,7 @@ export const CustomControls = () => {
         </Tooltip>
       )}
       {/* Redo Button */}
-      {showUndoRedo && (
+      {undoManagerExist && (
         <Tooltip title="Redo (Ctrl+Y or Ctrl+Shift+Z)">
           <button
             className={`control-button ${!canRedo ? "disabled" : ""}`}

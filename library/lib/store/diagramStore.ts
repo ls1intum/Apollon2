@@ -28,6 +28,7 @@ type InitialDiagramState = {
   assessments: Record<string, Assessment>
   canUndo: boolean
   canRedo: boolean
+  undoManager: Y.UndoManager | null
 }
 
 const initialDiagramState: InitialDiagramState = {
@@ -38,6 +39,7 @@ const initialDiagramState: InitialDiagramState = {
   assessments: {},
   canUndo: false,
   canRedo: false,
+  undoManager: null,
 }
 
 export type DiagramStore = {
@@ -84,7 +86,6 @@ export const createDiagramStore = (
     devtools(
       subscribeWithSelector((set, get) => ({
         ...initialDiagramState,
-        undoManager: null,
 
         initializeUndoManager: () => {
           const nodesMap = getNodesMap(ydoc)

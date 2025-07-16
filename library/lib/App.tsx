@@ -33,7 +33,6 @@ import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts"
 import { ApollonMode } from "./typings"
-//import { useEffect } from "react"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -62,10 +61,6 @@ function App({ onReactFlowInit }: AppProps) {
   const onReconnect = useReconnect()
   const { onBeforeDelete, onNodeDoubleClick, onEdgeDoubleClick } =
     useElementInteractions()
-
-  // useEffect(() => {
-  //   initializeUndoManager()
-  // }, [initializeUndoManager])
 
   useKeyboardShortcuts()
 
