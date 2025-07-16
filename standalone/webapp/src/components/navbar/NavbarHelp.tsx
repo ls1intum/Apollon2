@@ -5,13 +5,19 @@ import MenuItem from "@mui/material/MenuItem"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import Typography from "@mui/material/Typography/Typography"
 import { secondary } from "@/constants"
+import { useModalContext } from "@/contexts"
 
 interface Props {
   color?: string
 }
 
+// bug report url
+export const bugReportURL =
+  "https://github.com/ls1intum/apollon2/issues/new?labels=bug&template=bug-report.md"
+
 export const NavbarHelp: FC<Props> = ({ color }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const { openModal } = useModalContext()
 
   const open = Boolean(anchorEl)
   const openMenu = (event: MouseEvent<HTMLButtonElement>) => {
@@ -20,6 +26,22 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const openHelpModal = () => {
+    openModal("HowToUseModal")
+    handleClose()
+  }
+
+  const openAboutModal = () => {
+    openModal("AboutModal")
+
+    handleClose()
+  }
+
+  const openBugReport = () => {
+    window.open(bugReportURL, "_blank")
+    handleClose()
   }
 
   return (
@@ -46,9 +68,9 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>How does this Editor Work?</MenuItem>
-        <MenuItem onClick={handleClose}>About Apollon</MenuItem>
-        <MenuItem onClick={handleClose}>Report a Problem</MenuItem>
+        <MenuItem onClick={openHelpModal}>How does this Editor Work?</MenuItem>
+        <MenuItem onClick={openAboutModal}>About Apollon</MenuItem>
+        <MenuItem onClick={openBugReport}>Report a Problem</MenuItem>
       </Menu>
     </>
   )

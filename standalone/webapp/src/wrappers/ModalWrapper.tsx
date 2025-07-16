@@ -4,6 +4,8 @@ import {
   NewDiagramFromTemplateModal,
   LoadDiagramModal,
   ShareModal,
+  AboutModal,
+  HowToUseModal,
 } from "@/components/modals"
 import { useModalContext } from "@/contexts"
 import { ModalName, ModalProps } from "@/types"
@@ -21,7 +23,9 @@ const MODAL_COMPONENTS: Record<ModalName, React.ComponentType<unknown>> = {
   NEW_DIAGRAM: NewDiagramModal,
   NEW_DIAGRAM_FROM_TEMPLATE: NewDiagramFromTemplateModal,
   SHARE: ShareModal,
-  LOAD_DIAGRAM: LoadDiagramModal, // Assuming LoadDiagramModal is similar to NewDiagramModal
+  LOAD_DIAGRAM: LoadDiagramModal,
+  HowToUseModal: HowToUseModal,
+  AboutModal: AboutModal,
   // Add other modals here
 }
 
@@ -30,6 +34,8 @@ const MODAL_TITLES: Record<ModalName, string> = {
   NEW_DIAGRAM_FROM_TEMPLATE: "Create new Diagram from Template",
   SHARE: "Share",
   LOAD_DIAGRAM: "Load Diagram",
+  HowToUseModal: "How to use this editor?",
+  AboutModal: "Information about Apollon",
   // Add other modals here
 }
 
@@ -45,6 +51,7 @@ const style = {
   width: "50vw", // ensures it's at least half screen
   gap: 1,
 }
+
 export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
   const SpecificModal = MODAL_COMPONENTS[name]
   const { closeModal } = useModalContext()
@@ -85,8 +92,17 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
         </Box>
         <Divider />
 
-        {/* Content */}
-        <Box sx={{ p: 2 }}>{SpecificModal && <SpecificModal {...props} />}</Box>
+        {/* Scrollable Content */}
+        <Box
+          sx={{
+            p: 2,
+            overflowY: "auto", // Enable vertical scrolling
+            maxHeight: "calc(90vh - 60px)", // Adjust for header and padding
+            flexGrow: 1, // Allow content to take remaining space
+          }}
+        >
+          {SpecificModal && <SpecificModal {...props} />}
+        </Box>
       </Paper>
     </Modal>
   )
