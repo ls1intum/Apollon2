@@ -153,19 +153,6 @@
   background-color: white; /* Prevent hover effect when disabled */
 }
 
-.zoom-control {
-  background-color: white;
-  border: 1px solid black;
-  border-radius: 8px;
-  padding-left: 6px;
-  padding-right: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  min-height: 32px;
-  transition: background-color 0.2s ease;
-}
-
 .icon-enabled {
   color: #000000;
 }

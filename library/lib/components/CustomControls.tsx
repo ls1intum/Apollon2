@@ -14,7 +14,6 @@ export const CustomControls = () => {
     useShallow((state) => ({
       canUndo: state.canUndo,
       canRedo: state.canRedo,
-      undoManager: state.undoManager,
       undo: state.undo,
       redo: state.redo,
       undoManagerExist: state.undoManager !== null,
