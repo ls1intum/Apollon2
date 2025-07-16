@@ -2,7 +2,9 @@ export type ModalName =
   | "NEW_DIAGRAM"
   | "NEW_DIAGRAM_FROM_TEMPLATE"
   | "SHARE"
-  | "LOAD_DIAGRAM" // Extend as needed
+  | "LOAD_DIAGRAM"
+  | "HowToUseModal"
+  | "AboutModal"
 
 export interface ModalProps {
   [key: string]: unknown
