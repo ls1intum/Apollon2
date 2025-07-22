@@ -258,13 +258,8 @@ export const createDiagramStore = (
           }
 
           // Select changes are handled previously
-          // Position with dragging false means onNodeDragStop and this is handled seperately
           const filteredChanges = changes.filter(
-            (change) =>
-              !(
-                change.type === "select" ||
-                (change.type === "position" && !change.dragging)
-              )
+            (change) => change.type !== "select"
           )
 
           if (filteredChanges.length === 0) return
