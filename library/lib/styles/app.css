@@ -160,3 +160,16 @@
 .icon-disabled {
   color: #999;
 }
+
+.horizontally-not-resizable .react-flow__resize-control.top.line:hover {
+  cursor: grab; 
+}
+.horizontally-not-resizable .react-flow__resize-control.bottom.line:hover {
+  cursor: grab; 
+}
+.vertically-not-resizable .react-flow__resize-control.right.line:hover {
+  cursor: grab; 
+}
+.vertically-not-resizable .react-flow__resize-control.left.line:hover {
+  cursor: grab; 
+}
