@@ -152,7 +152,12 @@ export function Class({
   const finalWidth = Math.max(width ?? 0, minWidth)
 
   return (
-    <DefaultNodeWrapper width={width} height={height} elementId={id}>
+    <DefaultNodeWrapper
+      width={width}
+      height={height}
+      elementId={id}
+      className="horizontally-not-resizable"
+    >
       <NodeResizer
         nodeId={id}
         isVisible={isDiagramModifiable && !!selected}
