@@ -50,6 +50,7 @@ export function ActivityForkNodeHorizontal({
         HandleId.RightTop,
         HandleId.RightBottom,
       ]}
+      className="horizontally-not-resizable"
     >
       <NodeToolbar
         isVisible={isDiagramModifiable && !!selected}

@@ -18,13 +18,22 @@ export default defineConfig({
       output: {
         assetFileNames: "assets/[name][extname]",
         entryFileNames: "index.js",
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM",
+        },
       },
     },
     minify: true,
+    commonjsOptions: {
+      include: [/node_modules/],
+      exclude: ["react", "react-dom"],
+    },
   },
   resolve: {
     alias: {
       "@": resolve(__dirname, "lib"),
     },
+    dedupe: ["@emotion/react", "@emotion/styled"],
   },
 })
