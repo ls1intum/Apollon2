@@ -50,6 +50,7 @@ export function ActivityForkNode({
         HandleId.BottomLeft,
         HandleId.BottomRight,
       ]}
+      className="vertically-not-resizable"
     >
       <NodeToolbar
         isVisible={isDiagramModifiable && !!selected}
