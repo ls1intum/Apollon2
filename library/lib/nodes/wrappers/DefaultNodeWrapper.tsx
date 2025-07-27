@@ -23,7 +23,8 @@ interface Props {
   width?: number
   height?: number
   elementId: string
-  hiddenHandles?: HandleId[] // Type-safe hiddenHandles prop
+  hiddenHandles?: HandleId[]
+  className?: string
 }
 
 function calculateAdjustedQuarter(x: number): number {
@@ -36,7 +37,8 @@ export function DefaultNodeWrapper({
   children,
   width = 0,
   height = 0,
-  hiddenHandles = [], // Default to empty array
+  hiddenHandles = [],
+  className,
 }: Props) {
   const adjustedWidth = calculateAdjustedQuarter(width)
   const adjustedHeight = calculateAdjustedQuarter(height)
@@ -118,7 +120,7 @@ export function DefaultNodeWrapper({
   ]
 
   return (
-    <>
+    <div className={className}>
       {handles.map(
         (handle) =>
           !hiddenHandles.includes(handle.id) && (
@@ -133,6 +135,6 @@ export function DefaultNodeWrapper({
           )
       )}
       {children}
-    </>
+    </div>
   )
 }
