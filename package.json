@@ -46,6 +46,8 @@
   "devDependencies": {
     "@commitlint/cli": "19.6.0",
     "@commitlint/config-conventional": "19.6.0",
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
     "@types/node": "22.13.1",
     "concurrently": "9.1.0",
     "husky": "9.1.7",
