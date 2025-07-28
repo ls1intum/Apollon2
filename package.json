@@ -60,7 +60,7 @@
     "@capacitor/cli": "7.0.1",
     "@capacitor/core": "7.0.1",
     "@capacitor/ios": "7.0.1",
-    "@capacitor/splash-screen": "7.0.0",
+    "@capacitor/splash-screen": "7.0.1",
     "capacitor-plugin-safe-area": "4.0.0"
   }
 }
