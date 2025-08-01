@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, ButtonGroup } from "@mui/material"
+import { Button, ButtonGroup } from "./ui"
 import { ClassType } from "@/types"
 import { useShallow } from "zustand/shallow"
 import { useDiagramStore } from "@/store"

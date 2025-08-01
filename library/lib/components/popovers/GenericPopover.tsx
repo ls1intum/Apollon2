@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react"
-import { Popover, PopoverOrigin, Paper } from "@mui/material"
+import { Popover, PopoverOrigin, Paper } from "../ui"
 
 interface GenericPopoverProps {
   id: string
@@ -40,15 +40,14 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
   >
     <Paper
       elevation={2}
-      sx={{
+      style={{
         width: "100%",
         maxWidth,
-        px: 1,
-        py: 1.25,
+        padding: "10px 8px",
         display: "flex",
         flex: 1,
         flexDirection: "column",
-        bgcolor: "#f7f9fb",
+        backgroundColor: "#f7f9fb",
       }}
     >
       {children}

@@ -2,9 +2,9 @@ import { NodeProps, NodeToolbar, Position, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper, HandleId } from "../wrappers"
 
 import { DefaultNodeProps } from "@/types"
-import Box from "@mui/material/Box"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import EditIcon from "@mui/icons-material/Edit"
+import { Box } from "../../components/ui"
+import { DeleteIcon } from "../../components/Icon"
+import { EditIcon } from "../../components/Icon"
 import { useRef } from "react"
 import { usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
@@ -54,7 +54,7 @@ export function ActivityFinalNode({
         offset={10}
       >
         <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
-          <DeleteOutlineOutlinedIcon
+          <DeleteIcon
             onClick={handleDelete}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />

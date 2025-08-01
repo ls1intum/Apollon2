@@ -1,5 +1,5 @@
 import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
-import { MenuItem } from "@mui/material"
+import { MenuItem } from "../ui"
 import React, { useRef } from "react"
 import { useNavigate } from "react-router"
 

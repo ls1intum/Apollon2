@@ -1,9 +1,9 @@
-import AppBar from "@mui/material/AppBar"
-import Box from "@mui/material/Box"
-import Toolbar from "@mui/material/Toolbar"
-import Typography from "@mui/material/Typography"
-import Button from "@mui/material/Button"
-import { TextField } from "@mui/material"
+import { AppBar } from "../ui"
+import { Box } from "../ui"
+import { Toolbar } from "../ui"
+import { Typography } from "../ui"
+import { Button } from "../ui"
+import { TextField } from "../ui"
 import { NavbarFile } from "./NavbarFile"
 import { NavbarHelp } from "./NavbarHelp"
 import { BrandAndVersion } from "./BrandAndVersion"
@@ -46,10 +46,10 @@ export const DesktopNavbar = () => {
   return (
     <AppBar
       position="static"
-      sx={{ bgcolor: NAVBAR_BACKGROUND_COLOR }}
+      style={{ backgroundColor: NAVBAR_BACKGROUND_COLOR }}
       elevation={0}
     >
-      <Toolbar disableGutters sx={{ ml: 2 }}>
+      <Toolbar disableGutters style={{ marginLeft: 16 }}>
         <div
           onClick={goHome}
           style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
@@ -67,21 +67,21 @@ export const DesktopNavbar = () => {
 
         {/* Spacer */}
         <Box
-          sx={{
+          style={{
             flexGrow: 1,
             alignItems: "center",
           }}
         >
           <NavbarFile />
           <Button
-            sx={{ textTransform: "none" }} // This removes the uppercase transformation
+            style={{ textTransform: "none" }} // This removes the uppercase transformation
             onClick={() => openModal("SHARE")}
           >
             <Typography color={secondary}>Share</Typography>
           </Button>
           <NavbarHelp />
           <TextField
-            sx={{ input: { color: "white", padding: 1 }, marginLeft: 1 }}
+            style={{ marginLeft: 8 }}
             value={diagramTitle}
             onChange={(event) => {
               const newTitle = event.target.value

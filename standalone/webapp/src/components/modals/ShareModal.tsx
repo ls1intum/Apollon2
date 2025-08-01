@@ -1,5 +1,5 @@
-import { Tooltip, Typography } from "@mui/material"
-import Info from "@mui/icons-material/Info"
+import { Tooltip, Typography } from "../ui"
+import { InfoIcon } from "../ui"
 import { APButton } from "../APButton"
 import { toast } from "react-toastify"
 import { useEditorContext, useModalContext } from "@/contexts"
@@ -50,7 +50,7 @@ export const ShareModal = () => {
           After sharing, this diagram will be accessible to everyone with access
           to the link for at least 12 weeks.{" "}
           <Tooltip title="Copy link to clipboard">
-            <Info />
+            <InfoIcon />
           </Tooltip>
         </Typography>
       </div>

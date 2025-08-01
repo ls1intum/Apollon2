@@ -1,7 +1,7 @@
 import { useModalContext } from "@/contexts/ModalContext"
 import { useNavigate } from "react-router"
 import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
+import { DeleteIcon } from "../ui"
 import { formatUpadtedDate } from "@/utils/date"
 
 export const LoadDiagramModal = () => {
@@ -81,13 +81,13 @@ export const LoadDiagramModal = () => {
                   </span>
                 </div>
                 {!isSelected && (
-                  <DeleteOutlineOutlinedIcon
+                  <DeleteIcon
                     className="hover:bg-red-500 hover:text-white rounded-full p-1"
                     onClick={(e) => {
                       e.stopPropagation()
                       handleDeleteDiagram(model.id)
                     }}
-                    sx={{ width: 32, height: 32 }}
+                    style={{ width: 32, height: 32 }}
                   />
                 )}
               </div>

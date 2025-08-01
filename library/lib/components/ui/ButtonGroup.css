@@ -1,0 +1,62 @@
+/* ButtonGroup Styles */
+
+.button-group {
+  display: inline-flex;
+  border-radius: 4px;
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
+}
+
+.button-group-vertical {
+  flex-direction: column;
+}
+
+.button-group-horizontal {
+  flex-direction: row;
+}
+
+/* Remove individual button styling when in group */
+.button-group .btn {
+  box-shadow: none;
+  border-radius: 0;
+  position: relative;
+}
+
+/* First button */
+.button-group-horizontal .btn:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.button-group-vertical .btn:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+/* Last button */
+.button-group-horizontal .btn:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.button-group-vertical .btn:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/* Remove duplicate borders */
+.button-group-horizontal .btn:not(:first-child) {
+  border-left: none;
+}
+
+.button-group-vertical .btn:not(:first-child) {
+  border-top: none;
+}
+
+/* Hover effects */
+.button-group .btn:hover {
+  z-index: 1;
+}
+
+.button-group .btn:focus {
+  z-index: 2;
+}

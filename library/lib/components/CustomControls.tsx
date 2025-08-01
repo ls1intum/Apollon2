@@ -3,7 +3,7 @@ import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { UndoIcon } from "./Icon/UndoIcon"
 import { RedoIcon } from "./Icon/RedoIcon"
-import { Tooltip } from "@mui/material"
+import { Tooltip } from "./ui/Tooltip"
 
 export const CustomControls = () => {
   const { zoomTo } = useReactFlow()

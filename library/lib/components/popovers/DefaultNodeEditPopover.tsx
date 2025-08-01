@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material"
+import { TextField } from "../ui"
 import { DefaultNodeProps } from "@/types"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
@@ -45,7 +45,7 @@ export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
       onChange={(event) => handleNameChange(event.target.value)}
       size="small"
       value={nodeData.name}
-      sx={{ backgroundColor: "#fff" }}
+      style={{ backgroundColor: "#fff" }}
     />
   )
 }

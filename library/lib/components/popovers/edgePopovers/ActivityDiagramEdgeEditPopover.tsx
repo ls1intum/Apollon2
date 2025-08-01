@@ -1,8 +1,8 @@
-import { Box, TextField, Typography } from "@mui/material"
+import { Box, TextField, Typography } from "../../ui"
 
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps } from "@/edges/EdgeProps"
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
+import { SwapHorizIcon } from "../../Icon"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 
@@ -21,7 +21,7 @@ export const ActivityDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   const edgeData = edge.data as CustomEdgeProps | undefined
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+    <Box style={{ display: "flex", flexDirection: "column", gap: 8 }}>
       <div
         style={{
           display: "flex",
@@ -29,13 +29,13 @@ export const ActivityDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
           alignItems: "center",
         }}
       >
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+        <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
           Control Flow
         </Typography>
         {/* Swap icon for source/target swap */}
         {handleSwap && (
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
+          <Box style={{ display: "flex", justifyContent: "flex-end" }}>
+            <SwapHorizIcon style={{ cursor: "pointer" }} onClick={handleSwap} />
           </Box>
         )}
       </div>

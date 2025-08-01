@@ -9,8 +9,15 @@ import {
 } from "@/components/modals"
 import { useModalContext } from "@/contexts"
 import { ModalName, ModalProps } from "@/types"
-import { Modal, Paper, Box, Typography, Button, Divider } from "@mui/material"
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
+import {
+  Modal,
+  Paper,
+  Box,
+  Typography,
+  Button,
+  Divider,
+  CloseIcon,
+} from "../components/ui"
 
 interface ModalWrapperProps {
   name: ModalName
@@ -39,7 +46,7 @@ const MODAL_TITLES: Record<ModalName, string> = {
   // Add other modals here
 }
 
-const style = {
+const style: React.CSSProperties = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -49,7 +56,7 @@ const style = {
   minWidth: "20vw", // or use a specific pixel value like "600px"
   maxWidth: "90vw", // to limit on very large screens
   width: "50vw", // ensures it's at least half screen
-  gap: 1,
+  gap: 8,
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
@@ -68,15 +75,15 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Paper sx={style}>
+      <Paper style={style}>
         {/* Header */}
         <Box
-          sx={{
+          style={{
             position: "relative",
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
-            p: 2,
+            justifyContent: "space-between",
+            padding: "16px 24px",
           }}
         >
           <Typography variant="h5" id="modal-modal-title">
@@ -84,18 +91,18 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
           </Typography>
 
           <Button
-            sx={{ position: "absolute", top: 16, right: 8 }}
+            style={{ position: "absolute", top: 86, right: 8 }}
             onClick={closeModal}
           >
-            <CloseOutlinedIcon sx={{ color: "grey" }} />
+            <CloseIcon style={{ color: "grey" }} />
           </Button>
         </Box>
         <Divider />
 
         {/* Scrollable Content */}
         <Box
-          sx={{
-            p: 2,
+          style={{
+            padding: 16,
             overflowY: "auto", // Enable vertical scrolling
             maxHeight: "calc(90vh - 60px)", // Adjust for header and padding
             flexGrow: 1, // Allow content to take remaining space

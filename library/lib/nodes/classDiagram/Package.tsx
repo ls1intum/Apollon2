@@ -9,9 +9,8 @@ import { DefaultNodeWrapper } from "../wrappers"
 import { PackageSVG } from "@/components"
 import { useHandleOnResize } from "@/hooks"
 import { DefaultNodeProps } from "@/types"
-import Box from "@mui/material/Box"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import EditIcon from "@mui/icons-material/Edit"
+import { Box } from "../../components/ui"
+import { DeleteIcon, EditIcon } from "../../components/Icon"
 import { useRef } from "react"
 import { usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
@@ -48,8 +47,8 @@ export default function Package({
         align="end"
         offset={10}
       >
-        <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
-          <DeleteOutlineOutlinedIcon
+        <Box style={{ display: "flex", gap: 8, flexDirection: "column" }}>
+          <DeleteIcon
             onClick={handleDelete}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />

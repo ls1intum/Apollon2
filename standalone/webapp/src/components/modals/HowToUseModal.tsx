@@ -1,4 +1,4 @@
-import { Button } from "@mui/material"
+import { Button } from "../ui"
 import { useModalContext } from "@/contexts"
 import NodeCreation from "assets/images/how-to-use-node-creation.png"
 import EdgeCreation from "assets/images/how-to-use-edge-creation.png"
