@@ -12,8 +12,7 @@ import {
   ActivityForkNodeSVG,
   ActivityForkNodeHorizontalSVG,
 } from "./svgs"
-import SouthEastIcon from "@mui/icons-material/SouthEast"
-import MapIcon from "@mui/icons-material/Map"
+import { SouthEastIcon, MapIcon } from "./Icon"
 import { DiagramNodeType } from "@/typings"
 
 export const CustomMiniMap = () => {

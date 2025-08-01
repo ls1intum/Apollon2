@@ -7,10 +7,9 @@ import {
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
 import { ClassSVG } from "@/components"
-import EditIcon from "@mui/icons-material/Edit"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
+import { EditIcon, DeleteIcon } from "../../components/Icon"
 import { useEffect, useMemo, useRef } from "react"
-import { Box } from "@mui/material"
+import { Box } from "../../components/ui"
 import { ClassNodeProps, ClassType } from "@/types"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
@@ -173,7 +172,7 @@ export function Class({
         offset={10}
       >
         <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
-          <DeleteOutlineOutlinedIcon
+          <DeleteIcon
             onClick={handleDelete}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />

@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material"
+import { Typography } from "../ui"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 

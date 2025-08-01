@@ -2,7 +2,7 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import { PopoverProps } from "../types"
 import { GiveFeedbackAssessmentBox } from "../GiveFeedbackAssessmentBox"
-import Button from "@mui/material/Button"
+import { Button } from "../../ui"
 import { useGoToNextAssessment } from "@/hooks"
 
 export const EdgeGiveFeedbackPopover = ({ elementId }: PopoverProps) => {

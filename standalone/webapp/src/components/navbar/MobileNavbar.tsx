@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from "react"
-import AppBar from "@mui/material/AppBar"
-import Box from "@mui/material/Box"
-import Toolbar from "@mui/material/Toolbar"
-import IconButton from "@mui/material/IconButton"
-import Typography from "@mui/material/Typography"
-import Menu from "@mui/material/Menu"
-import MenuIcon from "@mui/icons-material/Menu"
+import { AppBar } from "../ui"
+import { Box } from "../ui"
+import { Toolbar } from "../ui"
+import { IconButton } from "../ui"
+import { Typography } from "../ui"
+import { Menu } from "../ui"
+import { MenuIcon } from "../ui"
 import { NavbarFile } from "./NavbarFile"
 import { NavbarHelp } from "./NavbarHelp"
-import Button from "@mui/material/Button/Button"
+import { Button } from "../ui"
 import { BrandAndVersion } from "./BrandAndVersion"
 import { NAVBAR_BACKGROUND_COLOR } from "@/constants"
 import { useEditorContext, useModalContext } from "@/contexts"
-import TextField from "@mui/material/TextField/TextField"
+import { TextField } from "../ui"
 import TumLogo from "assets/images/tum-logo.png"
 import { useNavigate } from "react-router"
 
@@ -58,12 +58,12 @@ export default function MobileNavbar() {
   return (
     <AppBar
       position="static"
-      sx={{ bgcolor: NAVBAR_BACKGROUND_COLOR }}
+      style={{ backgroundColor: NAVBAR_BACKGROUND_COLOR }}
       elevation={0}
     >
       <Toolbar disableGutters>
         <Box
-          sx={{
+          style={{
             display: "flex",
             flex: 1,
             justifyContent: "space-between",
@@ -71,7 +71,9 @@ export default function MobileNavbar() {
           }}
         >
           {/* Mobile Menu Button */}
-          <Box sx={{ ml: 2, display: "flex", alignItems: "center" }}>
+          <Box
+            style={{ marginLeft: 16, display: "flex", alignItems: "center" }}
+          >
             {/* Logo */}
             <img alt="Logo" src={TumLogo} width="60" height="30" />
 
@@ -102,7 +104,7 @@ export default function MobileNavbar() {
             >
               {/* Interactive Menu Items */}
               <Box
-                sx={{
+                style={{
                   display: "flex",
                   flexDirection: "column",
                   gap: 0.25,
@@ -114,7 +116,7 @@ export default function MobileNavbar() {
                   handleCloseNavMenu={handleCloseNavMenu}
                 />
                 <Button
-                  sx={{ textTransform: "none" }} // This removes the uppercase transformation
+                  style={{ textTransform: "none" }} // This removes the uppercase transformation
                   onClick={() => openModal("SHARE")}
                 >
                   <Typography color="black">Share</Typography>
@@ -122,7 +124,7 @@ export default function MobileNavbar() {
                 <NavbarHelp color="black" />
 
                 {/* Diagram Name Input Field */}
-                <Box sx={{ p: 0.5 }}>
+                <Box style={{ padding: 4 }}>
                   <TextField
                     value={diagramTitle}
                     onChange={(event) => {
@@ -132,7 +134,7 @@ export default function MobileNavbar() {
                     }}
                     placeholder="Diagram Name"
                     fullWidth
-                    sx={{ input: { padding: 0.5 } }}
+                    style={{}}
                     variant="outlined"
                     onClick={(e) => e.stopPropagation()}
                     onFocus={(e) => e.stopPropagation()}

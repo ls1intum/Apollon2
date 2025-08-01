@@ -1,6 +1,6 @@
 import { appVersion, apollon2RepositoryLink } from "@/constants"
 import { useModalContext } from "@/contexts"
-import { Button } from "@mui/material"
+import { Button } from "../ui"
 
 export const AboutModal = () => {
   const { closeModal } = useModalContext()

@@ -1,0 +1,142 @@
+/* Select Styles */
+
+.select-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.select-full-width {
+  width: 100%;
+}
+
+.select-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.select-input {
+  font-family: inherit;
+  font-weight: 400;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+/* Size variants */
+.select-small .select-input {
+  padding: 6px 32px 6px 12px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  min-height: 32px;
+}
+
+.select-medium .select-input {
+  padding: 8px 32px 8px 14px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  min-height: 40px;
+}
+
+/* Variant styles */
+.select-outlined .select-input {
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.select-filled .select-input {
+  border: 1px solid transparent;
+  background-color: #f5f5f5;
+  border-bottom: 2px solid #ccc;
+  border-radius: 4px 4px 0 0;
+}
+
+.select-standard .select-input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
+  background-color: transparent;
+  padding-left: 0;
+  padding-right: 24px;
+}
+
+/* Hover states */
+.select-outlined .select-input:hover:not(:disabled) {
+  border-color: #999;
+}
+
+.select-filled .select-input:hover:not(:disabled) {
+  background-color: #ebebeb;
+  border-bottom-color: #999;
+}
+
+.select-standard .select-input:hover:not(:disabled) {
+  border-bottom-color: #999;
+}
+
+/* Focus states */
+.select-outlined .select-input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 1px #1976d2;
+}
+
+.select-filled .select-input:focus {
+  background-color: #ebebeb;
+  border-bottom-color: #1976d2;
+  border-bottom-width: 2px;
+}
+
+.select-standard .select-input:focus {
+  border-bottom-color: #1976d2;
+  border-bottom-width: 2px;
+}
+
+/* Error states */
+.select-error .select-label {
+  color: #d32f2f;
+}
+
+.select-error.select-outlined .select-input {
+  border-color: #d32f2f;
+}
+
+.select-error.select-filled .select-input {
+  border-bottom-color: #d32f2f;
+}
+
+.select-error.select-standard .select-input {
+  border-bottom-color: #d32f2f;
+}
+
+/* Disabled states */
+.select-input:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.select-outlined .select-input:disabled {
+  border-color: #e0e0e0;
+}
+
+.select-filled .select-input:disabled {
+  background-color: #f0f0f0;
+  border-bottom-color: #e0e0e0;
+}
+
+.select-standard .select-input:disabled {
+  border-bottom-color: #e0e0e0;
+}

@@ -1,9 +1,8 @@
 import { IPoint } from "@/edges"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import EditIcon from "@mui/icons-material/Edit"
-import { Box } from "@mui/material"
+import { DeleteIcon, EditIcon } from "../../Icon"
+import { Box } from "../../ui"
 import { forwardRef, ForwardedRef } from "react"
 
 interface CustomEdgeToolbarProps {
@@ -52,11 +51,11 @@ export const CustomEdgeToolbar = forwardRef(
             }}
           >
             <Box
-              sx={{
+              style={{
                 width: "16px",
                 height: "16px",
                 backgroundColor: "#f8fafc",
-                borderRadius: 1,
+                borderRadius: 4,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -66,14 +65,14 @@ export const CustomEdgeToolbar = forwardRef(
                 onDeleteClick(e)
               }}
             >
-              <DeleteOutlineOutlinedIcon style={{ width: 16, height: 16 }} />
+              <DeleteIcon style={{ width: 16, height: 16 }} />
             </Box>
             <Box
-              sx={{
+              style={{
                 width: "16px",
                 height: "16px",
                 backgroundColor: "#f8fafc",
-                borderRadius: 1,
+                borderRadius: 4,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",

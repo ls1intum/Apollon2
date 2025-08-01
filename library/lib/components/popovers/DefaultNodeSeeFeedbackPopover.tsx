@@ -4,7 +4,7 @@ import { DefaultNodeProps } from "@/types"
 import { PopoverProps } from "./types"
 import { SeeFeedbackAssessmentBox } from "./SeeFeedbackAssessmentBox"
 import { useGoToNextAssessment } from "@/hooks"
-import Button from "@mui/material/Button"
+import { Button } from "../ui"
 
 export const DefaultNodeSeeFeedbackPopover = ({ elementId }: PopoverProps) => {
   const nodes = useDiagramStore(useShallow((state) => state.nodes))

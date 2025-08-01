@@ -1,0 +1,21 @@
+/* Popover Styles */
+
+.popover-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1300;
+  pointer-events: none;
+}
+
+.popover-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}

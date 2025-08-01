@@ -1,6 +1,6 @@
 import React, { FC } from "react"
-import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar"
-import Alert from "@mui/material/Alert"
+import { Snackbar, SnackbarOrigin } from "../ui"
+import { Alert } from "../ui"
 
 interface SnackbarMessageProps {
   open: boolean
@@ -26,7 +26,7 @@ export const SnackbarMessage: FC<SnackbarMessageProps> = ({
       onClose={onClose}
       anchorOrigin={anchorOrigin}
     >
-      <Alert onClose={onClose} severity={severity} sx={{ width: "100%" }}>
+      <Alert onClose={onClose} severity={severity} style={{ width: "100%" }}>
         {message}
       </Alert>
     </Snackbar>

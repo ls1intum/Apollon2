@@ -3,7 +3,7 @@ import { useShallow } from "zustand/shallow"
 import { DefaultNodeProps } from "@/types"
 import { PopoverProps } from "./types"
 import { GiveFeedbackAssessmentBox } from "./GiveFeedbackAssessmentBox"
-import Button from "@mui/material/Button"
+import { Button } from "../ui"
 import { useGoToNextAssessment } from "@/hooks"
 
 export const DefaultNodeGiveFeedbackPopover = ({ elementId }: PopoverProps) => {

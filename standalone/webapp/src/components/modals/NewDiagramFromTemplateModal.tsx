@@ -1,11 +1,11 @@
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button/Button"
+import { Box } from "../ui"
+import { Button } from "../ui"
 import { useModalContext } from "@/contexts/ModalContext"
-import ListItemText from "@mui/material/ListItemText"
-import MenuItem from "@mui/material/MenuItem"
-import MenuList from "@mui/material/MenuList"
-import Divider from "@mui/material/Divider"
-import { Typography } from "@mui/material"
+import { ListItemText } from "../ui"
+import { MenuItem } from "../ui"
+import { MenuList } from "../ui"
+import { Divider } from "../ui"
+import { Typography } from "../ui"
 import { useState } from "react"
 import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { useNavigate } from "react-router"
@@ -65,22 +65,29 @@ export const NewDiagramFromTemplateModal = () => {
 
   return (
     <Box>
-      <Box sx={{ pt: 2, px: 2 }}>
+      <Box style={{ paddingTop: 86, paddingLeft: 16, paddingRight: 16 }}>
         {error && (
-          <Box sx={{ px: 1, color: "red", mb: 1 }}>
+          <Box
+            style={{
+              paddingLeft: 8,
+              paddingRight: 8,
+              color: "red",
+              marginBottom: 8,
+            }}
+          >
             <Typography variant="body2">{error}</Typography>
           </Box>
         )}
 
         {/* Selected Template */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.25 }}>
+        <Box style={{ display: "flex", flexDirection: "column", gap: 0.25 }}>
           <Typography variant="body1">Selected Template</Typography>
           <Box
-            sx={{
-              p: 1,
-              mt: 0.5,
-              mb: 1,
-              bgcolor: "lightgray",
+            style={{
+              padding: 8,
+              marginTop: 4,
+              marginBottom: 8,
+              backgroundColor: "lightgray",
               borderRadius: 1,
             }}
           >
@@ -135,26 +142,27 @@ export const NewDiagramFromTemplateModal = () => {
       </Box>
 
       <Box
-        sx={{
+        style={{
           display: "flex",
           justifyContent: "flex-end",
           flex: 1,
-          pb: 2,
-          px: 2,
-          gap: 1,
+          paddingBottom: 16,
+          paddingLeft: 16,
+          paddingRight: 16,
+          gap: 8,
         }}
       >
         <Button
           variant="contained"
           onClick={closeModal}
-          sx={{ bgcolor: "gray", textTransform: "none" }}
+          style={{ backgroundColor: "gray", textTransform: "none" }}
         >
           Close
         </Button>
         <Button
           variant="contained"
           onClick={handleCreate}
-          sx={{
+          style={{
             textTransform: "none",
           }}
         >

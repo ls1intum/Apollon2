@@ -3,7 +3,7 @@ import { useShallow } from "zustand/shallow"
 import { PopoverProps } from "../types"
 import { SeeFeedbackAssessmentBox } from "../SeeFeedbackAssessmentBox"
 import { useGoToNextAssessment } from "@/hooks"
-import Button from "@mui/material/Button"
+import { Button } from "../../ui"
 
 export const EdgeSeeFeedbackPopover = ({ elementId }: PopoverProps) => {
   const edges = useDiagramStore(useShallow((state) => state.edges))

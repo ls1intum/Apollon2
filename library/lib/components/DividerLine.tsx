@@ -1,5 +1,5 @@
 import React from "react"
-import { Box } from "@mui/material"
+import { Box } from "./ui"
 
 interface DividerLineProps {
   width?: string | number

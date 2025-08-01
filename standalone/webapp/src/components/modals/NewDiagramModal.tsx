@@ -1,8 +1,8 @@
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
+import { Box } from "../ui"
+import { Typography } from "../ui"
 import { useState } from "react"
-import TextField from "@mui/material/TextField"
-import Button from "@mui/material/Button"
+import { TextField } from "../ui"
+import { Button } from "../ui"
 import { useModalContext } from "@/contexts/ModalContext"
 import { UMLDiagramType } from "@tumaet/apollon"
 import { useNavigate } from "react-router"
@@ -63,8 +63,8 @@ export const NewDiagramModal = () => {
 
   return (
     <Box
-      sx={{
-        gap: 2,
+      style={{
+        gap: 16,
         display: "flex",
         flexDirection: "column",
       }}
@@ -97,7 +97,7 @@ export const NewDiagramModal = () => {
           </Typography>
           <Box
             className="list-group list-group-flush"
-            sx={{ gap: 1, flexDirection: "column", display: "flex" }}
+            style={{ gap: 8, flexDirection: "column", display: "flex" }}
           >
             {diagramTypes.structural.map((type) => (
               <Button
@@ -123,7 +123,7 @@ export const NewDiagramModal = () => {
             </Typography>
             <Box
               className="list-group list-group-flush"
-              sx={{ gap: 1, flexDirection: "column", display: "flex" }}
+              style={{ gap: 8, flexDirection: "column", display: "flex" }}
             >
               {diagramTypes.behavioral.map((type) => (
                 <Button
@@ -147,18 +147,18 @@ export const NewDiagramModal = () => {
       </Box>
 
       {/* Footer with buttons */}
-      <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+      <Box style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
         <Button
           variant="contained"
           onClick={closeModal}
-          sx={{ bgcolor: "gray", textTransform: "none" }}
+          style={{ backgroundColor: "gray", textTransform: "none" }}
         >
           Close
         </Button>
         <Button
           variant="contained"
           onClick={handleCreateDiagram}
-          sx={{ textTransform: "none" }}
+          style={{ textTransform: "none" }}
         >
           Create Diagram
         </Button>

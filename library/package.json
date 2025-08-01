@@ -23,8 +23,6 @@
   "dependencies": {
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
-    "@mui/icons-material": "6.4.2",
-    "@mui/material": "6.4.2",
     "@types/node": "22.13.8",
     "@xyflow/react": "12.3.6",
     "react": "18.3.1",

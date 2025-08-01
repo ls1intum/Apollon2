@@ -1,7 +1,7 @@
 import { DividerLine, StereotypeButtonGroup } from "@/components"
 import { useDiagramStore } from "@/store"
 import { ClassNodeProps } from "@/types"
-import { TextField } from "@mui/material"
+import { TextField } from "../../ui"
 import { useShallow } from "zustand/shallow"
 import { EditableAttributeList } from "./EditableAttributesList"
 import { EditableMethodsList } from "./EditableMethodsList"
@@ -47,7 +47,7 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
         onChange={(event) => handleNameChange(event.target.value)}
         size="small"
         value={nodeData.name}
-        sx={{ backgroundColor: "#fff" }}
+        style={{ backgroundColor: "#fff" }}
       />
       <DividerLine width="100%" />
       <StereotypeButtonGroup

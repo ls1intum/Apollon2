@@ -1,9 +1,9 @@
 import { useState, MouseEvent, FC } from "react"
-import Button from "@mui/material/Button"
-import Menu from "@mui/material/Menu"
-import MenuItem from "@mui/material/MenuItem"
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
-import Typography from "@mui/material/Typography/Typography"
+import { Button } from "../ui"
+import { Menu } from "../ui"
+import { MenuItem } from "../ui"
+import { KeyboardArrowDownIcon } from "../ui"
+import { Typography } from "../ui"
 import { secondary } from "@/constants"
 import { useModalContext } from "@/contexts"
 
@@ -52,11 +52,11 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={openMenu}
-        sx={{ textTransform: "none" }} // This removes the uppercase transformation
+        style={{ textTransform: "none" }} // This removes the uppercase transformation
       >
         <Typography color={color ?? secondary}>Help</Typography>
         <KeyboardArrowDownIcon
-          sx={{ width: 16, height: 16, color: secondary }}
+          style={{ width: 16, height: 16, color: secondary }}
         />
       </Button>
       <Menu

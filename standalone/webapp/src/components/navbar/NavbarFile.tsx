@@ -1,10 +1,10 @@
 import { useState, MouseEvent, FC, useCallback } from "react"
-import Button from "@mui/material/Button"
-import Menu from "@mui/material/Menu"
-import MenuItem from "@mui/material/MenuItem"
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
-import Typography from "@mui/material/Typography"
+import { Button } from "../ui"
+import { Menu } from "../ui"
+import { MenuItem } from "../ui"
+import { KeyboardArrowDownIcon } from "../ui"
+import { KeyboardArrowRightIcon } from "../ui"
+import { Typography } from "../ui"
 import { secondary } from "@/constants"
 import { useModalContext } from "@/contexts"
 import {
@@ -66,7 +66,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         aria-haspopup="true"
         aria-expanded={isMenuOpen ? "true" : undefined}
         onClick={openMainMenu}
-        sx={{
+        style={{
           textTransform: "none",
         }}
       >
@@ -74,7 +74,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
           File
         </Typography>
         <KeyboardArrowDownIcon
-          sx={{ width: 16, height: 16, color: secondary, ml: 0.5 }}
+          style={{ width: 16, height: 16, color: secondary, marginLeft: 4 }}
         />
       </Button>
       <Menu
@@ -96,7 +96,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         <JsonFileImportButton />
         <MenuItem
           onClick={openSubMenu}
-          sx={{
+          style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
