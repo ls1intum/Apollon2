@@ -171,9 +171,6 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
         resizeAllParents(newNode, updatedNodes)
       }
 
-      console.log("New node created:", newNode)
-      console.log("Updated nodes:", updatedNodes)
-
       setNodes(updatedNodes)
     },
     [
