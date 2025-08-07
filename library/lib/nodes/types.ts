@@ -12,6 +12,7 @@ import {
   ActivityForkNode,
   ActivityForkNodeHorizontal,
 } from "./activityDiagram"
+import { UseCase, UseCaseActor, UseCaseSystem } from "./useCaseDiagram"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -26,6 +27,9 @@ export const diagramNodeTypes = {
   activityMergeNode: ActivityMergeNode,
   activityForkNode: ActivityForkNode,
   activityForkNodeHorizontal: ActivityForkNodeHorizontal,
+  useCase: UseCase,
+  useCaseActor: UseCaseActor,
+  useCaseSystem: UseCaseSystem,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -45,4 +49,7 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   activityMergeNode: "activityMergeNode",
   activityForkNode: "activityForkNode",
   activityForkNodeHorizontal: "activityForkNodeHorizontal",
+  useCase: "useCase",
+  useCaseActor: "useCaseActor",
+  useCaseSystem: "useCaseSystem",
 } as const

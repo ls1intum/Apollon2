@@ -10,14 +10,14 @@ import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 
 const diagramTypes = {
   structural: [UMLDiagramType.ClassDiagram, UMLDiagramType.ObjectDiagram],
-  behavioral: [UMLDiagramType.ActivityDiagram],
+  behavioral: [UMLDiagramType.ActivityDiagram, UMLDiagramType.UseCaseDiagram],
 }
 
 const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   ClassDiagram: "Class Diagram",
   ObjectDiagram: "Object Diagram",
   ActivityDiagram: "Activity Diagram",
-  UseCaseDiagram: "",
+  UseCaseDiagram: "Use Case Diagram",
   CommunicationDiagram: "",
   ComponentDiagram: "",
   DeploymentDiagram: "",

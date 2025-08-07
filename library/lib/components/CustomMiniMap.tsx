@@ -11,6 +11,9 @@ import {
   ActivityMergeNodeSVG,
   ActivityForkNodeSVG,
   ActivityForkNodeHorizontalSVG,
+  UseCaseNodeSVG,
+  UseCaseSystemNodeSVG,
+  UseCaseActorNodeSVG,
 } from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
@@ -168,6 +171,37 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           svgAttributes={{ x, y }}
         />
       )
+    case "useCase":
+      return (
+        <UseCaseNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "useCaseActor":
+      return (
+        <UseCaseActorNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "useCaseSystem":
+      return (
+        <UseCaseSystemNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+
     default:
       return <rect x={x} y={y} width={100} height={100} fill="gray" />
   }
