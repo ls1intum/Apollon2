@@ -10,6 +10,9 @@ import {
   ActivitySVG,
   ClassSVG,
   PackageSVG,
+  UseCaseNodeSVG,
+  UseCaseSystemNodeSVG,
+  UseCaseActorNodeSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -181,6 +184,34 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
   [UMLDiagramType.PetriNet]: [],
   [UMLDiagramType.ReachabilityGraph]: [],
   [UMLDiagramType.SyntaxTree]: [],
-  [UMLDiagramType.UseCaseDiagram]: [],
+  [UMLDiagramType.UseCaseDiagram]: [
+    {
+      type: "useCase",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: {
+        name: "Use Case",
+      },
+      svg: (props) => <UseCaseNodeSVG {...props} />,
+    },
+    {
+      type: "useCaseActor",
+      width: 100,
+      height: 150,
+      defaultData: {
+        name: "Actor",
+      },
+      svg: (props) => <UseCaseActorNodeSVG {...props} />,
+    },
+    {
+      type: "useCaseSystem",
+      width: droppedElementWidth,
+      height: 120,
+      defaultData: {
+        name: "System",
+      },
+      svg: (props) => <UseCaseSystemNodeSVG {...props} />,
+    },
+  ],
   [UMLDiagramType.Flowchart]: [],
 }
