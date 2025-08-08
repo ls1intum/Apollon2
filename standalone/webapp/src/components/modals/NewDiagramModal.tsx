@@ -9,7 +9,11 @@ import { useNavigate } from "react-router"
 import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 
 const diagramTypes = {
-  structural: [UMLDiagramType.ClassDiagram, UMLDiagramType.ObjectDiagram],
+  structural: [
+    UMLDiagramType.ClassDiagram,
+    UMLDiagramType.ObjectDiagram,
+    UMLDiagramType.ComponentDiagram,
+  ],
   behavioral: [UMLDiagramType.ActivityDiagram, UMLDiagramType.UseCaseDiagram],
 }
 
@@ -19,7 +23,7 @@ const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   ActivityDiagram: "Activity Diagram",
   UseCaseDiagram: "Use Case Diagram",
   CommunicationDiagram: "",
-  ComponentDiagram: "",
+  ComponentDiagram: "Component Diagram",
   DeploymentDiagram: "",
   PetriNet: "",
   ReachabilityGraph: "",

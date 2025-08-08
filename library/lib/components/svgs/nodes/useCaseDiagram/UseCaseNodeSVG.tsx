@@ -5,11 +5,11 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 
-export type UseCaseNodeSVGProps = SVGComponentProps & {
+interface Props extends SVGComponentProps {
   name: string
 }
 
-export const UseCaseNodeSVG: React.FC<UseCaseNodeSVGProps> = ({
+export const UseCaseNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,

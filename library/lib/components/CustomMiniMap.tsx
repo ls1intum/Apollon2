@@ -14,6 +14,9 @@ import {
   UseCaseNodeSVG,
   UseCaseSystemNodeSVG,
   UseCaseActorNodeSVG,
+  ComponentInterfaceNodeSVG,
+  ComponentSubsystemNodeSVG,
+  ComponentNodeSVG,
 } from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
@@ -194,6 +197,43 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
     case "useCaseSystem":
       return (
         <UseCaseSystemNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+
+    case "component":
+      return (
+        <ComponentNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          isComponentHeaderShown={
+            nodeInfo.data.isComponentHeaderShown as boolean
+          }
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "componentSubsystem":
+      return (
+        <ComponentSubsystemNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          isComponentSubsystemHeaderShown={
+            nodeInfo.data.isComponentSubsystemHeaderShown as boolean
+          }
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "componentInterface":
+      return (
+        <ComponentInterfaceNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}

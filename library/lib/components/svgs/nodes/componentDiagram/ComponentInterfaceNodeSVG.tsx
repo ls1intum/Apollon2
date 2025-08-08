@@ -8,8 +8,7 @@ import { SVGComponentProps } from "@/types/SVG"
 interface Props extends SVGComponentProps {
   name: string
 }
-
-export const UseCaseSystemNodeSVG: React.FC<Props> = ({
+export const ComponentInterfaceNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,
@@ -32,11 +31,10 @@ export const UseCaseSystemNodeSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
+        <circle
+          cx={width / 2}
+          cy={height / 2}
+          r={width / 2}
           stroke="black"
           strokeWidth={LINE_WIDTH}
           fill="white"
@@ -44,8 +42,8 @@ export const UseCaseSystemNodeSVG: React.FC<Props> = ({
 
         {/* Name Text */}
         <CustomText
-          x={width / 2}
-          y={20}
+          x={width + 10}
+          y={-10}
           textAnchor="middle"
           fontWeight="600"
           dominantBaseline="hanging"
