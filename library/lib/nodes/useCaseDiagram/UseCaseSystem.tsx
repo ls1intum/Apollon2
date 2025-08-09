@@ -5,7 +5,7 @@ import {
   Position,
   type Node,
 } from "@xyflow/react"
-import { DefaultNodeWrapper } from "../wrappers"
+
 import { useHandleOnResize } from "@/hooks"
 import { DefaultNodeProps } from "@/types"
 import Box from "@mui/material/Box"
@@ -41,7 +41,7 @@ export function UseCaseSystem({
   }
 
   return (
-    <DefaultNodeWrapper width={width} height={height} elementId={id}>
+    <>
       <NodeToolbar
         isVisible={isDiagramModifiable && !!selected}
         position={Position.Top}
@@ -84,6 +84,6 @@ export function UseCaseSystem({
         elementId={id}
         type="default"
       />
-    </DefaultNodeWrapper>
+    </>
   )
 }
