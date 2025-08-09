@@ -20,6 +20,7 @@ import { GenericPopover } from "./GenericPopover"
 import {
   ActivityDiagramEdgeEditPopover,
   EdgeEditPopover,
+  UseCaseEdgeEditPopover,
   EdgeGiveFeedbackPopover,
   EdgeSeeFeedbackPopover,
 } from "./edgePopovers"
@@ -38,6 +39,11 @@ const editPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  // Add use case edge types
+  UseCaseAssociation: React.FC<PopoverProps>
+  UseCaseInclude: React.FC<PopoverProps>
+  UseCaseExtend: React.FC<PopoverProps>
+  UseCaseGeneralization: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   default: DefaultNodeEditPopover,
@@ -49,6 +55,11 @@ const editPopovers: {
   ClassUnidirectional: EdgeEditPopover,
   ClassDependency: EdgeEditPopover,
   ActivityControlFlow: ActivityDiagramEdgeEditPopover,
+  // Use case edges - reuse existing edge popover
+  UseCaseAssociation: UseCaseEdgeEditPopover,
+  UseCaseInclude: UseCaseEdgeEditPopover,
+  UseCaseExtend: UseCaseEdgeEditPopover,
+  UseCaseGeneralization: UseCaseEdgeEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -62,6 +73,11 @@ const giveFeedbackPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  // Add use case edge types
+  UseCaseAssociation: React.FC<PopoverProps>
+  UseCaseInclude: React.FC<PopoverProps>
+  UseCaseExtend: React.FC<PopoverProps>
+  UseCaseGeneralization: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
@@ -73,6 +89,11 @@ const giveFeedbackPopovers: {
   ClassUnidirectional: EdgeGiveFeedbackPopover,
   ClassDependency: EdgeGiveFeedbackPopover,
   ActivityControlFlow: EdgeGiveFeedbackPopover,
+  // Use case edges - reuse existing edge popover
+  UseCaseAssociation: EdgeGiveFeedbackPopover,
+  UseCaseInclude: EdgeGiveFeedbackPopover,
+  UseCaseExtend: EdgeGiveFeedbackPopover,
+  UseCaseGeneralization: EdgeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -86,6 +107,11 @@ const seeFeedbackPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  // Add use case edge types
+  UseCaseAssociation: React.FC<PopoverProps>
+  UseCaseInclude: React.FC<PopoverProps>
+  UseCaseExtend: React.FC<PopoverProps>
+  UseCaseGeneralization: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
@@ -97,6 +123,11 @@ const seeFeedbackPopovers: {
   ClassUnidirectional: EdgeSeeFeedbackPopover,
   ClassDependency: EdgeSeeFeedbackPopover,
   ActivityControlFlow: EdgeSeeFeedbackPopover,
+  // Use case edges - reuse existing edge popover
+  UseCaseAssociation: EdgeSeeFeedbackPopover,
+  UseCaseInclude: EdgeSeeFeedbackPopover,
+  UseCaseExtend: EdgeSeeFeedbackPopover,
+  UseCaseGeneralization: EdgeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

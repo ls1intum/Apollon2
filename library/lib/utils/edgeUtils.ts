@@ -8,14 +8,9 @@ import {
 import { IPoint } from "@/edges/Connection"
 import { DiagramEdgeType, UMLDiagramType } from "@/typings"
 import { Position, Rect, XYPosition } from "@xyflow/react"
+
 /**
  * Adjusts the target coordinates based on the position and marker padding.
- *
- * @param targetX - X coordinate of the target
- * @param targetY - Y coordinate of the target
- * @param targetPosition - Position of the target (left, right, top, bottom)
- * @param targetPadding - Padding to adjust the position
- * @returns Adjusted targetX and targetY
  */
 export const adjustTargetCoordinates = (
   targetX: number,
@@ -37,12 +32,6 @@ export const adjustTargetCoordinates = (
 
 /**
  * Adjusts the source coordinates based on the position and marker padding.
- *
- * @param sourceX - X coordinate of the source
- * @param sourceY - Y coordinate of the source
- * @param sourcePosition - Position of the source (left, right, top, bottom)
- * @param sourcePadding - Padding to adjust the position
- * @returns Adjusted sourceX and sourceY
  */
 export const adjustSourceCoordinates = (
   sourceX: number,
@@ -81,28 +70,28 @@ export const calculateTextPlacement = (
 
   switch (position) {
     case "top":
-      roleX = x - 10 // Shift role slightly to the left
-      roleY = y - 15 // Move role above the marker
-      multiplicityX = x + 10 // Shift multiplicity to the right
-      multiplicityY = y - 15 // Keep multiplicity above the marker
+      roleX = x - 10
+      roleY = y - 15
+      multiplicityX = x + 10
+      multiplicityY = y - 15
       break
     case "right":
-      roleX = x + 15 // Move role to the right
-      roleY = y - 10 // Place role above the marker
-      multiplicityX = x + 15 // Move multiplicity to the right
-      multiplicityY = y + 15 // Place multiplicity below the marker
+      roleX = x + 15
+      roleY = y - 10
+      multiplicityX = x + 15
+      multiplicityY = y + 15
       break
     case "bottom":
-      roleX = x - 10 // Shift role slightly to the left
-      roleY = y + 15 // Move role below the marker
-      multiplicityX = x + 10 // Shift multiplicity to the right
-      multiplicityY = y + 15 // Keep multiplicity below the marker
+      roleX = x - 10
+      roleY = y + 15
+      multiplicityX = x + 10
+      multiplicityY = y + 15
       break
     case "left":
-      roleX = x - 15 // Move role to the left
-      roleY = y - 10 // Place role above the marker
-      multiplicityX = x - 15 // Move multiplicity to the left
-      multiplicityY = y + 15 // Place multiplicity below the marker
+      roleX = x - 15
+      roleY = y - 10
+      multiplicityX = x - 15
+      multiplicityY = y + 15
       break
   }
 
@@ -124,7 +113,6 @@ export const calculateDynamicEdgeLabels = (
 
   switch (direction) {
     case "top": {
-      // If it's a target on top handle, move labels UPWARD (away from node)
       const topYOffset = -5
       return {
         roleX: x - offset,
@@ -136,7 +124,6 @@ export const calculateDynamicEdgeLabels = (
       }
     }
     case "bottom": {
-      // If it's a target on bottom handle, move labels DOWNWARD (away from node)
       const bottomYOffset = textOffset
       return {
         roleX: x - offset,
@@ -148,7 +135,6 @@ export const calculateDynamicEdgeLabels = (
       }
     }
     case "left": {
-      // If it's a target on left handle, move labels LEFTWARD (away from node)
       const leftXOffset = -5
       return {
         roleX: x + leftXOffset,
@@ -190,6 +176,7 @@ export interface EdgeMarkerStyles {
 
 export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
   switch (edgeType) {
+    // Class diagram edges - use existing markers
     case "ClassBidirectional":
       return {
         markerPadding: MARKER_PADDING,
@@ -232,6 +219,32 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "8",
       }
+
+    // Use case diagram edges - using ClassUnidirectional styling for associations
+    case "UseCaseAssociation":
+      return {
+        markerPadding: 0,
+        strokeDashArray: "0", // Use same styling as ClassUnidirectional but no arrow
+      }
+    case "UseCaseInclude":
+      return {
+        markerPadding: ARROW_MARKER_PADDING,
+        markerEnd: "url(#usecase-arrow)",
+        strokeDashArray: "4", // Smaller dash pattern
+      }
+    case "UseCaseExtend":
+      return {
+        markerPadding: ARROW_MARKER_PADDING,
+        markerEnd: "url(#usecase-arrow)",
+        strokeDashArray: "4", // Smaller dash pattern
+      }
+    case "UseCaseGeneralization":
+      return {
+        markerPadding: TRIANGLE_MARKER_PADDING,
+        markerEnd: "url(#usecase-triangle)",
+        strokeDashArray: "0",
+      }
+
     default:
       return {
         markerPadding: MARKER_PADDING,
@@ -299,6 +312,99 @@ export function findClosestHandle(point: XYPosition, rect: Rect): string {
   }
 
   return closest.label
+}
+
+/**
+ * Enhanced handle positioning for use case diagrams with elliptical nodes
+ */
+export function findClosestHandleForUseCase(
+  point: XYPosition, 
+  rect: Rect,
+  diagramType: "UseCase" | "Class" = "Class"
+): string {
+  if (diagramType === "UseCase") {
+    // For use case diagrams (elliptical nodes), calculate the best connection point
+    const centerX = rect.x + rect.width / 2
+    const centerY = rect.y + rect.height / 2
+    
+    // Calculate angle from center to point
+    const angle = Math.atan2(point.y - centerY, point.x - centerX)
+    
+    // Convert to degrees and normalize (0-360)
+    let degrees = (angle * 180 / Math.PI + 360) % 360
+    
+    // For elliptical use case nodes, we can have 8 connection points
+    if (degrees >= 337.5 || degrees < 22.5) return "right"
+    if (degrees >= 22.5 && degrees < 67.5) return "bottom-right"
+    if (degrees >= 67.5 && degrees < 112.5) return "bottom"
+    if (degrees >= 112.5 && degrees < 157.5) return "bottom-left"
+    if (degrees >= 157.5 && degrees < 202.5) return "left"
+    if (degrees >= 202.5 && degrees < 247.5) return "top-left"
+    if (degrees >= 247.5 && degrees < 292.5) return "top"
+    return "top-right"
+  }
+  
+  // Use existing logic for class diagrams
+  return findClosestHandle(point, rect)
+}
+
+/**
+ * Helper function to get handle position on ellipse perimeter
+ */
+export function getEllipseHandlePosition(
+  centerX: number,
+  centerY: number,
+  radiusX: number,
+  radiusY: number,
+  handle: string
+): { x: number; y: number } {
+  const angleMap: { [key: string]: number } = {
+    "right": 0,
+    "bottom-right": Math.PI / 4,
+    "bottom": Math.PI / 2,
+    "bottom-left": (3 * Math.PI) / 4,
+    "left": Math.PI,
+    "top-left": (5 * Math.PI) / 4,
+    "top": (3 * Math.PI) / 2,
+    "top-right": (7 * Math.PI) / 4,
+  }
+  
+  const angle = angleMap[handle] ?? 0
+  
+  return {
+    x: centerX + radiusX * Math.cos(angle),
+    y: centerY + radiusY * Math.sin(angle),
+  }
+}
+
+/**
+ * NEW: Calculate straight line path for use case diagrams
+ */
+export function calculateStraightPath(
+  sourceX: number,
+  sourceY: number,
+  targetX: number,
+  targetY: number,
+  markerPadding: number = 0
+): string {
+  // Calculate direction vector
+  const dx = targetX - sourceX
+  const dy = targetY - sourceY
+  const length = Math.sqrt(dx * dx + dy * dy)
+  
+  if (length === 0) {
+    return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
+  }
+  
+  // Normalize the direction vector
+  const normalizedDx = dx / length
+  const normalizedDy = dy / length
+  
+  // Adjust target point by marker padding
+  const adjustedTargetX = targetX - normalizedDx * markerPadding
+  const adjustedTargetY = targetY - normalizedDy * markerPadding
+  
+  return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
 }
 
 export function simplifySvgPath(path: string, decimals: number = 2): string {
@@ -426,7 +532,6 @@ export function getMarkerSegmentPath(
   points: IPoint[],
   markerPadding: number,
   targetPosition: "top" | "bottom" | "left" | "right"
-  // type: string,
 ): string {
   if (points.length === 0) return ""
 
@@ -454,6 +559,9 @@ export function getMarkerSegmentPath(
   return `M ${lastPoint.x} ${lastPoint.y} L ${extendedX} ${extendedY}`
 }
 
+/**
+ * UPDATED: Enhanced to support use case diagrams
+ */
 export const getDefaultEdgeType = (
   diagramType: UMLDiagramType
 ): DiagramEdgeType => {
@@ -462,6 +570,8 @@ export const getDefaultEdgeType = (
       return "ClassUnidirectional"
     case "ActivityDiagram":
       return "ActivityControlFlow"
+    case "UseCaseDiagram":
+      return "UseCaseAssociation"
     default:
       return "ClassUnidirectional"
   }

@@ -5,6 +5,7 @@ export function SvgMarkers() {
       id="apollon2_svg-markers"
     >
       <defs>
+        {/* Existing markers for class diagrams */}
         <marker
           id="black-rhombus"
           viewBox="0 0 30 30"
@@ -71,6 +72,42 @@ export function SvgMarkers() {
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
+          />
+        </marker>
+
+        {/* Smaller markers for use case diagrams */}
+        <marker
+          id="usecase-arrow"
+          viewBox="0 0 20 20"
+          markerWidth="12"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,18 L20,10 L0,2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+        </marker>
+        <marker
+          id="usecase-triangle"
+          viewBox="0 0 20 20"
+          markerWidth="14"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,2 L0,18 L20,10 z"
+            fill="white"
+            stroke="currentColor"
+            strokeWidth="1"
           />
         </marker>
       </defs>
