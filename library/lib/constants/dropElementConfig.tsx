@@ -255,7 +255,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
   ],
   [UMLDiagramType.Flowchart]: [
     {
-      type: "FlowchartTerminal",
+      type: "flowchartTerminal",
       width: droppedElementWidth,
       height: 70,
       defaultData: {
@@ -264,7 +264,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <FlowchartTerminalNodeSVG {...props} />,
     },
     {
-      type: "FlowchartProcess",
+      type: "flowchartProcess",
       width: droppedElementWidth,
       height: 70,
       defaultData: {
@@ -273,7 +273,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <FlowchartProcessNodeSVG {...props} />,
     },
     {
-      type: "FlowchartDecision",
+      type: "flowchartDecision",
       width: droppedElementWidth,
       height: 70,
       defaultData: {
@@ -282,7 +282,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <FlowchartDecisionNodeSVG {...props} />,
     },
     {
-      type: "FlowchartInputOutput",
+      type: "flowchartInputOutput",
       width: 140,
       height: 70,
       defaultData: {
@@ -291,7 +291,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <FlowchartInputOutputNodeSVG {...props} />,
     },
     {
-      type: "FlowchartFunctionCall",
+      type: "flowchartFunctionCall",
       width: droppedElementWidth,
       height: 70,
       defaultData: {

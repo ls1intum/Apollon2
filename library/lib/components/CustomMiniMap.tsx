@@ -17,6 +17,11 @@ import {
   ComponentInterfaceNodeSVG,
   ComponentSubsystemNodeSVG,
   ComponentNodeSVG,
+  FlowchartTerminalNodeSVG,
+  FlowchartProcessNodeSVG,
+  FlowchartDecisionNodeSVG,
+  FlowchartInputOutputNodeSVG,
+  FlowchartFunctionCallNodeSVG,
 } from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
@@ -234,6 +239,56 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
     case "componentInterface":
       return (
         <ComponentInterfaceNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "flowchartTerminal":
+      return (
+        <FlowchartTerminalNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "flowchartProcess":
+      return (
+        <FlowchartProcessNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "flowchartDecision":
+      return (
+        <FlowchartDecisionNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "flowchartInputOutput":
+      return (
+        <FlowchartInputOutputNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "flowchartFunctionCall":
+      return (
+        <FlowchartFunctionCallNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
