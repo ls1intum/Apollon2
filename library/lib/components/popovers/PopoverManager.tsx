@@ -24,8 +24,17 @@ import {
   EdgeSeeFeedbackPopover,
 } from "./edgePopovers"
 import { LocationPopover } from "@/types"
+import {
+  ComponentEditPopover,
+  ComponentSubsystemEditPopover,
+} from "./componentDiagram"
 
-type PopoverType = "class" | "default" | DiagramEdgeType
+type PopoverType =
+  | "class"
+  | "default"
+  | DiagramEdgeType
+  | "Component"
+  | "ComponentSubsystem"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -38,6 +47,8 @@ const editPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  Component: React.FC<PopoverProps>
+  ComponentSubsystem: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   default: DefaultNodeEditPopover,
@@ -49,6 +60,8 @@ const editPopovers: {
   ClassUnidirectional: EdgeEditPopover,
   ClassDependency: EdgeEditPopover,
   ActivityControlFlow: ActivityDiagramEdgeEditPopover,
+  Component: ComponentEditPopover,
+  ComponentSubsystem: ComponentSubsystemEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -62,6 +75,8 @@ const giveFeedbackPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  Component: React.FC<PopoverProps>
+  ComponentSubsystem: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
@@ -73,6 +88,8 @@ const giveFeedbackPopovers: {
   ClassUnidirectional: EdgeGiveFeedbackPopover,
   ClassDependency: EdgeGiveFeedbackPopover,
   ActivityControlFlow: EdgeGiveFeedbackPopover,
+  Component: DefaultNodeGiveFeedbackPopover,
+  ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -86,6 +103,8 @@ const seeFeedbackPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  Component: React.FC<PopoverProps>
+  ComponentSubsystem: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
@@ -97,6 +116,8 @@ const seeFeedbackPopovers: {
   ClassUnidirectional: EdgeSeeFeedbackPopover,
   ClassDependency: EdgeSeeFeedbackPopover,
   ActivityControlFlow: EdgeSeeFeedbackPopover,
+  Component: DefaultNodeSeeFeedbackPopover,
+  ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

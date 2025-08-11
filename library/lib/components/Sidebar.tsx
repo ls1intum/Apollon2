@@ -32,7 +32,7 @@ export const Sidebar = () => {
         alignItems: "center",
       }}
     >
-      {dropElementConfigs[diagramType].map((config) => (
+      {dropElementConfigs[diagramType].map((config, index) => (
         <React.Fragment key={`${config.type}_${config.defaultData?.name}`}>
           {config.type === "colorDescription" && (
             <DividerLine style={{ margin: "3px 0" }} height={2} />
@@ -44,6 +44,7 @@ export const Sidebar = () => {
                 width: config.width * transformScale,
                 height: config.height * transformScale,
                 zIndex: 2,
+                marginTop: config.marginTop,
               }}
             >
               {React.createElement(config.svg, {
@@ -51,7 +52,7 @@ export const Sidebar = () => {
                 height: config.height,
                 ...config.defaultData,
                 transformScale,
-                id: "2",
+                id: `sidebarElement_${index}`,
               })}
             </div>
           </DraggableGhost>

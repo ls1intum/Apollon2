@@ -13,6 +13,9 @@ import {
   UseCaseNodeSVG,
   UseCaseSystemNodeSVG,
   UseCaseActorNodeSVG,
+  ComponentNodeSVG,
+  ComponentInterfaceNodeSVG,
+  ComponentSubsystemNodeSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -29,6 +32,7 @@ export type DropElementConfig = {
   height: number
   defaultData?: Record<string, unknown>
   svg: React.FC<any>
+  marginTop?: number
 }
 
 export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
@@ -179,7 +183,38 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
   ],
   [UMLDiagramType.BPMN]: [],
   [UMLDiagramType.CommunicationDiagram]: [],
-  [UMLDiagramType.ComponentDiagram]: [],
+  [UMLDiagramType.ComponentDiagram]: [
+    {
+      type: "component",
+      width: 180,
+      height: 120,
+      defaultData: {
+        name: "Component",
+        isComponentHeaderShown: true,
+      },
+      svg: (props) => <ComponentNodeSVG {...props} />,
+    },
+    {
+      type: "componentSubsystem",
+      width: 180,
+      height: 120,
+      defaultData: {
+        name: "Subsystem",
+        isComponentSubsystemHeaderShown: true,
+      },
+      svg: (props) => <ComponentSubsystemNodeSVG {...props} />,
+    },
+    {
+      type: "componentInterface",
+      width: 20,
+      height: 20,
+      defaultData: {
+        name: "Interface",
+      },
+      svg: (props) => <ComponentInterfaceNodeSVG {...props} />,
+      marginTop: 10,
+    },
+  ],
   [UMLDiagramType.DeploymentDiagram]: [],
   [UMLDiagramType.PetriNet]: [],
   [UMLDiagramType.ReachabilityGraph]: [],
