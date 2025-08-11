@@ -13,6 +13,7 @@ const diagramTypes = {
     UMLDiagramType.ClassDiagram,
     UMLDiagramType.ObjectDiagram,
     UMLDiagramType.ComponentDiagram,
+    UMLDiagramType.Flowchart,
   ],
   behavioral: [UMLDiagramType.ActivityDiagram, UMLDiagramType.UseCaseDiagram],
 }
@@ -28,7 +29,7 @@ const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   PetriNet: "",
   ReachabilityGraph: "",
   SyntaxTree: "",
-  Flowchart: "",
+  Flowchart: "Flowchart",
   BPMN: "",
 }
 
