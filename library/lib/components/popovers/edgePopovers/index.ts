@@ -1,5 +1,5 @@
-export * from "./EdgeEditPopover"
+export * from "./ClassDiagramEdgeEditPopover"
 export * from "./EdgeGiveFeedbackPopover"
 export * from "./EdgeSeeFeedbackPopover"
 export * from "./ActivityDiagramEdgeEditPopover"
-export * from "./UseCaseEdgeEditPopover"
+export * from "./UseCaseDiagramEdgeEditPopover"

@@ -8,16 +8,16 @@ import {
   CommonEdgeElements,
 } from "../GenericEdge"
 import { 
+  calculateOverlayPath,
   calculateStraightPath, 
   getEdgeMarkerStyles,
-  adjustTargetCoordinates,
-  adjustSourceCoordinates,
+  //adjustTargetCoordinates,
+  //adjustSourceCoordinates,
 } from "@/utils/edgeUtils"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { useToolbar } from "@/hooks"
-import { MARKER_PADDING, SOURCE_CONNECTION_POINT_PADDING } from "@/constants"
 import { IPoint } from "../Connection"
 
 interface StraightPathEdgeProps extends BaseEdgeProps {
@@ -67,54 +67,29 @@ export const StraightPathEdge = ({
     setIsMiddlePathHorizontal,
   } = useEdgeState()
 
-  const { markerPadding, markerEnd, strokeDashArray} = getEdgeMarkerStyles(type)
-  const padding = markerPadding ?? MARKER_PADDING
-  // Calculate straight path using your existing coordinate adjustment functions
+  const { markerEnd, strokeDashArray} = getEdgeMarkerStyles(type)
+  //const padding = markerPadding ?? MARKER_PADDING
+
   const currentPath = useMemo(() => {
-    // Use your existing functions exactly as they are implemented
-    const adjustedTargetCoordinates = adjustTargetCoordinates(
-      targetX,
-      targetY,
-      targetPosition || 'right',
-      padding
-    )
-    const adjustedSourceCoordinates = adjustSourceCoordinates(
-      sourceX,
-      sourceY,
-      sourcePosition || 'left',
-      SOURCE_CONNECTION_POINT_PADDING
-    )
-    
+
     return calculateStraightPath(
-      adjustedSourceCoordinates.sourceX, 
-      adjustedSourceCoordinates.sourceY, 
-      adjustedTargetCoordinates.targetX, 
-      adjustedTargetCoordinates.targetY, 
-      padding
+      sourceX, 
+      sourceY, 
+      targetX, 
+      targetY, 
+      type,
+      false
     )
   }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition ])
 
+
   const overlayPath = useMemo(() => {
-    // Use your existing functions exactly as they are implemented
-    const adjustedTargetCoordinates = adjustTargetCoordinates(
-      targetX,
-      targetY,
-      targetPosition || 'right',
-      0
-    )
-    const adjustedSourceCoordinates = adjustSourceCoordinates(
-      sourceX,
-      sourceY,
-      sourcePosition || 'left',
-      SOURCE_CONNECTION_POINT_PADDING
-    )
-    
-    return calculateStraightPath(
-      adjustedSourceCoordinates.sourceX, 
-      adjustedSourceCoordinates.sourceY, 
-      adjustedTargetCoordinates.targetX, 
-      adjustedTargetCoordinates.targetY, 
-      -1
+    return calculateOverlayPath(
+      sourceX, 
+      sourceY, 
+      targetX, 
+      targetY, 
+      type,
     )
   }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition ])
 
@@ -159,7 +134,7 @@ export const StraightPathEdge = ({
           className="edge-overlay"
           d={overlayPath}
           fill="none"
-          strokeWidth={12}
+          strokeWidth={15}
           pointerEvents="stroke"
           style={{ opacity: 0.4 }}
         />

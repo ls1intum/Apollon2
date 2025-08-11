@@ -32,9 +32,7 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
   }
 
   const edgeData = edge.data as CustomEdgeProps | undefined
-  
-  // Determine if this is a use case diagram edge
-  const isUseCaseEdge = edge.type?.startsWith('UseCase')
+
   
   // Retrieve source/target node names
   const sourceNode = getNode(edge.source)
@@ -44,14 +42,7 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   // Define edge type options based on diagram type
   const getEdgeTypeOptions = () => {
-    if (isUseCaseEdge) {
-      return [
-        { value: "UseCaseAssociation", label: "Association" },
-        { value: "UseCaseInclude", label: "Include" },
-        { value: "UseCaseExtend", label: "Extend" },
-        { value: "UseCaseGeneralization", label: "Generalization" },
-      ]
-    } else {
+
       return [
         { value: "ClassBidirectional", label: "Bi-Association" },
         { value: "ClassUnidirectional", label: "Uni-Association" },
@@ -61,7 +52,7 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
         { value: "ClassDependency", label: "Dependency" },
         { value: "ClassRealization", label: "Realization" },
       ]
-    }
+    
   }
 
   const edgeTypeOptions = getEdgeTypeOptions()
@@ -69,7 +60,7 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
       {/* Swap icon for source/target swap - only show for non-use case edges */}
-      {handleSwap && !isUseCaseEdge && (
+      {handleSwap && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
         </Box>
@@ -94,7 +85,7 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
       </FormControl>
 
       {/* Only show role and multiplicity fields for class diagram edges */}
-      {!isUseCaseEdge && (
+      {(
         <>
           {/* Source subheadline */}
           <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
@@ -142,20 +133,6 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
             fullWidth
           />
         </>
-      )}
-
-      {/* For use case edges, show simplified info */}
-      {isUseCaseEdge && (
-        <Box sx={{ mt: 1 }}>
-          <Typography variant="body2" color="text.secondary">
-            {sourceName} → {targetName}
-          </Typography>
-          {(edge.type === "UseCaseInclude" || edge.type === "UseCaseExtend") && (
-            <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-              Relationship label will be automatically displayed
-            </Typography>
-          )}
-        </Box>
       )}
     </Box>
   )

@@ -4,12 +4,9 @@ import { IPoint } from "../Connection"
 interface EdgeMiddleLabelsProps {
   // Basic edge label
   label?: string | null
-  
-  // Position data
   pathMiddlePosition: IPoint
   isMiddlePathHorizontal: boolean
   
-  // For straight path labels (use case)
   sourcePoint?: IPoint
   targetPoint?: IPoint
   isUseCasePath?: boolean

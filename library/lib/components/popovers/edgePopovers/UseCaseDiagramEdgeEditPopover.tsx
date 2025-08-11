@@ -79,19 +79,6 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) =>
         />
       )}
       
-      {/* Info for include/extend relationships */}
-      {(edge.type === "UseCaseInclude" || edge.type === "UseCaseExtend") && (
-        <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-          Relationship label will be automatically displayed on the edge
-        </Typography>
-      )}
-
-      {/* Info for generalization */}
-      {edge.type === "UseCaseGeneralization" && (
-        <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-          Generalization relationship (inheritance arrow)
-        </Typography>
-      )}
     </Box>
   )
 }

@@ -4,6 +4,7 @@ import {
   ARROW_MARKER_PADDING,
   RHOMBUS_MARKER_PADDING,
   TRIANGLE_MARKER_PADDING,
+  USECASE_PADDING,
 } from "@/constants"
 import { IPoint } from "@/edges/Connection"
 import { DiagramEdgeType, UMLDiagramType } from "@/typings"
@@ -175,7 +176,8 @@ export interface EdgeMarkerStyles {
   offset?: number // New offset property
 }
 
-export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
+export function 
+getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
   switch (edgeType) {
     // Class diagram edges - use existing markers
     case "ClassBidirectional":
@@ -237,24 +239,24 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
       }
     case "UseCaseInclude":
       return {
-        markerPadding: 5,
+        markerPadding: USECASE_PADDING,
         markerEnd: "url(#black-arrow)",
-        strokeDashArray: "8",
-        offset: 0,
+        strokeDashArray: "4",
+        offset: 10,
       }
     case "UseCaseExtend":
       return {
-        markerPadding: ARROW_MARKER_PADDING,
-        markerEnd: "url(#usecase-arrow)",
+        markerPadding: USECASE_PADDING,
+        markerEnd: "url(#black-arrow)",
         strokeDashArray: "4",
-        offset: 13,
+        offset: 10,
       }
     case "UseCaseGeneralization":
       return {
-        markerPadding: TRIANGLE_MARKER_PADDING,
-        markerEnd: "url(#usecase-triangle)",
+        markerPadding: USECASE_PADDING,
+        markerEnd: "url(#white-triangle)",
         strokeDashArray: "0",
-        offset: 13, // Triangle gets 10px offset
+        offset: 10, 
       }
 
     default:
@@ -390,16 +392,46 @@ export function getEllipseHandlePosition(
   }
 }
 
-/**
- * NEW: Calculate straight line path for use case diagrams
- */
+export function calculateOverlayPath(
+  sourceX: number,
+  sourceY: number,
+  targetX: number,
+  targetY: number,
+  type:string
+): string {
+
+    if (type == "UseCaseInclude" ||  type == "UseCaseExtend" || type == "UseCaseGeneralization"){
+       const { offset } = getEdgeMarkerStyles(type)
+    const markerOffset = offset ?? 0
+    
+    console.log(`UseCase edge ${type} with offset:`, markerOffset)
+    
+    // Calculate normalized direction vector for offset adjustment
+      const dx = targetX - sourceX
+  const dy = targetY - sourceY
+  const length = Math.sqrt(dx * dx + dy * dy)
+
+    const normalizedDx = dx / length
+    const normalizedDy = dy / length
+    
+    // Apply offset to target coordinates
+    const adjustedTargetX = targetX + normalizedDx * markerOffset
+    const adjustedTargetY = targetY + normalizedDy * markerOffset
+      return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
+    }
+    return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
+}
+
 export function calculateStraightPath(
   sourceX: number,
   sourceY: number,
   targetX: number,
   targetY: number,
-  markerPadding: number = 0
+  type: string,
+  isOverlay: boolean
 ): string {
+  // Coordinates are already adjusted when passed in, so just use them directly
+  
   // Calculate direction vector
   const dx = targetX - sourceX
   const dy = targetY - sourceY
@@ -409,15 +441,39 @@ export function calculateStraightPath(
     return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
   }
   
-  // Normalize the direction vector
-  const normalizedDx = dx / length
-  const normalizedDy = dy / length
+  // Special handling for UseCaseInclude with gap
+  if (type === "UseCaseInclude" && !isOverlay) {
+    console.log("Creating UseCaseInclude path with gap")
+    
+    const startX = sourceX
+    const startY = sourceY  
+    const endX = targetX
+    const endY = targetY
+    const midX = (startX + endX) / 2
+    const midY = (startY + endY) / 2
+    
+    const normalizedDx = dx / length
+    const normalizedDy = dy / length
+    const gapSize = 30
+    
+    const gapStartX = midX - normalizedDx * gapSize  // 30px before middle
+    const gapStartY = midY - normalizedDy * gapSize 
+    const gapEndX = midX + normalizedDx * gapSize     // 30px after middle  
+    const gapEndY = midY + normalizedDy * gapSize
+    
+    console.log("Gap path:", { 
+      start: { x: startX, y: startY }, 
+      gapStart: { x: gapStartX, y: gapStartY },
+      gapEnd: { x: gapEndX, y: gapEndY },
+      end: { x: endX, y: endY }
+    })
+    
+    return `M ${startX},${startY} L ${gapStartX},${gapStartY} M ${gapEndX},${gapEndY} L ${endX},${endY}`
+  }
   
-  // Adjust target point by marker padding
-  const adjustedTargetX = targetX - normalizedDx * markerPadding
-  const adjustedTargetY = targetY - normalizedDy * markerPadding
-  
-  return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
+  // For all other edge types, just create a straight line
+  console.log("Creating straight path:", { sourceX, sourceY, targetX, targetY })
+  return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
 }
 
 export function simplifySvgPath(path: string, decimals: number = 2): string {
