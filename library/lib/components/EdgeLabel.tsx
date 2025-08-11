@@ -32,30 +32,30 @@ export const EdgeLabel = ({
     const dx = targetPoint.x - sourcePoint.x
     const dy = targetPoint.y - sourcePoint.y
     const angle = Math.atan2(dy, dx) * (180 / Math.PI)
-    
+
     // Normalize angle to keep text readable (never upside down)
     if (angle > 90 || angle < -90) {
       rotation = angle + 180
     } else {
       rotation = angle
     }
-    
+
     // Calculate perpendicular offset to position label below the edge
     const offsetDistance = 20 // Increased distance from the edge
-    
+
     // Get perpendicular direction (rotate the edge vector by 90 degrees clockwise)
     const perpX = dy // Perpendicular X is original Y
     const perpY = -dx // Perpendicular Y is negative original X
-    
+
     // Normalize the perpendicular vector
     const perpLength = Math.sqrt(perpX * perpX + perpY * perpY)
     const normalizedPerpX = perpX / perpLength
     const normalizedPerpY = perpY / perpLength
-    
+
     // Apply offset in perpendicular direction
     offsetX = normalizedPerpX * offsetDistance
     offsetY = normalizedPerpY * offsetDistance
-    
+
     transform = `translate(${pathMiddlePosition.x + offsetX}px, ${pathMiddlePosition.y + offsetY}px) translate(-50%, 0%) rotate(${rotation}deg)`
   } else {
     // Use existing logic for step paths

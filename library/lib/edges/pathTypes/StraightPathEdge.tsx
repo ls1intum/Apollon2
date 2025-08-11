@@ -1,18 +1,16 @@
 import { useMemo, useRef, useEffect } from "react"
 import React from "react"
 import { BaseEdge } from "@xyflow/react"
-import { 
+import {
   BaseEdgeProps,
   useEdgeState,
   useEdgePath,
   CommonEdgeElements,
 } from "../GenericEdge"
-import { 
+import {
   calculateOverlayPath,
-  calculateStraightPath, 
+  calculateStraightPath,
   getEdgeMarkerStyles,
-  //adjustTargetCoordinates,
-  //adjustSourceCoordinates,
 } from "@/utils/edgeUtils"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
@@ -21,7 +19,9 @@ import { useToolbar } from "@/hooks"
 import { IPoint } from "../Connection"
 
 interface StraightPathEdgeProps extends BaseEdgeProps {
-  children?: React.ReactNode | ((edgeData: StraightPathEdgeData) => React.ReactNode)
+  children?:
+    | React.ReactNode
+    | ((edgeData: StraightPathEdgeData) => React.ReactNode)
 }
 
 // Data passed to children components
@@ -46,20 +46,26 @@ export const StraightPathEdge = ({
   const pathRef = useRef<SVGPathElement | null>(null)
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
-  
+
   const { assessments } = useDiagramStore(
     useShallow((state) => ({
       assessments: state.assessments,
     }))
   )
-  
+
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
 
   const { handleDelete } = useToolbar({ id })
-  const { updateMiddlePosition } = useEdgePath(sourceX, sourceY, targetX, targetY, pathRef)
-  
+  const { updateMiddlePosition } = useEdgePath(
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    pathRef
+  )
+
   const {
     pathMiddlePosition,
     setPathMiddlePosition,
@@ -67,32 +73,15 @@ export const StraightPathEdge = ({
     setIsMiddlePathHorizontal,
   } = useEdgeState()
 
-  const { markerEnd, strokeDashArray} = getEdgeMarkerStyles(type)
-  //const padding = markerPadding ?? MARKER_PADDING
+  const { markerEnd, strokeDashArray } = getEdgeMarkerStyles(type)
 
   const currentPath = useMemo(() => {
-
-    return calculateStraightPath(
-      sourceX, 
-      sourceY, 
-      targetX, 
-      targetY, 
-      type,
-      false
-    )
-  }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition ])
-
+    return calculateStraightPath(sourceX, sourceY, targetX, targetY, type)
+  }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition])
 
   const overlayPath = useMemo(() => {
-    return calculateOverlayPath(
-      sourceX, 
-      sourceY, 
-      targetX, 
-      targetY, 
-      type,
-    )
-  }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition ])
-
+    return calculateOverlayPath(sourceX, sourceY, targetX, targetY, type)
+  }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition])
 
   // Update middle position for straight paths
   useEffect(() => {
@@ -102,7 +91,12 @@ export const StraightPathEdge = ({
       setIsMiddlePathHorizontal,
       true // isDirectPath = true for straight paths
     )
-  }, [currentPath, updateMiddlePosition, setPathMiddlePosition, setIsMiddlePathHorizontal])
+  }, [
+    currentPath,
+    updateMiddlePosition,
+    setPathMiddlePosition,
+    setIsMiddlePathHorizontal,
+  ])
 
   const sourcePoint = { x: sourceX, y: sourceY }
   const targetPoint = { x: targetX, y: targetY }
@@ -141,7 +135,7 @@ export const StraightPathEdge = ({
       </g>
 
       {/* Render custom labels passed as children with edge data */}
-      {typeof children === 'function' ? children(edgeData) : children}
+      {typeof children === "function" ? children(edgeData) : children}
 
       <CommonEdgeElements
         id={id}
@@ -158,13 +152,21 @@ export const StraightPathEdge = ({
 }
 
 // Export computed values for use by label components
-export const useStraightPathData = (straightPathEdgeProps: StraightPathEdgeProps) => {
+export const useStraightPathData = (
+  straightPathEdgeProps: StraightPathEdgeProps
+) => {
   const { pathMiddlePosition, isMiddlePathHorizontal } = useEdgeState()
-  
+
   return {
     pathMiddlePosition,
     isMiddlePathHorizontal,
-    sourcePoint: { x: straightPathEdgeProps.sourceX, y: straightPathEdgeProps.sourceY },
-    targetPoint: { x: straightPathEdgeProps.targetX, y: straightPathEdgeProps.targetY },
+    sourcePoint: {
+      x: straightPathEdgeProps.sourceX,
+      y: straightPathEdgeProps.sourceY,
+    },
+    targetPoint: {
+      x: straightPathEdgeProps.targetX,
+      y: straightPathEdgeProps.targetY,
+    },
   }
 }

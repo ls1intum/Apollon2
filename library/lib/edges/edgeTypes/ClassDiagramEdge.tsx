@@ -56,7 +56,7 @@ export const ClassDiagramEdge = ({
             sourcePosition={sourcePosition}
             targetPosition={targetPosition}
           />
-          
+
           <EdgeMiddleLabels
             label={data?.label}
             pathMiddlePosition={edgeData.pathMiddlePosition}

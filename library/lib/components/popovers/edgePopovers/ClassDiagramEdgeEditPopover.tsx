@@ -33,7 +33,6 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   const edgeData = edge.data as CustomEdgeProps | undefined
 
-  
   // Retrieve source/target node names
   const sourceNode = getNode(edge.source)
   const targetNode = getNode(edge.target)
@@ -42,17 +41,15 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   // Define edge type options based on diagram type
   const getEdgeTypeOptions = () => {
-
-      return [
-        { value: "ClassBidirectional", label: "Bi-Association" },
-        { value: "ClassUnidirectional", label: "Uni-Association" },
-        { value: "ClassAggregation", label: "Aggregation" },
-        { value: "ClassComposition", label: "Composition" },
-        { value: "ClassInheritance", label: "Inheritance" },
-        { value: "ClassDependency", label: "Dependency" },
-        { value: "ClassRealization", label: "Realization" },
-      ]
-    
+    return [
+      { value: "ClassBidirectional", label: "Bi-Association" },
+      { value: "ClassUnidirectional", label: "Uni-Association" },
+      { value: "ClassAggregation", label: "Aggregation" },
+      { value: "ClassComposition", label: "Composition" },
+      { value: "ClassInheritance", label: "Inheritance" },
+      { value: "ClassDependency", label: "Dependency" },
+      { value: "ClassRealization", label: "Realization" },
+    ]
   }
 
   const edgeTypeOptions = getEdgeTypeOptions()
@@ -85,7 +82,7 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
       </FormControl>
 
       {/* Only show role and multiplicity fields for class diagram edges */}
-      {(
+      {
         <>
           {/* Source subheadline */}
           <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
@@ -133,7 +130,7 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
             fullWidth
           />
         </>
-      )}
+      }
     </Box>
   )
 }

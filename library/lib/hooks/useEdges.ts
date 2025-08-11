@@ -6,26 +6,32 @@ export function useEdgePopOver(id: string) {
   const handleEdgeTypeChange = (newType: string) => {
     const currentEdge = reactFlow.getEdge(id)
     const currentData = currentEdge?.data || {}
-    
+
     // Store the current label as savedLabel when switching away from association
-    if (currentEdge?.type === "UseCaseAssociation" && newType !== "UseCaseAssociation") {
-      reactFlow.updateEdge(id, { 
+    if (
+      currentEdge?.type === "UseCaseAssociation" &&
+      newType !== "UseCaseAssociation"
+    ) {
+      reactFlow.updateEdge(id, {
         type: newType,
         data: {
           ...currentData,
           savedLabel: currentData.label, // Save current label
           label: undefined, // Remove active label
-        }
+        },
       })
     }
     // Restore savedLabel when switching back to association
-    else if (currentEdge?.type !== "UseCaseAssociation" && newType === "UseCaseAssociation") {
-      reactFlow.updateEdge(id, { 
+    else if (
+      currentEdge?.type !== "UseCaseAssociation" &&
+      newType === "UseCaseAssociation"
+    ) {
+      reactFlow.updateEdge(id, {
         type: newType,
         data: {
           ...currentData,
           label: currentData.savedLabel || "", // Restore saved label
-        }
+        },
       })
     }
     // For all other edge type changes, just update the type

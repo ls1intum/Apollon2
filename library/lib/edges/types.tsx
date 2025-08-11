@@ -1,6 +1,6 @@
 import { EdgeTypes } from "@xyflow/react"
 import { ClassDiagramEdge } from "./edgeTypes/ClassDiagramEdge"
-import { ActivityDiagramEdge } from "./edgeTypes/ActivityDiagramEdge" 
+import { ActivityDiagramEdge } from "./edgeTypes/ActivityDiagramEdge"
 import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ExtendedEdgeProps } from "./EdgeProps"
 
@@ -16,7 +16,7 @@ const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   )
 }
 
-// Activity diagram edge factory  
+// Activity diagram edge factory
 const createActivityEdgeComponent = (allowMidpointDragging: boolean = true) => {
   return (props: ExtendedEdgeProps) => (
     <ActivityDiagramEdge
@@ -27,12 +27,11 @@ const createActivityEdgeComponent = (allowMidpointDragging: boolean = true) => {
 }
 
 // Use case diagram edge factory
-const createUseCaseEdgeComponent = (showRelationshipLabels: boolean = false) => {
+const createUseCaseEdgeComponent = (
+  showRelationshipLabels: boolean = false
+) => {
   return (props: ExtendedEdgeProps) => (
-    <UseCaseEdge
-      {...props}
-      showRelationshipLabels={showRelationshipLabels}
-    />
+    <UseCaseEdge {...props} showRelationshipLabels={showRelationshipLabels} />
   )
 }
 
@@ -45,10 +44,10 @@ export const diagramEdgeTypes = {
   ClassBidirectional: createClassEdgeComponent(true),
   ClassUnidirectional: createClassEdgeComponent(true),
   ClassDependency: createClassEdgeComponent(true),
-  
+
   // Activity diagram edges - use step paths with midpoint dragging
   ActivityControlFlow: createActivityEdgeComponent(true),
-  
+
   // Use case diagram edges - use straight paths, no midpoint dragging
   UseCaseAssociation: createUseCaseEdgeComponent(false), // No relationship labels
   UseCaseInclude: createUseCaseEdgeComponent(true), // Show <<include>>

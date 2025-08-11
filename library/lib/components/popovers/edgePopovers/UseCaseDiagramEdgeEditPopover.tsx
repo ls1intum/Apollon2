@@ -13,7 +13,9 @@ import { CustomEdgeProps } from "@/edges/EdgeProps"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 
-export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
+export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
+  elementId,
+}) => {
   const { getEdge, getNode } = useReactFlow()
 
   const edge = getEdge(elementId)
@@ -27,7 +29,7 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) =>
   }
 
   const edgeData = edge.data as CustomEdgeProps | undefined
-  
+
   // Retrieve source/target node names
   const sourceNode = getNode(edge.source)
   const targetNode = getNode(edge.target)
@@ -66,7 +68,7 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) =>
       <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
         {sourceName} → {targetName}
       </Typography>
-      
+
       {/* Show label input only for associations */}
       {edge.type === "UseCaseAssociation" && (
         <TextField
@@ -78,7 +80,6 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) =>
           placeholder="Optional label for association"
         />
       )}
-      
     </Box>
   )
 }

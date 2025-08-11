@@ -10,10 +10,10 @@ interface EdgeEndLabelsProps {
     sourceMultiplicity?: string | null
     targetMultiplicity?: string | null
   }
-  
+
   // Points for dynamic positioning
   activePoints: IPoint[]
-  
+
   // Fallback positions
   sourceX: number
   sourceY: number

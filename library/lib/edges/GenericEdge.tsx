@@ -16,9 +16,15 @@ export interface BaseEdgeProps extends ExtendedEdgeProps {
 // Hook for common edge state management
 export const useEdgeState = (initialPoints?: IPoint[]) => {
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
-  const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>({ x: 0, y: 0 })
-  const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] = useState<boolean>(true)
-  const [tempReconnectPoints, setTempReconnectPoints] = useState<IPoint[] | null>(null)
+  const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>({
+    x: 0,
+    y: 0,
+  })
+  const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] =
+    useState<boolean>(true)
+  const [tempReconnectPoints, setTempReconnectPoints] = useState<
+    IPoint[] | null
+  >(null)
 
   useEffect(() => {
     if (initialPoints) {
@@ -46,34 +52,39 @@ export const useEdgePath = (
   targetY: number,
   pathRef: React.RefObject<SVGPathElement>
 ) => {
-  const updateMiddlePosition = useCallback((
-    path: string,
-    setPathMiddlePosition: (pos: IPoint) => void,
-    setIsMiddlePathHorizontal: (horizontal: boolean) => void,
-    isDirectPath = false
-  ) => {
-    if (isDirectPath) {
-      console.log(path)
-      const middleX = (sourceX + targetX) / 2
-      const middleY = (sourceY + targetY) / 2
-      setPathMiddlePosition({ x: middleX, y: middleY })
-      
-      const dx = Math.abs(targetX - sourceX)
-      const dy = Math.abs(targetY - sourceY)
-      setIsMiddlePathHorizontal(dx > dy)
-    } else if (pathRef.current) {
-      const totalLength = pathRef.current.getTotalLength()
-      const halfLength = totalLength / 2
-      const middlePoint = pathRef.current.getPointAtLength(halfLength)
-      const pointOnCloseToMiddle = pathRef.current.getPointAtLength(halfLength + 2)
-      const isHorizontal =
-        Math.abs(pointOnCloseToMiddle.x - middlePoint.x) >
-        Math.abs(pointOnCloseToMiddle.y - middlePoint.y)
+  const updateMiddlePosition = useCallback(
+    (
+      path: string,
+      setPathMiddlePosition: (pos: IPoint) => void,
+      setIsMiddlePathHorizontal: (horizontal: boolean) => void,
+      isDirectPath = false
+    ) => {
+      if (isDirectPath) {
+        console.log(path)
+        const middleX = (sourceX + targetX) / 2
+        const middleY = (sourceY + targetY) / 2
+        setPathMiddlePosition({ x: middleX, y: middleY })
 
-      setIsMiddlePathHorizontal(isHorizontal)
-      setPathMiddlePosition({ x: middlePoint.x, y: middlePoint.y })
-    }
-  }, [sourceX, sourceY, targetX, targetY, pathRef])
+        const dx = Math.abs(targetX - sourceX)
+        const dy = Math.abs(targetY - sourceY)
+        setIsMiddlePathHorizontal(dx > dy)
+      } else if (pathRef.current) {
+        const totalLength = pathRef.current.getTotalLength()
+        const halfLength = totalLength / 2
+        const middlePoint = pathRef.current.getPointAtLength(halfLength)
+        const pointOnCloseToMiddle = pathRef.current.getPointAtLength(
+          halfLength + 2
+        )
+        const isHorizontal =
+          Math.abs(pointOnCloseToMiddle.x - middlePoint.x) >
+          Math.abs(pointOnCloseToMiddle.y - middlePoint.y)
+
+        setIsMiddlePathHorizontal(isHorizontal)
+        setPathMiddlePosition({ x: middlePoint.x, y: middlePoint.y })
+      }
+    },
+    [sourceX, sourceY, targetX, targetY, pathRef]
+  )
 
   return { updateMiddlePosition }
 }

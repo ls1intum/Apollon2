@@ -176,8 +176,7 @@ export interface EdgeMarkerStyles {
   offset?: number // New offset property
 }
 
-export function 
-getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
+export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
   switch (edgeType) {
     // Class diagram edges - use existing markers
     case "ClassBidirectional":
@@ -256,7 +255,7 @@ getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: USECASE_PADDING,
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "0",
-        offset: 10, 
+        offset: 10,
       }
 
     default:
@@ -333,7 +332,7 @@ export function findClosestHandle(point: XYPosition, rect: Rect): string {
  * Enhanced handle positioning for use case diagrams with elliptical nodes
  */
 export function findClosestHandleForUseCase(
-  point: XYPosition, 
+  point: XYPosition,
   rect: Rect,
   diagramType: "UseCase" | "Class" = "Class"
 ): string {
@@ -341,13 +340,13 @@ export function findClosestHandleForUseCase(
     // For use case diagrams (elliptical nodes), calculate the best connection point
     const centerX = rect.x + rect.width / 2
     const centerY = rect.y + rect.height / 2
-    
+
     // Calculate angle from center to point
     const angle = Math.atan2(point.y - centerY, point.x - centerX)
-    
+
     // Convert to degrees and normalize (0-360)
-    let degrees = (angle * 180 / Math.PI + 360) % 360
-    
+    let degrees = ((angle * 180) / Math.PI + 360) % 360
+
     // For elliptical use case nodes, we can have 8 connection points
     if (degrees >= 337.5 || degrees < 22.5) return "right"
     if (degrees >= 22.5 && degrees < 67.5) return "bottom-right"
@@ -358,7 +357,7 @@ export function findClosestHandleForUseCase(
     if (degrees >= 247.5 && degrees < 292.5) return "top"
     return "top-right"
   }
-  
+
   // Use existing logic for class diagrams
   return findClosestHandle(point, rect)
 }
@@ -374,18 +373,18 @@ export function getEllipseHandlePosition(
   handle: string
 ): { x: number; y: number } {
   const angleMap: { [key: string]: number } = {
-    "right": 0,
+    right: 0,
     "bottom-right": Math.PI / 4,
-    "bottom": Math.PI / 2,
+    bottom: Math.PI / 2,
     "bottom-left": (3 * Math.PI) / 4,
-    "left": Math.PI,
+    left: Math.PI,
     "top-left": (5 * Math.PI) / 4,
-    "top": (3 * Math.PI) / 2,
+    top: (3 * Math.PI) / 2,
     "top-right": (7 * Math.PI) / 4,
   }
-  
+
   const angle = angleMap[handle] ?? 0
-  
+
   return {
     x: centerX + radiusX * Math.cos(angle),
     y: centerY + radiusY * Math.sin(angle),
@@ -397,29 +396,30 @@ export function calculateOverlayPath(
   sourceY: number,
   targetX: number,
   targetY: number,
-  type:string
+  type: string
 ): string {
-
-    if (type == "UseCaseInclude" ||  type == "UseCaseExtend" || type == "UseCaseGeneralization"){
-       const { offset } = getEdgeMarkerStyles(type)
+  if (
+    type == "UseCaseInclude" ||
+    type == "UseCaseExtend" ||
+    type == "UseCaseGeneralization"
+  ) {
+    const { offset } = getEdgeMarkerStyles(type)
     const markerOffset = offset ?? 0
-    
-    console.log(`UseCase edge ${type} with offset:`, markerOffset)
-    
+
     // Calculate normalized direction vector for offset adjustment
-      const dx = targetX - sourceX
-  const dy = targetY - sourceY
-  const length = Math.sqrt(dx * dx + dy * dy)
+    const dx = targetX - sourceX
+    const dy = targetY - sourceY
+    const length = Math.sqrt(dx * dx + dy * dy)
 
     const normalizedDx = dx / length
     const normalizedDy = dy / length
-    
+
     // Apply offset to target coordinates
     const adjustedTargetX = targetX + normalizedDx * markerOffset
     const adjustedTargetY = targetY + normalizedDy * markerOffset
-      return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
-    }
-    return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
+    return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
+  }
+  return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
 }
 
 export function calculateStraightPath(
@@ -427,52 +427,41 @@ export function calculateStraightPath(
   sourceY: number,
   targetX: number,
   targetY: number,
-  type: string,
-  isOverlay: boolean
+  type: string
 ): string {
   // Coordinates are already adjusted when passed in, so just use them directly
-  
+
   // Calculate direction vector
   const dx = targetX - sourceX
   const dy = targetY - sourceY
   const length = Math.sqrt(dx * dx + dy * dy)
-  
+
   if (length === 0) {
     return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
   }
-  
+
   // Special handling for UseCaseInclude with gap
-  if (type === "UseCaseInclude" && !isOverlay) {
-    console.log("Creating UseCaseInclude path with gap")
-    
+  if (type === "UseCaseInclude" || type == "UseCaseExtend") {
     const startX = sourceX
-    const startY = sourceY  
+    const startY = sourceY
     const endX = targetX
     const endY = targetY
     const midX = (startX + endX) / 2
     const midY = (startY + endY) / 2
-    
+
     const normalizedDx = dx / length
     const normalizedDy = dy / length
-    const gapSize = 30
-    
-    const gapStartX = midX - normalizedDx * gapSize  // 30px before middle
-    const gapStartY = midY - normalizedDy * gapSize 
-    const gapEndX = midX + normalizedDx * gapSize     // 30px after middle  
+    const gapSize = 40
+
+    const gapStartX = midX - normalizedDx * gapSize // 30px before middle
+    const gapStartY = midY - normalizedDy * gapSize
+    const gapEndX = midX + normalizedDx * gapSize // 30px after middle
     const gapEndY = midY + normalizedDy * gapSize
-    
-    console.log("Gap path:", { 
-      start: { x: startX, y: startY }, 
-      gapStart: { x: gapStartX, y: gapStartY },
-      gapEnd: { x: gapEndX, y: gapEndY },
-      end: { x: endX, y: endY }
-    })
-    
+
     return `M ${startX},${startY} L ${gapStartX},${gapStartY} M ${gapEndX},${gapEndY} L ${endX},${endY}`
   }
-  
+
   // For all other edge types, just create a straight line
-  console.log("Creating straight path:", { sourceX, sourceY, targetX, targetY })
   return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
 }
 

@@ -52,15 +52,16 @@ function App({ onReactFlowInit }: AppProps) {
     )
 
   const { mode, diagramType } = useMetadataStore(
-  useShallow((state) => ({
-    mode: state.mode,
-    diagramType: state.diagramType,
-  }))
-)
+    useShallow((state) => ({
+      mode: state.mode,
+      diagramType: state.diagramType,
+    }))
+  )
   const isDiagramModifiable = useDiagramModifiable()
-    const connectionLineType = diagramType === "UseCaseDiagram" 
-  ? ConnectionLineType.Straight 
-  : ConnectionLineType.Step
+  const connectionLineType =
+    diagramType === "UseCaseDiagram"
+      ? ConnectionLineType.Straight
+      : ConnectionLineType.Step
   const onNodeDragStop = useNodeDragStop()
   const onDragOver = useDragOver()
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =

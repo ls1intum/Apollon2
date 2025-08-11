@@ -11,7 +11,7 @@ import {
   adjustTargetCoordinates,
   getPositionOnCanvas,
 } from "@/utils"
-import { 
+import {
   BaseEdgeProps,
   useEdgeState,
   useEdgePath,
@@ -19,7 +19,7 @@ import {
   EdgeEndpointMarkers,
   CommonEdgeElements,
 } from "../GenericEdge"
-import { 
+import {
   getEdgeMarkerStyles,
   findClosestHandle,
   simplifySvgPath,
@@ -71,11 +71,17 @@ export const StepPathEdge = ({
   const pathRef = useRef<SVGPathElement | null>(null)
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const finalPointsRef = useRef<IPoint[]>([])
-  
+
   const isDiagramModifiable = useDiagramModifiable()
   const { handleDelete } = useToolbar({ id })
   const { getNode, getNodes, screenToFlowPosition } = useReactFlow()
-  const { updateMiddlePosition } = useEdgePath(sourceX, sourceY, targetX, targetY, pathRef)
+  const { updateMiddlePosition } = useEdgePath(
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    pathRef
+  )
 
   const {
     customPoints,
@@ -106,7 +112,12 @@ export const StepPathEdge = ({
     useShallow((state) => state.setPopOverElementId)
   )
 
-  const { markerPadding, markerEnd, strokeDashArray, offset = 0 } = getEdgeMarkerStyles(type)
+  const {
+    markerPadding,
+    markerEnd,
+    strokeDashArray,
+    offset = 0,
+  } = getEdgeMarkerStyles(type)
   const padding = markerPadding ?? MARKER_PADDING
   const sourceNode = getNode(source)!
   const targetNode = getNode(target)!
@@ -124,6 +135,41 @@ export const StepPathEdge = ({
 
   // Generate step path
   const basePath = useMemo(() => {
+    // For activity diagram edges, skip straight path calculation and always use step path
+    const isActivityDiagram = type.startsWith("Activity")
+
+    if (isActivityDiagram) {
+      console.log(
+        `Activity diagram edge detected (${type}) - using step path only`
+      )
+
+      const adjustedTargetCoordinates = adjustTargetCoordinates(
+        targetX,
+        targetY,
+        targetPosition,
+        padding
+      )
+      const adjustedSourceCoordinates = adjustSourceCoordinates(
+        sourceX,
+        sourceY,
+        sourcePosition,
+        SOURCE_CONNECTION_POINT_PADDING
+      )
+
+      const [edgePath] = getSmoothStepPath({
+        sourceX: adjustedSourceCoordinates.sourceX,
+        sourceY: adjustedSourceCoordinates.sourceY,
+        sourcePosition,
+        targetX: adjustedTargetCoordinates.targetX,
+        targetY: adjustedTargetCoordinates.targetY,
+        targetPosition,
+        borderRadius: STEP_BOARDER_RADIUS,
+        offset: 30,
+      })
+      return edgePath
+    }
+
+    // For other diagram types, try straight path first, then fallback to step path
     const straightPathPoints = tryFindStraightPath(
       {
         position: { x: sourceAbsolutePosition.x, y: sourceAbsolutePosition.y },
@@ -141,8 +187,10 @@ export const StepPathEdge = ({
     )
 
     if (straightPathPoints !== null) {
+      console.log(`Using straight path for ${type}`)
       return pointsToSvgPath(straightPathPoints)
     } else {
+      console.log(`Fallback to step path for ${type}`)
       const adjustedTargetCoordinates = adjustTargetCoordinates(
         targetX,
         targetY,
@@ -169,6 +217,7 @@ export const StepPathEdge = ({
       return edgePath
     }
   }, [
+    type, // Add type as dependency instead of currentDiagramType
     sourceAbsolutePosition,
     targetAbsolutePosition,
     sourceNode,
@@ -179,7 +228,7 @@ export const StepPathEdge = ({
     sourceY,
     targetX,
     targetY,
-    padding
+    padding,
   ])
 
   const computedPoints = useMemo(() => {
@@ -282,7 +331,7 @@ export const StepPathEdge = ({
 
   const markerSegmentPath = useMemo(
     () => getMarkerSegmentPath(activePoints, offset, targetPosition),
-    [activePoints, padding, targetPosition]
+    [activePoints, offset, targetPosition]
   )
 
   const overlayPath = useMemo(() => {
@@ -297,7 +346,12 @@ export const StepPathEdge = ({
       setIsMiddlePathHorizontal,
       false
     )
-  }, [currentPath, updateMiddlePosition, setPathMiddlePosition, setIsMiddlePathHorizontal])
+  }, [
+    currentPath,
+    updateMiddlePosition,
+    setPathMiddlePosition,
+    setIsMiddlePathHorizontal,
+  ])
 
   const midpoints = useMemo(() => {
     if (!allowMidpointDragging || activePoints.length < 3) return []
@@ -365,58 +419,193 @@ export const StepPathEdge = ({
   )
 
   // Reconnection handlers
-  const handleEndpointPointerDown = useCallback((
-    e: React.PointerEvent,
-    endType: "source" | "target"
-  ) => {
-    if (!isDiagramModifiable || !enableReconnection) return
-    
-    const endpoint = endType === "source" 
-      ? activePoints[0] 
-      : activePoints[activePoints.length - 1]
+  const handleEndpointPointerDown = useCallback(
+    (e: React.PointerEvent, endType: "source" | "target") => {
+      if (!isDiagramModifiable || !enableReconnection) return
 
-    startReconnection(e, endType, endpoint)
+      const endpoint =
+        endType === "source"
+          ? activePoints[0]
+          : activePoints[activePoints.length - 1]
 
-    const handleEndpointPointerMove = (moveEvent: PointerEvent) => {
-      if (!isReconnectingRef.current) return
+      startReconnection(e, endType, endpoint)
 
-      const newEndpoint = screenToFlowPosition({
-        x: moveEvent.clientX,
-        y: moveEvent.clientY,
-      })
+      const handleEndpointPointerMove = (moveEvent: PointerEvent) => {
+        if (!isReconnectingRef.current) return
 
-      const newPoints = [...activePoints]
-      if (reconnectingEndRef.current === "source") {
-        newPoints[0] = newEndpoint
-      } else {
-        newPoints[newPoints.length - 1] = newEndpoint
+        const newEndpoint = screenToFlowPosition({
+          x: moveEvent.clientX,
+          y: moveEvent.clientY,
+        })
+
+        // Recalculate the entire path with the new endpoint position
+        let newSourceX = sourceX
+        let newSourceY = sourceY
+        let newTargetX = targetX
+        let newTargetY = targetY
+
+        if (reconnectingEndRef.current === "source") {
+          newSourceX = newEndpoint.x
+          newSourceY = newEndpoint.y
+        } else {
+          newTargetX = newEndpoint.x
+          newTargetY = newEndpoint.y
+        }
+
+        // Check if this is an activity diagram edge
+        const isActivityDiagram = type.startsWith("Activity")
+
+        let newPoints: IPoint[] = []
+
+        if (isActivityDiagram) {
+          // For activity diagrams, always use step path
+          const adjustedTargetCoordinates = adjustTargetCoordinates(
+            newTargetX,
+            newTargetY,
+            targetPosition,
+            padding
+          )
+          const adjustedSourceCoordinates = adjustSourceCoordinates(
+            newSourceX,
+            newSourceY,
+            sourcePosition,
+            SOURCE_CONNECTION_POINT_PADDING
+          )
+
+          const [edgePath] = getSmoothStepPath({
+            sourceX: adjustedSourceCoordinates.sourceX,
+            sourceY: adjustedSourceCoordinates.sourceY,
+            sourcePosition,
+            targetX: adjustedTargetCoordinates.targetX,
+            targetY: adjustedTargetCoordinates.targetY,
+            targetPosition,
+            borderRadius: STEP_BOARDER_RADIUS,
+            offset: 30,
+          })
+
+          // Parse the new path into points
+          const simplifiedPath = simplifySvgPath(edgePath)
+          newPoints = removeDuplicatePoints(parseSvgPath(simplifiedPath))
+        } else {
+          // For other diagram types, try straight path first
+          const newSourceAbsolute =
+            reconnectingEndRef.current === "source"
+              ? newEndpoint
+              : sourceAbsolutePosition
+          const newTargetAbsolute =
+            reconnectingEndRef.current === "target"
+              ? newEndpoint
+              : targetAbsolutePosition
+
+          const straightPathPoints = tryFindStraightPath(
+            {
+              position: { x: newSourceAbsolute.x, y: newSourceAbsolute.y },
+              width: sourceNode.width ?? 100,
+              height: sourceNode.height ?? 160,
+              direction: sourcePosition,
+            },
+            {
+              position: { x: newTargetAbsolute.x, y: newTargetAbsolute.y },
+              width: targetNode.width ?? 100,
+              height: targetNode.height ?? 160,
+              direction: targetPosition,
+            },
+            padding
+          )
+
+          if (straightPathPoints !== null) {
+            newPoints = straightPathPoints
+          } else {
+            // Fallback to step path
+            const adjustedTargetCoordinates = adjustTargetCoordinates(
+              newTargetX,
+              newTargetY,
+              targetPosition,
+              padding
+            )
+            const adjustedSourceCoordinates = adjustSourceCoordinates(
+              newSourceX,
+              newSourceY,
+              sourcePosition,
+              SOURCE_CONNECTION_POINT_PADDING
+            )
+
+            const [edgePath] = getSmoothStepPath({
+              sourceX: adjustedSourceCoordinates.sourceX,
+              sourceY: adjustedSourceCoordinates.sourceY,
+              sourcePosition,
+              targetX: adjustedTargetCoordinates.targetX,
+              targetY: adjustedTargetCoordinates.targetY,
+              targetPosition,
+              borderRadius: STEP_BOARDER_RADIUS,
+              offset: 30,
+            })
+
+            // Parse the new path into points
+            const simplifiedPath = simplifySvgPath(edgePath)
+            newPoints = removeDuplicatePoints(parseSvgPath(simplifiedPath))
+          }
+        }
+
+        // Update temp points for live preview
+        setTempReconnectPoints(newPoints)
       }
-      setTempReconnectPoints(newPoints)
-    }
 
-    const handleEndpointPointerUp = (upEvent: PointerEvent) => {
-      setTempReconnectPoints(null)
-      document.removeEventListener("pointermove", handleEndpointPointerMove, { capture: true })
-      document.removeEventListener("pointerup", handleEndpointPointerUp, { capture: true })
+      const handleEndpointPointerUp = (upEvent: PointerEvent) => {
+        setTempReconnectPoints(null)
+        document.removeEventListener("pointermove", handleEndpointPointerMove, {
+          capture: true,
+        })
+        document.removeEventListener("pointerup", handleEndpointPointerUp, {
+          capture: true,
+        })
 
-      completeReconnection(
-        upEvent,
-        findClosestHandle,
-        () => setCustomPoints([])
-      )
-    }
+        completeReconnection(upEvent, findClosestHandle, () => {
+          // Reset custom points when reconnection is completed
+          // The path will be recalculated automatically based on new connection
+          setCustomPoints([])
+        })
+      }
 
-    document.addEventListener("pointermove", handleEndpointPointerMove, { capture: true })
-    document.addEventListener("pointerup", handleEndpointPointerUp, {
-      once: true,
-      capture: true,
-    })
-  }, [isDiagramModifiable, enableReconnection, activePoints, startReconnection, 
-      isReconnectingRef, screenToFlowPosition, reconnectingEndRef, 
-      setTempReconnectPoints, completeReconnection, setCustomPoints])
+      document.addEventListener("pointermove", handleEndpointPointerMove, {
+        capture: true,
+      })
+      document.addEventListener("pointerup", handleEndpointPointerUp, {
+        once: true,
+        capture: true,
+      })
+    },
+    [
+      isDiagramModifiable,
+      enableReconnection,
+      activePoints,
+      startReconnection,
+      isReconnectingRef,
+      screenToFlowPosition,
+      reconnectingEndRef,
+      setTempReconnectPoints,
+      completeReconnection,
+      setCustomPoints,
+      sourceX,
+      sourceY,
+      targetX,
+      targetY,
+      sourcePosition,
+      targetPosition,
+      type,
+      padding,
+      sourceAbsolutePosition,
+      targetAbsolutePosition,
+      sourceNode,
+      targetNode,
+    ]
+  )
 
   const sourcePoint = activePoints[0] || { x: sourceX, y: sourceY }
-  const targetPoint = activePoints[activePoints.length - 1] || { x: targetX, y: targetY }
+  const targetPoint = activePoints[activePoints.length - 1] || {
+    x: targetX,
+    y: targetY,
+  }
 
   // Create context data for children
   const edgeData: StepPathEdgeData = {
@@ -437,7 +626,9 @@ export const StepPathEdge = ({
           pointerEvents="none"
           style={{
             stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
-            strokeDasharray: isReconnectingRef.current ? "4 4" : strokeDashArray,
+            strokeDasharray: isReconnectingRef.current
+              ? "4 4"
+              : strokeDashArray,
           }}
         />
 
@@ -486,7 +677,7 @@ export const StepPathEdge = ({
       </g>
 
       {/* Render custom labels passed as children with edge data */}
-      {typeof children === 'function' ? children(edgeData) : children}
+      {typeof children === "function" ? children(edgeData) : children}
 
       <CommonEdgeElements
         id={id}
