@@ -16,6 +16,11 @@ import {
   ComponentNodeSVG,
   ComponentInterfaceNodeSVG,
   ComponentSubsystemNodeSVG,
+  FlowchartTerminalNodeSVG,
+  FlowchartProcessNodeSVG,
+  FlowchartDecisionNodeSVG,
+  FlowchartInputOutputNodeSVG,
+  FlowchartFunctionCallNodeSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -248,5 +253,51 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <UseCaseSystemNodeSVG {...props} />,
     },
   ],
-  [UMLDiagramType.Flowchart]: [],
+  [UMLDiagramType.Flowchart]: [
+    {
+      type: "FlowchartTerminal",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Terminal",
+      },
+      svg: (props) => <FlowchartTerminalNodeSVG {...props} />,
+    },
+    {
+      type: "FlowchartProcess",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Process",
+      },
+      svg: (props) => <FlowchartProcessNodeSVG {...props} />,
+    },
+    {
+      type: "FlowchartDecision",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Decision",
+      },
+      svg: (props) => <FlowchartDecisionNodeSVG {...props} />,
+    },
+    {
+      type: "FlowchartInputOutput",
+      width: 140,
+      height: 70,
+      defaultData: {
+        name: "Input/Output",
+      },
+      svg: (props) => <FlowchartInputOutputNodeSVG {...props} />,
+    },
+    {
+      type: "FlowchartFunctionCall",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Function Call",
+      },
+      svg: (props) => <FlowchartFunctionCallNodeSVG {...props} />,
+    },
+  ],
 }

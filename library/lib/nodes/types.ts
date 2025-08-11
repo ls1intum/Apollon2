@@ -18,6 +18,13 @@ import {
   ComponentInterface,
   ComponentSubsystem,
 } from "./componentDiagram"
+import {
+  FlowchartTerminal,
+  FlowchartProcess,
+  FlowchartDecision,
+  FlowchartInputOutput,
+  FlowchartFunctionCall,
+} from "./flowchart"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -38,6 +45,11 @@ export const diagramNodeTypes = {
   component: Component,
   componentInterface: ComponentInterface,
   componentSubsystem: ComponentSubsystem,
+  FlowchartTerminal: FlowchartTerminal,
+  FlowchartProcess: FlowchartProcess,
+  FlowchartDecision: FlowchartDecision,
+  FlowchartInputOutput: FlowchartInputOutput,
+  FlowchartFunctionCall: FlowchartFunctionCall,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -63,4 +75,9 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   component: "component",
   componentInterface: "componentInterface",
   componentSubsystem: "componentSubsystem",
+  FlowchartTerminal: "FlowchartTerminal",
+  FlowchartProcess: "FlowchartProcess",
+  FlowchartDecision: "FlowchartDecision",
+  FlowchartInputOutput: "FlowchartInputOutput",
+  FlowchartFunctionCall: "FlowchartFunctionCall",
 } as const
