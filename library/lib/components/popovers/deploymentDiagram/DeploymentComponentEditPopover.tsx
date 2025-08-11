@@ -35,24 +35,29 @@ export const DeploymentComponentEditPopover: React.FC<PopoverProps> = ({
     )
   }
 
+  const SwitchHeaderElement = (
+    <div
+      onClick={switchHeaderShown}
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1,
+        ...(nodeData.isComponentHeaderShown && {
+          background:
+            "linear-gradient(to top right, transparent calc(50% - 1px), black 50%, transparent calc(50% + 1px))",
+        }),
+      }}
+    >
+      {"«»"}
+    </div>
+  )
+
   return (
-    <DefaultNodeEditPopover elementId={elementId}>
-      <div
-        onClick={switchHeaderShown}
-        style={{
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 1,
-          ...(nodeData.isComponentHeaderShown && {
-            background:
-              "linear-gradient(to top right, transparent calc(50% - 1px), black 50%, transparent calc(50% + 1px))",
-          }),
-        }}
-      >
-        {"<<>>"}
-      </div>
-    </DefaultNodeEditPopover>
+    <DefaultNodeEditPopover
+      elementId={elementId}
+      sideElements={[SwitchHeaderElement]}
+    />
   )
 }

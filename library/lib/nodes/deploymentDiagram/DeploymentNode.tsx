@@ -84,7 +84,7 @@ export function DeploymentNode({
       <PopoverManager
         anchorEl={svgWrapperRef.current}
         elementId={id}
-        type="default"
+        type="DeploymentNode"
       />
     </DefaultNodeWrapper>
   )

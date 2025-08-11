@@ -3,6 +3,7 @@ import { DeploymentNodeProps } from "@/types"
 import { useShallow } from "zustand/shallow"
 import { DefaultNodeEditPopover } from "../DefaultNodeEditPopover"
 import { PopoverProps } from "../types"
+import { Divider, TextField } from "@mui/material"
 
 export const DeploymentNodeEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -17,6 +18,23 @@ export const DeploymentNodeEditPopover: React.FC<PopoverProps> = ({
   }
 
   const nodeData = node.data as DeploymentNodeProps
+
+  const handleStereotypeChange = (newStereotype: string) => {
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === elementId) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              stereotype: newStereotype,
+            },
+          }
+        }
+        return node
+      })
+    )
+  }
 
   const switchHeaderShown = () => {
     setNodes((nodes) =>
@@ -35,23 +53,48 @@ export const DeploymentNodeEditPopover: React.FC<PopoverProps> = ({
     )
   }
 
+  const HeaderSwitcher = (
+    <div
+      onClick={switchHeaderShown}
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1,
+        ...(nodeData.isComponentHeaderShown && {
+          background:
+            "linear-gradient(to top right, transparent calc(50% - 1px), black 50%, transparent calc(50% + 1px))",
+        }),
+      }}
+    >
+      {"«»"}
+    </div>
+  )
+
   return (
-    <DefaultNodeEditPopover elementId={elementId}>
+    <DefaultNodeEditPopover
+      elementId={elementId}
+      sideElements={[HeaderSwitcher]}
+    >
       <div
-        onClick={switchHeaderShown}
         style={{
-          position: "relative",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 1,
-          ...(nodeData.isComponentHeaderShown && {
-            background:
-              "linear-gradient(to top right, transparent calc(50% - 1px), black 50%, transparent calc(50% + 1px))",
-          }),
+          flexDirection: "column",
+          gap: "8px",
+          marginTop: "8px",
+          width: "100%",
         }}
       >
-        {"<<>>"}
+        <Divider />
+        <TextField
+          value={nodeData.stereotype}
+          onChange={(e) => handleStereotypeChange(e.target.value)}
+          onBlur={() => handleStereotypeChange(nodeData.stereotype)}
+          size="small"
+          sx={{ backgroundColor: "#fff" }}
+          fullWidth
+        />
       </div>
     </DefaultNodeEditPopover>
   )
