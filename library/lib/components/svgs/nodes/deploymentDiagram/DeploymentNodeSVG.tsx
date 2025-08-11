@@ -36,60 +36,52 @@ export const DeploymentNodeSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          stroke="black"
-          strokeWidth={LINE_WIDTH}
-          fill="white"
-        />
-
-        {/* Deployment Node Icon - Simple cube representation */}
-        <g transform={`translate(${width - 35}, 5)`}>
-          <rect
-            x="0"
-            y="5"
-            width="20"
-            height="15"
+        <g>
+          {/* Top face */}
+          <path
+            d={`M 0 8 l 8 -8 H ${width} l -8 8 Z`}
             stroke="black"
-            strokeWidth="1"
+            strokeWidth={LINE_WIDTH}
             fill="white"
           />
-          <polygon
-            points="20,5 25,0 25,15 20,20"
+          {/* Right face */}
+          <path
+            d={`M ${width} 0 V ${height - 8} l -8 8 V 8 Z`}
             stroke="black"
-            strokeWidth="1"
-            fill="lightgray"
+            strokeWidth={LINE_WIDTH}
+            fill="white"
           />
-          <polygon
-            points="0,5 5,0 25,0 20,5"
+          {/* Front face */}
+          <rect
+            x="0"
+            y="8"
+            width={width - 8}
+            height={height - 8}
             stroke="black"
-            strokeWidth="1"
-            fill="lightgray"
+            strokeWidth={LINE_WIDTH}
+            fill="white"
           />
         </g>
 
         {/* Name Text */}
         <CustomText
-          x={width / 2}
-          y={height / 2}
+          x="50%"
+          y={30}
           textAnchor="middle"
-          fontWeight="600"
-          dominantBaseline="central"
+          fontWeight="bold"
+          dominantBaseline="middle"
         >
           {isComponentHeaderShown ? (
             <>
-              <tspan x={width / 2} dy="-0.6em">
-                {`<<${stereotype}>>`}
+              <tspan x="50%" dy="-8" fontSize="85%">
+                {`«${stereotype}»`}
               </tspan>
-              <tspan x={width / 2} dy="1.2em">
+              <tspan x="50%" dy="18" textDecoration="underline">
                 {name}
               </tspan>
             </>
           ) : (
-            <tspan x={width / 2} dy="0">
+            <tspan x="50%" dy="0" textDecoration="underline">
               {name}
             </tspan>
           )}

@@ -45,7 +45,7 @@ export const ComponentInterfaceNodeSVG: React.FC<Props> = ({
           x={width + 2}
           y={-10}
           textAnchor="start"
-          fontWeight="600"
+          fontWeight="bold"
           dominantBaseline="hanging"
         >
           {name}

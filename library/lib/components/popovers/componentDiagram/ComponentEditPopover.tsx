@@ -54,7 +54,7 @@ export const ComponentEditPopover: React.FC<PopoverProps> = ({
           }),
         }}
       >
-        {"<<>>"}
+        {"«»"}
       </div>
     </DefaultNodeEditPopover>
   )

@@ -44,7 +44,7 @@ export const ComponentNodeSVG: React.FC<Props> = ({
         />
 
         {/* right top book */}
-        <g transform={`translate(${width - 29}, 5)`}>
+        <g transform={`translate(${width - 32}, 8)`}>
           <path
             d="M 4.8 0 L 24 0 L 24 24 L 4.8 24 L 4.8 19.2 L 0 19.2 L 0 14.4 L 4.8 14.4 L 4.8 9.6 L 0 9.6 L 0 4.8 L 4.8 4.8 Z"
             strokeWidth="1.2"
@@ -66,13 +66,13 @@ export const ComponentNodeSVG: React.FC<Props> = ({
           x={width / 2}
           y={height / 2}
           textAnchor="middle"
-          fontWeight="600"
+          fontWeight="bold"
           dominantBaseline="central"
         >
           {isComponentHeaderShown ? (
             <>
-              <tspan x={width / 2} dy="-0.6em">
-                {"<<component>>"}
+              <tspan x={width / 2} dy="-0.6em" fontSize="0.8em">
+                {"«component»"}
               </tspan>
               <tspan x={width / 2} dy="1.2em">
                 {name}

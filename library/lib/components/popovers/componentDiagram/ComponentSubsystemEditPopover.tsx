@@ -41,7 +41,6 @@ export const ComponentSubsystemEditPopover: React.FC<PopoverProps> = ({
 
   return (
     <DefaultNodeEditPopover elementId={elementId}>
-      {/* <div onClick={switchHeaderShown} >{nodeData.isComponentSubsystemHeaderShown? "<<>>" : "<<>>"}</div> */}
       <div
         onClick={switchHeaderShown}
         style={{
@@ -56,7 +55,7 @@ export const ComponentSubsystemEditPopover: React.FC<PopoverProps> = ({
           }),
         }}
       >
-        {"<<>>"}
+        {"«»"}
       </div>
     </DefaultNodeEditPopover>
   )

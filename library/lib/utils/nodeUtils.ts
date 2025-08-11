@@ -108,6 +108,8 @@ export const isParentNodeType = (nodeType?: string) => {
     nodeType === DiagramNodeTypeRecord.package ||
     nodeType === DiagramNodeTypeRecord.activity ||
     nodeType === DiagramNodeTypeRecord.useCaseSystem ||
-    nodeType === DiagramNodeTypeRecord.componentSubsystem
+    nodeType === DiagramNodeTypeRecord.componentSubsystem ||
+    nodeType === DiagramNodeTypeRecord.deploymentNode ||
+    nodeType === DiagramNodeTypeRecord.deploymentComponent
   )
 }

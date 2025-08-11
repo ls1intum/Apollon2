@@ -1,17 +1,40 @@
-import { NodeProps, type Node } from "@xyflow/react"
+import {
+  NodeProps,
+  NodeResizer,
+  NodeToolbar,
+  Position,
+  type Node,
+} from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
 import { DefaultNodeProps } from "@/types"
 import { useRef } from "react"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { DeploymentArtifactSVG } from "@/components"
+import { useHandleOnResize } from "@/hooks"
+import Box from "@mui/material/Box"
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
+import EditIcon from "@mui/icons-material/Edit"
+import { usePopoverStore } from "@/store/context"
+import { useShallow } from "zustand/shallow"
+import { useHandleDelete } from "@/hooks/useHandleDelete"
+import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
+import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 
 export function DeploymentArtifact({
   id,
   width,
   height,
   data: { name },
+  parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
+  const { onResize } = useHandleOnResize(parentId)
+  const isDiagramModifiable = useDiagramModifiable()
+  const selected = useIsOnlyThisElementSelected(id)
+  const setPopOverElementId = usePopoverStore(
+    useShallow((state) => state.setPopOverElementId)
+  )
+  const handleDelete = useHandleDelete(id)
 
   if (!width || !height) {
     return null
@@ -19,13 +42,40 @@ export function DeploymentArtifact({
 
   return (
     <DefaultNodeWrapper width={width} height={height} elementId={id}>
+      <NodeToolbar
+        isVisible={isDiagramModifiable && !!selected}
+        position={Position.Top}
+        align="end"
+        offset={10}
+      >
+        <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
+          <DeleteOutlineOutlinedIcon
+            onClick={handleDelete}
+            style={{ cursor: "pointer", width: 16, height: 16 }}
+          />
+
+          <EditIcon
+            onClick={() => {
+              setPopOverElementId(id)
+            }}
+            style={{ cursor: "pointer", width: 16, height: 16 }}
+          />
+        </Box>
+      </NodeToolbar>
+      <NodeResizer
+        isVisible={isDiagramModifiable && !!selected}
+        onResize={onResize}
+        minHeight={50}
+        minWidth={50}
+        handleStyle={{ width: 8, height: 8 }}
+      />
       <div ref={svgWrapperRef}>
         <DeploymentArtifactSVG
           width={width}
           height={height}
           name={name}
           id={id}
-          showAssessmentResults={false}
+          showAssessmentResults={!isDiagramModifiable}
         />
       </div>
 
