@@ -14,3 +14,11 @@ export type ClassNodeProps = {
   attributes: ClassNodeElement[]
   stereotype?: ClassType
 } & DefaultNodeProps
+
+export type ComponentNodeProps = {
+  isComponentHeaderShown: boolean
+} & DefaultNodeProps
+
+export type ComponentSubsystemNodeProps = {
+  isComponentSubsystemHeaderShown: boolean
+} & DefaultNodeProps

@@ -25,8 +25,17 @@ import {
   EdgeSeeFeedbackPopover,
 } from "./edgePopovers"
 import { LocationPopover } from "@/types"
+import {
+  ComponentEditPopover,
+  ComponentSubsystemEditPopover,
+} from "./componentDiagram"
 
-type PopoverType = "class" | "default" | DiagramEdgeType
+type PopoverType =
+  | "class"
+  | "default"
+  | DiagramEdgeType
+  | "Component"
+  | "ComponentSubsystem"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -44,6 +53,8 @@ const editPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  Component: React.FC<PopoverProps>
+  ComponentSubsystem: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   default: DefaultNodeEditPopover,
@@ -60,6 +71,8 @@ const editPopovers: {
   UseCaseInclude: UseCaseEdgeEditPopover,
   UseCaseExtend: UseCaseEdgeEditPopover,
   UseCaseGeneralization: UseCaseEdgeEditPopover,
+  Component: ComponentEditPopover,
+  ComponentSubsystem: ComponentSubsystemEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -78,6 +91,8 @@ const giveFeedbackPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  Component: React.FC<PopoverProps>
+  ComponentSubsystem: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
@@ -94,6 +109,8 @@ const giveFeedbackPopovers: {
   UseCaseInclude: EdgeGiveFeedbackPopover,
   UseCaseExtend: EdgeGiveFeedbackPopover,
   UseCaseGeneralization: EdgeGiveFeedbackPopover,
+  Component: DefaultNodeGiveFeedbackPopover,
+  ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -112,6 +129,8 @@ const seeFeedbackPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  Component: React.FC<PopoverProps>
+  ComponentSubsystem: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
@@ -128,6 +147,8 @@ const seeFeedbackPopovers: {
   UseCaseInclude: EdgeSeeFeedbackPopover,
   UseCaseExtend: EdgeSeeFeedbackPopover,
   UseCaseGeneralization: EdgeSeeFeedbackPopover,
+  Component: DefaultNodeSeeFeedbackPopover,
+  ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {
