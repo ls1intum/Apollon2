@@ -17,6 +17,10 @@ import {
   ComponentInterfaceNodeSVG,
   ComponentSubsystemNodeSVG,
   ComponentNodeSVG,
+  DeploymentNodeSVG,
+  DeploymentComponentSVG,
+  DeploymentArtifactSVG,
+  DeploymentInterfaceSVG,
 } from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
@@ -234,6 +238,53 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
     case "componentInterface":
       return (
         <ComponentInterfaceNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "deploymentNode":
+      return (
+        <DeploymentNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          isComponentHeaderShown={
+            nodeInfo.data.isComponentHeaderShown as boolean
+          }
+          stereotype={nodeInfo.data.stereotype as string}
+        />
+      )
+    case "deploymentComponent":
+      return (
+        <DeploymentComponentSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          isComponentHeaderShown={
+            nodeInfo.data.isComponentHeaderShown as boolean
+          }
+        />
+      )
+    case "deploymentArtifact":
+      return (
+        <DeploymentArtifactSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "deploymentInterface":
+      return (
+        <DeploymentInterfaceSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
