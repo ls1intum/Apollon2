@@ -75,7 +75,7 @@ html_context = {
     "github_version": "develop",
     "conf_py_path": "/docs/",
 }
-html_logo = "images/logo.svg"
+html_logo = "images/logo.png"
 html_theme_options = {
     'logo_only': True,
     'style_nav_header_background': '#3b82f6',
