@@ -7,7 +7,7 @@ import {
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
 import { useHandleOnResize } from "@/hooks"
-import { ComponentNodeProps } from "@/types"
+import { DefaultNodeProps } from "@/types"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
@@ -26,7 +26,7 @@ export function FlowchartProcess({
   height,
   data: { name },
   parentId,
-}: NodeProps<Node<ComponentNodeProps>>) {
+}: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
   const { onResize } = useHandleOnResize(parentId)
   const isDiagramModifiable = useDiagramModifiable()
