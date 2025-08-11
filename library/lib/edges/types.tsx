@@ -1,43 +1,59 @@
 import { EdgeTypes } from "@xyflow/react"
-import { GenericEdge } from "./GenericEdge"
+import { ClassDiagramEdge } from "./edgeTypes/ClassDiagramEdge"
+import { ActivityDiagramEdge } from "./edgeTypes/ActivityDiagramEdge" 
+import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ExtendedEdgeProps } from "./EdgeProps"
 
-// Helper function to create configured edge components
-const createEdgeComponent = (
-  pathType: "step" | "straight",
-  diagramType: "class" | "usecase" | "activity",
-  allowMidpointDragging: boolean = true,
-  showRelationshipLabels: boolean = false
-) => {
+// Helper functions to create configured edge components for each diagram type
+
+// Class diagram edge factory
+const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   return (props: ExtendedEdgeProps) => (
-    <GenericEdge
+    <ClassDiagramEdge
       {...props}
-      pathType={pathType}
-      diagramType={diagramType}
       allowMidpointDragging={allowMidpointDragging}
+    />
+  )
+}
+
+// Activity diagram edge factory  
+const createActivityEdgeComponent = (allowMidpointDragging: boolean = true) => {
+  return (props: ExtendedEdgeProps) => (
+    <ActivityDiagramEdge
+      {...props}
+      allowMidpointDragging={allowMidpointDragging}
+    />
+  )
+}
+
+// Use case diagram edge factory
+const createUseCaseEdgeComponent = (showRelationshipLabels: boolean = false) => {
+  return (props: ExtendedEdgeProps) => (
+    <UseCaseEdge
+      {...props}
       showRelationshipLabels={showRelationshipLabels}
     />
   )
 }
 
 export const diagramEdgeTypes = {
-  // Class diagram edges - use step path with midpoint dragging
-  ClassAggregation: createEdgeComponent("step", "class", true, false),
-  ClassInheritance: createEdgeComponent("step", "class", true, false),
-  ClassRealization: createEdgeComponent("step", "class", true, false),
-  ClassComposition: createEdgeComponent("step", "class", true, false),
-  ClassBidirectional: createEdgeComponent("step", "class", true, false),
-  ClassUnidirectional: createEdgeComponent("step", "class", true, false),
-  ClassDependency: createEdgeComponent("step", "class", true, false),
+  // Class diagram edges - all use step paths with midpoint dragging
+  ClassAggregation: createClassEdgeComponent(true),
+  ClassInheritance: createClassEdgeComponent(true),
+  ClassRealization: createClassEdgeComponent(true),
+  ClassComposition: createClassEdgeComponent(true),
+  ClassBidirectional: createClassEdgeComponent(true),
+  ClassUnidirectional: createClassEdgeComponent(true),
+  ClassDependency: createClassEdgeComponent(true),
   
-  // Activity diagram edges - use step path with midpoint dragging
-  ActivityControlFlow: createEdgeComponent("step", "activity", true, false),
+  // Activity diagram edges - use step paths with midpoint dragging
+  ActivityControlFlow: createActivityEdgeComponent(true),
   
-  // Use case diagram edges - use straight path without midpoint dragging
-  UseCaseAssociation: createEdgeComponent("straight", "usecase", false, false), // No relationship labels
-  UseCaseInclude: createEdgeComponent("straight", "usecase", false, true), // Show <<include>>
-  UseCaseExtend: createEdgeComponent("straight", "usecase", false, true), // Show <<extend>>
-  UseCaseGeneralization: createEdgeComponent("straight", "usecase", false, false), // No relationship labels
+  // Use case diagram edges - use straight paths, no midpoint dragging
+  UseCaseAssociation: createUseCaseEdgeComponent(false), // No relationship labels
+  UseCaseInclude: createUseCaseEdgeComponent(true), // Show <<include>>
+  UseCaseExtend: createUseCaseEdgeComponent(true), // Show <<extend>>
+  UseCaseGeneralization: createUseCaseEdgeComponent(false), // No relationship labels
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes

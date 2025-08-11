@@ -172,6 +172,7 @@ export interface EdgeMarkerStyles {
   markerEnd?: string
   markerPadding?: number
   strokeDashArray?: string
+  offset?: number // New offset property
 }
 
 export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
@@ -181,6 +182,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
       return {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "0",
+        offset: 0,
       }
     case "ActivityControlFlow":
     case "ClassUnidirectional":
@@ -188,67 +190,78 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
         strokeDashArray: "0",
+        offset: 11.5,
       }
     case "ClassAggregation":
       return {
         markerPadding: RHOMBUS_MARKER_PADDING,
         markerEnd: "url(#white-rhombus)",
         strokeDashArray: "0",
+        offset: 14.5, // Rhombus gets 10px offset
       }
     case "ClassComposition":
       return {
         markerPadding: RHOMBUS_MARKER_PADDING,
         markerEnd: "url(#black-rhombus)",
         strokeDashArray: "0",
+        offset: 14.5, // Rhombus gets 10px offset
       }
     case "ClassInheritance":
       return {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "0",
+        offset: 11, // Triangle gets 10px offset
       }
     case "ClassDependency":
       return {
         markerPadding: DOTTED_ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
         strokeDashArray: "8",
+        offset: 11.5,
       }
     case "ClassRealization":
       return {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "8",
+        offset: 11, // Triangle gets 10px offset
       }
 
     // Use case diagram edges - using ClassUnidirectional styling for associations
     case "UseCaseAssociation":
       return {
         markerPadding: 0,
-        strokeDashArray: "0", // Use same styling as ClassUnidirectional but no arrow
+        strokeDashArray: "0",
+        offset: 0,
       }
     case "UseCaseInclude":
       return {
-        markerPadding: ARROW_MARKER_PADDING,
-        markerEnd: "url(#usecase-arrow)",
-        strokeDashArray: "4", // Smaller dash pattern
+        markerPadding: 5,
+        markerEnd: "url(#black-arrow)",
+        strokeDashArray: "8",
+        offset: 0,
       }
     case "UseCaseExtend":
       return {
         markerPadding: ARROW_MARKER_PADDING,
         markerEnd: "url(#usecase-arrow)",
-        strokeDashArray: "4", // Smaller dash pattern
+        strokeDashArray: "4",
+        offset: 13,
       }
     case "UseCaseGeneralization":
       return {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#usecase-triangle)",
         strokeDashArray: "0",
+        offset: 13, // Triangle gets 10px offset
       }
 
     default:
       return {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "0",
+        offset: 0,
       }
   }
 }
@@ -530,7 +543,7 @@ export function removeDuplicatePoints(points: IPoint[]): IPoint[] {
 
 export function getMarkerSegmentPath(
   points: IPoint[],
-  markerPadding: number,
+  offset: number,
   targetPosition: "top" | "bottom" | "left" | "right"
 ): string {
   if (points.length === 0) return ""
@@ -538,7 +551,6 @@ export function getMarkerSegmentPath(
   const lastPoint = points[points.length - 1]
   let extendedX = lastPoint.x
   let extendedY = lastPoint.y
-  const offset = markerPadding === -5 ? 0 : markerPadding === 6 ? 10 : 15
   switch (targetPosition) {
     case "top":
       extendedY = lastPoint.y + offset
@@ -559,9 +571,6 @@ export function getMarkerSegmentPath(
   return `M ${lastPoint.x} ${lastPoint.y} L ${extendedX} ${extendedY}`
 }
 
-/**
- * UPDATED: Enhanced to support use case diagrams
- */
 export const getDefaultEdgeType = (
   diagramType: UMLDiagramType
 ): DiagramEdgeType => {
