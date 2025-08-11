@@ -42,9 +42,9 @@ export const ComponentInterfaceNodeSVG: React.FC<Props> = ({
 
         {/* Name Text */}
         <CustomText
-          x={width + 10}
+          x={width + 2}
           y={-10}
-          textAnchor="middle"
+          textAnchor="start"
           fontWeight="600"
           dominantBaseline="hanging"
         >

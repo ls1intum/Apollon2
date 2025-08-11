@@ -32,6 +32,7 @@ export type DropElementConfig = {
   height: number
   defaultData?: Record<string, unknown>
   svg: React.FC<any>
+  marginTop?: number
 }
 
 export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
@@ -211,6 +212,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
         name: "Interface",
       },
       svg: (props) => <ComponentInterfaceNodeSVG {...props} />,
+      marginTop: 10,
     },
   ],
   [UMLDiagramType.DeploymentDiagram]: [],
