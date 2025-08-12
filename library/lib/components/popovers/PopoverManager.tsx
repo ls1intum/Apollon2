@@ -28,6 +28,10 @@ import {
   ComponentEditPopover,
   ComponentSubsystemEditPopover,
 } from "./componentDiagram"
+import {
+  DeploymentComponentEditPopover,
+  DeploymentNodeEditPopover,
+} from "./deploymentDiagram"
 
 type PopoverType =
   | "class"
@@ -35,6 +39,8 @@ type PopoverType =
   | DiagramEdgeType
   | "Component"
   | "ComponentSubsystem"
+  | "DeploymentComponent"
+  | "DeploymentNode"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -49,6 +55,8 @@ const editPopovers: {
   ActivityControlFlow: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
+  DeploymentComponent: React.FC<PopoverProps>
+  DeploymentNode: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   default: DefaultNodeEditPopover,
@@ -62,6 +70,8 @@ const editPopovers: {
   ActivityControlFlow: ActivityDiagramEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
+  DeploymentComponent: DeploymentComponentEditPopover,
+  DeploymentNode: DeploymentNodeEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -77,6 +87,8 @@ const giveFeedbackPopovers: {
   ActivityControlFlow: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
+  DeploymentComponent: React.FC<PopoverProps>
+  DeploymentNode: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
@@ -90,6 +102,8 @@ const giveFeedbackPopovers: {
   ActivityControlFlow: EdgeGiveFeedbackPopover,
   Component: DefaultNodeGiveFeedbackPopover,
   ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
+  DeploymentComponent: DefaultNodeGiveFeedbackPopover,
+  DeploymentNode: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -105,6 +119,8 @@ const seeFeedbackPopovers: {
   ActivityControlFlow: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
+  DeploymentComponent: React.FC<PopoverProps>
+  DeploymentNode: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
@@ -118,6 +134,8 @@ const seeFeedbackPopovers: {
   ActivityControlFlow: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
+  DeploymentComponent: DefaultNodeSeeFeedbackPopover,
+  DeploymentNode: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

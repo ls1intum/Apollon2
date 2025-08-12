@@ -16,6 +16,10 @@ import {
   ComponentNodeSVG,
   ComponentInterfaceNodeSVG,
   ComponentSubsystemNodeSVG,
+  DeploymentNodeSVG,
+  DeploymentComponentSVG,
+  DeploymentArtifactSVG,
+  DeploymentInterfaceSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -215,7 +219,48 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       marginTop: 10,
     },
   ],
-  [UMLDiagramType.DeploymentDiagram]: [],
+  [UMLDiagramType.DeploymentDiagram]: [
+    {
+      type: "deploymentNode",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: {
+        name: "Node",
+        isComponentHeaderShown: true,
+        stereotype: "node",
+      },
+      svg: (props) => <DeploymentNodeSVG {...props} />,
+    },
+    {
+      type: "deploymentComponent",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: {
+        name: "Component",
+        isComponentHeaderShown: true,
+      },
+      svg: (props) => <DeploymentComponentSVG {...props} />,
+    },
+    {
+      type: "deploymentArtifact",
+      width: droppedElementWidth,
+      height: 50,
+      defaultData: {
+        name: "Artifact",
+      },
+      svg: (props) => <DeploymentArtifactSVG {...props} />,
+    },
+    {
+      type: "deploymentInterface",
+      width: 20,
+      height: 20,
+      defaultData: {
+        name: "Interface",
+      },
+      svg: (props) => <DeploymentInterfaceSVG {...props} />,
+      marginTop: 10,
+    },
+  ],
   [UMLDiagramType.PetriNet]: [],
   [UMLDiagramType.ReachabilityGraph]: [],
   [UMLDiagramType.SyntaxTree]: [],

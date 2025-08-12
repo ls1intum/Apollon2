@@ -18,6 +18,12 @@ import {
   ComponentInterface,
   ComponentSubsystem,
 } from "./componentDiagram"
+import {
+  DeploymentNode,
+  DeploymentComponent,
+  DeploymentArtifact,
+  DeploymentInterface,
+} from "./deploymentDiagram"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -38,6 +44,10 @@ export const diagramNodeTypes = {
   component: Component,
   componentInterface: ComponentInterface,
   componentSubsystem: ComponentSubsystem,
+  deploymentNode: DeploymentNode,
+  deploymentComponent: DeploymentComponent,
+  deploymentArtifact: DeploymentArtifact,
+  deploymentInterface: DeploymentInterface,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -63,4 +73,8 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   component: "component",
   componentInterface: "componentInterface",
   componentSubsystem: "componentSubsystem",
+  deploymentNode: "deploymentNode",
+  deploymentComponent: "deploymentComponent",
+  deploymentArtifact: "deploymentArtifact",
+  deploymentInterface: "deploymentInterface",
 } as const
