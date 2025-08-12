@@ -7,6 +7,8 @@ import { useReconnect } from "@/hooks/useReconnect"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import AssessmentIcon from "@/components/svgs/AssessmentIcon"
 import { DiagramEdgeType } from "."
+import { NodeBounds } from "./Connection"
+import { Assessment } from "@/typings"
 
 export interface BaseEdgeProps extends ExtendedEdgeProps {
   diagramType?: "class" | "usecase" | "activity"
@@ -142,7 +144,7 @@ export const useEdgeReconnection = (
 
   const completeReconnection = (
     upEvent: PointerEvent,
-    handleFinder: (position: IPoint, nodeBounds: any) => string,
+    handleFinder: (position: IPoint, nodeBounds: NodeBounds) => string,
     onComplete?: () => void
   ) => {
     const isReconnectingSource = reconnectingEndRef.current === "source"
@@ -257,7 +259,7 @@ export const CommonEdgeElements = ({
   id: string
   pathMiddlePosition: IPoint
   isDiagramModifiable: boolean
-  assessments: any
+  assessments: Record<string, Assessment>
   anchorRef: React.RefObject<SVGSVGElement>
   handleDelete: () => void
   setPopOverElementId: (id: string) => void

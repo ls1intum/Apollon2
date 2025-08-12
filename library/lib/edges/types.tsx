@@ -4,35 +4,39 @@ import { ActivityDiagramEdge } from "./edgeTypes/ActivityDiagramEdge"
 import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ExtendedEdgeProps } from "./EdgeProps"
 
-// Helper functions to create configured edge components for each diagram type
-
 // Class diagram edge factory
 const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
-  return (props: ExtendedEdgeProps) => (
+  const Component = (props: ExtendedEdgeProps) => (
     <ClassDiagramEdge
       {...props}
       allowMidpointDragging={allowMidpointDragging}
     />
   )
+  Component.displayName = `ClassDiagramEdgeFactory(${allowMidpointDragging})`
+  return Component
 }
 
 // Activity diagram edge factory
 const createActivityEdgeComponent = (allowMidpointDragging: boolean = true) => {
-  return (props: ExtendedEdgeProps) => (
+  const Component = (props: ExtendedEdgeProps) => (
     <ActivityDiagramEdge
       {...props}
       allowMidpointDragging={allowMidpointDragging}
     />
   )
+  Component.displayName = `ActivityDiagramEdgeFactory(${allowMidpointDragging})`
+  return Component
 }
 
 // Use case diagram edge factory
 const createUseCaseEdgeComponent = (
   showRelationshipLabels: boolean = false
 ) => {
-  return (props: ExtendedEdgeProps) => (
+  const Component = (props: ExtendedEdgeProps) => (
     <UseCaseEdge {...props} showRelationshipLabels={showRelationshipLabels} />
   )
+  Component.displayName = `UseCaseEdgeFactory(${showRelationshipLabels})`
+  return Component
 }
 
 export const diagramEdgeTypes = {
@@ -44,11 +48,7 @@ export const diagramEdgeTypes = {
   ClassBidirectional: createClassEdgeComponent(true),
   ClassUnidirectional: createClassEdgeComponent(true),
   ClassDependency: createClassEdgeComponent(true),
-
-  // Activity diagram edges - use step paths with midpoint dragging
   ActivityControlFlow: createActivityEdgeComponent(true),
-
-  // Use case diagram edges - use straight paths, no midpoint dragging
   UseCaseAssociation: createUseCaseEdgeComponent(false), // No relationship labels
   UseCaseInclude: createUseCaseEdgeComponent(true), // Show <<include>>
   UseCaseExtend: createUseCaseEdgeComponent(true), // Show <<extend>>

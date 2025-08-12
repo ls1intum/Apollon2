@@ -341,7 +341,7 @@ export function findClosestHandleForUseCase(
     const angle = Math.atan2(point.y - centerY, point.x - centerX)
 
     // Convert to degrees and normalize (0-360)
-    let degrees = ((angle * 180) / Math.PI + 360) % 360
+    const degrees = ((angle * 180) / Math.PI + 360) % 360
 
     // For elliptical use case nodes, we can have 8 connection points
     if (degrees >= 337.5 || degrees < 22.5) return "right"
