@@ -10,6 +10,10 @@ const edgeTypeKeys = [
   "ClassUnidirectional",
   "ClassDependency",
   "ActivityControlFlow",
+  "BPMNSequenceFlow",
+  "BPMNMessageFlow",
+  "BPMNAssociationFlow",
+  "BPMNDataAssociationFlow",
 ] as const
 
 export const diagramEdgeTypes = Object.fromEntries(

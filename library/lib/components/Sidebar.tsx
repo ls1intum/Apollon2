@@ -30,6 +30,7 @@ export const Sidebar = () => {
         padding: "10px",
         gap: "15px",
         alignItems: "center",
+        overflowY: "auto",
       }}
     >
       {dropElementConfigs[diagramType].map((config, index) => (

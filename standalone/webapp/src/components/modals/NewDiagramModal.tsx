@@ -15,6 +15,7 @@ const diagramTypes = {
     UMLDiagramType.ComponentDiagram,
     UMLDiagramType.DeploymentDiagram,
     UMLDiagramType.Flowchart,
+    UMLDiagramType.BPMN,
   ],
   behavioral: [UMLDiagramType.ActivityDiagram, UMLDiagramType.UseCaseDiagram],
 }
@@ -31,7 +32,7 @@ const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   ReachabilityGraph: "",
   SyntaxTree: "",
   Flowchart: "Flowchart",
-  BPMN: "",
+  BPMN: "BPMN Diagram",
 }
 
 export const NewDiagramModal = () => {

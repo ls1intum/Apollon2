@@ -31,6 +31,22 @@ import {
   FlowchartInputOutput,
   FlowchartFunctionCall,
 } from "./flowchart"
+import {
+  BPMNTask,
+  BPMNStartEvent,
+  BPMNIntermediateEvent,
+  BPMNEndEvent,
+  BPMNGateway,
+  BPMNSubprocess,
+  BPMNTransaction,
+  BPMNCallActivity,
+  BPMNAnnotation,
+  BPMNDataObject,
+  BPMNDataStore,
+  BPMNPool,
+  BPMNSwimlane,
+  BPMNGroup,
+} from "./bpmn"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -60,6 +76,20 @@ export const diagramNodeTypes = {
   flowchartDecision: FlowchartDecision,
   flowchartInputOutput: FlowchartInputOutput,
   flowchartFunctionCall: FlowchartFunctionCall,
+  bpmnTask: BPMNTask,
+  bpmnStartEvent: BPMNStartEvent,
+  bpmnIntermediateEvent: BPMNIntermediateEvent,
+  bpmnEndEvent: BPMNEndEvent,
+  bpmnGateway: BPMNGateway,
+  bpmnSubprocess: BPMNSubprocess,
+  bpmnTransaction: BPMNTransaction,
+  bpmnCallActivity: BPMNCallActivity,
+  bpmnAnnotation: BPMNAnnotation,
+  bpmnDataObject: BPMNDataObject,
+  bpmnDataStore: BPMNDataStore,
+  bpmnPool: BPMNPool,
+  bpmnSwimlane: BPMNSwimlane,
+  bpmnGroup: BPMNGroup,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -94,4 +124,18 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   flowchartDecision: "flowchartDecision",
   flowchartInputOutput: "flowchartInputOutput",
   flowchartFunctionCall: "flowchartFunctionCall",
+  bpmnTask: "bpmnTask",
+  bpmnStartEvent: "bpmnStartEvent",
+  bpmnIntermediateEvent: "bpmnIntermediateEvent",
+  bpmnEndEvent: "bpmnEndEvent",
+  bpmnGateway: "bpmnGateway",
+  bpmnSubprocess: "bpmnSubprocess",
+  bpmnTransaction: "bpmnTransaction",
+  bpmnCallActivity: "bpmnCallActivity",
+  bpmnAnnotation: "bpmnAnnotation",
+  bpmnDataObject: "bpmnDataObject",
+  bpmnDataStore: "bpmnDataStore",
+  bpmnPool: "bpmnPool",
+  bpmnSwimlane: "bpmnSwimlane",
+  bpmnGroup: "bpmnGroup",
 } as const

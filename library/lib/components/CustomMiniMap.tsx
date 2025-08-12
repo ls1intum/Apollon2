@@ -26,6 +26,16 @@ import {
   FlowchartDecisionNodeSVG,
   FlowchartInputOutputNodeSVG,
   FlowchartFunctionCallNodeSVG,
+  BPMNTaskNodeSVG,
+  BPMNEventNodeSVG,
+  BPMNGatewayNodeSVG,
+  BPMNSubprocessNodeSVG,
+  BPMNAnnotationNodeSVG,
+  BPMNDataObjectNodeSVG,
+  BPMNDataStoreNodeSVG,
+  BPMNPoolNodeSVG,
+  BPMNSwimlaneNodeSVG,
+  BPMNGroupNodeSVG,
 } from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
@@ -344,6 +354,180 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+
+    // BPMN
+    case "bpmnTask":
+      return (
+        <BPMNTaskNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          taskType={
+            (nodeInfo.data
+              .taskType as unknown as import("@/types").BPMNTaskType) ||
+            "default"
+          }
+          marker={
+            (nodeInfo.data
+              .marker as unknown as import("@/types").BPMNMarkerType) || "none"
+          }
+        />
+      )
+    case "bpmnStartEvent":
+      return (
+        <BPMNEventNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          variant="start"
+          eventType={
+            (nodeInfo.data
+              .eventType as unknown as import("@/types").BPMNStartEventType) ||
+            "default"
+          }
+        />
+      )
+    case "bpmnIntermediateEvent":
+      return (
+        <BPMNEventNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          variant="intermediate"
+          eventType={
+            (nodeInfo.data
+              .eventType as unknown as import("@/types").BPMNIntermediateEventType) ||
+            "default"
+          }
+        />
+      )
+    case "bpmnEndEvent":
+      return (
+        <BPMNEventNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          variant="end"
+          eventType={
+            (nodeInfo.data
+              .eventType as unknown as import("@/types").BPMNEndEventType) ||
+            "default"
+          }
+        />
+      )
+    case "bpmnGateway":
+      return (
+        <BPMNGatewayNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          gatewayType={
+            (nodeInfo.data
+              .gatewayType as unknown as import("@/types").BPMNGatewayType) ||
+            "exclusive"
+          }
+        />
+      )
+    case "bpmnSubprocess":
+      return (
+        <BPMNSubprocessNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "bpmnTransaction":
+      return (
+        <BPMNSubprocessNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          variant="transaction"
+        />
+      )
+    case "bpmnCallActivity":
+      return (
+        <BPMNSubprocessNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          variant="call"
+        />
+      )
+    case "bpmnAnnotation":
+      return (
+        <BPMNAnnotationNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "bpmnDataObject":
+      return (
+        <BPMNDataObjectNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "bpmnDataStore":
+      return (
+        <BPMNDataStoreNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "bpmnPool":
+      return (
+        <BPMNPoolNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "bpmnSwimlane":
+      return (
+        <BPMNSwimlaneNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "bpmnGroup":
+      return (
+        <BPMNGroupNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
           svgAttributes={{ x, y }}
         />
       )
