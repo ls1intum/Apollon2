@@ -19,24 +19,18 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
   const { getEdge, getNode } = useReactFlow()
 
   const edge = getEdge(elementId)
-  const {
-    handleEdgeTypeChange,
-    handleLabelChange, // Use existing handleLabelChange
-  } = useEdgePopOver(elementId)
+  const { handleEdgeTypeChange, handleLabelChange } = useEdgePopOver(elementId)
 
   if (!edge) {
     return null
   }
 
   const edgeData = edge.data as CustomEdgeProps | undefined
-
-  // Retrieve source/target node names
   const sourceNode = getNode(edge.source)
   const targetNode = getNode(edge.target)
   const sourceName = (sourceNode?.data?.name as string) ?? "Source"
   const targetName = (targetNode?.data?.name as string) ?? "Target"
 
-  // Use case edge type options
   const useCaseEdgeTypeOptions = [
     { value: "UseCaseAssociation", label: "Association" },
     { value: "UseCaseInclude", label: "Include" },
