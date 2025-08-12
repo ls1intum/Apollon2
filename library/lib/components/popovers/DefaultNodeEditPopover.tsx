@@ -7,6 +7,7 @@ import { PopoverProps } from "./types"
 export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
   elementId,
   children,
+  sideElements = [],
 }) => {
   const { nodes, setNodes } = useDiagramStore(
     useShallow((state) => ({
@@ -40,15 +41,23 @@ export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
   const nodeData = node.data as DefaultNodeProps
 
   return (
-    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-      <TextField
-        id="outlined-basic"
-        variant="outlined"
-        onChange={(event) => handleNameChange(event.target.value)}
-        size="small"
-        value={nodeData.name}
-        sx={{ backgroundColor: "#fff" }}
-      />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <TextField
+          id="outlined-basic"
+          variant="outlined"
+          onChange={(event) => handleNameChange(event.target.value)}
+          size="small"
+          value={nodeData.name}
+          sx={{ backgroundColor: "#fff" }}
+        />
+        {sideElements}
+      </div>
       {children}
     </div>
   )

@@ -22,3 +22,12 @@ export type ComponentNodeProps = {
 export type ComponentSubsystemNodeProps = {
   isComponentSubsystemHeaderShown: boolean
 } & DefaultNodeProps
+
+export type DeploymentNodeProps = {
+  isComponentHeaderShown: boolean
+  stereotype: string
+} & DefaultNodeProps
+
+export type DeploymentComponentProps = {
+  isComponentHeaderShown: boolean
+} & DefaultNodeProps

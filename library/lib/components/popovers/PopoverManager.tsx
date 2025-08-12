@@ -28,6 +28,10 @@ import {
   ComponentEditPopover,
   ComponentSubsystemEditPopover,
 } from "./componentDiagram"
+import {
+  DeploymentComponentEditPopover,
+  DeploymentNodeEditPopover,
+} from "./deploymentDiagram"
 
 type PopoverType =
   | "class"
@@ -40,6 +44,8 @@ type PopoverType =
   | "FlowchartDecision"
   | "FlowchartInputOutput"
   | "FlowchartFunctionCall"
+  | "DeploymentComponent"
+  | "DeploymentNode"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -59,6 +65,8 @@ const editPopovers: {
   FlowchartDecision: React.FC<PopoverProps>
   FlowchartInputOutput: React.FC<PopoverProps>
   FlowchartFunctionCall: React.FC<PopoverProps>
+  DeploymentComponent: React.FC<PopoverProps>
+  DeploymentNode: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   default: DefaultNodeEditPopover,
@@ -77,6 +85,8 @@ const editPopovers: {
   FlowchartDecision: DefaultNodeEditPopover,
   FlowchartInputOutput: DefaultNodeEditPopover,
   FlowchartFunctionCall: DefaultNodeEditPopover,
+  DeploymentComponent: DeploymentComponentEditPopover,
+  DeploymentNode: DeploymentNodeEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -97,6 +107,8 @@ const giveFeedbackPopovers: {
   FlowchartDecision: React.FC<PopoverProps>
   FlowchartInputOutput: React.FC<PopoverProps>
   FlowchartFunctionCall: React.FC<PopoverProps>
+  DeploymentComponent: React.FC<PopoverProps>
+  DeploymentNode: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
@@ -115,6 +127,8 @@ const giveFeedbackPopovers: {
   FlowchartDecision: DefaultNodeGiveFeedbackPopover,
   FlowchartInputOutput: DefaultNodeGiveFeedbackPopover,
   FlowchartFunctionCall: DefaultNodeGiveFeedbackPopover,
+  DeploymentComponent: DefaultNodeGiveFeedbackPopover,
+  DeploymentNode: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -135,6 +149,8 @@ const seeFeedbackPopovers: {
   FlowchartDecision: React.FC<PopoverProps>
   FlowchartInputOutput: React.FC<PopoverProps>
   FlowchartFunctionCall: React.FC<PopoverProps>
+  DeploymentComponent: React.FC<PopoverProps>
+  DeploymentNode: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
@@ -153,6 +169,8 @@ const seeFeedbackPopovers: {
   FlowchartDecision: DefaultNodeSeeFeedbackPopover,
   FlowchartInputOutput: DefaultNodeSeeFeedbackPopover,
   FlowchartFunctionCall: DefaultNodeSeeFeedbackPopover,
+  DeploymentComponent: DefaultNodeSeeFeedbackPopover,
+  DeploymentNode: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

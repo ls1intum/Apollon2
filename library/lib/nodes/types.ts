@@ -19,6 +19,12 @@ import {
   ComponentSubsystem,
 } from "./componentDiagram"
 import {
+  DeploymentNode,
+  DeploymentComponent,
+  DeploymentArtifact,
+  DeploymentInterface,
+} from "./deploymentDiagram"
+import {
   FlowchartTerminal,
   FlowchartProcess,
   FlowchartDecision,
@@ -45,6 +51,10 @@ export const diagramNodeTypes = {
   component: Component,
   componentInterface: ComponentInterface,
   componentSubsystem: ComponentSubsystem,
+  deploymentNode: DeploymentNode,
+  deploymentComponent: DeploymentComponent,
+  deploymentArtifact: DeploymentArtifact,
+  deploymentInterface: DeploymentInterface,
   flowchartTerminal: FlowchartTerminal,
   flowchartProcess: FlowchartProcess,
   flowchartDecision: FlowchartDecision,
@@ -75,6 +85,10 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   component: "component",
   componentInterface: "componentInterface",
   componentSubsystem: "componentSubsystem",
+  deploymentNode: "deploymentNode",
+  deploymentComponent: "deploymentComponent",
+  deploymentArtifact: "deploymentArtifact",
+  deploymentInterface: "deploymentInterface",
   flowchartTerminal: "flowchartTerminal",
   flowchartProcess: "flowchartProcess",
   flowchartDecision: "flowchartDecision",

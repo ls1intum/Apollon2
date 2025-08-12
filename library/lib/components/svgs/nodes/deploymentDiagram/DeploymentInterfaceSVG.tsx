@@ -8,7 +8,8 @@ import { SVGComponentProps } from "@/types/SVG"
 interface Props extends SVGComponentProps {
   name: string
 }
-export const ComponentInterfaceNodeSVG: React.FC<Props> = ({
+
+export const DeploymentInterfaceSVG: React.FC<Props> = ({
   id,
   width,
   height,
