@@ -82,7 +82,7 @@ export function SyntaxTreeTerminal({
       <PopoverManager
         anchorEl={svgWrapperRef.current}
         elementId={id}
-        type="default"
+        type="SyntaxTreeTerminal"
       />
     </DefaultNodeWrapper>
   )

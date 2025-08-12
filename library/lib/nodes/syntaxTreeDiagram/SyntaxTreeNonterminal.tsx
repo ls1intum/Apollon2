@@ -82,7 +82,7 @@ export function SyntaxTreeNonterminal({
       <PopoverManager
         anchorEl={svgWrapperRef.current}
         elementId={id}
-        type="default"
+        type="SyntaxTreeNonterminal"
       />
     </DefaultNodeWrapper>
   )
