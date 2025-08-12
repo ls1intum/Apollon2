@@ -26,6 +26,8 @@ import {
   FlowchartDecisionNodeSVG,
   FlowchartInputOutputNodeSVG,
   FlowchartFunctionCallNodeSVG,
+  SyntaxTreeTerminalNodeSVG,
+  SyntaxTreeNonterminalNodeSVG,
 } from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
@@ -340,6 +342,26 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
     case "flowchartFunctionCall":
       return (
         <FlowchartFunctionCallNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "syntaxTreeNonterminal":
+      return (
+        <SyntaxTreeNonterminalNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "syntaxTreeTerminal":
+      return (
+        <SyntaxTreeTerminalNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}

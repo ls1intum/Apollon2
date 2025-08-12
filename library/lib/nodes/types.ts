@@ -31,6 +31,8 @@ import {
   FlowchartInputOutput,
   FlowchartFunctionCall,
 } from "./flowchart"
+import { SyntaxTreeTerminal } from "./syntaxTreeDiagram/SyntaxTreeTerminal"
+import { SyntaxTreeNonterminal } from "./syntaxTreeDiagram/SyntaxTreeNonterminal"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -60,6 +62,8 @@ export const diagramNodeTypes = {
   flowchartDecision: FlowchartDecision,
   flowchartInputOutput: FlowchartInputOutput,
   flowchartFunctionCall: FlowchartFunctionCall,
+  syntaxTreeTerminal: SyntaxTreeTerminal,
+  syntaxTreeNonterminal: SyntaxTreeNonterminal,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -94,4 +98,6 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   flowchartDecision: "flowchartDecision",
   flowchartInputOutput: "flowchartInputOutput",
   flowchartFunctionCall: "flowchartFunctionCall",
+  syntaxTreeTerminal: "syntaxTreeTerminal",
+  syntaxTreeNonterminal: "syntaxTreeNonterminal",
 } as const

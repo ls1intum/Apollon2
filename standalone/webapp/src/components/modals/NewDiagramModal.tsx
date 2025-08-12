@@ -15,6 +15,7 @@ const diagramTypes = {
     UMLDiagramType.ComponentDiagram,
     UMLDiagramType.DeploymentDiagram,
     UMLDiagramType.Flowchart,
+    UMLDiagramType.SyntaxTree,
   ],
   behavioral: [UMLDiagramType.ActivityDiagram, UMLDiagramType.UseCaseDiagram],
 }
@@ -29,7 +30,7 @@ const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   DeploymentDiagram: "Deployment Diagram",
   PetriNet: "",
   ReachabilityGraph: "",
-  SyntaxTree: "",
+  SyntaxTree: "Syntax Tree",
   Flowchart: "Flowchart",
   BPMN: "",
 }
