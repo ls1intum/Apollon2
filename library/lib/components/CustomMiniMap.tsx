@@ -357,8 +357,6 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           svgAttributes={{ x, y }}
         />
       )
-
-    // BPMN
     case "bpmnTask":
       return (
         <BPMNTaskNodeSVG
