@@ -25,6 +25,8 @@ import {
   DeploymentComponentSVG,
   DeploymentArtifactSVG,
   DeploymentInterfaceSVG,
+  SyntaxTreeNonterminalNodeSVG,
+  SyntaxTreeTerminalNodeSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -268,7 +270,26 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
   ],
   [UMLDiagramType.PetriNet]: [],
   [UMLDiagramType.ReachabilityGraph]: [],
-  [UMLDiagramType.SyntaxTree]: [],
+  [UMLDiagramType.SyntaxTree]: [
+    {
+      type: "syntaxTreeNonterminal",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: {
+        name: "",
+      },
+      svg: (props) => <SyntaxTreeNonterminalNodeSVG {...props} />,
+    },
+    {
+      type: "syntaxTreeTerminal",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: {
+        name: "",
+      },
+      svg: (props) => <SyntaxTreeTerminalNodeSVG {...props} />,
+    },
+  ],
   [UMLDiagramType.UseCaseDiagram]: [
     {
       type: "useCase",

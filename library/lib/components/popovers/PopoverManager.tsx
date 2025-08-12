@@ -33,6 +33,10 @@ import {
   DeploymentComponentEditPopover,
   DeploymentNodeEditPopover,
 } from "./deploymentDiagram"
+import {
+  SyntaxTreeNonterminalEditPopover,
+  SyntaxTreeTerminalEditPopover,
+} from "./syntaxTreeDiagram"
 
 type PopoverType =
   | "class"
@@ -47,6 +51,8 @@ type PopoverType =
   | "FlowchartFunctionCall"
   | "DeploymentComponent"
   | "DeploymentNode"
+  | "SyntaxTreeNonterminal"
+  | "SyntaxTreeTerminal"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -72,6 +78,8 @@ const editPopovers: {
   FlowchartFunctionCall: React.FC<PopoverProps>
   DeploymentComponent: React.FC<PopoverProps>
   DeploymentNode: React.FC<PopoverProps>
+  SyntaxTreeNonterminal: React.FC<PopoverProps>
+  SyntaxTreeTerminal: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   default: DefaultNodeEditPopover,
@@ -96,6 +104,8 @@ const editPopovers: {
   FlowchartFunctionCall: DefaultNodeEditPopover,
   DeploymentComponent: DeploymentComponentEditPopover,
   DeploymentNode: DeploymentNodeEditPopover,
+  SyntaxTreeNonterminal: SyntaxTreeNonterminalEditPopover,
+  SyntaxTreeTerminal: SyntaxTreeTerminalEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -122,6 +132,8 @@ const giveFeedbackPopovers: {
   FlowchartFunctionCall: React.FC<PopoverProps>
   DeploymentComponent: React.FC<PopoverProps>
   DeploymentNode: React.FC<PopoverProps>
+  SyntaxTreeNonterminal: React.FC<PopoverProps>
+  SyntaxTreeTerminal: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
@@ -146,6 +158,8 @@ const giveFeedbackPopovers: {
   FlowchartFunctionCall: DefaultNodeGiveFeedbackPopover,
   DeploymentComponent: DefaultNodeGiveFeedbackPopover,
   DeploymentNode: DefaultNodeGiveFeedbackPopover,
+  SyntaxTreeNonterminal: DefaultNodeGiveFeedbackPopover,
+  SyntaxTreeTerminal: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -172,6 +186,8 @@ const seeFeedbackPopovers: {
   FlowchartFunctionCall: React.FC<PopoverProps>
   DeploymentComponent: React.FC<PopoverProps>
   DeploymentNode: React.FC<PopoverProps>
+  SyntaxTreeNonterminal: React.FC<PopoverProps>
+  SyntaxTreeTerminal: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
@@ -196,6 +212,8 @@ const seeFeedbackPopovers: {
   FlowchartFunctionCall: DefaultNodeSeeFeedbackPopover,
   DeploymentComponent: DefaultNodeSeeFeedbackPopover,
   DeploymentNode: DefaultNodeSeeFeedbackPopover,
+  SyntaxTreeNonterminal: DefaultNodeSeeFeedbackPopover,
+  SyntaxTreeTerminal: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {
