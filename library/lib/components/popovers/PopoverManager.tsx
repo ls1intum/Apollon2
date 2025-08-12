@@ -39,6 +39,11 @@ type PopoverType =
   | DiagramEdgeType
   | "Component"
   | "ComponentSubsystem"
+  | "FlowchartTerminal"
+  | "FlowchartProcess"
+  | "FlowchartDecision"
+  | "FlowchartInputOutput"
+  | "FlowchartFunctionCall"
   | "DeploymentComponent"
   | "DeploymentNode"
 
@@ -55,6 +60,11 @@ const editPopovers: {
   ActivityControlFlow: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
+  FlowchartTerminal: React.FC<PopoverProps>
+  FlowchartProcess: React.FC<PopoverProps>
+  FlowchartDecision: React.FC<PopoverProps>
+  FlowchartInputOutput: React.FC<PopoverProps>
+  FlowchartFunctionCall: React.FC<PopoverProps>
   DeploymentComponent: React.FC<PopoverProps>
   DeploymentNode: React.FC<PopoverProps>
 } = {
@@ -70,6 +80,11 @@ const editPopovers: {
   ActivityControlFlow: ActivityDiagramEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
+  FlowchartTerminal: DefaultNodeEditPopover,
+  FlowchartProcess: DefaultNodeEditPopover,
+  FlowchartDecision: DefaultNodeEditPopover,
+  FlowchartInputOutput: DefaultNodeEditPopover,
+  FlowchartFunctionCall: DefaultNodeEditPopover,
   DeploymentComponent: DeploymentComponentEditPopover,
   DeploymentNode: DeploymentNodeEditPopover,
 }
@@ -87,6 +102,11 @@ const giveFeedbackPopovers: {
   ActivityControlFlow: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
+  FlowchartTerminal: React.FC<PopoverProps>
+  FlowchartProcess: React.FC<PopoverProps>
+  FlowchartDecision: React.FC<PopoverProps>
+  FlowchartInputOutput: React.FC<PopoverProps>
+  FlowchartFunctionCall: React.FC<PopoverProps>
   DeploymentComponent: React.FC<PopoverProps>
   DeploymentNode: React.FC<PopoverProps>
 } = {
@@ -102,6 +122,11 @@ const giveFeedbackPopovers: {
   ActivityControlFlow: EdgeGiveFeedbackPopover,
   Component: DefaultNodeGiveFeedbackPopover,
   ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
+  FlowchartTerminal: DefaultNodeGiveFeedbackPopover,
+  FlowchartProcess: DefaultNodeGiveFeedbackPopover,
+  FlowchartDecision: DefaultNodeGiveFeedbackPopover,
+  FlowchartInputOutput: DefaultNodeGiveFeedbackPopover,
+  FlowchartFunctionCall: DefaultNodeGiveFeedbackPopover,
   DeploymentComponent: DefaultNodeGiveFeedbackPopover,
   DeploymentNode: DefaultNodeGiveFeedbackPopover,
 }
@@ -119,6 +144,11 @@ const seeFeedbackPopovers: {
   ActivityControlFlow: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
+  FlowchartTerminal: React.FC<PopoverProps>
+  FlowchartProcess: React.FC<PopoverProps>
+  FlowchartDecision: React.FC<PopoverProps>
+  FlowchartInputOutput: React.FC<PopoverProps>
+  FlowchartFunctionCall: React.FC<PopoverProps>
   DeploymentComponent: React.FC<PopoverProps>
   DeploymentNode: React.FC<PopoverProps>
 } = {
@@ -134,6 +164,11 @@ const seeFeedbackPopovers: {
   ActivityControlFlow: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
+  FlowchartTerminal: DefaultNodeSeeFeedbackPopover,
+  FlowchartProcess: DefaultNodeSeeFeedbackPopover,
+  FlowchartDecision: DefaultNodeSeeFeedbackPopover,
+  FlowchartInputOutput: DefaultNodeSeeFeedbackPopover,
+  FlowchartFunctionCall: DefaultNodeSeeFeedbackPopover,
   DeploymentComponent: DefaultNodeSeeFeedbackPopover,
   DeploymentNode: DefaultNodeSeeFeedbackPopover,
 }

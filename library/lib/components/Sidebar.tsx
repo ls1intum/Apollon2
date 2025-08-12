@@ -28,7 +28,7 @@ export const Sidebar = () => {
         display: "flex",
         flexDirection: "column",
         padding: "10px",
-        gap: "8px",
+        gap: "15px",
         alignItems: "center",
       }}
     >
