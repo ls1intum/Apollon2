@@ -29,6 +29,10 @@ import {
   ComponentEditPopover,
   ComponentSubsystemEditPopover,
 } from "./componentDiagram"
+import {
+  DeploymentComponentEditPopover,
+  DeploymentNodeEditPopover,
+} from "./deploymentDiagram"
 
 type PopoverType =
   | "class"
@@ -36,6 +40,13 @@ type PopoverType =
   | DiagramEdgeType
   | "Component"
   | "ComponentSubsystem"
+  | "FlowchartTerminal"
+  | "FlowchartProcess"
+  | "FlowchartDecision"
+  | "FlowchartInputOutput"
+  | "FlowchartFunctionCall"
+  | "DeploymentComponent"
+  | "DeploymentNode"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -55,6 +66,13 @@ const editPopovers: {
   UseCaseGeneralization: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
+  FlowchartTerminal: React.FC<PopoverProps>
+  FlowchartProcess: React.FC<PopoverProps>
+  FlowchartDecision: React.FC<PopoverProps>
+  FlowchartInputOutput: React.FC<PopoverProps>
+  FlowchartFunctionCall: React.FC<PopoverProps>
+  DeploymentComponent: React.FC<PopoverProps>
+  DeploymentNode: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   default: DefaultNodeEditPopover,
@@ -73,6 +91,13 @@ const editPopovers: {
   UseCaseGeneralization: UseCaseEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
+  FlowchartTerminal: DefaultNodeEditPopover,
+  FlowchartProcess: DefaultNodeEditPopover,
+  FlowchartDecision: DefaultNodeEditPopover,
+  FlowchartInputOutput: DefaultNodeEditPopover,
+  FlowchartFunctionCall: DefaultNodeEditPopover,
+  DeploymentComponent: DeploymentComponentEditPopover,
+  DeploymentNode: DeploymentNodeEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -93,6 +118,13 @@ const giveFeedbackPopovers: {
   UseCaseGeneralization: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
+  FlowchartTerminal: React.FC<PopoverProps>
+  FlowchartProcess: React.FC<PopoverProps>
+  FlowchartDecision: React.FC<PopoverProps>
+  FlowchartInputOutput: React.FC<PopoverProps>
+  FlowchartFunctionCall: React.FC<PopoverProps>
+  DeploymentComponent: React.FC<PopoverProps>
+  DeploymentNode: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
@@ -111,6 +143,13 @@ const giveFeedbackPopovers: {
   UseCaseGeneralization: EdgeGiveFeedbackPopover,
   Component: DefaultNodeGiveFeedbackPopover,
   ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
+  FlowchartTerminal: DefaultNodeGiveFeedbackPopover,
+  FlowchartProcess: DefaultNodeGiveFeedbackPopover,
+  FlowchartDecision: DefaultNodeGiveFeedbackPopover,
+  FlowchartInputOutput: DefaultNodeGiveFeedbackPopover,
+  FlowchartFunctionCall: DefaultNodeGiveFeedbackPopover,
+  DeploymentComponent: DefaultNodeGiveFeedbackPopover,
+  DeploymentNode: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -131,6 +170,13 @@ const seeFeedbackPopovers: {
   UseCaseGeneralization: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
+  FlowchartTerminal: React.FC<PopoverProps>
+  FlowchartProcess: React.FC<PopoverProps>
+  FlowchartDecision: React.FC<PopoverProps>
+  FlowchartInputOutput: React.FC<PopoverProps>
+  FlowchartFunctionCall: React.FC<PopoverProps>
+  DeploymentComponent: React.FC<PopoverProps>
+  DeploymentNode: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
@@ -149,6 +195,13 @@ const seeFeedbackPopovers: {
   UseCaseGeneralization: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
+  FlowchartTerminal: DefaultNodeSeeFeedbackPopover,
+  FlowchartProcess: DefaultNodeSeeFeedbackPopover,
+  FlowchartDecision: DefaultNodeSeeFeedbackPopover,
+  FlowchartInputOutput: DefaultNodeSeeFeedbackPopover,
+  FlowchartFunctionCall: DefaultNodeSeeFeedbackPopover,
+  DeploymentComponent: DefaultNodeSeeFeedbackPopover,
+  DeploymentNode: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

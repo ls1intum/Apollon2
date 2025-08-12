@@ -1,17 +1,14 @@
-import { ComponentSubsystemNodeProps } from "@/types"
+import { useDiagramStore } from "@/store"
+import { DeploymentComponentProps } from "@/types"
+import { useShallow } from "zustand/shallow"
 import { DefaultNodeEditPopover } from "../DefaultNodeEditPopover"
 import { PopoverProps } from "../types"
-import { useDiagramStore } from "@/store"
-import { useShallow } from "zustand/shallow"
 
-export const ComponentSubsystemEditPopover: React.FC<PopoverProps> = ({
+export const DeploymentComponentEditPopover: React.FC<PopoverProps> = ({
   elementId,
-}: PopoverProps) => {
+}) => {
   const { nodes, setNodes } = useDiagramStore(
-    useShallow((state) => ({
-      nodes: state.nodes,
-      setNodes: state.setNodes,
-    }))
+    useShallow((state) => ({ setNodes: state.setNodes, nodes: state.nodes }))
   )
 
   const node = nodes.find((node) => node.id === elementId)
@@ -19,7 +16,7 @@ export const ComponentSubsystemEditPopover: React.FC<PopoverProps> = ({
     return null
   }
 
-  const nodeData = node.data as ComponentSubsystemNodeProps
+  const nodeData = node.data as DeploymentComponentProps
 
   const switchHeaderShown = () => {
     setNodes((nodes) =>
@@ -29,8 +26,7 @@ export const ComponentSubsystemEditPopover: React.FC<PopoverProps> = ({
             ...node,
             data: {
               ...node.data,
-              isComponentSubsystemHeaderShown:
-                !nodeData.isComponentSubsystemHeaderShown,
+              isComponentHeaderShown: !nodeData.isComponentHeaderShown,
             },
           }
         }
@@ -39,7 +35,7 @@ export const ComponentSubsystemEditPopover: React.FC<PopoverProps> = ({
     )
   }
 
-  const HeaderSwitcher = (
+  const SwitchHeaderElement = (
     <div
       onClick={switchHeaderShown}
       style={{
@@ -48,7 +44,7 @@ export const ComponentSubsystemEditPopover: React.FC<PopoverProps> = ({
         alignItems: "center",
         justifyContent: "center",
         zIndex: 1,
-        ...(nodeData.isComponentSubsystemHeaderShown && {
+        ...(nodeData.isComponentHeaderShown && {
           background:
             "linear-gradient(to top right, transparent calc(50% - 1px), black 50%, transparent calc(50% + 1px))",
         }),
@@ -61,7 +57,7 @@ export const ComponentSubsystemEditPopover: React.FC<PopoverProps> = ({
   return (
     <DefaultNodeEditPopover
       elementId={elementId}
-      sideElements={[HeaderSwitcher]}
+      sideElements={[SwitchHeaderElement]}
     />
   )
 }

@@ -18,6 +18,19 @@ import {
   ComponentInterface,
   ComponentSubsystem,
 } from "./componentDiagram"
+import {
+  DeploymentNode,
+  DeploymentComponent,
+  DeploymentArtifact,
+  DeploymentInterface,
+} from "./deploymentDiagram"
+import {
+  FlowchartTerminal,
+  FlowchartProcess,
+  FlowchartDecision,
+  FlowchartInputOutput,
+  FlowchartFunctionCall,
+} from "./flowchart"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -38,6 +51,15 @@ export const diagramNodeTypes = {
   component: Component,
   componentInterface: ComponentInterface,
   componentSubsystem: ComponentSubsystem,
+  deploymentNode: DeploymentNode,
+  deploymentComponent: DeploymentComponent,
+  deploymentArtifact: DeploymentArtifact,
+  deploymentInterface: DeploymentInterface,
+  flowchartTerminal: FlowchartTerminal,
+  flowchartProcess: FlowchartProcess,
+  flowchartDecision: FlowchartDecision,
+  flowchartInputOutput: FlowchartInputOutput,
+  flowchartFunctionCall: FlowchartFunctionCall,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -63,4 +85,13 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   component: "component",
   componentInterface: "componentInterface",
   componentSubsystem: "componentSubsystem",
+  deploymentNode: "deploymentNode",
+  deploymentComponent: "deploymentComponent",
+  deploymentArtifact: "deploymentArtifact",
+  deploymentInterface: "deploymentInterface",
+  flowchartTerminal: "flowchartTerminal",
+  flowchartProcess: "flowchartProcess",
+  flowchartDecision: "flowchartDecision",
+  flowchartInputOutput: "flowchartInputOutput",
+  flowchartFunctionCall: "flowchartFunctionCall",
 } as const

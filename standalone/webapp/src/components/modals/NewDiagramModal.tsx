@@ -13,6 +13,8 @@ const diagramTypes = {
     UMLDiagramType.ClassDiagram,
     UMLDiagramType.ObjectDiagram,
     UMLDiagramType.ComponentDiagram,
+    UMLDiagramType.DeploymentDiagram,
+    UMLDiagramType.Flowchart,
   ],
   behavioral: [UMLDiagramType.ActivityDiagram, UMLDiagramType.UseCaseDiagram],
 }
@@ -24,11 +26,11 @@ const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   UseCaseDiagram: "Use Case Diagram",
   CommunicationDiagram: "",
   ComponentDiagram: "Component Diagram",
-  DeploymentDiagram: "",
+  DeploymentDiagram: "Deployment Diagram",
   PetriNet: "",
   ReachabilityGraph: "",
   SyntaxTree: "",
-  Flowchart: "",
+  Flowchart: "Flowchart",
   BPMN: "",
 }
 

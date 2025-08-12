@@ -8,8 +8,10 @@ import { SVGComponentProps } from "@/types/SVG"
 interface Props extends SVGComponentProps {
   name: string
   isComponentHeaderShown: boolean
+  stereotype: string
 }
-export const ComponentNodeSVG: React.FC<Props> = ({
+
+export const DeploymentNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,
@@ -18,6 +20,7 @@ export const ComponentNodeSVG: React.FC<Props> = ({
   transformScale,
   showAssessmentResults = false,
   isComponentHeaderShown,
+  stereotype,
 }) => {
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
@@ -33,53 +36,52 @@ export const ComponentNodeSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          stroke="black"
-          strokeWidth={LINE_WIDTH}
-          fill="white"
-        />
-
-        {/* right top book */}
-        <g transform={`translate(${width - 32}, 8)`}>
+        <g>
+          {/* Top face */}
           <path
-            d="M 4.8 0 L 24 0 L 24 24 L 4.8 24 L 4.8 19.2 L 0 19.2 L 0 14.4 L 4.8 14.4 L 4.8 9.6 L 0 9.6 L 0 4.8 L 4.8 4.8 Z"
-            strokeWidth="1.2"
-            strokeMiterlimit="10"
+            d={`M 0 8 l 8 -8 H ${width} l -8 8 Z`}
             stroke="black"
+            strokeWidth={LINE_WIDTH}
             fill="white"
-          ></path>
+          />
+          {/* Right face */}
           <path
-            d="M 4.8 4.8 L 9.6 4.8 L 9.6 9.6 L 4.8 9.6 M 4.8 14.4 L 9.6 14.4 L 9.6 19.2 L 4.8 19.2"
-            strokeWidth="1.2"
-            strokeMiterlimit="10"
+            d={`M ${width} 0 V ${height - 8} l -8 8 V 8 Z`}
             stroke="black"
-            fill="none"
-          ></path>
+            strokeWidth={LINE_WIDTH}
+            fill="white"
+          />
+          {/* Front face */}
+          <rect
+            x="0"
+            y="8"
+            width={width - 8}
+            height={height - 8}
+            stroke="black"
+            strokeWidth={LINE_WIDTH}
+            fill="white"
+          />
         </g>
 
         {/* Name Text */}
         <CustomText
-          x={width / 2}
-          y={height / 2}
+          x="50%"
+          y={30}
           textAnchor="middle"
           fontWeight="bold"
-          dominantBaseline="central"
+          dominantBaseline="middle"
         >
-          {isComponentHeaderShown ? (
+          {isComponentHeaderShown && stereotype.length > 0 ? (
             <>
-              <tspan x={width / 2} dy="-0.6em" fontSize="0.8em">
-                {"«component»"}
+              <tspan x="50%" dy="-8" fontSize="85%">
+                {`«${stereotype}»`}
               </tspan>
-              <tspan x={width / 2} dy="1.2em">
+              <tspan x="50%" dy="18" textDecoration="underline">
                 {name}
               </tspan>
             </>
           ) : (
-            <tspan x={width / 2} dy="0">
+            <tspan x="50%" dy="0" textDecoration="underline">
               {name}
             </tspan>
           )}

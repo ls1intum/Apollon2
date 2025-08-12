@@ -16,6 +16,15 @@ import {
   ComponentNodeSVG,
   ComponentInterfaceNodeSVG,
   ComponentSubsystemNodeSVG,
+  FlowchartTerminalNodeSVG,
+  FlowchartProcessNodeSVG,
+  FlowchartDecisionNodeSVG,
+  FlowchartInputOutputNodeSVG,
+  FlowchartFunctionCallNodeSVG,
+  DeploymentNodeSVG,
+  DeploymentComponentSVG,
+  DeploymentArtifactSVG,
+  DeploymentInterfaceSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -215,7 +224,48 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       marginTop: 10,
     },
   ],
-  [UMLDiagramType.DeploymentDiagram]: [],
+  [UMLDiagramType.DeploymentDiagram]: [
+    {
+      type: "deploymentNode",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: {
+        name: "Node",
+        isComponentHeaderShown: true,
+        stereotype: "node",
+      },
+      svg: (props) => <DeploymentNodeSVG {...props} />,
+    },
+    {
+      type: "deploymentComponent",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: {
+        name: "Component",
+        isComponentHeaderShown: true,
+      },
+      svg: (props) => <DeploymentComponentSVG {...props} />,
+    },
+    {
+      type: "deploymentArtifact",
+      width: droppedElementWidth,
+      height: 50,
+      defaultData: {
+        name: "Artifact",
+      },
+      svg: (props) => <DeploymentArtifactSVG {...props} />,
+    },
+    {
+      type: "deploymentInterface",
+      width: 20,
+      height: 20,
+      defaultData: {
+        name: "Interface",
+      },
+      svg: (props) => <DeploymentInterfaceSVG {...props} />,
+      marginTop: 10,
+    },
+  ],
   [UMLDiagramType.PetriNet]: [],
   [UMLDiagramType.ReachabilityGraph]: [],
   [UMLDiagramType.SyntaxTree]: [],
@@ -248,5 +298,51 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <UseCaseSystemNodeSVG {...props} />,
     },
   ],
-  [UMLDiagramType.Flowchart]: [],
+  [UMLDiagramType.Flowchart]: [
+    {
+      type: "flowchartTerminal",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Terminal",
+      },
+      svg: (props) => <FlowchartTerminalNodeSVG {...props} />,
+    },
+    {
+      type: "flowchartProcess",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Process",
+      },
+      svg: (props) => <FlowchartProcessNodeSVG {...props} />,
+    },
+    {
+      type: "flowchartDecision",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Decision",
+      },
+      svg: (props) => <FlowchartDecisionNodeSVG {...props} />,
+    },
+    {
+      type: "flowchartInputOutput",
+      width: 140,
+      height: 70,
+      defaultData: {
+        name: "Input/Output",
+      },
+      svg: (props) => <FlowchartInputOutputNodeSVG {...props} />,
+    },
+    {
+      type: "flowchartFunctionCall",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Function Call",
+      },
+      svg: (props) => <FlowchartFunctionCallNodeSVG {...props} />,
+    },
+  ],
 }

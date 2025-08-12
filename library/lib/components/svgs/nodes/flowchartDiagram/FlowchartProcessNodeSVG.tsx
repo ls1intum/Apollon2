@@ -8,7 +8,7 @@ import { SVGComponentProps } from "@/types/SVG"
 interface Props extends SVGComponentProps {
   name: string
 }
-export const ComponentInterfaceNodeSVG: React.FC<Props> = ({
+export const FlowchartProcessNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,
@@ -31,10 +31,11 @@ export const ComponentInterfaceNodeSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <circle
-          cx={width / 2}
-          cy={height / 2}
-          r={width / 2}
+        <rect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
           stroke="black"
           strokeWidth={LINE_WIDTH}
           fill="white"
@@ -42,13 +43,15 @@ export const ComponentInterfaceNodeSVG: React.FC<Props> = ({
 
         {/* Name Text */}
         <CustomText
-          x={width + 2}
-          y={-10}
-          textAnchor="start"
-          fontWeight="bold"
-          dominantBaseline="hanging"
+          x={width / 2}
+          y={height / 2}
+          textAnchor="middle"
+          fontWeight="600"
+          dominantBaseline="central"
         >
-          {name}
+          <tspan x={width / 2} dy="0">
+            {name}
+          </tspan>
         </CustomText>
       </g>
 
