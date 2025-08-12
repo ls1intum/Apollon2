@@ -3,7 +3,6 @@ import { calculateDynamicEdgeLabels } from "@/utils/edgeUtils"
 import { IPoint } from "../Connection"
 
 interface EdgeEndLabelsProps {
-  // Edge data
   data?: {
     sourceRole?: string | null
     targetRole?: string | null
@@ -11,10 +10,7 @@ interface EdgeEndLabelsProps {
     targetMultiplicity?: string | null
   }
 
-  // Points for dynamic positioning
   activePoints: IPoint[]
-
-  // Fallback positions
   sourceX: number
   sourceY: number
   targetX: number

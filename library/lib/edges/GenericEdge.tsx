@@ -8,12 +8,10 @@ import { PopoverManager } from "@/components/popovers/PopoverManager"
 import AssessmentIcon from "@/components/svgs/AssessmentIcon"
 import { DiagramEdgeType } from "."
 
-// Base interface for all edge types
 export interface BaseEdgeProps extends ExtendedEdgeProps {
   diagramType?: "class" | "usecase" | "activity"
 }
 
-// Hook for common edge state management
 export const useEdgeState = (initialPoints?: IPoint[]) => {
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
   const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>({
@@ -44,7 +42,6 @@ export const useEdgeState = (initialPoints?: IPoint[]) => {
   }
 }
 
-// Hook for edge path calculations
 export const useEdgePath = (
   sourceX: number,
   sourceY: number,
@@ -89,7 +86,6 @@ export const useEdgePath = (
   return { updateMiddlePosition }
 }
 
-// Hook for reconnection logic
 export const useEdgeReconnection = (
   id: string,
   source: string,
@@ -199,7 +195,6 @@ export const useEdgeReconnection = (
   }
 }
 
-// Common edge rendering components
 export const EdgeEndpointMarkers = ({
   sourcePoint,
   targetPoint,

@@ -187,10 +187,8 @@ export const StepPathEdge = ({
     )
 
     if (straightPathPoints !== null) {
-      console.log(`Using straight path for ${type}`)
       return pointsToSvgPath(straightPathPoints)
     } else {
-      console.log(`Fallback to step path for ${type}`)
       const adjustedTargetCoordinates = adjustTargetCoordinates(
         targetX,
         targetY,
@@ -217,7 +215,7 @@ export const StepPathEdge = ({
       return edgePath
     }
   }, [
-    type, // Add type as dependency instead of currentDiagramType
+    type,
     sourceAbsolutePosition,
     targetAbsolutePosition,
     sourceNode,
@@ -418,7 +416,6 @@ export const StepPathEdge = ({
     [midpoints, activePoints, id, setEdges, allowMidpointDragging]
   )
 
-  // Reconnection handlers
   const handleEndpointPointerDown = useCallback(
     (e: React.PointerEvent, endType: "source" | "target") => {
       if (!isDiagramModifiable || !enableReconnection) return
@@ -438,7 +435,6 @@ export const StepPathEdge = ({
           y: moveEvent.clientY,
         })
 
-        // Recalculate the entire path with the new endpoint position
         let newSourceX = sourceX
         let newSourceY = sourceY
         let newTargetX = targetX
@@ -483,11 +479,9 @@ export const StepPathEdge = ({
             offset: 30,
           })
 
-          // Parse the new path into points
           const simplifiedPath = simplifySvgPath(edgePath)
           newPoints = removeDuplicatePoints(parseSvgPath(simplifiedPath))
         } else {
-          // For other diagram types, try straight path first
           const newSourceAbsolute =
             reconnectingEndRef.current === "source"
               ? newEndpoint
@@ -516,7 +510,6 @@ export const StepPathEdge = ({
           if (straightPathPoints !== null) {
             newPoints = straightPathPoints
           } else {
-            // Fallback to step path
             const adjustedTargetCoordinates = adjustTargetCoordinates(
               newTargetX,
               newTargetY,
@@ -540,14 +533,11 @@ export const StepPathEdge = ({
               borderRadius: STEP_BOARDER_RADIUS,
               offset: 30,
             })
-
-            // Parse the new path into points
             const simplifiedPath = simplifySvgPath(edgePath)
             newPoints = removeDuplicatePoints(parseSvgPath(simplifiedPath))
           }
         }
 
-        // Update temp points for live preview
         setTempReconnectPoints(newPoints)
       }
 
@@ -561,8 +551,6 @@ export const StepPathEdge = ({
         })
 
         completeReconnection(upEvent, findClosestHandle, () => {
-          // Reset custom points when reconnection is completed
-          // The path will be recalculated automatically based on new connection
           setCustomPoints([])
         })
       }
@@ -607,7 +595,6 @@ export const StepPathEdge = ({
     y: targetY,
   }
 
-  // Create context data for children
   const edgeData: StepPathEdgeData = {
     activePoints,
     pathMiddlePosition,

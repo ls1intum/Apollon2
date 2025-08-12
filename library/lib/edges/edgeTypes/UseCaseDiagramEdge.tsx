@@ -32,7 +32,6 @@ export const UseCaseEdge = ({
   data,
   showRelationshipLabels = false,
 }: UseCaseEdgeProps) => {
-  // Calculate adjusted coordinates once at the top level
   const adjustedCoordinates = useMemo(() => {
     const { markerPadding } = getEdgeMarkerStyles(type)
     const padding = markerPadding ?? MARKER_PADDING
@@ -62,18 +61,14 @@ export const UseCaseEdge = ({
     id,
   ])
 
-  // Calculate the correct middle position for labels based on edge type
   const labelMiddlePosition = useMemo(() => {
     const { adjustedSource, adjustedTarget } = adjustedCoordinates
 
     if (type === "UseCaseInclude" || type === "UseCaseExtend") {
-      // For UseCaseInclude, the label should be positioned in the gap
       const startX = adjustedSource.sourceX
       const startY = adjustedSource.sourceY
       const endX = adjustedTarget.targetX
       const endY = adjustedTarget.targetY
-
-      // Calculate the true middle of the gap
       const midX = (startX + endX) / 2
       const midY = (startY + endY) / 2
       return { x: midX, y: midY }
@@ -85,7 +80,6 @@ export const UseCaseEdge = ({
     }
   }, [adjustedCoordinates, type, id])
 
-  // Determine relationship type for labels
   const relationshipType =
     type === "UseCaseInclude"
       ? "include"
@@ -114,7 +108,6 @@ export const UseCaseEdge = ({
           label={data?.label}
           pathMiddlePosition={labelMiddlePosition}
           isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-          // Pass adjusted coordinates for consistency
           sourcePoint={{
             x: adjustedCoordinates.adjustedSource.sourceX,
             y: adjustedCoordinates.adjustedSource.sourceY,

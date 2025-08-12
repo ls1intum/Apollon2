@@ -173,12 +173,11 @@ export interface EdgeMarkerStyles {
   markerEnd?: string
   markerPadding?: number
   strokeDashArray?: string
-  offset?: number // New offset property
+  offset?: number
 }
 
 export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
   switch (edgeType) {
-    // Class diagram edges - use existing markers
     case "ClassBidirectional":
       return {
         markerPadding: MARKER_PADDING,
@@ -198,21 +197,21 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: RHOMBUS_MARKER_PADDING,
         markerEnd: "url(#white-rhombus)",
         strokeDashArray: "0",
-        offset: 14.5, // Rhombus gets 10px offset
+        offset: 14.5,
       }
     case "ClassComposition":
       return {
         markerPadding: RHOMBUS_MARKER_PADDING,
         markerEnd: "url(#black-rhombus)",
         strokeDashArray: "0",
-        offset: 14.5, // Rhombus gets 10px offset
+        offset: 14.5,
       }
     case "ClassInheritance":
       return {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "0",
-        offset: 11, // Triangle gets 10px offset
+        offset: 11,
       }
     case "ClassDependency":
       return {
@@ -226,10 +225,8 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "8",
-        offset: 11, // Triangle gets 10px offset
+        offset: 11,
       }
-
-    // Use case diagram edges - using ClassUnidirectional styling for associations
     case "UseCaseAssociation":
       return {
         markerPadding: 0,
@@ -341,7 +338,6 @@ export function findClosestHandleForUseCase(
     const centerX = rect.x + rect.width / 2
     const centerY = rect.y + rect.height / 2
 
-    // Calculate angle from center to point
     const angle = Math.atan2(point.y - centerY, point.x - centerX)
 
     // Convert to degrees and normalize (0-360)
@@ -358,7 +354,6 @@ export function findClosestHandleForUseCase(
     return "top-right"
   }
 
-  // Use existing logic for class diagrams
   return findClosestHandle(point, rect)
 }
 
@@ -405,16 +400,12 @@ export function calculateOverlayPath(
   ) {
     const { offset } = getEdgeMarkerStyles(type)
     const markerOffset = offset ?? 0
-
-    // Calculate normalized direction vector for offset adjustment
     const dx = targetX - sourceX
     const dy = targetY - sourceY
     const length = Math.sqrt(dx * dx + dy * dy)
 
     const normalizedDx = dx / length
     const normalizedDy = dy / length
-
-    // Apply offset to target coordinates
     const adjustedTargetX = targetX + normalizedDx * markerOffset
     const adjustedTargetY = targetY + normalizedDy * markerOffset
     return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
@@ -429,9 +420,6 @@ export function calculateStraightPath(
   targetY: number,
   type: string
 ): string {
-  // Coordinates are already adjusted when passed in, so just use them directly
-
-  // Calculate direction vector
   const dx = targetX - sourceX
   const dy = targetY - sourceY
   const length = Math.sqrt(dx * dx + dy * dy)
@@ -440,7 +428,6 @@ export function calculateStraightPath(
     return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
   }
 
-  // Special handling for UseCaseInclude with gap
   if (type === "UseCaseInclude" || type == "UseCaseExtend") {
     const startX = sourceX
     const startY = sourceY
@@ -453,9 +440,9 @@ export function calculateStraightPath(
     const normalizedDy = dy / length
     const gapSize = 40
 
-    const gapStartX = midX - normalizedDx * gapSize // 30px before middle
+    const gapStartX = midX - normalizedDx * gapSize
     const gapStartY = midY - normalizedDy * gapSize
-    const gapEndX = midX + normalizedDx * gapSize // 30px after middle
+    const gapEndX = midX + normalizedDx * gapSize
     const gapEndY = midY + normalizedDy * gapSize
 
     return `M ${startX},${startY} L ${gapStartX},${gapStartY} M ${gapEndX},${gapEndY} L ${endX},${endY}`

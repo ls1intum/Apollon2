@@ -24,7 +24,6 @@ interface StraightPathEdgeProps extends BaseEdgeProps {
     | ((edgeData: StraightPathEdgeData) => React.ReactNode)
 }
 
-// Data passed to children components
 export interface StraightPathEdgeData {
   pathMiddlePosition: IPoint
   isMiddlePathHorizontal: boolean
@@ -151,7 +150,6 @@ export const StraightPathEdge = ({
   )
 }
 
-// Export computed values for use by label components
 export const useStraightPathData = (
   straightPathEdgeProps: StraightPathEdgeProps
 ) => {
