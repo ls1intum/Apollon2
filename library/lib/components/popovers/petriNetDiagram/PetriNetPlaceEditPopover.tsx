@@ -34,7 +34,9 @@ export const PetriNetPlaceEditPopover: React.FC<PopoverProps> = ({
     )
   }
 
-  const handleCapacityChange = (newCapacity: number | "Infinity") => {
+  const handleCapacityChange = (
+    newCapacity: number | "Infinity" | undefined
+  ) => {
     setNodes((nodes) =>
       nodes.map((node) => {
         if (node.id === elementId) {
@@ -50,7 +52,6 @@ export const PetriNetPlaceEditPopover: React.FC<PopoverProps> = ({
       })
     )
   }
-
   const node = nodes.find((node) => node.id === elementId)
   if (!node) {
     return null
@@ -82,11 +83,25 @@ export const PetriNetPlaceEditPopover: React.FC<PopoverProps> = ({
           <TextField
             variant="outlined"
             type="number"
-            onChange={(event) =>
-              handleTokensChange(parseInt(event.target.value) || 0)
-            }
+            onChange={(event) => {
+              const value = event.target.value
+              if (value === "") {
+                // Don't update immediately when empty, wait for blur or valid input
+                return
+              }
+              const numValue = parseInt(value)
+              if (!isNaN(numValue)) {
+                handleTokensChange(numValue)
+              }
+            }}
+            onBlur={(event) => {
+              const value = event.target.value
+              if (value === "") {
+                handleTokensChange(0)
+              }
+            }}
             size="small"
-            value={nodeData.tokens || 0}
+            defaultValue={nodeData.tokens}
             fullWidth
             sx={{ backgroundColor: "#fff" }}
           />
@@ -106,11 +121,21 @@ export const PetriNetPlaceEditPopover: React.FC<PopoverProps> = ({
             <TextField
               variant="outlined"
               type="number"
-              onChange={(event) =>
-                handleCapacityChange(parseInt(event.target.value) || 0)
-              }
+              onChange={(event) => {
+                const value = event.target.value
+                if (value === "") {
+                  handleCapacityChange(undefined)
+                } else {
+                  const numValue = parseInt(value)
+                  handleCapacityChange(isNaN(numValue) ? undefined : numValue)
+                }
+              }}
               size="small"
-              value={nodeData.capacity || 0}
+              value={
+                nodeData.capacity === "Infinity"
+                  ? ""
+                  : (nodeData.capacity ?? "")
+              }
               fullWidth
               sx={{ backgroundColor: "#fff" }}
             />
