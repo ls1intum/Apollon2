@@ -3,7 +3,7 @@ import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
-import { Box, Tooltip } from "@mui/material"
+import { Box } from "@mui/material"
 import { forwardRef, ForwardedRef, useMemo } from "react"
 
 interface CustomEdgeToolbarProps {
@@ -21,15 +21,14 @@ export const CustomEdgeToolbar = forwardRef(
     const isDiagramModifiable = useDiagramModifiable()
     const selected = useIsOnlyThisElementSelected(edgeId)
 
-    // Memoize toolbar visibility to prevent unnecessary re-renders
     const showToolbar = useMemo(() => {
       return selected && isDiagramModifiable
     }, [selected, isDiagramModifiable])
-    // Memoize positioning to prevent flickering during transitions
+
     const toolbarPosition = useMemo(() => {
       return {
-        x: position.x - 16, // Center the 32px toolbar horizontally
-        y: position.y - 28, // Position above the middle point vertically
+        x: position.x - 16,
+        y: position.y - 28,
       }
     }, [position.x, position.y, edgeId])
 
@@ -38,10 +37,10 @@ export const CustomEdgeToolbar = forwardRef(
         ? {
             borderRadius: 8,
             boxShadow: "0 0 4px 0 rgb(0 0 0 / .2)",
-            opacity: 0,
+            opacity: 1,
             transition: "opacity 0.2s ease-in-out",
           }
-        : { opacity: 0 }
+        : { opacity: 1 }
     }, [showToolbar])
 
     return (
@@ -65,111 +64,48 @@ export const CustomEdgeToolbar = forwardRef(
               alignItems: "center",
               cursor: "pointer",
               gap: "8px",
-              // Safari-specific fixes for foreignObject
               width: "100%",
               height: "100%",
               boxSizing: "border-box",
-              WebkitTransform: "translateZ(0)", // Force hardware acceleration
+              WebkitTransform: "translateZ(0)",
               transform: "translateZ(0)",
               position: "relative",
             }}
           >
-            {/* Delete Button with Tooltip Wrapper to fix MUI warning */}
-            <Tooltip title="Delete edge" placement="left">
-              <span>
-                {/* Wrapper span to fix MUI warning */}
-                <Box
-                  component="button"
-                  sx={{
-                    width: "16px",
-                    height: "16px",
-                    minWidth: "16px", // Safari fix
-                    minHeight: "16px", // Safari fix
-                    backgroundColor: "#f8fafc",
-                    borderRadius: 1,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: 0,
-                    margin: 0, // Safari fix
-                    outline: "none", // Safari fix
-                    position: "relative", // Safari fix
-                    "&:hover": {
-                      backgroundColor: "#fee2e2",
-                    },
-                    // Safari-specific fixes
-                    WebkitAppearance: "none",
-                    MozAppearance: "none",
-                    appearance: "none",
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onDeleteClick(e)
-                  }}
-                  disabled={!isDiagramModifiable}
-                >
-                  <DeleteOutlineOutlinedIcon
-                    style={{
-                      width: 16,
-                      height: 16,
-                      display: "block", // Safari fix
-                      lineHeight: 1, // Safari fix
-                    }}
-                  />
-                </Box>
-              </span>
-            </Tooltip>
-
-            {/* Edit Button with Tooltip Wrapper to fix MUI warning */}
-            <Tooltip title="Edit edge" placement="left">
-              <span>
-                {" "}
-                {/* Wrapper span to fix MUI warning */}
-                <Box
-                  component="button"
-                  sx={{
-                    width: "16px",
-                    height: "16px",
-                    minWidth: "16px", // Safari fix
-                    minHeight: "16px", // Safari fix
-                    backgroundColor: "#f8fafc",
-                    borderRadius: 1,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: 0,
-                    margin: 0, // Safari fix
-                    outline: "none", // Safari fix
-                    position: "relative", // Safari fix
-                    "&:hover": {
-                      backgroundColor: "#e0e7ff",
-                    },
-                    // Safari-specific fixes
-                    WebkitAppearance: "none",
-                    MozAppearance: "none",
-                    appearance: "none",
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onEditClick(e)
-                  }}
-                  disabled={!isDiagramModifiable}
-                >
-                  <EditIcon
-                    style={{
-                      width: 16,
-                      height: 16,
-                      display: "block", // Safari fix
-                      lineHeight: 1, // Safari fix
-                    }}
-                  />
-                </Box>
-              </span>
-            </Tooltip>
+            <Box
+              sx={{
+                width: "16px",
+                height: "16px",
+                backgroundColor: "#f8fafc",
+                borderRadius: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
+                onDeleteClick(e)
+              }}
+            >
+              <DeleteOutlineOutlinedIcon style={{ width: 16, height: 16 }} />
+            </Box>
+            <Box
+              sx={{
+                width: "16px",
+                height: "16px",
+                backgroundColor: "#f8fafc",
+                borderRadius: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
+                onEditClick(e)
+              }}
+            >
+              <EditIcon style={{ width: 16, height: 16 }} />
+            </Box>
           </Box>
         )}
       </foreignObject>
