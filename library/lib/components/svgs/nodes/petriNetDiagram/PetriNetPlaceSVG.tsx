@@ -33,7 +33,7 @@ export const PetriNetPlaceSVG: React.FC<Props> = ({
   const renderTokens = () => {
     if (tokens === 0) return null
 
-    if (tokens <= 6) {
+    if (tokens <= 5) {
       // Show individual dots for small numbers
       const tokenPositions = []
       if (tokens === 1) {
