@@ -44,7 +44,6 @@ import {
   BPMNDataObject,
   BPMNDataStore,
   BPMNPool,
-  BPMNSwimlane,
   BPMNGroup,
 } from "./bpmn"
 
@@ -88,7 +87,6 @@ export const diagramNodeTypes = {
   bpmnDataObject: BPMNDataObject,
   bpmnDataStore: BPMNDataStore,
   bpmnPool: BPMNPool,
-  bpmnSwimlane: BPMNSwimlane,
   bpmnGroup: BPMNGroup,
 } satisfies NodeTypes
 
@@ -136,6 +134,5 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   bpmnDataObject: "bpmnDataObject",
   bpmnDataStore: "bpmnDataStore",
   bpmnPool: "bpmnPool",
-  bpmnSwimlane: "bpmnSwimlane",
   bpmnGroup: "bpmnGroup",
 } as const

@@ -111,5 +111,4 @@ export type BPMNAnnotationProps = DefaultNodeProps
 export type BPMNDataObjectProps = DefaultNodeProps
 export type BPMNDataStoreProps = DefaultNodeProps
 export type BPMNPoolProps = DefaultNodeProps
-export type BPMNSwimlaneProps = DefaultNodeProps
 export type BPMNGroupProps = DefaultNodeProps

@@ -169,24 +169,66 @@ export const BPMNTaskNodeSVG: React.FC<BPMNTaskNodeSVGProps> = ({
       case "parallel multi instance":
         return (
           <g transform={`translate(${width / 2 - 7}, ${height - 16})`}>
-            <polyline points="3 3, 3 11" stroke="black" />
-            <polyline points="7 3, 7 11" stroke="black" />
-            <polyline points="11 3, 11 11" stroke="black" />
+            <polyline
+              points="3 3, 3 11"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="7 3, 7 11"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="11 3, 11 11"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </g>
         )
       case "sequential multi instance":
         return (
           <g transform={`translate(${width / 2 - 7}, ${height - 16})`}>
-            <polyline points="3 3, 11 3" stroke="black" />
-            <polyline points="3 7, 11 7" stroke="black" />
-            <polyline points="3 11, 11 11" stroke="black" />
+            <polyline
+              points="3 3, 11 3"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="3 7, 11 7"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="3 11, 11 11"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </g>
         )
       case "loop":
         return (
           <g transform={`translate(${width / 2 - 7}, ${height - 16})`}>
-            <path d={`M7,3 A 4 4 30 1 1 3.535 5`} fill="none" stroke="black" />
-            <path d={`M9.5,1.5 L7,3 L8,6`} fill="none" stroke="black" />
+            <path
+              d={`M7,3 A 4 4 30 1 1 3.535 5`}
+              fill="none"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d={`M9.5,1.5 L7,3 L8,6`}
+              fill="none"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </g>
         )
       default:

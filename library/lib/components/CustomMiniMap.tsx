@@ -34,7 +34,6 @@ import {
   BPMNDataObjectNodeSVG,
   BPMNDataStoreNodeSVG,
   BPMNPoolNodeSVG,
-  BPMNSwimlaneNodeSVG,
   BPMNGroupNodeSVG,
 } from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
@@ -508,15 +507,6 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           name={(nodeInfo.data.name as string) || ""}
-          svgAttributes={{ x, y }}
-        />
-      )
-    case "bpmnSwimlane":
-      return (
-        <BPMNSwimlaneNodeSVG
-          width={nodeInfo.width ?? 0}
-          height={nodeInfo.height ?? 0}
-          id={`minimap_${id}`}
           svgAttributes={{ x, y }}
         />
       )

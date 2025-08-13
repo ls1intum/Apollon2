@@ -76,7 +76,6 @@ type PopoverType =
   | "BPMNDataObject"
   | "BPMNDataStore"
   | "BPMNPool"
-  | "BPMNSwimlane"
   | "BPMNGroup"
   | "BPMNTask"
   | "BPMNStartEvent"
@@ -90,7 +89,6 @@ type PopoverType =
   | "BPMNDataObject"
   | "BPMNDataStore"
   | "BPMNPool"
-  | "BPMNSwimlane"
   | "BPMNGroup"
 
 const editPopovers: {
@@ -129,7 +127,6 @@ const editPopovers: {
   BPMNDataObject: React.FC<PopoverProps>
   BPMNDataStore: React.FC<PopoverProps>
   BPMNPool: React.FC<PopoverProps>
-  BPMNSwimlane: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
@@ -167,7 +164,6 @@ const editPopovers: {
   BPMNDataObject: DefaultNodeEditPopover,
   BPMNDataStore: DefaultNodeEditPopover,
   BPMNPool: DefaultNodeEditPopover,
-  BPMNSwimlane: DefaultNodeEditPopover,
   BPMNGroup: DefaultNodeEditPopover,
 }
 
@@ -207,7 +203,6 @@ const giveFeedbackPopovers: {
   BPMNDataObject: React.FC<PopoverProps>
   BPMNDataStore: React.FC<PopoverProps>
   BPMNPool: React.FC<PopoverProps>
-  BPMNSwimlane: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
@@ -245,7 +240,6 @@ const giveFeedbackPopovers: {
   BPMNDataObject: DefaultNodeGiveFeedbackPopover,
   BPMNDataStore: DefaultNodeGiveFeedbackPopover,
   BPMNPool: DefaultNodeGiveFeedbackPopover,
-  BPMNSwimlane: DefaultNodeGiveFeedbackPopover,
   BPMNGroup: DefaultNodeGiveFeedbackPopover,
 }
 
@@ -285,7 +279,6 @@ const seeFeedbackPopovers: {
   BPMNDataObject: React.FC<PopoverProps>
   BPMNDataStore: React.FC<PopoverProps>
   BPMNPool: React.FC<PopoverProps>
-  BPMNSwimlane: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
@@ -323,7 +316,6 @@ const seeFeedbackPopovers: {
   BPMNDataObject: DefaultNodeSeeFeedbackPopover,
   BPMNDataStore: DefaultNodeSeeFeedbackPopover,
   BPMNPool: DefaultNodeSeeFeedbackPopover,
-  BPMNSwimlane: DefaultNodeSeeFeedbackPopover,
   BPMNGroup: DefaultNodeSeeFeedbackPopover,
 }
 

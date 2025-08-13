@@ -33,7 +33,6 @@ import {
   BPMNDataObjectNodeSVG,
   BPMNDataStoreNodeSVG,
   BPMNPoolNodeSVG,
-  BPMNSwimlaneNodeSVG,
   BPMNGroupNodeSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
@@ -232,6 +231,13 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <BPMNSubprocessNodeSVG variant="call" {...props} />,
     },
     {
+      type: "bpmnGroup",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: { name: "Group" },
+      svg: (props) => <BPMNGroupNodeSVG {...props} />,
+    },
+    {
       type: "bpmnAnnotation",
       width: droppedElementWidth,
       height: 100,
@@ -286,20 +292,6 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       height: 80,
       defaultData: { name: "Pool" },
       svg: (props) => <BPMNPoolNodeSVG {...props} />,
-    },
-    {
-      type: "bpmnSwimlane",
-      width: 160,
-      height: 80,
-      defaultData: { name: "Swimlane" },
-      svg: (props) => <BPMNSwimlaneNodeSVG {...props} />,
-    },
-    {
-      type: "bpmnGroup",
-      width: droppedElementWidth,
-      height: 100,
-      defaultData: { name: "Group" },
-      svg: (props) => <BPMNGroupNodeSVG {...props} />,
     },
   ],
   [UMLDiagramType.CommunicationDiagram]: [],
