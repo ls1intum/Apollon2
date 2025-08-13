@@ -15,6 +15,16 @@ export type ClassNodeProps = {
   stereotype?: ClassType
 } & DefaultNodeProps
 
+export type ObjectNodeProps = {
+  methods: ClassNodeElement[]
+  attributes: ClassNodeElement[]
+} & DefaultNodeProps
+
+export type CommunicationObjectNodeProps = {
+  methods: ClassNodeElement[]
+  attributes: ClassNodeElement[]
+} & DefaultNodeProps
+
 export type ComponentNodeProps = {
   isComponentHeaderShown: boolean
 } & DefaultNodeProps

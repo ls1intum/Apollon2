@@ -1,11 +1,10 @@
-import { ClassType, ClassNodeElement } from "@/types"
+import { ClassNodeElement } from "@/types"
 import {
   DEFAULT_FONT,
   DEFAULT_HEADER_HEIGHT,
   DEFAULT_ATTRIBUTE_HEIGHT,
   DEFAULT_METHOD_HEIGHT,
   DEFAULT_PADDING,
-  DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE,
   LINE_WIDTH,
 } from "@/constants/dropElementConfig"
 import { SeparationLine } from "@/components/svgs/nodes/SeparationLine"
@@ -16,35 +15,25 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 
-export interface MinSize {
-  minWidth: number
-  minHeight: number
-}
-
-export type ClassSVGProps = SVGComponentProps & {
+interface Props extends SVGComponentProps {
   methods: ClassNodeElement[]
   attributes: ClassNodeElement[]
-  stereotype?: ClassType
   name: string
 }
 
-export const ClassSVG = ({
+export const ObjectNameSVG = ({
   id,
   width,
   height,
   methods,
   attributes,
-  stereotype,
   name,
   transformScale,
   svgAttributes,
   showAssessmentResults = false,
-}: ClassSVGProps) => {
-  // Layout constants
-  const showStereotype = !!stereotype
-  const headerHeight = showStereotype
-    ? DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE
-    : DEFAULT_HEADER_HEIGHT
+}: Props) => {
+  // Layout constants - no stereotype for object diagrams
+  const headerHeight = DEFAULT_HEADER_HEIGHT
   const attributeHeight = DEFAULT_ATTRIBUTE_HEIGHT
   const methodHeight = DEFAULT_METHOD_HEIGHT
   const padding = DEFAULT_PADDING
@@ -85,14 +74,15 @@ export const ClassSVG = ({
           fill="white"
         />
 
-        {/* Header Section */}
+        {/* Header Section - Object name with underline */}
         <HeaderSection
-          showStereotype={showStereotype}
-          stereotype={stereotype}
+          showStereotype={false}
+          stereotype={undefined}
           name={name}
           width={width}
           font={font}
           headerHeight={headerHeight}
+          isUnderlined={true}
         />
 
         {/* Attributes Section */}
