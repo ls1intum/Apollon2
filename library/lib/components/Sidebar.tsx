@@ -23,6 +23,8 @@ export const Sidebar = () => {
   return (
     <aside
       style={{
+        width: "180px",
+        minWidth: "180px",
         height: "100%",
         backgroundColor: "#f0f0f0",
         display: "flex",
@@ -31,6 +33,7 @@ export const Sidebar = () => {
         gap: "15px",
         alignItems: "center",
         overflowY: "auto",
+        flexShrink: 0,
       }}
     >
       {dropElementConfigs[diagramType].map((config, index) => (
