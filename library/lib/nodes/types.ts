@@ -35,6 +35,7 @@ import {
 } from "./flowchart"
 import { SyntaxTreeTerminal } from "./syntaxTreeDiagram/SyntaxTreeTerminal"
 import { SyntaxTreeNonterminal } from "./syntaxTreeDiagram/SyntaxTreeNonterminal"
+import { PetriNetTransition, PetriNetPlace } from "./petriNetDiagram"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -68,6 +69,8 @@ export const diagramNodeTypes = {
   flowchartFunctionCall: FlowchartFunctionCall,
   syntaxTreeTerminal: SyntaxTreeTerminal,
   syntaxTreeNonterminal: SyntaxTreeNonterminal,
+  petriNetTransition: PetriNetTransition,
+  petriNetPlace: PetriNetPlace,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -106,4 +109,6 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   flowchartFunctionCall: "flowchartFunctionCall",
   syntaxTreeTerminal: "syntaxTreeTerminal",
   syntaxTreeNonterminal: "syntaxTreeNonterminal",
+  petriNetTransition: "petriNetTransition",
+  petriNetPlace: "petriNetPlace",
 } as const
