@@ -17,20 +17,17 @@ export const BPMNAnnotationNodeSVG: React.FC<
       {...svgAttributes}
     >
       <path
-        d={`M10 0 H ${width} V ${height} H 10`}
+        d={`M20,0 L10,0 A 10 10 280 0 0 0 10 L0,${height - 10} A 10 10 180 0 0 10 ${height} L20, ${height}`}
         stroke="black"
         strokeWidth={LINE_WIDTH}
         fill="none"
       />
-      <line
-        x1={10}
-        y1={0}
-        x2={10}
-        y2={height}
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-      />
-      <CustomText x={width / 2 + 5} y={height / 2} textAnchor="middle">
+      <CustomText
+        x={width / 2}
+        y={height / 2}
+        textAnchor="middle"
+        fontWeight="bold"
+      >
         {name}
       </CustomText>
     </svg>

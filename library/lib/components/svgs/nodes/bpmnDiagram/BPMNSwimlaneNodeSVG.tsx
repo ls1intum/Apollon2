@@ -1,4 +1,3 @@
-import { LINE_WIDTH } from "@/constants"
 import { SVGComponentProps } from "@/types/SVG"
 
 export const BPMNSwimlaneNodeSVG: React.FC<SVGComponentProps> = ({
@@ -23,8 +22,7 @@ export const BPMNSwimlaneNodeSVG: React.FC<SVGComponentProps> = ({
         y={0}
         width={width}
         height={height}
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
+        stroke="none"
         fill="white"
       />
     </svg>

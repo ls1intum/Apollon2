@@ -26,7 +26,9 @@ export const BPMNGroupNodeSVG: React.FC<SVGComponentProps> = ({
         stroke="black"
         strokeWidth={LINE_WIDTH}
         fill="none"
-        strokeDasharray="5,5"
+        strokeDasharray="4"
+        rx={10}
+        ry={10}
       />
     </svg>
   )

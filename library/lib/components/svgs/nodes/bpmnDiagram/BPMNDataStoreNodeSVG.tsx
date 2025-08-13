@@ -7,7 +7,6 @@ export const BPMNDataStoreNodeSVG: React.FC<
 > = ({ width, height, name, svgAttributes, transformScale }) => {
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
-  const rx = 10
 
   return (
     <svg
@@ -17,27 +16,39 @@ export const BPMNDataStoreNodeSVG: React.FC<
       overflow="visible"
       {...svgAttributes}
     >
-      <rect
-        x={0}
-        y={10}
-        width={width}
-        height={height - 10}
-        fill="white"
+      <path
+        d={`M 0 10 L 0 ${height - 10} A ${width / 2} 10 0 0 0 ${width} ${
+          height - 10
+        } L ${width} 10 A ${width / 2} 10 180 0 0 0 10`}
         stroke="black"
         strokeWidth={LINE_WIDTH}
-        rx={rx}
-        ry={rx}
-      />
-      <ellipse
-        cx={width / 2}
-        cy={10}
-        rx={width / 2}
-        ry={10}
         fill="white"
+      />
+      <path
+        d={`M 0 30 A ${width / 2} 10 0 0 0 ${width} 30`}
         stroke="black"
         strokeWidth={LINE_WIDTH}
+        fill="none"
       />
-      <CustomText x={width / 2} y={height / 2 + 5} textAnchor="middle">
+      <path
+        d={`M 0 20 A ${width / 2} 10 0 0 0 ${width} 20`}
+        stroke="black"
+        strokeWidth={LINE_WIDTH}
+        fill="none"
+      />
+      <path
+        d={`M 0 10 A ${width / 2} 10 0 0 0 ${width} 10`}
+        stroke="black"
+        strokeWidth={LINE_WIDTH}
+        fill="none"
+      />
+      <CustomText
+        x={width / 2}
+        y={height + 20}
+        textAnchor="middle"
+        fontSize={14}
+        dominantBaseline="hanging"
+      >
         {name}
       </CustomText>
     </svg>

@@ -304,7 +304,7 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
         <circle
           cx={width / 2}
           cy={height / 2}
-          r={r - 4}
+          r={r - 3.5}
           stroke="black"
           strokeWidth={LINE_WIDTH}
           fill="none"
@@ -314,9 +314,11 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
       {name && (
         <CustomText
           x={width / 2}
-          y={height + 18}
+          y={height + 20}
           textAnchor="middle"
           fontWeight="normal"
+          fontSize={14}
+          dominantBaseline="hanging"
         >
           {name}
         </CustomText>

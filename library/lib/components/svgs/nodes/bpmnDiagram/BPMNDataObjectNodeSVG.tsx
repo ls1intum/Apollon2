@@ -17,28 +17,18 @@ export const BPMNDataObjectNodeSVG: React.FC<
       {...svgAttributes}
     >
       <path
-        d={`M0 0 H ${width - 12} L ${width} 12 V ${height} H 0 Z`}
+        d={`M0,0 L0,${height} L${width},${height} L${width},15 L${width - 15},0 L${width - 15},15 L${width},15 L${width - 15},0 L0,0`}
         stroke="black"
         strokeWidth={LINE_WIDTH}
         fill="white"
       />
-      <line
-        x1={width - 12}
-        y1={0}
-        x2={width - 12}
-        y2={12}
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-      />
-      <line
-        x1={width - 12}
-        y1={12}
-        x2={width}
-        y2={12}
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-      />
-      <CustomText x={width / 2} y={height / 2} textAnchor="middle">
+      <CustomText
+        x={width / 2}
+        y={height + 20}
+        textAnchor="middle"
+        fontSize={14}
+        dominantBaseline="hanging"
+      >
         {name}
       </CustomText>
     </svg>

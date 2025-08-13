@@ -148,7 +148,13 @@ export const BPMNGatewayNodeSVG: React.FC<
         </g>
       )}
       {name && (
-        <CustomText x={width / 2} y={height + 18} textAnchor="middle">
+        <CustomText
+          x={width / 2}
+          y={height + 20}
+          textAnchor="middle"
+          fontSize={14}
+          dominantBaseline="hanging"
+        >
           {name}
         </CustomText>
       )}

@@ -48,11 +48,15 @@ export const BPMNTaskNodeSVG: React.FC<BPMNTaskNodeSVGProps> = ({
               points="0.2 3, 19.8 3, 10 11, 0.2 3"
               fill="black"
               stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
             <polyline
               points="0 5.5, 0 17, 20 17, 20 5.5, 10 13.5, 0 5.5"
               fill="black"
               stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </g>
         )
@@ -63,6 +67,8 @@ export const BPMNTaskNodeSVG: React.FC<BPMNTaskNodeSVGProps> = ({
               points="0 3, 0 17, 20 17, 20 3, 10 11, 0 3, 20 3"
               fill="none"
               stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </g>
         )
@@ -73,6 +79,7 @@ export const BPMNTaskNodeSVG: React.FC<BPMNTaskNodeSVGProps> = ({
               d="M5 1.5C5 2.5 5 8 5 8M5 1.5C5 0.499993 7 0.500007 7 1.5M5 1.5C5 1.5 5 4.00001 5 3.00001C5 2 3 1.93337 3 3.00001C3 4.06664 3 10 3 10C3 10 3 8.25001 3 7.25001C3 6.25 1 6.25 1 7.25001C1 8.25001 1 12 1 12L3 14V16H9V14L11 12V8.56252C11 8.56252 11 5 11 4C11 3 9 3 9 4C9 5 9 3.00001 9 3.00001M7 1.5C7 2.49999 7 8 7 8M7 1.5C7 1.5 7 4.00001 7 3.00001C7 2.00001 9 2.00001 9 3.00001M9 3.00001V8"
               fill="none"
               stroke="black"
+              strokeLinejoin="round"
             />
           </g>
         )
@@ -86,18 +93,35 @@ export const BPMNTaskNodeSVG: React.FC<BPMNTaskNodeSVGProps> = ({
               height={16}
               fill="none"
               stroke="black"
+              strokeLinejoin="round"
             />
             <rect
               x={2}
               y={2}
               width={16}
               height={4}
-              fill="black"
+              fill="currentColor"
               stroke="black"
+              strokeLinejoin="round"
             />
-            <polyline points="2 10, 18 10" stroke="black" />
-            <polyline points="2 14, 18 14" stroke="black" />
-            <polyline points="6 2, 6 18" stroke="black" />
+            <polyline
+              points="2 10, 18 10"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="2 14, 18 14"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="6 2, 6 18"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </g>
         )
       case "script":
@@ -110,10 +134,29 @@ export const BPMNTaskNodeSVG: React.FC<BPMNTaskNodeSVGProps> = ({
               height={16}
               fill="none"
               stroke="black"
+              strokeLinejoin="round"
             />
-            <polyline points="6 6, 12 6" fill="none" stroke="black" />
-            <polyline points="6 10, 14 10" fill="none" stroke="black" />
-            <polyline points="6 14, 10 14" fill="none" stroke="black" />
+            <polyline
+              points="6 6, 12 6"
+              fill="none"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="6 10, 14 10"
+              fill="none"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="6 14, 10 14"
+              fill="none"
+              stroke="black"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </g>
         )
       default:
