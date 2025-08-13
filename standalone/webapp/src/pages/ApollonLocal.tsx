@@ -45,5 +45,10 @@ export const ApollonLocal: React.FC = () => {
     }
   }, [diagram?.id, state?.timeStapToCreate])
 
-  return <div className="flex grow" ref={containerRef} />
+  return (
+    <div
+      style={{ display: "flex", flexGrow: 1, height: "100%" }}
+      ref={containerRef}
+    />
+  )
 }
