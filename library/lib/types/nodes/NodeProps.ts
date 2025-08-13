@@ -20,6 +20,11 @@ export type ObjectNodeProps = {
   attributes: ClassNodeElement[]
 } & DefaultNodeProps
 
+export type CommunicationObjectNodeProps = {
+  methods: ClassNodeElement[]
+  attributes: ClassNodeElement[]
+} & DefaultNodeProps
+
 export type ComponentNodeProps = {
   isComponentHeaderShown: boolean
 } & DefaultNodeProps

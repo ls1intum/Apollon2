@@ -29,6 +29,7 @@ import {
   SyntaxTreeTerminalNodeSVG,
   SyntaxTreeNonterminalNodeSVG,
   ObjectNameSVG,
+  CommunicationObjectNameSVG,
 } from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
@@ -382,6 +383,18 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           id={`minimap_${id}`}
           name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
+        />
+      )
+    case "communicationObjectName":
+      return (
+        <CommunicationObjectNameSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          methods={(nodeInfo.data.methods as []) || []}
+          attributes={(nodeInfo.data.attributes as []) || []}
         />
       )
 
