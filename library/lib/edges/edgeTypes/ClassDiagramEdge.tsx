@@ -45,7 +45,6 @@ export const ClassDiagramEdge = ({
     >
       {(edgeData: StepPathEdgeData) => (
         <>
-          {/* Class diagrams use both end labels (roles/multiplicities) and middle labels */}
           <EdgeEndLabels
             data={data}
             activePoints={edgeData.activePoints}

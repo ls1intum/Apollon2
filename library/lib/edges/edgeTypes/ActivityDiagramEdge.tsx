@@ -43,15 +43,12 @@ export const ActivityDiagramEdge = ({
       enableReconnection={enableReconnection}
     >
       {(edgeData: StepPathEdgeData) => (
-        <>
-          {/* Activity diagrams typically only use middle labels, not end labels */}
-          <EdgeMiddleLabels
-            label={data?.label}
-            pathMiddlePosition={edgeData.pathMiddlePosition}
-            isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-            isUseCasePath={false}
-          />
-        </>
+        <EdgeMiddleLabels
+          label={data?.label}
+          pathMiddlePosition={edgeData.pathMiddlePosition}
+          isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
+          isUseCasePath={false}
+        />
       )}
     </StepPathEdge>
   )

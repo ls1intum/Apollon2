@@ -32,14 +32,11 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
   }
 
   const edgeData = edge.data as CustomEdgeProps | undefined
-
-  // Retrieve source/target node names
   const sourceNode = getNode(edge.source)
   const targetNode = getNode(edge.target)
   const sourceName = (sourceNode?.data?.name as string) ?? "Source"
   const targetName = (targetNode?.data?.name as string) ?? "Target"
 
-  // Define edge type options based on diagram type
   const getEdgeTypeOptions = () => {
     return [
       { value: "ClassBidirectional", label: "Bi-Association" },
@@ -56,14 +53,11 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      {/* Swap icon for source/target swap - only show for non-use case edges */}
       {handleSwap && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
         </Box>
       )}
-
-      {/* Edge type selection */}
       <FormControl fullWidth size="small">
         <InputLabel id="edge-type-label">Edge Type</InputLabel>
         <Select
@@ -81,7 +75,6 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
         </Select>
       </FormControl>
 
-      {/* Only show role and multiplicity fields for class diagram edges */}
       {
         <>
           {/* Source subheadline */}

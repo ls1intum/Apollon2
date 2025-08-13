@@ -82,13 +82,12 @@ export const StraightPathEdge = ({
     return calculateOverlayPath(sourceX, sourceY, targetX, targetY, type)
   }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition])
 
-  // Update middle position for straight paths
   useEffect(() => {
     updateMiddlePosition(
       currentPath,
       setPathMiddlePosition,
       setIsMiddlePathHorizontal,
-      true // isDirectPath = true for straight paths
+      true
     )
   }, [
     currentPath,
@@ -99,8 +98,6 @@ export const StraightPathEdge = ({
 
   const sourcePoint = { x: sourceX, y: sourceY }
   const targetPoint = { x: targetX, y: targetY }
-
-  // Create context data for children
   const edgeData: StraightPathEdgeData = {
     pathMiddlePosition,
     isMiddlePathHorizontal,
@@ -133,7 +130,6 @@ export const StraightPathEdge = ({
         />
       </g>
 
-      {/* Render custom labels passed as children with edge data */}
       {typeof children === "function" ? children(edgeData) : children}
 
       <CommonEdgeElements

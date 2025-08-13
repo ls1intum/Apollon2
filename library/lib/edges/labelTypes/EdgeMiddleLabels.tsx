@@ -25,7 +25,6 @@ export const EdgeMiddleLabels = ({
 }: EdgeMiddleLabelsProps) => {
   return (
     <>
-      {/* Standard edge label (center of path) */}
       {label && pathMiddlePosition.x !== 0 && pathMiddlePosition.y !== 0 && (
         <EdgeLabel
           isMiddlePathHorizontal={isMiddlePathHorizontal}
@@ -37,7 +36,6 @@ export const EdgeMiddleLabels = ({
         />
       )}
 
-      {/* Relationship labels for use case include/extend */}
       {showRelationshipLabels &&
         relationshipType &&
         sourcePoint &&

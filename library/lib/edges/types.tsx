@@ -4,7 +4,6 @@ import { ActivityDiagramEdge } from "./edgeTypes/ActivityDiagramEdge"
 import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ExtendedEdgeProps } from "./EdgeProps"
 
-// Class diagram edge factory
 const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   const Component = (props: ExtendedEdgeProps) => (
     <ClassDiagramEdge
@@ -16,7 +15,6 @@ const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   return Component
 }
 
-// Activity diagram edge factory
 const createActivityEdgeComponent = (allowMidpointDragging: boolean = true) => {
   const Component = (props: ExtendedEdgeProps) => (
     <ActivityDiagramEdge
@@ -28,7 +26,6 @@ const createActivityEdgeComponent = (allowMidpointDragging: boolean = true) => {
   return Component
 }
 
-// Use case diagram edge factory
 const createUseCaseEdgeComponent = (
   showRelationshipLabels: boolean = false
 ) => {
@@ -40,7 +37,6 @@ const createUseCaseEdgeComponent = (
 }
 
 export const diagramEdgeTypes = {
-  // Class diagram edges - all use step paths with midpoint dragging
   ClassAggregation: createClassEdgeComponent(true),
   ClassInheritance: createClassEdgeComponent(true),
   ClassRealization: createClassEdgeComponent(true),
@@ -49,10 +45,10 @@ export const diagramEdgeTypes = {
   ClassUnidirectional: createClassEdgeComponent(true),
   ClassDependency: createClassEdgeComponent(true),
   ActivityControlFlow: createActivityEdgeComponent(true),
-  UseCaseAssociation: createUseCaseEdgeComponent(false), // No relationship labels
-  UseCaseInclude: createUseCaseEdgeComponent(true), // Show <<include>>
-  UseCaseExtend: createUseCaseEdgeComponent(true), // Show <<extend>>
-  UseCaseGeneralization: createUseCaseEdgeComponent(false), // No relationship labels
+  UseCaseAssociation: createUseCaseEdgeComponent(false),
+  UseCaseInclude: createUseCaseEdgeComponent(true),
+  UseCaseExtend: createUseCaseEdgeComponent(true),
+  UseCaseGeneralization: createUseCaseEdgeComponent(false),
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes

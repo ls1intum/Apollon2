@@ -8,7 +8,7 @@ import {
 } from "@/constants"
 import { IPoint } from "@/edges/Connection"
 import { DiagramEdgeType, UMLDiagramType } from "@/typings"
-import { Position, Rect, XYPosition } from "@xyflow/react"
+import { Position, Rect, XYPosition, ConnectionLineType } from "@xyflow/react"
 
 /**
  * Adjusts the target coordinates based on the position and marker padding.
@@ -615,5 +615,22 @@ export const getDefaultEdgeType = (
       return "UseCaseAssociation"
     default:
       return "ClassUnidirectional"
+  }
+}
+
+/**
+ * Determines the appropriate connection line type based on the diagram type
+ * @param diagramType - The type of diagram being rendered
+ * @returns The corresponding ConnectionLineType
+ */
+export function getConnectionLineType(
+  diagramType: UMLDiagramType
+): ConnectionLineType {
+  switch (diagramType) {
+    case "UseCaseDiagram":
+      return ConnectionLineType.Straight
+
+    default:
+      return ConnectionLineType.Step
   }
 }
