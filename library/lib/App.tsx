@@ -1,7 +1,6 @@
 import {
   ReactFlowProvider,
   ReactFlowInstance,
-  ConnectionLineType,
   ConnectionMode,
   ReactFlow,
 } from "@xyflow/react"
@@ -33,6 +32,7 @@ import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts"
 import { ApollonMode } from "./typings"
+import { getConnectionLineType } from "./utils/edgeUtils"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -58,10 +58,7 @@ function App({ onReactFlowInit }: AppProps) {
     }))
   )
   const isDiagramModifiable = useDiagramModifiable()
-  const connectionLineType =
-    diagramType === "UseCaseDiagram"
-      ? ConnectionLineType.Straight
-      : ConnectionLineType.Step
+  const connectionLineType = getConnectionLineType(diagramType)
   const onNodeDragStop = useNodeDragStop()
   const onDragOver = useDragOver()
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =

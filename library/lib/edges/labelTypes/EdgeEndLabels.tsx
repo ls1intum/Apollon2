@@ -29,7 +29,6 @@ export const EdgeEndLabels = ({
   sourcePosition,
   targetPosition,
 }: EdgeEndLabelsProps) => {
-  // Calculate source labels based on actual edge points and their directions
   const sourceLabels = useMemo(() => {
     if (activePoints.length < 2) {
       return calculateDynamicEdgeLabels(sourceX, sourceY, sourcePosition)
@@ -49,7 +48,6 @@ export const EdgeEndLabels = ({
     return calculateDynamicEdgeLabels(sourcePoint.x, sourcePoint.y, direction)
   }, [activePoints, sourceX, sourceY, sourcePosition])
 
-  // Calculate target labels
   const targetLabels = useMemo(() => {
     if (activePoints.length < 2) {
       return calculateDynamicEdgeLabels(targetX, targetY, targetPosition)

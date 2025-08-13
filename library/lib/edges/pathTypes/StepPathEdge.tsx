@@ -133,9 +133,7 @@ export const StepPathEdge = ({
     return getPositionOnCanvas(targetNode, allNodes)
   }, [targetNode, allNodes, targetX, targetY])
 
-  // Generate step path
   const basePath = useMemo(() => {
-    // For activity diagram edges, skip straight path calculation and always use step path
     const isActivityDiagram = type.startsWith("Activity")
 
     if (isActivityDiagram) {
@@ -169,7 +167,6 @@ export const StepPathEdge = ({
       return edgePath
     }
 
-    // For other diagram types, try straight path first, then fallback to step path
     const straightPathPoints = tryFindStraightPath(
       {
         position: { x: sourceAbsolutePosition.x, y: sourceAbsolutePosition.y },
@@ -243,7 +240,6 @@ export const StepPathEdge = ({
     return result
   }, [basePath, isDiagramModifiable])
 
-  // Node position tracking for resetting custom points
   const prevNodePositionsRef = useRef<{
     source: { x: number; y: number; parentId?: string }
     target: { x: number; y: number; parentId?: string }
@@ -336,7 +332,6 @@ export const StepPathEdge = ({
     return `${currentPath} ${markerSegmentPath}`
   }, [currentPath, markerSegmentPath])
 
-  // Update middle position
   useEffect(() => {
     updateMiddlePosition(
       currentPath,
@@ -356,7 +351,6 @@ export const StepPathEdge = ({
     return calculateInnerMidpoints(activePoints)
   }, [activePoints, allowMidpointDragging])
 
-  // Midpoint dragging logic
   const handlePointerDown = useCallback(
     (event: React.PointerEvent, index: number) => {
       if (!allowMidpointDragging) return
@@ -447,14 +441,11 @@ export const StepPathEdge = ({
           newTargetX = newEndpoint.x
           newTargetY = newEndpoint.y
         }
-
-        // Check if this is an activity diagram edge
         const isActivityDiagram = type.startsWith("Activity")
 
         let newPoints: IPoint[] = []
 
         if (isActivityDiagram) {
-          // For activity diagrams, always use step path
           const adjustedTargetCoordinates = adjustTargetCoordinates(
             newTargetX,
             newTargetY,
@@ -643,7 +634,6 @@ export const StepPathEdge = ({
           />
         )}
 
-        {/* Midpoint dragging circles */}
         {isDiagramModifiable &&
           !isReconnectingRef.current &&
           allowMidpointDragging &&
@@ -662,8 +652,6 @@ export const StepPathEdge = ({
             />
           ))}
       </g>
-
-      {/* Render custom labels passed as children with edge data */}
       {typeof children === "function" ? children(edgeData) : children}
 
       <CommonEdgeElements

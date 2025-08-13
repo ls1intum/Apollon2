@@ -1,5 +1,7 @@
 import { NodeTypes } from "@xyflow/react" // Explicitly differentiate imported type
 import { Class, ColorDescription } from "./classDiagram"
+import { ObjectName } from "./objectDiagram"
+import { CommunicationObjectName } from "./communicationDiagram"
 import { TitleAndDesctiption } from "./TitleAndDescriptionNode"
 import Package from "./classDiagram/Package"
 import {
@@ -37,6 +39,8 @@ import { SyntaxTreeNonterminal } from "./syntaxTreeDiagram/SyntaxTreeNonterminal
 export const diagramNodeTypes = {
   package: Package,
   class: Class,
+  objectName: ObjectName,
+  communicationObjectName: CommunicationObjectName,
   colorDescription: ColorDescription,
   titleAndDesctiption: TitleAndDesctiption,
   activity: Activity,
@@ -73,6 +77,8 @@ export type DiagramNodeType = keyof typeof diagramNodeTypes
 export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   package: "package",
   class: "class",
+  objectName: "objectName",
+  communicationObjectName: "communicationObjectName",
   colorDescription: "colorDescription",
   titleAndDesctiption: "titleAndDesctiption",
   activity: "activity",

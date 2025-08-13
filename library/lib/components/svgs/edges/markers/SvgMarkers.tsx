@@ -5,13 +5,12 @@ export function SvgMarkers() {
       id="apollon2_svg-markers"
     >
       <defs>
-        {/* Existing markers for class diagrams */}
         <marker
           id="black-rhombus"
           viewBox="0 0 30 30"
           markerWidth="30"
           markerHeight="30"
-          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -28,7 +27,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="30"
           markerHeight="30"
-          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -45,7 +44,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -62,7 +61,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -74,8 +73,6 @@ export function SvgMarkers() {
             strokeWidth="1.5"
           />
         </marker>
-
-        {/* Smaller markers for use case diagrams */}
         <marker
           id="usecase-arrow"
           viewBox="0 0 20 20"

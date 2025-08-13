@@ -13,6 +13,11 @@ import {
   DefaultNodeGiveFeedbackPopover,
   DefaultNodeSeeFeedbackPopover,
 } from "./classDiagram"
+import {
+  ObjectEditPopover,
+  ObjectGiveFeedbackPopover,
+  ObjectSeeFeedbackPopover,
+} from "./objectDiagram"
 import { useViewportCenter } from "@/hooks"
 import { getPopoverOrigin, getPositionOnCanvas, getQuadrant } from "@/utils"
 import { PopoverProps } from "./types"
@@ -30,6 +35,11 @@ import {
   ComponentSubsystemEditPopover,
 } from "./componentDiagram"
 import {
+  CommunicationObjectNameEditPopover,
+  CommunicationObjectNameGiveFeedbackPopover,
+  CommunicationObjectNameSeeFeedbackPopover,
+} from "./communicationDiagram"
+import {
   DeploymentComponentEditPopover,
   DeploymentNodeEditPopover,
 } from "./deploymentDiagram"
@@ -40,6 +50,8 @@ import {
 
 type PopoverType =
   | "class"
+  | "objectName"
+  | "communicationObjectName"
   | "default"
   | DiagramEdgeType
   | "Component"
@@ -56,6 +68,8 @@ type PopoverType =
 
 const editPopovers: {
   class: React.FC<PopoverProps>
+  objectName: React.FC<PopoverProps>
+  communicationObjectName: React.FC<PopoverProps>
   default: React.FC<PopoverProps>
   ClassAggregation: React.FC<PopoverProps>
   ClassInheritance: React.FC<PopoverProps>
@@ -82,6 +96,8 @@ const editPopovers: {
   SyntaxTreeTerminal: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
+  objectName: ObjectEditPopover,
+  communicationObjectName: CommunicationObjectNameEditPopover,
   default: DefaultNodeEditPopover,
   ClassAggregation: EdgeEditPopover,
   ClassInheritance: EdgeEditPopover,
@@ -110,6 +126,8 @@ const editPopovers: {
 
 const giveFeedbackPopovers: {
   class: React.FC<PopoverProps>
+  objectName: React.FC<PopoverProps>
+  communicationObjectName: React.FC<PopoverProps>
   default: React.FC<PopoverProps>
   ClassAggregation: React.FC<PopoverProps>
   ClassInheritance: React.FC<PopoverProps>
@@ -136,6 +154,8 @@ const giveFeedbackPopovers: {
   SyntaxTreeTerminal: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
+  objectName: ObjectGiveFeedbackPopover,
+  communicationObjectName: CommunicationObjectNameGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
   ClassAggregation: EdgeGiveFeedbackPopover,
   ClassInheritance: EdgeGiveFeedbackPopover,
@@ -164,6 +184,8 @@ const giveFeedbackPopovers: {
 
 const seeFeedbackPopovers: {
   class: React.FC<PopoverProps>
+  objectName: React.FC<PopoverProps>
+  communicationObjectName: React.FC<PopoverProps>
   default: React.FC<PopoverProps>
   ClassAggregation: React.FC<PopoverProps>
   ClassInheritance: React.FC<PopoverProps>
@@ -190,6 +212,8 @@ const seeFeedbackPopovers: {
   SyntaxTreeTerminal: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
+  objectName: ObjectSeeFeedbackPopover,
+  communicationObjectName: CommunicationObjectNameSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
   ClassAggregation: EdgeSeeFeedbackPopover,
   ClassInheritance: EdgeSeeFeedbackPopover,

@@ -6,12 +6,12 @@ import {
   type Node,
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
-import { ClassSVG } from "@/components"
+import { CommunicationObjectNameSVG } from "@/components"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import { useEffect, useMemo, useRef } from "react"
 import { Box } from "@mui/material"
-import { ClassNodeProps } from "@/types"
+import { CommunicationObjectNodeProps } from "@/types"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import {
@@ -25,19 +25,18 @@ import {
   DEFAULT_PADDING,
   DEFAULT_FONT,
   DEFAULT_HEADER_HEIGHT,
-  DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE,
 } from "@/constants"
 import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 
-export function Class({
+export function CommunicationObjectName({
   id,
   width,
   height,
-  data: { methods, attributes, stereotype, name },
-}: NodeProps<Node<ClassNodeProps>>) {
+  data: { methods, attributes, name },
+}: NodeProps<Node<CommunicationObjectNodeProps>>) {
   const { setNodes } = useDiagramStore(
     useShallow((state) => ({
       setNodes: state.setNodes,
@@ -49,14 +48,11 @@ export function Class({
   const selected = useIsOnlyThisElementSelected(id)
   const isDiagramModifiable = useDiagramModifiable()
 
-  const classSvgWrapperRef = useRef<HTMLDivElement | null>(null)
+  const communicationObjectSvgWrapperRef = useRef<HTMLDivElement | null>(null)
   const handleDelete = useHandleDelete(id)
 
-  const showStereotype = !!stereotype
-  const headerHeight = showStereotype
-    ? DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE
-    : DEFAULT_HEADER_HEIGHT
-
+  // Communication diagrams don't have stereotypes, so header height is consistent
+  const headerHeight = DEFAULT_HEADER_HEIGHT
   const attributeHeight = DEFAULT_ATTRIBUTE_HEIGHT
   const methodHeight = DEFAULT_METHOD_HEIGHT
   const padding = DEFAULT_PADDING
@@ -64,25 +60,22 @@ export function Class({
 
   // Calculate the widest text accurately
   const maxTextWidth = useMemo(() => {
-    const headerTextWidths = [
-      stereotype ? measureTextWidth(`«${stereotype}»`, font) : 0,
-      measureTextWidth(name, font),
-    ]
-    const attributesTextWidths = attributes.map((attr) =>
+    const headerTextWidth = measureTextWidth(name, font)
+    const attributesTextWidths = attributes.map((attr: { name: string }) =>
       measureTextWidth(attr.name, font)
     )
-    const methodsTextWidths = methods.map((method) =>
+    const methodsTextWidths = methods.map((method: { name: string }) =>
       measureTextWidth(method.name, font)
     )
     const allTextWidths = [
-      ...headerTextWidths,
+      headerTextWidth,
       ...attributesTextWidths,
       ...methodsTextWidths,
     ]
 
     const result = Math.max(...allTextWidths, 0)
     return result
-  }, [stereotype, name, attributes, methods, font])
+  }, [name, attributes, methods, font])
 
   const minWidth = useMemo(() => {
     const result = calculateMinWidth(maxTextWidth, padding)
@@ -185,22 +178,21 @@ export function Class({
         </Box>
       </NodeToolbar>
 
-      <div ref={classSvgWrapperRef}>
-        <ClassSVG
+      <div ref={communicationObjectSvgWrapperRef}>
+        <CommunicationObjectNameSVG
           width={finalWidth}
           height={minHeight}
           attributes={attributes}
           methods={methods}
-          stereotype={stereotype}
           name={name}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />
       </div>
       <PopoverManager
-        anchorEl={classSvgWrapperRef.current}
+        anchorEl={communicationObjectSvgWrapperRef.current}
         elementId={id}
-        type={"class" as const}
+        type={"communicationObjectName" as const}
       />
     </DefaultNodeWrapper>
   )
