@@ -1,4 +1,5 @@
 export * from "./classDiagram"
+export * from "./objectDiagram"
 export * from "./activityDiagram"
 export * from "./useCaseDiagram"
 export * from "./componentDiagram"
