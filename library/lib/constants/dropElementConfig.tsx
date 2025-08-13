@@ -27,6 +27,8 @@ import {
   DeploymentInterfaceSVG,
   SyntaxTreeNonterminalNodeSVG,
   SyntaxTreeTerminalNodeSVG,
+  ObjectNameSVG,
+  CommunicationObjectNameSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -109,16 +111,15 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
   ],
   [UMLDiagramType.ObjectDiagram]: [
     {
-      type: "class",
+      type: "objectName",
       width: droppedElementWidth,
       height: 70,
       defaultData: {
         name: "Object",
-        stereotype: ClassType.ObjectClass,
         attributes: [{ id: generateUUID(), name: "attribute = value" }],
         methods: [],
       },
-      svg: (props) => <ClassSVG {...props} />,
+      svg: (props) => <ObjectNameSVG {...props} />,
     },
   ],
   [UMLDiagramType.ActivityDiagram]: [
@@ -193,7 +194,19 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
     },
   ],
   [UMLDiagramType.BPMN]: [],
-  [UMLDiagramType.CommunicationDiagram]: [],
+  [UMLDiagramType.CommunicationDiagram]: [
+    {
+      type: "communicationObjectName",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Object",
+        attributes: [{ id: generateUUID(), name: "attribute = value" }],
+        methods: [],
+      },
+      svg: (props) => <CommunicationObjectNameSVG {...props} />,
+    },
+  ],
   [UMLDiagramType.ComponentDiagram]: [
     {
       type: "component",
