@@ -248,14 +248,14 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       type: "bpmnStartEvent",
       width: 40,
       height: 40,
-      defaultData: { name: "Start Event", eventType: "default" },
+      defaultData: { name: "", eventType: "default" },
       svg: (props) => <BPMNEventNodeSVG variant="start" {...props} name="" />,
     },
     {
       type: "bpmnIntermediateEvent",
       width: 40,
       height: 40,
-      defaultData: { name: "Intermediate Event", eventType: "default" },
+      defaultData: { name: "", eventType: "default" },
       svg: (props) => (
         <BPMNEventNodeSVG variant="intermediate" {...props} name="" />
       ),
@@ -264,14 +264,14 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       type: "bpmnEndEvent",
       width: 40,
       height: 40,
-      defaultData: { name: "End Event", eventType: "default" },
+      defaultData: { name: "", eventType: "default" },
       svg: (props) => <BPMNEventNodeSVG variant="end" {...props} name="" />,
     },
     {
       type: "bpmnGateway",
       width: 40,
       height: 40,
-      defaultData: { name: "Gateway", gatewayType: "exclusive" },
+      defaultData: { name: "", gatewayType: "exclusive" },
       svg: (props) => <BPMNGatewayNodeSVG {...props} name="" />,
     },
     {

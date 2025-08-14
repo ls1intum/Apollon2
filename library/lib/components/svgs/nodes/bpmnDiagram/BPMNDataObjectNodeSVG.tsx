@@ -24,7 +24,7 @@ export const BPMNDataObjectNodeSVG: React.FC<
       />
       <CustomText
         x={width / 2}
-        y={height + 20}
+        y={height + 10}
         textAnchor="middle"
         fontSize={14}
         dominantBaseline="hanging"

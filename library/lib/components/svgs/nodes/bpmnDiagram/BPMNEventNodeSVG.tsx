@@ -314,7 +314,7 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
       {name && (
         <CustomText
           x={width / 2}
-          y={height + 20}
+          y={height + 10}
           textAnchor="middle"
           fontWeight="normal"
           fontSize={14}
