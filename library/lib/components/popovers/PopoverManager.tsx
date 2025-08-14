@@ -13,6 +13,11 @@ import {
   DefaultNodeGiveFeedbackPopover,
   DefaultNodeSeeFeedbackPopover,
 } from "./classDiagram"
+import {
+  ObjectEditPopover,
+  ObjectGiveFeedbackPopover,
+  ObjectSeeFeedbackPopover,
+} from "./objectDiagram"
 import { useViewportCenter } from "@/hooks"
 import { getPopoverOrigin, getPositionOnCanvas, getQuadrant } from "@/utils"
 import { PopoverProps } from "./types"
@@ -29,9 +34,18 @@ import {
   ComponentSubsystemEditPopover,
 } from "./componentDiagram"
 import {
+  CommunicationObjectNameEditPopover,
+  CommunicationObjectNameGiveFeedbackPopover,
+  CommunicationObjectNameSeeFeedbackPopover,
+} from "./communicationDiagram"
+import {
   DeploymentComponentEditPopover,
   DeploymentNodeEditPopover,
 } from "./deploymentDiagram"
+import {
+  SyntaxTreeNonterminalEditPopover,
+  SyntaxTreeTerminalEditPopover,
+} from "./syntaxTreeDiagram"
 import {
   BPMNTaskEditPopover,
   BPMNStartEventEditPopover,
@@ -43,6 +57,8 @@ import {
 
 type PopoverType =
   | "class"
+  | "objectName"
+  | "communicationObjectName"
   | "default"
   | "ClassAggregation"
   | "ClassInheritance"
@@ -65,6 +81,8 @@ type PopoverType =
   | "FlowchartFunctionCall"
   | "DeploymentComponent"
   | "DeploymentNode"
+  | "SyntaxTreeNonterminal"
+  | "SyntaxTreeTerminal"
   | "BPMNTask"
   | "BPMNStartEvent"
   | "BPMNIntermediateEvent"
@@ -94,6 +112,8 @@ type PopoverType =
 
 const editPopovers: {
   class: React.FC<PopoverProps>
+  objectName: React.FC<PopoverProps>
+  communicationObjectName: React.FC<PopoverProps>
   default: React.FC<PopoverProps>
   ClassAggregation: React.FC<PopoverProps>
   ClassInheritance: React.FC<PopoverProps>
@@ -116,6 +136,8 @@ const editPopovers: {
   FlowchartFunctionCall: React.FC<PopoverProps>
   DeploymentComponent: React.FC<PopoverProps>
   DeploymentNode: React.FC<PopoverProps>
+  SyntaxTreeNonterminal: React.FC<PopoverProps>
+  SyntaxTreeTerminal: React.FC<PopoverProps>
   BPMNTask: React.FC<PopoverProps>
   BPMNStartEvent: React.FC<PopoverProps>
   BPMNIntermediateEvent: React.FC<PopoverProps>
@@ -131,6 +153,8 @@ const editPopovers: {
   BPMNGroup: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
+  objectName: ObjectEditPopover,
+  communicationObjectName: CommunicationObjectNameEditPopover,
   default: DefaultNodeEditPopover,
   ClassAggregation: EdgeEditPopover,
   ClassInheritance: EdgeEditPopover,
@@ -153,6 +177,8 @@ const editPopovers: {
   FlowchartFunctionCall: DefaultNodeEditPopover,
   DeploymentComponent: DeploymentComponentEditPopover,
   DeploymentNode: DeploymentNodeEditPopover,
+  SyntaxTreeNonterminal: SyntaxTreeNonterminalEditPopover,
+  SyntaxTreeTerminal: SyntaxTreeTerminalEditPopover,
   BPMNTask: BPMNTaskEditPopover,
   BPMNStartEvent: BPMNStartEventEditPopover,
   BPMNIntermediateEvent: BPMNIntermediateEventEditPopover,
@@ -170,6 +196,8 @@ const editPopovers: {
 
 const giveFeedbackPopovers: {
   class: React.FC<PopoverProps>
+  objectName: React.FC<PopoverProps>
+  communicationObjectName: React.FC<PopoverProps>
   default: React.FC<PopoverProps>
   ClassAggregation: React.FC<PopoverProps>
   ClassInheritance: React.FC<PopoverProps>
@@ -192,6 +220,8 @@ const giveFeedbackPopovers: {
   FlowchartFunctionCall: React.FC<PopoverProps>
   DeploymentComponent: React.FC<PopoverProps>
   DeploymentNode: React.FC<PopoverProps>
+  SyntaxTreeNonterminal: React.FC<PopoverProps>
+  SyntaxTreeTerminal: React.FC<PopoverProps>
   BPMNTask: React.FC<PopoverProps>
   BPMNStartEvent: React.FC<PopoverProps>
   BPMNIntermediateEvent: React.FC<PopoverProps>
@@ -207,6 +237,8 @@ const giveFeedbackPopovers: {
   BPMNGroup: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
+  objectName: ObjectGiveFeedbackPopover,
+  communicationObjectName: CommunicationObjectNameGiveFeedbackPopover,
   default: DefaultNodeGiveFeedbackPopover,
   ClassAggregation: EdgeGiveFeedbackPopover,
   ClassInheritance: EdgeGiveFeedbackPopover,
@@ -229,6 +261,8 @@ const giveFeedbackPopovers: {
   FlowchartFunctionCall: DefaultNodeGiveFeedbackPopover,
   DeploymentComponent: DefaultNodeGiveFeedbackPopover,
   DeploymentNode: DefaultNodeGiveFeedbackPopover,
+  SyntaxTreeNonterminal: DefaultNodeGiveFeedbackPopover,
+  SyntaxTreeTerminal: DefaultNodeGiveFeedbackPopover,
   BPMNTask: DefaultNodeGiveFeedbackPopover,
   BPMNStartEvent: DefaultNodeGiveFeedbackPopover,
   BPMNIntermediateEvent: DefaultNodeGiveFeedbackPopover,
@@ -246,6 +280,8 @@ const giveFeedbackPopovers: {
 
 const seeFeedbackPopovers: {
   class: React.FC<PopoverProps>
+  objectName: React.FC<PopoverProps>
+  communicationObjectName: React.FC<PopoverProps>
   default: React.FC<PopoverProps>
   ClassAggregation: React.FC<PopoverProps>
   ClassInheritance: React.FC<PopoverProps>
@@ -268,6 +304,8 @@ const seeFeedbackPopovers: {
   FlowchartFunctionCall: React.FC<PopoverProps>
   DeploymentComponent: React.FC<PopoverProps>
   DeploymentNode: React.FC<PopoverProps>
+  SyntaxTreeNonterminal: React.FC<PopoverProps>
+  SyntaxTreeTerminal: React.FC<PopoverProps>
   BPMNTask: React.FC<PopoverProps>
   BPMNStartEvent: React.FC<PopoverProps>
   BPMNIntermediateEvent: React.FC<PopoverProps>
@@ -283,6 +321,8 @@ const seeFeedbackPopovers: {
   BPMNGroup: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
+  objectName: ObjectSeeFeedbackPopover,
+  communicationObjectName: CommunicationObjectNameSeeFeedbackPopover,
   default: DefaultNodeSeeFeedbackPopover,
   ClassAggregation: EdgeSeeFeedbackPopover,
   ClassInheritance: EdgeSeeFeedbackPopover,
@@ -305,6 +345,8 @@ const seeFeedbackPopovers: {
   FlowchartFunctionCall: DefaultNodeSeeFeedbackPopover,
   DeploymentComponent: DefaultNodeSeeFeedbackPopover,
   DeploymentNode: DefaultNodeSeeFeedbackPopover,
+  SyntaxTreeNonterminal: DefaultNodeSeeFeedbackPopover,
+  SyntaxTreeTerminal: DefaultNodeSeeFeedbackPopover,
   BPMNTask: DefaultNodeSeeFeedbackPopover,
   BPMNStartEvent: DefaultNodeSeeFeedbackPopover,
   BPMNIntermediateEvent: DefaultNodeSeeFeedbackPopover,

@@ -1,6 +1,5 @@
 import { type Edge, type Node } from "@xyflow/react"
 import { ClassType } from "./types"
-// import { ClassType } from "./types"
 
 export const initialNodes: Node[] = [
   {

@@ -26,6 +26,10 @@ import {
   FlowchartDecisionNodeSVG,
   FlowchartInputOutputNodeSVG,
   FlowchartFunctionCallNodeSVG,
+  SyntaxTreeTerminalNodeSVG,
+  SyntaxTreeNonterminalNodeSVG,
+  ObjectNameSVG,
+  CommunicationObjectNameSVG,
   BPMNTaskNodeSVG,
   BPMNEventNodeSVG,
   BPMNGatewayNodeSVG,
@@ -39,6 +43,7 @@ import {
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
 import { DiagramNodeType } from "@/typings"
+import { ClassType } from "@/types/nodes/enums"
 
 export const CustomMiniMap = () => {
   const [minimapCollapsed, setMinimapCollapsed] = useState(true)
@@ -101,8 +106,9 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          methods={(nodeInfo.data["methods"] as []) || []}
-          attributes={(nodeInfo.data["attributes"] as []) || []}
+          stereotype={nodeInfo.data.stereotype as ClassType | undefined}
+          methods={(nodeInfo.data.methods as []) || []}
+          attributes={(nodeInfo.data.attributes as []) || []}
           name={(nodeInfo.data.name as string) || ""}
         />
       )
@@ -113,6 +119,18 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "objectName":
+      return (
+        <ObjectNameSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          methods={(nodeInfo.data.methods as []) || []}
+          attributes={(nodeInfo.data.attributes as []) || []}
           svgAttributes={{ x, y }}
         />
       )
@@ -354,6 +372,38 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           id={`minimap_${id}`}
           name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
+        />
+      )
+    case "syntaxTreeNonterminal":
+      return (
+        <SyntaxTreeNonterminalNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "syntaxTreeTerminal":
+      return (
+        <SyntaxTreeTerminalNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "communicationObjectName":
+      return (
+        <CommunicationObjectNameSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          methods={(nodeInfo.data.methods as []) || []}
+          attributes={(nodeInfo.data.attributes as []) || []}
         />
       )
     case "bpmnTask":

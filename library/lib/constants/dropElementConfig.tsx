@@ -25,6 +25,10 @@ import {
   DeploymentComponentSVG,
   DeploymentArtifactSVG,
   DeploymentInterfaceSVG,
+  SyntaxTreeNonterminalNodeSVG,
+  SyntaxTreeTerminalNodeSVG,
+  ObjectNameSVG,
+  CommunicationObjectNameSVG,
   BPMNTaskNodeSVG,
   BPMNEventNodeSVG,
   BPMNGatewayNodeSVG,
@@ -116,16 +120,15 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
   ],
   [UMLDiagramType.ObjectDiagram]: [
     {
-      type: "class",
+      type: "objectName",
       width: droppedElementWidth,
       height: 70,
       defaultData: {
         name: "Object",
-        stereotype: ClassType.ObjectClass,
         attributes: [{ id: generateUUID(), name: "attribute = value" }],
         methods: [],
       },
-      svg: (props) => <ClassSVG {...props} />,
+      svg: (props) => <ObjectNameSVG {...props} />,
     },
   ],
   [UMLDiagramType.ActivityDiagram]: [
@@ -296,7 +299,19 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <BPMNPoolNodeSVG {...props} />,
     },
   ],
-  [UMLDiagramType.CommunicationDiagram]: [],
+  [UMLDiagramType.CommunicationDiagram]: [
+    {
+      type: "communicationObjectName",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: {
+        name: "Object",
+        attributes: [{ id: generateUUID(), name: "attribute = value" }],
+        methods: [],
+      },
+      svg: (props) => <CommunicationObjectNameSVG {...props} />,
+    },
+  ],
   [UMLDiagramType.ComponentDiagram]: [
     {
       type: "component",
@@ -373,7 +388,26 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
   ],
   [UMLDiagramType.PetriNet]: [],
   [UMLDiagramType.ReachabilityGraph]: [],
-  [UMLDiagramType.SyntaxTree]: [],
+  [UMLDiagramType.SyntaxTree]: [
+    {
+      type: "syntaxTreeNonterminal",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: {
+        name: "",
+      },
+      svg: (props) => <SyntaxTreeNonterminalNodeSVG {...props} />,
+    },
+    {
+      type: "syntaxTreeTerminal",
+      width: droppedElementWidth,
+      height: 100,
+      defaultData: {
+        name: "",
+      },
+      svg: (props) => <SyntaxTreeTerminalNodeSVG {...props} />,
+    },
+  ],
   [UMLDiagramType.UseCaseDiagram]: [
     {
       type: "useCase",

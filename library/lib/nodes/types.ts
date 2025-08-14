@@ -1,5 +1,7 @@
 import { NodeTypes } from "@xyflow/react" // Explicitly differentiate imported type
 import { Class, ColorDescription } from "./classDiagram"
+import { ObjectName } from "./objectDiagram"
+import { CommunicationObjectName } from "./communicationDiagram"
 import { TitleAndDesctiption } from "./TitleAndDescriptionNode"
 import Package from "./classDiagram/Package"
 import {
@@ -31,6 +33,8 @@ import {
   FlowchartInputOutput,
   FlowchartFunctionCall,
 } from "./flowchart"
+import { SyntaxTreeTerminal } from "./syntaxTreeDiagram/SyntaxTreeTerminal"
+import { SyntaxTreeNonterminal } from "./syntaxTreeDiagram/SyntaxTreeNonterminal"
 import {
   BPMNTask,
   BPMNStartEvent,
@@ -50,6 +54,8 @@ import {
 export const diagramNodeTypes = {
   package: Package,
   class: Class,
+  objectName: ObjectName,
+  communicationObjectName: CommunicationObjectName,
   colorDescription: ColorDescription,
   titleAndDesctiption: TitleAndDesctiption,
   activity: Activity,
@@ -75,6 +81,8 @@ export const diagramNodeTypes = {
   flowchartDecision: FlowchartDecision,
   flowchartInputOutput: FlowchartInputOutput,
   flowchartFunctionCall: FlowchartFunctionCall,
+  syntaxTreeTerminal: SyntaxTreeTerminal,
+  syntaxTreeNonterminal: SyntaxTreeNonterminal,
   bpmnTask: BPMNTask,
   bpmnStartEvent: BPMNStartEvent,
   bpmnIntermediateEvent: BPMNIntermediateEvent,
@@ -97,6 +105,8 @@ export type DiagramNodeType = keyof typeof diagramNodeTypes
 export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   package: "package",
   class: "class",
+  objectName: "objectName",
+  communicationObjectName: "communicationObjectName",
   colorDescription: "colorDescription",
   titleAndDesctiption: "titleAndDesctiption",
   activity: "activity",
@@ -122,6 +132,8 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   flowchartDecision: "flowchartDecision",
   flowchartInputOutput: "flowchartInputOutput",
   flowchartFunctionCall: "flowchartFunctionCall",
+  syntaxTreeTerminal: "syntaxTreeTerminal",
+  syntaxTreeNonterminal: "syntaxTreeNonterminal",
   bpmnTask: "bpmnTask",
   bpmnStartEvent: "bpmnStartEvent",
   bpmnIntermediateEvent: "bpmnIntermediateEvent",

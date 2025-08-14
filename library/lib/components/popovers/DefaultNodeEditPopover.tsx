@@ -8,6 +8,7 @@ export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
   elementId,
   children,
   sideElements = [],
+  placeholder,
 }) => {
   const { nodes, setNodes } = useDiagramStore(
     useShallow((state) => ({
@@ -54,6 +55,7 @@ export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
           onChange={(event) => handleNameChange(event.target.value)}
           size="small"
           value={nodeData.name}
+          placeholder={placeholder}
           sx={{ backgroundColor: "#fff" }}
         />
         {sideElements}

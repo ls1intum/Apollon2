@@ -15,9 +15,14 @@ const diagramTypes = {
     UMLDiagramType.ComponentDiagram,
     UMLDiagramType.DeploymentDiagram,
     UMLDiagramType.Flowchart,
+    UMLDiagramType.SyntaxTree,
+  ],
+  behavioral: [
+    UMLDiagramType.ActivityDiagram,
+    UMLDiagramType.UseCaseDiagram,
+    UMLDiagramType.CommunicationDiagram,
     UMLDiagramType.BPMN,
   ],
-  behavioral: [UMLDiagramType.ActivityDiagram, UMLDiagramType.UseCaseDiagram],
 }
 
 const diagramTypeToTitle: Record<UMLDiagramType, string> = {
@@ -25,12 +30,12 @@ const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   ObjectDiagram: "Object Diagram",
   ActivityDiagram: "Activity Diagram",
   UseCaseDiagram: "Use Case Diagram",
-  CommunicationDiagram: "",
+  CommunicationDiagram: "Communication Diagram",
   ComponentDiagram: "Component Diagram",
   DeploymentDiagram: "Deployment Diagram",
   PetriNet: "",
   ReachabilityGraph: "",
-  SyntaxTree: "",
+  SyntaxTree: "Syntax Tree",
   Flowchart: "Flowchart",
   BPMN: "BPMN Diagram",
 }
