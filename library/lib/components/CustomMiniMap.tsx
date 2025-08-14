@@ -516,6 +516,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
         />
       )

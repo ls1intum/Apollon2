@@ -1,12 +1,5 @@
-import {
-  NodeProps,
-  NodeResizer,
-  NodeToolbar,
-  Position,
-  type Node,
-} from "@xyflow/react"
+import { NodeProps, NodeToolbar, Position, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
-import { useHandleOnResize } from "@/hooks"
 import Box from "@mui/material/Box"
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
@@ -22,23 +15,17 @@ import { BPMNGatewayNodeSVG } from "@/components"
 
 export function BPMNGateway({
   id,
-  width,
-  height,
+  width = 40,
+  height = 40,
   data,
-  parentId,
 }: NodeProps<Node<BPMNGatewayProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
-  const { onResize } = useHandleOnResize(parentId)
   const isDiagramModifiable = useDiagramModifiable()
   const selected = useIsOnlyThisElementSelected(id)
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
   const handleDelete = useHandleDelete(id)
-
-  if (!width || !height) {
-    return null
-  }
 
   return (
     <DefaultNodeWrapper width={width} height={height} elementId={id}>
@@ -61,13 +48,6 @@ export function BPMNGateway({
           />
         </Box>
       </NodeToolbar>
-      <NodeResizer
-        isVisible={isDiagramModifiable && !!selected}
-        onResize={onResize}
-        minHeight={50}
-        minWidth={50}
-        handleStyle={{ width: 8, height: 8 }}
-      />
       <div ref={svgWrapperRef}>
         <BPMNGatewayNodeSVG
           width={width}

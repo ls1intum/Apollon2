@@ -1,12 +1,10 @@
+import { CustomText } from "@/components"
 import { LINE_WIDTH } from "@/constants"
 import { SVGComponentProps } from "@/types/SVG"
 
-export const BPMNGroupNodeSVG: React.FC<SVGComponentProps> = ({
-  width,
-  height,
-  svgAttributes,
-  transformScale,
-}) => {
+export const BPMNGroupNodeSVG: React.FC<
+  SVGComponentProps & { name: string }
+> = ({ width, height, name, svgAttributes, transformScale }) => {
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
 
@@ -30,6 +28,15 @@ export const BPMNGroupNodeSVG: React.FC<SVGComponentProps> = ({
         rx={10}
         ry={10}
       />
+      <CustomText
+        x={width / 2}
+        y={height / 2}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontWeight="bold"
+      >
+        {name}
+      </CustomText>
     </svg>
   )
 }

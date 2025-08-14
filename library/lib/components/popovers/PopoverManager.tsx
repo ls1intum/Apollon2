@@ -38,6 +38,7 @@ import {
   BPMNIntermediateEventEditPopover,
   BPMNEndEventEditPopover,
   BPMNGatewayEditPopover,
+  BPMNPoolEditPopover,
 } from "./bpmnDiagram"
 
 type PopoverType =
@@ -163,7 +164,7 @@ const editPopovers: {
   BPMNAnnotation: DefaultNodeEditPopover,
   BPMNDataObject: DefaultNodeEditPopover,
   BPMNDataStore: DefaultNodeEditPopover,
-  BPMNPool: DefaultNodeEditPopover,
+  BPMNPool: BPMNPoolEditPopover,
   BPMNGroup: DefaultNodeEditPopover,
 }
 

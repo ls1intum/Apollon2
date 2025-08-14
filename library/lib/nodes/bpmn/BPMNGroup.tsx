@@ -24,6 +24,7 @@ export function BPMNGroup({
   id,
   width,
   height,
+  data,
   parentId,
 }: NodeProps<Node<BPMNGroupProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -68,7 +69,12 @@ export function BPMNGroup({
         handleStyle={{ width: 8, height: 8 }}
       />
       <div ref={svgWrapperRef}>
-        <BPMNGroupNodeSVG width={width} height={height} id={id} />
+        <BPMNGroupNodeSVG
+          width={width}
+          height={height}
+          id={id}
+          name={data.name}
+        />
       </div>
       <PopoverManager
         anchorEl={svgWrapperRef.current}
