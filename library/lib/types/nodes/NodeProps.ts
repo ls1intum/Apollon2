@@ -41,3 +41,8 @@ export type DeploymentNodeProps = {
 export type DeploymentComponentProps = {
   isComponentHeaderShown: boolean
 } & DefaultNodeProps
+
+export type PetriNetPlaceProps = {
+  tokens: number
+  capacity: number | "Infinity"
+} & DefaultNodeProps

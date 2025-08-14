@@ -46,6 +46,7 @@ import {
   SyntaxTreeNonterminalEditPopover,
   SyntaxTreeTerminalEditPopover,
 } from "./syntaxTreeDiagram"
+import { PetriNetPlaceEditPopover } from "./petriNetDiagram"
 
 type PopoverType =
   | "class"
@@ -64,6 +65,7 @@ type PopoverType =
   | "DeploymentNode"
   | "SyntaxTreeNonterminal"
   | "SyntaxTreeTerminal"
+  | "PetriNetPlace"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -89,6 +91,7 @@ const editPopovers: {
   DeploymentNode: React.FC<PopoverProps>
   SyntaxTreeNonterminal: React.FC<PopoverProps>
   SyntaxTreeTerminal: React.FC<PopoverProps>
+  PetriNetPlace: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   objectName: ObjectEditPopover,
@@ -113,6 +116,7 @@ const editPopovers: {
   DeploymentNode: DeploymentNodeEditPopover,
   SyntaxTreeNonterminal: SyntaxTreeNonterminalEditPopover,
   SyntaxTreeTerminal: SyntaxTreeTerminalEditPopover,
+  PetriNetPlace: PetriNetPlaceEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -139,6 +143,7 @@ const giveFeedbackPopovers: {
   DeploymentNode: React.FC<PopoverProps>
   SyntaxTreeNonterminal: React.FC<PopoverProps>
   SyntaxTreeTerminal: React.FC<PopoverProps>
+  PetriNetPlace: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   objectName: ObjectGiveFeedbackPopover,
@@ -163,6 +168,7 @@ const giveFeedbackPopovers: {
   DeploymentNode: DefaultNodeGiveFeedbackPopover,
   SyntaxTreeNonterminal: DefaultNodeGiveFeedbackPopover,
   SyntaxTreeTerminal: DefaultNodeGiveFeedbackPopover,
+  PetriNetPlace: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -189,6 +195,7 @@ const seeFeedbackPopovers: {
   DeploymentNode: React.FC<PopoverProps>
   SyntaxTreeNonterminal: React.FC<PopoverProps>
   SyntaxTreeTerminal: React.FC<PopoverProps>
+  PetriNetPlace: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   objectName: ObjectSeeFeedbackPopover,
@@ -213,6 +220,7 @@ const seeFeedbackPopovers: {
   DeploymentNode: DefaultNodeSeeFeedbackPopover,
   SyntaxTreeNonterminal: DefaultNodeSeeFeedbackPopover,
   SyntaxTreeTerminal: DefaultNodeSeeFeedbackPopover,
+  PetriNetPlace: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {
