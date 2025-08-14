@@ -24,12 +24,13 @@ export const Sidebar = () => {
     <aside
       style={{
         height: "100%",
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "white",
         display: "flex",
         flexDirection: "column",
         padding: "10px",
         gap: "15px",
         alignItems: "center",
+        minWidth: "148px",
       }}
     >
       {dropElementConfigs[diagramType].map((config, index) => (
