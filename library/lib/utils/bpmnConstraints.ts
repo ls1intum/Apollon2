@@ -8,7 +8,7 @@ export const canDropIntoParent = (
 ): boolean => {
   // BPMN Pool constraints
   if (parentType === "bpmnPool") {
-    // Pools can contain most BPMN elements
+    // Pools can contain most BPMN elements including other pools
     return (
       childType === "bpmnTask" ||
       childType === "bpmnStartEvent" ||
@@ -21,7 +21,8 @@ export const canDropIntoParent = (
       childType === "bpmnDataObject" ||
       childType === "bpmnDataStore" ||
       childType === "bpmnAnnotation" ||
-      childType === "bpmnGroup"
+      childType === "bpmnGroup" ||
+      childType === "bpmnPool"
     )
   }
 
