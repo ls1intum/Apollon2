@@ -30,6 +30,8 @@ import {
   SyntaxTreeNonterminalNodeSVG,
   ObjectNameSVG,
   CommunicationObjectNameSVG,
+  PetriNetPlaceSVG,
+  PetriNetTransitionSVG,
   BPMNTaskNodeSVG,
   BPMNEventNodeSVG,
   BPMNGatewayNodeSVG,
@@ -404,6 +406,28 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           svgAttributes={{ x, y }}
           methods={(nodeInfo.data.methods as []) || []}
           attributes={(nodeInfo.data.attributes as []) || []}
+        />
+      )
+    case "petriNetPlace":
+      return (
+        <PetriNetPlaceSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+          capacity={nodeInfo.data.capacity as number | "Infinity"}
+          tokens={nodeInfo.data.tokens as number}
+          name={nodeInfo.data.name as string}
+        />
+      )
+    case "petriNetTransition":
+      return (
+        <PetriNetTransitionSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+          name={nodeInfo.data.name as string}
         />
       )
     case "bpmnTask":

@@ -48,6 +48,10 @@
   z-index: 9;
 }
 
+.react-flow__resize-control.handle {
+  z-index: 20;
+}
+
 .react-flow__node:hover .react-flow__handle {
   opacity: 0.6;
   padding: 4px;

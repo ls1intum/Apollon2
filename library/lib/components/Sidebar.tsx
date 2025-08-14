@@ -26,7 +26,7 @@ export const Sidebar = () => {
         width: "180px",
         minWidth: "180px",
         height: "100%",
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "white",
         display: "flex",
         flexDirection: "column",
         padding: "10px",

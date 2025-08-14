@@ -35,6 +35,7 @@ import {
 } from "./flowchart"
 import { SyntaxTreeTerminal } from "./syntaxTreeDiagram/SyntaxTreeTerminal"
 import { SyntaxTreeNonterminal } from "./syntaxTreeDiagram/SyntaxTreeNonterminal"
+import { PetriNetTransition, PetriNetPlace } from "./petriNetDiagram"
 import {
   BPMNTask,
   BPMNStartEvent,
@@ -83,6 +84,8 @@ export const diagramNodeTypes = {
   flowchartFunctionCall: FlowchartFunctionCall,
   syntaxTreeTerminal: SyntaxTreeTerminal,
   syntaxTreeNonterminal: SyntaxTreeNonterminal,
+  petriNetTransition: PetriNetTransition,
+  petriNetPlace: PetriNetPlace,
   bpmnTask: BPMNTask,
   bpmnStartEvent: BPMNStartEvent,
   bpmnIntermediateEvent: BPMNIntermediateEvent,
@@ -134,6 +137,8 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   flowchartFunctionCall: "flowchartFunctionCall",
   syntaxTreeTerminal: "syntaxTreeTerminal",
   syntaxTreeNonterminal: "syntaxTreeNonterminal",
+  petriNetTransition: "petriNetTransition",
+  petriNetPlace: "petriNetPlace",
   bpmnTask: "bpmnTask",
   bpmnStartEvent: "bpmnStartEvent",
   bpmnIntermediateEvent: "bpmnIntermediateEvent",

@@ -29,6 +29,8 @@ import {
   SyntaxTreeTerminalNodeSVG,
   ObjectNameSVG,
   CommunicationObjectNameSVG,
+  PetriNetPlaceSVG,
+  PetriNetTransitionSVG,
   BPMNTaskNodeSVG,
   BPMNEventNodeSVG,
   BPMNGatewayNodeSVG,
@@ -386,7 +388,30 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       marginTop: 10,
     },
   ],
-  [UMLDiagramType.PetriNet]: [],
+  [UMLDiagramType.PetriNet]: [
+    {
+      type: "petriNetTransition",
+      width: 30,
+      height: 60,
+      defaultData: {
+        name: "Transition",
+      },
+      svg: (props) => <PetriNetTransitionSVG {...props} />,
+      marginTop: 15,
+    },
+    {
+      type: "petriNetPlace",
+      width: 60,
+      height: 60,
+      defaultData: {
+        name: "Place",
+        tokens: 0,
+        capacity: "Infinity",
+      },
+      svg: (props) => <PetriNetPlaceSVG {...props} />,
+      marginTop: 5,
+    },
+  ],
   [UMLDiagramType.ReachabilityGraph]: [],
   [UMLDiagramType.SyntaxTree]: [
     {

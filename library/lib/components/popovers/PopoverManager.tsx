@@ -46,6 +46,7 @@ import {
   SyntaxTreeNonterminalEditPopover,
   SyntaxTreeTerminalEditPopover,
 } from "./syntaxTreeDiagram"
+import { PetriNetPlaceEditPopover } from "./petriNetDiagram"
 import {
   BPMNTaskEditPopover,
   BPMNStartEventEditPopover,
@@ -83,6 +84,7 @@ type PopoverType =
   | "DeploymentNode"
   | "SyntaxTreeNonterminal"
   | "SyntaxTreeTerminal"
+  | "PetriNetPlace"
   | "BPMNTask"
   | "BPMNStartEvent"
   | "BPMNIntermediateEvent"
@@ -138,6 +140,7 @@ const editPopovers: {
   DeploymentNode: React.FC<PopoverProps>
   SyntaxTreeNonterminal: React.FC<PopoverProps>
   SyntaxTreeTerminal: React.FC<PopoverProps>
+  PetriNetPlace: React.FC<PopoverProps>
   BPMNTask: React.FC<PopoverProps>
   BPMNStartEvent: React.FC<PopoverProps>
   BPMNIntermediateEvent: React.FC<PopoverProps>
@@ -179,6 +182,7 @@ const editPopovers: {
   DeploymentNode: DeploymentNodeEditPopover,
   SyntaxTreeNonterminal: SyntaxTreeNonterminalEditPopover,
   SyntaxTreeTerminal: SyntaxTreeTerminalEditPopover,
+  PetriNetPlace: PetriNetPlaceEditPopover,
   BPMNTask: BPMNTaskEditPopover,
   BPMNStartEvent: BPMNStartEventEditPopover,
   BPMNIntermediateEvent: BPMNIntermediateEventEditPopover,
@@ -222,6 +226,7 @@ const giveFeedbackPopovers: {
   DeploymentNode: React.FC<PopoverProps>
   SyntaxTreeNonterminal: React.FC<PopoverProps>
   SyntaxTreeTerminal: React.FC<PopoverProps>
+  PetriNetPlace: React.FC<PopoverProps>
   BPMNTask: React.FC<PopoverProps>
   BPMNStartEvent: React.FC<PopoverProps>
   BPMNIntermediateEvent: React.FC<PopoverProps>
@@ -263,6 +268,7 @@ const giveFeedbackPopovers: {
   DeploymentNode: DefaultNodeGiveFeedbackPopover,
   SyntaxTreeNonterminal: DefaultNodeGiveFeedbackPopover,
   SyntaxTreeTerminal: DefaultNodeGiveFeedbackPopover,
+  PetriNetPlace: DefaultNodeGiveFeedbackPopover,
   BPMNTask: DefaultNodeGiveFeedbackPopover,
   BPMNStartEvent: DefaultNodeGiveFeedbackPopover,
   BPMNIntermediateEvent: DefaultNodeGiveFeedbackPopover,
@@ -306,6 +312,7 @@ const seeFeedbackPopovers: {
   DeploymentNode: React.FC<PopoverProps>
   SyntaxTreeNonterminal: React.FC<PopoverProps>
   SyntaxTreeTerminal: React.FC<PopoverProps>
+  PetriNetPlace: React.FC<PopoverProps>
   BPMNTask: React.FC<PopoverProps>
   BPMNStartEvent: React.FC<PopoverProps>
   BPMNIntermediateEvent: React.FC<PopoverProps>
@@ -347,6 +354,7 @@ const seeFeedbackPopovers: {
   DeploymentNode: DefaultNodeSeeFeedbackPopover,
   SyntaxTreeNonterminal: DefaultNodeSeeFeedbackPopover,
   SyntaxTreeTerminal: DefaultNodeSeeFeedbackPopover,
+  PetriNetPlace: DefaultNodeSeeFeedbackPopover,
   BPMNTask: DefaultNodeSeeFeedbackPopover,
   BPMNStartEvent: DefaultNodeSeeFeedbackPopover,
   BPMNIntermediateEvent: DefaultNodeSeeFeedbackPopover,
