@@ -28,7 +28,6 @@ export const useConnect = () => {
   const diagramType = useMetadataStore(useShallow((state) => state.diagramType))
 
   const defaultEdgeType = getDefaultEdgeType(diagramType)
-  // Helper to get drop position from event
   const getDropPosition = useCallback(
     (event: MouseEvent | TouchEvent) => {
       const { clientX, clientY } =
@@ -54,7 +53,6 @@ export const useConnect = () => {
     })
     const intersectingNodesIds = intersectingNodes.map((node) => node.id)
 
-    // Find any existing edge from the source node/handle that targets one of the intersecting nodes
     const existingEdges = [
       ...edges.filter(
         (edge) =>
@@ -100,13 +98,11 @@ export const useConnect = () => {
           height: 10,
         })
 
-        if (intersectingNodes.length === 0) return // Not dropped on any node
-
-        // Choose the node on top (last in array)
+        if (intersectingNodes.length === 0) return
         const nodeOnTop = intersectingNodes[intersectingNodes.length - 1]
         const internalNodeData = getInternalNode(nodeOnTop.id)
 
-        if (!internalNodeData) return // safeguard against missing internal data
+        if (!internalNodeData) return
 
         const targetHandle = findClosestHandle(dropPosition, {
           x: internalNodeData.internals.positionAbsolute.x,
@@ -116,7 +112,6 @@ export const useConnect = () => {
         })
 
         if (startEdge.current) {
-          // Update existing edge with new target or source based on connection start handle type
           const updatedEdge = edges.find(
             (edge) => edge.id === startEdge.current?.id
           )
@@ -135,7 +130,6 @@ export const useConnect = () => {
             eds.map((edge) => (edge.id === newEdge.id ? newEdge : edge))
           )
         } else {
-          // No start edge exists: create a new one
           setEdges((eds) =>
             eds.concat({
               id: generateUUID(),

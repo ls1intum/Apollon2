@@ -10,7 +10,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="30"
           markerHeight="30"
-          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -27,7 +27,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="30"
           markerHeight="30"
-          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -44,7 +44,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -61,7 +61,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="15" // Aligns the endpoint of the line with the rightmost point of the diamond
+          refX="15"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -71,6 +71,40 @@ export function SvgMarkers() {
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
+          />
+        </marker>
+        <marker
+          id="usecase-arrow"
+          viewBox="0 0 20 20"
+          markerWidth="12"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,18 L20,10 L0,2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+        </marker>
+        <marker
+          id="usecase-triangle"
+          viewBox="0 0 20 20"
+          markerWidth="14"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,2 L0,18 L20,10 z"
+            fill="white"
+            stroke="currentColor"
+            strokeWidth="1"
           />
         </marker>
       </defs>

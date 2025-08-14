@@ -44,16 +44,11 @@ export function computeOverlap(
 
 export function pointsToSvgPath(points: IPoint[]): string {
   if (points.length === 0) return ""
-
-  // Start with the first point using the "M" command.
   const pathCommands = [`M ${points[0].x} ${points[0].y}`]
 
-  // Add "L" command for each subsequent point.
   for (let i = 1; i < points.length; i++) {
     pathCommands.push(`L ${points[i].x} ${points[i].y}`)
   }
-
-  // Combine commands into a single string
   return pathCommands.join(" ")
 }
 export function tryFindStraightPath(
@@ -99,7 +94,6 @@ export function tryFindStraightPath(
         x: source.position.x + source.width,
         y: middleY,
       }
-      // Adjust target coordinate: for a left handle, move further left.
       const end: IPoint = {
         x: target.position.x - offset,
         y: middleY,
@@ -131,7 +125,7 @@ export function tryFindStraightPath(
         x: source.position.x,
         y: middleY,
       }
-      // Adjust target coordinate: for a right handle, move further right.
+
       const end: IPoint = {
         x: target.position.x + target.width + offset,
         y: middleY,
@@ -157,7 +151,7 @@ export function tryFindStraightPath(
         x: middleX,
         y: source.position.y + source.height,
       }
-      // Adjust target coordinate: for a top handle, move upward.
+
       const end: IPoint = {
         x: middleX,
         y: target.position.y - offset,
@@ -183,7 +177,7 @@ export function tryFindStraightPath(
         x: middleX,
         y: source.position.y,
       }
-      // Adjust target coordinate: for a bottom handle, move downward.
+
       const end: IPoint = {
         x: middleX,
         y: target.position.y + target.height + offset,

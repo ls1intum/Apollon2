@@ -4,7 +4,7 @@ import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelect
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import EditIcon from "@mui/icons-material/Edit"
 import { Box } from "@mui/material"
-import { forwardRef, ForwardedRef } from "react"
+import { forwardRef, ForwardedRef, useMemo } from "react"
 
 interface CustomEdgeToolbarProps {
   edgeId: string
@@ -13,28 +13,43 @@ interface CustomEdgeToolbarProps {
   onDeleteClick: (event: React.MouseEvent<HTMLElement>) => void
 }
 
-// Use forwardRef to allow passing a ref to the component
 export const CustomEdgeToolbar = forwardRef(
   (
     { edgeId, position, onEditClick, onDeleteClick }: CustomEdgeToolbarProps,
     ref: ForwardedRef<SVGForeignObjectElement>
   ) => {
     const isDiagramModifiable = useDiagramModifiable()
-
     const selected = useIsOnlyThisElementSelected(edgeId)
 
-    const showToolbar = selected && isDiagramModifiable
-    const foreignObjectStyle = showToolbar
-      ? { borderRadius: 8, boxShadow: "0 0 4px 0 rgb(0 0 0 / .2)" }
-      : {}
+    const showToolbar = useMemo(() => {
+      return selected && isDiagramModifiable
+    }, [selected, isDiagramModifiable])
+
+    const toolbarPosition = useMemo(() => {
+      return {
+        x: position.x - 16,
+        y: position.y - 28,
+      }
+    }, [position.x, position.y, edgeId])
+
+    const foreignObjectStyle = useMemo(() => {
+      return showToolbar
+        ? {
+            borderRadius: 8,
+            boxShadow: "0 0 4px 0 rgb(0 0 0 / .2)",
+            opacity: 1,
+            transition: "opacity 0.2s ease-in-out",
+          }
+        : { opacity: 1 }
+    }, [showToolbar])
 
     return (
       <foreignObject
         ref={ref}
         width={32}
         height={56}
-        x={position.x}
-        y={position.y}
+        x={toolbarPosition.x}
+        y={toolbarPosition.y}
         style={foreignObjectStyle}
       >
         {showToolbar && (
@@ -49,6 +64,12 @@ export const CustomEdgeToolbar = forwardRef(
               alignItems: "center",
               cursor: "pointer",
               gap: "8px",
+              width: "100%",
+              height: "100%",
+              boxSizing: "border-box",
+              WebkitTransform: "translateZ(0)",
+              transform: "translateZ(0)",
+              position: "relative",
             }}
           >
             <Box
@@ -92,5 +113,4 @@ export const CustomEdgeToolbar = forwardRef(
   }
 )
 
-// Optional: Add display name for better debugging
 CustomEdgeToolbar.displayName = "CustomEdgeToolbar"

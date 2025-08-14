@@ -4,7 +4,35 @@ export function useEdgePopOver(id: string) {
   const reactFlow = useReactFlow()
 
   const handleEdgeTypeChange = (newType: string) => {
-    reactFlow.updateEdge(id, { type: newType })
+    const currentEdge = reactFlow.getEdge(id)
+    const currentData = currentEdge?.data || {}
+
+    if (
+      currentEdge?.type === "UseCaseAssociation" &&
+      newType !== "UseCaseAssociation"
+    ) {
+      reactFlow.updateEdge(id, {
+        type: newType,
+        data: {
+          ...currentData,
+          savedLabel: currentData.label,
+          label: undefined,
+        },
+      })
+    } else if (
+      currentEdge?.type !== "UseCaseAssociation" &&
+      newType === "UseCaseAssociation"
+    ) {
+      reactFlow.updateEdge(id, {
+        type: newType,
+        data: {
+          ...currentData,
+          label: currentData.savedLabel || "",
+        },
+      })
+    } else {
+      reactFlow.updateEdge(id, { type: newType })
+    }
   }
 
   const handleSwap = () => {

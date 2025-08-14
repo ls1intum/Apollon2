@@ -1,3 +1,3 @@
 export * from "./classDiagram"
-export * from "./edgePopovers/EdgeEditPopover"
+export * from "./edgePopovers/ClassDiagramEdgeEditPopover"
 export * from "./GenericPopover"
