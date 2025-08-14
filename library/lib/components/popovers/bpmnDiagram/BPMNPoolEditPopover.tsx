@@ -27,9 +27,9 @@ export const BPMNPoolEditPopover = ({ elementId }: PopoverProps) => {
     }))
   )
 
-  const poolNode = nodes.find(
-    (node) => node.id === elementId
-  ) as Node<BPMNPoolProps & { swimlanes?: Swimlane[] }>
+  const poolNode = nodes.find((node) => node.id === elementId) as Node<
+    BPMNPoolProps & { swimlanes?: Swimlane[] }
+  >
 
   if (!poolNode) {
     return null
@@ -61,15 +61,16 @@ export const BPMNPoolEditPopover = ({ elementId }: PopoverProps) => {
           // Calculate new pool height based on swimlanes
           const minHeight = 120
           const swimlaneHeight = 100
-          const newHeight = newSwimlanes.length > 0 
-            ? Math.max(minHeight, newSwimlanes.length * swimlaneHeight)
-            : minHeight
+          const newHeight =
+            newSwimlanes.length > 0
+              ? Math.max(minHeight, newSwimlanes.length * swimlaneHeight)
+              : minHeight
 
           return {
             ...node,
-            data: { 
-              ...node.data, 
-              swimlanes: newSwimlanes 
+            data: {
+              ...node.data,
+              swimlanes: newSwimlanes,
             },
             style: {
               ...node.style,
@@ -90,22 +91,19 @@ export const BPMNPoolEditPopover = ({ elementId }: PopoverProps) => {
     if (!newSwimlane.trim()) return
 
     const newId = `swimlane-${Date.now()}`
-    const newSwimlanes = [
-      ...swimlanes,
-      { id: newId, name: newSwimlane.trim() }
-    ]
-    
+    const newSwimlanes = [...swimlanes, { id: newId, name: newSwimlane.trim() }]
+
     updatePoolSwimlanes(newSwimlanes)
     setNewSwimlane("")
   }
 
   const removeSwimlane = (swimlaneId: string) => {
-    const newSwimlanes = swimlanes.filter(s => s.id !== swimlaneId)
+    const newSwimlanes = swimlanes.filter((s) => s.id !== swimlaneId)
     updatePoolSwimlanes(newSwimlanes)
   }
 
   const updateSwimlaneName = (swimlaneId: string, name: string) => {
-    const newSwimlanes = swimlanes.map(s => 
+    const newSwimlanes = swimlanes.map((s) =>
       s.id === swimlaneId ? { ...s, name } : s
     )
     updatePoolSwimlanes(newSwimlanes)
@@ -186,10 +184,10 @@ export const BPMNPoolEditPopover = ({ elementId }: PopoverProps) => {
       </Box>
 
       {swimlanes.length === 0 && (
-        <Typography 
-          variant="body2" 
-          color="text.secondary" 
-          sx={{ mt: 2, fontStyle: 'italic', textAlign: 'center' }}
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ mt: 2, fontStyle: "italic", textAlign: "center" }}
         >
           Add lanes to organize your pool content
         </Typography>

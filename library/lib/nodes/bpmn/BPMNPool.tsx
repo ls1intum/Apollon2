@@ -41,7 +41,7 @@ export function BPMNPool({
     useShallow((state) => state.setPopOverElementId)
   )
   const handleDelete = useHandleDelete(id)
-  
+
   const { setNodes } = useDiagramStore(
     useShallow((state) => ({
       setNodes: state.setNodes,
@@ -56,7 +56,7 @@ export function BPMNPool({
     (event, params) => {
       // Call original resize handler
       onResize(event, params)
-      
+
       // Update pool dimensions in node data
       setNodes((nodes) =>
         nodes.map((node) => {
