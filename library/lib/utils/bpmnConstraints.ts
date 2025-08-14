@@ -37,7 +37,7 @@ export const canDropIntoParent = (
     parentType === "bpmnTransaction" ||
     parentType === "bpmnCallActivity"
   ) {
-    // Subprocesses can contain most BPMN elements except pools and swimlanes
+    // Subprocesses can contain most BPMN elements except pools
     return (
       childType === "bpmnTask" ||
       childType === "bpmnStartEvent" ||
