@@ -22,6 +22,7 @@ const diagramTypes = {
     UMLDiagramType.UseCaseDiagram,
     UMLDiagramType.CommunicationDiagram,
     UMLDiagramType.PetriNet,
+    UMLDiagramType.BPMN,
   ],
 }
 
@@ -37,7 +38,7 @@ const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   ReachabilityGraph: "",
   SyntaxTree: "Syntax Tree",
   Flowchart: "Flowchart",
-  BPMN: "",
+  BPMN: "BPMN Diagram",
 }
 
 export const NewDiagramModal = () => {

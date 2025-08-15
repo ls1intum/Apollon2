@@ -38,12 +38,14 @@ function App() {
       <BrowserRouter>
         <AppProviders>
           <Navbar />
-          <Routes>
-            <Route path="/" element={<ApollonLocal />} />
-            <Route path="/playground" element={<ApollonPlayground />} />
-            <Route path="/:diagramId" element={<ApollonWithConnection />} />
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
+          <div style={{ flex: 1, overflow: "hidden" }}>
+            <Routes>
+              <Route path="/" element={<ApollonLocal />} />
+              <Route path="/playground" element={<ApollonPlayground />} />
+              <Route path="/:diagramId" element={<ApollonWithConnection />} />
+              <Route path="*" element={<ErrorPage />} />
+            </Routes>
+          </div>
 
           <ToastContainer />
         </AppProviders>

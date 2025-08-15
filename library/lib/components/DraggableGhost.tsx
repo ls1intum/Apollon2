@@ -13,6 +13,7 @@ import {
   isParentNodeType,
   resizeAllParents,
 } from "@/utils"
+import { canDropIntoParent } from "@/utils/bpmnConstraints"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
@@ -124,7 +125,13 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
         y: dropPosition.y,
         width: MOUSE_UP_OFFSET_IN_PIXELS,
         height: MOUSE_UP_OFFSET_IN_PIXELS,
-      }).filter((node) => isParentNodeType(node.type))
+      }).filter((node) => {
+        return (
+          isParentNodeType(node.type) &&
+          node.type &&
+          canDropIntoParent(dropElementConfig.type, node.type)
+        )
+      })
 
       const parentNode = intersectingNodes[intersectingNodes.length - 1]
       const parentId = parentNode ? parentNode.id : undefined

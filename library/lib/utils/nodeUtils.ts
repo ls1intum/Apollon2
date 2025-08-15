@@ -110,6 +110,11 @@ export const isParentNodeType = (nodeType?: string) => {
     nodeType === DiagramNodeTypeRecord.useCaseSystem ||
     nodeType === DiagramNodeTypeRecord.componentSubsystem ||
     nodeType === DiagramNodeTypeRecord.deploymentNode ||
-    nodeType === DiagramNodeTypeRecord.deploymentComponent
+    nodeType === DiagramNodeTypeRecord.deploymentComponent ||
+    nodeType === DiagramNodeTypeRecord.bpmnPool ||
+    nodeType === DiagramNodeTypeRecord.bpmnGroup ||
+    nodeType === DiagramNodeTypeRecord.bpmnSubprocess ||
+    nodeType === DiagramNodeTypeRecord.bpmnTransaction ||
+    nodeType === DiagramNodeTypeRecord.bpmnCallActivity
   )
 }

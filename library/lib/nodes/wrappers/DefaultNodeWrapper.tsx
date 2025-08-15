@@ -18,6 +18,18 @@ export enum HandleId {
   LeftTop = "left-top",
 }
 
+// Preset for hiding corner and intermediate handles, showing only main directional handles
+export const FOUR_WAY_HANDLES_PRESET: HandleId[] = [
+  HandleId.TopLeft,
+  HandleId.TopRight,
+  HandleId.RightTop,
+  HandleId.RightBottom,
+  HandleId.BottomRight,
+  HandleId.BottomLeft,
+  HandleId.LeftBottom,
+  HandleId.LeftTop,
+]
+
 interface Props {
   children: React.ReactNode
   width?: number

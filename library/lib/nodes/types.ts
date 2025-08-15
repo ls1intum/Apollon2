@@ -36,6 +36,21 @@ import {
 import { SyntaxTreeTerminal } from "./syntaxTreeDiagram/SyntaxTreeTerminal"
 import { SyntaxTreeNonterminal } from "./syntaxTreeDiagram/SyntaxTreeNonterminal"
 import { PetriNetTransition, PetriNetPlace } from "./petriNetDiagram"
+import {
+  BPMNTask,
+  BPMNStartEvent,
+  BPMNIntermediateEvent,
+  BPMNEndEvent,
+  BPMNGateway,
+  BPMNSubprocess,
+  BPMNTransaction,
+  BPMNCallActivity,
+  BPMNAnnotation,
+  BPMNDataObject,
+  BPMNDataStore,
+  BPMNPool,
+  BPMNGroup,
+} from "./bpmn"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -71,6 +86,19 @@ export const diagramNodeTypes = {
   syntaxTreeNonterminal: SyntaxTreeNonterminal,
   petriNetTransition: PetriNetTransition,
   petriNetPlace: PetriNetPlace,
+  bpmnTask: BPMNTask,
+  bpmnStartEvent: BPMNStartEvent,
+  bpmnIntermediateEvent: BPMNIntermediateEvent,
+  bpmnEndEvent: BPMNEndEvent,
+  bpmnGateway: BPMNGateway,
+  bpmnSubprocess: BPMNSubprocess,
+  bpmnTransaction: BPMNTransaction,
+  bpmnCallActivity: BPMNCallActivity,
+  bpmnAnnotation: BPMNAnnotation,
+  bpmnDataObject: BPMNDataObject,
+  bpmnDataStore: BPMNDataStore,
+  bpmnPool: BPMNPool,
+  bpmnGroup: BPMNGroup,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -111,4 +139,17 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   syntaxTreeNonterminal: "syntaxTreeNonterminal",
   petriNetTransition: "petriNetTransition",
   petriNetPlace: "petriNetPlace",
+  bpmnTask: "bpmnTask",
+  bpmnStartEvent: "bpmnStartEvent",
+  bpmnIntermediateEvent: "bpmnIntermediateEvent",
+  bpmnEndEvent: "bpmnEndEvent",
+  bpmnGateway: "bpmnGateway",
+  bpmnSubprocess: "bpmnSubprocess",
+  bpmnTransaction: "bpmnTransaction",
+  bpmnCallActivity: "bpmnCallActivity",
+  bpmnAnnotation: "bpmnAnnotation",
+  bpmnDataObject: "bpmnDataObject",
+  bpmnDataStore: "bpmnDataStore",
+  bpmnPool: "bpmnPool",
+  bpmnGroup: "bpmnGroup",
 } as const
