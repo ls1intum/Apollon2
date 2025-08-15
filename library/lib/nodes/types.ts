@@ -51,6 +51,7 @@ import {
   BPMNPool,
   BPMNGroup,
 } from "./bpmn"
+import { ReachabilityGraphMarking } from "./reachabilityGraphDiagram"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -99,6 +100,7 @@ export const diagramNodeTypes = {
   bpmnDataStore: BPMNDataStore,
   bpmnPool: BPMNPool,
   bpmnGroup: BPMNGroup,
+  reachabilityGraphMarking: ReachabilityGraphMarking,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -152,4 +154,5 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   bpmnDataStore: "bpmnDataStore",
   bpmnPool: "bpmnPool",
   bpmnGroup: "bpmnGroup",
+  reachabilityGraphMarking: "reachabilityGraphMarking",
 } as const

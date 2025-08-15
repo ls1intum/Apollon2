@@ -41,6 +41,7 @@ import {
   BPMNDataStoreNodeSVG,
   BPMNPoolNodeSVG,
   BPMNGroupNodeSVG,
+  ReachabilityGraphMarkingSVG,
 } from "./svgs"
 import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
@@ -592,6 +593,17 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           id={`minimap_${id}`}
           name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
+        />
+      )
+    case "reachabilityGraphMarking":
+      return (
+        <ReachabilityGraphMarkingSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+          isInitialMarking={nodeInfo.data.isInitialMarking as boolean}
         />
       )
 

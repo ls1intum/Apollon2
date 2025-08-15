@@ -127,3 +127,7 @@ export type BPMNDataObjectProps = DefaultNodeProps
 export type BPMNDataStoreProps = DefaultNodeProps
 export type BPMNPoolProps = DefaultNodeProps
 export type BPMNGroupProps = DefaultNodeProps
+
+export type ReachabilityGraphMarkingProps = DefaultNodeProps & {
+  isInitialMarking: boolean
+}
