@@ -1,7 +1,6 @@
 import {
   ReactFlowProvider,
   ReactFlowInstance,
-  ConnectionLineType,
   ConnectionMode,
   ReactFlow,
 } from "@xyflow/react"
@@ -33,6 +32,7 @@ import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts"
 import { ApollonMode } from "./typings"
+import { getConnectionLineType } from "./utils/edgeUtils"
 
 interface AppProps {
   onReactFlowInit: (instance: ReactFlowInstance) => void
@@ -51,9 +51,14 @@ function App({ onReactFlowInit }: AppProps) {
       }))
     )
 
-  const diagramMode = useMetadataStore(useShallow((state) => state.mode))
+  const { mode, diagramType } = useMetadataStore(
+    useShallow((state) => ({
+      mode: state.mode,
+      diagramType: state.diagramType,
+    }))
+  )
   const isDiagramModifiable = useDiagramModifiable()
-
+  const connectionLineType = getConnectionLineType(diagramType)
   const onNodeDragStop = useNodeDragStop()
   const onDragOver = useDragOver()
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =
@@ -73,7 +78,7 @@ function App({ onReactFlowInit }: AppProps) {
         overflow: "hidden",
       }}
     >
-      {diagramMode === ApollonMode.Modelling && <Sidebar />}
+      {mode === ApollonMode.Modelling && <Sidebar />}
 
       <SvgMarkers />
       <ReactFlow
@@ -92,7 +97,7 @@ function App({ onReactFlowInit }: AppProps) {
         zoomOnDoubleClick={false}
         onNodeDragStop={onNodeDragStop}
         onReconnect={onReconnect}
-        connectionLineType={ConnectionLineType.Step}
+        connectionLineType={connectionLineType}
         connectionMode={ConnectionMode.Loose}
         onInit={(instance) => {
           instance.fitView({ maxZoom: 1.0, minZoom: 1.0 })
