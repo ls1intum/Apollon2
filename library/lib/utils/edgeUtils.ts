@@ -227,6 +227,29 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         strokeDashArray: "8",
         offset: 11,
       }
+    case "BPMNSequenceFlow":
+      return {
+        markerPadding: ARROW_MARKER_PADDING,
+        markerEnd: "url(#black-arrow)",
+        strokeDashArray: "0",
+      }
+    case "BPMNMessageFlow":
+      return {
+        markerPadding: ARROW_MARKER_PADDING,
+        markerEnd: "url(#black-arrow)",
+        strokeDashArray: "8",
+      }
+    case "BPMNAssociationFlow":
+      return {
+        markerPadding: MARKER_PADDING,
+        strokeDashArray: "8",
+      }
+    case "BPMNDataAssociationFlow":
+      return {
+        markerPadding: ARROW_MARKER_PADDING,
+        markerEnd: "url(#black-arrow)",
+        strokeDashArray: "8",
+      }
     case "UseCaseAssociation":
       return {
         markerPadding: 0,
@@ -608,9 +631,12 @@ export const getDefaultEdgeType = (
 ): DiagramEdgeType => {
   switch (diagramType) {
     case "ClassDiagram":
+    case "BPMN":
       return "ClassUnidirectional"
     case "ActivityDiagram":
       return "ActivityControlFlow"
+    
+    
     case "UseCaseDiagram":
       return "UseCaseAssociation"
     default:

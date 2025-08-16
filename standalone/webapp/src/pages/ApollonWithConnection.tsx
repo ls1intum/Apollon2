@@ -112,7 +112,12 @@ export const ApollonWithConnection: React.FC = () => {
       )}
 
       <div
-        className={isLoading ? "invisible" : "flex grow "}
+        className={isLoading ? "invisible" : ""}
+        style={{
+          display: isLoading ? "none" : "flex",
+          flexGrow: 1,
+          height: "100%",
+        }}
         ref={containerRef}
       />
     </div>

@@ -31,6 +31,15 @@ import {
   CommunicationObjectNameSVG,
   PetriNetPlaceSVG,
   PetriNetTransitionSVG,
+  BPMNTaskNodeSVG,
+  BPMNEventNodeSVG,
+  BPMNGatewayNodeSVG,
+  BPMNSubprocessNodeSVG,
+  BPMNAnnotationNodeSVG,
+  BPMNDataObjectNodeSVG,
+  BPMNDataStoreNodeSVG,
+  BPMNPoolNodeSVG,
+  BPMNGroupNodeSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -195,7 +204,103 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <ActivityForkNodeHorizontalSVG {...props} />,
     },
   ],
-  [UMLDiagramType.BPMN]: [],
+  [UMLDiagramType.BPMN]: [
+    {
+      type: "bpmnTask",
+      width: droppedElementWidth,
+      height: 60,
+      defaultData: { name: "Task", taskType: "default", marker: "none" },
+      svg: (props) => <BPMNTaskNodeSVG {...props} />,
+    },
+    {
+      type: "bpmnSubprocess",
+      width: droppedElementWidth,
+      height: 60,
+      defaultData: { name: "Subprocess" },
+      svg: (props) => <BPMNSubprocessNodeSVG {...props} />,
+    },
+    {
+      type: "bpmnTransaction",
+      width: droppedElementWidth,
+      height: 60,
+      defaultData: { name: "Transaction" },
+      svg: (props) => (
+        <BPMNSubprocessNodeSVG variant="transaction" {...props} />
+      ),
+    },
+    {
+      type: "bpmnCallActivity",
+      width: droppedElementWidth,
+      height: 60,
+      defaultData: { name: "Call Activity" },
+      svg: (props) => <BPMNSubprocessNodeSVG variant="call" {...props} />,
+    },
+    {
+      type: "bpmnGroup",
+      width: droppedElementWidth,
+      height: 60,
+      defaultData: { name: "Group" },
+      svg: (props) => <BPMNGroupNodeSVG {...props} />,
+    },
+    {
+      type: "bpmnAnnotation",
+      width: droppedElementWidth,
+      height: 60,
+      defaultData: { name: "Annotation" },
+      svg: (props) => <BPMNAnnotationNodeSVG {...props} />,
+    },
+    {
+      type: "bpmnStartEvent",
+      width: 40,
+      height: 40,
+      defaultData: { name: "", eventType: "default" },
+      svg: (props) => <BPMNEventNodeSVG variant="start" {...props} name="" />,
+    },
+    {
+      type: "bpmnIntermediateEvent",
+      width: 40,
+      height: 40,
+      defaultData: { name: "", eventType: "default" },
+      svg: (props) => (
+        <BPMNEventNodeSVG variant="intermediate" {...props} name="" />
+      ),
+    },
+    {
+      type: "bpmnEndEvent",
+      width: 40,
+      height: 40,
+      defaultData: { name: "", eventType: "default" },
+      svg: (props) => <BPMNEventNodeSVG variant="end" {...props} name="" />,
+    },
+    {
+      type: "bpmnGateway",
+      width: 40,
+      height: 40,
+      defaultData: { name: "", gatewayType: "exclusive" },
+      svg: (props) => <BPMNGatewayNodeSVG {...props} name="" />,
+    },
+    {
+      type: "bpmnDataObject",
+      width: 40,
+      height: 60,
+      defaultData: { name: "Data Object" },
+      svg: (props) => <BPMNDataObjectNodeSVG {...props} name="" />,
+    },
+    {
+      type: "bpmnDataStore",
+      width: 60,
+      height: 60,
+      defaultData: { name: "Data Store" },
+      svg: (props) => <BPMNDataStoreNodeSVG {...props} name="" />,
+    },
+    {
+      type: "bpmnPool",
+      width: 160,
+      height: 80,
+      defaultData: { name: "Pool" },
+      svg: (props) => <BPMNPoolNodeSVG {...props} />,
+    },
+  ],
   [UMLDiagramType.CommunicationDiagram]: [
     {
       type: "communicationObjectName",
