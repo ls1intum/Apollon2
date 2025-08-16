@@ -635,8 +635,7 @@ export const getDefaultEdgeType = (
       return "ClassUnidirectional"
     case "ActivityDiagram":
       return "ActivityControlFlow"
-    
-    
+
     case "UseCaseDiagram":
       return "UseCaseAssociation"
     default:

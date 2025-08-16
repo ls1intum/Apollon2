@@ -36,8 +36,6 @@ const createUseCaseEdgeComponent = (
   return Component
 }
 
-
-
 export const diagramEdgeTypes = {
   ClassAggregation: createClassEdgeComponent(true),
   ClassInheritance: createClassEdgeComponent(true),

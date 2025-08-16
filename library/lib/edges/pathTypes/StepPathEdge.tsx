@@ -75,7 +75,6 @@ export const StepPathEdge = ({
   const isDiagramModifiable = useDiagramModifiable()
   const { handleDelete } = useToolbar({ id })
   const { getNode, getNodes, screenToFlowPosition } = useReactFlow()
-  
 
   const { pathMiddlePosition, isMiddlePathHorizontal } = useEdgePath(
     sourceX,
@@ -328,7 +327,6 @@ export const StepPathEdge = ({
   const overlayPath = useMemo(() => {
     return `${currentPath} ${markerSegmentPath}`
   }, [currentPath, markerSegmentPath])
-
 
   const midpoints = useMemo(() => {
     if (!allowMidpointDragging || activePoints.length < 3) return []

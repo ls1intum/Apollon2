@@ -1,11 +1,7 @@
 import { useMemo, useRef } from "react"
 import React from "react"
 import { BaseEdge } from "@xyflow/react"
-import {
-  BaseEdgeProps,
-  useEdgePath,
-  CommonEdgeElements,
-} from "../GenericEdge"
+import { BaseEdgeProps, useEdgePath, CommonEdgeElements } from "../GenericEdge"
 import {
   calculateOverlayPath,
   calculateStraightPath,
@@ -131,7 +127,7 @@ export const useStraightPathData = (
     straightPathEdgeProps.sourceY,
     straightPathEdgeProps.targetX,
     straightPathEdgeProps.targetY,
-    { current: null } 
+    { current: null }
   )
 
   return {
