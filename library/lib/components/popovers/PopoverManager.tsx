@@ -47,6 +47,7 @@ import {
   SyntaxTreeNonterminalEditPopover,
   SyntaxTreeTerminalEditPopover,
 } from "./syntaxTreeDiagram"
+import { ComponentEdgeEditPopover } from "./edgePopovers/ComponentDiagramEdgeEditPopover"
 
 type PopoverType =
   | "class"
@@ -83,6 +84,9 @@ const editPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  ComponentDependency: React.FC<PopoverProps>
+  ComponentProvidedInterface: React.FC<PopoverProps>
+  ComponentRequiredInterface: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -111,6 +115,9 @@ const editPopovers: {
   UseCaseInclude: UseCaseEdgeEditPopover,
   UseCaseExtend: UseCaseEdgeEditPopover,
   UseCaseGeneralization: UseCaseEdgeEditPopover,
+  ComponentDependency: ComponentEdgeEditPopover,
+  ComponentProvidedInterface: ComponentEdgeEditPopover,
+  ComponentRequiredInterface: ComponentEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
   FlowchartTerminal: DefaultNodeEditPopover,
@@ -141,6 +148,9 @@ const giveFeedbackPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  ComponentDependency: React.FC<PopoverProps>
+  ComponentProvidedInterface: React.FC<PopoverProps>
+  ComponentRequiredInterface: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -169,6 +179,9 @@ const giveFeedbackPopovers: {
   UseCaseInclude: EdgeGiveFeedbackPopover,
   UseCaseExtend: EdgeGiveFeedbackPopover,
   UseCaseGeneralization: EdgeGiveFeedbackPopover,
+  ComponentDependency: EdgeGiveFeedbackPopover,
+  ComponentProvidedInterface: EdgeGiveFeedbackPopover,
+  ComponentRequiredInterface: EdgeGiveFeedbackPopover,
   Component: DefaultNodeGiveFeedbackPopover,
   ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
   FlowchartTerminal: DefaultNodeGiveFeedbackPopover,
@@ -199,6 +212,9 @@ const seeFeedbackPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  ComponentDependency: React.FC<PopoverProps>
+  ComponentProvidedInterface: React.FC<PopoverProps>
+  ComponentRequiredInterface: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -227,6 +243,9 @@ const seeFeedbackPopovers: {
   UseCaseInclude: EdgeSeeFeedbackPopover,
   UseCaseExtend: EdgeSeeFeedbackPopover,
   UseCaseGeneralization: EdgeSeeFeedbackPopover,
+  ComponentDependency: EdgeSeeFeedbackPopover,
+ ComponentProvidedInterface: EdgeSeeFeedbackPopover,
+  ComponentRequiredInterface: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
   FlowchartTerminal: DefaultNodeSeeFeedbackPopover,

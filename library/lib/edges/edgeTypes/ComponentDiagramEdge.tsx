@@ -1,5 +1,6 @@
-// ComponentDiagramEdge.tsx
-import { StepPathEdge } from "../pathTypes/StepPathEdge"
+import { StepPathEdge, StepPathEdgeData } from "../pathTypes/StepPathEdge"
+
+import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { BaseEdgeProps } from "../GenericEdge"
 
 interface ComponentDiagramEdgeProps extends BaseEdgeProps {
@@ -24,7 +25,6 @@ export const ComponentDiagramEdge = ({
   allowMidpointDragging = true,
   enableReconnection = true,
 }: ComponentDiagramEdgeProps) => {
-  
   return (
     <StepPathEdge
       id={id}
@@ -43,7 +43,18 @@ export const ComponentDiagramEdge = ({
       allowMidpointDragging={allowMidpointDragging}
       enableReconnection={enableReconnection}
     >
-  
+      {(edgeData: StepPathEdgeData) => (
+        <>
+       
+
+          <EdgeMiddleLabels
+            label={data?.label}
+            pathMiddlePosition={edgeData.pathMiddlePosition}
+            isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
+            isUseCasePath={false}
+          />
+        </>
+      )}
     </StepPathEdge>
   )
 }

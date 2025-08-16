@@ -107,6 +107,25 @@ export function SvgMarkers() {
             strokeWidth="1"
           />
         </marker>
+        {/* <marker
+          id="required-interface"
+          viewBox="0 0 20 20"
+          markerWidth="16"
+          markerHeight="20"
+          refX="0"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        > */}
+          {/* Half circle opening to the right - SVG will auto-rotate this */}
+          {/* <path
+            d="M0,2 A 8,8 0 0,0 0,18"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+        </marker> */}
+        {/* Required Interface - Semicircle */}
         <marker
           id="required-interface"
           viewBox="0 0 20 20"
@@ -117,14 +136,53 @@ export function SvgMarkers() {
           orient="auto"
           markerUnits="strokeWidth"
         >
-          {/* Half circle opening to the right - SVG will auto-rotate this */}
           <path
-            d="M0,2 A 8,8 0 0,0 0,18"
+            d="M 13 -13.5 a 1 1 0 0 0 0 27"
+      
+            fill="none"
+            stroke="black"
+            strokeWidth="1.5"
+          />
+        </marker>
+
+        {/* Required Interface - Three Quarter Circle */}
+        <marker
+          id="required-interface-threequarter"
+          viewBox="0 0 20 20"
+          markerWidth="16"
+          markerHeight="20"
+          refX="0"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,10 A 8,8 0 1,1 5.66,2.34"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
           />
         </marker>
+
+        {/* Required Interface - Quarter Circle */}
+        <marker
+          id="required-interface-quarter"
+          viewBox="0 0 20 20"
+          markerWidth="16"
+          markerHeight="20"
+          refX="0"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,10 A 8,8 0 0,1 5.66,2.34"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+        </marker>
+
       </defs>
     </svg>
   )

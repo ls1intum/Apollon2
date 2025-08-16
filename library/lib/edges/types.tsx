@@ -63,9 +63,9 @@ export const diagramEdgeTypes = {
   UseCaseInclude: createUseCaseEdgeComponent(true), // Show <<include>>
   UseCaseExtend: createUseCaseEdgeComponent(true), // Show <<extend>>
   UseCaseGeneralization: createUseCaseEdgeComponent(false), // No relationship labels
-   ComponentDependency: createComponentEdgeComponent(true), // Dashed line with arrow
-  ComponentProvided: createComponentEdgeComponent(false), // Plain line to provided interface
-  ComponentRequired: createComponentEdgeComponent(false)
+  ComponentDependency: createComponentEdgeComponent(true), // Dashed line with arrow
+  ComponentProvidedInterface: createComponentEdgeComponent(false), // Plain line to provided interface
+  ComponentRequiredInterface: createComponentEdgeComponent(false)
   
 } satisfies EdgeTypes
 

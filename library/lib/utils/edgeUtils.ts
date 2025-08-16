@@ -263,10 +263,33 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         strokeDashArray: "0", // Plain line like association
         offset: 0,
       }
+    // case "ComponentRequired":
+    //   return {
+    //     markerPadding: 8,
+    //     markerEnd: "url(#required-interface)",
+    //     strokeDashArray: "0",
+    //     offset: 8,
+    //   }
     case "ComponentRequired":
+      console.log("COmponent req")
+      return {
+        
+        markerPadding: 20,
+        markerEnd: "url(#required-interface)", // Default semicircle
+        strokeDashArray: "0",
+        offset: 8,
+      }
+    case "ComponentRequiredQuarter":
       return {
         markerPadding: 8,
-        markerEnd: "url(#required-interface)",
+        markerEnd: "url(#required-interface-quarter)",
+        strokeDashArray: "0",
+        offset: 8,
+      }
+    case "ComponentRequiredThreeQuarter":
+      return {
+        markerPadding: 8,
+        markerEnd: "url(#required-interface-threequarter)",
         strokeDashArray: "0",
         offset: 8,
       }
@@ -628,6 +651,8 @@ export const getDefaultEdgeType = (
       return "ActivityControlFlow"
     case "UseCaseDiagram":
       return "UseCaseAssociation"
+    case "ComponentDiagram":
+      return "ComponentDependency"
     default:
       return "ClassUnidirectional"
   }
