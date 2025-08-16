@@ -3,6 +3,7 @@ import { ClassDiagramEdge } from "./edgeTypes/ClassDiagramEdge"
 import { ActivityDiagramEdge } from "./edgeTypes/ActivityDiagramEdge"
 import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ExtendedEdgeProps } from "./EdgeProps"
+import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
 
 const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   const Component = (props: ExtendedEdgeProps) => (
@@ -36,6 +37,19 @@ const createUseCaseEdgeComponent = (
   return Component
 }
 
+// Factory function for component diagram edges
+export const createComponentEdgeComponent = (
+  allowMidpointDragging: boolean = true
+) => {
+  const Component = (props: any) => (
+    <ComponentDiagramEdge
+      {...props}
+      allowMidpointDragging={allowMidpointDragging}
+    />
+  )
+  Component.displayName = `ComponentEdgeFactory(${allowMidpointDragging})`
+  return Component
+}
 export const diagramEdgeTypes = {
   ClassAggregation: createClassEdgeComponent(true),
   ClassInheritance: createClassEdgeComponent(true),
@@ -45,10 +59,14 @@ export const diagramEdgeTypes = {
   ClassUnidirectional: createClassEdgeComponent(true),
   ClassDependency: createClassEdgeComponent(true),
   ActivityControlFlow: createActivityEdgeComponent(true),
-  UseCaseAssociation: createUseCaseEdgeComponent(false),
-  UseCaseInclude: createUseCaseEdgeComponent(true),
-  UseCaseExtend: createUseCaseEdgeComponent(true),
-  UseCaseGeneralization: createUseCaseEdgeComponent(false),
+  UseCaseAssociation: createUseCaseEdgeComponent(false), // No relationship labels
+  UseCaseInclude: createUseCaseEdgeComponent(true), // Show <<include>>
+  UseCaseExtend: createUseCaseEdgeComponent(true), // Show <<extend>>
+  UseCaseGeneralization: createUseCaseEdgeComponent(false), // No relationship labels
+   ComponentDependency: createComponentEdgeComponent(true), // Dashed line with arrow
+  ComponentProvided: createComponentEdgeComponent(false), // Plain line to provided interface
+  ComponentRequired: createComponentEdgeComponent(false)
+  
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes

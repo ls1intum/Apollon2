@@ -107,6 +107,24 @@ export function SvgMarkers() {
             strokeWidth="1"
           />
         </marker>
+        <marker
+          id="required-interface"
+          viewBox="0 0 20 20"
+          markerWidth="16"
+          markerHeight="20"
+          refX="0"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          {/* Half circle opening to the right - SVG will auto-rotate this */}
+          <path
+            d="M0,2 A 8,8 0 0,0 0,18"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+        </marker>
       </defs>
     </svg>
   )

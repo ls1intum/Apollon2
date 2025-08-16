@@ -213,6 +213,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         strokeDashArray: "0",
         offset: 11,
       }
+    case "ComponentDependency":
     case "ClassDependency":
       return {
         markerPadding: DOTTED_ARROW_MARKER_PADDING,
@@ -254,7 +255,21 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         strokeDashArray: "0",
         offset: 10,
       }
+  
 
+    case "ComponentProvided":
+      return {
+        markerPadding: 0,
+        strokeDashArray: "0", // Plain line like association
+        offset: 0,
+      }
+    case "ComponentRequired":
+      return {
+        markerPadding: 8,
+        markerEnd: "url(#required-interface)",
+        strokeDashArray: "0",
+        offset: 8,
+      }
     default:
       return {
         markerPadding: MARKER_PADDING,
