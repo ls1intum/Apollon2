@@ -56,6 +56,7 @@ import {
   BPMNGatewayEditPopover,
   BPMNPoolEditPopover,
 } from "./bpmnDiagram"
+import { ReachabilityGraphMarkingEditPopover } from "./reachabilityGraphDiagram"
 
 type PopoverType =
   | "class"
@@ -116,6 +117,7 @@ type PopoverType =
   | "BPMNDataStore"
   | "BPMNPool"
   | "BPMNGroup"
+  | "ReachabilityGraphMarking"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -163,6 +165,7 @@ const editPopovers: {
   BPMNDataStore: React.FC<PopoverProps>
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
+  ReachabilityGraphMarking: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   objectName: ObjectEditPopover,
@@ -209,6 +212,7 @@ const editPopovers: {
   BPMNDataStore: DefaultNodeEditPopover,
   BPMNPool: BPMNPoolEditPopover,
   BPMNGroup: DefaultNodeEditPopover,
+  ReachabilityGraphMarking: ReachabilityGraphMarkingEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -257,6 +261,7 @@ const giveFeedbackPopovers: {
   BPMNDataStore: React.FC<PopoverProps>
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
+  ReachabilityGraphMarking: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   objectName: ObjectGiveFeedbackPopover,
@@ -303,6 +308,7 @@ const giveFeedbackPopovers: {
   BPMNDataStore: DefaultNodeGiveFeedbackPopover,
   BPMNPool: DefaultNodeGiveFeedbackPopover,
   BPMNGroup: DefaultNodeGiveFeedbackPopover,
+  ReachabilityGraphMarking: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -351,6 +357,7 @@ const seeFeedbackPopovers: {
   BPMNDataStore: React.FC<PopoverProps>
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
+  ReachabilityGraphMarking: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   objectName: ObjectSeeFeedbackPopover,
@@ -397,6 +404,7 @@ const seeFeedbackPopovers: {
   BPMNDataStore: DefaultNodeSeeFeedbackPopover,
   BPMNPool: DefaultNodeSeeFeedbackPopover,
   BPMNGroup: DefaultNodeSeeFeedbackPopover,
+  ReachabilityGraphMarking: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

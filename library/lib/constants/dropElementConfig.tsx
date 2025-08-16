@@ -44,6 +44,7 @@ import {
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
 import { DiagramNodeType } from "@/nodes"
+import { ReachabilityGraphMarkingSVG } from "@/components/svgs/nodes/reachabilityGraphDiagram/ReachabilityGraphMarkingSVG"
 
 export * from "./layoutConstants"
 export const transformScale = 0.8
@@ -412,7 +413,18 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       marginTop: 5,
     },
   ],
-  [UMLDiagramType.ReachabilityGraph]: [],
+  [UMLDiagramType.ReachabilityGraph]: [
+    {
+      type: "reachabilityGraphMarking",
+      width: droppedElementWidth,
+      height: 120,
+      defaultData: {
+        name: "Marking",
+        isInitialMarking: false,
+      },
+      svg: (props) => <ReachabilityGraphMarkingSVG {...props} />,
+    },
+  ],
   [UMLDiagramType.SyntaxTree]: [
     {
       type: "syntaxTreeNonterminal",
