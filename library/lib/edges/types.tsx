@@ -37,20 +37,6 @@ const createUseCaseEdgeComponent = (
 }
 
 
-// const edgeTypeKeys = [
-//   "ClassAggregation",
-//   "ClassInheritance",
-//   "ClassRealization",
-//   "ClassComposition",
-//   "ClassBidirectional",
-//   "ClassUnidirectional",
-//   "ClassDependency",
-//   "ActivityControlFlow",
-//   "BPMNSequenceFlow",
-//   "BPMNMessageFlow",
-//   "BPMNAssociationFlow",
-//   "BPMNDataAssociationFlow",
-// ] as const
 
 export const diagramEdgeTypes = {
   ClassAggregation: createClassEdgeComponent(true),

@@ -75,21 +75,18 @@ export const StepPathEdge = ({
   const isDiagramModifiable = useDiagramModifiable()
   const { handleDelete } = useToolbar({ id })
   const { getNode, getNodes, screenToFlowPosition } = useReactFlow()
-  const { updateMiddlePosition } = useEdgePath(
+  
+
+  const { pathMiddlePosition, isMiddlePathHorizontal } = useEdgePath(
     sourceX,
     sourceY,
     targetX,
     targetY,
     pathRef
   )
-
   const {
     customPoints,
     setCustomPoints,
-    pathMiddlePosition,
-    setPathMiddlePosition,
-    isMiddlePathHorizontal,
-    setIsMiddlePathHorizontal,
     tempReconnectPoints,
     setTempReconnectPoints,
   } = useEdgeState(data?.points)
@@ -332,19 +329,6 @@ export const StepPathEdge = ({
     return `${currentPath} ${markerSegmentPath}`
   }, [currentPath, markerSegmentPath])
 
-  useEffect(() => {
-    updateMiddlePosition(
-      currentPath,
-      setPathMiddlePosition,
-      setIsMiddlePathHorizontal,
-      false
-    )
-  }, [
-    currentPath,
-    updateMiddlePosition,
-    setPathMiddlePosition,
-    setIsMiddlePathHorizontal,
-  ])
 
   const midpoints = useMemo(() => {
     if (!allowMidpointDragging || activePoints.length < 3) return []

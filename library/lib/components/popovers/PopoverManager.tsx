@@ -469,7 +469,7 @@ export const PopoverManager = ({
 
   return Component ? (
     <GenericPopover
-      id={`popover-${elementId}`}
+      id={`popover-${elementId}-${type}`}
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}

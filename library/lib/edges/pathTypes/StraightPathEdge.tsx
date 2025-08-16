@@ -1,9 +1,8 @@
-import { useMemo, useRef, useEffect } from "react"
+import { useMemo, useRef } from "react"
 import React from "react"
 import { BaseEdge } from "@xyflow/react"
 import {
   BaseEdgeProps,
-  useEdgeState,
   useEdgePath,
   CommonEdgeElements,
 } from "../GenericEdge"
@@ -38,8 +37,6 @@ export const StraightPathEdge = ({
   sourceY,
   targetX,
   targetY,
-  sourcePosition,
-  targetPosition,
   children,
 }: StraightPathEdgeProps) => {
   const pathRef = useRef<SVGPathElement | null>(null)
@@ -57,7 +54,8 @@ export const StraightPathEdge = ({
   )
 
   const { handleDelete } = useToolbar({ id })
-  const { updateMiddlePosition } = useEdgePath(
+
+  const { pathMiddlePosition, isMiddlePathHorizontal } = useEdgePath(
     sourceX,
     sourceY,
     targetX,
@@ -65,36 +63,15 @@ export const StraightPathEdge = ({
     pathRef
   )
 
-  const {
-    pathMiddlePosition,
-    setPathMiddlePosition,
-    isMiddlePathHorizontal,
-    setIsMiddlePathHorizontal,
-  } = useEdgeState()
-
   const { markerEnd, strokeDashArray } = getEdgeMarkerStyles(type)
 
   const currentPath = useMemo(() => {
     return calculateStraightPath(sourceX, sourceY, targetX, targetY, type)
-  }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition])
+  }, [sourceX, sourceY, targetX, targetY, type])
 
   const overlayPath = useMemo(() => {
     return calculateOverlayPath(sourceX, sourceY, targetX, targetY, type)
-  }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition])
-
-  useEffect(() => {
-    updateMiddlePosition(
-      currentPath,
-      setPathMiddlePosition,
-      setIsMiddlePathHorizontal,
-      true
-    )
-  }, [
-    currentPath,
-    updateMiddlePosition,
-    setPathMiddlePosition,
-    setIsMiddlePathHorizontal,
-  ])
+  }, [sourceX, sourceY, targetX, targetY, type])
 
   const sourcePoint = { x: sourceX, y: sourceY }
   const targetPoint = { x: targetX, y: targetY }
@@ -149,7 +126,13 @@ export const StraightPathEdge = ({
 export const useStraightPathData = (
   straightPathEdgeProps: StraightPathEdgeProps
 ) => {
-  const { pathMiddlePosition, isMiddlePathHorizontal } = useEdgeState()
+  const { pathMiddlePosition, isMiddlePathHorizontal } = useEdgePath(
+    straightPathEdgeProps.sourceX,
+    straightPathEdgeProps.sourceY,
+    straightPathEdgeProps.targetX,
+    straightPathEdgeProps.targetY,
+    { current: null } 
+  )
 
   return {
     pathMiddlePosition,
