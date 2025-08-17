@@ -57,6 +57,7 @@ import {
   BPMNPoolEditPopover,
 } from "./bpmnDiagram"
 import { ComponentEdgeEditPopover } from "./edgePopovers/ComponentDiagramEdgeEditPopover"
+import { ReachabilityGraphMarkingEditPopover } from "./reachabilityGraphDiagram"
 
 type NodePopoverType =
   | "class"
@@ -88,6 +89,7 @@ type NodePopoverType =
   | "BPMNDataStore"
   | "BPMNPool"
   | "BPMNGroup"
+  | "ReachabilityGraphMarking"
 
 type EdgePopoverType =
   | "ClassAggregation"
@@ -165,6 +167,7 @@ const editPopovers: {
   BPMNDataStore: React.FC<PopoverProps>
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
+  ReachabilityGraphMarking: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   objectName: ObjectEditPopover,
@@ -216,6 +219,7 @@ const editPopovers: {
   BPMNDataStore: DefaultNodeEditPopover,
   BPMNPool: BPMNPoolEditPopover,
   BPMNGroup: DefaultNodeEditPopover,
+  ReachabilityGraphMarking: ReachabilityGraphMarkingEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -269,6 +273,7 @@ const giveFeedbackPopovers: {
   BPMNDataStore: React.FC<PopoverProps>
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
+  ReachabilityGraphMarking: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   objectName: ObjectGiveFeedbackPopover,
@@ -320,6 +325,7 @@ const giveFeedbackPopovers: {
   BPMNDataStore: DefaultNodeGiveFeedbackPopover,
   BPMNPool: DefaultNodeGiveFeedbackPopover,
   BPMNGroup: DefaultNodeGiveFeedbackPopover,
+  ReachabilityGraphMarking: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -373,6 +379,7 @@ const seeFeedbackPopovers: {
   BPMNDataStore: React.FC<PopoverProps>
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
+  ReachabilityGraphMarking: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   objectName: ObjectSeeFeedbackPopover,
@@ -424,6 +431,7 @@ const seeFeedbackPopovers: {
   BPMNDataStore: DefaultNodeSeeFeedbackPopover,
   BPMNPool: DefaultNodeSeeFeedbackPopover,
   BPMNGroup: DefaultNodeSeeFeedbackPopover,
+  ReachabilityGraphMarking: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {
