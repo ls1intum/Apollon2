@@ -2,7 +2,7 @@ import { StepPathEdge } from "../pathTypes/StepPathEdge"
 import { BaseEdgeProps } from "../GenericEdge"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
-import { useMemo } from "react"
+
 import { Position } from "@xyflow/react"
 
 interface ComponentDiagramEdgeProps extends BaseEdgeProps {
@@ -55,7 +55,7 @@ export const ComponentDiagramEdge = ({
     }))
   )
 
-  const dynamicEdgeType = useMemo(() => {
+  const dynamicEdgeType = (() => {
     if (type !== "ComponentRequiredInterface") {
       return type
     }
@@ -79,6 +79,7 @@ export const ComponentDiagramEdge = ({
         const otherPosition = getPositionFromHandleId(otherEdge.targetHandle!)
         return arePositionsOpposite(currentTargetPosition, otherPosition)
       })
+
     switch (currentRequiredInterfaces.length) {
       case 1:
         if (currentAllInterfaces.length === currentRequiredInterfaces.length) {
@@ -92,26 +93,10 @@ export const ComponentDiagramEdge = ({
         } else {
           return "ComponentRequiredQuarterInterface"
         }
-
       default:
         return "ComponentRequiredQuarterInterface"
     }
-  }, [
-    type,
-    target,
-    targetHandleId,
-    id,
-    edges,
-    edges.length,
-    JSON.stringify(
-      edges.map((e) => ({
-        id: e.id,
-        type: e.type,
-        target: e.target,
-        targetHandle: e.targetHandle,
-      }))
-    ),
-  ])
+  })()
 
   return (
     <StepPathEdge

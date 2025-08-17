@@ -21,8 +21,6 @@ import {
 } from "../GenericEdge"
 import {
   getEdgeMarkerStyles,
-  findClosestHandle,
-  findClosestHandleForInterface,
   simplifySvgPath,
   removeDuplicatePoints,
   parseSvgPath,
@@ -34,7 +32,7 @@ import { useShallow } from "zustand/shallow"
 import { IPoint, pointsToSvgPath, tryFindStraightPath } from "../Connection"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useToolbar } from "@/hooks"
-import { DiagramNodeTypeRecord } from "@/nodes"
+import { useHandleFinder } from "@/hooks"
 
 interface StepPathEdgeProps extends BaseEdgeProps {
   allowMidpointDragging?: boolean
@@ -101,6 +99,7 @@ export const StepPathEdge = ({
     completeReconnection,
   } = useEdgeReconnection(id, source, target, sourceHandleId, targetHandleId)
 
+  const { findBestHandle } = useHandleFinder()
   const { setEdges, assessments } = useDiagramStore(
     useShallow((state) => ({
       setEdges: state.setEdges,
@@ -520,12 +519,9 @@ export const StepPathEdge = ({
         document.removeEventListener("pointerup", handleEndpointPointerUp, {
           capture: true,
         })
-        if (targetNode.type == DiagramNodeTypeRecord.componentInterface) {
-          completeReconnection(upEvent, findClosestHandleForInterface, () => {
-            setCustomPoints([])
-          })
-        }
-        completeReconnection(upEvent, findClosestHandle, () => {
+
+        // Pass the findBestHandle function to completeReconnection
+        completeReconnection(upEvent, findBestHandle, () => {
           setCustomPoints([])
         })
       }

@@ -445,7 +445,6 @@ export const PopoverManager = ({
   anchorEl,
   type,
 }: PopoverManagerProps) => {
-  console.log("PopoverManager", elementId, type)
   const viewportCenter = useViewportCenter()
   const { nodes } = useDiagramStore(
     useShallow((state) => ({

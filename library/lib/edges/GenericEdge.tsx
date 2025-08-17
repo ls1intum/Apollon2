@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState, useEffect } from "react"
-import { useReactFlow } from "@xyflow/react"
+import { useReactFlow, type Node } from "@xyflow/react"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { CustomEdgeToolbar } from "@/components"
 import { IPoint } from "./Connection"
@@ -7,7 +7,6 @@ import { useReconnect } from "@/hooks/useReconnect"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import AssessmentIcon from "@/components/svgs/AssessmentIcon"
 import { DiagramEdgeType } from "."
-import { NodeBounds } from "./Connection"
 import { Assessment } from "@/typings"
 
 export interface BaseEdgeProps extends ExtendedEdgeProps {
@@ -131,31 +130,7 @@ export const useEdgeReconnection = (
   const reconnectOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
   const reconnectingEndRef = useRef<"source" | "target" | null>(null)
   const onReconnect = useReconnect()
-  const { getNodes, getEdges, screenToFlowPosition } = useReactFlow()
-
-  const getDropPosition = (event: PointerEvent) => {
-    return screenToFlowPosition(
-      { x: event.clientX, y: event.clientY },
-      { snapToGrid: false }
-    )
-  }
-
-  const findNodeAtPosition = (position: IPoint) => {
-    const nodes = getNodes()
-    return nodes.find((node) => {
-      const x = node.position?.x || 0
-      const y = node.position?.y || 0
-      const width = node.width || 100
-      const height = node.height || 160
-
-      return (
-        position.x > x &&
-        position.x < x + width &&
-        position.y > y &&
-        position.y < y + height
-      )
-    })
-  }
+  const { getEdges } = useReactFlow()
 
   const startReconnection = (
     e: React.PointerEvent,
@@ -176,41 +151,36 @@ export const useEdgeReconnection = (
 
   const completeReconnection = (
     upEvent: PointerEvent,
-    handleFinder: (position: IPoint, nodeBounds: NodeBounds) => string,
-    onComplete?: () => void
+    handleFinder: (upEvent: PointerEvent) => {
+      handle: string | null
+      node: Node | null
+      shouldClearPoints: boolean
+    },
+    onCustomPointsClear?: () => void
   ) => {
     const isReconnectingSource = reconnectingEndRef.current === "source"
-
     isReconnectingRef.current = false
 
-    const dropPosition = getDropPosition(upEvent)
-    const nodeAtPosition = findNodeAtPosition(dropPosition)
+    const { handle, node, shouldClearPoints } = handleFinder(upEvent)
 
-    if (!nodeAtPosition) {
+    if (!node || shouldClearPoints) {
       reconnectingEndRef.current = null
-      onComplete?.()
+      onCustomPointsClear?.()
       return
     }
 
-    const newHandle = handleFinder(dropPosition, {
-      x: nodeAtPosition.position.x,
-      y: nodeAtPosition.position.y,
-      width: nodeAtPosition.width!,
-      height: nodeAtPosition.height!,
-    })
-
     const newConnection = isReconnectingSource
       ? {
-          source: nodeAtPosition.id,
+          source: node.id,
           target: target,
-          sourceHandle: newHandle,
+          sourceHandle: handle,
           targetHandle: targetHandleId ?? null,
         }
       : {
           source: source,
-          target: nodeAtPosition.id,
+          target: node.id,
           sourceHandle: sourceHandleId ?? null,
-          targetHandle: newHandle,
+          targetHandle: handle,
         }
 
     const oldEdge = getEdges().find((edge) => edge.id === id)
@@ -218,6 +188,7 @@ export const useEdgeReconnection = (
       onReconnect(oldEdge, newConnection)
     }
 
+    onCustomPointsClear?.()
     reconnectingEndRef.current = null
   }
 
