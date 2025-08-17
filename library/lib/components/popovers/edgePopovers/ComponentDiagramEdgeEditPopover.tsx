@@ -8,6 +8,7 @@ import {
 } from "@mui/material"
 
 import { useReactFlow } from "@xyflow/react"
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 
@@ -17,11 +18,12 @@ export const ComponentEdgeEditPopover: React.FC<PopoverProps> = ({
   const { getEdge, getNode } = useReactFlow()
 
   const edge = getEdge(elementId)
-  const { handleEdgeTypeChange } = useEdgePopOver(elementId)
+  const { handleEdgeTypeChange, handleSwap } = useEdgePopOver(elementId)
 
   if (!edge) {
     return null
   }
+  
   const sourceNode = getNode(edge.source)
   const targetNode = getNode(edge.target)
   const sourceName = (sourceNode?.data?.name as string) ?? "Source"
@@ -35,6 +37,12 @@ export const ComponentEdgeEditPopover: React.FC<PopoverProps> = ({
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      {handleSwap && (
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
+        </Box>
+      )}
+      
       <FormControl fullWidth size="small">
         <InputLabel id="edge-type-label">Edge Type</InputLabel>
         <Select

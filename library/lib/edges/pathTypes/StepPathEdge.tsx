@@ -70,6 +70,7 @@ export const StepPathEdge = ({
   enableStraightPath = false,
   children,
 }: StepPathEdgeProps) => {
+  console.log("StepPathEdge", id, type, source, target)
   const draggingIndexRef = useRef<number | null>(null)
   const dragOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
   const pathRef = useRef<SVGPathElement | null>(null)

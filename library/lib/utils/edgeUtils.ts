@@ -292,14 +292,14 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         strokeDashArray: "0",
         offset: 0,
       }
-    case "ComponentRequiredQuarter":
+    case "ComponentRequiredQuarterInterface":
       return {
         markerPadding: 2,
         markerEnd: "url(#required-interface-quarter)",
         strokeDashArray: "0",
         offset: 0,
       }
-    case "ComponentRequiredThreeQuarter":
+    case "ComponentRequiredThreeQuarterInterface":
       return {
         markerPadding: 2,
         markerEnd: "url(#required-interface-threequarter)",

@@ -65,6 +65,8 @@ export const diagramEdgeTypes = {
   ComponentDependency: createComponentEdgeComponent(true), // Dashed line with arrow
   ComponentProvidedInterface: createComponentEdgeComponent(false), // Plain line to provided interface
   ComponentRequiredInterface: createComponentEdgeComponent(false),
+  ComponentRequiredThreeQuarterInterface: createComponentEdgeComponent(false), // Plain line to required interface
+  ComponentRequiredQuarterInterface: createComponentEdgeComponent(false), // Plain line to required interface
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes

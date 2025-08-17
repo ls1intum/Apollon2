@@ -56,6 +56,7 @@ export const ComponentDiagramEdge = ({
   )
 
   const dynamicEdgeType = useMemo(() => {
+    console.log("EDGE type", type)
     if (type !== "ComponentRequiredInterface") {
       return type
     }
@@ -84,17 +85,17 @@ export const ComponentDiagramEdge = ({
         if (currentAllInterfaces.length === currentRequiredInterfaces.length) {
           return "ComponentRequiredInterface"
         } else {
-          return "ComponentRequiredThreeQuarter"
+          return "ComponentRequiredThreeQuarterInterface"
         }
       case 2:
         if (hasOppositeRequiredInterface) {
-          return "ComponentRequiredThreeQuarter"
+          return "ComponentRequiredThreeQuarterInterface"
         } else {
-          return "ComponentRequiredQuarter"
+          return "ComponentRequiredQuarterInterface"
         }
 
       default:
-        return "ComponentRequiredQuarter"
+        return "ComponentRequiredQuarterInterface"
     }
   }, [
     type,
