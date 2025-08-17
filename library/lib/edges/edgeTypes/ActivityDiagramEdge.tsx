@@ -51,6 +51,7 @@ export const ActivityDiagramEdge = ({
           pathMiddlePosition={edgeData.pathMiddlePosition}
           isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
           isUseCasePath={false}
+          showRelationshipLabels={true}
         />
       )}
     </StepPathEdge>

@@ -1,69 +1,80 @@
 import { useCallback } from "react"
-import { useReactFlow } from "@xyflow/react"
+import { type Node, useReactFlow } from "@xyflow/react"
 import {
   findClosestHandle,
   findClosestHandleForInterface,
 } from "../utils/edgeUtils"
 import { DiagramNodeTypeRecord } from "../nodes"
-import { IPoint } from "../edges/Connection"
+
+interface HandleFinderResult {
+  handle: string | null
+  node: Node | null
+  shouldClearPoints: boolean
+}
 
 export const useHandleFinder = () => {
-  const { getNodes, screenToFlowPosition } = useReactFlow()
-
-  const findNodeAtPosition = (position: IPoint) => {
-    const nodes = getNodes()
-    return nodes.find((node) => {
-      const x = node.position?.x || 0
-      const y = node.position?.y || 0
-      const width = node.width || 100
-      const height = node.height || 160
-
-      return (
-        position.x > x &&
-        position.x < x + width &&
-        position.y > y &&
-        position.y < y + height
-      )
-    })
-  }
+  const { screenToFlowPosition, getIntersectingNodes, getInternalNode } =
+    useReactFlow()
 
   const findBestHandle = useCallback(
-    (upEvent: PointerEvent) => {
+    (upEvent: PointerEvent): HandleFinderResult => {
       const dropPosition = screenToFlowPosition({
         x: upEvent.clientX,
         y: upEvent.clientY,
       })
-      const nodeAtPosition = findNodeAtPosition(dropPosition)
 
-      if (!nodeAtPosition) {
+      const intersectingNodes = getIntersectingNodes({
+        x: dropPosition.x - 1,
+        y: dropPosition.y - 1,
+        width: 2,
+        height: 2,
+      })
+
+      if (intersectingNodes.length === 0) {
         return {
           handle: null,
           node: null,
           shouldClearPoints: true,
         }
       }
+      const nodeOnTop = intersectingNodes[intersectingNodes.length - 1]
+      const internalNodeData = getInternalNode(nodeOnTop.id)
 
-      const nodeBounds = {
-        x: nodeAtPosition.position.x,
-        y: nodeAtPosition.position.y,
-        width: nodeAtPosition.width!,
-        height: nodeAtPosition.height!,
+      if (!internalNodeData) {
+        console.warn("No internal node data found for:", nodeOnTop.id)
+        return {
+          handle: null,
+          node: null,
+          shouldClearPoints: true,
+        }
       }
-
+      if (nodeOnTop.width == null || nodeOnTop.height == null) {
+        console.warn("Node dimensions not available:", nodeOnTop.id)
+        return {
+          handle: null,
+          node: null,
+          shouldClearPoints: true,
+        }
+      }
+      const nodeBounds = {
+        x: internalNodeData.internals.positionAbsolute.x,
+        y: internalNodeData.internals.positionAbsolute.y,
+        width: nodeOnTop.width,
+        height: nodeOnTop.height,
+      }
       let handle: string
-      if (nodeAtPosition.type === DiagramNodeTypeRecord.componentInterface) {
+      if (nodeOnTop.type === DiagramNodeTypeRecord.componentInterface) {
         handle = findClosestHandleForInterface(dropPosition, nodeBounds)
       } else {
         handle = findClosestHandle(dropPosition, nodeBounds)
       }
-
       return {
         handle,
-        node: nodeAtPosition,
+        node: nodeOnTop,
         shouldClearPoints: false,
       }
     },
-    [getNodes, screenToFlowPosition]
+    [screenToFlowPosition, getIntersectingNodes, getInternalNode]
   )
 
   return { findBestHandle }

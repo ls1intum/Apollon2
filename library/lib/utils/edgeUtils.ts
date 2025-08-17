@@ -179,6 +179,7 @@ export interface EdgeMarkerStyles {
 export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
   switch (edgeType) {
     case "ClassBidirectional":
+    case "DeploymentAssociation":
       return {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "0",
@@ -215,6 +216,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
       }
     case "ComponentDependency":
     case "ClassDependency":
+    case "DeploymentDependency":
       return {
         markerPadding: DOTTED_ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
@@ -280,12 +282,14 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
       }
 
     case "ComponentProvidedInterface":
+    case "DeploymentProvidedInterface":
       return {
         markerPadding: -2,
         strokeDashArray: "0", // Plain line like association
         offset: 0,
       }
     case "ComponentRequiredInterface":
+    case "DeploymentRequiredInterface":
       return {
         markerPadding: 2,
         markerEnd: "url(#required-interface)",
@@ -293,6 +297,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         offset: 0,
       }
     case "ComponentRequiredQuarterInterface":
+    case "DeploymentRequiredQuarterInterface":
       return {
         markerPadding: 2,
         markerEnd: "url(#required-interface-quarter)",
@@ -300,6 +305,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         offset: 0,
       }
     case "ComponentRequiredThreeQuarterInterface":
+    case "DeploymentRequiredThreeQuarterInterface":
       return {
         markerPadding: 2,
         markerEnd: "url(#required-interface-threequarter)",
@@ -670,6 +676,8 @@ export const getDefaultEdgeType = (
       return "UseCaseAssociation"
     case "ComponentDiagram":
       return "ComponentDependency"
+    case "DeploymentDiagram":
+      return "DeploymentAssociation"
     default:
       return "ClassUnidirectional"
   }

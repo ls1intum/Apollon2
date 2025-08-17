@@ -4,6 +4,7 @@ import { ActivityDiagramEdge } from "./edgeTypes/ActivityDiagramEdge"
 import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
+import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
 
 const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   const Component = (props: ExtendedEdgeProps) => (
@@ -49,6 +50,21 @@ export const createComponentEdgeComponent = (
   Component.displayName = `ComponentEdgeFactory(${allowMidpointDragging})`
   return Component
 }
+
+export const createDeploymentEdgeComponent = (
+  allowMidpointDragging: boolean = true,
+  showRelationshipLabels: boolean = false
+) => {
+  const Component = (props: ExtendedEdgeProps) => (
+    <DeploymentDiagramEdge
+      {...props}
+      allowMidpointDragging={allowMidpointDragging}
+      showRelationshipLabels={showRelationshipLabels}
+    />
+  )
+  Component.displayName = `DeploymentEdgeFactory(${allowMidpointDragging}${showRelationshipLabels})`
+  return Component
+}
 export const diagramEdgeTypes = {
   ClassAggregation: createClassEdgeComponent(true),
   ClassInheritance: createClassEdgeComponent(true),
@@ -67,6 +83,18 @@ export const diagramEdgeTypes = {
   ComponentRequiredInterface: createComponentEdgeComponent(false),
   ComponentRequiredThreeQuarterInterface: createComponentEdgeComponent(false), // Plain line to required interface
   ComponentRequiredQuarterInterface: createComponentEdgeComponent(false), // Plain line to required interface
+  DeploymentAssociation: createDeploymentEdgeComponent(true, true), // Plain line like association
+  DeploymentDependency: createDeploymentEdgeComponent(true, false), // Dashed line with arrow
+  DeploymentProvidedInterface: createDeploymentEdgeComponent(true, false), // Plain line to provided interface
+  DeploymentRequiredInterface: createDeploymentEdgeComponent(true, false),
+  DeploymentRequiredThreeQuarterInterface: createDeploymentEdgeComponent(
+    true,
+    false
+  ), // Plain line to required interface
+  DeploymentRequiredQuarterInterface: createDeploymentEdgeComponent(
+    true,
+    false
+  ), // Plain line to required interface
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes

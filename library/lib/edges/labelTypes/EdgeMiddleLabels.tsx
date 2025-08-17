@@ -21,22 +21,23 @@ export const EdgeMiddleLabels = ({
   targetPoint,
   isUseCasePath = false,
   showRelationshipLabels = false,
-  relationshipType,
 }: EdgeMiddleLabelsProps) => {
   return (
     <>
-      {label && pathMiddlePosition.x !== 0 && pathMiddlePosition.y !== 0 && (
-        <EdgeLabel
-          isMiddlePathHorizontal={isMiddlePathHorizontal}
-          pathMiddlePosition={pathMiddlePosition}
-          label={label}
-          sourcePoint={sourcePoint}
-          targetPoint={targetPoint}
-          isUseCasePath={isUseCasePath}
-        />
-      )}
-
       {showRelationshipLabels &&
+        pathMiddlePosition.x !== 0 &&
+        pathMiddlePosition.y !== 0 && (
+          <EdgeLabel
+            isMiddlePathHorizontal={isMiddlePathHorizontal}
+            pathMiddlePosition={pathMiddlePosition}
+            label={label}
+            sourcePoint={sourcePoint}
+            targetPoint={targetPoint}
+            isUseCasePath={isUseCasePath}
+          />
+        )}
+
+      {/* {showRelationshipLabels &&
         relationshipType &&
         sourcePoint &&
         targetPoint &&
@@ -72,7 +73,7 @@ export const EdgeMiddleLabels = ({
               {relationshipType === "include" ? "<<include>>" : "<<extend>>"}
             </text>
           )
-        })()}
+        })()} */}
     </>
   )
 }
