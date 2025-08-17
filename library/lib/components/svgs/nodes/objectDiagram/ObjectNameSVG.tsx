@@ -32,7 +32,6 @@ export const ObjectNameSVG = ({
   svgAttributes,
   showAssessmentResults = false,
 }: Props) => {
-  // Layout constants - no stereotype for object diagrams
   const headerHeight = DEFAULT_HEADER_HEIGHT
   const attributeHeight = DEFAULT_ATTRIBUTE_HEIGHT
   const methodHeight = DEFAULT_METHOD_HEIGHT

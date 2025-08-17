@@ -3,7 +3,7 @@ import {
   usePopoverStore,
   useMetadataStore,
 } from "@/store/context"
-import { ApollonMode, DiagramEdgeType } from "@/typings"
+import { ApollonMode } from "@/typings"
 import { useShallow } from "zustand/shallow"
 import {
   ClassEditPopover,
@@ -47,6 +47,15 @@ import {
   SyntaxTreeNonterminalEditPopover,
   SyntaxTreeTerminalEditPopover,
 } from "./syntaxTreeDiagram"
+import { PetriNetPlaceEditPopover } from "./petriNetDiagram"
+import {
+  BPMNTaskEditPopover,
+  BPMNStartEventEditPopover,
+  BPMNIntermediateEventEditPopover,
+  BPMNEndEventEditPopover,
+  BPMNGatewayEditPopover,
+  BPMNPoolEditPopover,
+} from "./bpmnDiagram"
 import { ComponentEdgeEditPopover } from "./edgePopovers/ComponentDiagramEdgeEditPopover"
 
 type PopoverType =
@@ -54,7 +63,22 @@ type PopoverType =
   | "objectName"
   | "communicationObjectName"
   | "default"
-  | DiagramEdgeType
+  | "ClassAggregation"
+  | "ClassInheritance"
+  | "ClassRealization"
+  | "ClassComposition"
+  | "ClassBidirectional"
+  | "ClassUnidirectional"
+  | "ClassDependency"
+  | "ActivityControlFlow"
+  | "UseCaseAssociation"
+  | "UseCaseInclude"
+  | "UseCaseExtend"
+  | "UseCaseGeneralization"
+  | "BPMNSequenceFlow"
+  | "BPMNMessageFlow"
+  | "BPMNAssociationFlow"
+  | "BPMNDataAssociationFlow"
   | "Component"
   | "ComponentSubsystem"
   | "FlowchartTerminal"
@@ -66,6 +90,33 @@ type PopoverType =
   | "DeploymentNode"
   | "SyntaxTreeNonterminal"
   | "SyntaxTreeTerminal"
+  | "PetriNetPlace"
+  | "BPMNTask"
+  | "BPMNStartEvent"
+  | "BPMNIntermediateEvent"
+  | "BPMNEndEvent"
+  | "BPMNGateway"
+  | "BPMNSubprocess"
+  | "BPMNTransaction"
+  | "BPMNCallActivity"
+  | "BPMNAnnotation"
+  | "BPMNDataObject"
+  | "BPMNDataStore"
+  | "BPMNPool"
+  | "BPMNGroup"
+  | "BPMNTask"
+  | "BPMNStartEvent"
+  | "BPMNIntermediateEvent"
+  | "BPMNEndEvent"
+  | "BPMNGateway"
+  | "BPMNSubprocess"
+  | "BPMNTransaction"
+  | "BPMNCallActivity"
+  | "BPMNAnnotation"
+  | "BPMNDataObject"
+  | "BPMNDataStore"
+  | "BPMNPool"
+  | "BPMNGroup"
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -84,6 +135,10 @@ const editPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  BPMNSequenceFlow: React.FC<PopoverProps>
+  BPMNMessageFlow: React.FC<PopoverProps>
+  BPMNAssociationFlow: React.FC<PopoverProps>
+  BPMNDataAssociationFlow: React.FC<PopoverProps>
   ComponentDependency: React.FC<PopoverProps>
   ComponentProvidedInterface: React.FC<PopoverProps>
   ComponentRequiredInterface: React.FC<PopoverProps>
@@ -98,6 +153,20 @@ const editPopovers: {
   DeploymentNode: React.FC<PopoverProps>
   SyntaxTreeNonterminal: React.FC<PopoverProps>
   SyntaxTreeTerminal: React.FC<PopoverProps>
+  PetriNetPlace: React.FC<PopoverProps>
+  BPMNTask: React.FC<PopoverProps>
+  BPMNStartEvent: React.FC<PopoverProps>
+  BPMNIntermediateEvent: React.FC<PopoverProps>
+  BPMNEndEvent: React.FC<PopoverProps>
+  BPMNGateway: React.FC<PopoverProps>
+  BPMNSubprocess: React.FC<PopoverProps>
+  BPMNTransaction: React.FC<PopoverProps>
+  BPMNCallActivity: React.FC<PopoverProps>
+  BPMNAnnotation: React.FC<PopoverProps>
+  BPMNDataObject: React.FC<PopoverProps>
+  BPMNDataStore: React.FC<PopoverProps>
+  BPMNPool: React.FC<PopoverProps>
+  BPMNGroup: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   objectName: ObjectEditPopover,
@@ -115,6 +184,10 @@ const editPopovers: {
   UseCaseInclude: UseCaseEdgeEditPopover,
   UseCaseExtend: UseCaseEdgeEditPopover,
   UseCaseGeneralization: UseCaseEdgeEditPopover,
+  BPMNSequenceFlow: EdgeEditPopover,
+  BPMNMessageFlow: EdgeEditPopover,
+  BPMNAssociationFlow: EdgeEditPopover,
+  BPMNDataAssociationFlow: EdgeEditPopover,
   ComponentDependency: ComponentEdgeEditPopover,
   ComponentProvidedInterface: ComponentEdgeEditPopover,
   ComponentRequiredInterface: ComponentEdgeEditPopover,
@@ -129,6 +202,20 @@ const editPopovers: {
   DeploymentNode: DeploymentNodeEditPopover,
   SyntaxTreeNonterminal: SyntaxTreeNonterminalEditPopover,
   SyntaxTreeTerminal: SyntaxTreeTerminalEditPopover,
+  PetriNetPlace: PetriNetPlaceEditPopover,
+  BPMNTask: BPMNTaskEditPopover,
+  BPMNStartEvent: BPMNStartEventEditPopover,
+  BPMNIntermediateEvent: BPMNIntermediateEventEditPopover,
+  BPMNEndEvent: BPMNEndEventEditPopover,
+  BPMNGateway: BPMNGatewayEditPopover,
+  BPMNSubprocess: DefaultNodeEditPopover,
+  BPMNTransaction: DefaultNodeEditPopover,
+  BPMNCallActivity: DefaultNodeEditPopover,
+  BPMNAnnotation: DefaultNodeEditPopover,
+  BPMNDataObject: DefaultNodeEditPopover,
+  BPMNDataStore: DefaultNodeEditPopover,
+  BPMNPool: BPMNPoolEditPopover,
+  BPMNGroup: DefaultNodeEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -148,6 +235,10 @@ const giveFeedbackPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  BPMNSequenceFlow: React.FC<PopoverProps>
+  BPMNMessageFlow: React.FC<PopoverProps>
+  BPMNAssociationFlow: React.FC<PopoverProps>
+  BPMNDataAssociationFlow: React.FC<PopoverProps>
   ComponentDependency: React.FC<PopoverProps>
   ComponentProvidedInterface: React.FC<PopoverProps>
   ComponentRequiredInterface: React.FC<PopoverProps>
@@ -162,6 +253,20 @@ const giveFeedbackPopovers: {
   DeploymentNode: React.FC<PopoverProps>
   SyntaxTreeNonterminal: React.FC<PopoverProps>
   SyntaxTreeTerminal: React.FC<PopoverProps>
+  PetriNetPlace: React.FC<PopoverProps>
+  BPMNTask: React.FC<PopoverProps>
+  BPMNStartEvent: React.FC<PopoverProps>
+  BPMNIntermediateEvent: React.FC<PopoverProps>
+  BPMNEndEvent: React.FC<PopoverProps>
+  BPMNGateway: React.FC<PopoverProps>
+  BPMNSubprocess: React.FC<PopoverProps>
+  BPMNTransaction: React.FC<PopoverProps>
+  BPMNCallActivity: React.FC<PopoverProps>
+  BPMNAnnotation: React.FC<PopoverProps>
+  BPMNDataObject: React.FC<PopoverProps>
+  BPMNDataStore: React.FC<PopoverProps>
+  BPMNPool: React.FC<PopoverProps>
+  BPMNGroup: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   objectName: ObjectGiveFeedbackPopover,
@@ -179,6 +284,10 @@ const giveFeedbackPopovers: {
   UseCaseInclude: EdgeGiveFeedbackPopover,
   UseCaseExtend: EdgeGiveFeedbackPopover,
   UseCaseGeneralization: EdgeGiveFeedbackPopover,
+  BPMNSequenceFlow: EdgeGiveFeedbackPopover,
+  BPMNMessageFlow: EdgeGiveFeedbackPopover,
+  BPMNAssociationFlow: EdgeGiveFeedbackPopover,
+  BPMNDataAssociationFlow: EdgeGiveFeedbackPopover,
   ComponentDependency: EdgeGiveFeedbackPopover,
   ComponentProvidedInterface: EdgeGiveFeedbackPopover,
   ComponentRequiredInterface: EdgeGiveFeedbackPopover,
@@ -193,6 +302,20 @@ const giveFeedbackPopovers: {
   DeploymentNode: DefaultNodeGiveFeedbackPopover,
   SyntaxTreeNonterminal: DefaultNodeGiveFeedbackPopover,
   SyntaxTreeTerminal: DefaultNodeGiveFeedbackPopover,
+  PetriNetPlace: DefaultNodeGiveFeedbackPopover,
+  BPMNTask: DefaultNodeGiveFeedbackPopover,
+  BPMNStartEvent: DefaultNodeGiveFeedbackPopover,
+  BPMNIntermediateEvent: DefaultNodeGiveFeedbackPopover,
+  BPMNEndEvent: DefaultNodeGiveFeedbackPopover,
+  BPMNGateway: DefaultNodeGiveFeedbackPopover,
+  BPMNSubprocess: DefaultNodeGiveFeedbackPopover,
+  BPMNTransaction: DefaultNodeGiveFeedbackPopover,
+  BPMNCallActivity: DefaultNodeGiveFeedbackPopover,
+  BPMNAnnotation: DefaultNodeGiveFeedbackPopover,
+  BPMNDataObject: DefaultNodeGiveFeedbackPopover,
+  BPMNDataStore: DefaultNodeGiveFeedbackPopover,
+  BPMNPool: DefaultNodeGiveFeedbackPopover,
+  BPMNGroup: DefaultNodeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -212,6 +335,10 @@ const seeFeedbackPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  BPMNSequenceFlow: React.FC<PopoverProps>
+  BPMNMessageFlow: React.FC<PopoverProps>
+  BPMNAssociationFlow: React.FC<PopoverProps>
+  BPMNDataAssociationFlow: React.FC<PopoverProps>
   ComponentDependency: React.FC<PopoverProps>
   ComponentProvidedInterface: React.FC<PopoverProps>
   ComponentRequiredInterface: React.FC<PopoverProps>
@@ -226,6 +353,20 @@ const seeFeedbackPopovers: {
   DeploymentNode: React.FC<PopoverProps>
   SyntaxTreeNonterminal: React.FC<PopoverProps>
   SyntaxTreeTerminal: React.FC<PopoverProps>
+  PetriNetPlace: React.FC<PopoverProps>
+  BPMNTask: React.FC<PopoverProps>
+  BPMNStartEvent: React.FC<PopoverProps>
+  BPMNIntermediateEvent: React.FC<PopoverProps>
+  BPMNEndEvent: React.FC<PopoverProps>
+  BPMNGateway: React.FC<PopoverProps>
+  BPMNSubprocess: React.FC<PopoverProps>
+  BPMNTransaction: React.FC<PopoverProps>
+  BPMNCallActivity: React.FC<PopoverProps>
+  BPMNAnnotation: React.FC<PopoverProps>
+  BPMNDataObject: React.FC<PopoverProps>
+  BPMNDataStore: React.FC<PopoverProps>
+  BPMNPool: React.FC<PopoverProps>
+  BPMNGroup: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   objectName: ObjectSeeFeedbackPopover,
@@ -243,6 +384,10 @@ const seeFeedbackPopovers: {
   UseCaseInclude: EdgeSeeFeedbackPopover,
   UseCaseExtend: EdgeSeeFeedbackPopover,
   UseCaseGeneralization: EdgeSeeFeedbackPopover,
+  BPMNSequenceFlow: EdgeSeeFeedbackPopover,
+  BPMNMessageFlow: EdgeSeeFeedbackPopover,
+  BPMNAssociationFlow: EdgeSeeFeedbackPopover,
+  BPMNDataAssociationFlow: EdgeSeeFeedbackPopover,
   ComponentDependency: EdgeSeeFeedbackPopover,
  ComponentProvidedInterface: EdgeSeeFeedbackPopover,
   ComponentRequiredInterface: EdgeSeeFeedbackPopover,
@@ -257,6 +402,20 @@ const seeFeedbackPopovers: {
   DeploymentNode: DefaultNodeSeeFeedbackPopover,
   SyntaxTreeNonterminal: DefaultNodeSeeFeedbackPopover,
   SyntaxTreeTerminal: DefaultNodeSeeFeedbackPopover,
+  PetriNetPlace: DefaultNodeSeeFeedbackPopover,
+  BPMNTask: DefaultNodeSeeFeedbackPopover,
+  BPMNStartEvent: DefaultNodeSeeFeedbackPopover,
+  BPMNIntermediateEvent: DefaultNodeSeeFeedbackPopover,
+  BPMNEndEvent: DefaultNodeSeeFeedbackPopover,
+  BPMNGateway: DefaultNodeSeeFeedbackPopover,
+  BPMNSubprocess: DefaultNodeSeeFeedbackPopover,
+  BPMNTransaction: DefaultNodeSeeFeedbackPopover,
+  BPMNCallActivity: DefaultNodeSeeFeedbackPopover,
+  BPMNAnnotation: DefaultNodeSeeFeedbackPopover,
+  BPMNDataObject: DefaultNodeSeeFeedbackPopover,
+  BPMNDataStore: DefaultNodeSeeFeedbackPopover,
+  BPMNPool: DefaultNodeSeeFeedbackPopover,
+  BPMNGroup: DefaultNodeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {
@@ -329,7 +488,7 @@ export const PopoverManager = ({
 
   return Component ? (
     <GenericPopover
-      id={`popover-${elementId}`}
+      id={`popover-${elementId}-${type}`}
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}

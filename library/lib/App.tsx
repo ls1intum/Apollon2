@@ -70,8 +70,16 @@ function App({ onReactFlowInit }: AppProps) {
   useKeyboardShortcuts()
 
   return (
-    <div style={{ display: "flex", flex: 1 }}>
+    <div
+      style={{
+        display: "flex",
+        height: "100%",
+        width: "100%",
+        overflow: "hidden",
+      }}
+    >
       {mode === ApollonMode.Modelling && <Sidebar />}
+
       <SvgMarkers />
       <ReactFlow
         id={`react-flow-library-${diagramId}`}
@@ -106,6 +114,7 @@ function App({ onReactFlowInit }: AppProps) {
         edgesReconnectable={isDiagramModifiable}
         nodesConnectable={isDiagramModifiable}
         nodesDraggable={isDiagramModifiable}
+        style={{ width: "100%", height: "100%" }}
       >
         <CustomBackground />
         <CustomMiniMap />

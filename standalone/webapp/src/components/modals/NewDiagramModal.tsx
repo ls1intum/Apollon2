@@ -21,6 +21,8 @@ const diagramTypes = {
     UMLDiagramType.ActivityDiagram,
     UMLDiagramType.UseCaseDiagram,
     UMLDiagramType.CommunicationDiagram,
+    UMLDiagramType.PetriNet,
+    UMLDiagramType.BPMN,
   ],
 }
 
@@ -32,11 +34,11 @@ const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   CommunicationDiagram: "Communication Diagram",
   ComponentDiagram: "Component Diagram",
   DeploymentDiagram: "Deployment Diagram",
-  PetriNet: "",
+  PetriNet: "Petri Net",
   ReachabilityGraph: "",
   SyntaxTree: "Syntax Tree",
   Flowchart: "Flowchart",
-  BPMN: "",
+  BPMN: "BPMN Diagram",
 }
 
 export const NewDiagramModal = () => {

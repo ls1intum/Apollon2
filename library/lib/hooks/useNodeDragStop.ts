@@ -6,6 +6,7 @@ import {
   resizeAllParents,
   sortNodesTopologically,
 } from "@/utils"
+import { canDropIntoParent } from "@/utils/bpmnConstraints"
 import { MOUSE_UP_OFFSET_IN_PIXELS } from "@/constants"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
@@ -41,7 +42,15 @@ export const useNodeDragStop = () => {
         y: draggedLastPoint.y,
         width: MOUSE_UP_OFFSET_IN_PIXELS,
         height: MOUSE_UP_OFFSET_IN_PIXELS,
-      }).filter((n) => isParentNodeType(n.type) && n.id !== draggedNode.id)
+      }).filter((n) => {
+        return (
+          isParentNodeType(n.type) &&
+          n.id !== draggedNode.id &&
+          n.type &&
+          draggedNode.type &&
+          canDropIntoParent(draggedNode.type, n.type)
+        )
+      })
 
       const parentNode = intersectionsWithDroppedLocation.length
         ? intersectionsWithDroppedLocation[

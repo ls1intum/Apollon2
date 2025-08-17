@@ -63,7 +63,14 @@ export const ApollonPlayground: React.FC = () => {
   }, [apollonOptions])
 
   return (
-    <div className="flex flex-row grow ">
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        flexGrow: 1,
+        height: "100%",
+      }}
+    >
       <div className="flex flex-col p-4 gap-2 overflow-scroll max-w-[300px]">
         <div>
           <label className="font-semibold ">Select Diagram Type</label>
@@ -159,7 +166,11 @@ export const ApollonPlayground: React.FC = () => {
         <canvas ref={canvasRef} id="canvas"></canvas>
       </div>
 
-      <div id="playground" className="flex flex-1" ref={containerRef} />
+      <div
+        id="playground"
+        style={{ display: "flex", flex: 1, height: "100%" }}
+        ref={containerRef}
+      />
     </div>
   )
 }

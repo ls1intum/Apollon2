@@ -13,15 +13,8 @@ import { Assessment } from "@/typings"
 export interface BaseEdgeProps extends ExtendedEdgeProps {
   diagramType?: "class" | "usecase" | "activity"
 }
-
 export const useEdgeState = (initialPoints?: IPoint[]) => {
   const [customPoints, setCustomPoints] = useState<IPoint[]>([])
-  const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>({
-    x: 0,
-    y: 0,
-  })
-  const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] =
-    useState<boolean>(true)
   const [tempReconnectPoints, setTempReconnectPoints] = useState<
     IPoint[] | null
   >(null)
@@ -35,15 +28,10 @@ export const useEdgeState = (initialPoints?: IPoint[]) => {
   return {
     customPoints,
     setCustomPoints,
-    pathMiddlePosition,
-    setPathMiddlePosition,
-    isMiddlePathHorizontal,
-    setIsMiddlePathHorizontal,
     tempReconnectPoints,
     setTempReconnectPoints,
   }
 }
-
 export const useEdgePath = (
   sourceX: number,
   sourceY: number,
@@ -51,15 +39,32 @@ export const useEdgePath = (
   targetY: number,
   pathRef: React.RefObject<SVGPathElement>
 ) => {
+  const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>(() => ({
+    x: (sourceX + targetX) / 2,
+    y: (sourceY + targetY) / 2,
+  }))
+
+  const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] = useState<boolean>(
+    () => {
+      const dx = Math.abs(targetX - sourceX)
+      const dy = Math.abs(targetY - sourceY)
+      return dx > dy
+    }
+  )
+
+  useEffect(() => {
+    const middleX = (sourceX + targetX) / 2
+    const middleY = (sourceY + targetY) / 2
+    setPathMiddlePosition({ x: middleX, y: middleY })
+
+    const dx = Math.abs(targetX - sourceX)
+    const dy = Math.abs(targetY - sourceY)
+    setIsMiddlePathHorizontal(dx > dy)
+  }, [sourceX, sourceY, targetX, targetY])
+
   const updateMiddlePosition = useCallback(
-    (
-      path: string,
-      setPathMiddlePosition: (pos: IPoint) => void,
-      setIsMiddlePathHorizontal: (horizontal: boolean) => void,
-      isDirectPath = false
-    ) => {
+    (isDirectPath = false) => {
       if (isDirectPath) {
-        console.log(path)
         const middleX = (sourceX + targetX) / 2
         const middleY = (sourceY + targetY) / 2
         setPathMiddlePosition({ x: middleX, y: middleY })
@@ -68,24 +73,51 @@ export const useEdgePath = (
         const dy = Math.abs(targetY - sourceY)
         setIsMiddlePathHorizontal(dx > dy)
       } else if (pathRef.current) {
-        const totalLength = pathRef.current.getTotalLength()
-        const halfLength = totalLength / 2
-        const middlePoint = pathRef.current.getPointAtLength(halfLength)
-        const pointOnCloseToMiddle = pathRef.current.getPointAtLength(
-          halfLength + 2
-        )
-        const isHorizontal =
-          Math.abs(pointOnCloseToMiddle.x - middlePoint.x) >
-          Math.abs(pointOnCloseToMiddle.y - middlePoint.y)
+        try {
+          const totalLength = pathRef.current.getTotalLength()
+          if (totalLength === 0 || !isFinite(totalLength)) {
+            const middleX = (sourceX + targetX) / 2
+            const middleY = (sourceY + targetY) / 2
+            setPathMiddlePosition({ x: middleX, y: middleY })
 
-        setIsMiddlePathHorizontal(isHorizontal)
-        setPathMiddlePosition({ x: middlePoint.x, y: middlePoint.y })
+            const dx = Math.abs(targetX - sourceX)
+            const dy = Math.abs(targetY - sourceY)
+            setIsMiddlePathHorizontal(dx > dy)
+            return
+          }
+
+          const halfLength = totalLength / 2
+          const middlePoint = pathRef.current.getPointAtLength(halfLength)
+          const pointOnCloseToMiddle = pathRef.current.getPointAtLength(
+            Math.min(halfLength + 2, totalLength)
+          )
+
+          const isHorizontal =
+            Math.abs(pointOnCloseToMiddle.x - middlePoint.x) >
+            Math.abs(pointOnCloseToMiddle.y - middlePoint.y)
+
+          setIsMiddlePathHorizontal(isHorizontal)
+          setPathMiddlePosition({ x: middlePoint.x, y: middlePoint.y })
+        } catch (error) {
+          console.warn("Path calculation failed, using fallback:", error)
+          const middleX = (sourceX + targetX) / 2
+          const middleY = (sourceY + targetY) / 2
+          setPathMiddlePosition({ x: middleX, y: middleY })
+
+          const dx = Math.abs(targetX - sourceX)
+          const dy = Math.abs(targetY - sourceY)
+          setIsMiddlePathHorizontal(dx > dy)
+        }
       }
     },
     [sourceX, sourceY, targetX, targetY, pathRef]
   )
 
-  return { updateMiddlePosition }
+  return {
+    updateMiddlePosition,
+    pathMiddlePosition,
+    isMiddlePathHorizontal,
+  }
 }
 
 export const useEdgeReconnection = (
