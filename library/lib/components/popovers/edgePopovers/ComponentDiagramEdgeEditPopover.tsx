@@ -23,7 +23,7 @@ export const ComponentEdgeEditPopover: React.FC<PopoverProps> = ({
   if (!edge) {
     return null
   }
-  
+
   const sourceNode = getNode(edge.source)
   const targetNode = getNode(edge.target)
   const sourceName = (sourceNode?.data?.name as string) ?? "Source"
@@ -42,7 +42,7 @@ export const ComponentEdgeEditPopover: React.FC<PopoverProps> = ({
           <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
         </Box>
       )}
-      
+
       <FormControl fullWidth size="small">
         <InputLabel id="edge-type-label">Edge Type</InputLabel>
         <Select
