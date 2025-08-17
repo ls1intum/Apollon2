@@ -6,4 +6,5 @@ export const DEFAULT_ATTRIBUTE_HEIGHT = 30
 export const DEFAULT_METHOD_HEIGHT = 30
 export const DEFAULT_PADDING = 10
 export const LINE_WIDTH = 1
+export const LINE_WIDTH_INTERFACE = 2
 export const LINE_WIDTH_ON_EDGE = LINE_WIDTH * 2

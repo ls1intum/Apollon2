@@ -1,5 +1,5 @@
 import { CustomText } from "@/components"
-import { LINE_WIDTH } from "@/constants"
+import { LINE_WIDTH_INTERFACE } from "@/constants"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
@@ -36,7 +36,7 @@ export const ComponentInterfaceNodeSVG: React.FC<Props> = ({
           cy={height / 2}
           r={width / 2}
           stroke="black"
-          strokeWidth={LINE_WIDTH}
+          strokeWidth={LINE_WIDTH_INTERFACE}
           fill="white"
         />
 

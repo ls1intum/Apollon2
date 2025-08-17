@@ -58,27 +58,11 @@ import {
 } from "./bpmnDiagram"
 import { ComponentEdgeEditPopover } from "./edgePopovers/ComponentDiagramEdgeEditPopover"
 
-type PopoverType =
+type NodePopoverType =
   | "class"
   | "objectName"
   | "communicationObjectName"
   | "default"
-  | "ClassAggregation"
-  | "ClassInheritance"
-  | "ClassRealization"
-  | "ClassComposition"
-  | "ClassBidirectional"
-  | "ClassUnidirectional"
-  | "ClassDependency"
-  | "ActivityControlFlow"
-  | "UseCaseAssociation"
-  | "UseCaseInclude"
-  | "UseCaseExtend"
-  | "UseCaseGeneralization"
-  | "BPMNSequenceFlow"
-  | "BPMNMessageFlow"
-  | "BPMNAssociationFlow"
-  | "BPMNDataAssociationFlow"
   | "Component"
   | "ComponentSubsystem"
   | "FlowchartTerminal"
@@ -104,19 +88,29 @@ type PopoverType =
   | "BPMNDataStore"
   | "BPMNPool"
   | "BPMNGroup"
-  | "BPMNTask"
-  | "BPMNStartEvent"
-  | "BPMNIntermediateEvent"
-  | "BPMNEndEvent"
-  | "BPMNGateway"
-  | "BPMNSubprocess"
-  | "BPMNTransaction"
-  | "BPMNCallActivity"
-  | "BPMNAnnotation"
-  | "BPMNDataObject"
-  | "BPMNDataStore"
-  | "BPMNPool"
-  | "BPMNGroup"
+
+type EdgePopoverType =
+  | "ClassAggregation"
+  | "ClassInheritance"
+  | "ClassRealization"
+  | "ClassComposition"
+  | "ClassBidirectional"
+  | "ClassUnidirectional"
+  | "ClassDependency"
+  | "ActivityControlFlow"
+  | "UseCaseAssociation"
+  | "UseCaseInclude"
+  | "UseCaseExtend"
+  | "UseCaseGeneralization"
+  | "ComponentDependency"
+  | "ComponentProvidedInterface"
+  | "ComponentRequiredInterface"
+  | "BPMNSequenceFlow"
+  | "BPMNMessageFlow"
+  | "BPMNAssociationFlow"
+  | "BPMNDataAssociationFlow"
+
+type PopoverType = NodePopoverType | EdgePopoverType
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -389,7 +383,7 @@ const seeFeedbackPopovers: {
   BPMNAssociationFlow: EdgeSeeFeedbackPopover,
   BPMNDataAssociationFlow: EdgeSeeFeedbackPopover,
   ComponentDependency: EdgeSeeFeedbackPopover,
- ComponentProvidedInterface: EdgeSeeFeedbackPopover,
+  ComponentProvidedInterface: EdgeSeeFeedbackPopover,
   ComponentRequiredInterface: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
@@ -488,7 +482,7 @@ export const PopoverManager = ({
 
   return Component ? (
     <GenericPopover
-      id={`popover-${elementId}-${type}`}
+      id={`popover-${elementId}`}
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}

@@ -1,11 +1,34 @@
-import { StepPathEdge, StepPathEdgeData } from "../pathTypes/StepPathEdge"
-
-import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
+import { StepPathEdge } from "../pathTypes/StepPathEdge"
 import { BaseEdgeProps } from "../GenericEdge"
+import { useDiagramStore } from "@/store/context"
+import { useShallow } from "zustand/shallow"
+import { useMemo } from "react"
+import { Position } from "@xyflow/react"
 
 interface ComponentDiagramEdgeProps extends BaseEdgeProps {
   allowMidpointDragging?: boolean
   enableReconnection?: boolean
+  enableStraightPath?: boolean
+}
+
+const arePositionsOpposite = (pos1: Position, pos2: Position): boolean => {
+  return (
+    (pos1 === Position.Left && pos2 === Position.Right) ||
+    (pos1 === Position.Right && pos2 === Position.Left) ||
+    (pos1 === Position.Top && pos2 === Position.Bottom) ||
+    (pos1 === Position.Bottom && pos2 === Position.Top)
+  )
+}
+
+const getPositionFromHandleId = (handleId: string | null): Position => {
+  if (!handleId) return Position.Right // default
+
+  if (handleId.includes("left")) return Position.Left
+  if (handleId.includes("right")) return Position.Right
+  if (handleId.includes("top")) return Position.Top
+  if (handleId.includes("bottom")) return Position.Bottom
+
+  return Position.Right
 }
 
 export const ComponentDiagramEdge = ({
@@ -24,11 +47,76 @@ export const ComponentDiagramEdge = ({
   data,
   allowMidpointDragging = true,
   enableReconnection = true,
+  enableStraightPath = false,
 }: ComponentDiagramEdgeProps) => {
+  const { edges } = useDiagramStore(
+    useShallow((state) => ({
+      edges: state.edges,
+    }))
+  )
+
+  const dynamicEdgeType = useMemo(() => {
+    if (type !== "ComponentRequiredInterface") {
+      return type
+    }
+
+    const currentRequiredInterfaces = edges.filter(
+      (edge) =>
+        edge.target === target && edge.type === "ComponentRequiredInterface"
+    )
+
+    const currentAllInterfaces = edges.filter(
+      (edge) =>
+        edge.target === target &&
+        (edge.type === "ComponentRequiredInterface" ||
+          edge.type === "ComponentProvidedInterface")
+    )
+
+    const currentTargetPosition = getPositionFromHandleId(targetHandleId!)
+    const hasOppositeRequiredInterface = currentRequiredInterfaces
+      .filter((edge) => edge.id !== id)
+      .some((otherEdge) => {
+        const otherPosition = getPositionFromHandleId(otherEdge.targetHandle!)
+        return arePositionsOpposite(currentTargetPosition, otherPosition)
+      })
+    switch (currentRequiredInterfaces.length) {
+      case 1:
+        if (currentAllInterfaces.length === currentRequiredInterfaces.length) {
+          return "ComponentRequiredInterface"
+        } else {
+          return "ComponentRequiredThreeQuarter"
+        }
+      case 2:
+        if (hasOppositeRequiredInterface) {
+          return "ComponentRequiredThreeQuarter"
+        } else {
+          return "ComponentRequiredQuarter"
+        }
+
+      default:
+        return "ComponentRequiredQuarter"
+    }
+  }, [
+    type,
+    target,
+    targetHandleId,
+    id,
+    edges,
+    edges.length,
+    JSON.stringify(
+      edges.map((e) => ({
+        id: e.id,
+        type: e.type,
+        target: e.target,
+        targetHandle: e.targetHandle,
+      }))
+    ),
+  ])
+
   return (
     <StepPathEdge
       id={id}
-      type={type}
+      type={dynamicEdgeType}
       source={source}
       target={target}
       sourceX={sourceX}
@@ -42,19 +130,7 @@ export const ComponentDiagramEdge = ({
       data={data}
       allowMidpointDragging={allowMidpointDragging}
       enableReconnection={enableReconnection}
-    >
-      {(edgeData: StepPathEdgeData) => (
-        <>
-       
-
-          <EdgeMiddleLabels
-            label={data?.label}
-            pathMiddlePosition={edgeData.pathMiddlePosition}
-            isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-            isUseCasePath={false}
-          />
-        </>
-      )}
-    </StepPathEdge>
+      enableStraightPath={enableStraightPath}
+    ></StepPathEdge>
   )
 }

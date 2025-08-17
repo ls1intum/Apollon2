@@ -37,11 +37,10 @@ const createUseCaseEdgeComponent = (
   return Component
 }
 
-// Factory function for component diagram edges
 export const createComponentEdgeComponent = (
   allowMidpointDragging: boolean = true
 ) => {
-  const Component = (props: any) => (
+  const Component = (props: ExtendedEdgeProps) => (
     <ComponentDiagramEdge
       {...props}
       allowMidpointDragging={allowMidpointDragging}
@@ -65,8 +64,7 @@ export const diagramEdgeTypes = {
   UseCaseGeneralization: createUseCaseEdgeComponent(false), // No relationship labels
   ComponentDependency: createComponentEdgeComponent(true), // Dashed line with arrow
   ComponentProvidedInterface: createComponentEdgeComponent(false), // Plain line to provided interface
-  ComponentRequiredInterface: createComponentEdgeComponent(false)
-  
+  ComponentRequiredInterface: createComponentEdgeComponent(false),
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes

@@ -1,6 +1,5 @@
 import {
   Box,
-  TextField,
   FormControl,
   InputLabel,
   Select,
@@ -9,7 +8,6 @@ import {
 } from "@mui/material"
 
 import { useReactFlow } from "@xyflow/react"
-import { CustomEdgeProps } from "@/edges/EdgeProps"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 
@@ -19,13 +17,11 @@ export const ComponentEdgeEditPopover: React.FC<PopoverProps> = ({
   const { getEdge, getNode } = useReactFlow()
 
   const edge = getEdge(elementId)
-  const { handleEdgeTypeChange, handleLabelChange } = useEdgePopOver(elementId)
+  const { handleEdgeTypeChange } = useEdgePopOver(elementId)
 
   if (!edge) {
     return null
   }
-
-  const edgeData = edge.data as CustomEdgeProps | undefined
   const sourceNode = getNode(edge.source)
   const targetNode = getNode(edge.target)
   const sourceName = (sourceNode?.data?.name as string) ?? "Source"
@@ -59,15 +55,6 @@ export const ComponentEdgeEditPopover: React.FC<PopoverProps> = ({
       <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
         {sourceName} → {targetName}
       </Typography>
-
-      <TextField
-        label="Edge Label"
-        value={edgeData?.label ?? ""}
-        onChange={(e) => handleLabelChange(e.target.value)}
-        size="small"
-        fullWidth
-        placeholder="Optional label for edge"
-      />
     </Box>
   )
 }

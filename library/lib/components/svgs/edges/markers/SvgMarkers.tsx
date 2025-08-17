@@ -107,82 +107,62 @@ export function SvgMarkers() {
             strokeWidth="1"
           />
         </marker>
-        {/* <marker
-          id="required-interface"
-          viewBox="0 0 20 20"
-          markerWidth="16"
-          markerHeight="20"
-          refX="0"
-          refY="10"
-          orient="auto"
-          markerUnits="strokeWidth"
-        > */}
-          {/* Half circle opening to the right - SVG will auto-rotate this */}
-          {/* <path
-            d="M0,2 A 8,8 0 0,0 0,18"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
-        </marker> */}
+
         {/* Required Interface - Semicircle */}
         <marker
           id="required-interface"
-          viewBox="0 0 20 20"
-          markerWidth="16"
-          markerHeight="20"
-          refX="0"
-          refY="10"
+          viewBox="0 0 36 36"
+          markerWidth="30"
+          markerHeight="36"
+          refX="2"
+          refY="18"
           orient="auto"
           markerUnits="strokeWidth"
         >
           <path
-            d="M 13 -13.5 a 1 1 0 0 0 0 27"
-      
+            d="M 18,2 A 16,16 0 0,0 18,34"
             fill="none"
             stroke="black"
-            strokeWidth="1.5"
+            strokeWidth="2"
           />
         </marker>
 
-        {/* Required Interface - Three Quarter Circle */}
         <marker
           id="required-interface-threequarter"
-          viewBox="0 0 20 20"
-          markerWidth="16"
-          markerHeight="20"
-          refX="0"
-          refY="10"
+          viewBox="-4 -13 16 26" // Extended to include negative coordinates
+          markerWidth="20" // Reasonable display size
+          markerHeight="26" // Matches the path height
+          refX="0" // Connect at the opening (left edge)
+          refY="0" // Connect at middle (Y=0 in this coordinate system)
           orient="auto"
           markerUnits="strokeWidth"
         >
           <path
-            d="M0,10 A 8,8 0 1,1 5.66,2.34"
+            d="M 8 -12.5 C -3.5 -7.5 -3.3 7.9 8 12.5"
             fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
+            stroke="black"
+            strokeWidth="2"
           />
         </marker>
 
         {/* Required Interface - Quarter Circle */}
         <marker
           id="required-interface-quarter"
-          viewBox="0 0 20 20"
-          markerWidth="16"
-          markerHeight="20"
-          refX="0"
-          refY="10"
+          viewBox="-2 -8 6 16" // Extended to include negative coordinates
+          markerWidth="16" // Display size
+          markerHeight="20" // Display size
+          refX="0" // Connect at the opening (left edge)
+          refY="0" // Connect at middle (Y=0 in this coordinate system)
           orient="auto"
           markerUnits="strokeWidth"
         >
           <path
-            d="M0,10 A 8,8 0 0,1 5.66,2.34"
+            d="M 2 -7.8 C -1.5 -3 -1.2 3.4 2 7.8"
             fill="none"
-            stroke="currentColor"
+            stroke="black"
             strokeWidth="1.5"
           />
         </marker>
-
       </defs>
     </svg>
   )

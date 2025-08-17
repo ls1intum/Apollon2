@@ -22,6 +22,7 @@ import {
 import {
   getEdgeMarkerStyles,
   findClosestHandle,
+  findClosestHandleForInterface,
   simplifySvgPath,
   removeDuplicatePoints,
   parseSvgPath,
@@ -33,10 +34,12 @@ import { useShallow } from "zustand/shallow"
 import { IPoint, pointsToSvgPath, tryFindStraightPath } from "../Connection"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useToolbar } from "@/hooks"
+import { DiagramNodeTypeRecord } from "@/nodes"
 
 interface StepPathEdgeProps extends BaseEdgeProps {
   allowMidpointDragging?: boolean
   enableReconnection?: boolean
+  enableStraightPath?: boolean
   children?: React.ReactNode | ((edgeData: StepPathEdgeData) => React.ReactNode)
 }
 
@@ -64,6 +67,7 @@ export const StepPathEdge = ({
   data,
   allowMidpointDragging = true,
   enableReconnection = true,
+  enableStraightPath = false,
   children,
 }: StepPathEdgeProps) => {
   const draggingIndexRef = useRef<number | null>(null)
@@ -130,13 +134,7 @@ export const StepPathEdge = ({
   }, [targetNode, allNodes, targetX, targetY])
 
   const basePath = useMemo(() => {
-    const isActivityDiagram = type.startsWith("Activity")
-
-    if (isActivityDiagram) {
-      console.log(
-        `Activity diagram edge detected (${type}) - using step path only`
-      )
-
+    if (!enableStraightPath) {
       const adjustedTargetCoordinates = adjustTargetCoordinates(
         targetX,
         targetY,
@@ -522,7 +520,11 @@ export const StepPathEdge = ({
         document.removeEventListener("pointerup", handleEndpointPointerUp, {
           capture: true,
         })
-
+        if (targetNode.type == DiagramNodeTypeRecord.componentInterface) {
+          completeReconnection(upEvent, findClosestHandleForInterface, () => {
+            setCustomPoints([])
+          })
+        }
         completeReconnection(upEvent, findClosestHandle, () => {
           setCustomPoints([])
         })
