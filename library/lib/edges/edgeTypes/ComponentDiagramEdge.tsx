@@ -56,7 +56,6 @@ export const ComponentDiagramEdge = ({
   )
 
   const dynamicEdgeType = useMemo(() => {
-    console.log("EDGE type", type)
     if (type !== "ComponentRequiredInterface") {
       return type
     }
