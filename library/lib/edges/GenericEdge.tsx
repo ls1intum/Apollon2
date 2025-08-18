@@ -225,7 +225,7 @@ export const EdgeEndpointMarkers = ({
         className="source-edge-marker-grab"
         cx={sourcePoint.x}
         cy={sourcePoint.y}
-        r={pathType === "straight" ? 8 : 8}
+        r={pathType === "straight" ? 8 : 10}
         fill="transparent"
         stroke="transparent"
         strokeWidth={0}
@@ -237,7 +237,7 @@ export const EdgeEndpointMarkers = ({
         className="target-edge-marker-grab"
         cx={targetPoint.x}
         cy={targetPoint.y}
-        r={pathType === "straight" ? 8 : 8}
+        r={pathType === "straight" ? 8 : 10}
         fill="transparent"
         stroke="transparent"
         strokeWidth={0}

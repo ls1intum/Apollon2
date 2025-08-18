@@ -104,22 +104,14 @@ export const ApollonWithConnection: React.FC = () => {
   }, [diagramId, searchParams, setEditor])
 
   return (
-    <div className="flex  grow">
+    <div className="h-full">
       {isLoading && (
         <div className="flex grow justify-center  items-center ">
           Preparing the diagram for collaboration...
         </div>
       )}
 
-      <div
-        className={isLoading ? "invisible" : ""}
-        style={{
-          display: isLoading ? "none" : "flex",
-          flexGrow: 1,
-          height: "100%",
-        }}
-        ref={containerRef}
-      />
+      <div className={isLoading ? "invisible" : "h-full "} ref={containerRef} />
     </div>
   )
 }
