@@ -19,7 +19,8 @@ export const DeploymentEdgeEditPopover: React.FC<PopoverProps> = ({
   const { getEdge, getNode } = useReactFlow()
 
   const edge = getEdge(elementId)
-  const { handleEdgeTypeChange, handleLabelChange, handleSwap } = useEdgePopOver(elementId)
+  const { handleEdgeTypeChange, handleLabelChange, handleSwap } =
+    useEdgePopOver(elementId)
 
   if (!edge) {
     return null
@@ -38,10 +39,9 @@ export const DeploymentEdgeEditPopover: React.FC<PopoverProps> = ({
     { value: "DeploymentRequiredInterface", label: "Required Interface" },
   ]
 
-  
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        {handleSwap && (
+      {handleSwap && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
         </Box>

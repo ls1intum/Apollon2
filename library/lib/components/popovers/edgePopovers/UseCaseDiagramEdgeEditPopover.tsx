@@ -19,7 +19,8 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
   const { getEdge, getNode } = useReactFlow()
 
   const edge = getEdge(elementId)
-  const { handleEdgeTypeChange, handleLabelChange, handleSwap } = useEdgePopOver(elementId)
+  const { handleEdgeTypeChange, handleLabelChange, handleSwap } =
+    useEdgePopOver(elementId)
 
   if (!edge) {
     return null
