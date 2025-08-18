@@ -74,7 +74,7 @@ export const diagramEdgeTypes = {
   ClassUnidirectional: createClassEdgeComponent(true),
   ClassDependency: createClassEdgeComponent(true),
   ActivityControlFlow: createActivityEdgeComponent(true),
-  UseCaseAssociation: createUseCaseEdgeComponent(false), // No relationship labels
+  UseCaseAssociation: createUseCaseEdgeComponent(true), // No relationship labels
   UseCaseInclude: createUseCaseEdgeComponent(true), // Show <<include>>
   UseCaseExtend: createUseCaseEdgeComponent(true), // Show <<extend>>
   UseCaseGeneralization: createUseCaseEdgeComponent(false), // No relationship labels

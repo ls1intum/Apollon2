@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect, useRef } from "react"
+import { useCallback, useMemo, useEffect, useRef, useState } from "react"
 import React from "react"
 import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
 import {
@@ -14,7 +14,6 @@ import {
 import {
   BaseEdgeProps,
   useEdgeState,
-  useEdgePath,
   useEdgeReconnection,
   EdgeEndpointMarkers,
   CommonEdgeElements,
@@ -78,13 +77,16 @@ export const StepPathEdge = ({
   const { handleDelete } = useToolbar({ id })
   const { getNode, getNodes, screenToFlowPosition } = useReactFlow()
 
-  const { pathMiddlePosition, isMiddlePathHorizontal } = useEdgePath(
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    pathRef
-  )
+  const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>({
+    x: (sourceX + targetX) / 2,
+    y: (sourceY + targetY) / 2,
+  })
+  const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] =
+    useState<boolean>(true)
+
+  const [isPathReady, setIsPathReady] = useState(false)
+  const [hasInitialCalculation, setHasInitialCalculation] = useState(false)
+
   const {
     customPoints,
     setCustomPoints,
@@ -274,6 +276,9 @@ export const StepPathEdge = ({
       currentTargetPos.parentId !== prevTargetPos.parentId
 
     if (sourceChanged || targetChanged) {
+      // Reset path ready state when nodes move
+      setIsPathReady(false)
+
       prevNodePositionsRef.current = {
         source: currentSourcePos,
         target: currentTargetPos,
@@ -329,6 +334,48 @@ export const StepPathEdge = ({
     if (!allowMidpointDragging || activePoints.length < 3) return []
     return calculateInnerMidpoints(activePoints)
   }, [activePoints, allowMidpointDragging])
+
+  useEffect(() => {
+    if (pathRef.current && currentPath) {
+      const calculateMiddlePoint = () => {
+        if (!pathRef.current) return
+
+        try {
+          const totalLength = pathRef.current.getTotalLength()
+
+          if (totalLength > 0) {
+            const halfLength = totalLength / 2
+            const middlePoint = pathRef.current.getPointAtLength(halfLength)
+            const pointOnCloseToMiddle = pathRef.current.getPointAtLength(
+              halfLength + 2
+            )
+
+            const isHorizontal =
+              Math.abs(pointOnCloseToMiddle.x - middlePoint.x) >
+              Math.abs(pointOnCloseToMiddle.y - middlePoint.y)
+
+            setIsMiddlePathHorizontal(isHorizontal)
+            setPathMiddlePosition({ x: middlePoint.x, y: middlePoint.y })
+
+            if (!hasInitialCalculation) {
+              setHasInitialCalculation(true)
+            }
+            setIsPathReady(true)
+          }
+        } catch (error) {
+          console.warn("Path calculation error:", error)
+          setPathMiddlePosition({
+            x: (sourceX + targetX) / 2,
+            y: (sourceY + targetY) / 2,
+          })
+          setIsPathReady(true)
+        }
+      }
+      const timeoutId = setTimeout(calculateMiddlePoint, 0)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [currentPath, sourceX, sourceY, targetX, targetY, hasInitialCalculation])
 
   const handlePointerDown = useCallback(
     (event: React.PointerEvent, index: number) => {
@@ -520,7 +567,6 @@ export const StepPathEdge = ({
           capture: true,
         })
 
-        // Pass the findBestHandle function to completeReconnection
         completeReconnection(upEvent, findBestHandle, () => {
           setCustomPoints([])
         })
@@ -574,6 +620,9 @@ export const StepPathEdge = ({
     targetPoint,
   }
 
+  const shouldRenderInteractiveElements =
+    isPathReady || isReconnectingRef.current
+
   return (
     <>
       <g className="edge-container">
@@ -587,6 +636,9 @@ export const StepPathEdge = ({
             strokeDasharray: isReconnectingRef.current
               ? "4 4"
               : strokeDashArray,
+
+            transition: hasInitialCalculation ? "opacity 0.1s ease-in" : "none",
+            opacity: shouldRenderInteractiveElements ? 1 : 0.7,
           }}
         />
 
@@ -598,11 +650,15 @@ export const StepPathEdge = ({
           strokeWidth={12}
           pointerEvents="stroke"
           style={{
-            opacity: isReconnectingRef.current ? 0 : 0.4,
+            opacity: isReconnectingRef.current
+              ? 0
+              : shouldRenderInteractiveElements
+                ? 0.4
+                : 0.2,
           }}
         />
 
-        {enableReconnection && (
+        {enableReconnection && shouldRenderInteractiveElements && (
           <EdgeEndpointMarkers
             sourcePoint={sourcePoint}
             targetPoint={targetPoint}
@@ -617,6 +673,7 @@ export const StepPathEdge = ({
         {isDiagramModifiable &&
           !isReconnectingRef.current &&
           allowMidpointDragging &&
+          shouldRenderInteractiveElements &&
           midpoints.map((point, midPointIndex) => (
             <circle
               className="edge-circle"
@@ -627,23 +684,26 @@ export const StepPathEdge = ({
               r={10}
               fill="lightgray"
               stroke="none"
-              style={{ cursor: "grab" }}
+              style={{ cursor: "grab", zIndex: 9999 }}
               onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
             />
           ))}
       </g>
-      {typeof children === "function" ? children(edgeData) : children}
-
-      <CommonEdgeElements
-        id={id}
-        pathMiddlePosition={pathMiddlePosition}
-        isDiagramModifiable={isDiagramModifiable}
-        assessments={assessments}
-        anchorRef={anchorRef}
-        handleDelete={handleDelete}
-        setPopOverElementId={setPopOverElementId}
-        type={type}
-      />
+      {shouldRenderInteractiveElements && (
+        <>
+          {typeof children === "function" ? children(edgeData) : children}
+          <CommonEdgeElements
+            id={id}
+            pathMiddlePosition={pathMiddlePosition}
+            isDiagramModifiable={isDiagramModifiable}
+            assessments={assessments}
+            anchorRef={anchorRef}
+            handleDelete={handleDelete}
+            setPopOverElementId={setPopOverElementId}
+            type={type}
+          />
+        </>
+      )}
     </>
   )
 }

@@ -56,7 +56,6 @@ export const DeploymentDiagramEdge = ({
       edges: state.edges,
     }))
   )
-
   const dynamicEdgeType = (() => {
     if (type !== "DeploymentRequiredInterface") {
       return type
@@ -124,7 +123,6 @@ export const DeploymentDiagramEdge = ({
           label={data?.label}
           pathMiddlePosition={edgeData.pathMiddlePosition}
           isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-          isUseCasePath={false}
           showRelationshipLabels={showRelationshipLabels}
         />
       )}

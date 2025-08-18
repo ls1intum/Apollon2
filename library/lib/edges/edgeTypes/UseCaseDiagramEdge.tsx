@@ -11,6 +11,7 @@ import {
 } from "@/utils/edgeUtils"
 import { MARKER_PADDING, SOURCE_CONNECTION_POINT_PADDING } from "@/constants"
 import { useMemo } from "react"
+import { EdgeIncludeExtendLabel } from "../labelTypes/EdgeIncludeExtendLabel"
 
 interface UseCaseEdgeProps extends BaseEdgeProps {
   showRelationshipLabels?: boolean
@@ -61,31 +62,16 @@ export const UseCaseEdge = ({
     id,
   ])
 
-  const labelMiddlePosition = useMemo(() => {
-    const { adjustedSource, adjustedTarget } = adjustedCoordinates
-
-    if (type === "UseCaseInclude" || type === "UseCaseExtend") {
-      const startX = adjustedSource.sourceX
-      const startY = adjustedSource.sourceY
-      const endX = adjustedTarget.targetX
-      const endY = adjustedTarget.targetY
-      const midX = (startX + endX) / 2
-      const midY = (startY + endY) / 2
-      return { x: midX, y: midY }
-    }
-
-    return {
-      x: (adjustedSource.sourceX + adjustedTarget.targetX) / 2,
-      y: (adjustedSource.sourceY + adjustedTarget.targetY) / 2,
-    }
-  }, [adjustedCoordinates, type, id])
-
   const relationshipType =
     type === "UseCaseInclude"
       ? "include"
       : type === "UseCaseExtend"
         ? "extend"
         : undefined
+
+  const showIncludeExtendLabel =
+    relationshipType === "include" || relationshipType === "extend"
+  const showMiddleLabel = !relationshipType
 
   return (
     <StraightPathEdge
@@ -104,22 +90,43 @@ export const UseCaseEdge = ({
       data={data}
     >
       {(edgeData: StraightPathEdgeData) => (
-        <EdgeMiddleLabels
-          label={data?.label}
-          pathMiddlePosition={labelMiddlePosition}
-          isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-          sourcePoint={{
-            x: adjustedCoordinates.adjustedSource.sourceX,
-            y: adjustedCoordinates.adjustedSource.sourceY,
-          }}
-          targetPoint={{
-            x: adjustedCoordinates.adjustedTarget.targetX,
-            y: adjustedCoordinates.adjustedTarget.targetY,
-          }}
-          isUseCasePath={true}
-          showRelationshipLabels={showRelationshipLabels}
-          relationshipType={relationshipType}
-        />
+        <>
+          {/* Show include/extend labels for include/extend relationships */}
+          {showIncludeExtendLabel && (
+            <EdgeIncludeExtendLabel
+              relationshipType={relationshipType}
+              pathMiddlePosition={edgeData.pathMiddlePosition}
+              sourcePoint={{
+                x: adjustedCoordinates.adjustedSource.sourceX,
+                y: adjustedCoordinates.adjustedSource.sourceY,
+              }}
+              targetPoint={{
+                x: adjustedCoordinates.adjustedTarget.targetX,
+                y: adjustedCoordinates.adjustedTarget.targetY,
+              }}
+              showRelationshipLabels={showRelationshipLabels}
+            />
+          )}
+
+          {/* Show middle label for association relationships */}
+          {showMiddleLabel && (
+            <EdgeMiddleLabels
+              label={data?.label}
+              pathMiddlePosition={edgeData.pathMiddlePosition}
+              isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
+              sourcePoint={{
+                x: adjustedCoordinates.adjustedSource.sourceX,
+                y: adjustedCoordinates.adjustedSource.sourceY,
+              }}
+              targetPoint={{
+                x: adjustedCoordinates.adjustedTarget.targetX,
+                y: adjustedCoordinates.adjustedTarget.targetY,
+              }}
+              showRelationshipLabels={showRelationshipLabels}
+              isUseCasePath={true}
+            />
+          )}
+        </>
       )}
     </StraightPathEdge>
   )

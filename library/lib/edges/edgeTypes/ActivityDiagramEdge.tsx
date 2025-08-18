@@ -50,7 +50,6 @@ export const ActivityDiagramEdge = ({
           label={data?.label}
           pathMiddlePosition={edgeData.pathMiddlePosition}
           isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-          isUseCasePath={false}
           showRelationshipLabels={true}
         />
       )}

@@ -63,7 +63,6 @@ export const ClassDiagramEdge = ({
             label={data?.label}
             pathMiddlePosition={edgeData.pathMiddlePosition}
             isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-            isUseCasePath={false}
           />
         </>
       )}

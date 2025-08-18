@@ -39,8 +39,9 @@ export const CustomEdgeToolbar = forwardRef(
             boxShadow: "0 0 4px 0 rgb(0 0 0 / .2)",
             opacity: 1,
             transition: "opacity 0.2s ease-in-out",
+            zIndex: 10000,
           }
-        : { opacity: 1 }
+        : { opacity: 1, zIndex: 10000 }
     }, [showToolbar])
 
     return (
@@ -70,6 +71,7 @@ export const CustomEdgeToolbar = forwardRef(
               WebkitTransform: "translateZ(0)",
               transform: "translateZ(0)",
               position: "relative",
+              zIndex: 10000,
             }}
           >
             <Box
