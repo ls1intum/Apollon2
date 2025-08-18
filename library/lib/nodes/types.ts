@@ -52,6 +52,14 @@ import {
   BPMNGroup,
 } from "./bpmn"
 import { ReachabilityGraphMarking } from "./reachabilityGraphDiagram"
+import {
+  SfcStart,
+  SfcStep,
+  SfcActionTable,
+  SfcTransitionBranch,
+  SfcJump,
+  SfcPreviewSpacer,
+} from "./sfcDiagram"
 
 export const diagramNodeTypes = {
   package: Package,
@@ -101,6 +109,12 @@ export const diagramNodeTypes = {
   bpmnPool: BPMNPool,
   bpmnGroup: BPMNGroup,
   reachabilityGraphMarking: ReachabilityGraphMarking,
+  sfcStart: SfcStart,
+  sfcStep: SfcStep,
+  sfcActionTable: SfcActionTable,
+  sfcTransitionBranch: SfcTransitionBranch,
+  sfcJump: SfcJump,
+  sfcPreviewSpacer: SfcPreviewSpacer,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -155,4 +169,10 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   bpmnPool: "bpmnPool",
   bpmnGroup: "bpmnGroup",
   reachabilityGraphMarking: "reachabilityGraphMarking",
+  sfcStart: "sfcStart",
+  sfcStep: "sfcStep",
+  sfcActionTable: "sfcActionTable",
+  sfcTransitionBranch: "sfcTransitionBranch",
+  sfcJump: "sfcJump",
+  sfcPreviewSpacer: "sfcPreviewSpacer",
 } as const

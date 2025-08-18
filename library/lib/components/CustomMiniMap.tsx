@@ -21,6 +21,12 @@ import {
   DeploymentComponentSVG,
   DeploymentArtifactSVG,
   DeploymentInterfaceSVG,
+  SfcStartNodeSVG,
+  SfcStepNodeSVG,
+  SfcActionTableNodeSVG,
+  SfcJumpNodeSVG,
+  SfcTransitionBranchNodeSVG,
+  SfcPreviewSpacerNodeSVG,
   FlowchartTerminalNodeSVG,
   FlowchartProcessNodeSVG,
   FlowchartDecisionNodeSVG,
@@ -324,6 +330,64 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "sfcStart":
+      return (
+        <SfcStartNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "sfcStep":
+      return (
+        <SfcStepNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "sfcActionTable":
+      return (
+        <SfcActionTableNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "sfcTransitionBranch":
+      return (
+        <SfcTransitionBranchNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "sfcJump":
+      return (
+        <SfcJumpNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
+          name={(nodeInfo.data.name as string) || ""}
+          svgAttributes={{ x, y }}
+        />
+      )
+    case "sfcPreviewSpacer":
+      return (
+        <SfcPreviewSpacerNodeSVG
+          width={nodeInfo.width ?? 0}
+          height={nodeInfo.height ?? 0}
+          id={`minimap_${id}`}
           svgAttributes={{ x, y }}
         />
       )

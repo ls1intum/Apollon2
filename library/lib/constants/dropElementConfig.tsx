@@ -45,6 +45,14 @@ import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
 import { DiagramNodeType } from "@/nodes"
 import { ReachabilityGraphMarkingSVG } from "@/components/svgs/nodes/reachabilityGraphDiagram/ReachabilityGraphMarkingSVG"
+import {
+  SfcStartNodeSVG,
+  SfcStepNodeSVG,
+  SfcJumpNodeSVG,
+  SfcTransitionBranchNodeSVG,
+  SfcActionTableNodeSVG,
+  SfcPreviewSpacerNodeSVG,
+} from "@/components"
 
 export * from "./layoutConstants"
 export const transformScale = 0.8
@@ -519,6 +527,57 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
         name: "Function Call",
       },
       svg: (props) => <FlowchartFunctionCallNodeSVG {...props} />,
+    },
+  ],
+  [UMLDiagramType.Sfc]: [
+    {
+      type: "sfcStart",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: { name: "Start" },
+      svg: (props) => <SfcStartNodeSVG {...props} />,
+    },
+    {
+      type: "sfcStep",
+      width: droppedElementWidth,
+      height: 70,
+      defaultData: { name: "Step" },
+      svg: (props) => <SfcStepNodeSVG {...props} />,
+    },
+    {
+      type: "sfcJump",
+      width: 80,
+      height: 20,
+      defaultData: { name: "Jump" },
+      svg: (props) => <SfcJumpNodeSVG {...props} />,
+      marginTop: 10,
+    },
+    {
+      type: "sfcTransitionBranch",
+      width: 20,
+      height: 20,
+      defaultData: { name: "" },
+      svg: (props) => <SfcTransitionBranchNodeSVG {...props} />,
+      marginTop: 10,
+    },
+    {
+      type: "sfcActionTable",
+      width: droppedElementWidth,
+      height: 30, // Header + one row
+      defaultData: {
+        name: "",
+        actionRows: [
+          { id: crypto.randomUUID(), identifier: "A", description: "Actions" },
+        ],
+      },
+      svg: (props) => <SfcActionTableNodeSVG {...props} />,
+    },
+    {
+      type: "sfcPreviewSpacer",
+      width: droppedElementWidth,
+      height: 30,
+      defaultData: {},
+      svg: (props) => <SfcPreviewSpacerNodeSVG {...props} />,
     },
   ],
 }

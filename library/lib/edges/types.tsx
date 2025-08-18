@@ -4,6 +4,7 @@ import { ActivityDiagramEdge } from "./edgeTypes/ActivityDiagramEdge"
 import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
+import { SfcDiagramEdge } from "./edgeTypes/SfcDiagramEdge"
 
 const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   const Component = (props: ExtendedEdgeProps) => (
@@ -49,6 +50,14 @@ export const createComponentEdgeComponent = (
   Component.displayName = `ComponentEdgeFactory(${allowMidpointDragging})`
   return Component
 }
+
+const createSfcEdgeComponent = (allowMidpointDragging: boolean = true) => {
+  const Component = (props: ExtendedEdgeProps) => (
+    <SfcDiagramEdge {...props} allowMidpointDragging={allowMidpointDragging} />
+  )
+  Component.displayName = `SfcEdgeFactory(${allowMidpointDragging})`
+  return Component
+}
 export const diagramEdgeTypes = {
   ClassAggregation: createClassEdgeComponent(true),
   ClassInheritance: createClassEdgeComponent(true),
@@ -67,6 +76,7 @@ export const diagramEdgeTypes = {
   ComponentRequiredInterface: createComponentEdgeComponent(false),
   ComponentRequiredThreeQuarterInterface: createComponentEdgeComponent(false), // Plain line to required interface
   ComponentRequiredQuarterInterface: createComponentEdgeComponent(false), // Plain line to required interface
+  SfcTransition: createSfcEdgeComponent(true), // SFC transition with crossbar
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes
