@@ -84,7 +84,7 @@ export const StepPathEdge = ({
   const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] =
     useState<boolean>(true)
 
-  const [isPathReady, setIsPathReady] = useState(false)
+
   const [hasInitialCalculation, setHasInitialCalculation] = useState(false)
 
   const {
@@ -276,8 +276,7 @@ export const StepPathEdge = ({
       currentTargetPos.parentId !== prevTargetPos.parentId
 
     if (sourceChanged || targetChanged) {
-      // Reset path ready state when nodes move
-      setIsPathReady(false)
+      
 
       prevNodePositionsRef.current = {
         source: currentSourcePos,
@@ -360,7 +359,7 @@ export const StepPathEdge = ({
             if (!hasInitialCalculation) {
               setHasInitialCalculation(true)
             }
-            setIsPathReady(true)
+        
           }
         } catch (error) {
           console.warn("Path calculation error:", error)
@@ -368,7 +367,7 @@ export const StepPathEdge = ({
             x: (sourceX + targetX) / 2,
             y: (sourceY + targetY) / 2,
           })
-          setIsPathReady(true)
+
         }
       }
       const timeoutId = setTimeout(calculateMiddlePoint, 0)
@@ -620,8 +619,6 @@ export const StepPathEdge = ({
     targetPoint,
   }
 
-  const shouldRenderInteractiveElements =
-    isPathReady || isReconnectingRef.current
 
   return (
     <>
@@ -638,7 +635,7 @@ export const StepPathEdge = ({
               : strokeDashArray,
 
             transition: hasInitialCalculation ? "opacity 0.1s ease-in" : "none",
-            opacity: shouldRenderInteractiveElements ? 1 : 0.7,
+            opacity:  1,
           }}
         />
 
@@ -652,13 +649,11 @@ export const StepPathEdge = ({
           style={{
             opacity: isReconnectingRef.current
               ? 0
-              : shouldRenderInteractiveElements
-                ? 0.4
-                : 0.2,
+                : 0.4,
           }}
         />
 
-        {enableReconnection && shouldRenderInteractiveElements && (
+        {enableReconnection &&  (
           <EdgeEndpointMarkers
             sourcePoint={sourcePoint}
             targetPoint={targetPoint}
@@ -673,7 +668,7 @@ export const StepPathEdge = ({
         {isDiagramModifiable &&
           !isReconnectingRef.current &&
           allowMidpointDragging &&
-          shouldRenderInteractiveElements &&
+          
           midpoints.map((point, midPointIndex) => (
             <circle
               className="edge-circle"
@@ -689,7 +684,7 @@ export const StepPathEdge = ({
             />
           ))}
       </g>
-      {shouldRenderInteractiveElements && (
+      {(
         <>
           {typeof children === "function" ? children(edgeData) : children}
           <CommonEdgeElements

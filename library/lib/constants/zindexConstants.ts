@@ -1,4 +1,4 @@
-// zIndex.ts
+
 export const ZINDEX_BASE = 0
 export const ZINDEX_HEADER_SWITCH = 1
 export const ZINDEX_MODAL = 9998

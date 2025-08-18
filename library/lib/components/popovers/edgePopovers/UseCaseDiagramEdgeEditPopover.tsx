@@ -7,7 +7,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material"
-
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps } from "@/edges/EdgeProps"
 import { useEdgePopOver } from "@/hooks"
@@ -19,7 +19,7 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
   const { getEdge, getNode } = useReactFlow()
 
   const edge = getEdge(elementId)
-  const { handleEdgeTypeChange, handleLabelChange } = useEdgePopOver(elementId)
+  const { handleEdgeTypeChange, handleLabelChange, handleSwap } = useEdgePopOver(elementId)
 
   if (!edge) {
     return null
@@ -41,6 +41,11 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
       {/* Edge type selection */}
+      {handleSwap && (
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
+        </Box>
+      )}
       <FormControl fullWidth size="small">
         <InputLabel id="edge-type-label">Edge Type</InputLabel>
         <Select
