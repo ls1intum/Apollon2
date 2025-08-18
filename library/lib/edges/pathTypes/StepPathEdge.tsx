@@ -132,10 +132,7 @@ export const StepPathEdge = ({
     if (!targetNode) return { x: targetX, y: targetY }
     return getPositionOnCanvas(targetNode, allNodes)
   }, [targetNode, allNodes, targetX, targetY])
-
-  const basePath = useMemo(() => {
-    if (!enableStraightPath) {
-      const adjustedTargetCoordinates = adjustTargetCoordinates(
+  const adjustedTargetCoordinates = adjustTargetCoordinates(
         targetX,
         targetY,
         targetPosition,
@@ -147,6 +144,9 @@ export const StepPathEdge = ({
         sourcePosition,
         SOURCE_CONNECTION_POINT_PADDING
       )
+  const basePath = useMemo(() => {
+    if (!enableStraightPath) {
+      
 
       const [edgePath] = getSmoothStepPath({
         sourceX: adjustedSourceCoordinates.sourceX,
@@ -180,19 +180,7 @@ export const StepPathEdge = ({
     if (straightPathPoints !== null) {
       return pointsToSvgPath(straightPathPoints)
     } else {
-      const adjustedTargetCoordinates = adjustTargetCoordinates(
-        targetX,
-        targetY,
-        targetPosition,
-        padding
-      )
-      const adjustedSourceCoordinates = adjustSourceCoordinates(
-        sourceX,
-        sourceY,
-        sourcePosition,
-        SOURCE_CONNECTION_POINT_PADDING
-      )
-
+      
       const [edgePath] = getSmoothStepPath({
         sourceX: adjustedSourceCoordinates.sourceX,
         sourceY: adjustedSourceCoordinates.sourceY,

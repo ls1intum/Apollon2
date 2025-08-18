@@ -180,6 +180,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
   switch (edgeType) {
     case "ClassBidirectional":
     case "DeploymentAssociation":
+    case "ObjectLink":
       return {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "0",
@@ -678,6 +679,8 @@ export const getDefaultEdgeType = (
       return "ComponentDependency"
     case "DeploymentDiagram":
       return "DeploymentAssociation"
+    case "ObjectDiagram":
+      return "ObjectLink"
     default:
       return "ClassUnidirectional"
   }

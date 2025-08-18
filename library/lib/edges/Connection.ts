@@ -4,6 +4,7 @@
  * It calculates port positions based solely on a node's width and height.
  */
 
+import { ARROW_MARKER_PADDING, MARKER_PADDING } from "@/constants"
 import { Position } from "@xyflow/react"
 
 export interface IPoint {
@@ -66,7 +67,7 @@ export function tryFindStraightPath(
   },
   targetPadding: number
 ): IPoint[] | null {
-  const offset = targetPadding === -5 ? 0 : targetPadding === 6 ? 10 : 15
+  const offset = targetPadding === MARKER_PADDING ? 0 : targetPadding === ARROW_MARKER_PADDING ? 10 : 15
   const OVERLAP_THRESHOLD = 40
   const sourceHandleEdge = source.direction
   const targetHandleEdge = target.direction

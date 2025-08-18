@@ -5,6 +5,7 @@ import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ExtendedEdgeProps } from "./EdgeProps"
 import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
 import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
+import { ObjectDiagramEdge } from "./edgeTypes/ObjectDiagramEdge"
 
 const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   const Component = (props: ExtendedEdgeProps) => (
@@ -65,6 +66,23 @@ export const createDeploymentEdgeComponent = (
   Component.displayName = `DeploymentEdgeFactory(${allowMidpointDragging}${showRelationshipLabels})`
   return Component
 }
+
+export const createObjectEdgeComponent = (
+  allowMidpointDragging: boolean = true,
+  enableStraightPath: boolean = true,
+) => {
+  const Component = (props: ExtendedEdgeProps) => (
+    <ObjectDiagramEdge
+      {...props}
+      allowMidpointDragging={allowMidpointDragging}
+      enableStraightPath={enableStraightPath} 
+      
+    />
+  )
+  Component.displayName = `ObjectEdgeFactory(${allowMidpointDragging})`
+  return Component
+}
+
 export const diagramEdgeTypes = {
   ClassAggregation: createClassEdgeComponent(true),
   ClassInheritance: createClassEdgeComponent(true),
@@ -95,6 +113,7 @@ export const diagramEdgeTypes = {
     true,
     false
   ), // Plain line to required interface
+  ObjectLink: createObjectEdgeComponent(true,true), // Plain line like association, allow straight path
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes
