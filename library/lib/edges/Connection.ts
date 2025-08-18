@@ -67,7 +67,12 @@ export function tryFindStraightPath(
   },
   targetPadding: number
 ): IPoint[] | null {
-  const offset = targetPadding === MARKER_PADDING ? 0 : targetPadding === ARROW_MARKER_PADDING ? 10 : 15
+  const offset =
+    targetPadding === MARKER_PADDING
+      ? 0
+      : targetPadding === ARROW_MARKER_PADDING
+        ? 10
+        : 15
   const OVERLAP_THRESHOLD = 40
   const sourceHandleEdge = source.direction
   const targetHandleEdge = target.direction

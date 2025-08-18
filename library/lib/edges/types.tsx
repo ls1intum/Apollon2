@@ -69,14 +69,13 @@ export const createDeploymentEdgeComponent = (
 
 export const createObjectEdgeComponent = (
   allowMidpointDragging: boolean = true,
-  enableStraightPath: boolean = true,
+  enableStraightPath: boolean = true
 ) => {
   const Component = (props: ExtendedEdgeProps) => (
     <ObjectDiagramEdge
       {...props}
       allowMidpointDragging={allowMidpointDragging}
-      enableStraightPath={enableStraightPath} 
-      
+      enableStraightPath={enableStraightPath}
     />
   )
   Component.displayName = `ObjectEdgeFactory(${allowMidpointDragging})`
@@ -113,7 +112,7 @@ export const diagramEdgeTypes = {
     true,
     false
   ), // Plain line to required interface
-  ObjectLink: createObjectEdgeComponent(true,true), // Plain line like association, allow straight path
+  ObjectLink: createObjectEdgeComponent(true, true), // Plain line like association, allow straight path
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes
