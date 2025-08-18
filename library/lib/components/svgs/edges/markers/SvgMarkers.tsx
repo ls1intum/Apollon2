@@ -107,6 +107,62 @@ export function SvgMarkers() {
             strokeWidth="1"
           />
         </marker>
+
+        {/* Required Interface - Semicircle */}
+        <marker
+          id="required-interface"
+          viewBox="0 0 36 36"
+          markerWidth="30"
+          markerHeight="36"
+          refX="2"
+          refY="18"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M 18,2 A 16,16 0 0,0 18,34"
+            fill="none"
+            stroke="black"
+            strokeWidth="2"
+          />
+        </marker>
+
+        <marker
+          id="required-interface-threequarter"
+          viewBox="-4 -13 16 26" // Extended to include negative coordinates
+          markerWidth="20" // Reasonable display size
+          markerHeight="26" // Matches the path height
+          refX="0" // Connect at the opening (left edge)
+          refY="0" // Connect at middle (Y=0 in this coordinate system)
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M 8 -12.5 C -3.5 -7.5 -3.3 7.9 8 12.5"
+            fill="none"
+            stroke="black"
+            strokeWidth="2"
+          />
+        </marker>
+
+        {/* Required Interface - Quarter Circle */}
+        <marker
+          id="required-interface-quarter"
+          viewBox="-2 -8 6 16" // Extended to include negative coordinates
+          markerWidth="16" // Display size
+          markerHeight="20" // Display size
+          refX="0" // Connect at the opening (left edge)
+          refY="0" // Connect at middle (Y=0 in this coordinate system)
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M 2 -7.8 C -1.5 -3 -1.2 3.4 2 7.8"
+            fill="none"
+            stroke="black"
+            strokeWidth="1.5"
+          />
+        </marker>
       </defs>
     </svg>
   )

@@ -6,6 +6,7 @@ import { BaseEdgeProps } from "../GenericEdge"
 interface ClassDiagramEdgeProps extends BaseEdgeProps {
   allowMidpointDragging?: boolean
   enableReconnection?: boolean
+  enableStraightPath?: boolean
 }
 
 export const ClassDiagramEdge = ({
@@ -24,6 +25,7 @@ export const ClassDiagramEdge = ({
   data,
   allowMidpointDragging = true,
   enableReconnection = true,
+  enableStraightPath = true,
 }: ClassDiagramEdgeProps) => {
   return (
     <StepPathEdge
@@ -42,6 +44,7 @@ export const ClassDiagramEdge = ({
       data={data}
       allowMidpointDragging={allowMidpointDragging}
       enableReconnection={enableReconnection}
+      enableStraightPath={enableStraightPath}
     >
       {(edgeData: StepPathEdgeData) => (
         <>

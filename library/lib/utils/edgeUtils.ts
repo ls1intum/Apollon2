@@ -213,6 +213,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         strokeDashArray: "0",
         offset: 11,
       }
+    case "ComponentDependency":
     case "ClassDependency":
       return {
         markerPadding: DOTTED_ARROW_MARKER_PADDING,
@@ -278,6 +279,33 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         offset: 10,
       }
 
+    case "ComponentProvidedInterface":
+      return {
+        markerPadding: -2,
+        strokeDashArray: "0", // Plain line like association
+        offset: 0,
+      }
+    case "ComponentRequiredInterface":
+      return {
+        markerPadding: 2,
+        markerEnd: "url(#required-interface)",
+        strokeDashArray: "0",
+        offset: 0,
+      }
+    case "ComponentRequiredQuarterInterface":
+      return {
+        markerPadding: 2,
+        markerEnd: "url(#required-interface-quarter)",
+        strokeDashArray: "0",
+        offset: 0,
+      }
+    case "ComponentRequiredThreeQuarterInterface":
+      return {
+        markerPadding: 2,
+        markerEnd: "url(#required-interface-threequarter)",
+        strokeDashArray: "0",
+        offset: 0,
+      }
     default:
       return {
         markerPadding: MARKER_PADDING,
@@ -348,36 +376,38 @@ export function findClosestHandle(point: XYPosition, rect: Rect): string {
   return closest.label
 }
 
-/**
- * Enhanced handle positioning for use case diagrams with elliptical nodes
- */
-export function findClosestHandleForUseCase(
+export function findClosestHandleForInterface(
   point: XYPosition,
-  rect: Rect,
-  diagramType: "UseCase" | "Class" = "Class"
+  rect: Rect
 ): string {
-  if (diagramType === "UseCase") {
-    // For use case diagrams (elliptical nodes), calculate the best connection point
-    const centerX = rect.x + rect.width / 2
-    const centerY = rect.y + rect.height / 2
+  const points: { label: string; position: XYPosition }[] = [
+    { label: "top", position: { x: rect.x + rect.width / 2, y: rect.y } },
 
-    const angle = Math.atan2(point.y - centerY, point.x - centerX)
+    {
+      label: "bottom",
+      position: { x: rect.x + rect.width / 2, y: rect.y + rect.height },
+    },
 
-    // Convert to degrees and normalize (0-360)
-    const degrees = ((angle * 180) / Math.PI + 360) % 360
+    { label: "left", position: { x: rect.x, y: rect.y + rect.height / 2 } },
 
-    // For elliptical use case nodes, we can have 8 connection points
-    if (degrees >= 337.5 || degrees < 22.5) return "right"
-    if (degrees >= 22.5 && degrees < 67.5) return "bottom-right"
-    if (degrees >= 67.5 && degrees < 112.5) return "bottom"
-    if (degrees >= 112.5 && degrees < 157.5) return "bottom-left"
-    if (degrees >= 157.5 && degrees < 202.5) return "left"
-    if (degrees >= 202.5 && degrees < 247.5) return "top-left"
-    if (degrees >= 247.5 && degrees < 292.5) return "top"
-    return "top-right"
+    {
+      label: "right",
+      position: { x: rect.x + rect.width, y: rect.y + rect.height / 2 },
+    },
+  ]
+
+  let closest = points[0]
+  let minDist = distance(point, points[0].position)
+
+  for (const p of points) {
+    const d = distance(point, p.position)
+    if (d < minDist) {
+      minDist = d
+      closest = p
+    }
   }
 
-  return findClosestHandle(point, rect)
+  return closest.label
 }
 
 /**
@@ -638,6 +668,8 @@ export const getDefaultEdgeType = (
 
     case "UseCaseDiagram":
       return "UseCaseAssociation"
+    case "ComponentDiagram":
+      return "ComponentDependency"
     default:
       return "ClassUnidirectional"
   }

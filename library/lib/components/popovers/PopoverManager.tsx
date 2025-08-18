@@ -56,29 +56,14 @@ import {
   BPMNGatewayEditPopover,
   BPMNPoolEditPopover,
 } from "./bpmnDiagram"
+import { ComponentEdgeEditPopover } from "./edgePopovers/ComponentDiagramEdgeEditPopover"
 import { ReachabilityGraphMarkingEditPopover } from "./reachabilityGraphDiagram"
 
-type PopoverType =
+type NodePopoverType =
   | "class"
   | "objectName"
   | "communicationObjectName"
   | "default"
-  | "ClassAggregation"
-  | "ClassInheritance"
-  | "ClassRealization"
-  | "ClassComposition"
-  | "ClassBidirectional"
-  | "ClassUnidirectional"
-  | "ClassDependency"
-  | "ActivityControlFlow"
-  | "UseCaseAssociation"
-  | "UseCaseInclude"
-  | "UseCaseExtend"
-  | "UseCaseGeneralization"
-  | "BPMNSequenceFlow"
-  | "BPMNMessageFlow"
-  | "BPMNAssociationFlow"
-  | "BPMNDataAssociationFlow"
   | "Component"
   | "ComponentSubsystem"
   | "FlowchartTerminal"
@@ -104,20 +89,32 @@ type PopoverType =
   | "BPMNDataStore"
   | "BPMNPool"
   | "BPMNGroup"
-  | "BPMNTask"
-  | "BPMNStartEvent"
-  | "BPMNIntermediateEvent"
-  | "BPMNEndEvent"
-  | "BPMNGateway"
-  | "BPMNSubprocess"
-  | "BPMNTransaction"
-  | "BPMNCallActivity"
-  | "BPMNAnnotation"
-  | "BPMNDataObject"
-  | "BPMNDataStore"
-  | "BPMNPool"
-  | "BPMNGroup"
   | "ReachabilityGraphMarking"
+
+type EdgePopoverType =
+  | "ClassAggregation"
+  | "ClassInheritance"
+  | "ClassRealization"
+  | "ClassComposition"
+  | "ClassBidirectional"
+  | "ClassUnidirectional"
+  | "ClassDependency"
+  | "ActivityControlFlow"
+  | "UseCaseAssociation"
+  | "UseCaseInclude"
+  | "UseCaseExtend"
+  | "UseCaseGeneralization"
+  | "ComponentDependency"
+  | "ComponentProvidedInterface"
+  | "ComponentRequiredInterface"
+  | "ComponentRequiredThreeQuarterInterface"
+  | "ComponentRequiredQuarterInterface"
+  | "BPMNSequenceFlow"
+  | "BPMNMessageFlow"
+  | "BPMNAssociationFlow"
+  | "BPMNDataAssociationFlow"
+
+type PopoverType = NodePopoverType | EdgePopoverType
 
 const editPopovers: {
   class: React.FC<PopoverProps>
@@ -140,6 +137,11 @@ const editPopovers: {
   BPMNMessageFlow: React.FC<PopoverProps>
   BPMNAssociationFlow: React.FC<PopoverProps>
   BPMNDataAssociationFlow: React.FC<PopoverProps>
+  ComponentDependency: React.FC<PopoverProps>
+  ComponentProvidedInterface: React.FC<PopoverProps>
+  ComponentRequiredInterface: React.FC<PopoverProps>
+  ComponentRequiredThreeQuarterInterface: React.FC<PopoverProps>
+  ComponentRequiredQuarterInterface: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -187,6 +189,11 @@ const editPopovers: {
   BPMNMessageFlow: EdgeEditPopover,
   BPMNAssociationFlow: EdgeEditPopover,
   BPMNDataAssociationFlow: EdgeEditPopover,
+  ComponentDependency: ComponentEdgeEditPopover,
+  ComponentProvidedInterface: ComponentEdgeEditPopover,
+  ComponentRequiredInterface: ComponentEdgeEditPopover,
+  ComponentRequiredThreeQuarterInterface: ComponentEdgeEditPopover,
+  ComponentRequiredQuarterInterface: ComponentEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
   FlowchartTerminal: DefaultNodeEditPopover,
@@ -236,6 +243,11 @@ const giveFeedbackPopovers: {
   BPMNMessageFlow: React.FC<PopoverProps>
   BPMNAssociationFlow: React.FC<PopoverProps>
   BPMNDataAssociationFlow: React.FC<PopoverProps>
+  ComponentDependency: React.FC<PopoverProps>
+  ComponentProvidedInterface: React.FC<PopoverProps>
+  ComponentRequiredInterface: React.FC<PopoverProps>
+  ComponentRequiredThreeQuarterInterface: React.FC<PopoverProps>
+  ComponentRequiredQuarterInterface: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -283,6 +295,11 @@ const giveFeedbackPopovers: {
   BPMNMessageFlow: EdgeGiveFeedbackPopover,
   BPMNAssociationFlow: EdgeGiveFeedbackPopover,
   BPMNDataAssociationFlow: EdgeGiveFeedbackPopover,
+  ComponentDependency: EdgeGiveFeedbackPopover,
+  ComponentProvidedInterface: EdgeGiveFeedbackPopover,
+  ComponentRequiredInterface: EdgeGiveFeedbackPopover,
+  ComponentRequiredThreeQuarterInterface: EdgeGiveFeedbackPopover,
+  ComponentRequiredQuarterInterface: EdgeGiveFeedbackPopover,
   Component: DefaultNodeGiveFeedbackPopover,
   ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
   FlowchartTerminal: DefaultNodeGiveFeedbackPopover,
@@ -332,6 +349,11 @@ const seeFeedbackPopovers: {
   BPMNMessageFlow: React.FC<PopoverProps>
   BPMNAssociationFlow: React.FC<PopoverProps>
   BPMNDataAssociationFlow: React.FC<PopoverProps>
+  ComponentDependency: React.FC<PopoverProps>
+  ComponentProvidedInterface: React.FC<PopoverProps>
+  ComponentRequiredInterface: React.FC<PopoverProps>
+  ComponentRequiredThreeQuarterInterface: React.FC<PopoverProps>
+  ComponentRequiredQuarterInterface: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -379,6 +401,11 @@ const seeFeedbackPopovers: {
   BPMNMessageFlow: EdgeSeeFeedbackPopover,
   BPMNAssociationFlow: EdgeSeeFeedbackPopover,
   BPMNDataAssociationFlow: EdgeSeeFeedbackPopover,
+  ComponentDependency: EdgeSeeFeedbackPopover,
+  ComponentProvidedInterface: EdgeSeeFeedbackPopover,
+  ComponentRequiredInterface: EdgeSeeFeedbackPopover,
+  ComponentRequiredThreeQuarterInterface: EdgeSeeFeedbackPopover,
+  ComponentRequiredQuarterInterface: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
   FlowchartTerminal: DefaultNodeSeeFeedbackPopover,
@@ -477,7 +504,7 @@ export const PopoverManager = ({
 
   return Component ? (
     <GenericPopover
-      id={`popover-${elementId}-${type}`}
+      id={`popover-${elementId}`}
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}

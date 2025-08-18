@@ -21,7 +21,6 @@ import {
 } from "../GenericEdge"
 import {
   getEdgeMarkerStyles,
-  findClosestHandle,
   simplifySvgPath,
   removeDuplicatePoints,
   parseSvgPath,
@@ -33,10 +32,12 @@ import { useShallow } from "zustand/shallow"
 import { IPoint, pointsToSvgPath, tryFindStraightPath } from "../Connection"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useToolbar } from "@/hooks"
+import { useHandleFinder } from "@/hooks"
 
 interface StepPathEdgeProps extends BaseEdgeProps {
   allowMidpointDragging?: boolean
   enableReconnection?: boolean
+  enableStraightPath?: boolean
   children?: React.ReactNode | ((edgeData: StepPathEdgeData) => React.ReactNode)
 }
 
@@ -64,6 +65,7 @@ export const StepPathEdge = ({
   data,
   allowMidpointDragging = true,
   enableReconnection = true,
+  enableStraightPath = false,
   children,
 }: StepPathEdgeProps) => {
   const draggingIndexRef = useRef<number | null>(null)
@@ -97,6 +99,7 @@ export const StepPathEdge = ({
     completeReconnection,
   } = useEdgeReconnection(id, source, target, sourceHandleId, targetHandleId)
 
+  const { findBestHandle } = useHandleFinder()
   const { setEdges, assessments } = useDiagramStore(
     useShallow((state) => ({
       setEdges: state.setEdges,
@@ -130,13 +133,7 @@ export const StepPathEdge = ({
   }, [targetNode, allNodes, targetX, targetY])
 
   const basePath = useMemo(() => {
-    const isActivityDiagram = type.startsWith("Activity")
-
-    if (isActivityDiagram) {
-      console.log(
-        `Activity diagram edge detected (${type}) - using step path only`
-      )
-
+    if (!enableStraightPath) {
       const adjustedTargetCoordinates = adjustTargetCoordinates(
         targetX,
         targetY,
@@ -523,7 +520,8 @@ export const StepPathEdge = ({
           capture: true,
         })
 
-        completeReconnection(upEvent, findClosestHandle, () => {
+        // Pass the findBestHandle function to completeReconnection
+        completeReconnection(upEvent, findBestHandle, () => {
           setCustomPoints([])
         })
       }

@@ -5,6 +5,7 @@ import { BaseEdgeProps } from "../GenericEdge"
 interface ActivityDiagramEdgeProps extends BaseEdgeProps {
   allowMidpointDragging?: boolean
   enableReconnection?: boolean
+  enableStraightPath?: boolean
 }
 
 export const ActivityDiagramEdge = ({
@@ -23,6 +24,7 @@ export const ActivityDiagramEdge = ({
   data,
   allowMidpointDragging = true,
   enableReconnection = true,
+  enableStraightPath = false,
 }: ActivityDiagramEdgeProps) => {
   return (
     <StepPathEdge
@@ -41,6 +43,7 @@ export const ActivityDiagramEdge = ({
       data={data}
       allowMidpointDragging={allowMidpointDragging}
       enableReconnection={enableReconnection}
+      enableStraightPath={enableStraightPath}
     >
       {(edgeData: StepPathEdgeData) => (
         <EdgeMiddleLabels
