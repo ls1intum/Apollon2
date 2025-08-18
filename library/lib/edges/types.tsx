@@ -6,6 +6,7 @@ import { ExtendedEdgeProps } from "./EdgeProps"
 import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
 import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
 import { ObjectDiagramEdge } from "./edgeTypes/ObjectDiagramEdge"
+import { FlowChartEdge } from "./edgeTypes/FlowChartEdge"
 
 const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   const Component = (props: ExtendedEdgeProps) => (
@@ -26,6 +27,15 @@ const createActivityEdgeComponent = (allowMidpointDragging: boolean = true) => {
     />
   )
   Component.displayName = `ActivityDiagramEdgeFactory(${allowMidpointDragging})`
+  return Component
+}
+const createFlowChartEdgeComponent = (
+  allowMidpointDragging: boolean = true
+) => {
+  const Component = (props: ExtendedEdgeProps) => (
+    <FlowChartEdge {...props} allowMidpointDragging={allowMidpointDragging} />
+  )
+  Component.displayName = `FlowChartEdgeFactory(${allowMidpointDragging})`
   return Component
 }
 
@@ -113,6 +123,7 @@ export const diagramEdgeTypes = {
     false
   ), // Plain line to required interface
   ObjectLink: createObjectEdgeComponent(true, true), // Plain line like association, allow straight path
+  FlowChartFlowline: createFlowChartEdgeComponent(true), // Straight line with optional midpoint dragging
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes

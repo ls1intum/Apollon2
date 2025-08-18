@@ -60,6 +60,7 @@ import { ComponentEdgeEditPopover } from "./edgePopovers/ComponentDiagramEdgeEdi
 import { ReachabilityGraphMarkingEditPopover } from "./reachabilityGraphDiagram"
 import { DeploymentEdgeEditPopover } from "./edgePopovers/DeploymentDiagramEdgeEditPopover"
 import { ObjectDiagramEdgeEditPopover } from "./edgePopovers/ObjectDiagramEdgeEditPopover"
+import { FlowChartEdgeEditPopover } from "./edgePopovers/FlowChartEdgeEditPopover"
 
 type NodePopoverType =
   | "class"
@@ -122,6 +123,7 @@ type EdgePopoverType =
   | "DeploymentRequiredThreeQuarterInterface"
   | "DeploymentRequiredQuarterInterface"
   | "ObjectLink"
+  | "FlowChartFlowline"
 
 type PopoverType = NodePopoverType | EdgePopoverType
 
@@ -158,6 +160,7 @@ const editPopovers: {
   DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
   ObjectLink: React.FC<PopoverProps>
+  FlowChartFlowline: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -217,6 +220,7 @@ const editPopovers: {
   DeploymentRequiredThreeQuarterInterface: DeploymentEdgeEditPopover,
   DeploymentRequiredQuarterInterface: DeploymentEdgeEditPopover,
   ObjectLink: ObjectDiagramEdgeEditPopover,
+  FlowChartFlowline: FlowChartEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
   FlowchartTerminal: DefaultNodeEditPopover,
@@ -278,6 +282,7 @@ const giveFeedbackPopovers: {
   DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
   ObjectLink: React.FC<PopoverProps>
+  FlowChartFlowline: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -337,6 +342,7 @@ const giveFeedbackPopovers: {
   DeploymentRequiredThreeQuarterInterface: EdgeGiveFeedbackPopover,
   DeploymentRequiredQuarterInterface: EdgeGiveFeedbackPopover,
   ObjectLink: EdgeGiveFeedbackPopover,
+  FlowChartFlowline: EdgeGiveFeedbackPopover,
   Component: DefaultNodeGiveFeedbackPopover,
   ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
   FlowchartTerminal: DefaultNodeGiveFeedbackPopover,
@@ -398,6 +404,7 @@ const seeFeedbackPopovers: {
   DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
   ObjectLink: React.FC<PopoverProps>
+  FlowChartFlowline: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -457,6 +464,7 @@ const seeFeedbackPopovers: {
   DeploymentRequiredThreeQuarterInterface: EdgeSeeFeedbackPopover,
   DeploymentRequiredQuarterInterface: EdgeSeeFeedbackPopover,
   ObjectLink: EdgeSeeFeedbackPopover,
+  FlowChartFlowline: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
   FlowchartTerminal: DefaultNodeSeeFeedbackPopover,
