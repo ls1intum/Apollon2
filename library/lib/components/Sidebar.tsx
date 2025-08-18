@@ -7,6 +7,7 @@ import { DividerLine } from "./DividerLine"
 import { useMetadataStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { DraggableGhost } from "./DraggableGhost"
+import { ZINDEX_DRAGGABLE_GHOST } from "@/constants/zindexConstants"
 
 /* ========================================================================
    Sidebar Component
@@ -47,7 +48,7 @@ export const Sidebar = () => {
               style={{
                 width: config.width * transformScale,
                 height: config.height * transformScale,
-                zIndex: 2,
+                zIndex: ZINDEX_DRAGGABLE_GHOST,
                 marginTop: config.marginTop,
               }}
             >

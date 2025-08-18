@@ -1,3 +1,4 @@
+import { ZINDEX_LABEL } from "@/constants/zindexConstants"
 import { IPoint } from "../Connection"
 import { EdgeLabelRenderer } from "@xyflow/react"
 
@@ -52,8 +53,8 @@ export const EdgeMiddleLabels = ({
 
     transform = `translate(${middleX}px, ${middleY}px) translate(-50%, -50%) rotate(${rotation}deg)`
   } else {
-    offsetX = isMiddlePathHorizontal ? +30 : -30
-    offsetY = isMiddlePathHorizontal ? +30 : -30
+    offsetX = isMiddlePathHorizontal ? 0 : 10
+    offsetY = isMiddlePathHorizontal ? +20 : 0
 
     transform = `translate(${pathMiddlePosition.x + offsetX}px, ${pathMiddlePosition.y + offsetY}px) translate(-50%, -50%)`
   }
@@ -70,7 +71,7 @@ export const EdgeMiddleLabels = ({
           transformOrigin: "center center",
           whiteSpace: "nowrap",
           pointerEvents: "none",
-          zIndex: 9998,
+          zIndex: ZINDEX_LABEL,
         }}
         className="nodrag nopan"
       >
