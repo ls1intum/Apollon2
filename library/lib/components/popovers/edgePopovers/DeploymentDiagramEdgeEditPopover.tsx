@@ -31,7 +31,7 @@ export const DeploymentEdgeEditPopover: React.FC<PopoverProps> = ({
   const sourceName = (sourceNode?.data?.name as string) ?? "Source"
   const targetName = (targetNode?.data?.name as string) ?? "Target"
 
-  const useCaseEdgeTypeOptions = [
+  const deploymentEdgeTypeOptions = [
     { value: "DeploymentAssociation", label: "Deployment Association" },
     { value: "DeploymentDependency", label: "Deployment Dependency" },
     { value: "DeploymentProvidedInterface", label: "Provided Interface" },
@@ -50,7 +50,7 @@ export const DeploymentEdgeEditPopover: React.FC<PopoverProps> = ({
           label="Edge Type"
           onChange={(e) => handleEdgeTypeChange(e.target.value)}
         >
-          {useCaseEdgeTypeOptions.map((option) => (
+          {deploymentEdgeTypeOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
