@@ -7,6 +7,7 @@ import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
 import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
 import { ObjectDiagramEdge } from "./edgeTypes/ObjectDiagramEdge"
 import { FlowChartEdge } from "./edgeTypes/FlowChartEdge"
+import { SyntaxTreeEdge } from "./edgeTypes/SyntaxTreeEdge"
 
 const createClassEdgeComponent = (allowMidpointDragging: boolean = true) => {
   const Component = (props: ExtendedEdgeProps) => (
@@ -46,6 +47,12 @@ const createUseCaseEdgeComponent = (
     <UseCaseEdge {...props} showRelationshipLabels={showRelationshipLabels} />
   )
   Component.displayName = `UseCaseEdgeFactory(${showRelationshipLabels})`
+  return Component
+}
+
+const createSyntaxTreeEdgeComponent = () => {
+  const Component = (props: ExtendedEdgeProps) => <SyntaxTreeEdge {...props} />
+  Component.displayName = `SyntaxTreeEdgeFactory()`
   return Component
 }
 
@@ -124,6 +131,7 @@ export const diagramEdgeTypes = {
   ), // Plain line to required interface
   ObjectLink: createObjectEdgeComponent(true, true), // Plain line like association, allow straight path
   FlowChartFlowline: createFlowChartEdgeComponent(true), // Straight line with optional midpoint dragging
+  SyntaxTreeLink: createSyntaxTreeEdgeComponent(), // Straight line with no special features
 } satisfies EdgeTypes
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes
