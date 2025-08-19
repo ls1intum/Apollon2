@@ -3,6 +3,8 @@ import React from "react"
 import { BaseEdge } from "@xyflow/react"
 import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
 import {
+  adjustSourceCoordinates,
+  adjustTargetCoordinates,
   calculateOverlayPath,
   calculateStraightPath,
   getEdgeMarkerStyles,
@@ -12,6 +14,7 @@ import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { useToolbar } from "@/hooks"
 import { IPoint } from "../Connection"
+import { MARKER_PADDING, SOURCE_CONNECTION_POINT_PADDING } from "@/constants"
 
 interface StraightPathEdgeProps extends BaseEdgeProps {
   children?:
@@ -31,8 +34,10 @@ export const StraightPathEdge = ({
   type,
   sourceX,
   sourceY,
+  sourcePosition,
   targetX,
   targetY,
+  targetPosition,
   children,
 }: StraightPathEdgeProps) => {
   const pathRef = useRef<SVGPathElement | null>(null)
@@ -63,14 +68,40 @@ export const StraightPathEdge = ({
 
   const { handleDelete } = useToolbar({ id })
 
-  const { markerEnd, strokeDashArray } = getEdgeMarkerStyles(type)
+  const { markerPadding, markerEnd, strokeDashArray } =
+    getEdgeMarkerStyles(type)
+  const padding = markerPadding ?? MARKER_PADDING
+  const adjustedTargetCoordinates = adjustTargetCoordinates(
+    targetX,
+    targetY,
+    targetPosition,
+    padding
+  )
+  const adjustedSourceCoordinates = adjustSourceCoordinates(
+    sourceX,
+    sourceY,
+    sourcePosition,
+    SOURCE_CONNECTION_POINT_PADDING
+  )
 
   const currentPath = useMemo(() => {
-    return calculateStraightPath(sourceX, sourceY, targetX, targetY, type)
+    return calculateStraightPath(
+      adjustedSourceCoordinates.sourceX,
+      adjustedSourceCoordinates.sourceY,
+      adjustedTargetCoordinates.targetX,
+      adjustedTargetCoordinates.targetY,
+      type
+    )
   }, [sourceX, sourceY, targetX, targetY, type])
 
   const overlayPath = useMemo(() => {
-    return calculateOverlayPath(sourceX, sourceY, targetX, targetY, type)
+    return calculateOverlayPath(
+      adjustedSourceCoordinates.sourceX,
+      adjustedSourceCoordinates.sourceY,
+      adjustedTargetCoordinates.targetX,
+      adjustedTargetCoordinates.targetY,
+      type
+    )
   }, [sourceX, sourceY, targetX, targetY, type])
 
   useEffect(() => {
@@ -113,7 +144,6 @@ export const StraightPathEdge = ({
     }
   }, [currentPath, sourceX, sourceY, targetX, targetY])
 
-  // Update position immediately when coordinates change (for smooth transitions)
   useEffect(() => {
     const middleX = (sourceX + targetX) / 2
     const middleY = (sourceY + targetY) / 2
