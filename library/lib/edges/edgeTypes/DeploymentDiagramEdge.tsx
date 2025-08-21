@@ -4,13 +4,7 @@ import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { Position } from "@xyflow/react"
-
-interface DeploymentDiagramEdgeProps extends BaseEdgeProps {
-  allowMidpointDragging?: boolean
-  enableReconnection?: boolean
-  enableStraightPath?: boolean
-  showRelationshipLabels?: boolean
-}
+import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 
 const arePositionsOpposite = (pos1: Position, pos2: Position): boolean => {
   return (
@@ -46,16 +40,25 @@ export const DeploymentDiagramEdge = ({
   sourceHandleId,
   targetHandleId,
   data,
-  allowMidpointDragging = true,
-  enableReconnection = true,
-  enableStraightPath = false,
-  showRelationshipLabels = false,
-}: DeploymentDiagramEdgeProps) => {
+}: BaseEdgeProps) => {
+  const config = useEdgeConfig(type as 
+    | 'DeploymentDependency'
+    | 'DeploymentProvidedInterface'
+    | 'DeploymentRequiredInterface'
+    | 'DeploymentRequiredThreeQuarterInterface'
+    | 'DeploymentRequiredQuarterInterface'
+  )
+  
+  // For deployment edges, config has both allowMidpointDragging and showRelationshipLabels
+  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
+  const showRelationshipLabels = 'showRelationshipLabels' in config ? config.showRelationshipLabels : false
+  
   const { edges } = useDiagramStore(
     useShallow((state) => ({
       edges: state.edges,
     }))
   )
+  
   const dynamicEdgeType = (() => {
     if (type !== "DeploymentRequiredInterface") {
       return type
@@ -115,8 +118,8 @@ export const DeploymentDiagramEdge = ({
       targetHandleId={targetHandleId}
       data={data}
       allowMidpointDragging={allowMidpointDragging}
-      enableReconnection={enableReconnection}
-      enableStraightPath={enableStraightPath}
+      enableReconnection={true}
+      enableStraightPath={false}
     >
       {(edgeData: StepPathEdgeData) => (
         <EdgeMiddleLabels

@@ -2,14 +2,8 @@ import { StepPathEdge } from "../pathTypes/StepPathEdge"
 import { BaseEdgeProps } from "../GenericEdge"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
-
 import { Position } from "@xyflow/react"
-
-interface ComponentDiagramEdgeProps extends BaseEdgeProps {
-  allowMidpointDragging?: boolean
-  enableReconnection?: boolean
-  enableStraightPath?: boolean
-}
+import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 
 const arePositionsOpposite = (pos1: Position, pos2: Position): boolean => {
   return (
@@ -45,10 +39,18 @@ export const ComponentDiagramEdge = ({
   sourceHandleId,
   targetHandleId,
   data,
-  allowMidpointDragging = true,
-  enableReconnection = true,
-  enableStraightPath = false,
-}: ComponentDiagramEdgeProps) => {
+}: BaseEdgeProps) => {
+  const config = useEdgeConfig(type as 
+    | 'ComponentDependency'
+    | 'ComponentProvidedInterface'
+    | 'ComponentRequiredInterface'
+    | 'ComponentRequiredThreeQuarterInterface'
+    | 'ComponentRequiredQuarterInterface'
+  )
+  
+  // For component edges, config has allowMidpointDragging
+  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
+  
   const { edges } = useDiagramStore(
     useShallow((state) => ({
       edges: state.edges,
@@ -114,8 +116,8 @@ export const ComponentDiagramEdge = ({
       targetHandleId={targetHandleId}
       data={data}
       allowMidpointDragging={allowMidpointDragging}
-      enableReconnection={enableReconnection}
-      enableStraightPath={enableStraightPath}
+      enableReconnection={true}
+      enableStraightPath={false}
     ></StepPathEdge>
   )
 }
