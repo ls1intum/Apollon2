@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useEffect, useRef, useState } from "react"
-import React from "react"
-import { BaseEdge, getSmoothStepPath, useReactFlow } from "@xyflow/react"
+import { getSmoothStepPath, useReactFlow } from "@xyflow/react"
 import {
   STEP_BOARDER_RADIUS,
   MARKER_PADDING,
@@ -11,13 +10,14 @@ import {
   adjustTargetCoordinates,
   getPositionOnCanvas,
 } from "@/utils"
+import { Position } from "@xyflow/react"
 import {
-  BaseEdgeProps,
-  useEdgeState,
-  useEdgeReconnection,
-  EdgeEndpointMarkers,
-  CommonEdgeElements,
-} from "../GenericEdge"
+  IPoint,
+  pointsToSvgPath,
+  tryFindStraightPath,
+} from "../edges/Connection"
+import { useDiagramStore } from "@/store/context"
+import { useShallow } from "zustand/shallow"
 import {
   getEdgeMarkerStyles,
   simplifySvgPath,
@@ -26,18 +26,27 @@ import {
   calculateInnerMidpoints,
   getMarkerSegmentPath,
 } from "@/utils/edgeUtils"
-import { useDiagramStore, usePopoverStore } from "@/store/context"
-import { useShallow } from "zustand/shallow"
-import { IPoint, pointsToSvgPath, tryFindStraightPath } from "../Connection"
-import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
-import { useToolbar } from "@/hooks"
-import { useHandleFinder } from "@/hooks"
+import { useEdgeState, useEdgeReconnection } from "../edges/GenericEdge"
+import { useDiagramModifiable } from "./useDiagramModifiable"
+import { useHandleFinder } from "./useHandleFinder"
 
-interface StepPathEdgeProps extends BaseEdgeProps {
+interface UseStepPathEdgeProps {
+  id: string
+  type: string
+  source: string
+  target: string
+  sourceX: number
+  sourceY: number
+  targetX: number
+  targetY: number
+  sourcePosition: Position
+  targetPosition: Position
+  sourceHandleId?: string | null
+  targetHandleId?: string | null
+  data?: { points?: IPoint[] }
   allowMidpointDragging?: boolean
   enableReconnection?: boolean
   enableStraightPath?: boolean
-  children?: React.ReactNode | ((edgeData: StepPathEdgeData) => React.ReactNode)
 }
 
 export interface StepPathEdgeData {
@@ -48,7 +57,7 @@ export interface StepPathEdgeData {
   targetPoint: IPoint
 }
 
-export const StepPathEdge = ({
+export const useStepPathEdge = ({
   id,
   type,
   source,
@@ -65,16 +74,13 @@ export const StepPathEdge = ({
   allowMidpointDragging = true,
   enableReconnection = true,
   enableStraightPath = false,
-  children,
-}: StepPathEdgeProps) => {
+}: UseStepPathEdgeProps) => {
   const draggingIndexRef = useRef<number | null>(null)
   const dragOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
   const pathRef = useRef<SVGPathElement | null>(null)
-  const anchorRef = useRef<SVGSVGElement | null>(null)
   const finalPointsRef = useRef<IPoint[]>([])
 
   const isDiagramModifiable = useDiagramModifiable()
-  const { handleDelete } = useToolbar({ id })
   const { getNode, getNodes, screenToFlowPosition } = useReactFlow()
 
   const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>({
@@ -83,7 +89,6 @@ export const StepPathEdge = ({
   })
   const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] =
     useState<boolean>(true)
-
   const [hasInitialCalculation, setHasInitialCalculation] = useState(false)
 
   const {
@@ -101,15 +106,10 @@ export const StepPathEdge = ({
   } = useEdgeReconnection(id, source, target, sourceHandleId, targetHandleId)
 
   const { findBestHandle } = useHandleFinder()
-  const { setEdges, assessments } = useDiagramStore(
+  const { setEdges } = useDiagramStore(
     useShallow((state) => ({
       setEdges: state.setEdges,
-      assessments: state.assessments,
     }))
-  )
-
-  const setPopOverElementId = usePopoverStore(
-    useShallow((state) => state.setPopOverElementId)
   )
 
   const {
@@ -206,7 +206,7 @@ export const StepPathEdge = ({
       return edgePath
     }
   }, [
-    type,
+    enableStraightPath,
     sourceAbsolutePosition,
     targetAbsolutePosition,
     sourceNode,
@@ -250,6 +250,7 @@ export const StepPathEdge = ({
     },
   })
 
+  // Reset custom points when nodes move
   useEffect(() => {
     const currentSourcePos = {
       x: sourceNode.position.x,
@@ -304,6 +305,7 @@ export const StepPathEdge = ({
     customPoints,
     id,
     setEdges,
+    setCustomPoints,
   ])
 
   const activePoints = useMemo(() => {
@@ -427,7 +429,14 @@ export const StepPathEdge = ({
       document.addEventListener("pointermove", handlePointerMove)
       document.addEventListener("pointerup", handlePointerUp, { once: true })
     },
-    [midpoints, activePoints, id, setEdges, allowMidpointDragging]
+    [
+      midpoints,
+      activePoints,
+      id,
+      setEdges,
+      allowMidpointDragging,
+      setCustomPoints,
+    ]
   )
 
   const handleEndpointPointerDown = useCallback(
@@ -597,6 +606,7 @@ export const StepPathEdge = ({
       targetAbsolutePosition,
       sourceNode,
       targetNode,
+      findBestHandle,
     ]
   )
 
@@ -614,82 +624,20 @@ export const StepPathEdge = ({
     targetPoint,
   }
 
-  return (
-    <>
-      <g className="edge-container">
-        <BaseEdge
-          id={id}
-          path={currentPath}
-          markerEnd={isReconnectingRef.current ? undefined : markerEnd}
-          pointerEvents="none"
-          style={{
-            stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
-            strokeDasharray: isReconnectingRef.current
-              ? "4 4"
-              : strokeDashArray,
-
-            transition: hasInitialCalculation ? "opacity 0.1s ease-in" : "none",
-            opacity: 1,
-          }}
-        />
-
-        <path
-          ref={pathRef}
-          className="edge-overlay"
-          d={overlayPath}
-          fill="none"
-          strokeWidth={12}
-          pointerEvents="stroke"
-          style={{
-            opacity: isReconnectingRef.current ? 0 : 0.4,
-          }}
-        />
-
-        {enableReconnection && (
-          <EdgeEndpointMarkers
-            sourcePoint={sourcePoint}
-            targetPoint={targetPoint}
-            isDiagramModifiable={isDiagramModifiable}
-            diagramType="step"
-            pathType="step"
-            onSourcePointerDown={(e) => handleEndpointPointerDown(e, "source")}
-            onTargetPointerDown={(e) => handleEndpointPointerDown(e, "target")}
-          />
-        )}
-
-        {isDiagramModifiable &&
-          !isReconnectingRef.current &&
-          allowMidpointDragging &&
-          midpoints.map((point, midPointIndex) => (
-            <circle
-              className="edge-circle"
-              pointerEvents="all"
-              key={`${id}-midpoint-${midPointIndex}`}
-              cx={point.x}
-              cy={point.y}
-              r={10}
-              fill="lightgray"
-              stroke="none"
-              style={{ cursor: "grab", zIndex: 9999 }}
-              onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
-            />
-          ))}
-      </g>
-      {
-        <>
-          {typeof children === "function" ? children(edgeData) : children}
-          <CommonEdgeElements
-            id={id}
-            pathMiddlePosition={pathMiddlePosition}
-            isDiagramModifiable={isDiagramModifiable}
-            assessments={assessments}
-            anchorRef={anchorRef}
-            handleDelete={handleDelete}
-            setPopOverElementId={setPopOverElementId}
-            type={type}
-          />
-        </>
-      }
-    </>
-  )
+  return {
+    pathRef,
+    edgeData,
+    currentPath,
+    overlayPath,
+    midpoints,
+    hasInitialCalculation,
+    isReconnectingRef,
+    markerEnd,
+    strokeDashArray,
+    handlePointerDown,
+    handleEndpointPointerDown,
+    sourcePoint,
+    targetPoint,
+    isDiagramModifiable,
+  }
 }
