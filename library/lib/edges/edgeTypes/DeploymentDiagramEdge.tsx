@@ -1,16 +1,18 @@
-import { StepPathEdge, StepPathEdgeData } from "../pathTypes/StepPathEdge"
-import { BaseEdgeProps } from "../GenericEdge"
-import { useDiagramStore } from "@/store/context"
+import { BaseEdge } from "@xyflow/react"
+import {
+  BaseEdgeProps,
+  EdgeEndpointMarkers,
+  CommonEdgeElements,
+} from "../GenericEdge"
+import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { Position } from "@xyflow/react"
-
-interface DeploymentDiagramEdgeProps extends BaseEdgeProps {
-  allowMidpointDragging?: boolean
-  enableReconnection?: boolean
-  enableStraightPath?: boolean
-  showRelationshipLabels?: boolean
-}
+import { useEdgeConfig } from "@/hooks/useEdgeConfig"
+import { useStepPathEdge } from "@/hooks/useStepPathEdge"
+import { useToolbar } from "@/hooks"
+import { useRef } from "react"
+import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
 const arePositionsOpposite = (pos1: Position, pos2: Position): boolean => {
   return (
@@ -46,16 +48,35 @@ export const DeploymentDiagramEdge = ({
   sourceHandleId,
   targetHandleId,
   data,
-  allowMidpointDragging = true,
-  enableReconnection = true,
-  enableStraightPath = false,
-  showRelationshipLabels = false,
-}: DeploymentDiagramEdgeProps) => {
-  const { edges } = useDiagramStore(
+}: BaseEdgeProps) => {
+  const anchorRef = useRef<SVGSVGElement | null>(null)
+  const { handleDelete } = useToolbar({ id })
+
+  const config = useEdgeConfig(
+    type as
+      | "DeploymentDependency"
+      | "DeploymentProvidedInterface"
+      | "DeploymentRequiredInterface"
+      | "DeploymentRequiredThreeQuarterInterface"
+      | "DeploymentRequiredQuarterInterface"
+  )
+
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const showRelationshipLabels =
+    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
+
+  const { edges, assessments } = useDiagramStore(
     useShallow((state) => ({
       edges: state.edges,
+      assessments: state.assessments,
     }))
   )
+
+  const setPopOverElementId = usePopoverStore(
+    useShallow((state) => state.setPopOverElementId)
+  )
+
   const dynamicEdgeType = (() => {
     if (type !== "DeploymentRequiredInterface") {
       return type
@@ -99,33 +120,116 @@ export const DeploymentDiagramEdge = ({
     }
   })()
 
+  const {
+    pathRef,
+    edgeData,
+    currentPath,
+    overlayPath,
+    midpoints,
+    hasInitialCalculation,
+    isReconnectingRef,
+    markerEnd,
+    strokeDashArray,
+    handlePointerDown,
+    handleEndpointPointerDown,
+    sourcePoint,
+    targetPoint,
+    isDiagramModifiable,
+  } = useStepPathEdge({
+    id,
+    type: dynamicEdgeType,
+    source,
+    target,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    sourceHandleId,
+    targetHandleId,
+    data,
+    allowMidpointDragging,
+    enableReconnection: true,
+    enableStraightPath: false,
+  })
+
   return (
-    <StepPathEdge
-      id={id}
-      type={dynamicEdgeType}
-      source={source}
-      target={target}
-      sourceX={sourceX}
-      sourceY={sourceY}
-      targetX={targetX}
-      targetY={targetY}
-      sourcePosition={sourcePosition}
-      targetPosition={targetPosition}
-      sourceHandleId={sourceHandleId}
-      targetHandleId={targetHandleId}
-      data={data}
-      allowMidpointDragging={allowMidpointDragging}
-      enableReconnection={enableReconnection}
-      enableStraightPath={enableStraightPath}
-    >
-      {(edgeData: StepPathEdgeData) => (
-        <EdgeMiddleLabels
-          label={data?.label}
-          pathMiddlePosition={edgeData.pathMiddlePosition}
-          isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-          showRelationshipLabels={showRelationshipLabels}
+    <>
+      <g className="edge-container">
+        <BaseEdge
+          id={id}
+          path={currentPath}
+          markerEnd={isReconnectingRef.current ? undefined : markerEnd}
+          pointerEvents="none"
+          style={{
+            stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
+            strokeDasharray: isReconnectingRef.current
+              ? "4 4"
+              : strokeDashArray,
+            transition: hasInitialCalculation ? "opacity 0.1s ease-in" : "none",
+            opacity: 1,
+          }}
         />
-      )}
-    </StepPathEdge>
+
+        <path
+          ref={pathRef}
+          className="edge-overlay"
+          d={overlayPath}
+          fill="none"
+          strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
+          pointerEvents="stroke"
+          style={{
+            opacity: isReconnectingRef.current ? 0 : 0.4,
+          }}
+        />
+
+        <EdgeEndpointMarkers
+          sourcePoint={sourcePoint}
+          targetPoint={targetPoint}
+          isDiagramModifiable={isDiagramModifiable}
+          diagramType="step"
+          pathType="step"
+          onSourcePointerDown={(e) => handleEndpointPointerDown(e, "source")}
+          onTargetPointerDown={(e) => handleEndpointPointerDown(e, "target")}
+        />
+
+        {isDiagramModifiable &&
+          !isReconnectingRef.current &&
+          allowMidpointDragging &&
+          midpoints.map((point, midPointIndex) => (
+            <circle
+              className="edge-circle"
+              pointerEvents="all"
+              key={`${id}-midpoint-${midPointIndex}`}
+              cx={point.x}
+              cy={point.y}
+              r={10}
+              fill="lightgray"
+              stroke="none"
+              style={{ cursor: "grab", zIndex: 9999 }}
+              onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
+            />
+          ))}
+      </g>
+
+      <EdgeMiddleLabels
+        label={data?.label}
+        pathMiddlePosition={edgeData.pathMiddlePosition}
+        isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
+        showRelationshipLabels={showRelationshipLabels}
+      />
+
+      <CommonEdgeElements
+        id={id}
+        pathMiddlePosition={edgeData.pathMiddlePosition}
+        isDiagramModifiable={isDiagramModifiable}
+        assessments={assessments}
+        anchorRef={anchorRef}
+        handleDelete={handleDelete}
+        setPopOverElementId={setPopOverElementId}
+        type={dynamicEdgeType}
+      />
+    </>
   )
 }
