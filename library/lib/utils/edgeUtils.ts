@@ -670,6 +670,9 @@ export const getDefaultEdgeType = (
       return "UseCaseAssociation"
     case "ComponentDiagram":
       return "ComponentDependency"
+
+    case "Sfc":
+      return "SfcTransition"
     default:
       return "ClassUnidirectional"
   }
