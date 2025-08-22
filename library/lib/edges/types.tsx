@@ -63,7 +63,7 @@ export const edgeConfig = {
   //FlowChart edge
   FlowChartFlowline: { allowMidpointDragging: true },
 
-  SyntaxTreeLink: { },
+  SyntaxTreeLink: {},
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
   UseCaseInclude: { showRelationshipLabels: true }, // Show <<include>>
