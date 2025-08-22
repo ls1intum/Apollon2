@@ -161,7 +161,6 @@ const editPopovers: {
   DeploymentRequiredInterface: React.FC<PopoverProps>
   DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
-  ObjectLink: React.FC<PopoverProps>
   FlowChartFlowline: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
@@ -222,7 +221,6 @@ const editPopovers: {
   DeploymentRequiredInterface: DeploymentEdgeEditPopover,
   DeploymentRequiredThreeQuarterInterface: DeploymentEdgeEditPopover,
   DeploymentRequiredQuarterInterface: DeploymentEdgeEditPopover,
-  ObjectLink: ObjectDiagramEdgeEditPopover,
   FlowChartFlowline: FlowChartEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
@@ -285,7 +283,6 @@ const giveFeedbackPopovers: {
   DeploymentRequiredInterface: React.FC<PopoverProps>
   DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
-  ObjectLink: React.FC<PopoverProps>
   FlowChartFlowline: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
@@ -346,7 +343,6 @@ const giveFeedbackPopovers: {
   DeploymentRequiredInterface: EdgeGiveFeedbackPopover,
   DeploymentRequiredThreeQuarterInterface: EdgeGiveFeedbackPopover,
   DeploymentRequiredQuarterInterface: EdgeGiveFeedbackPopover,
-  ObjectLink: EdgeGiveFeedbackPopover,
   FlowChartFlowline: EdgeGiveFeedbackPopover,
   Component: DefaultNodeGiveFeedbackPopover,
   ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
@@ -409,7 +405,6 @@ const seeFeedbackPopovers: {
   DeploymentRequiredInterface: React.FC<PopoverProps>
   DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
-  ObjectLink: React.FC<PopoverProps>
   FlowChartFlowline: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
@@ -470,7 +465,6 @@ const seeFeedbackPopovers: {
   DeploymentRequiredInterface: EdgeSeeFeedbackPopover,
   DeploymentRequiredThreeQuarterInterface: EdgeSeeFeedbackPopover,
   DeploymentRequiredQuarterInterface: EdgeSeeFeedbackPopover,
-  ObjectLink: EdgeSeeFeedbackPopover,
   FlowChartFlowline: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,

@@ -20,6 +20,8 @@ export const diagramEdgeTypes = {
 
   ObjectLink: ObjectDiagramEdge,
 
+  FlowChartFlowline: FlowChartEdge,
+
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
   UseCaseExtend: UseCaseEdge,
@@ -54,6 +56,9 @@ export const edgeConfig = {
 
   // Object edge
   ObjectLink: { allowMidpointDragging: true },
+
+  //FlowChart edge
+  FlowChartFlowline: { allowMidpointDragging: true },
 
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
