@@ -103,6 +103,7 @@ type EdgePopoverType =
   | "ClassUnidirectional"
   | "ClassDependency"
   | "ActivityControlFlow"
+  | "ObjectLink"
   | "UseCaseAssociation"
   | "UseCaseInclude"
   | "UseCaseExtend"
@@ -140,6 +141,7 @@ const editPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  ObjectLink: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -200,6 +202,7 @@ const editPopovers: {
   ClassUnidirectional: EdgeEditPopover,
   ClassDependency: EdgeEditPopover,
   ActivityControlFlow: ActivityDiagramEdgeEditPopover,
+  ObjectLink: ObjectDiagramEdgeEditPopover,
   UseCaseAssociation: UseCaseEdgeEditPopover,
   UseCaseInclude: UseCaseEdgeEditPopover,
   UseCaseExtend: UseCaseEdgeEditPopover,
@@ -262,6 +265,7 @@ const giveFeedbackPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  ObjectLink: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -322,6 +326,7 @@ const giveFeedbackPopovers: {
   ClassUnidirectional: EdgeGiveFeedbackPopover,
   ClassDependency: EdgeGiveFeedbackPopover,
   ActivityControlFlow: EdgeGiveFeedbackPopover,
+  ObjectLink: EdgeGiveFeedbackPopover,
   UseCaseAssociation: EdgeGiveFeedbackPopover,
   UseCaseInclude: EdgeGiveFeedbackPopover,
   UseCaseExtend: EdgeGiveFeedbackPopover,
@@ -384,6 +389,7 @@ const seeFeedbackPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  ObjectLink: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -444,6 +450,7 @@ const seeFeedbackPopovers: {
   ClassUnidirectional: EdgeSeeFeedbackPopover,
   ClassDependency: EdgeSeeFeedbackPopover,
   ActivityControlFlow: EdgeSeeFeedbackPopover,
+  ObjectLink: EdgeSeeFeedbackPopover,
   UseCaseAssociation: EdgeSeeFeedbackPopover,
   UseCaseInclude: EdgeSeeFeedbackPopover,
   UseCaseExtend: EdgeSeeFeedbackPopover,
