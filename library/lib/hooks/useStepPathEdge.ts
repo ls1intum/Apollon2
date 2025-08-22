@@ -333,7 +333,6 @@ export const useStepPathEdge = ({
     return calculateInnerMidpoints(activePoints)
   }, [activePoints, allowMidpointDragging])
 
-  // Calculate path middle position and orientation
   useEffect(() => {
     if (pathRef.current && currentPath) {
       const calculateMiddlePoint = () => {
@@ -626,30 +625,17 @@ export const useStepPathEdge = ({
   }
 
   return {
-    // Refs
     pathRef,
-
-    // Edge data
     edgeData,
-
-    // Path calculations
     currentPath,
     overlayPath,
     midpoints,
-
-    // State
     hasInitialCalculation,
     isReconnectingRef,
-
-    // Styling
     markerEnd,
     strokeDashArray,
-
-    // Event handlers
     handlePointerDown,
     handleEndpointPointerDown,
-
-    // Computed values
     sourcePoint,
     targetPoint,
     isDiagramModifiable,

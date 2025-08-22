@@ -8,10 +8,6 @@ import {
 import { useDiagramModifiable } from "./useDiagramModifiable"
 import { IPoint } from "../edges/Connection"
 
-interface UseStraightPathEdgeProps extends BaseEdgeProps {
-  // Add any additional props specific to straight path edges
-}
-
 export interface StraightPathEdgeData {
   pathMiddlePosition: IPoint
   isMiddlePathHorizontal: boolean
@@ -25,7 +21,7 @@ export const useStraightPathEdge = ({
   sourceY,
   targetX,
   targetY,
-}: UseStraightPathEdgeProps) => {
+}: BaseEdgeProps) => {
   const pathRef = useRef<SVGPathElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
 
@@ -112,21 +108,12 @@ export const useStraightPathEdge = ({
   }
 
   return {
-    // Refs
     pathRef,
-
-    // Edge data
     edgeData,
-
-    // Path calculations
     currentPath,
     overlayPath,
-
-    // Styling
     markerEnd,
     strokeDashArray,
-
-    // Computed values
     sourcePoint,
     targetPoint,
     isDiagramModifiable,
