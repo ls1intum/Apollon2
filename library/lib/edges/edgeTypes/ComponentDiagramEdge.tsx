@@ -61,7 +61,6 @@ export const ComponentDiagramEdge = ({
       | "ComponentRequiredQuarterInterface"
   )
 
-
   // For component edges, config has allowMidpointDragging
   const allowMidpointDragging =
     "allowMidpointDragging" in config ? config.allowMidpointDragging : true
