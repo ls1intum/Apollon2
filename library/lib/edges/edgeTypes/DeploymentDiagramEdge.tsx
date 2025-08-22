@@ -1,7 +1,8 @@
-import { StepPathEdge } from "../pathTypes/StepPathEdge"
+import { StepPathEdge, StepPathEdgeData } from "../pathTypes/StepPathEdge"
 import { BaseEdgeProps } from "../GenericEdge"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
+import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { Position } from "@xyflow/react"
 import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 
@@ -25,7 +26,7 @@ const getPositionFromHandleId = (handleId: string | null): Position => {
   return Position.Right
 }
 
-export const ComponentDiagramEdge = ({
+export const DeploymentDiagramEdge = ({
   id,
   type,
   source,
@@ -42,16 +43,17 @@ export const ComponentDiagramEdge = ({
 }: BaseEdgeProps) => {
   const config = useEdgeConfig(
     type as
-      | "ComponentDependency"
-      | "ComponentProvidedInterface"
-      | "ComponentRequiredInterface"
-      | "ComponentRequiredThreeQuarterInterface"
-      | "ComponentRequiredQuarterInterface"
+      | "DeploymentDependency"
+      | "DeploymentProvidedInterface"
+      | "DeploymentRequiredInterface"
+      | "DeploymentRequiredThreeQuarterInterface"
+      | "DeploymentRequiredQuarterInterface"
   )
 
-  // For component edges, config has allowMidpointDragging
   const allowMidpointDragging =
     "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const showRelationshipLabels =
+    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
 
   const { edges } = useDiagramStore(
     useShallow((state) => ({
@@ -60,20 +62,20 @@ export const ComponentDiagramEdge = ({
   )
 
   const dynamicEdgeType = (() => {
-    if (type !== "ComponentRequiredInterface") {
+    if (type !== "DeploymentRequiredInterface") {
       return type
     }
 
     const currentRequiredInterfaces = edges.filter(
       (edge) =>
-        edge.target === target && edge.type === "ComponentRequiredInterface"
+        edge.target === target && edge.type === "DeploymentRequiredInterface"
     )
 
     const currentAllInterfaces = edges.filter(
       (edge) =>
         edge.target === target &&
-        (edge.type === "ComponentRequiredInterface" ||
-          edge.type === "ComponentProvidedInterface")
+        (edge.type === "DeploymentRequiredInterface" ||
+          edge.type === "DeploymentProvidedInterface")
     )
 
     const currentTargetPosition = getPositionFromHandleId(targetHandleId!)
@@ -87,18 +89,18 @@ export const ComponentDiagramEdge = ({
     switch (currentRequiredInterfaces.length) {
       case 1:
         if (currentAllInterfaces.length === currentRequiredInterfaces.length) {
-          return "ComponentRequiredInterface"
+          return "DeploymentRequiredInterface"
         } else {
-          return "ComponentRequiredThreeQuarterInterface"
+          return "DeploymentRequiredThreeQuarterInterface"
         }
       case 2:
         if (hasOppositeRequiredInterface) {
-          return "ComponentRequiredThreeQuarterInterface"
+          return "DeploymentRequiredThreeQuarterInterface"
         } else {
-          return "ComponentRequiredQuarterInterface"
+          return "DeploymentRequiredQuarterInterface"
         }
       default:
-        return "ComponentRequiredQuarterInterface"
+        return "DeploymentRequiredQuarterInterface"
     }
   })()
 
@@ -120,6 +122,15 @@ export const ComponentDiagramEdge = ({
       allowMidpointDragging={allowMidpointDragging}
       enableReconnection={true}
       enableStraightPath={false}
-    ></StepPathEdge>
+    >
+      {(edgeData: StepPathEdgeData) => (
+        <EdgeMiddleLabels
+          label={data?.label}
+          pathMiddlePosition={edgeData.pathMiddlePosition}
+          isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
+          showRelationshipLabels={showRelationshipLabels}
+        />
+      )}
+    </StepPathEdge>
   )
 }

@@ -13,7 +13,7 @@ import { CustomEdgeProps } from "@/edges/EdgeProps"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 
-export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
+export const DeploymentEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,
 }) => {
   const { getEdge, getNode } = useReactFlow()
@@ -32,21 +32,21 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
   const sourceName = (sourceNode?.data?.name as string) ?? "Source"
   const targetName = (targetNode?.data?.name as string) ?? "Target"
 
-  const useCaseEdgeTypeOptions = [
-    { value: "UseCaseAssociation", label: "Association" },
-    { value: "UseCaseInclude", label: "Include" },
-    { value: "UseCaseExtend", label: "Extend" },
-    { value: "UseCaseGeneralization", label: "Generalization" },
+  const deploymentEdgeTypeOptions = [
+    { value: "DeploymentAssociation", label: "Deployment Association" },
+    { value: "DeploymentDependency", label: "Deployment Dependency" },
+    { value: "DeploymentProvidedInterface", label: "Provided Interface" },
+    { value: "DeploymentRequiredInterface", label: "Required Interface" },
   ]
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      {/* Edge type selection */}
       {handleSwap && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
         </Box>
       )}
+      {/* Edge type selection */}
       <FormControl fullWidth size="small">
         <InputLabel id="edge-type-label">Edge Type</InputLabel>
         <Select
@@ -56,7 +56,7 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
           label="Edge Type"
           onChange={(e) => handleEdgeTypeChange(e.target.value)}
         >
-          {useCaseEdgeTypeOptions.map((option) => (
+          {deploymentEdgeTypeOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
@@ -70,7 +70,7 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
       </Typography>
 
       {/* Show label input only for associations */}
-      {edge.type === "UseCaseAssociation" && (
+      {edge.type === "DeploymentAssociation" && (
         <TextField
           label="Edge Label"
           value={edgeData?.label ?? ""}

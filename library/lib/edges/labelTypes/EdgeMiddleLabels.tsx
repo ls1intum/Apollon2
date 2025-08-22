@@ -1,16 +1,15 @@
-import { EdgeLabel } from "@/components/EdgeLabel"
+import { ZINDEX_LABEL } from "@/constants/zindexConstants"
 import { IPoint } from "../Connection"
+import { EdgeLabelRenderer } from "@xyflow/react"
 
 interface EdgeMiddleLabelsProps {
   label?: string | null
   pathMiddlePosition: IPoint
   isMiddlePathHorizontal: boolean
-
   sourcePoint?: IPoint
   targetPoint?: IPoint
-  isUseCasePath?: boolean
   showRelationshipLabels?: boolean
-  relationshipType?: "include" | "extend"
+  isUseCasePath?: boolean
 }
 
 export const EdgeMiddleLabels = ({
@@ -19,60 +18,65 @@ export const EdgeMiddleLabels = ({
   isMiddlePathHorizontal,
   sourcePoint,
   targetPoint,
-  isUseCasePath = false,
   showRelationshipLabels = false,
-  relationshipType,
+  isUseCasePath = false,
 }: EdgeMiddleLabelsProps) => {
+  if (!label || !showRelationshipLabels) return null
+
+  let transform = ""
+  let offsetX = 0
+  let offsetY = 0
+
+  if (isUseCasePath && sourcePoint && targetPoint) {
+    const dx = targetPoint.x - sourcePoint.x
+    const dy = targetPoint.y - sourcePoint.y
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI)
+    let rotation = angle
+    if (angle > 90 || angle < -90) {
+      rotation = angle + 180
+    }
+
+    const offsetDistance = 15
+    const perpX = -dy
+    const perpY = dx
+    const perpLength = Math.sqrt(perpX * perpX + perpY * perpY)
+
+    if (perpLength > 0) {
+      const normalizedPerpX = perpX / perpLength
+      const normalizedPerpY = perpY / perpLength
+      offsetX = normalizedPerpX * offsetDistance
+      offsetY = normalizedPerpY * offsetDistance
+    }
+
+    const middleX = (sourcePoint.x + targetPoint.x) / 2 + offsetX
+    const middleY = (sourcePoint.y + targetPoint.y) / 2 + offsetY
+
+    transform = `translate(${middleX}px, ${middleY}px) translate(-50%, -50%) rotate(${rotation}deg)`
+  } else {
+    offsetX = isMiddlePathHorizontal ? 0 : 10
+    offsetY = isMiddlePathHorizontal ? +20 : 0
+
+    transform = `translate(${pathMiddlePosition.x + offsetX}px, ${pathMiddlePosition.y + offsetY}px) translate(-50%, -50%)`
+  }
+
   return (
-    <>
-      {label && pathMiddlePosition.x !== 0 && pathMiddlePosition.y !== 0 && (
-        <EdgeLabel
-          isMiddlePathHorizontal={isMiddlePathHorizontal}
-          pathMiddlePosition={pathMiddlePosition}
-          label={label}
-          sourcePoint={sourcePoint}
-          targetPoint={targetPoint}
-          isUseCasePath={isUseCasePath}
-        />
-      )}
-
-      {showRelationshipLabels &&
-        relationshipType &&
-        sourcePoint &&
-        targetPoint &&
-        (() => {
-          const dx = targetPoint.x - sourcePoint.x
-          const dy = targetPoint.y - sourcePoint.y
-          const angle = Math.atan2(dy, dx) * (180 / Math.PI)
-          let rotation = angle
-          if (angle > 90 || angle < -90) {
-            rotation = angle + 180
-          }
-
-          const middleX = (sourcePoint.x + targetPoint.x) / 2
-          const middleY = (sourcePoint.y + targetPoint.y) / 2
-
-          return (
-            <text
-              x={middleX}
-              y={middleY}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              transform={`rotate(${rotation}, ${middleX}, ${middleY})`}
-              className="edge-label"
-              style={{
-                fontSize: "12px",
-                fill: "black",
-                fontStyle: "italic",
-                userSelect: "none",
-                fontWeight: "bold",
-                pointerEvents: "none",
-              }}
-            >
-              {relationshipType === "include" ? "<<include>>" : "<<extend>>"}
-            </text>
-          )
-        })()}
-    </>
+    <EdgeLabelRenderer>
+      <div
+        style={{
+          position: "absolute",
+          transform: transform,
+          borderRadius: 5,
+          fontSize: 12,
+          fontWeight: 700,
+          transformOrigin: "center center",
+          whiteSpace: "nowrap",
+          pointerEvents: "none",
+          zIndex: ZINDEX_LABEL,
+        }}
+        className="nodrag nopan"
+      >
+        {label}
+      </div>
+    </EdgeLabelRenderer>
   )
 }

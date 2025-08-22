@@ -2,12 +2,7 @@ import { StepPathEdge, StepPathEdgeData } from "../pathTypes/StepPathEdge"
 import { EdgeEndLabels } from "../labelTypes/EdgeEndLabels"
 import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { BaseEdgeProps } from "../GenericEdge"
-
-interface ClassDiagramEdgeProps extends BaseEdgeProps {
-  allowMidpointDragging?: boolean
-  enableReconnection?: boolean
-  enableStraightPath?: boolean
-}
+import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 
 export const ClassDiagramEdge = ({
   id,
@@ -23,10 +18,25 @@ export const ClassDiagramEdge = ({
   sourceHandleId,
   targetHandleId,
   data,
-  allowMidpointDragging = true,
-  enableReconnection = true,
-  enableStraightPath = true,
-}: ClassDiagramEdgeProps) => {
+}: BaseEdgeProps) => {
+  const config = useEdgeConfig(
+    type as
+      | "ClassAggregation"
+      | "ClassInheritance"
+      | "ClassRealization"
+      | "ClassComposition"
+      | "ClassBidirectional"
+      | "ClassUnidirectional"
+      | "ClassDependency"
+  )
+
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const enableStraightPath =
+    "enableStraightPath" in config
+      ? (config.enableStraightPath as boolean)
+      : true
+
   return (
     <StepPathEdge
       id={id}
@@ -43,7 +53,7 @@ export const ClassDiagramEdge = ({
       targetHandleId={targetHandleId}
       data={data}
       allowMidpointDragging={allowMidpointDragging}
-      enableReconnection={enableReconnection}
+      enableReconnection={true}
       enableStraightPath={enableStraightPath}
     >
       {(edgeData: StepPathEdgeData) => (
@@ -58,12 +68,11 @@ export const ClassDiagramEdge = ({
             sourcePosition={sourcePosition}
             targetPosition={targetPosition}
           />
-
           <EdgeMiddleLabels
             label={data?.label}
             pathMiddlePosition={edgeData.pathMiddlePosition}
             isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-            isUseCasePath={false}
+            showRelationshipLabels={true}
           />
         </>
       )}

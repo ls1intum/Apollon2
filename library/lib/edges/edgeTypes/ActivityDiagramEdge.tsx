@@ -1,12 +1,7 @@
 import { StepPathEdge, StepPathEdgeData } from "../pathTypes/StepPathEdge"
 import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { BaseEdgeProps } from "../GenericEdge"
-
-interface ActivityDiagramEdgeProps extends BaseEdgeProps {
-  allowMidpointDragging?: boolean
-  enableReconnection?: boolean
-  enableStraightPath?: boolean
-}
+import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 
 export const ActivityDiagramEdge = ({
   id,
@@ -22,10 +17,12 @@ export const ActivityDiagramEdge = ({
   sourceHandleId,
   targetHandleId,
   data,
-  allowMidpointDragging = true,
-  enableReconnection = true,
-  enableStraightPath = false,
-}: ActivityDiagramEdgeProps) => {
+}: BaseEdgeProps) => {
+  const config = useEdgeConfig(type as "ActivityControlFlow")
+
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+
   return (
     <StepPathEdge
       id={id}
@@ -42,15 +39,15 @@ export const ActivityDiagramEdge = ({
       targetHandleId={targetHandleId}
       data={data}
       allowMidpointDragging={allowMidpointDragging}
-      enableReconnection={enableReconnection}
-      enableStraightPath={enableStraightPath}
+      enableReconnection={true}
+      enableStraightPath={false}
     >
       {(edgeData: StepPathEdgeData) => (
         <EdgeMiddleLabels
           label={data?.label}
           pathMiddlePosition={edgeData.pathMiddlePosition}
           isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-          isUseCasePath={false}
+          showRelationshipLabels={true}
         />
       )}
     </StepPathEdge>

@@ -58,6 +58,7 @@ import {
 } from "./bpmnDiagram"
 import { ComponentEdgeEditPopover } from "./edgePopovers/ComponentDiagramEdgeEditPopover"
 import { ReachabilityGraphMarkingEditPopover } from "./reachabilityGraphDiagram"
+import { DeploymentEdgeEditPopover } from "./edgePopovers/DeploymentDiagramEdgeEditPopover"
 
 type NodePopoverType =
   | "class"
@@ -113,6 +114,12 @@ type EdgePopoverType =
   | "BPMNMessageFlow"
   | "BPMNAssociationFlow"
   | "BPMNDataAssociationFlow"
+  | "DeploymentAssociation"
+  | "DeploymentDependency"
+  | "DeploymentProvidedInterface"
+  | "DeploymentRequiredInterface"
+  | "DeploymentRequiredThreeQuarterInterface"
+  | "DeploymentRequiredQuarterInterface"
 
 type PopoverType = NodePopoverType | EdgePopoverType
 
@@ -142,6 +149,12 @@ const editPopovers: {
   ComponentRequiredInterface: React.FC<PopoverProps>
   ComponentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   ComponentRequiredQuarterInterface: React.FC<PopoverProps>
+  DeploymentAssociation: React.FC<PopoverProps>
+  DeploymentDependency: React.FC<PopoverProps>
+  DeploymentProvidedInterface: React.FC<PopoverProps>
+  DeploymentRequiredInterface: React.FC<PopoverProps>
+  DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
+  DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -194,6 +207,12 @@ const editPopovers: {
   ComponentRequiredInterface: ComponentEdgeEditPopover,
   ComponentRequiredThreeQuarterInterface: ComponentEdgeEditPopover,
   ComponentRequiredQuarterInterface: ComponentEdgeEditPopover,
+  DeploymentAssociation: DeploymentEdgeEditPopover,
+  DeploymentDependency: DeploymentEdgeEditPopover,
+  DeploymentProvidedInterface: DeploymentEdgeEditPopover,
+  DeploymentRequiredInterface: DeploymentEdgeEditPopover,
+  DeploymentRequiredThreeQuarterInterface: DeploymentEdgeEditPopover,
+  DeploymentRequiredQuarterInterface: DeploymentEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
   FlowchartTerminal: DefaultNodeEditPopover,
@@ -248,6 +267,12 @@ const giveFeedbackPopovers: {
   ComponentRequiredInterface: React.FC<PopoverProps>
   ComponentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   ComponentRequiredQuarterInterface: React.FC<PopoverProps>
+  DeploymentAssociation: React.FC<PopoverProps>
+  DeploymentDependency: React.FC<PopoverProps>
+  DeploymentProvidedInterface: React.FC<PopoverProps>
+  DeploymentRequiredInterface: React.FC<PopoverProps>
+  DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
+  DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -300,6 +325,12 @@ const giveFeedbackPopovers: {
   ComponentRequiredInterface: EdgeGiveFeedbackPopover,
   ComponentRequiredThreeQuarterInterface: EdgeGiveFeedbackPopover,
   ComponentRequiredQuarterInterface: EdgeGiveFeedbackPopover,
+  DeploymentAssociation: EdgeGiveFeedbackPopover,
+  DeploymentDependency: EdgeGiveFeedbackPopover,
+  DeploymentProvidedInterface: EdgeGiveFeedbackPopover,
+  DeploymentRequiredInterface: EdgeGiveFeedbackPopover,
+  DeploymentRequiredThreeQuarterInterface: EdgeGiveFeedbackPopover,
+  DeploymentRequiredQuarterInterface: EdgeGiveFeedbackPopover,
   Component: DefaultNodeGiveFeedbackPopover,
   ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
   FlowchartTerminal: DefaultNodeGiveFeedbackPopover,
@@ -354,6 +385,12 @@ const seeFeedbackPopovers: {
   ComponentRequiredInterface: React.FC<PopoverProps>
   ComponentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   ComponentRequiredQuarterInterface: React.FC<PopoverProps>
+  DeploymentAssociation: React.FC<PopoverProps>
+  DeploymentDependency: React.FC<PopoverProps>
+  DeploymentProvidedInterface: React.FC<PopoverProps>
+  DeploymentRequiredInterface: React.FC<PopoverProps>
+  DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
+  DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -406,6 +443,12 @@ const seeFeedbackPopovers: {
   ComponentRequiredInterface: EdgeSeeFeedbackPopover,
   ComponentRequiredThreeQuarterInterface: EdgeSeeFeedbackPopover,
   ComponentRequiredQuarterInterface: EdgeSeeFeedbackPopover,
+  DeploymentAssociation: EdgeSeeFeedbackPopover,
+  DeploymentDependency: EdgeSeeFeedbackPopover,
+  DeploymentProvidedInterface: EdgeSeeFeedbackPopover,
+  DeploymentRequiredInterface: EdgeSeeFeedbackPopover,
+  DeploymentRequiredThreeQuarterInterface: EdgeSeeFeedbackPopover,
+  DeploymentRequiredQuarterInterface: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
   FlowchartTerminal: DefaultNodeSeeFeedbackPopover,

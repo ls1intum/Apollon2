@@ -1,3 +1,4 @@
+import { ZINDEX_TOOLTIP } from "@/constants/zindexConstants"
 import { IPoint } from "@/edges"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
@@ -39,8 +40,9 @@ export const CustomEdgeToolbar = forwardRef(
             boxShadow: "0 0 4px 0 rgb(0 0 0 / .2)",
             opacity: 1,
             transition: "opacity 0.2s ease-in-out",
+            zIndex: ZINDEX_TOOLTIP,
           }
-        : { opacity: 1 }
+        : { opacity: 1, zIndex: ZINDEX_TOOLTIP }
     }, [showToolbar])
 
     return (
@@ -48,8 +50,8 @@ export const CustomEdgeToolbar = forwardRef(
         ref={ref}
         width={32}
         height={56}
-        x={toolbarPosition.x}
-        y={toolbarPosition.y}
+        x={toolbarPosition.x + 20}
+        y={toolbarPosition.y + 20}
         style={foreignObjectStyle}
       >
         {showToolbar && (
@@ -70,6 +72,7 @@ export const CustomEdgeToolbar = forwardRef(
               WebkitTransform: "translateZ(0)",
               transform: "translateZ(0)",
               position: "relative",
+              zIndex: ZINDEX_TOOLTIP,
             }}
           >
             <Box
