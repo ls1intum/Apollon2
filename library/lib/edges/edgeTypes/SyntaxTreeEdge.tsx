@@ -1,9 +1,11 @@
-import { StraightPathEdge } from "../pathTypes/StraightPathEdge"
-import { BaseEdgeProps } from "../GenericEdge"
-
-interface SyntaxTreeEdgeProps extends BaseEdgeProps {
-  showRelationshipLabels?: boolean
-}
+import { BaseEdge } from "@xyflow/react"
+import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
+import { useStraightPathEdge } from "@/hooks/useStraightPathEdge"
+import { useDiagramStore, usePopoverStore } from "@/store/context"
+import { useShallow } from "zustand/shallow"
+import { useToolbar } from "@/hooks"
+import { useRef } from "react"
+import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
 export const SyntaxTreeEdge = ({
   id,
@@ -19,22 +21,79 @@ export const SyntaxTreeEdge = ({
   sourceHandleId,
   targetHandleId,
   data,
-}: SyntaxTreeEdgeProps) => {
+}: BaseEdgeProps) => {
+  const anchorRef = useRef<SVGSVGElement | null>(null)
+  const { handleDelete } = useToolbar({ id })
+
+  const { assessments } = useDiagramStore(
+    useShallow((state) => ({
+      assessments: state.assessments,
+    }))
+  )
+
+  const setPopOverElementId = usePopoverStore(
+    useShallow((state) => state.setPopOverElementId)
+  )
+
+  const {
+    pathRef,
+    edgeData,
+    currentPath,
+    overlayPath,
+    markerEnd,
+    strokeDashArray,
+    isDiagramModifiable,
+  } = useStraightPathEdge({
+    id,
+    type,
+    source,
+    target,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    sourceHandleId,
+    targetHandleId,
+    data,
+  })
+
   return (
-    <StraightPathEdge
-      id={id}
-      type={type}
-      source={source}
-      target={target}
-      sourceX={sourceX}
-      sourceY={sourceY}
-      targetX={targetX}
-      targetY={targetY}
-      sourcePosition={sourcePosition}
-      targetPosition={targetPosition}
-      sourceHandleId={sourceHandleId}
-      targetHandleId={targetHandleId}
-      data={data}
-    ></StraightPathEdge>
+    <>
+      <g className="edge-container">
+        <BaseEdge
+          id={id}
+          path={currentPath}
+          markerEnd={markerEnd}
+          pointerEvents="none"
+          style={{
+            stroke: "black",
+            strokeDasharray: strokeDashArray,
+          }}
+        />
+
+        <path
+          ref={pathRef}
+          className="edge-overlay"
+          d={overlayPath}
+          fill="none"
+          strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
+          pointerEvents="stroke"
+          style={{ opacity: 0.4 }}
+        />
+      </g>
+
+      <CommonEdgeElements
+        id={id}
+        pathMiddlePosition={edgeData.pathMiddlePosition}
+        isDiagramModifiable={isDiagramModifiable}
+        assessments={assessments}
+        anchorRef={anchorRef}
+        handleDelete={handleDelete}
+        setPopOverElementId={setPopOverElementId}
+        type={type}
+      />
+    </>
   )
 }

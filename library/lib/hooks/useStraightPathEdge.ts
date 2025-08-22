@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { BaseEdgeProps } from "../edges/GenericEdge"
 import {
-  adjustSourceCoordinates,
-  adjustTargetCoordinates,
   calculateOverlayPath,
   calculateStraightPath,
   getEdgeMarkerStyles,
@@ -21,7 +19,6 @@ export const useStraightPathEdge = ({
   type,
   sourceX,
   sourceY,
-  sourcePosition,
   targetX,
   targetY,
 }: BaseEdgeProps) => {
@@ -43,23 +40,11 @@ export const useStraightPathEdge = ({
   const { markerEnd, strokeDashArray } = getEdgeMarkerStyles(type)
 
   const currentPath = useMemo(() => {
-    return calculateStraightPath(
-      adjustedSourceCoordinates.sourceX,
-      adjustedSourceCoordinates.sourceY,
-      adjustedTargetCoordinates.targetX,
-      adjustedTargetCoordinates.targetY,
-      type
-    )
+    return calculateStraightPath(sourceX, sourceY, targetX, targetY, type)
   }, [sourceX, sourceY, targetX, targetY, type])
 
   const overlayPath = useMemo(() => {
-    return calculateOverlayPath(
-      adjustedSourceCoordinates.sourceX,
-      adjustedSourceCoordinates.sourceY,
-      adjustedTargetCoordinates.targetX,
-      adjustedTargetCoordinates.targetY,
-      type
-    )
+    return calculateOverlayPath(sourceX, sourceY, targetX, targetY, type)
   }, [sourceX, sourceY, targetX, targetY, type])
 
   useEffect(() => {
