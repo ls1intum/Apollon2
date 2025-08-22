@@ -19,19 +19,23 @@ export const ClassDiagramEdge = ({
   targetHandleId,
   data,
 }: BaseEdgeProps) => {
-  const config = useEdgeConfig(type as 
-    | 'ClassAggregation'
-    | 'ClassInheritance'
-    | 'ClassRealization'
-    | 'ClassComposition'
-    | 'ClassBidirectional'
-    | 'ClassUnidirectional'
-    | 'ClassDependency'
+  const config = useEdgeConfig(
+    type as
+      | "ClassAggregation"
+      | "ClassInheritance"
+      | "ClassRealization"
+      | "ClassComposition"
+      | "ClassBidirectional"
+      | "ClassUnidirectional"
+      | "ClassDependency"
   )
 
-
-  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
-  const enableStraightPath = 'enableStraightPath' in config ? config.enableStraightPath as boolean : true
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const enableStraightPath =
+    "enableStraightPath" in config
+      ? (config.enableStraightPath as boolean)
+      : true
 
   return (
     <StepPathEdge

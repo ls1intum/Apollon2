@@ -1,4 +1,7 @@
-import { StraightPathEdge, StraightPathEdgeData } from "../pathTypes/StraightPathEdge"
+import {
+  StraightPathEdge,
+  StraightPathEdgeData,
+} from "../pathTypes/StraightPathEdge"
 import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { EdgeIncludeExtendLabel } from "../labelTypes/EdgeIncludeExtendLabel"
 import { BaseEdgeProps } from "../GenericEdge"
@@ -19,13 +22,15 @@ export const UseCaseEdge = ({
   targetHandleId,
   data,
 }: BaseEdgeProps) => {
-  const config = useEdgeConfig(type as 
-    | 'UseCaseAssociation' 
-    | 'UseCaseInclude' 
-    | 'UseCaseExtend' 
-    | 'UseCaseGeneralization'
+  const config = useEdgeConfig(
+    type as
+      | "UseCaseAssociation"
+      | "UseCaseInclude"
+      | "UseCaseExtend"
+      | "UseCaseGeneralization"
   )
-  const showRelationshipLabels = 'showRelationshipLabels' in config ? config.showRelationshipLabels : false
+  const showRelationshipLabels =
+    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
 
   return (
     <StraightPathEdge
@@ -56,8 +61,16 @@ export const UseCaseEdge = ({
           />
 
           <EdgeIncludeExtendLabel
-            relationshipType={type === 'UseCaseInclude' ? 'include' : type === 'UseCaseExtend' ? 'extend' : undefined}
-            showRelationshipLabels={type === 'UseCaseInclude' || type === 'UseCaseExtend'}
+            relationshipType={
+              type === "UseCaseInclude"
+                ? "include"
+                : type === "UseCaseExtend"
+                  ? "extend"
+                  : undefined
+            }
+            showRelationshipLabels={
+              type === "UseCaseInclude" || type === "UseCaseExtend"
+            }
             pathMiddlePosition={edgeData.pathMiddlePosition}
             sourcePoint={edgeData.sourcePoint}
             targetPoint={edgeData.targetPoint}

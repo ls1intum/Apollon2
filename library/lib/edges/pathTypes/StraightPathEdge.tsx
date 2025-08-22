@@ -113,7 +113,6 @@ export const StraightPathEdge = ({
     }
   }, [currentPath, sourceX, sourceY, targetX, targetY])
 
-
   useEffect(() => {
     const middleX = (sourceX + targetX) / 2
     const middleY = (sourceY + targetY) / 2
@@ -151,27 +150,26 @@ export const StraightPathEdge = ({
           style={{ opacity: 0.4 }}
         />
       </g>
-     
-          {typeof children === "function"
-            ? children({
-                pathMiddlePosition,
-                isMiddlePathHorizontal,
-                sourcePoint,
-                targetPoint,
-              })
-            : children}
 
-          <CommonEdgeElements
-            id={id}
-            pathMiddlePosition={pathMiddlePosition}
-            isDiagramModifiable={isDiagramModifiable}
-            assessments={assessments}
-            anchorRef={anchorRef}
-            handleDelete={handleDelete}
-            setPopOverElementId={setPopOverElementId}
-            type={type}
-          />
-        </>
-      
+      {typeof children === "function"
+        ? children({
+            pathMiddlePosition,
+            isMiddlePathHorizontal,
+            sourcePoint,
+            targetPoint,
+          })
+        : children}
+
+      <CommonEdgeElements
+        id={id}
+        pathMiddlePosition={pathMiddlePosition}
+        isDiagramModifiable={isDiagramModifiable}
+        assessments={assessments}
+        anchorRef={anchorRef}
+        handleDelete={handleDelete}
+        setPopOverElementId={setPopOverElementId}
+        type={type}
+      />
+    </>
   )
 }

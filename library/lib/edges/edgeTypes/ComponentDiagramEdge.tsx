@@ -40,17 +40,19 @@ export const ComponentDiagramEdge = ({
   targetHandleId,
   data,
 }: BaseEdgeProps) => {
-  const config = useEdgeConfig(type as 
-    | 'ComponentDependency'
-    | 'ComponentProvidedInterface'
-    | 'ComponentRequiredInterface'
-    | 'ComponentRequiredThreeQuarterInterface'
-    | 'ComponentRequiredQuarterInterface'
+  const config = useEdgeConfig(
+    type as
+      | "ComponentDependency"
+      | "ComponentProvidedInterface"
+      | "ComponentRequiredInterface"
+      | "ComponentRequiredThreeQuarterInterface"
+      | "ComponentRequiredQuarterInterface"
   )
-  
+
   // For component edges, config has allowMidpointDragging
-  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
-  
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+
   const { edges } = useDiagramStore(
     useShallow((state) => ({
       edges: state.edges,

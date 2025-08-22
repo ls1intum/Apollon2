@@ -41,24 +41,26 @@ export const DeploymentDiagramEdge = ({
   targetHandleId,
   data,
 }: BaseEdgeProps) => {
-  const config = useEdgeConfig(type as 
-    | 'DeploymentDependency'
-    | 'DeploymentProvidedInterface'
-    | 'DeploymentRequiredInterface'
-    | 'DeploymentRequiredThreeQuarterInterface'
-    | 'DeploymentRequiredQuarterInterface'
+  const config = useEdgeConfig(
+    type as
+      | "DeploymentDependency"
+      | "DeploymentProvidedInterface"
+      | "DeploymentRequiredInterface"
+      | "DeploymentRequiredThreeQuarterInterface"
+      | "DeploymentRequiredQuarterInterface"
   )
-  
 
-  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
-  const showRelationshipLabels = 'showRelationshipLabels' in config ? config.showRelationshipLabels : false
-  
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const showRelationshipLabels =
+    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
+
   const { edges } = useDiagramStore(
     useShallow((state) => ({
       edges: state.edges,
     }))
   )
-  
+
   const dynamicEdgeType = (() => {
     if (type !== "DeploymentRequiredInterface") {
       return type

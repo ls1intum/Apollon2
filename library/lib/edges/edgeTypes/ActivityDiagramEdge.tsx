@@ -18,11 +18,10 @@ export const ActivityDiagramEdge = ({
   targetHandleId,
   data,
 }: BaseEdgeProps) => {
-  const config = useEdgeConfig(type as 
-    | 'ActivityControlFlow'
-  )
+  const config = useEdgeConfig(type as "ActivityControlFlow")
 
-  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
 
   return (
     <StepPathEdge
