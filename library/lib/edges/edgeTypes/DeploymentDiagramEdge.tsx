@@ -52,17 +52,20 @@ export const DeploymentDiagramEdge = ({
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
 
-  const config = useEdgeConfig(type as 
-    | 'DeploymentDependency'
-    | 'DeploymentProvidedInterface'
-    | 'DeploymentRequiredInterface'
-    | 'DeploymentRequiredThreeQuarterInterface'
-    | 'DeploymentRequiredQuarterInterface'
+  const config = useEdgeConfig(
+    type as
+      | "DeploymentDependency"
+      | "DeploymentProvidedInterface"
+      | "DeploymentRequiredInterface"
+      | "DeploymentRequiredThreeQuarterInterface"
+      | "DeploymentRequiredQuarterInterface"
   )
-  
-  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
-  const showRelationshipLabels = 'showRelationshipLabels' in config ? config.showRelationshipLabels : false
-  
+
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const showRelationshipLabels =
+    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
+
   const { edges, assessments } = useDiagramStore(
     useShallow((state) => ({
       edges: state.edges,
@@ -73,7 +76,7 @@ export const DeploymentDiagramEdge = ({
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
-  
+
   const dynamicEdgeType = (() => {
     if (type !== "DeploymentRequiredInterface") {
       return type
@@ -216,7 +219,7 @@ export const DeploymentDiagramEdge = ({
         isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
         showRelationshipLabels={showRelationshipLabels}
       />
-      
+
       <CommonEdgeElements
         id={id}
         pathMiddlePosition={edgeData.pathMiddlePosition}

@@ -11,7 +11,11 @@ import {
   getPositionOnCanvas,
 } from "@/utils"
 import { Position } from "@xyflow/react"
-import { IPoint, pointsToSvgPath, tryFindStraightPath } from "../edges/Connection"
+import {
+  IPoint,
+  pointsToSvgPath,
+  tryFindStraightPath,
+} from "../edges/Connection"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import {
@@ -83,7 +87,8 @@ export const useStepPathEdge = ({
     x: (sourceX + targetX) / 2,
     y: (sourceY + targetY) / 2,
   })
-  const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] = useState<boolean>(true)
+  const [isMiddlePathHorizontal, setIsMiddlePathHorizontal] =
+    useState<boolean>(true)
   const [hasInitialCalculation, setHasInitialCalculation] = useState(false)
 
   const {
@@ -425,7 +430,14 @@ export const useStepPathEdge = ({
       document.addEventListener("pointermove", handlePointerMove)
       document.addEventListener("pointerup", handlePointerUp, { once: true })
     },
-    [midpoints, activePoints, id, setEdges, allowMidpointDragging, setCustomPoints]
+    [
+      midpoints,
+      activePoints,
+      id,
+      setEdges,
+      allowMidpointDragging,
+      setCustomPoints,
+    ]
   )
 
   const handleEndpointPointerDown = useCallback(
@@ -616,27 +628,27 @@ export const useStepPathEdge = ({
   return {
     // Refs
     pathRef,
-    
+
     // Edge data
     edgeData,
-    
+
     // Path calculations
     currentPath,
     overlayPath,
     midpoints,
-    
+
     // State
     hasInitialCalculation,
     isReconnectingRef,
-    
+
     // Styling
     markerEnd,
     strokeDashArray,
-    
+
     // Event handlers
     handlePointerDown,
     handleEndpointPointerDown,
-    
+
     // Computed values
     sourcePoint,
     targetPoint,

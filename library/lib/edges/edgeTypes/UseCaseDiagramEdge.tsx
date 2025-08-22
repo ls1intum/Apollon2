@@ -1,8 +1,5 @@
 import { BaseEdge } from "@xyflow/react"
-import {
-  BaseEdgeProps,
-  CommonEdgeElements,
-} from "../GenericEdge"
+import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
 import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { EdgeIncludeExtendLabel } from "../labelTypes/EdgeIncludeExtendLabel"
 import { useEdgeConfig } from "@/hooks/useEdgeConfig"
@@ -31,13 +28,15 @@ export const UseCaseEdge = ({
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
 
-  const config = useEdgeConfig(type as 
-    | 'UseCaseAssociation' 
-    | 'UseCaseInclude' 
-    | 'UseCaseExtend' 
-    | 'UseCaseGeneralization'
+  const config = useEdgeConfig(
+    type as
+      | "UseCaseAssociation"
+      | "UseCaseInclude"
+      | "UseCaseExtend"
+      | "UseCaseGeneralization"
   )
-  const showRelationshipLabels = 'showRelationshipLabels' in config ? config.showRelationshipLabels : false
+  const showRelationshipLabels =
+    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
 
   const { assessments } = useDiagramStore(
     useShallow((state) => ({
@@ -109,8 +108,16 @@ export const UseCaseEdge = ({
       />
 
       <EdgeIncludeExtendLabel
-        relationshipType={type === 'UseCaseInclude' ? 'include' : type === 'UseCaseExtend' ? 'extend' : undefined}
-        showRelationshipLabels={type === 'UseCaseInclude' || type === 'UseCaseExtend'}
+        relationshipType={
+          type === "UseCaseInclude"
+            ? "include"
+            : type === "UseCaseExtend"
+              ? "extend"
+              : undefined
+        }
+        showRelationshipLabels={
+          type === "UseCaseInclude" || type === "UseCaseExtend"
+        }
         pathMiddlePosition={edgeData.pathMiddlePosition}
         sourcePoint={edgeData.sourcePoint}
         targetPoint={edgeData.targetPoint}

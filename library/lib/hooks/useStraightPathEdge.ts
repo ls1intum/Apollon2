@@ -114,18 +114,18 @@ export const useStraightPathEdge = ({
   return {
     // Refs
     pathRef,
-    
+
     // Edge data
     edgeData,
-    
+
     // Path calculations
     currentPath,
     overlayPath,
-    
+
     // Styling
     markerEnd,
     strokeDashArray,
-    
+
     // Computed values
     sourcePoint,
     targetPoint,

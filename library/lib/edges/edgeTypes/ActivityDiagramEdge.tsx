@@ -31,11 +31,10 @@ export const ActivityDiagramEdge = ({
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
 
-  const config = useEdgeConfig(type as 
-    | 'ActivityControlFlow'
-  )
+  const config = useEdgeConfig(type as "ActivityControlFlow")
 
-  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
 
   const { assessments } = useDiagramStore(
     useShallow((state) => ({
@@ -146,7 +145,7 @@ export const ActivityDiagramEdge = ({
         isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
         showRelationshipLabels={true}
       />
-      
+
       <CommonEdgeElements
         id={id}
         pathMiddlePosition={edgeData.pathMiddlePosition}

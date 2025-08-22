@@ -52,18 +52,21 @@ export const ComponentDiagramEdge = ({
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
 
-  const config = useEdgeConfig(type as 
-    | 'ComponentDependency'
-    | 'ComponentProvidedInterface'
-    | 'ComponentRequiredInterface'
-    | 'ComponentRequiredThreeQuarterInterface'
-    | 'ComponentRequiredQuarterInterface'
+  const config = useEdgeConfig(
+    type as
+      | "ComponentDependency"
+      | "ComponentProvidedInterface"
+      | "ComponentRequiredInterface"
+      | "ComponentRequiredThreeQuarterInterface"
+      | "ComponentRequiredQuarterInterface"
   )
-  
+
   // For component edges, config has allowMidpointDragging
-  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
-  const showRelationshipLabels = 'showRelationshipLabels' in config ? config.showRelationshipLabels : false
-  
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const showRelationshipLabels =
+    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
+
   const { edges, assessments } = useDiagramStore(
     useShallow((state) => ({
       edges: state.edges,
@@ -217,7 +220,7 @@ export const ComponentDiagramEdge = ({
         isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
         showRelationshipLabels={showRelationshipLabels}
       />
-      
+
       <CommonEdgeElements
         id={id}
         pathMiddlePosition={edgeData.pathMiddlePosition}

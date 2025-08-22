@@ -32,18 +32,23 @@ export const ClassDiagramEdge = ({
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
 
-  const config = useEdgeConfig(type as 
-    | 'ClassAggregation'
-    | 'ClassInheritance'
-    | 'ClassRealization'
-    | 'ClassComposition'
-    | 'ClassBidirectional'
-    | 'ClassUnidirectional'
-    | 'ClassDependency'
+  const config = useEdgeConfig(
+    type as
+      | "ClassAggregation"
+      | "ClassInheritance"
+      | "ClassRealization"
+      | "ClassComposition"
+      | "ClassBidirectional"
+      | "ClassUnidirectional"
+      | "ClassDependency"
   )
 
-  const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
-  const enableStraightPath = 'enableStraightPath' in config ? config.enableStraightPath as boolean : true
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const enableStraightPath =
+    "enableStraightPath" in config
+      ? (config.enableStraightPath as boolean)
+      : true
 
   const { assessments } = useDiagramStore(
     useShallow((state) => ({
@@ -158,14 +163,14 @@ export const ClassDiagramEdge = ({
         sourcePosition={sourcePosition}
         targetPosition={targetPosition}
       />
-      
+
       <EdgeMiddleLabels
         label={data?.label}
         pathMiddlePosition={edgeData.pathMiddlePosition}
         isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
         showRelationshipLabels={true}
       />
-      
+
       <CommonEdgeElements
         id={id}
         pathMiddlePosition={edgeData.pathMiddlePosition}

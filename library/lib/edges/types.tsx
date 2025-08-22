@@ -6,7 +6,6 @@ import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
 import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
 
 export const diagramEdgeTypes = {
-
   ClassAggregation: ClassDiagramEdge,
   ClassInheritance: ClassDiagramEdge,
   ClassRealization: ClassDiagramEdge,
@@ -14,9 +13,9 @@ export const diagramEdgeTypes = {
   ClassBidirectional: ClassDiagramEdge,
   ClassUnidirectional: ClassDiagramEdge,
   ClassDependency: ClassDiagramEdge,
-  
+
   ActivityControlFlow: ActivityDiagramEdge,
- 
+
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
   UseCaseExtend: UseCaseEdge,
@@ -51,8 +50,8 @@ export const edgeConfig = {
 
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
-  UseCaseInclude: { showRelationshipLabels: true },     // Show <<include>>
-  UseCaseExtend: { showRelationshipLabels: true },      // Show <<extend>>
+  UseCaseInclude: { showRelationshipLabels: true }, // Show <<include>>
+  UseCaseExtend: { showRelationshipLabels: true }, // Show <<extend>>
   UseCaseGeneralization: { showRelationshipLabels: false }, // No stereotype labels
 
   // Component edges - different midpoint settings
@@ -63,12 +62,30 @@ export const edgeConfig = {
   ComponentRequiredQuarterInterface: { allowMidpointDragging: false },
 
   // Deployment edges - with relationship labels
-  DeploymentAssociation: { allowMidpointDragging: true, showRelationshipLabels: true },
-  DeploymentDependency: { allowMidpointDragging: true, showRelationshipLabels: false },
-  DeploymentProvidedInterface: { allowMidpointDragging: true, showRelationshipLabels: false },
-  DeploymentRequiredInterface: { allowMidpointDragging: true, showRelationshipLabels: false },
-  DeploymentRequiredThreeQuarterInterface: { allowMidpointDragging: true, showRelationshipLabels: false },
-  DeploymentRequiredQuarterInterface: { allowMidpointDragging: true, showRelationshipLabels: false },
+  DeploymentAssociation: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: true,
+  },
+  DeploymentDependency: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: false,
+  },
+  DeploymentProvidedInterface: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: false,
+  },
+  DeploymentRequiredInterface: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: false,
+  },
+  DeploymentRequiredThreeQuarterInterface: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: false,
+  },
+  DeploymentRequiredQuarterInterface: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: false,
+  },
 } as const
 
 export type DiagramEdgeType = keyof typeof diagramEdgeTypes
