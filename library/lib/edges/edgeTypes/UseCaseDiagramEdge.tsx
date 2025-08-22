@@ -1,8 +1,17 @@
-import { StraightPathEdge, StraightPathEdgeData } from "../pathTypes/StraightPathEdge"
+import { BaseEdge } from "@xyflow/react"
+import {
+  BaseEdgeProps,
+  CommonEdgeElements,
+} from "../GenericEdge"
 import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { EdgeIncludeExtendLabel } from "../labelTypes/EdgeIncludeExtendLabel"
-import { BaseEdgeProps } from "../GenericEdge"
 import { useEdgeConfig } from "@/hooks/useEdgeConfig"
+import { useStraightPathEdge } from "@/hooks/useStraightPathEdge"
+import { useDiagramStore, usePopoverStore } from "@/store/context"
+import { useShallow } from "zustand/shallow"
+import { useToolbar } from "@/hooks"
+import { useRef } from "react"
+import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
 export const UseCaseEdge = ({
   id,
@@ -19,6 +28,9 @@ export const UseCaseEdge = ({
   targetHandleId,
   data,
 }: BaseEdgeProps) => {
+  const anchorRef = useRef<SVGSVGElement | null>(null)
+  const { handleDelete } = useToolbar({ id })
+
   const config = useEdgeConfig(type as 
     | 'UseCaseAssociation' 
     | 'UseCaseInclude' 
@@ -27,43 +39,93 @@ export const UseCaseEdge = ({
   )
   const showRelationshipLabels = 'showRelationshipLabels' in config ? config.showRelationshipLabels : false
 
-  return (
-    <StraightPathEdge
-      id={id}
-      type={type}
-      source={source}
-      target={target}
-      sourceX={sourceX}
-      sourceY={sourceY}
-      targetX={targetX}
-      targetY={targetY}
-      sourcePosition={sourcePosition}
-      targetPosition={targetPosition}
-      sourceHandleId={sourceHandleId}
-      targetHandleId={targetHandleId}
-      data={data}
-    >
-      {(edgeData: StraightPathEdgeData) => (
-        <>
-          <EdgeMiddleLabels
-            label={data?.label}
-            pathMiddlePosition={edgeData.pathMiddlePosition}
-            isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-            showRelationshipLabels={showRelationshipLabels}
-            sourcePoint={edgeData.sourcePoint}
-            targetPoint={edgeData.targetPoint}
-            isUseCasePath={true}
-          />
+  const { assessments } = useDiagramStore(
+    useShallow((state) => ({
+      assessments: state.assessments,
+    }))
+  )
 
-          <EdgeIncludeExtendLabel
-            relationshipType={type === 'UseCaseInclude' ? 'include' : type === 'UseCaseExtend' ? 'extend' : undefined}
-            showRelationshipLabels={type === 'UseCaseInclude' || type === 'UseCaseExtend'}
-            pathMiddlePosition={edgeData.pathMiddlePosition}
-            sourcePoint={edgeData.sourcePoint}
-            targetPoint={edgeData.targetPoint}
-          />
-        </>
-      )}
-    </StraightPathEdge>
+  const setPopOverElementId = usePopoverStore(
+    useShallow((state) => state.setPopOverElementId)
+  )
+
+  const {
+    pathRef,
+    edgeData,
+    currentPath,
+    overlayPath,
+    markerEnd,
+    strokeDashArray,
+    isDiagramModifiable,
+  } = useStraightPathEdge({
+    id,
+    type,
+    source,
+    target,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    sourceHandleId,
+    targetHandleId,
+    data,
+  })
+
+  return (
+    <>
+      <g className="edge-container">
+        <BaseEdge
+          id={id}
+          path={currentPath}
+          markerEnd={markerEnd}
+          pointerEvents="none"
+          style={{
+            stroke: "black",
+            strokeDasharray: strokeDashArray,
+          }}
+        />
+
+        <path
+          ref={pathRef}
+          className="edge-overlay"
+          d={overlayPath}
+          fill="none"
+          strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
+          pointerEvents="stroke"
+          style={{ opacity: 0.4 }}
+        />
+      </g>
+
+      <EdgeMiddleLabels
+        label={data?.label}
+        pathMiddlePosition={edgeData.pathMiddlePosition}
+        isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
+        showRelationshipLabels={showRelationshipLabels}
+        sourcePoint={edgeData.sourcePoint}
+        targetPoint={edgeData.targetPoint}
+        isUseCasePath={true}
+      />
+
+      <EdgeIncludeExtendLabel
+        relationshipType={type === 'UseCaseInclude' ? 'include' : type === 'UseCaseExtend' ? 'extend' : undefined}
+        showRelationshipLabels={type === 'UseCaseInclude' || type === 'UseCaseExtend'}
+        pathMiddlePosition={edgeData.pathMiddlePosition}
+        sourcePoint={edgeData.sourcePoint}
+        targetPoint={edgeData.targetPoint}
+      />
+
+      <CommonEdgeElements
+        id={id}
+        pathMiddlePosition={edgeData.pathMiddlePosition}
+        isDiagramModifiable={isDiagramModifiable}
+        assessments={assessments}
+        anchorRef={anchorRef}
+        handleDelete={handleDelete}
+        setPopOverElementId={setPopOverElementId}
+        type={type}
+      />
+    </>
   )
 }

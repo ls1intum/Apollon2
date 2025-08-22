@@ -11,6 +11,7 @@ import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { useToolbar } from "@/hooks"
 import { useRef } from "react"
+import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
 export const ActivityDiagramEdge = ({
   id,
@@ -103,7 +104,7 @@ export const ActivityDiagramEdge = ({
           className="edge-overlay"
           d={overlayPath}
           fill="none"
-          strokeWidth={12}
+          strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
           pointerEvents="stroke"
           style={{
             opacity: isReconnectingRef.current ? 0 : 0.4,

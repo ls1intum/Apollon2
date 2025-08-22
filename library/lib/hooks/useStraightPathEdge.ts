@@ -1,22 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import React from "react"
-import { BaseEdge } from "@xyflow/react"
-import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
+import { BaseEdgeProps } from "../edges/GenericEdge"
 import {
   calculateOverlayPath,
   calculateStraightPath,
   getEdgeMarkerStyles,
 } from "@/utils/edgeUtils"
-import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
-import { useDiagramStore, usePopoverStore } from "@/store/context"
-import { useShallow } from "zustand/shallow"
-import { useToolbar } from "@/hooks"
-import { IPoint } from "../Connection"
+import { useDiagramModifiable } from "./useDiagramModifiable"
+import { IPoint } from "../edges/Connection"
 
-interface StraightPathEdgeProps extends BaseEdgeProps {
-  children?:
-    | React.ReactNode
-    | ((edgeData: StraightPathEdgeData) => React.ReactNode)
+interface UseStraightPathEdgeProps extends BaseEdgeProps {
+  // Add any additional props specific to straight path edges
 }
 
 export interface StraightPathEdgeData {
@@ -26,24 +19,15 @@ export interface StraightPathEdgeData {
   targetPoint: IPoint
 }
 
-export const StraightPathEdge = ({
-  id,
+export const useStraightPathEdge = ({
   type,
   sourceX,
   sourceY,
   targetX,
   targetY,
-  children,
-}: StraightPathEdgeProps) => {
+}: UseStraightPathEdgeProps) => {
   const pathRef = useRef<SVGPathElement | null>(null)
-  const anchorRef = useRef<SVGSVGElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
-
-  const { assessments } = useDiagramStore(
-    useShallow((state) => ({
-      assessments: state.assessments,
-    }))
-  )
 
   const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>(() => ({
     x: (sourceX + targetX) / 2,
@@ -56,12 +40,6 @@ export const StraightPathEdge = ({
       return dx > dy
     }
   )
-
-  const setPopOverElementId = usePopoverStore(
-    useShallow((state) => state.setPopOverElementId)
-  )
-
-  const { handleDelete } = useToolbar({ id })
 
   const { markerEnd, strokeDashArray } = getEdgeMarkerStyles(type)
 
@@ -113,7 +91,6 @@ export const StraightPathEdge = ({
     }
   }, [currentPath, sourceX, sourceY, targetX, targetY])
 
-
   useEffect(() => {
     const middleX = (sourceX + targetX) / 2
     const middleY = (sourceY + targetY) / 2
@@ -127,51 +104,31 @@ export const StraightPathEdge = ({
   const sourcePoint = { x: sourceX, y: sourceY }
   const targetPoint = { x: targetX, y: targetY }
 
-  return (
-    <>
-      <g className="edge-container">
-        <BaseEdge
-          id={id}
-          path={currentPath}
-          markerEnd={markerEnd}
-          pointerEvents="none"
-          style={{
-            stroke: "black",
-            strokeDasharray: strokeDashArray,
-          }}
-        />
+  const edgeData: StraightPathEdgeData = {
+    pathMiddlePosition,
+    isMiddlePathHorizontal,
+    sourcePoint,
+    targetPoint,
+  }
 
-        <path
-          ref={pathRef}
-          className="edge-overlay"
-          d={overlayPath}
-          fill="none"
-          strokeWidth={15}
-          pointerEvents="stroke"
-          style={{ opacity: 0.4 }}
-        />
-      </g>
-     
-          {typeof children === "function"
-            ? children({
-                pathMiddlePosition,
-                isMiddlePathHorizontal,
-                sourcePoint,
-                targetPoint,
-              })
-            : children}
-
-          <CommonEdgeElements
-            id={id}
-            pathMiddlePosition={pathMiddlePosition}
-            isDiagramModifiable={isDiagramModifiable}
-            assessments={assessments}
-            anchorRef={anchorRef}
-            handleDelete={handleDelete}
-            setPopOverElementId={setPopOverElementId}
-            type={type}
-          />
-        </>
-      
-  )
+  return {
+    // Refs
+    pathRef,
+    
+    // Edge data
+    edgeData,
+    
+    // Path calculations
+    currentPath,
+    overlayPath,
+    
+    // Styling
+    markerEnd,
+    strokeDashArray,
+    
+    // Computed values
+    sourcePoint,
+    targetPoint,
+    isDiagramModifiable,
+  }
 }

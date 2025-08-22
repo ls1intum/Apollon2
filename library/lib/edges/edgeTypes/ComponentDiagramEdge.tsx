@@ -12,6 +12,7 @@ import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 import { useStepPathEdge } from "@/hooks/useStepPathEdge"
 import { useToolbar } from "@/hooks"
 import { useRef } from "react"
+import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
 const arePositionsOpposite = (pos1: Position, pos2: Position): boolean => {
   return (
@@ -174,7 +175,7 @@ export const ComponentDiagramEdge = ({
           className="edge-overlay"
           d={overlayPath}
           fill="none"
-          strokeWidth={12}
+          strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
           pointerEvents="stroke"
           style={{
             opacity: isReconnectingRef.current ? 0 : 0.4,
