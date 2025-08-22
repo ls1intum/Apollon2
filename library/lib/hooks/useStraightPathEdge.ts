@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import React from "react"
-import { BaseEdge } from "@xyflow/react"
-import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
+import { BaseEdgeProps } from "../edges/GenericEdge"
 import {
   adjustSourceCoordinates,
   adjustTargetCoordinates,
@@ -9,18 +7,8 @@ import {
   calculateStraightPath,
   getEdgeMarkerStyles,
 } from "@/utils/edgeUtils"
-import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
-import { useDiagramStore, usePopoverStore } from "@/store/context"
-import { useShallow } from "zustand/shallow"
-import { useToolbar } from "@/hooks"
-import { IPoint } from "../Connection"
-import { MARKER_PADDING, SOURCE_CONNECTION_POINT_PADDING } from "@/constants"
-
-interface StraightPathEdgeProps extends BaseEdgeProps {
-  children?:
-    | React.ReactNode
-    | ((edgeData: StraightPathEdgeData) => React.ReactNode)
-}
+import { useDiagramModifiable } from "./useDiagramModifiable"
+import { IPoint } from "../edges/Connection"
 
 export interface StraightPathEdgeData {
   pathMiddlePosition: IPoint
@@ -29,26 +17,16 @@ export interface StraightPathEdgeData {
   targetPoint: IPoint
 }
 
-export const StraightPathEdge = ({
-  id,
+export const useStraightPathEdge = ({
   type,
   sourceX,
   sourceY,
   sourcePosition,
   targetX,
   targetY,
-  targetPosition,
-  children,
-}: StraightPathEdgeProps) => {
+}: BaseEdgeProps) => {
   const pathRef = useRef<SVGPathElement | null>(null)
-  const anchorRef = useRef<SVGSVGElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
-
-  const { assessments } = useDiagramStore(
-    useShallow((state) => ({
-      assessments: state.assessments,
-    }))
-  )
 
   const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>(() => ({
     x: (sourceX + targetX) / 2,
@@ -62,27 +40,7 @@ export const StraightPathEdge = ({
     }
   )
 
-  const setPopOverElementId = usePopoverStore(
-    useShallow((state) => state.setPopOverElementId)
-  )
-
-  const { handleDelete } = useToolbar({ id })
-
-  const { markerPadding, markerEnd, strokeDashArray } =
-    getEdgeMarkerStyles(type)
-  const padding = markerPadding ?? MARKER_PADDING
-  const adjustedTargetCoordinates = adjustTargetCoordinates(
-    targetX,
-    targetY,
-    targetPosition,
-    padding
-  )
-  const adjustedSourceCoordinates = adjustSourceCoordinates(
-    sourceX,
-    sourceY,
-    sourcePosition,
-    SOURCE_CONNECTION_POINT_PADDING
-  )
+  const { markerEnd, strokeDashArray } = getEdgeMarkerStyles(type)
 
   const currentPath = useMemo(() => {
     return calculateStraightPath(
@@ -157,54 +115,22 @@ export const StraightPathEdge = ({
   const sourcePoint = { x: sourceX, y: sourceY }
   const targetPoint = { x: targetX, y: targetY }
 
-  return (
-    <>
-      <g className="edge-container">
-        <BaseEdge
-          id={id}
-          path={currentPath}
-          markerEnd={markerEnd}
-          pointerEvents="none"
-          style={{
-            stroke: "black",
-            strokeDasharray: strokeDashArray,
-          }}
-        />
+  const edgeData: StraightPathEdgeData = {
+    pathMiddlePosition,
+    isMiddlePathHorizontal,
+    sourcePoint,
+    targetPoint,
+  }
 
-        <path
-          ref={pathRef}
-          className="edge-overlay"
-          d={overlayPath}
-          fill="none"
-          strokeWidth={15}
-          pointerEvents="stroke"
-          style={{ opacity: 0.4 }}
-        />
-      </g>
-
-      {pathMiddlePosition && (
-        <>
-          {typeof children === "function"
-            ? children({
-                pathMiddlePosition,
-                isMiddlePathHorizontal,
-                sourcePoint,
-                targetPoint,
-              })
-            : children}
-
-          <CommonEdgeElements
-            id={id}
-            pathMiddlePosition={pathMiddlePosition}
-            isDiagramModifiable={isDiagramModifiable}
-            assessments={assessments}
-            anchorRef={anchorRef}
-            handleDelete={handleDelete}
-            setPopOverElementId={setPopOverElementId}
-            type={type}
-          />
-        </>
-      )}
-    </>
-  )
+  return {
+    pathRef,
+    edgeData,
+    currentPath,
+    overlayPath,
+    markerEnd,
+    strokeDashArray,
+    sourcePoint,
+    targetPoint,
+    isDiagramModifiable,
+  }
 }

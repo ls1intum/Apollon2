@@ -30,7 +30,7 @@ export const FlowChartEdgeEditPopover: React.FC<PopoverProps> = ({
         }}
       >
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-          Control Flow
+          Flowline
         </Typography>
         {/* Swap icon for source/target swap */}
         {handleSwap && (
