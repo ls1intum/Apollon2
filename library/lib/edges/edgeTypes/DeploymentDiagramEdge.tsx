@@ -151,7 +151,7 @@ export const DeploymentDiagramEdge = ({
     data,
     allowMidpointDragging,
     enableReconnection: true,
-    enableStraightPath: false,
+    enableStraightPath: true,
   })
 
   return (

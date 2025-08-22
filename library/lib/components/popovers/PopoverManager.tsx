@@ -102,6 +102,7 @@ type EdgePopoverType =
   | "ClassUnidirectional"
   | "ClassDependency"
   | "ActivityControlFlow"
+  | "ObjectLink"
   | "UseCaseAssociation"
   | "UseCaseInclude"
   | "UseCaseExtend"
@@ -121,7 +122,6 @@ type EdgePopoverType =
   | "DeploymentRequiredInterface"
   | "DeploymentRequiredThreeQuarterInterface"
   | "DeploymentRequiredQuarterInterface"
-  | "ObjectLink"
 
 type PopoverType = NodePopoverType | EdgePopoverType
 
@@ -138,6 +138,7 @@ const editPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  ObjectLink: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -157,7 +158,6 @@ const editPopovers: {
   DeploymentRequiredInterface: React.FC<PopoverProps>
   DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
-  ObjectLink: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -197,6 +197,7 @@ const editPopovers: {
   ClassUnidirectional: EdgeEditPopover,
   ClassDependency: EdgeEditPopover,
   ActivityControlFlow: ActivityDiagramEdgeEditPopover,
+  ObjectLink: ObjectDiagramEdgeEditPopover,
   UseCaseAssociation: UseCaseEdgeEditPopover,
   UseCaseInclude: UseCaseEdgeEditPopover,
   UseCaseExtend: UseCaseEdgeEditPopover,
@@ -216,7 +217,6 @@ const editPopovers: {
   DeploymentRequiredInterface: DeploymentEdgeEditPopover,
   DeploymentRequiredThreeQuarterInterface: DeploymentEdgeEditPopover,
   DeploymentRequiredQuarterInterface: DeploymentEdgeEditPopover,
-  ObjectLink: ObjectDiagramEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
   FlowchartTerminal: DefaultNodeEditPopover,
@@ -258,6 +258,7 @@ const giveFeedbackPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  ObjectLink: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -277,7 +278,6 @@ const giveFeedbackPopovers: {
   DeploymentRequiredInterface: React.FC<PopoverProps>
   DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
-  ObjectLink: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -317,6 +317,7 @@ const giveFeedbackPopovers: {
   ClassUnidirectional: EdgeGiveFeedbackPopover,
   ClassDependency: EdgeGiveFeedbackPopover,
   ActivityControlFlow: EdgeGiveFeedbackPopover,
+  ObjectLink: EdgeGiveFeedbackPopover,
   UseCaseAssociation: EdgeGiveFeedbackPopover,
   UseCaseInclude: EdgeGiveFeedbackPopover,
   UseCaseExtend: EdgeGiveFeedbackPopover,
@@ -336,7 +337,6 @@ const giveFeedbackPopovers: {
   DeploymentRequiredInterface: EdgeGiveFeedbackPopover,
   DeploymentRequiredThreeQuarterInterface: EdgeGiveFeedbackPopover,
   DeploymentRequiredQuarterInterface: EdgeGiveFeedbackPopover,
-  ObjectLink: EdgeGiveFeedbackPopover,
   Component: DefaultNodeGiveFeedbackPopover,
   ComponentSubsystem: DefaultNodeGiveFeedbackPopover,
   FlowchartTerminal: DefaultNodeGiveFeedbackPopover,
@@ -378,6 +378,7 @@ const seeFeedbackPopovers: {
   ClassUnidirectional: React.FC<PopoverProps>
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
+  ObjectLink: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -397,7 +398,6 @@ const seeFeedbackPopovers: {
   DeploymentRequiredInterface: React.FC<PopoverProps>
   DeploymentRequiredThreeQuarterInterface: React.FC<PopoverProps>
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
-  ObjectLink: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -437,6 +437,7 @@ const seeFeedbackPopovers: {
   ClassUnidirectional: EdgeSeeFeedbackPopover,
   ClassDependency: EdgeSeeFeedbackPopover,
   ActivityControlFlow: EdgeSeeFeedbackPopover,
+  ObjectLink: EdgeSeeFeedbackPopover,
   UseCaseAssociation: EdgeSeeFeedbackPopover,
   UseCaseInclude: EdgeSeeFeedbackPopover,
   UseCaseExtend: EdgeSeeFeedbackPopover,
@@ -456,7 +457,6 @@ const seeFeedbackPopovers: {
   DeploymentRequiredInterface: EdgeSeeFeedbackPopover,
   DeploymentRequiredThreeQuarterInterface: EdgeSeeFeedbackPopover,
   DeploymentRequiredQuarterInterface: EdgeSeeFeedbackPopover,
-  ObjectLink: EdgeSeeFeedbackPopover,
   Component: DefaultNodeSeeFeedbackPopover,
   ComponentSubsystem: DefaultNodeSeeFeedbackPopover,
   FlowchartTerminal: DefaultNodeSeeFeedbackPopover,

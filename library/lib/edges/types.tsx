@@ -17,6 +17,8 @@ export const diagramEdgeTypes = {
 
   ActivityControlFlow: ActivityDiagramEdge,
 
+  ObjectLink: ObjectDiagramEdge,
+
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
   UseCaseExtend: UseCaseEdge,
@@ -48,6 +50,9 @@ export const edgeConfig = {
 
   // Activity edges - allow midpoint dragging
   ActivityControlFlow: { allowMidpointDragging: true },
+
+  // Object edge
+  ObjectLink: { allowMidpointDragging: true },
 
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
