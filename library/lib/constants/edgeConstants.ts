@@ -7,3 +7,4 @@ export const SOURCE_CONNECTION_POINT_PADDING = 3.5 // Reduce padding to bring ma
 export const STEP_BOARDER_RADIUS = 0 //Radius of the corners of Smooth Edge
 export const USECASE_PADDING = 5
 export const NO_PADDING = 0
+export const EDGE_HIGHTLIGHT_STROKE_WIDTH = 15
