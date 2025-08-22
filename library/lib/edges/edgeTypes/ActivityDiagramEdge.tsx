@@ -22,7 +22,6 @@ export const ActivityDiagramEdge = ({
     | 'ActivityControlFlow'
   )
 
-  // For activity edges, config has allowMidpointDragging
   const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
 
   return (

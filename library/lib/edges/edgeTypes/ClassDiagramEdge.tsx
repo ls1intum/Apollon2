@@ -29,7 +29,7 @@ export const ClassDiagramEdge = ({
     | 'ClassDependency'
   )
 
-  // For class edges, config has allowMidpointDragging and enableStraightPath
+
   const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
   const enableStraightPath = 'enableStraightPath' in config ? config.enableStraightPath as boolean : true
 

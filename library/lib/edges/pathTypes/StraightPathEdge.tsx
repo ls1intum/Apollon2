@@ -113,7 +113,7 @@ export const StraightPathEdge = ({
     }
   }, [currentPath, sourceX, sourceY, targetX, targetY])
 
-  // Update position immediately when coordinates change (for smooth transitions)
+
   useEffect(() => {
     const middleX = (sourceX + targetX) / 2
     const middleY = (sourceY + targetY) / 2
@@ -151,9 +151,7 @@ export const StraightPathEdge = ({
           style={{ opacity: 0.4 }}
         />
       </g>
-
-      {pathMiddlePosition && (
-        <>
+     
           {typeof children === "function"
             ? children({
                 pathMiddlePosition,
@@ -174,7 +172,6 @@ export const StraightPathEdge = ({
             type={type}
           />
         </>
-      )}
-    </>
+      
   )
 }

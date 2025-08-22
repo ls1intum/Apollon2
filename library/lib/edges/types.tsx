@@ -5,9 +5,8 @@ import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
 import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
 
-// Direct component mapping - much cleaner like nodes!
 export const diagramEdgeTypes = {
-  // Class Diagram Edges
+
   ClassAggregation: ClassDiagramEdge,
   ClassInheritance: ClassDiagramEdge,
   ClassRealization: ClassDiagramEdge,
@@ -15,24 +14,20 @@ export const diagramEdgeTypes = {
   ClassBidirectional: ClassDiagramEdge,
   ClassUnidirectional: ClassDiagramEdge,
   ClassDependency: ClassDiagramEdge,
-
-  // Activity Diagram Edges
+  
   ActivityControlFlow: ActivityDiagramEdge,
  
-  // Use Case Diagram Edges
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
   UseCaseExtend: UseCaseEdge,
   UseCaseGeneralization: UseCaseEdge,
 
-  // Component Diagram Edges
   ComponentDependency: ComponentDiagramEdge,
   ComponentProvidedInterface: ComponentDiagramEdge,
   ComponentRequiredInterface: ComponentDiagramEdge,
   ComponentRequiredThreeQuarterInterface: ComponentDiagramEdge,
   ComponentRequiredQuarterInterface: ComponentDiagramEdge,
 
-  // Deployment Diagram Edges
   DeploymentAssociation: DeploymentDiagramEdge,
   DeploymentDependency: DeploymentDiagramEdge,
   DeploymentProvidedInterface: DeploymentDiagramEdge,
@@ -41,7 +36,6 @@ export const diagramEdgeTypes = {
   DeploymentRequiredQuarterInterface: DeploymentDiagramEdge,
 } satisfies EdgeTypes
 
-// Edge configuration - separated from the component mapping
 export const edgeConfig = {
   // Class edges - all allow midpoint dragging
   ClassAggregation: { allowMidpointDragging: true },

@@ -49,7 +49,7 @@ export const DeploymentDiagramEdge = ({
     | 'DeploymentRequiredQuarterInterface'
   )
   
-  // For deployment edges, config has both allowMidpointDragging and showRelationshipLabels
+
   const allowMidpointDragging = 'allowMidpointDragging' in config ? config.allowMidpointDragging : true
   const showRelationshipLabels = 'showRelationshipLabels' in config ? config.showRelationshipLabels : false
   
