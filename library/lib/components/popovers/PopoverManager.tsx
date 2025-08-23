@@ -123,7 +123,6 @@ type EdgePopoverType =
   | "DeploymentRequiredInterface"
   | "DeploymentRequiredThreeQuarterInterface"
   | "DeploymentRequiredQuarterInterface"
-  | "ObjectLink"
   | "FlowChartFlowline"
 
 type PopoverType = NodePopoverType | EdgePopoverType
