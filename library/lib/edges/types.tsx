@@ -4,6 +4,7 @@ import { ActivityDiagramEdge } from "./edgeTypes/ActivityDiagramEdge"
 import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
 import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
+import { ObjectDiagramEdge } from "./edgeTypes/ObjectDiagramEdge"
 
 export const diagramEdgeTypes = {
   ClassAggregation: ClassDiagramEdge,
@@ -15,6 +16,8 @@ export const diagramEdgeTypes = {
   ClassDependency: ClassDiagramEdge,
 
   ActivityControlFlow: ActivityDiagramEdge,
+
+  ObjectLink: ObjectDiagramEdge,
 
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
@@ -47,6 +50,9 @@ export const edgeConfig = {
 
   // Activity edges - allow midpoint dragging
   ActivityControlFlow: { allowMidpointDragging: true },
+
+  // Object edge
+  ObjectLink: { allowMidpointDragging: true },
 
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
