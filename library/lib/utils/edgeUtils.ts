@@ -686,7 +686,7 @@ export const getDefaultEdgeType = (
       return "FlowChartFlowline"
 
     case "Sfc":
-      return "SfcTransition"
+      return "SfcDiagramEdge"
     default:
       return "ClassUnidirectional"
   }

@@ -40,6 +40,7 @@ export const diagramEdgeTypes = {
   DeploymentRequiredInterface: DeploymentDiagramEdge,
   DeploymentRequiredThreeQuarterInterface: DeploymentDiagramEdge,
   DeploymentRequiredQuarterInterface: DeploymentDiagramEdge,
+
   SfcDiagramEdge: SfcDiagramEdge,
 } satisfies EdgeTypes
 
@@ -99,6 +100,10 @@ export const edgeConfig = {
   DeploymentRequiredQuarterInterface: {
     allowMidpointDragging: true,
     showRelationshipLabels: false,
+  },
+
+  SfcDiagramEdge: {
+    allowMidpointDragging: true,
   },
 } as const
 

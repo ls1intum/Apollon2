@@ -127,7 +127,7 @@ type EdgePopoverType =
   | "DeploymentRequiredThreeQuarterInterface"
   | "DeploymentRequiredQuarterInterface"
   | "FlowChartFlowline"
-  | "SfcTransition"
+  | "SfcDiagramEdge"
 
 type PopoverType = NodePopoverType | EdgePopoverType
 
@@ -153,7 +153,7 @@ const editPopovers: {
   BPMNMessageFlow: React.FC<PopoverProps>
   BPMNAssociationFlow: React.FC<PopoverProps>
   BPMNDataAssociationFlow: React.FC<PopoverProps>
-  SfcTransition: React.FC<PopoverProps>
+  SfcDiagramEdge: React.FC<PopoverProps>
   ComponentDependency: React.FC<PopoverProps>
   ComponentProvidedInterface: React.FC<PopoverProps>
   ComponentRequiredInterface: React.FC<PopoverProps>
@@ -216,7 +216,7 @@ const editPopovers: {
   BPMNMessageFlow: EdgeEditPopover,
   BPMNAssociationFlow: EdgeEditPopover,
   BPMNDataAssociationFlow: EdgeEditPopover,
-  SfcTransition: SfcEdgeEditPopover,
+  SfcDiagramEdge: SfcEdgeEditPopover,
   ComponentDependency: ComponentEdgeEditPopover,
   ComponentProvidedInterface: ComponentEdgeEditPopover,
   ComponentRequiredInterface: ComponentEdgeEditPopover,
@@ -321,7 +321,7 @@ const giveFeedbackPopovers: {
   ReachabilityGraphMarking: React.FC<PopoverProps>
   Sfc: React.FC<PopoverProps>
   SfcActionTable: React.FC<PopoverProps>
-  SfcTransition: React.FC<PopoverProps>
+  SfcDiagramEdge: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   objectName: ObjectGiveFeedbackPopover,
@@ -384,7 +384,7 @@ const giveFeedbackPopovers: {
   ReachabilityGraphMarking: DefaultNodeGiveFeedbackPopover,
   Sfc: DefaultNodeGiveFeedbackPopover,
   SfcActionTable: DefaultNodeGiveFeedbackPopover,
-  SfcTransition: EdgeGiveFeedbackPopover,
+  SfcDiagramEdge: EdgeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -449,7 +449,7 @@ const seeFeedbackPopovers: {
   ReachabilityGraphMarking: React.FC<PopoverProps>
   Sfc: React.FC<PopoverProps>
   SfcActionTable: React.FC<PopoverProps>
-  SfcTransition: React.FC<PopoverProps>
+  SfcDiagramEdge: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   objectName: ObjectSeeFeedbackPopover,
@@ -512,7 +512,7 @@ const seeFeedbackPopovers: {
   ReachabilityGraphMarking: DefaultNodeSeeFeedbackPopover,
   Sfc: DefaultNodeSeeFeedbackPopover,
   SfcActionTable: DefaultNodeSeeFeedbackPopover,
-  SfcTransition: EdgeSeeFeedbackPopover,
+  SfcDiagramEdge: EdgeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

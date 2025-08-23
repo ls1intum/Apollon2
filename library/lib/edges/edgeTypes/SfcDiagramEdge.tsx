@@ -1,11 +1,11 @@
-import { StepPathEdge, StepPathEdgeData } from "../pathTypes/StepPathEdge"
-import { BaseEdgeProps } from "../GenericEdge"
-
-interface SfcDiagramEdgeProps extends BaseEdgeProps {
-  allowMidpointDragging?: boolean
-  enableReconnection?: boolean
-  enableStraightPath?: boolean
-}
+import { BaseEdge } from "@xyflow/react"
+import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
+import { useStepPathEdge } from "@/hooks/useStepPathEdge"
+import { useDiagramStore, usePopoverStore } from "@/store/context"
+import { useShallow } from "zustand/shallow"
+import { useToolbar } from "@/hooks"
+import { useRef } from "react"
+import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
 function getParsedEdgeData(data: unknown): {
   isNegated: boolean
@@ -49,64 +49,146 @@ export const SfcDiagramEdge = ({
   sourceHandleId,
   targetHandleId,
   data,
-  allowMidpointDragging = true,
-  enableReconnection = true,
-  enableStraightPath = true,
-}: SfcDiagramEdgeProps) => {
+}: BaseEdgeProps) => {
+  const anchorRef = useRef<SVGSVGElement | null>(null)
+  const { handleDelete } = useToolbar({ id })
+
+  const allowMidpointDragging = true
+  const enableStraightPath = true
+
+  const { assessments } = useDiagramStore(
+    useShallow((state) => ({
+      assessments: state.assessments,
+    }))
+  )
+
+  const setPopOverElementId = usePopoverStore(
+    useShallow((state) => state.setPopOverElementId)
+  )
+
+  const {
+    pathRef,
+    edgeData,
+    currentPath,
+    overlayPath,
+    midpoints,
+    hasInitialCalculation,
+    isReconnectingRef,
+    markerEnd,
+    strokeDashArray,
+    handlePointerDown,
+    isDiagramModifiable,
+  } = useStepPathEdge({
+    id,
+    type,
+    source,
+    target,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    sourceHandleId,
+    targetHandleId,
+    data,
+    allowMidpointDragging,
+    enableReconnection: true,
+    enableStraightPath,
+  })
+
   const { isNegated, displayName, showBar } = getParsedEdgeData(data)
 
-  return (
-    <StepPathEdge
-      id={id}
-      type={type}
-      source={source}
-      target={target}
-      sourceX={sourceX}
-      sourceY={sourceY}
-      targetX={targetX}
-      targetY={targetY}
-      sourcePosition={sourcePosition}
-      targetPosition={targetPosition}
-      sourceHandleId={sourceHandleId}
-      targetHandleId={targetHandleId}
-      data={data}
-      allowMidpointDragging={allowMidpointDragging}
-      enableReconnection={enableReconnection}
-      enableStraightPath={enableStraightPath}
-    >
-      {(edgeData: StepPathEdgeData) => (
-        <>
-          {/* SFC Transition - show crossbar and label if there's text */}
-          {displayName && (
-            <g>
-              {/* Crossbar - thick horizontal line at the middle */}
-              {showBar && (
-                <line
-                  x1={edgeData.pathMiddlePosition.x - 20}
-                  y1={edgeData.pathMiddlePosition.y}
-                  x2={edgeData.pathMiddlePosition.x + 20}
-                  y2={edgeData.pathMiddlePosition.y}
-                  stroke="black"
-                  strokeWidth="10"
-                />
-              )}
+  console.log({ isNegated, displayName, showBar })
 
-              {/* Label text positioned above the crossbar */}
-              <text
-                x={edgeData.pathMiddlePosition.x}
-                y={edgeData.pathMiddlePosition.y - 20}
-                fill="black"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fontSize="14"
-                textDecoration={isNegated ? "overline" : undefined}
-              >
-                {displayName}
-              </text>
-            </g>
+  return (
+    <>
+      <g className="edge-container">
+        <BaseEdge
+          id={id}
+          path={currentPath}
+          markerEnd={isReconnectingRef.current ? undefined : markerEnd}
+          pointerEvents="none"
+          style={{
+            stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
+            strokeDasharray: isReconnectingRef.current
+              ? "4 4"
+              : strokeDashArray,
+            transition: hasInitialCalculation ? "opacity 0.1s ease-in" : "none",
+            opacity: 1,
+          }}
+        />
+
+        <path
+          ref={pathRef}
+          className="edge-overlay"
+          d={overlayPath}
+          fill="none"
+          strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
+          pointerEvents="stroke"
+          style={{
+            opacity: isReconnectingRef.current ? 0 : 0.4,
+          }}
+        />
+
+        {isDiagramModifiable &&
+          !isReconnectingRef.current &&
+          allowMidpointDragging &&
+          midpoints.map((point, midPointIndex) => (
+            <circle
+              className="edge-circle"
+              pointerEvents="all"
+              key={`${id}-midpoint-${midPointIndex}`}
+              cx={point.x}
+              cy={point.y}
+              r={10}
+              fill="lightgray"
+              stroke="none"
+              style={{ cursor: "grab", zIndex: 9999 }}
+              onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
+            />
+          ))}
+
+        {/* SFC Transition - show crossbar and label */}
+        <g>
+          {/* Crossbar - thick horizontal line at the middle */}
+          {showBar && (
+            <line
+              x1={edgeData.pathMiddlePosition.x - 20}
+              y1={edgeData.pathMiddlePosition.y}
+              x2={edgeData.pathMiddlePosition.x + 20}
+              y2={edgeData.pathMiddlePosition.y}
+              stroke="black"
+              strokeWidth="10"
+            />
           )}
-        </>
-      )}
-    </StepPathEdge>
+
+          {displayName && (
+            <text
+              x={edgeData.pathMiddlePosition.x}
+              y={edgeData.pathMiddlePosition.y - 20}
+              fill="black"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fontSize="14"
+              textDecoration={isNegated ? "overline" : undefined}
+            >
+              {displayName}
+            </text>
+          )}
+        </g>
+      </g>
+
+      <CommonEdgeElements
+        id={id}
+        pathMiddlePosition={edgeData.pathMiddlePosition}
+        isDiagramModifiable={isDiagramModifiable}
+        assessments={assessments}
+        anchorRef={anchorRef}
+        handleDelete={handleDelete}
+        setPopOverElementId={setPopOverElementId}
+        type={type}
+      />
+    </>
   )
 }
