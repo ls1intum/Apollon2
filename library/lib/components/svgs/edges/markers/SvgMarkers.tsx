@@ -57,6 +57,23 @@ export function SvgMarkers() {
           />
         </marker>
         <marker
+          id="black-triangle"
+          viewBox="0 0 30 30"
+          markerWidth="22"
+          markerHeight="30"
+          refX="15"
+          refY="15"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,1 L0,29 L30,15 z"
+            fill="black"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+        </marker>
+        <marker
           id="black-arrow"
           viewBox="0 0 30 30"
           markerWidth="22"

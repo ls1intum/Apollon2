@@ -8,6 +8,7 @@ import { ObjectDiagramEdge } from "./edgeTypes/ObjectDiagramEdge"
 import { FlowChartEdge } from "./edgeTypes/FlowChartEdge"
 import { SyntaxTreeEdge } from "./edgeTypes"
 import { CommunicationDiagramEdge } from "./edgeTypes/CommunicationDiagramEdge"
+import { PetriNetEdge } from "./edgeTypes/PetriNetEdge"
 
 export const diagramEdgeTypes = {
   ClassAggregation: ClassDiagramEdge,
@@ -28,6 +29,8 @@ export const diagramEdgeTypes = {
 
   CommunicationLink: CommunicationDiagramEdge,
 
+  PetriNetArc: PetriNetEdge,
+  
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
   UseCaseExtend: UseCaseEdge,
@@ -67,6 +70,9 @@ export const edgeConfig = {
   FlowChartFlowline: { allowMidpointDragging: true },
 
   SyntaxTreeLink: {},
+
+  //PetriNet edge
+  PetriNetArc: { showRelationshipLabels: true },
 
   // Communication diagram edge - allow midpoint dragging with multiple labels
   CommunicationLink: { allowMidpointDragging: true },

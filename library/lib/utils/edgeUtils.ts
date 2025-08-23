@@ -218,6 +218,13 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         strokeDashArray: "0",
         offset: 11,
       }
+    case "PetriNetArc":
+      return {
+        markerPadding: 30,
+        markerEnd: "url(#black-triangle)",
+        strokeDashArray: "0",
+        offset: 40,
+      }
     case "ComponentDependency":
     case "ClassDependency":
     case "DeploymentDependency":
@@ -690,6 +697,8 @@ export const getDefaultEdgeType = (
       return "SyntaxTreeLink"
     case "CommunicationDiagram":
       return "CommunicationLink"
+    case "PetriNet":
+      return "PetriNetArc"
     default:
       return "ClassUnidirectional"
   }
@@ -706,6 +715,7 @@ export function getConnectionLineType(
   switch (diagramType) {
     case "UseCaseDiagram":
     case "SyntaxTree":
+    case "PetriNet":
       return ConnectionLineType.Straight
 
     default:

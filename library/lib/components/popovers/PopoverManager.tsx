@@ -63,6 +63,7 @@ import { DeploymentEdgeEditPopover } from "./edgePopovers/DeploymentDiagramEdgeE
 import { ObjectDiagramEdgeEditPopover } from "./edgePopovers/ObjectDiagramEdgeEditPopover"
 import { FlowChartEdgeEditPopover } from "./edgePopovers/FlowChartEdgeEditPopover"
 import { SyntaxTreeEdgeEditPopover } from "./edgePopovers/SyntaxTreeEdgeEditPopover"
+import { PetriNetEdgeEditPopover } from "./edgePopovers/PetriNetEdgeEditPopover"
 
 type NodePopoverType =
   | "class"
@@ -129,6 +130,7 @@ type EdgePopoverType =
   | "ObjectLink"
   | "FlowChartFlowline"
   | "SyntaxTreeLink"
+  | "PetriNetArc"
 
 type PopoverType = NodePopoverType | EdgePopoverType
 
@@ -151,6 +153,7 @@ const editPopovers: {
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
   UseCaseGeneralization: React.FC<PopoverProps>
+  PetriNetArc: React.FC<PopoverProps>
   BPMNSequenceFlow: React.FC<PopoverProps>
   BPMNMessageFlow: React.FC<PopoverProps>
   BPMNAssociationFlow: React.FC<PopoverProps>
@@ -213,6 +216,7 @@ const editPopovers: {
   UseCaseInclude: UseCaseEdgeEditPopover,
   UseCaseExtend: UseCaseEdgeEditPopover,
   UseCaseGeneralization: UseCaseEdgeEditPopover,
+  PetriNetArc: PetriNetEdgeEditPopover,
   BPMNSequenceFlow: EdgeEditPopover,
   BPMNMessageFlow: EdgeEditPopover,
   BPMNAssociationFlow: EdgeEditPopover,
@@ -294,6 +298,7 @@ const giveFeedbackPopovers: {
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
   FlowChartFlowline: React.FC<PopoverProps>
   SyntaxTreeLink: React.FC<PopoverProps>
+  PetriNetArc: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -335,6 +340,7 @@ const giveFeedbackPopovers: {
   ActivityControlFlow: EdgeGiveFeedbackPopover,
   ObjectLink: EdgeGiveFeedbackPopover,
   CommunicationLink: EdgeGiveFeedbackPopover,
+  PetriNetArc: EdgeGiveFeedbackPopover,
   UseCaseAssociation: EdgeGiveFeedbackPopover,
   UseCaseInclude: EdgeGiveFeedbackPopover,
   UseCaseExtend: EdgeGiveFeedbackPopover,
@@ -399,6 +405,7 @@ const seeFeedbackPopovers: {
   ActivityControlFlow: React.FC<PopoverProps>
   ObjectLink: React.FC<PopoverProps>
   CommunicationLink: React.FC<PopoverProps>
+  PetriNetArc: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -461,6 +468,7 @@ const seeFeedbackPopovers: {
   ActivityControlFlow: EdgeSeeFeedbackPopover,
   ObjectLink: EdgeSeeFeedbackPopover,
   CommunicationLink: EdgeSeeFeedbackPopover,
+  PetriNetArc: EdgeSeeFeedbackPopover,
   UseCaseAssociation: EdgeSeeFeedbackPopover,
   UseCaseInclude: EdgeSeeFeedbackPopover,
   UseCaseExtend: EdgeSeeFeedbackPopover,

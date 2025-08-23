@@ -1,9 +1,7 @@
 import { BaseEdge } from "@xyflow/react"
-import {
-  BaseEdgeProps,
-  CommonEdgeElements,
-} from "../GenericEdge"
-import { EdgeMultipleLabels } from "../labelTypes/EdgeMultipleLabels"
+import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
+import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
+import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 import { useStraightPathEdge } from "@/hooks/useStraightPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
@@ -11,7 +9,7 @@ import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
-export const CommunicationDiagramEdge = ({
+export const PetriNetEdge = ({
   id,
   type,
   source,
@@ -28,6 +26,10 @@ export const CommunicationDiagramEdge = ({
 }: BaseEdgeProps) => {
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
+
+   const config = useEdgeConfig(type as "PetriNetArc")
+  const showRelationshipLabels =
+    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
 
   const { assessments } = useDiagramStore(
     useShallow((state) => ({
@@ -74,7 +76,6 @@ export const CommunicationDiagramEdge = ({
           style={{
             stroke: "black",
             strokeDasharray: strokeDashArray,
-            opacity: 1,
           }}
         />
 
@@ -85,19 +86,18 @@ export const CommunicationDiagramEdge = ({
           fill="none"
           strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
           pointerEvents="stroke"
-          style={{
-            opacity: 0.4,
-          }}
+          style={{ opacity: 0.4 }}
         />
       </g>
 
-      <EdgeMultipleLabels
-        labels={data?.labels || []}
+      <EdgeMiddleLabels
+        label={data?.label}
         pathMiddlePosition={edgeData.pathMiddlePosition}
         isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
+        showRelationshipLabels={showRelationshipLabels}
         sourcePoint={edgeData.sourcePoint}
         targetPoint={edgeData.targetPoint}
-        showRelationshipLabels={true}
+        isUseCasePath={true}
       />
 
       <CommonEdgeElements
