@@ -220,10 +220,10 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
       }
     case "PetriNetArc":
       return {
-        markerPadding: 30,
+        markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#black-triangle)",
         strokeDashArray: "0",
-        offset: 40,
+        offset: 11,
       }
     case "ComponentDependency":
     case "ClassDependency":
@@ -466,19 +466,26 @@ export function calculateOverlayPath(
   if (
     type == "UseCaseInclude" ||
     type == "UseCaseExtend" ||
-    type == "UseCaseGeneralization"
+    type == "UseCaseGeneralization" ||
+    type == "CommunicationLink" ||
+    type == "PetriNetArc"
   ) {
     const { offset } = getEdgeMarkerStyles(type)
     const markerOffset = offset ?? 0
-    const dx = targetX - sourceX
-    const dy = targetY - sourceY
-    const length = Math.sqrt(dx * dx + dy * dy)
+    
+    if (markerOffset !== 0) {
+      const dx = targetX - sourceX
+      const dy = targetY - sourceY
+      const length = Math.sqrt(dx * dx + dy * dy)
 
-    const normalizedDx = dx / length
-    const normalizedDy = dy / length
-    const adjustedTargetX = targetX + normalizedDx * markerOffset
-    const adjustedTargetY = targetY + normalizedDy * markerOffset
-    return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
+      if (length > 0) {
+        const normalizedDx = dx / length
+        const normalizedDy = dy / length
+        const adjustedTargetX = targetX + normalizedDx * markerOffset
+        const adjustedTargetY = targetY + normalizedDy * markerOffset
+        return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
+      }
+    }
   }
   return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
 }

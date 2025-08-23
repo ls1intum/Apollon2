@@ -12,16 +12,12 @@ import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 export const PetriNetEdge = ({
   id,
   type,
-  source,
-  target,
   sourceX,
   sourceY,
   targetX,
   targetY,
   sourcePosition,
   targetPosition,
-  sourceHandleId,
-  targetHandleId,
   data,
 }: BaseEdgeProps) => {
   const anchorRef = useRef<SVGSVGElement | null>(null)
@@ -50,19 +46,13 @@ export const PetriNetEdge = ({
     strokeDashArray,
     isDiagramModifiable,
   } = useStraightPathEdge({
-    id,
     type,
-    source,
-    target,
     sourceX,
     sourceY,
     targetX,
     targetY,
     sourcePosition,
     targetPosition,
-    sourceHandleId,
-    targetHandleId,
-    data,
   })
 
   return (
