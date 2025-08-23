@@ -39,12 +39,10 @@ export const EdgeMultipleLabels = ({
     arrowRotation = isMiddlePathHorizontal ? 0 : 90
   }
 
-  // Increase offset to provide more space from the edge and prevent collision
-  // Apply offset in both directions to ensure arrow doesn't collide with edge
-  const offsetX = isMiddlePathHorizontal ? 35 : 35 // Always apply horizontal offset
-  const baseOffsetY = isMiddlePathHorizontal ? 55 : 45 // Increased vertical offset for horizontal edges
+  const offsetX = isMiddlePathHorizontal ? 0 : 35 //  horizontal offset
+  const baseOffsetY = isMiddlePathHorizontal ? 20 : 0 // vertical offset
 
-  const transform = `translate(${pathMiddlePosition.x + offsetX}px, ${pathMiddlePosition.y + baseOffsetY}px) translate(-50%, -50%)`
+  const transform = `translate(${pathMiddlePosition.x + offsetX}px, ${pathMiddlePosition.y + baseOffsetY}px) translate(-50%, 0%)`
 
   return (
     <EdgeLabelRenderer>
