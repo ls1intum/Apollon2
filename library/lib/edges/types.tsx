@@ -7,6 +7,7 @@ import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
 import { ObjectDiagramEdge } from "./edgeTypes/ObjectDiagramEdge"
 import { FlowChartEdge } from "./edgeTypes/FlowChartEdge"
 import { SyntaxTreeEdge } from "./edgeTypes"
+import { CommunicationDiagramEdge } from "./edgeTypes/CommunicationDiagramEdge"
 
 export const diagramEdgeTypes = {
   ClassAggregation: ClassDiagramEdge,
@@ -24,6 +25,8 @@ export const diagramEdgeTypes = {
   FlowChartFlowline: FlowChartEdge,
 
   SyntaxTreeLink: SyntaxTreeEdge,
+
+  CommunicationLink: CommunicationDiagramEdge,
 
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
@@ -63,7 +66,11 @@ export const edgeConfig = {
   //FlowChart edge
   FlowChartFlowline: { allowMidpointDragging: true },
 
-  SyntaxTreeLink: { },
+  SyntaxTreeLink: {},
+
+  // Communication diagram edge - allow midpoint dragging with multiple labels
+  CommunicationLink: { allowMidpointDragging: true },
+
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
   UseCaseInclude: { showRelationshipLabels: true }, // Show <<include>>

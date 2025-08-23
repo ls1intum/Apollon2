@@ -8,6 +8,7 @@ export type CustomEdgeProps = {
   targetMultiplicity: string | null
   points: IPoint[]
   label?: string | null
+  labels?: string[] // For communication diagram edges with multiple labels
 }
 
 export type ExtendedEdgeProps = EdgeProps<Edge<CustomEdgeProps>> & {
