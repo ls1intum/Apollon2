@@ -1,8 +1,5 @@
 import { BaseEdge } from "@xyflow/react"
 import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
-import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
-import { EdgeIncludeExtendLabel } from "../labelTypes/EdgeIncludeExtendLabel"
-import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 import { useStraightPathEdge } from "@/hooks/useStraightPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
@@ -10,7 +7,7 @@ import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
-export const UseCaseEdge = ({
+export const SyntaxTreeEdge = ({
   id,
   type,
   sourceX,
@@ -19,20 +16,9 @@ export const UseCaseEdge = ({
   targetY,
   sourcePosition,
   targetPosition,
-  data,
 }: BaseEdgeProps) => {
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
-
-  const config = useEdgeConfig(
-    type as
-      | "UseCaseAssociation"
-      | "UseCaseInclude"
-      | "UseCaseExtend"
-      | "UseCaseGeneralization"
-  )
-  const showRelationshipLabels =
-    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
 
   const { assessments } = useDiagramStore(
     useShallow((state) => ({
@@ -86,32 +72,6 @@ export const UseCaseEdge = ({
           style={{ opacity: 0.4 }}
         />
       </g>
-
-      <EdgeMiddleLabels
-        label={data?.label}
-        pathMiddlePosition={edgeData.pathMiddlePosition}
-        isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-        showRelationshipLabels={showRelationshipLabels}
-        sourcePoint={edgeData.sourcePoint}
-        targetPoint={edgeData.targetPoint}
-        isUseCasePath={true}
-      />
-
-      <EdgeIncludeExtendLabel
-        relationshipType={
-          type === "UseCaseInclude"
-            ? "include"
-            : type === "UseCaseExtend"
-              ? "extend"
-              : undefined
-        }
-        showRelationshipLabels={
-          type === "UseCaseInclude" || type === "UseCaseExtend"
-        }
-        pathMiddlePosition={edgeData.pathMiddlePosition}
-        sourcePoint={edgeData.sourcePoint}
-        targetPoint={edgeData.targetPoint}
-      />
 
       <CommonEdgeElements
         id={id}
