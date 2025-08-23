@@ -181,6 +181,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
     case "ClassBidirectional":
     case "DeploymentAssociation":
     case "ObjectLink":
+    case "SyntaxTreeLink":
       return {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "0",
@@ -684,6 +685,8 @@ export const getDefaultEdgeType = (
       return "ObjectLink"
     case "Flowchart":
       return "FlowChartFlowline"
+    case "SyntaxTree":
+      return "SyntaxTreeLink"
 
     case "Sfc":
       return "SfcDiagramEdge"
@@ -702,6 +705,7 @@ export function getConnectionLineType(
 ): ConnectionLineType {
   switch (diagramType) {
     case "UseCaseDiagram":
+    case "SyntaxTree":
       return ConnectionLineType.Straight
 
     default:
