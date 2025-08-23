@@ -4,16 +4,37 @@ import {
   EdgeEndpointMarkers,
   CommonEdgeElements,
 } from "../GenericEdge"
-import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
-import { useEdgeConfig } from "@/hooks/useEdgeConfig"
-import { useStepPathEdge } from "@/hooks/useStepPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
+import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
+import { Position } from "@xyflow/react"
+import { useEdgeConfig } from "@/hooks/useEdgeConfig"
+import { useStepPathEdge } from "@/hooks/useStepPathEdge"
 import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
-export const ActivityDiagramEdge = ({
+const arePositionsOpposite = (pos1: Position, pos2: Position): boolean => {
+  return (
+    (pos1 === Position.Left && pos2 === Position.Right) ||
+    (pos1 === Position.Right && pos2 === Position.Left) ||
+    (pos1 === Position.Top && pos2 === Position.Bottom) ||
+    (pos1 === Position.Bottom && pos2 === Position.Top)
+  )
+}
+
+const getPositionFromHandleId = (handleId: string | null): Position => {
+  if (!handleId) return Position.Right // default
+
+  if (handleId.includes("left")) return Position.Left
+  if (handleId.includes("right")) return Position.Right
+  if (handleId.includes("top")) return Position.Top
+  if (handleId.includes("bottom")) return Position.Bottom
+
+  return Position.Right
+}
+
+export const DeploymentDiagramEdge = ({
   id,
   type,
   source,
@@ -31,13 +52,23 @@ export const ActivityDiagramEdge = ({
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
 
-  const config = useEdgeConfig(type as "ActivityControlFlow")
+  const config = useEdgeConfig(
+    type as
+      | "DeploymentDependency"
+      | "DeploymentProvidedInterface"
+      | "DeploymentRequiredInterface"
+      | "DeploymentRequiredThreeQuarterInterface"
+      | "DeploymentRequiredQuarterInterface"
+  )
 
   const allowMidpointDragging =
     "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const showRelationshipLabels =
+    "showRelationshipLabels" in config ? config.showRelationshipLabels : false
 
-  const { assessments } = useDiagramStore(
+  const { edges, assessments } = useDiagramStore(
     useShallow((state) => ({
+      edges: state.edges,
       assessments: state.assessments,
     }))
   )
@@ -45,6 +76,49 @@ export const ActivityDiagramEdge = ({
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
+
+  const dynamicEdgeType = (() => {
+    if (type !== "DeploymentRequiredInterface") {
+      return type
+    }
+
+    const currentRequiredInterfaces = edges.filter(
+      (edge) =>
+        edge.target === target && edge.type === "DeploymentRequiredInterface"
+    )
+
+    const currentAllInterfaces = edges.filter(
+      (edge) =>
+        edge.target === target &&
+        (edge.type === "DeploymentRequiredInterface" ||
+          edge.type === "DeploymentProvidedInterface")
+    )
+
+    const currentTargetPosition = getPositionFromHandleId(targetHandleId!)
+    const hasOppositeRequiredInterface = currentRequiredInterfaces
+      .filter((edge) => edge.id !== id)
+      .some((otherEdge) => {
+        const otherPosition = getPositionFromHandleId(otherEdge.targetHandle!)
+        return arePositionsOpposite(currentTargetPosition, otherPosition)
+      })
+
+    switch (currentRequiredInterfaces.length) {
+      case 1:
+        if (currentAllInterfaces.length === currentRequiredInterfaces.length) {
+          return "DeploymentRequiredInterface"
+        } else {
+          return "DeploymentRequiredThreeQuarterInterface"
+        }
+      case 2:
+        if (hasOppositeRequiredInterface) {
+          return "DeploymentRequiredThreeQuarterInterface"
+        } else {
+          return "DeploymentRequiredQuarterInterface"
+        }
+      default:
+        return "DeploymentRequiredQuarterInterface"
+    }
+  })()
 
   const {
     pathRef,
@@ -63,7 +137,7 @@ export const ActivityDiagramEdge = ({
     isDiagramModifiable,
   } = useStepPathEdge({
     id,
-    type,
+    type: dynamicEdgeType,
     source,
     target,
     sourceX,
@@ -77,7 +151,7 @@ export const ActivityDiagramEdge = ({
     data,
     allowMidpointDragging,
     enableReconnection: true,
-    enableStraightPath: false,
+    enableStraightPath: true,
   })
 
   return (
@@ -143,7 +217,7 @@ export const ActivityDiagramEdge = ({
         label={data?.label}
         pathMiddlePosition={edgeData.pathMiddlePosition}
         isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-        showRelationshipLabels={true}
+        showRelationshipLabels={showRelationshipLabels}
       />
 
       <CommonEdgeElements
@@ -154,7 +228,7 @@ export const ActivityDiagramEdge = ({
         anchorRef={anchorRef}
         handleDelete={handleDelete}
         setPopOverElementId={setPopOverElementId}
-        type={type}
+        type={dynamicEdgeType}
       />
     </>
   )

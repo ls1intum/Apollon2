@@ -4,6 +4,7 @@ import { useShallow } from "zustand/shallow"
 import { DefaultNodeEditPopover } from "../DefaultNodeEditPopover"
 import { PopoverProps } from "../types"
 import { Divider, TextField } from "@mui/material"
+import { ZINDEX_HEADER_SWITCH } from "@/constants/zindexConstants"
 
 export const DeploymentNodeEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -61,7 +62,7 @@ export const DeploymentNodeEditPopover: React.FC<PopoverProps> = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 1,
+        zIndex: ZINDEX_HEADER_SWITCH,
         ...(nodeData.isComponentHeaderShown && {
           background:
             "linear-gradient(to top right, transparent calc(50% - 1px), black 50%, transparent calc(50% + 1px))",

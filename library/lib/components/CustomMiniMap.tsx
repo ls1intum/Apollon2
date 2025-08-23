@@ -53,6 +53,7 @@ import SouthEastIcon from "@mui/icons-material/SouthEast"
 import MapIcon from "@mui/icons-material/Map"
 import { DiagramNodeType } from "@/typings"
 import { ClassType } from "@/types/nodes/enums"
+import { ZINDEX_MINIMAP, ZINDEX_PANEL } from "@/constants/zindexConstants"
 
 export const CustomMiniMap = () => {
   const [minimapCollapsed, setMinimapCollapsed] = useState(true)
@@ -77,7 +78,7 @@ export const CustomMiniMap = () => {
           bottom: 0,
           right: 0,
           display: "flex",
-          zIndex: 10,
+          zIndex: ZINDEX_PANEL,
           padding: 8,
           backgroundColor: "white",
           borderRadius: "4px",
@@ -95,7 +96,7 @@ export const CustomMiniMap = () => {
         onClick={() => setMinimapCollapsed(true)}
         nodeComponent={MiniMapNode}
         offsetScale={20}
-        style={{ zIndex: 5 }}
+        style={{ zIndex: ZINDEX_MINIMAP }}
       />
     </Panel>
   )

@@ -4,7 +4,6 @@ import {
   EdgeEndpointMarkers,
   CommonEdgeElements,
 } from "../GenericEdge"
-import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 import { useStepPathEdge } from "@/hooks/useStepPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
@@ -13,7 +12,7 @@ import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
-export const ActivityDiagramEdge = ({
+export const ObjectDiagramEdge = ({
   id,
   type,
   source,
@@ -31,7 +30,7 @@ export const ActivityDiagramEdge = ({
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
 
-  const config = useEdgeConfig(type as "ActivityControlFlow")
+  const config = useEdgeConfig(type as "ObjectLink")
 
   const allowMidpointDragging =
     "allowMidpointDragging" in config ? config.allowMidpointDragging : true
@@ -138,13 +137,6 @@ export const ActivityDiagramEdge = ({
             />
           ))}
       </g>
-
-      <EdgeMiddleLabels
-        label={data?.label}
-        pathMiddlePosition={edgeData.pathMiddlePosition}
-        isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-        showRelationshipLabels={true}
-      />
 
       <CommonEdgeElements
         id={id}

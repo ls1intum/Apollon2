@@ -16,6 +16,7 @@ import {
 import { canDropIntoParent } from "@/utils/bpmnConstraints"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
+import { ZINDEX_DRAGGABLE_ELEMENT } from "@/constants/zindexConstants"
 
 /* ========================================================================
    Utility functions to manage page scrolling during dragging
@@ -252,7 +253,7 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
         left: `${ghostPosition.x}px`,
         top: `${ghostPosition.y}px`,
         pointerEvents: "none",
-        zIndex: 9999,
+        zIndex: ZINDEX_DRAGGABLE_ELEMENT,
         opacity: 0.8,
       }}
     >
