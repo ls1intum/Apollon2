@@ -127,7 +127,6 @@ type EdgePopoverType =
   | "DeploymentRequiredInterface"
   | "DeploymentRequiredThreeQuarterInterface"
   | "DeploymentRequiredQuarterInterface"
-  | "ObjectLink"
   | "FlowChartFlowline"
   | "SyntaxTreeLink"
   | "PetriNetArc"
