@@ -62,6 +62,7 @@ import { DeploymentEdgeEditPopover } from "./edgePopovers/DeploymentDiagramEdgeE
 import { ObjectDiagramEdgeEditPopover } from "./edgePopovers/ObjectDiagramEdgeEditPopover"
 import { FlowChartEdgeEditPopover } from "./edgePopovers/FlowChartEdgeEditPopover"
 import { SyntaxTreeEdgeEditPopover } from "./edgePopovers/SyntaxTreeEdgeEditPopover"
+import { SfcActionTableEditPopover, SfcEdgeEditPopover } from "./sfcDiagram"
 
 type NodePopoverType =
   | "class"
@@ -94,6 +95,8 @@ type NodePopoverType =
   | "BPMNPool"
   | "BPMNGroup"
   | "ReachabilityGraphMarking"
+  | "Sfc"
+  | "SfcActionTable"
 
 type EdgePopoverType =
   | "ClassAggregation"
@@ -126,6 +129,7 @@ type EdgePopoverType =
   | "DeploymentRequiredQuarterInterface"
   | "FlowChartFlowline"
   | "SyntaxTreeLink"
+  | "SfcDiagramEdge"
 
 type PopoverType = NodePopoverType | EdgePopoverType
 
@@ -151,6 +155,7 @@ const editPopovers: {
   BPMNMessageFlow: React.FC<PopoverProps>
   BPMNAssociationFlow: React.FC<PopoverProps>
   BPMNDataAssociationFlow: React.FC<PopoverProps>
+  SfcDiagramEdge: React.FC<PopoverProps>
   ComponentDependency: React.FC<PopoverProps>
   ComponentProvidedInterface: React.FC<PopoverProps>
   ComponentRequiredInterface: React.FC<PopoverProps>
@@ -190,6 +195,8 @@ const editPopovers: {
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
   ReachabilityGraphMarking: React.FC<PopoverProps>
+  Sfc: React.FC<PopoverProps>
+  SfcActionTable: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   objectName: ObjectEditPopover,
@@ -212,6 +219,7 @@ const editPopovers: {
   BPMNMessageFlow: EdgeEditPopover,
   BPMNAssociationFlow: EdgeEditPopover,
   BPMNDataAssociationFlow: EdgeEditPopover,
+  SfcDiagramEdge: SfcEdgeEditPopover,
   ComponentDependency: ComponentEdgeEditPopover,
   ComponentProvidedInterface: ComponentEdgeEditPopover,
   ComponentRequiredInterface: ComponentEdgeEditPopover,
@@ -251,6 +259,8 @@ const editPopovers: {
   BPMNPool: BPMNPoolEditPopover,
   BPMNGroup: DefaultNodeEditPopover,
   ReachabilityGraphMarking: ReachabilityGraphMarkingEditPopover,
+  Sfc: DefaultNodeEditPopover,
+  SfcActionTable: SfcActionTableEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -314,6 +324,9 @@ const giveFeedbackPopovers: {
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
   ReachabilityGraphMarking: React.FC<PopoverProps>
+  Sfc: React.FC<PopoverProps>
+  SfcActionTable: React.FC<PopoverProps>
+  SfcDiagramEdge: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   objectName: ObjectGiveFeedbackPopover,
@@ -375,6 +388,9 @@ const giveFeedbackPopovers: {
   BPMNPool: DefaultNodeGiveFeedbackPopover,
   BPMNGroup: DefaultNodeGiveFeedbackPopover,
   ReachabilityGraphMarking: DefaultNodeGiveFeedbackPopover,
+  Sfc: DefaultNodeGiveFeedbackPopover,
+  SfcActionTable: DefaultNodeGiveFeedbackPopover,
+  SfcDiagramEdge: EdgeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -438,6 +454,9 @@ const seeFeedbackPopovers: {
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
   ReachabilityGraphMarking: React.FC<PopoverProps>
+  Sfc: React.FC<PopoverProps>
+  SfcActionTable: React.FC<PopoverProps>
+  SfcDiagramEdge: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   objectName: ObjectSeeFeedbackPopover,
@@ -499,6 +518,9 @@ const seeFeedbackPopovers: {
   BPMNPool: DefaultNodeSeeFeedbackPopover,
   BPMNGroup: DefaultNodeSeeFeedbackPopover,
   ReachabilityGraphMarking: DefaultNodeSeeFeedbackPopover,
+  Sfc: DefaultNodeSeeFeedbackPopover,
+  SfcActionTable: DefaultNodeSeeFeedbackPopover,
+  SfcDiagramEdge: EdgeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

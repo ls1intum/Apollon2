@@ -6,7 +6,8 @@ import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
 import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
 import { ObjectDiagramEdge } from "./edgeTypes/ObjectDiagramEdge"
 import { FlowChartEdge } from "./edgeTypes/FlowChartEdge"
-import { SyntaxTreeEdge } from "./edgeTypes"
+import { SyntaxTreeEdge } from "./edgeTypes/SyntaxTreeEdge"
+import { SfcDiagramEdge } from "./edgeTypes/SfcDiagramEdge"
 
 export const diagramEdgeTypes = {
   ClassAggregation: ClassDiagramEdge,
@@ -42,6 +43,8 @@ export const diagramEdgeTypes = {
   DeploymentRequiredInterface: DeploymentDiagramEdge,
   DeploymentRequiredThreeQuarterInterface: DeploymentDiagramEdge,
   DeploymentRequiredQuarterInterface: DeploymentDiagramEdge,
+
+  SfcDiagramEdge: SfcDiagramEdge,
 } satisfies EdgeTypes
 
 export const edgeConfig = {
@@ -101,6 +104,10 @@ export const edgeConfig = {
   DeploymentRequiredQuarterInterface: {
     allowMidpointDragging: true,
     showRelationshipLabels: false,
+  },
+
+  SfcDiagramEdge: {
+    allowMidpointDragging: true,
   },
 } as const
 

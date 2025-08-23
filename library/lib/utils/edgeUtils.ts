@@ -687,6 +687,9 @@ export const getDefaultEdgeType = (
       return "FlowChartFlowline"
     case "SyntaxTree":
       return "SyntaxTreeLink"
+
+    case "Sfc":
+      return "SfcDiagramEdge"
     default:
       return "ClassUnidirectional"
   }
