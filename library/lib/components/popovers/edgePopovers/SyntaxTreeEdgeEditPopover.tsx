@@ -1,7 +1,5 @@
 import { Box, Typography } from "@mui/material"
-
 import { useReactFlow } from "@xyflow/react"
-
 import { PopoverProps } from "../types"
 
 export const SyntaxTreeEdgeEditPopover: React.FC<PopoverProps> = ({
