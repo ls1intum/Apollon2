@@ -1,8 +1,5 @@
 import { BaseEdge } from "@xyflow/react"
-import {
-  BaseEdgeProps,
-  CommonEdgeElements,
-} from "../GenericEdge"
+import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
 import { EdgeMultipleLabels } from "../labelTypes/EdgeMultipleLabels"
 import { useStraightPathEdge } from "@/hooks/useStraightPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"

@@ -30,7 +30,7 @@ export const diagramEdgeTypes = {
   CommunicationLink: CommunicationDiagramEdge,
 
   PetriNetArc: PetriNetEdge,
-  
+
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
   UseCaseExtend: UseCaseEdge,

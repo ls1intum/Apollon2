@@ -10,12 +10,16 @@ import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 export const SyntaxTreeEdge = ({
   id,
   type,
+  source,
+  target,
   sourceX,
   sourceY,
   targetX,
   targetY,
   sourcePosition,
   targetPosition,
+  sourceHandleId,
+  targetHandleId,
 }: BaseEdgeProps) => {
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
@@ -39,13 +43,18 @@ export const SyntaxTreeEdge = ({
     strokeDashArray,
     isDiagramModifiable,
   } = useStraightPathEdge({
+    id,
     type,
+    source,
+    target,
     sourceX,
     sourceY,
     targetX,
     targetY,
     sourcePosition,
     targetPosition,
+    sourceHandleId,
+    targetHandleId,
   })
 
   return (

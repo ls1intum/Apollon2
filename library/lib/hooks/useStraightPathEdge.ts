@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react"
-import { BaseEdgeProps } from "../edges/GenericEdge"
+import { useEffect, useMemo, useRef, useState, useCallback } from "react"
+import { useReactFlow, Position } from "@xyflow/react"
 import {
   calculateOverlayPath,
   calculateStraightPath,
   getEdgeMarkerStyles,
   adjustSourceCoordinates,
   adjustTargetCoordinates,
+  adjustPetriNetSourceCoordinates,
+  adjustPetriNetTargetCoordinates,
 } from "@/utils/edgeUtils"
 import {
   MARKER_PADDING,
@@ -13,6 +15,8 @@ import {
 } from "@/constants/edgeConstants"
 import { useDiagramModifiable } from "./useDiagramModifiable"
 import { IPoint } from "../edges/Connection"
+import { useEdgeReconnection, BaseEdgeProps } from "../edges/GenericEdge"
+import { useHandleFinder } from "./useHandleFinder"
 
 export interface StraightPathEdgeData {
   pathMiddlePosition: IPoint
@@ -21,35 +25,101 @@ export interface StraightPathEdgeData {
   targetPoint: IPoint
 }
 
-export const useStraightPathEdge = ({
-  type,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-}: Omit<BaseEdgeProps, "id" | "source" | "target" | "data">) => {
+export const useStraightPathEdge = (
+  params:
+    | (Omit<BaseEdgeProps, "data"> & { enableReconnection?: boolean })
+    | {
+        type: string
+        sourceX: number
+        sourceY: number
+        targetX: number
+        targetY: number
+        sourcePosition: Position
+        targetPosition: Position
+        id?: string
+        source?: string
+        target?: string
+        sourceHandleId?: string
+        targetHandleId?: string
+        enableReconnection?: boolean
+      }
+) => {
+  const {
+    id,
+    type,
+    source,
+    target,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    sourceHandleId,
+    targetHandleId,
+    enableReconnection = true,
+  } = params
   const pathRef = useRef<SVGPathElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
+  const { screenToFlowPosition } = useReactFlow()
+  const [tempReconnectPath, setTempReconnectPath] = useState<string | null>(
+    null
+  )
+
+  // Only enable reconnection features if we have all required parameters
+  const hasReconnectionSupport = id && source && target && enableReconnection
+
+  const { isReconnectingRef, startReconnection, completeReconnection } =
+    hasReconnectionSupport
+      ? useEdgeReconnection(id, source, target, sourceHandleId, targetHandleId)
+      : {
+          isReconnectingRef: { current: false },
+          startReconnection: () => {},
+          completeReconnection: () => {},
+        }
+
+  const { findBestHandle } = hasReconnectionSupport
+    ? useHandleFinder()
+    : {
+        findBestHandle: () => ({
+          handle: null,
+          node: null,
+          shouldClearPoints: false,
+        }),
+      }
 
   const { markerEnd, strokeDashArray, markerPadding } =
     getEdgeMarkerStyles(type)
 
   const padding = markerPadding ?? MARKER_PADDING
 
-  const adjustedTargetCoordinates = adjustTargetCoordinates(
-    targetX,
-    targetY,
-    targetPosition,
-    padding
-  )
-  const adjustedSourceCoordinates = adjustSourceCoordinates(
-    sourceX,
-    sourceY,
-    sourcePosition,
-    SOURCE_CONNECTION_POINT_PADDING
-  )
+  // Use specialized PetriNet coordinate adjustments if this is a PetriNet arc
+  const isPetriNetArc = type === "PetriNetArc"
+
+  const adjustedTargetCoordinates = isPetriNetArc
+    ? adjustPetriNetTargetCoordinates(
+        sourceX,
+        sourceY,
+        targetX,
+        targetY,
+        targetPosition,
+        padding
+      )
+    : adjustTargetCoordinates(targetX, targetY, targetPosition, padding)
+
+  const adjustedSourceCoordinates = isPetriNetArc
+    ? adjustPetriNetSourceCoordinates(
+        sourceX,
+        sourceY,
+        sourcePosition,
+        SOURCE_CONNECTION_POINT_PADDING
+      )
+    : adjustSourceCoordinates(
+        sourceX,
+        sourceY,
+        sourcePosition,
+        SOURCE_CONNECTION_POINT_PADDING
+      )
 
   const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>(() => ({
     x:
@@ -85,6 +155,7 @@ export const useStraightPathEdge = ({
     adjustedTargetCoordinates.targetX,
     adjustedTargetCoordinates.targetY,
     type,
+    targetPosition,
   ])
 
   const overlayPath = useMemo(() => {
@@ -101,6 +172,7 @@ export const useStraightPathEdge = ({
     adjustedTargetCoordinates.targetX,
     adjustedTargetCoordinates.targetY,
     type,
+    targetPosition,
   ])
 
   useEffect(() => {
@@ -194,6 +266,133 @@ export const useStraightPathEdge = ({
     y: adjustedTargetCoordinates.targetY,
   }
 
+  const handleEndpointPointerDown = useCallback(
+    (e: React.PointerEvent, endType: "source" | "target") => {
+      console.log("🔵 Endpoint grab attempted:", endType)
+
+      if (!isDiagramModifiable) {
+        console.log("❌ Diagram is not modifiable")
+        return
+      }
+
+      if (!enableReconnection) {
+        console.log("❌ Reconnection is disabled")
+        return
+      }
+
+      if (!hasReconnectionSupport) {
+        console.log("❌ Reconnection support missing:", { id, source, target })
+        return
+      }
+
+      // For straight path, use the actual endpoint coordinates
+      const endpoint = endType === "source" ? sourcePoint : targetPoint
+
+      console.log("✅ Starting reconnection:", endType, endpoint)
+      startReconnection(e, endType, endpoint)
+
+      const handleEndpointPointerMove = (moveEvent: PointerEvent) => {
+        if (!isReconnectingRef.current) return
+
+        const newEndpoint = screenToFlowPosition({
+          x: moveEvent.clientX,
+          y: moveEvent.clientY,
+        })
+
+        let newSourceX = sourceX
+        let newSourceY = sourceY
+        let newTargetX = targetX
+        let newTargetY = targetY
+
+        if (endType === "source") {
+          newSourceX = newEndpoint.x
+          newSourceY = newEndpoint.y
+        } else {
+          newTargetX = newEndpoint.x
+          newTargetY = newEndpoint.y
+        }
+
+        // Calculate adjusted coordinates for the temporary path
+        const tempAdjustedTargetCoordinates = isPetriNetArc
+          ? adjustPetriNetTargetCoordinates(
+              newSourceX,
+              newSourceY,
+              newTargetX,
+              newTargetY,
+              targetPosition,
+              padding
+            )
+          : adjustTargetCoordinates(
+              newTargetX,
+              newTargetY,
+              targetPosition,
+              padding
+            )
+
+        const tempAdjustedSourceCoordinates = isPetriNetArc
+          ? adjustPetriNetSourceCoordinates(
+              newSourceX,
+              newSourceY,
+              sourcePosition,
+              SOURCE_CONNECTION_POINT_PADDING
+            )
+          : adjustSourceCoordinates(
+              newSourceX,
+              newSourceY,
+              sourcePosition,
+              SOURCE_CONNECTION_POINT_PADDING
+            )
+
+        // Create temporary straight path
+        const tempPath = calculateStraightPath(
+          tempAdjustedSourceCoordinates.sourceX,
+          tempAdjustedSourceCoordinates.sourceY,
+          tempAdjustedTargetCoordinates.targetX,
+          tempAdjustedTargetCoordinates.targetY,
+          type
+        )
+
+        setTempReconnectPath(tempPath)
+      }
+
+      const handleEndpointPointerUp = (upEvent: PointerEvent) => {
+        setTempReconnectPath(null) // Clear temporary path
+
+        document.removeEventListener("pointermove", handleEndpointPointerMove, {
+          capture: true,
+        })
+        document.removeEventListener("pointerup", handleEndpointPointerUp, {
+          capture: true,
+        })
+
+        completeReconnection(upEvent, findBestHandle, () => {
+          // No custom points to clear for straight path edges
+        })
+      }
+
+      // Using capture: true ensures we get events before other handlers
+      // This is critical for drag operations to work reliably
+      document.addEventListener("pointermove", handleEndpointPointerMove, {
+        capture: true,
+      })
+      document.addEventListener("pointerup", handleEndpointPointerUp, {
+        once: true,
+        capture: true,
+      })
+    },
+    [
+      isDiagramModifiable,
+      enableReconnection,
+      hasReconnectionSupport,
+      sourcePoint,
+      targetPoint,
+      startReconnection,
+      isReconnectingRef,
+      completeReconnection,
+      findBestHandle,
+    ]
+  )
+
   const edgeData: StraightPathEdgeData = {
     pathMiddlePosition,
     isMiddlePathHorizontal,
@@ -211,5 +410,8 @@ export const useStraightPathEdge = ({
     sourcePoint,
     targetPoint,
     isDiagramModifiable,
+    isReconnectingRef,
+    handleEndpointPointerDown,
+    tempReconnectPath,
   }
 }
