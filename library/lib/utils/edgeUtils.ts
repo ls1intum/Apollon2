@@ -188,6 +188,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
       }
     case "ActivityControlFlow":
     case "ClassUnidirectional":
+    case "FlowChartFlowline":
       return {
         markerPadding: ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
@@ -681,6 +682,8 @@ export const getDefaultEdgeType = (
       return "DeploymentAssociation"
     case "ObjectDiagram":
       return "ObjectLink"
+    case "Flowchart":
+      return "FlowChartFlowline"
     default:
       return "ClassUnidirectional"
   }

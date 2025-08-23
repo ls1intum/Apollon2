@@ -5,6 +5,7 @@ import { UseCaseEdge } from "./edgeTypes/UseCaseDiagramEdge"
 import { ComponentDiagramEdge } from "./edgeTypes/ComponentDiagramEdge"
 import { DeploymentDiagramEdge } from "./edgeTypes/DeploymentDiagramEdge"
 import { ObjectDiagramEdge } from "./edgeTypes/ObjectDiagramEdge"
+import { FlowChartEdge } from "./edgeTypes/FlowChartEdge"
 
 export const diagramEdgeTypes = {
   ClassAggregation: ClassDiagramEdge,
@@ -18,6 +19,8 @@ export const diagramEdgeTypes = {
   ActivityControlFlow: ActivityDiagramEdge,
 
   ObjectLink: ObjectDiagramEdge,
+
+  FlowChartFlowline: FlowChartEdge,
 
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
@@ -53,6 +56,9 @@ export const edgeConfig = {
 
   // Object edge
   ObjectLink: { allowMidpointDragging: true },
+
+  //FlowChart edge
+  FlowChartFlowline: { allowMidpointDragging: true },
 
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
