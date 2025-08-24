@@ -8,6 +8,7 @@ import {
   DeepPartial,
   getSVG,
   getDiagramBounds,
+  createModelWithPathData,
 } from "./utils"
 import { UMLDiagramType } from "./types"
 import { createDiagramStore, DiagramStore } from "@/store/diagramStore"
@@ -304,6 +305,22 @@ export class ApollonEditor {
       edges: edges.map((edge) => mapFromReactFlowEdgeToApollonEdge(edge)),
       assessments: this.diagramStore.getState().assessments,
     }
+  }
+
+  /**
+   * Get model with complete path data for all edges
+   * This ensures that even edges without custom points include their computed path points
+   */
+  get modelWithPathData(): Apollon.UMLModel {
+    const { nodes, edges, diagramId, assessments } = this.diagramStore.getState()
+    const { diagramTitle, diagramType } = this.metadataStore.getState()
+    
+    return createModelWithPathData(nodes, edges, {
+      id: diagramId,
+      title: diagramTitle,
+      type: diagramType,
+      assessments,
+    })
   }
 
   set model(model: Apollon.UMLModel) {
