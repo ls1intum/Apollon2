@@ -171,6 +171,7 @@ export const calculateDynamicEdgeLabels = (
 
 export interface EdgeMarkerStyles {
   markerEnd?: string
+  markerStart?: string
   markerPadding?: number
   strokeDashArray?: string
   offset?: number
@@ -182,6 +183,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
     case "DeploymentAssociation":
     case "ObjectLink":
     case "SyntaxTreeLink":
+    case "CommunicationLink":
       return {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "0",
@@ -692,6 +694,8 @@ export const getDefaultEdgeType = (
       return "ReachabilityGraphArc"
     case "Sfc":
       return "SfcDiagramEdge"
+    case "CommunicationDiagram":
+      return "CommunicationLink"
     default:
       return "ClassUnidirectional"
   }
