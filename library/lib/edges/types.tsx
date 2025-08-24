@@ -9,6 +9,7 @@ import { FlowChartEdge } from "./edgeTypes/FlowChartEdge"
 import { SyntaxTreeEdge } from "./edgeTypes/SyntaxTreeEdge"
 import { SfcDiagramEdge } from "./edgeTypes/SfcDiagramEdge"
 import { ReachabilityGraphEdge } from "./edgeTypes/ReachabilityGraphArc"
+import { CommunicationDiagramEdge } from "./edgeTypes/CommunicationDiagramEdge"
 import { BPMNDiagramEdge } from "./edgeTypes/BPMNDiagramEdge"
 
 export const diagramEdgeTypes = {
@@ -27,6 +28,8 @@ export const diagramEdgeTypes = {
   FlowChartFlowline: FlowChartEdge,
 
   SyntaxTreeLink: SyntaxTreeEdge,
+
+  CommunicationLink: CommunicationDiagramEdge,
 
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
@@ -78,6 +81,10 @@ export const edgeConfig = {
   SyntaxTreeLink: {},
 
   ReachabilityGraphArc: { allowMidpointDragging: true },
+
+  // Communication diagram edge - allow midpoint dragging with multiple labels
+  CommunicationLink: { allowMidpointDragging: true },
+
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
   UseCaseInclude: { showRelationshipLabels: true }, // Show <<include>>

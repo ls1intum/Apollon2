@@ -112,7 +112,7 @@ export const SfcDiagramEdge = ({
           style={{
             stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
             strokeDasharray: isReconnectingRef.current
-              ? "4 4"
+              ? "none"
               : strokeDashArray,
             transition: hasInitialCalculation ? "opacity 0.1s ease-in" : "none",
             opacity: 1,

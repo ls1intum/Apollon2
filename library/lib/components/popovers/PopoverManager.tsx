@@ -28,6 +28,7 @@ import {
   UseCaseEdgeEditPopover,
   EdgeGiveFeedbackPopover,
   EdgeSeeFeedbackPopover,
+  CommunicationDiagramEdgeEditPopover,
 } from "./edgePopovers"
 import { LocationPopover } from "@/types"
 import {
@@ -110,6 +111,7 @@ type EdgePopoverType =
   | "ClassDependency"
   | "ActivityControlFlow"
   | "ObjectLink"
+  | "CommunicationLink"
   | "UseCaseAssociation"
   | "UseCaseInclude"
   | "UseCaseExtend"
@@ -150,6 +152,7 @@ const editPopovers: {
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
   ObjectLink: React.FC<PopoverProps>
+  CommunicationLink: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -215,6 +218,7 @@ const editPopovers: {
   ClassDependency: EdgeEditPopover,
   ActivityControlFlow: ActivityDiagramEdgeEditPopover,
   ObjectLink: ObjectDiagramEdgeEditPopover,
+  CommunicationLink: CommunicationDiagramEdgeEditPopover,
   UseCaseAssociation: UseCaseEdgeEditPopover,
   UseCaseInclude: UseCaseEdgeEditPopover,
   UseCaseExtend: UseCaseEdgeEditPopover,
@@ -282,6 +286,7 @@ const giveFeedbackPopovers: {
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
   ObjectLink: React.FC<PopoverProps>
+  CommunicationLink: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -348,6 +353,7 @@ const giveFeedbackPopovers: {
   ActivityControlFlow: EdgeGiveFeedbackPopover,
   ObjectLink: EdgeGiveFeedbackPopover,
   ReachabilityGraphArc: EdgeGiveFeedbackPopover,
+  CommunicationLink: EdgeGiveFeedbackPopover,
   UseCaseAssociation: EdgeGiveFeedbackPopover,
   UseCaseInclude: EdgeGiveFeedbackPopover,
   UseCaseExtend: EdgeGiveFeedbackPopover,
@@ -415,6 +421,7 @@ const seeFeedbackPopovers: {
   ActivityControlFlow: React.FC<PopoverProps>
   ObjectLink: React.FC<PopoverProps>
   ReachabilityGraphArc: React.FC<PopoverProps>
+  CommunicationLink: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
   UseCaseInclude: React.FC<PopoverProps>
   UseCaseExtend: React.FC<PopoverProps>
@@ -480,6 +487,7 @@ const seeFeedbackPopovers: {
   ActivityControlFlow: EdgeSeeFeedbackPopover,
   ObjectLink: EdgeSeeFeedbackPopover,
   ReachabilityGraphArc: EdgeSeeFeedbackPopover,
+  CommunicationLink: EdgeSeeFeedbackPopover,
   UseCaseAssociation: EdgeSeeFeedbackPopover,
   UseCaseInclude: EdgeSeeFeedbackPopover,
   UseCaseExtend: EdgeSeeFeedbackPopover,
