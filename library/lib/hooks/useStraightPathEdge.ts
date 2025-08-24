@@ -33,7 +33,7 @@ export const useStraightPathEdge = ({
   const pathRef = useRef<SVGPathElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
 
-  const { markerEnd, strokeDashArray, markerPadding } =
+  const { markerEnd, markerStart, strokeDashArray, markerPadding } =
     getEdgeMarkerStyles(type)
 
   const padding = markerPadding ?? MARKER_PADDING
@@ -207,6 +207,7 @@ export const useStraightPathEdge = ({
     currentPath,
     overlayPath,
     markerEnd,
+    markerStart,
     strokeDashArray,
     sourcePoint,
     targetPoint,

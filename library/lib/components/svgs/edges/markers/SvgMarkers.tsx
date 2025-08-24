@@ -163,6 +163,66 @@ export function SvgMarkers() {
             strokeWidth="1.5"
           />
         </marker>
+
+        {/* BPMN Specific Markers */}
+        {/* Small White Arrow for BPMN */}
+        <marker
+          id="bpmn-white-triangle"
+          viewBox="0 0 20 20"
+          markerWidth="15"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,18 L20,10 L0,2 z"
+            fill="white"
+            stroke="black"
+            strokeWidth="1.2"
+          />
+        </marker>
+
+        {/* Small White Circle for BPMN */}
+        <marker
+          id="bpmn-white-circle"
+          viewBox="0 0 20 20"
+          markerWidth="12"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <circle
+            cx="10"
+            cy="10"
+            r="8"
+            fill="white"
+            stroke="black"
+            strokeWidth="1.5"
+          />
+        </marker>
+
+        {/* BPMN Message Flow Arrow */}
+        <marker
+          id="bpmn-arrow"
+          viewBox="0 0 20 20"
+          markerWidth="15"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M2,18 L18,10 L2,2"
+            fill="none"
+            stroke="black"
+            strokeWidth="1.5"
+          />
+        </marker>
       </defs>
     </svg>
   )

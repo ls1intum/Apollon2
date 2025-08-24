@@ -63,6 +63,7 @@ import { ObjectDiagramEdgeEditPopover } from "./edgePopovers/ObjectDiagramEdgeEd
 import { FlowChartEdgeEditPopover } from "./edgePopovers/FlowChartEdgeEditPopover"
 import { SyntaxTreeEdgeEditPopover } from "./edgePopovers/SyntaxTreeEdgeEditPopover"
 import { SfcActionTableEditPopover, SfcEdgeEditPopover } from "./sfcDiagram"
+import { BPMNDiagramEdgeEditPopover } from "./edgePopovers/BPMNDiagramEdgeEditPopover"
 
 type NodePopoverType =
   | "class"
@@ -215,10 +216,10 @@ const editPopovers: {
   UseCaseInclude: UseCaseEdgeEditPopover,
   UseCaseExtend: UseCaseEdgeEditPopover,
   UseCaseGeneralization: UseCaseEdgeEditPopover,
-  BPMNSequenceFlow: EdgeEditPopover,
-  BPMNMessageFlow: EdgeEditPopover,
-  BPMNAssociationFlow: EdgeEditPopover,
-  BPMNDataAssociationFlow: EdgeEditPopover,
+  BPMNSequenceFlow: BPMNDiagramEdgeEditPopover,
+  BPMNMessageFlow: BPMNDiagramEdgeEditPopover,
+  BPMNAssociationFlow: BPMNDiagramEdgeEditPopover,
+  BPMNDataAssociationFlow: BPMNDiagramEdgeEditPopover,
   SfcDiagramEdge: SfcEdgeEditPopover,
   ComponentDependency: ComponentEdgeEditPopover,
   ComponentProvidedInterface: ComponentEdgeEditPopover,
