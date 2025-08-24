@@ -8,6 +8,7 @@ import { ObjectDiagramEdge } from "./edgeTypes/ObjectDiagramEdge"
 import { FlowChartEdge } from "./edgeTypes/FlowChartEdge"
 import { SyntaxTreeEdge } from "./edgeTypes/SyntaxTreeEdge"
 import { SfcDiagramEdge } from "./edgeTypes/SfcDiagramEdge"
+import { ReachabilityGraphEdge } from "./edgeTypes/ReachabilityGraphArc"
 import { BPMNDiagramEdge } from "./edgeTypes/BPMNDiagramEdge"
 
 export const diagramEdgeTypes = {
@@ -47,6 +48,8 @@ export const diagramEdgeTypes = {
 
   SfcDiagramEdge: SfcDiagramEdge,
 
+  ReachabilityGraphArc: ReachabilityGraphEdge,
+
   BPMNSequenceFlow: BPMNDiagramEdge,
   BPMNMessageFlow: BPMNDiagramEdge,
   BPMNAssociationFlow: BPMNDiagramEdge,
@@ -73,6 +76,8 @@ export const edgeConfig = {
   FlowChartFlowline: { allowMidpointDragging: true },
 
   SyntaxTreeLink: {},
+
+  ReachabilityGraphArc: { allowMidpointDragging: true },
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
   UseCaseInclude: { showRelationshipLabels: true }, // Show <<include>>
