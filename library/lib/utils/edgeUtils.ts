@@ -190,6 +190,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
     case "ActivityControlFlow":
     case "ClassUnidirectional":
     case "FlowChartFlowline":
+    case "ReachabilityGraphArc":
       return {
         markerPadding: ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
@@ -687,7 +688,8 @@ export const getDefaultEdgeType = (
       return "FlowChartFlowline"
     case "SyntaxTree":
       return "SyntaxTreeLink"
-
+    case "ReachabilityGraph":
+      return "ReachabilityGraphArc"
     case "Sfc":
       return "SfcDiagramEdge"
     default:
