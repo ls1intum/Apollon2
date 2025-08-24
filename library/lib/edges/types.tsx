@@ -11,6 +11,7 @@ import { SfcDiagramEdge } from "./edgeTypes/SfcDiagramEdge"
 import { ReachabilityGraphEdge } from "./edgeTypes/ReachabilityGraphArc"
 import { CommunicationDiagramEdge } from "./edgeTypes/CommunicationDiagramEdge"
 import { BPMNDiagramEdge } from "./edgeTypes/BPMNDiagramEdge"
+import { PetriNetEdge } from "./edgeTypes/PetriNetEdge"
 
 export const diagramEdgeTypes = {
   ClassAggregation: ClassDiagramEdge,
@@ -30,6 +31,8 @@ export const diagramEdgeTypes = {
   SyntaxTreeLink: SyntaxTreeEdge,
 
   CommunicationLink: CommunicationDiagramEdge,
+
+  PetriNetArc: PetriNetEdge,
 
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
@@ -81,6 +84,9 @@ export const edgeConfig = {
   SyntaxTreeLink: {},
 
   ReachabilityGraphArc: { allowMidpointDragging: true },
+
+  //PetriNet edge
+  PetriNetArc: { showRelationshipLabels: true },
 
   // Communication diagram edge - allow midpoint dragging with multiple labels
   CommunicationLink: { allowMidpointDragging: true },

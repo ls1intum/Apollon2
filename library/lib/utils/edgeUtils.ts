@@ -54,6 +54,104 @@ export const adjustSourceCoordinates = (
   return { sourceX, sourceY }
 }
 
+/**
+ * Calculate precise PetriNet source endpoint coordinates incorporating all path calculations
+ */
+export function adjustPetriNetSourceCoordinates(
+  sourceX: number,
+  sourceY: number,
+  sourcePosition: Position,
+  padding: number = 8
+) {
+  // Start with basic adjustment
+  const basicAdjusted = adjustSourceCoordinates(
+    sourceX,
+    sourceY,
+    sourcePosition,
+    padding
+  )
+
+  // For PetriNet arcs, we don't typically adjust the source end much,
+  // but we return the adjusted coordinates for consistency
+  return {
+    sourceX: basicAdjusted.sourceX,
+    sourceY: basicAdjusted.sourceY,
+  }
+}
+
+/**
+ * Calculate precise PetriNet target endpoint coordinates incorporating all path calculations
+ */
+export function adjustPetriNetTargetCoordinates(
+  sourceX: number,
+  sourceY: number,
+  targetX: number,
+  targetY: number,
+  targetPosition: Position,
+  markerPadding: number = MARKER_PADDING
+) {
+  // Start with basic adjustment
+  const basicAdjusted = adjustTargetCoordinates(
+    targetX,
+    targetY,
+    targetPosition,
+    markerPadding
+  )
+
+  // Apply the same calculations as in calculateStraightPath for PetriNet arcs
+  const dx = targetX - sourceX
+  const dy = targetY - sourceY
+  const length = Math.sqrt(dx * dx + dy * dy)
+
+  if (length === 0) {
+    return basicAdjusted
+  }
+
+  let adjustedTargetX = basicAdjusted.targetX
+  let adjustedTargetY = basicAdjusted.targetY
+  let padding = 10 // Default distance to shorten the path
+
+  // Determine if we should apply shortening based on handle position
+  const shouldShortenPath =
+    targetPosition === "top" ||
+    targetPosition === "bottom" ||
+    (targetPosition === "right" && dx > 0) || // Same direction as target
+    (targetPosition === "left" && dx < 0) // Same direction as target
+
+  if (shouldShortenPath) {
+    const normalizedDx = dx / length
+    const normalizedDy = dy / length
+
+    if (targetPosition === "top") {
+      // For top handle, make it lower (move in positive Y direction)
+      adjustedTargetX = basicAdjusted.targetX - normalizedDx * padding
+      adjustedTargetY = basicAdjusted.targetY + 12 // Move lower (positive Y)
+    } else if (targetPosition === "bottom") {
+      // For bottom handle, make it higher (move in negative Y direction)
+      adjustedTargetX = basicAdjusted.targetX - normalizedDx * padding
+      adjustedTargetY = basicAdjusted.targetY - 12 // Move higher (negative Y)
+    } else if (targetPosition === "right" && dx > 0) {
+      // For right handle when target is on the right, make it even shorter
+      padding = 22 // Very short for right->right direction
+      adjustedTargetX = basicAdjusted.targetX - normalizedDx * padding
+      adjustedTargetY = basicAdjusted.targetY - normalizedDy * padding
+    } else if (targetPosition === "left" && dx < 0) {
+      // For left handle when target is on the left
+      adjustedTargetX = basicAdjusted.targetX - normalizedDx * padding
+      adjustedTargetY = basicAdjusted.targetY - normalizedDy * padding
+    } else {
+      // Default behavior for other cases
+      adjustedTargetX = basicAdjusted.targetX - normalizedDx * padding
+      adjustedTargetY = basicAdjusted.targetY - normalizedDy * padding
+    }
+  }
+
+  return {
+    targetX: adjustedTargetX,
+    targetY: adjustedTargetY,
+  }
+}
+
 interface TextPlacement {
   roleX: number
   roleY: number
@@ -219,6 +317,13 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
       return {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#white-triangle)",
+        strokeDashArray: "0",
+        offset: 11,
+      }
+    case "PetriNetArc":
+      return {
+        markerPadding: TRIANGLE_MARKER_PADDING,
+        markerEnd: "url(#black-triangle)",
         strokeDashArray: "0",
         offset: 11,
       }
@@ -395,6 +500,40 @@ export function findClosestHandle(point: XYPosition, rect: Rect): string {
   return closest.label
 }
 
+/**
+ * Find the closest handle for PetriNet nodes (which only have 4 basic handles)
+ */
+export function findClosestHandleForPetriNet(
+  point: XYPosition,
+  rect: Rect
+): string {
+  const points: { label: string; position: XYPosition }[] = [
+    { label: "top", position: { x: rect.x + rect.width / 2, y: rect.y } },
+    {
+      label: "bottom",
+      position: { x: rect.x + rect.width / 2, y: rect.y + rect.height },
+    },
+    { label: "left", position: { x: rect.x, y: rect.y + rect.height / 2 } },
+    {
+      label: "right",
+      position: { x: rect.x + rect.width, y: rect.y + rect.height / 2 },
+    },
+  ]
+
+  let closest = points[0]
+  let minDist = distance(point, points[0].position)
+
+  for (const p of points) {
+    const d = distance(point, p.position)
+    if (d < minDist) {
+      minDist = d
+      closest = p
+    }
+  }
+
+  return closest.label
+}
+
 export function findClosestHandleForInterface(
   point: XYPosition,
   rect: Rect
@@ -468,19 +607,27 @@ export function calculateOverlayPath(
   if (
     type == "UseCaseInclude" ||
     type == "UseCaseExtend" ||
-    type == "UseCaseGeneralization"
+    type == "UseCaseGeneralization" ||
+    type == "CommunicationLink" ||
+    type == "PetriNetArc"
   ) {
     const { offset } = getEdgeMarkerStyles(type)
     const markerOffset = offset ?? 0
-    const dx = targetX - sourceX
-    const dy = targetY - sourceY
-    const length = Math.sqrt(dx * dx + dy * dy)
 
-    const normalizedDx = dx / length
-    const normalizedDy = dy / length
-    const adjustedTargetX = targetX + normalizedDx * markerOffset
-    const adjustedTargetY = targetY + normalizedDy * markerOffset
-    return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
+    if (markerOffset !== 0) {
+      const dx = targetX - sourceX
+      const dy = targetY - sourceY
+      const length = Math.sqrt(dx * dx + dy * dy)
+
+      if (length > 0) {
+        const normalizedDx = dx / length
+        const normalizedDy = dy / length
+        const adjustedTargetX = targetX + normalizedDx * markerOffset
+        const adjustedTargetY = targetY + normalizedDy * markerOffset
+
+        return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
+      }
+    }
   }
   return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
 }
@@ -752,6 +899,8 @@ export const getDefaultEdgeType = (
       return "SfcDiagramEdge"
     case "CommunicationDiagram":
       return "CommunicationLink"
+    case "PetriNet":
+      return "PetriNetArc"
     default:
       return "ClassUnidirectional"
   }
@@ -768,6 +917,7 @@ export function getConnectionLineType(
   switch (diagramType) {
     case "UseCaseDiagram":
     case "SyntaxTree":
+    case "PetriNet":
       return ConnectionLineType.Straight
 
     default:
