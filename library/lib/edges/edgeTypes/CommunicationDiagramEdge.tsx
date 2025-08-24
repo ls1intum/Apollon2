@@ -142,10 +142,9 @@ export const CommunicationDiagramEdge = ({
 
       <EdgeMultipleLabels
         labels={data?.labels || []}
+        messages={data?.messages}
         pathMiddlePosition={edgeData.pathMiddlePosition}
         isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-        sourcePoint={sourcePoint}
-        targetPoint={targetPoint}
         showRelationshipLabels={true}
       />
 
