@@ -115,6 +115,7 @@ export const useStepPathEdge = ({
   const {
     markerPadding,
     markerEnd,
+    markerStart,
     strokeDashArray,
     offset = 0,
   } = getEdgeMarkerStyles(type)
@@ -618,6 +619,7 @@ export const useStepPathEdge = ({
     hasInitialCalculation,
     isReconnectingRef,
     markerEnd,
+    markerStart,
     strokeDashArray,
     handlePointerDown,
     handleEndpointPointerDown,

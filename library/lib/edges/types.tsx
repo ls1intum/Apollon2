@@ -10,6 +10,7 @@ import { SyntaxTreeEdge } from "./edgeTypes/SyntaxTreeEdge"
 import { SfcDiagramEdge } from "./edgeTypes/SfcDiagramEdge"
 import { ReachabilityGraphEdge } from "./edgeTypes/ReachabilityGraphArc"
 import { CommunicationDiagramEdge } from "./edgeTypes/CommunicationDiagramEdge"
+import { BPMNDiagramEdge } from "./edgeTypes/BPMNDiagramEdge"
 
 export const diagramEdgeTypes = {
   ClassAggregation: ClassDiagramEdge,
@@ -51,6 +52,11 @@ export const diagramEdgeTypes = {
   SfcDiagramEdge: SfcDiagramEdge,
 
   ReachabilityGraphArc: ReachabilityGraphEdge,
+
+  BPMNSequenceFlow: BPMNDiagramEdge,
+  BPMNMessageFlow: BPMNDiagramEdge,
+  BPMNAssociationFlow: BPMNDiagramEdge,
+  BPMNDataAssociationFlow: BPMNDiagramEdge,
 } satisfies EdgeTypes
 
 export const edgeConfig = {
@@ -84,6 +90,24 @@ export const edgeConfig = {
   UseCaseInclude: { showRelationshipLabels: true }, // Show <<include>>
   UseCaseExtend: { showRelationshipLabels: true }, // Show <<extend>>
   UseCaseGeneralization: { showRelationshipLabels: false }, // No stereotype labels
+
+  //BPMN edges - all allow midpoint dragging
+  BPMNSequenceFlow: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: true,
+  },
+  BPMNMessageFlow: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: true,
+  },
+  BPMNAssociationFlow: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: true,
+  },
+  BPMNDataAssociationFlow: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: true,
+  },
 
   // Component edges - different midpoint settings
   ComponentDependency: { allowMidpointDragging: true },

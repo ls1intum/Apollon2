@@ -5,6 +5,8 @@ import {
   RHOMBUS_MARKER_PADDING,
   TRIANGLE_MARKER_PADDING,
   USECASE_PADDING,
+  BPMN_SMALL_ARROW_PADDING,
+  BPMN_MESSAGE_ARROW_PADDING,
 } from "@/constants"
 import { IPoint } from "@/edges/Connection"
 import { DiagramEdgeType, UMLDiagramType } from "@/typings"
@@ -238,26 +240,31 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
       }
     case "BPMNSequenceFlow":
       return {
-        markerPadding: ARROW_MARKER_PADDING,
-        markerEnd: "url(#black-arrow)",
+        markerPadding: BPMN_SMALL_ARROW_PADDING,
+        markerEnd: "url(#bpmn-white-triangle)",
         strokeDashArray: "0",
+        offset: 8,
       }
     case "BPMNMessageFlow":
       return {
-        markerPadding: ARROW_MARKER_PADDING,
-        markerEnd: "url(#black-arrow)",
+        markerPadding: BPMN_MESSAGE_ARROW_PADDING,
+        markerEnd: "url(#bpmn-white-triangle)",
+        markerStart: "url(#bpmn-white-circle)",
         strokeDashArray: "8",
+        offset: 10,
       }
     case "BPMNAssociationFlow":
       return {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "8",
+        offset: 0,
       }
     case "BPMNDataAssociationFlow":
       return {
-        markerPadding: ARROW_MARKER_PADDING,
-        markerEnd: "url(#black-arrow)",
+        markerPadding: BPMN_SMALL_ARROW_PADDING,
+        markerEnd: "url(#bpmn-arrow)",
         strokeDashArray: "8",
+        offset: 8,
       }
     case "UseCaseAssociation":
       return {
@@ -616,12 +623,60 @@ export function calculateInnerMidpoints(
 ): IPoint[] {
   const round = (num: number) => Number(num.toFixed(decimals))
   const midpoints: IPoint[] = []
-  if (points.length < 4) return midpoints
-  for (let i = 1; i < points.length - 2; i++) {
-    const p1 = points[i]
-    const p2 = points[i + 1]
-    midpoints.push({ x: round((p1.x + p2.x) / 2), y: round((p1.y + p2.y) / 2) })
+  if (points.length < 3) return midpoints
+
+  // Group consecutive points that form straight lines (horizontal or vertical)
+  const segments: IPoint[][] = []
+  let currentSegment: IPoint[] = [points[0]]
+
+  for (let i = 1; i < points.length; i++) {
+    const prevPoint = currentSegment[currentSegment.length - 1]
+    const currentPoint = points[i]
+
+    // Check if this point continues the current segment (same direction)
+    const isHorizontal = Math.abs(prevPoint.y - currentPoint.y) < 0.1
+    const isVertical = Math.abs(prevPoint.x - currentPoint.x) < 0.1
+
+    if (currentSegment.length === 1) {
+      // First segment, just add the point
+      currentSegment.push(currentPoint)
+    } else {
+      // Check if the new point continues the same direction as the current segment
+      const segmentStart = currentSegment[0]
+      const segmentPrev = currentSegment[currentSegment.length - 1]
+      const wasHorizontal = Math.abs(segmentStart.y - segmentPrev.y) < 0.1
+      const wasVertical = Math.abs(segmentStart.x - segmentPrev.x) < 0.1
+
+      if ((wasHorizontal && isHorizontal) || (wasVertical && isVertical)) {
+        // Continue current segment
+        currentSegment.push(currentPoint)
+      } else {
+        // Start new segment
+        segments.push([...currentSegment])
+        currentSegment = [prevPoint, currentPoint]
+      }
+    }
   }
+
+  // Add the last segment
+  if (currentSegment.length > 1) {
+    segments.push(currentSegment)
+  }
+
+  // Calculate one midpoint per segment (excluding first and last segments to avoid endpoints)
+  for (let i = 1; i < segments.length - 1; i++) {
+    const segment = segments[i]
+    if (segment.length >= 2) {
+      const start = segment[0]
+      const end = segment[segment.length - 1]
+      const midpoint = {
+        x: round((start.x + end.x) / 2),
+        y: round((start.y + end.y) / 2),
+      }
+      midpoints.push(midpoint)
+    }
+  }
+
   return midpoints
 }
 
@@ -673,7 +728,6 @@ export const getDefaultEdgeType = (
 ): DiagramEdgeType => {
   switch (diagramType) {
     case "ClassDiagram":
-    case "BPMN":
       return "ClassUnidirectional"
     case "ActivityDiagram":
       return "ActivityControlFlow"
@@ -692,6 +746,8 @@ export const getDefaultEdgeType = (
       return "SyntaxTreeLink"
     case "ReachabilityGraph":
       return "ReachabilityGraphArc"
+    case "BPMN":
+      return "BPMNSequenceFlow"
     case "Sfc":
       return "SfcDiagramEdge"
     case "CommunicationDiagram":
