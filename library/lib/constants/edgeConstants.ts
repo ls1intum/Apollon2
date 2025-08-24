@@ -8,3 +8,6 @@ export const STEP_BOARDER_RADIUS = 0 //Radius of the corners of Smooth Edge
 export const USECASE_PADDING = 5
 export const NO_PADDING = 0
 export const EDGE_HIGHTLIGHT_STROKE_WIDTH = 15
+export const BPMN_SMALL_ARROW_PADDING = 4 // Padding for small BPMN arrows
+export const BPMN_CIRCLE_PADDING = 5 // Padding for BPMN circle markers
+export const BPMN_MESSAGE_ARROW_PADDING = 6.5 // Padding for BPMN message flow arrows

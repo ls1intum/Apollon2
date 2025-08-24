@@ -88,7 +88,7 @@ export const useStraightPathEdge = (
         }),
       }
 
-  const { markerEnd, strokeDashArray, markerPadding } =
+  const { markerEnd, markerStart, strokeDashArray, markerPadding } =
     getEdgeMarkerStyles(type)
 
   const padding = markerPadding ?? MARKER_PADDING
@@ -406,6 +406,7 @@ export const useStraightPathEdge = (
     currentPath,
     overlayPath,
     markerEnd,
+    markerStart,
     strokeDashArray,
     sourcePoint,
     targetPoint,

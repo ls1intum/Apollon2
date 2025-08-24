@@ -65,6 +65,7 @@ import { FlowChartEdgeEditPopover } from "./edgePopovers/FlowChartEdgeEditPopove
 import { SyntaxTreeEdgeEditPopover } from "./edgePopovers/SyntaxTreeEdgeEditPopover"
 import { SfcActionTableEditPopover, SfcEdgeEditPopover } from "./sfcDiagram"
 import { ReachabilityGraphEdgeEditPopover } from "./edgePopovers/ReachabilityGraphEdgeEditPopover"
+import { BPMNDiagramEdgeEditPopover } from "./edgePopovers/BPMNDiagramEdgeEditPopover"
 import { PetriNetEdgeEditPopover } from "./edgePopovers/PetriNetEdgeEditPopover"
 
 type NodePopoverType =
@@ -225,6 +226,10 @@ const editPopovers: {
   UseCaseInclude: UseCaseEdgeEditPopover,
   UseCaseExtend: UseCaseEdgeEditPopover,
   UseCaseGeneralization: UseCaseEdgeEditPopover,
+  BPMNSequenceFlow: BPMNDiagramEdgeEditPopover,
+  BPMNMessageFlow: BPMNDiagramEdgeEditPopover,
+  BPMNAssociationFlow: BPMNDiagramEdgeEditPopover,
+  BPMNDataAssociationFlow: BPMNDiagramEdgeEditPopover,
   PetriNetArc: PetriNetEdgeEditPopover,
   BPMNSequenceFlow: EdgeEditPopover,
   BPMNMessageFlow: EdgeEditPopover,
