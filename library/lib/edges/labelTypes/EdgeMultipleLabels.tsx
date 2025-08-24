@@ -34,7 +34,6 @@ export const EdgeMultipleLabels: React.FC<{
   )
     return null
 
-  // Hide labels during reconnection to avoid interference with edge endpoint grabbers
   if (isReconnectingRef?.current) return null
 
   const {
@@ -118,7 +117,6 @@ export const EdgeMultipleLabels: React.FC<{
                 zIndex: ZINDEX_LABEL,
                 textAlign:
                   sourceArrowDirection === "Right" ? "left" : undefined,
-                // transition: "none",
                 willChange: "transform",
               }}
               className="nodrag nopan"
@@ -189,7 +187,6 @@ export const EdgeMultipleLabels: React.FC<{
                 pointerEvents: "none",
                 zIndex: ZINDEX_LABEL,
                 textAlign: targetArrowDirection === "Left" ? "left" : undefined,
-                //    transition: "none", // Disable any CSS transitions that might cause flash
                 willChange: "transform",
               }}
               className="nodrag nopan"
