@@ -1,7 +1,13 @@
 import { BaseEdge } from "@xyflow/react"
-import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
+import {
+  BaseEdgeProps,
+  EdgeEndpointMarkers,
+  CommonEdgeElements,
+} from "../GenericEdge"
 import { EdgeMultipleLabels } from "../labelTypes/EdgeMultipleLabels"
-import { useStraightPathEdge } from "@/hooks/useStraightPathEdge"
+import { useEdgeConfig } from "@/hooks/useEdgeConfig"
+import { DiagramEdgeType } from "@/edges/types"
+import { useStepPathEdge } from "@/hooks/useStepPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { useToolbar } from "@/hooks"
@@ -11,16 +17,25 @@ import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 export const CommunicationDiagramEdge = ({
   id,
   type,
+  source,
+  target,
   sourceX,
   sourceY,
   targetX,
   targetY,
   sourcePosition,
   targetPosition,
+  sourceHandleId,
+  targetHandleId,
   data,
 }: BaseEdgeProps) => {
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
+
+  const config = useEdgeConfig(type as DiagramEdgeType)
+
+  const allowMidpointDragging =
+    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
 
   const { assessments } = useDiagramStore(
     useShallow((state) => ({
@@ -37,17 +52,33 @@ export const CommunicationDiagramEdge = ({
     edgeData,
     currentPath,
     overlayPath,
+    midpoints,
+    hasInitialCalculation,
+    isReconnectingRef,
     markerEnd,
     strokeDashArray,
+    handlePointerDown,
+    handleEndpointPointerDown,
+    sourcePoint,
+    targetPoint,
     isDiagramModifiable,
-  } = useStraightPathEdge({
+  } = useStepPathEdge({
+    id,
     type,
+    source,
+    target,
     sourceX,
     sourceY,
     targetX,
     targetY,
     sourcePosition,
     targetPosition,
+    sourceHandleId,
+    targetHandleId,
+    data,
+    allowMidpointDragging,
+    enableReconnection: true,
+    enableStraightPath: false,
   })
 
   return (
@@ -56,7 +87,7 @@ export const CommunicationDiagramEdge = ({
         <BaseEdge
           id={id}
           path={currentPath}
-          markerEnd={markerEnd}
+          markerEnd={isReconnectingRef.current ? undefined : markerEnd}
           pointerEvents="none"
           style={{
             stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
@@ -76,9 +107,37 @@ export const CommunicationDiagramEdge = ({
           strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
           pointerEvents="stroke"
           style={{
-            opacity: 0.4,
+            opacity: isReconnectingRef.current ? 0 : 0.4,
           }}
         />
+
+        <EdgeEndpointMarkers
+          sourcePoint={sourcePoint}
+          targetPoint={targetPoint}
+          isDiagramModifiable={isDiagramModifiable}
+          diagramType="step"
+          pathType="step"
+          onSourcePointerDown={(e) => handleEndpointPointerDown(e, "source")}
+          onTargetPointerDown={(e) => handleEndpointPointerDown(e, "target")}
+        />
+
+        {isDiagramModifiable &&
+          !isReconnectingRef.current &&
+          allowMidpointDragging &&
+          midpoints.map((point, midPointIndex) => (
+            <circle
+              className="edge-circle"
+              pointerEvents="all"
+              key={`${id}-midpoint-${midPointIndex}`}
+              cx={point.x}
+              cy={point.y}
+              r={10}
+              fill="lightgray"
+              stroke="none"
+              style={{ cursor: "grab", zIndex: 9999 }}
+              onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
+            />
+          ))}
       </g>
 
       <EdgeMultipleLabels

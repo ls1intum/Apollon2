@@ -109,8 +109,8 @@ export const EdgeMultipleLabels: React.FC<{
                     : sourceArrowDirection === "Down"
                       ? `translate(${pathMiddlePosition.x + labelOffset.x}px, ${pathMiddlePosition.y + labelOffset.y}px) translate(0%, -50%)` // Left-anchored for vertical right labels (expand right)
                       : `translate(${pathMiddlePosition.x + labelOffset.x}px, ${pathMiddlePosition.y + labelOffset.y}px) translate(-100%, -50%)`, // Right-anchored for vertical left labels (expand left)
-                fontSize: "10px",
-                fontWeight: 700,
+                fontSize: "16px",
+                fontWeight: 400,
                 color: "black",
                 whiteSpace: "nowrap",
                 pointerEvents: "none",
@@ -180,8 +180,8 @@ export const EdgeMultipleLabels: React.FC<{
                     : targetArrowDirection === "Up"
                       ? `translate(${pathMiddlePosition.x + labelOffset.x}px, ${pathMiddlePosition.y + labelOffset.y}px) translate(-100%, -50%)` // Right-anchored for vertical left labels (expand left)
                       : `translate(${pathMiddlePosition.x + labelOffset.x}px, ${pathMiddlePosition.y + labelOffset.y}px) translate(0%, -50%)`, // Left-anchored for vertical right labels (expand right)
-                fontSize: "10px",
-                fontWeight: 700,
+                fontSize: "16px",
+                fontWeight: 400,
                 color: "black",
                 whiteSpace: "nowrap",
                 pointerEvents: "none",
