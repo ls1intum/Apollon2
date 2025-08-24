@@ -63,6 +63,8 @@ import { DeploymentEdgeEditPopover } from "./edgePopovers/DeploymentDiagramEdgeE
 import { ObjectDiagramEdgeEditPopover } from "./edgePopovers/ObjectDiagramEdgeEditPopover"
 import { FlowChartEdgeEditPopover } from "./edgePopovers/FlowChartEdgeEditPopover"
 import { SyntaxTreeEdgeEditPopover } from "./edgePopovers/SyntaxTreeEdgeEditPopover"
+import { SfcActionTableEditPopover, SfcEdgeEditPopover } from "./sfcDiagram"
+import { ReachabilityGraphEdgeEditPopover } from "./edgePopovers/ReachabilityGraphEdgeEditPopover"
 import { PetriNetEdgeEditPopover } from "./edgePopovers/PetriNetEdgeEditPopover"
 
 type NodePopoverType =
@@ -96,6 +98,8 @@ type NodePopoverType =
   | "BPMNPool"
   | "BPMNGroup"
   | "ReachabilityGraphMarking"
+  | "Sfc"
+  | "SfcActionTable"
 
 type EdgePopoverType =
   | "ClassAggregation"
@@ -129,6 +133,8 @@ type EdgePopoverType =
   | "DeploymentRequiredQuarterInterface"
   | "FlowChartFlowline"
   | "SyntaxTreeLink"
+  | "SfcDiagramEdge"
+  | "ReachabilityGraphArc"
   | "PetriNetArc"
 
 type PopoverType = NodePopoverType | EdgePopoverType
@@ -157,6 +163,7 @@ const editPopovers: {
   BPMNMessageFlow: React.FC<PopoverProps>
   BPMNAssociationFlow: React.FC<PopoverProps>
   BPMNDataAssociationFlow: React.FC<PopoverProps>
+  SfcDiagramEdge: React.FC<PopoverProps>
   ComponentDependency: React.FC<PopoverProps>
   ComponentProvidedInterface: React.FC<PopoverProps>
   ComponentRequiredInterface: React.FC<PopoverProps>
@@ -170,6 +177,7 @@ const editPopovers: {
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
   FlowChartFlowline: React.FC<PopoverProps>
   SyntaxTreeLink: React.FC<PopoverProps>
+  ReachabilityGraphArc: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
   FlowchartTerminal: React.FC<PopoverProps>
@@ -196,6 +204,8 @@ const editPopovers: {
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
   ReachabilityGraphMarking: React.FC<PopoverProps>
+  Sfc: React.FC<PopoverProps>
+  SfcActionTable: React.FC<PopoverProps>
 } = {
   class: ClassEditPopover,
   objectName: ObjectEditPopover,
@@ -220,6 +230,7 @@ const editPopovers: {
   BPMNMessageFlow: EdgeEditPopover,
   BPMNAssociationFlow: EdgeEditPopover,
   BPMNDataAssociationFlow: EdgeEditPopover,
+  SfcDiagramEdge: SfcEdgeEditPopover,
   ComponentDependency: ComponentEdgeEditPopover,
   ComponentProvidedInterface: ComponentEdgeEditPopover,
   ComponentRequiredInterface: ComponentEdgeEditPopover,
@@ -233,6 +244,7 @@ const editPopovers: {
   DeploymentRequiredQuarterInterface: DeploymentEdgeEditPopover,
   FlowChartFlowline: FlowChartEdgeEditPopover,
   SyntaxTreeLink: SyntaxTreeEdgeEditPopover,
+  ReachabilityGraphArc: ReachabilityGraphEdgeEditPopover,
   Component: ComponentEditPopover,
   ComponentSubsystem: ComponentSubsystemEditPopover,
   FlowchartTerminal: DefaultNodeEditPopover,
@@ -259,6 +271,8 @@ const editPopovers: {
   BPMNPool: BPMNPoolEditPopover,
   BPMNGroup: DefaultNodeEditPopover,
   ReachabilityGraphMarking: ReachabilityGraphMarkingEditPopover,
+  Sfc: DefaultNodeEditPopover,
+  SfcActionTable: SfcActionTableEditPopover,
 }
 
 const giveFeedbackPopovers: {
@@ -297,6 +311,7 @@ const giveFeedbackPopovers: {
   DeploymentRequiredQuarterInterface: React.FC<PopoverProps>
   FlowChartFlowline: React.FC<PopoverProps>
   SyntaxTreeLink: React.FC<PopoverProps>
+  ReachabilityGraphArc: React.FC<PopoverProps>
   PetriNetArc: React.FC<PopoverProps>
   Component: React.FC<PopoverProps>
   ComponentSubsystem: React.FC<PopoverProps>
@@ -324,6 +339,9 @@ const giveFeedbackPopovers: {
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
   ReachabilityGraphMarking: React.FC<PopoverProps>
+  Sfc: React.FC<PopoverProps>
+  SfcActionTable: React.FC<PopoverProps>
+  SfcDiagramEdge: React.FC<PopoverProps>
 } = {
   class: ClassGiveFeedbackPopover,
   objectName: ObjectGiveFeedbackPopover,
@@ -338,6 +356,7 @@ const giveFeedbackPopovers: {
   ClassDependency: EdgeGiveFeedbackPopover,
   ActivityControlFlow: EdgeGiveFeedbackPopover,
   ObjectLink: EdgeGiveFeedbackPopover,
+  ReachabilityGraphArc: EdgeGiveFeedbackPopover,
   CommunicationLink: EdgeGiveFeedbackPopover,
   PetriNetArc: EdgeGiveFeedbackPopover,
   UseCaseAssociation: EdgeGiveFeedbackPopover,
@@ -387,6 +406,9 @@ const giveFeedbackPopovers: {
   BPMNPool: DefaultNodeGiveFeedbackPopover,
   BPMNGroup: DefaultNodeGiveFeedbackPopover,
   ReachabilityGraphMarking: DefaultNodeGiveFeedbackPopover,
+  Sfc: DefaultNodeGiveFeedbackPopover,
+  SfcActionTable: DefaultNodeGiveFeedbackPopover,
+  SfcDiagramEdge: EdgeGiveFeedbackPopover,
 }
 
 const seeFeedbackPopovers: {
@@ -403,6 +425,7 @@ const seeFeedbackPopovers: {
   ClassDependency: React.FC<PopoverProps>
   ActivityControlFlow: React.FC<PopoverProps>
   ObjectLink: React.FC<PopoverProps>
+  ReachabilityGraphArc: React.FC<PopoverProps>
   CommunicationLink: React.FC<PopoverProps>
   PetriNetArc: React.FC<PopoverProps>
   UseCaseAssociation: React.FC<PopoverProps>
@@ -452,6 +475,9 @@ const seeFeedbackPopovers: {
   BPMNPool: React.FC<PopoverProps>
   BPMNGroup: React.FC<PopoverProps>
   ReachabilityGraphMarking: React.FC<PopoverProps>
+  Sfc: React.FC<PopoverProps>
+  SfcActionTable: React.FC<PopoverProps>
+  SfcDiagramEdge: React.FC<PopoverProps>
 } = {
   class: ClassSeeFeedbackPopover,
   objectName: ObjectSeeFeedbackPopover,
@@ -466,6 +492,7 @@ const seeFeedbackPopovers: {
   ClassDependency: EdgeSeeFeedbackPopover,
   ActivityControlFlow: EdgeSeeFeedbackPopover,
   ObjectLink: EdgeSeeFeedbackPopover,
+  ReachabilityGraphArc: EdgeSeeFeedbackPopover,
   CommunicationLink: EdgeSeeFeedbackPopover,
   PetriNetArc: EdgeSeeFeedbackPopover,
   UseCaseAssociation: EdgeSeeFeedbackPopover,
@@ -515,6 +542,9 @@ const seeFeedbackPopovers: {
   BPMNPool: DefaultNodeSeeFeedbackPopover,
   BPMNGroup: DefaultNodeSeeFeedbackPopover,
   ReachabilityGraphMarking: DefaultNodeSeeFeedbackPopover,
+  Sfc: DefaultNodeSeeFeedbackPopover,
+  SfcActionTable: DefaultNodeSeeFeedbackPopover,
+  SfcDiagramEdge: EdgeSeeFeedbackPopover,
 }
 
 interface PopoverManagerProps {

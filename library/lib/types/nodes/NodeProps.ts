@@ -131,3 +131,13 @@ export type BPMNGroupProps = DefaultNodeProps
 export type ReachabilityGraphMarkingProps = DefaultNodeProps & {
   isInitialMarking: boolean
 }
+
+export type SfcActionRow = {
+  id: string
+  identifier: string
+  description: string
+}
+
+export type SfcActionTableProps = DefaultNodeProps & {
+  actionRows: SfcActionRow[]
+}

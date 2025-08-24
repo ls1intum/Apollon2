@@ -1,10 +1,5 @@
 import { BaseEdge } from "@xyflow/react"
-import {
-  BaseEdgeProps,
-  EdgeEndpointMarkers,
-  CommonEdgeElements,
-} from "../GenericEdge"
-import { useEdgeConfig } from "@/hooks/useEdgeConfig"
+import { BaseEdgeProps, CommonEdgeElements } from "../GenericEdge"
 import { useStepPathEdge } from "@/hooks/useStepPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
@@ -12,7 +7,35 @@ import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 
-export const ObjectDiagramEdge = ({
+function getParsedEdgeData(data: unknown): {
+  isNegated: boolean
+  displayName: string
+  showBar: boolean
+} {
+  if (
+    !data ||
+    typeof data !== "object" ||
+    !("label" in data) ||
+    !(data as Record<string, unknown>).label
+  ) {
+    return { isNegated: false, displayName: "", showBar: false }
+  }
+
+  const label = (data as Record<string, unknown>).label as string
+
+  try {
+    const parsed = JSON.parse(label)
+    return {
+      isNegated: parsed.isNegated || false,
+      displayName: parsed.displayName || "",
+      showBar: parsed.showBar !== false, // default to true
+    }
+  } catch {
+    return { isNegated: false, displayName: label, showBar: true }
+  }
+}
+
+export const SfcDiagramEdge = ({
   id,
   type,
   source,
@@ -30,10 +53,8 @@ export const ObjectDiagramEdge = ({
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
 
-  const config = useEdgeConfig(type as "ObjectLink")
-
-  const allowMidpointDragging =
-    "allowMidpointDragging" in config ? config.allowMidpointDragging : true
+  const allowMidpointDragging = true
+  const enableStraightPath = true
 
   const { assessments } = useDiagramStore(
     useShallow((state) => ({
@@ -56,9 +77,6 @@ export const ObjectDiagramEdge = ({
     markerEnd,
     strokeDashArray,
     handlePointerDown,
-    handleEndpointPointerDown,
-    sourcePoint,
-    targetPoint,
     isDiagramModifiable,
   } = useStepPathEdge({
     id,
@@ -76,8 +94,12 @@ export const ObjectDiagramEdge = ({
     data,
     allowMidpointDragging,
     enableReconnection: true,
-    enableStraightPath: false,
+    enableStraightPath,
   })
+
+  const { isNegated, displayName, showBar } = getParsedEdgeData(data)
+
+  console.log({ isNegated, displayName, showBar })
 
   return (
     <>
@@ -109,16 +131,6 @@ export const ObjectDiagramEdge = ({
           }}
         />
 
-        <EdgeEndpointMarkers
-          sourcePoint={sourcePoint}
-          targetPoint={targetPoint}
-          isDiagramModifiable={isDiagramModifiable}
-          diagramType="step"
-          pathType="step"
-          onSourcePointerDown={(e) => handleEndpointPointerDown(e, "source")}
-          onTargetPointerDown={(e) => handleEndpointPointerDown(e, "target")}
-        />
-
         {isDiagramModifiable &&
           !isReconnectingRef.current &&
           allowMidpointDragging &&
@@ -136,6 +148,35 @@ export const ObjectDiagramEdge = ({
               onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
             />
           ))}
+
+        {/* SFC Transition - show crossbar and label */}
+        <g>
+          {/* Crossbar - thick horizontal line at the middle */}
+          {showBar && (
+            <line
+              x1={edgeData.pathMiddlePosition.x - 20}
+              y1={edgeData.pathMiddlePosition.y}
+              x2={edgeData.pathMiddlePosition.x + 20}
+              y2={edgeData.pathMiddlePosition.y}
+              stroke="black"
+              strokeWidth="10"
+            />
+          )}
+
+          {displayName && (
+            <text
+              x={edgeData.pathMiddlePosition.x}
+              y={edgeData.pathMiddlePosition.y - 20}
+              fill="black"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fontSize="14"
+              textDecoration={isNegated ? "overline" : undefined}
+            >
+              {displayName}
+            </text>
+          )}
+        </g>
       </g>
 
       <CommonEdgeElements

@@ -59,8 +59,11 @@ export const CommunicationDiagramEdge = ({
           markerEnd={markerEnd}
           pointerEvents="none"
           style={{
-            stroke: "black",
-            strokeDasharray: strokeDashArray,
+            stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
+            strokeDasharray: isReconnectingRef.current
+              ? "none"
+              : strokeDashArray,
+            transition: hasInitialCalculation ? "opacity 0.1s ease-in" : "none",
             opacity: 1,
           }}
         />
@@ -80,11 +83,11 @@ export const CommunicationDiagramEdge = ({
 
       <EdgeMultipleLabels
         labels={data?.labels || []}
+        messages={data?.messages}
         pathMiddlePosition={edgeData.pathMiddlePosition}
         isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-        sourcePoint={edgeData.sourcePoint}
-        targetPoint={edgeData.targetPoint}
         showRelationshipLabels={true}
+        isReconnectingRef={isReconnectingRef}
       />
 
       <CommonEdgeElements

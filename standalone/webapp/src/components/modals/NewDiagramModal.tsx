@@ -16,6 +16,7 @@ const diagramTypes = {
     UMLDiagramType.DeploymentDiagram,
     UMLDiagramType.Flowchart,
     UMLDiagramType.SyntaxTree,
+    UMLDiagramType.Sfc,
   ],
   behavioral: [
     UMLDiagramType.ActivityDiagram,
@@ -40,6 +41,7 @@ const diagramTypeToTitle: Record<UMLDiagramType, string> = {
   SyntaxTree: "Syntax Tree",
   Flowchart: "Flowchart",
   BPMN: "BPMN Diagram",
+  Sfc: "Sequential Function Chart Diagram",
 }
 
 export const NewDiagramModal = () => {

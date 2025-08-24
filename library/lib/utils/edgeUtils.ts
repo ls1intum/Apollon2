@@ -269,6 +269,7 @@ export const calculateDynamicEdgeLabels = (
 
 export interface EdgeMarkerStyles {
   markerEnd?: string
+  markerStart?: string
   markerPadding?: number
   strokeDashArray?: string
   offset?: number
@@ -289,6 +290,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
     case "ActivityControlFlow":
     case "ClassUnidirectional":
     case "FlowChartFlowline":
+    case "ReachabilityGraphArc":
       return {
         markerPadding: ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
@@ -835,6 +837,10 @@ export const getDefaultEdgeType = (
       return "FlowChartFlowline"
     case "SyntaxTree":
       return "SyntaxTreeLink"
+    case "ReachabilityGraph":
+      return "ReachabilityGraphArc"
+    case "Sfc":
+      return "SfcDiagramEdge"
     case "CommunicationDiagram":
       return "CommunicationLink"
     case "PetriNet":
