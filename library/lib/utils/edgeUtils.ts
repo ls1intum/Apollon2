@@ -171,6 +171,7 @@ export const calculateDynamicEdgeLabels = (
 
 export interface EdgeMarkerStyles {
   markerEnd?: string
+  markerStart?: string
   markerPadding?: number
   strokeDashArray?: string
   offset?: number

@@ -92,7 +92,7 @@ export const CommunicationDiagramEdge = ({
           style={{
             stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
             strokeDasharray: isReconnectingRef.current
-              ? "4 4"
+              ? "none"
               : strokeDashArray,
             transition: hasInitialCalculation ? "opacity 0.1s ease-in" : "none",
             opacity: 1,
@@ -146,6 +146,7 @@ export const CommunicationDiagramEdge = ({
         pathMiddlePosition={edgeData.pathMiddlePosition}
         isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
         showRelationshipLabels={true}
+        isReconnectingRef={isReconnectingRef}
       />
 
       <CommonEdgeElements
