@@ -297,7 +297,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
         strokeDashArray: "0",
-        offset: 11.5,
+        offset: 0,
       }
     case "ClassAggregation":
       return {
@@ -318,14 +318,14 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "0",
-        offset: 11,
+        offset: 0,
       }
     case "PetriNetArc":
       return {
-        markerPadding: TRIANGLE_MARKER_PADDING,
+        markerPadding: 0,
         markerEnd: "url(#black-triangle)",
         strokeDashArray: "0",
-        offset: 11,
+        offset: 0,
       }
     case "ComponentDependency":
     case "ClassDependency":

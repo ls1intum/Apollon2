@@ -96,25 +96,27 @@ export const useStraightPathEdge = (
   // Use specialized PetriNet coordinate adjustments if this is a PetriNet arc
   const isPetriNetArc = type === "PetriNetArc"
 
-  const adjustedTargetCoordinates = isPetriNetArc
-    ? adjustPetriNetTargetCoordinates(
-        sourceX,
-        sourceY,
-        targetX,
-        targetY,
-        targetPosition,
-        padding
-      )
-    : adjustTargetCoordinates(targetX, targetY, targetPosition, padding)
+  // const adjustedTargetCoordinates = isPetriNetArc
+  //   ? adjustPetriNetTargetCoordinates(
+  //       sourceX,
+  //       sourceY,
+  //       targetX,
+  //       targetY,
+  //       targetPosition,
+  //       padding
+  //     )
+  //   : adjustTargetCoordinates(targetX, targetY, targetPosition, padding)
+  const adjustedTargetCoordinates =  adjustTargetCoordinates(targetX, targetY, targetPosition, padding)
 
-  const adjustedSourceCoordinates = isPetriNetArc
-    ? adjustPetriNetSourceCoordinates(
-        sourceX,
-        sourceY,
-        sourcePosition,
-        SOURCE_CONNECTION_POINT_PADDING
-      )
-    : adjustSourceCoordinates(
+  // const adjustedSourceCoordinates = isPetriNetArc
+  //   ? adjustPetriNetSourceCoordinates(
+  //       sourceX,
+  //       sourceY,
+  //       sourcePosition,
+  //       SOURCE_CONNECTION_POINT_PADDING
+  //     )
+  //   : 
+   const adjustedSourceCoordinates = adjustSourceCoordinates(
         sourceX,
         sourceY,
         sourcePosition,
