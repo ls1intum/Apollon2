@@ -6,8 +6,6 @@ import {
   getEdgeMarkerStyles,
   adjustSourceCoordinates,
   adjustTargetCoordinates,
-  adjustPetriNetSourceCoordinates,
-  adjustPetriNetTargetCoordinates,
 } from "@/utils/edgeUtils"
 import {
   MARKER_PADDING,
@@ -66,7 +64,7 @@ export const useStraightPathEdge = (
     null
   )
 
-  // Only enable reconnection features if we have all required parameters
+
   const hasReconnectionSupport = id && source && target && enableReconnection
 
   const { isReconnectingRef, startReconnection, completeReconnection } =
@@ -93,29 +91,8 @@ export const useStraightPathEdge = (
 
   const padding = markerPadding ?? MARKER_PADDING
 
-  // Use specialized PetriNet coordinate adjustments if this is a PetriNet arc
-  const isPetriNetArc = type === "PetriNetArc"
-
-  // const adjustedTargetCoordinates = isPetriNetArc
-  //   ? adjustPetriNetTargetCoordinates(
-  //       sourceX,
-  //       sourceY,
-  //       targetX,
-  //       targetY,
-  //       targetPosition,
-  //       padding
-  //     )
-  //   : adjustTargetCoordinates(targetX, targetY, targetPosition, padding)
   const adjustedTargetCoordinates =  adjustTargetCoordinates(targetX, targetY, targetPosition, padding)
 
-  // const adjustedSourceCoordinates = isPetriNetArc
-  //   ? adjustPetriNetSourceCoordinates(
-  //       sourceX,
-  //       sourceY,
-  //       sourcePosition,
-  //       SOURCE_CONNECTION_POINT_PADDING
-  //     )
-  //   : 
    const adjustedSourceCoordinates = adjustSourceCoordinates(
         sourceX,
         sourceY,
@@ -287,7 +264,6 @@ export const useStraightPathEdge = (
         return
       }
 
-      // For straight path, use the actual endpoint coordinates
       const endpoint = endType === "source" ? sourcePoint : targetPoint
 
       console.log("✅ Starting reconnection:", endType, endpoint)
@@ -314,38 +290,21 @@ export const useStraightPathEdge = (
           newTargetY = newEndpoint.y
         }
 
-        // Calculate adjusted coordinates for the temporary path
-        const tempAdjustedTargetCoordinates = isPetriNetArc
-          ? adjustPetriNetTargetCoordinates(
-              newSourceX,
-              newSourceY,
-              newTargetX,
-              newTargetY,
-              targetPosition,
-              padding
-            )
-          : adjustTargetCoordinates(
+        const tempAdjustedTargetCoordinates = adjustTargetCoordinates(
               newTargetX,
               newTargetY,
               targetPosition,
               padding
             )
 
-        const tempAdjustedSourceCoordinates = isPetriNetArc
-          ? adjustPetriNetSourceCoordinates(
-              newSourceX,
-              newSourceY,
-              sourcePosition,
-              SOURCE_CONNECTION_POINT_PADDING
-            )
-          : adjustSourceCoordinates(
+        const tempAdjustedSourceCoordinates =  adjustSourceCoordinates(
               newSourceX,
               newSourceY,
               sourcePosition,
               SOURCE_CONNECTION_POINT_PADDING
             )
 
-        // Create temporary straight path
+   
         const tempPath = calculateStraightPath(
           tempAdjustedSourceCoordinates.sourceX,
           tempAdjustedSourceCoordinates.sourceY,
@@ -358,7 +317,7 @@ export const useStraightPathEdge = (
       }
 
       const handleEndpointPointerUp = (upEvent: PointerEvent) => {
-        setTempReconnectPath(null) // Clear temporary path
+        setTempReconnectPath(null) 
 
         document.removeEventListener("pointermove", handleEndpointPointerMove, {
           capture: true,
@@ -372,8 +331,6 @@ export const useStraightPathEdge = (
         })
       }
 
-      // Using capture: true ensures we get events before other handlers
-      // This is critical for drag operations to work reliably
       document.addEventListener("pointermove", handleEndpointPointerMove, {
         capture: true,
       })
