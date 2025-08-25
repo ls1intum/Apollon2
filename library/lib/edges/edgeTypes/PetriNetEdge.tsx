@@ -123,6 +123,7 @@ export const PetriNetEdge = ({
             sourcePoint={edgeData.sourcePoint}
             targetPoint={edgeData.targetPoint}
             isUseCasePath={true}
+            isPetriNet={true}
           />
 
           <CommonEdgeElements

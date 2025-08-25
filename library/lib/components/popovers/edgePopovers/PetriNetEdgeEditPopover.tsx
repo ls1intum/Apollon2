@@ -43,7 +43,10 @@ export const PetriNetEdgeEditPopover: React.FC<PopoverProps> = ({
       {/* Label update */}
       <TextField
         value={edgeData?.label ?? ""}
-        onChange={(e) => handleLabelChange(e.target.value)}
+        onChange={(e) => {
+          const value = e.target.value
+          handleLabelChange(value)
+        }}
         size="small"
         fullWidth
       />

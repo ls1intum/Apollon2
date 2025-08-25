@@ -64,7 +64,6 @@ export const useStraightPathEdge = (
     null
   )
 
-
   const hasReconnectionSupport = id && source && target && enableReconnection
 
   const { isReconnectingRef, startReconnection, completeReconnection } =
@@ -91,14 +90,19 @@ export const useStraightPathEdge = (
 
   const padding = markerPadding ?? MARKER_PADDING
 
-  const adjustedTargetCoordinates =  adjustTargetCoordinates(targetX, targetY, targetPosition, padding)
+  const adjustedTargetCoordinates = adjustTargetCoordinates(
+    targetX,
+    targetY,
+    targetPosition,
+    padding
+  )
 
-   const adjustedSourceCoordinates = adjustSourceCoordinates(
-        sourceX,
-        sourceY,
-        sourcePosition,
-        SOURCE_CONNECTION_POINT_PADDING
-      )
+  const adjustedSourceCoordinates = adjustSourceCoordinates(
+    sourceX,
+    sourceY,
+    sourcePosition,
+    SOURCE_CONNECTION_POINT_PADDING
+  )
 
   const [pathMiddlePosition, setPathMiddlePosition] = useState<IPoint>(() => ({
     x:
@@ -291,20 +295,19 @@ export const useStraightPathEdge = (
         }
 
         const tempAdjustedTargetCoordinates = adjustTargetCoordinates(
-              newTargetX,
-              newTargetY,
-              targetPosition,
-              padding
-            )
+          newTargetX,
+          newTargetY,
+          targetPosition,
+          padding
+        )
 
-        const tempAdjustedSourceCoordinates =  adjustSourceCoordinates(
-              newSourceX,
-              newSourceY,
-              sourcePosition,
-              SOURCE_CONNECTION_POINT_PADDING
-            )
+        const tempAdjustedSourceCoordinates = adjustSourceCoordinates(
+          newSourceX,
+          newSourceY,
+          sourcePosition,
+          SOURCE_CONNECTION_POINT_PADDING
+        )
 
-   
         const tempPath = calculateStraightPath(
           tempAdjustedSourceCoordinates.sourceX,
           tempAdjustedSourceCoordinates.sourceY,
@@ -317,7 +320,7 @@ export const useStraightPathEdge = (
       }
 
       const handleEndpointPointerUp = (upEvent: PointerEvent) => {
-        setTempReconnectPath(null) 
+        setTempReconnectPath(null)
 
         document.removeEventListener("pointermove", handleEndpointPointerMove, {
           capture: true,

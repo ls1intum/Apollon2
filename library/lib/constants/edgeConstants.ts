@@ -1,5 +1,5 @@
 export const ARROW_MARKER_PADDING = -3 // Path ends at target, marker extends from there
-export const DOTTED_ARROW_MARKER_PADDING = -3// Path ends at target, marker extends from there
+export const DOTTED_ARROW_MARKER_PADDING = -3 // Path ends at target, marker extends from there
 export const TRIANGLE_MARKER_PADDING = -3 // Path ends at target, marker extends from there
 export const RHOMBUS_MARKER_PADDING = 12 // Reduce padding to bring marker closer to the element
 export const MARKER_PADDING = -3 // Path ends at target, marker extends from there

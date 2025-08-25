@@ -54,7 +54,6 @@ export const adjustSourceCoordinates = (
   return { sourceX, sourceY }
 }
 
-
 interface TextPlacement {
   roleX: number
   roleY: number

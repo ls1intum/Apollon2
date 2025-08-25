@@ -113,7 +113,6 @@ export const ClassDiagramEdge = ({
         />
 
         <path
-        
           ref={pathRef}
           className="edge-overlay"
           d={overlayPath}
