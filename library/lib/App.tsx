@@ -26,8 +26,8 @@ import {
   useConnect,
   useReconnect,
   useElementInteractions,
+  useDragOver,
 } from "./hooks"
-import { useDragOver } from "./hooks/useDragOver"
 import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts"

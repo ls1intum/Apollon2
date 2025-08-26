@@ -6,6 +6,7 @@ import { useShallow } from "zustand/shallow"
 import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
+import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 
 function getParsedEdgeData(data: unknown): {
   isNegated: boolean
@@ -99,8 +100,6 @@ export const SfcDiagramEdge = ({
 
   const { isNegated, displayName, showBar } = getParsedEdgeData(data)
 
-  console.log({ isNegated, displayName, showBar })
-
   return (
     <>
       <g className="edge-container">
@@ -119,17 +118,19 @@ export const SfcDiagramEdge = ({
           }}
         />
 
-        <path
-          ref={pathRef}
-          className="edge-overlay"
-          d={overlayPath}
-          fill="none"
-          strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
-          pointerEvents="stroke"
-          style={{
-            opacity: isReconnectingRef.current ? 0 : 0.4,
-          }}
-        />
+        <FeedbackDropzone elementId={id} asElement="path">
+          <path
+            ref={pathRef}
+            className="edge-overlay"
+            d={overlayPath}
+            fill="none"
+            strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
+            pointerEvents="stroke"
+            style={{
+              opacity: isReconnectingRef.current ? 0 : 0.4,
+            }}
+          />
+        </FeedbackDropzone>
 
         {isDiagramModifiable &&
           !isReconnectingRef.current &&

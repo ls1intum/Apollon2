@@ -1,11 +1,16 @@
-import { useTheme } from "@mui/material/styles"
-import useMediaQuery from "@mui/material/useMediaQuery"
 import MobileNavbar from "./MobileNavbar"
 import { DesktopNavbar } from "./DesktopNavbar"
 
 export const Navbar = () => {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  return (
+    <>
+      <div className="hidden md:block">
+        <DesktopNavbar />
+      </div>
 
-  return isMobile ? <MobileNavbar /> : <DesktopNavbar />
+      <div className="md:hidden">
+        <MobileNavbar />
+      </div>
+    </>
+  )
 }

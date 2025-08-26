@@ -2,6 +2,7 @@ import { ClassNodeElement } from "@/types"
 import { CustomText } from "./CustomText"
 import { FC } from "react"
 import AssessmentIcon from "../AssessmentIcon"
+import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 
 interface RowBlockSectionProps {
   items: (ClassNodeElement & { score?: number })[]
@@ -29,22 +30,30 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
         const iconX = width - 15
 
         return (
-          <g key={item.id} id={item.id}>
-            <CustomText
-              key={item.id}
-              x={padding}
-              y={15 + index * itemHeight}
-              dominantBaseline="middle"
-              textAnchor="start"
-              font={font}
-            >
-              {item.name}
-            </CustomText>
-
+          <>
+            <FeedbackDropzone key={item.id} elementId={item.id}>
+              <rect
+                x={0}
+                y={y}
+                width={width}
+                height={itemHeight}
+                fill="transparent"
+              />
+              <CustomText
+                key={item.id}
+                x={padding}
+                y={15 + index * itemHeight}
+                dominantBaseline="middle"
+                textAnchor="start"
+                font={font}
+              >
+                {item.name}
+              </CustomText>
+            </FeedbackDropzone>
             {showAssessmentResults && typeof item.score === "number" && (
               <AssessmentIcon score={item.score} x={iconX} y={iconY} />
             )}
-          </g>
+          </>
         )
       })}
     </g>
