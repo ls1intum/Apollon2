@@ -27,11 +27,6 @@ export const DesktopNavbar = () => {
   }
 
   useEffect(() => {
-    console.log(
-      "Setting up subscription for diagram title changes",
-      editor,
-      unsubscribe
-    )
     if (editor && !unsubscribe.current) {
       unsubscribe.current = editor.subscribeToDiagramNameChange(
         (diagramTitle) => {
@@ -91,8 +86,6 @@ export const DesktopNavbar = () => {
             value={diagramTitle}
             onChange={(event) => {
               const newTitle = event.target.value
-              console.log("New Title:", newTitle)
-              console.log("Editor:", editor)
               editor?.updateDiagramTitle(newTitle)
             }}
             placeholder="Diagram Name"
