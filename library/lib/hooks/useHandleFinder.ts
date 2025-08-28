@@ -1,10 +1,6 @@
 import { useCallback } from "react"
 import { type Node, useReactFlow } from "@xyflow/react"
-import {
-  findClosestHandle,
-  findClosestHandleForInterface,
-  findClosestHandleForPetriNet,
-} from "../utils/edgeUtils"
+import { findClosestHandle } from "../utils/edgeUtils"
 import { DiagramNodeTypeRecord } from "../nodes"
 
 interface HandleFinderResult {
@@ -64,13 +60,12 @@ export const useHandleFinder = () => {
         height: nodeOnTop.height,
       }
       let handle: string
-      if (nodeOnTop.type === DiagramNodeTypeRecord.componentInterface) {
-        handle = findClosestHandleForInterface(dropPosition, nodeBounds)
-      } else if (
-        nodeOnTop.type === "petriNetPlace" ||
-        nodeOnTop.type === "petriNetTransition"
+      if (
+        nodeOnTop.type === DiagramNodeTypeRecord.componentInterface ||
+        nodeOnTop.type === DiagramNodeTypeRecord.petriNetPlace ||
+        nodeOnTop.type === DiagramNodeTypeRecord.petriNetTransition
       ) {
-        handle = findClosestHandleForPetriNet(dropPosition, nodeBounds)
+        handle = findClosestHandle(dropPosition, nodeBounds, true)
       } else {
         handle = findClosestHandle(dropPosition, nodeBounds)
       }

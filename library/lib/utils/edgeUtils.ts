@@ -345,70 +345,12 @@ function distance(p1: XYPosition, p2: XYPosition): number {
   return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
 }
 
-export function findClosestHandle(point: XYPosition, rect: Rect): string {
-  const points: { label: string; position: XYPosition }[] = [
-    { label: "top-left", position: { x: rect.x + rect.width / 3, y: rect.y } },
-    { label: "top", position: { x: rect.x + rect.width / 2, y: rect.y } },
-    {
-      label: "top-right",
-      position: { x: rect.x + (2 / 3) * rect.width, y: rect.y },
-    },
-
-    {
-      label: "bottom-left",
-      position: { x: rect.x + rect.width / 3, y: rect.y + rect.height },
-    },
-    {
-      label: "bottom",
-      position: { x: rect.x + rect.width / 2, y: rect.y + rect.height },
-    },
-    {
-      label: "bottom-right",
-      position: { x: rect.x + (2 / 3) * rect.width, y: rect.y + rect.height },
-    },
-
-    { label: "left-top", position: { x: rect.x, y: rect.y + rect.height / 3 } },
-    { label: "left", position: { x: rect.x, y: rect.y + rect.height / 2 } },
-    {
-      label: "left-bottom",
-      position: { x: rect.x, y: rect.y + (2 / 3) * rect.height },
-    },
-
-    {
-      label: "right-top",
-      position: { x: rect.x + rect.width, y: rect.y + rect.height / 3 },
-    },
-    {
-      label: "right",
-      position: { x: rect.x + rect.width, y: rect.y + rect.height / 2 },
-    },
-    {
-      label: "right-bottom",
-      position: { x: rect.x + rect.width, y: rect.y + (2 / 3) * rect.height },
-    },
-  ]
-
-  let closest = points[0]
-  let minDist = distance(point, points[0].position)
-
-  for (const p of points) {
-    const d = distance(point, p.position)
-    if (d < minDist) {
-      minDist = d
-      closest = p
-    }
-  }
-
-  return closest.label
-}
-
-/**
- * Find the closest handle for PetriNet nodes (which only have 4 basic handles)
- */
-export function findClosestHandleForPetriNet(
+export function findClosestHandle(
   point: XYPosition,
-  rect: Rect
+  rect: Rect,
+  isFourHandle: boolean = false
 ): string {
+  // Start with basic 4 handles (top, bottom, left, right)
   const points: { label: string; position: XYPosition }[] = [
     { label: "top", position: { x: rect.x + rect.width / 2, y: rect.y } },
     {
@@ -422,39 +364,43 @@ export function findClosestHandleForPetriNet(
     },
   ]
 
-  let closest = points[0]
-  let minDist = distance(point, points[0].position)
-
-  for (const p of points) {
-    const d = distance(point, p.position)
-    if (d < minDist) {
-      minDist = d
-      closest = p
-    }
+  // If not a 4-handle node, append additional handles
+  if (!isFourHandle) {
+    points.push(
+      {
+        label: "top-left",
+        position: { x: rect.x + rect.width / 3, y: rect.y },
+      },
+      {
+        label: "top-right",
+        position: { x: rect.x + (2 / 3) * rect.width, y: rect.y },
+      },
+      {
+        label: "bottom-left",
+        position: { x: rect.x + rect.width / 3, y: rect.y + rect.height },
+      },
+      {
+        label: "bottom-right",
+        position: { x: rect.x + (2 / 3) * rect.width, y: rect.y + rect.height },
+      },
+      {
+        label: "left-top",
+        position: { x: rect.x, y: rect.y + rect.height / 3 },
+      },
+      {
+        label: "left-bottom",
+        position: { x: rect.x, y: rect.y + (2 / 3) * rect.height },
+      },
+      {
+        label: "right-top",
+        position: { x: rect.x + rect.width, y: rect.y + rect.height / 3 },
+      },
+      {
+        label: "right-bottom",
+        position: { x: rect.x + rect.width, y: rect.y + (2 / 3) * rect.height },
+      }
+    )
   }
-
-  return closest.label
-}
-
-export function findClosestHandleForInterface(
-  point: XYPosition,
-  rect: Rect
-): string {
-  const points: { label: string; position: XYPosition }[] = [
-    { label: "top", position: { x: rect.x + rect.width / 2, y: rect.y } },
-
-    {
-      label: "bottom",
-      position: { x: rect.x + rect.width / 2, y: rect.y + rect.height },
-    },
-
-    { label: "left", position: { x: rect.x, y: rect.y + rect.height / 2 } },
-
-    {
-      label: "right",
-      position: { x: rect.x + rect.width, y: rect.y + rect.height / 2 },
-    },
-  ]
 
   let closest = points[0]
   let minDist = distance(point, points[0].position)

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react"
-import { useReactFlow, Position } from "@xyflow/react"
+import { useReactFlow } from "@xyflow/react"
 import {
   calculateOverlayPath,
   calculateStraightPath,
@@ -23,40 +23,21 @@ export interface StraightPathEdgeData {
   targetPoint: IPoint
 }
 
-export const useStraightPathEdge = (
-  params:
-    | (Omit<BaseEdgeProps, "data"> & { enableReconnection?: boolean })
-    | {
-        type: string
-        sourceX: number
-        sourceY: number
-        targetX: number
-        targetY: number
-        sourcePosition: Position
-        targetPosition: Position
-        id?: string
-        source?: string
-        target?: string
-        sourceHandleId?: string
-        targetHandleId?: string
-        enableReconnection?: boolean
-      }
-) => {
-  const {
-    id,
-    type,
-    source,
-    target,
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    sourcePosition,
-    targetPosition,
-    sourceHandleId,
-    targetHandleId,
-    enableReconnection = true,
-  } = params
+export const useStraightPathEdge = ({
+  id,
+  type,
+  source,
+  target,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  sourceHandleId,
+  targetHandleId,
+  enableReconnection = true,
+}: Omit<BaseEdgeProps, "data"> & { enableReconnection?: boolean }) => {
   const pathRef = useRef<SVGPathElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
   const { screenToFlowPosition } = useReactFlow()
@@ -251,26 +232,15 @@ export const useStraightPathEdge = (
 
   const handleEndpointPointerDown = useCallback(
     (e: React.PointerEvent, endType: "source" | "target") => {
-      console.log("🔵 Endpoint grab attempted:", endType)
-
-      if (!isDiagramModifiable) {
-        console.log("❌ Diagram is not modifiable")
-        return
-      }
-
-      if (!enableReconnection) {
-        console.log("❌ Reconnection is disabled")
-        return
-      }
-
-      if (!hasReconnectionSupport) {
-        console.log("❌ Reconnection support missing:", { id, source, target })
+      if (
+        !isDiagramModifiable ||
+        !enableReconnection ||
+        !hasReconnectionSupport
+      ) {
         return
       }
 
       const endpoint = endType === "source" ? sourcePoint : targetPoint
-
-      console.log("✅ Starting reconnection:", endType, endpoint)
       startReconnection(e, endType, endpoint)
 
       const handleEndpointPointerMove = (moveEvent: PointerEvent) => {
@@ -329,9 +299,7 @@ export const useStraightPathEdge = (
           capture: true,
         })
 
-        completeReconnection(upEvent, findBestHandle, () => {
-          // No custom points to clear for straight path edges
-        })
+        completeReconnection(upEvent, findBestHandle, () => {})
       }
 
       document.addEventListener("pointermove", handleEndpointPointerMove, {
