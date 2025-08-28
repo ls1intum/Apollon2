@@ -68,12 +68,12 @@ export const useHandleFinder = () => {
         handle = findClosestHandle({
           point: dropPosition,
           rect: nodeBounds,
-          useFourHandles: true
+          useFourHandles: true,
         })
       } else {
         handle = findClosestHandle({
           point: dropPosition,
-          rect: nodeBounds
+          rect: nodeBounds,
         })
       }
       return {

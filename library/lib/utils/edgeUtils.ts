@@ -346,9 +346,9 @@ function distance(p1: XYPosition, p2: XYPosition): number {
 }
 
 interface FindClosestHandleParams {
-  point: XYPosition;
-  rect: Rect;
-  useFourHandles?: boolean;
+  point: XYPosition
+  rect: Rect
+  useFourHandles?: boolean
 }
 
 export function findClosestHandle({

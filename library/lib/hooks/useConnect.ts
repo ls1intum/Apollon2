@@ -111,7 +111,7 @@ export const useConnect = () => {
             y: internalNodeData.internals.positionAbsolute.y,
             width: nodeOnTop.width!,
             height: nodeOnTop.height!,
-          }
+          },
         })
 
         if (startEdge.current) {
