@@ -65,9 +65,16 @@ export const useHandleFinder = () => {
         nodeOnTop.type === DiagramNodeTypeRecord.petriNetPlace ||
         nodeOnTop.type === DiagramNodeTypeRecord.petriNetTransition
       ) {
-        handle = findClosestHandle(dropPosition, nodeBounds, true)
+        handle = findClosestHandle({
+          point: dropPosition,
+          rect: nodeBounds,
+          useFourHandles: true
+        })
       } else {
-        handle = findClosestHandle(dropPosition, nodeBounds)
+        handle = findClosestHandle({
+          point: dropPosition,
+          rect: nodeBounds
+        })
       }
       return {
         handle,

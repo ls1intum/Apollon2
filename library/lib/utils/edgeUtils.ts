@@ -345,11 +345,17 @@ function distance(p1: XYPosition, p2: XYPosition): number {
   return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
 }
 
-export function findClosestHandle(
-  point: XYPosition,
-  rect: Rect,
-  isFourHandle: boolean = false
-): string {
+interface FindClosestHandleParams {
+  point: XYPosition;
+  rect: Rect;
+  useFourHandles?: boolean;
+}
+
+export function findClosestHandle({
+  point,
+  rect,
+  useFourHandles = false,
+}: FindClosestHandleParams): string {
   // Start with basic 4 handles (top, bottom, left, right)
   const points: { label: string; position: XYPosition }[] = [
     { label: "top", position: { x: rect.x + rect.width / 2, y: rect.y } },
@@ -365,7 +371,7 @@ export function findClosestHandle(
   ]
 
   // If not a 4-handle node, append additional handles
-  if (!isFourHandle) {
+  if (!useFourHandles) {
     points.push(
       {
         label: "top-left",
