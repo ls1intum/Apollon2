@@ -2,6 +2,7 @@ import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { MenuItem } from "@mui/material"
 import React, { useRef } from "react"
 import { useNavigate } from "react-router"
+import { importDiagram } from "@tumaet/apollon"
 
 export const JsonFileImportButton: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -25,14 +26,20 @@ export const JsonFileImportButton: React.FC = () => {
       try {
         const timeStapToCreate = new Date().getTime()
         const json = JSON.parse(e.target?.result as string)
-        createModel(json.model)
+        
+        // Use the universal import function that handles both v3 and v4 formats
+        const convertedModel = importDiagram(json)
+        
+        createModel(convertedModel)
         navigate("..", {
           relative: "route",
           replace: true,
           state: { timeStapToCreate },
         }) // Navigate to the parent route after loading the model
       } catch (error) {
-        console.error("Invalid JSON file", error)
+        console.error("Error importing diagram:", error)
+        // Show user-friendly error message
+        alert("Failed to import diagram. Please check that the file is a valid Apollon diagram (v3 or v4 format).")
       }
     }
     reader.readAsText(file)
