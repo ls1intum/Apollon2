@@ -25,13 +25,14 @@ export const useDropFeedback = ({
 
       const dropData = event.dataTransfer.getData("text/plain")
 
-      const parsedData = JSON.parse(dropData)
+      const instruction = JSON.parse(dropData)
       const newAssessment: Assessment = {
         modelElementId: elementId,
         elementType,
-        score: parsedData.credits,
-        feedback: parsedData.feedback,
-        dropInfo: parsedData,
+        score: instruction.credits,
+        feedback: instruction.feedback,
+        dropInfo: instruction,
+        correctionStatus: { status: "NOT_VALIDATED" },
       }
       setAssessments((prev) => ({
         ...prev,

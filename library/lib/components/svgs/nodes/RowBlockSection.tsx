@@ -30,8 +30,8 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
         const iconX = width - 15
 
         return (
-          <>
-            <FeedbackDropzone key={item.id} elementId={item.id}>
+          <g key={item.id}>
+            <FeedbackDropzone elementId={item.id}>
               <rect
                 x={0}
                 y={y}
@@ -40,7 +40,6 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
                 fill="transparent"
               />
               <CustomText
-                key={item.id}
                 x={padding}
                 y={15 + index * itemHeight}
                 dominantBaseline="middle"
@@ -53,7 +52,7 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
             {showAssessmentResults && typeof item.score === "number" && (
               <AssessmentIcon score={item.score} x={iconX} y={iconY} />
             )}
-          </>
+          </g>
         )
       })}
     </g>

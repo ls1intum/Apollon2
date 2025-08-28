@@ -32,6 +32,7 @@ export const GiveFeedbackAssessmentBox = ({ elementId, name, type }: Props) => {
       elementType: type.toLowerCase() as "node" | "attribute" | "method",
       score: newScore === "" ? 0 : validScore,
       feedback: newFeedback || undefined,
+      correctionStatus: { status: "NOT_VALIDATED" },
     }
 
     setAssessments((prev) => ({
