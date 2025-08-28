@@ -270,7 +270,7 @@ export const BPMNTaskNodeSVG: React.FC<BPMNTaskNodeSVGProps> = ({
       </g>
 
       {showAssessmentResults && (
-        <AssessmentIcon x={width - 15} y={-5} score={nodeScore} />
+        <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />
       )}
     </svg>
   )

@@ -25,6 +25,7 @@ export const DesktopNavbar = () => {
   const goHome = () => {
     navigate("/")
   }
+
   useEffect(() => {
     if (editor && !unsubscribe.current) {
       unsubscribe.current = editor.subscribeToDiagramNameChange(
@@ -41,7 +42,7 @@ export const DesktopNavbar = () => {
     return () => {
       unsubscribe.current?.()
     }
-  }, [editor])
+  }, [editor, setDiagramTitle, unsubscribe])
 
   return (
     <AppBar
@@ -86,7 +87,6 @@ export const DesktopNavbar = () => {
             onChange={(event) => {
               const newTitle = event.target.value
               editor?.updateDiagramTitle(newTitle)
-              setDiagramTitle(newTitle)
             }}
             placeholder="Diagram Name"
             variant="outlined"
