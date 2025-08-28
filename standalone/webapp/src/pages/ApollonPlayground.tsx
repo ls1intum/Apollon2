@@ -15,6 +15,7 @@ import {
   useExportAsJSON,
   useExportAsPDF,
 } from "@/hooks"
+import { FeedbackBoxes } from "@/components/FeedbackBoxes"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
 
@@ -78,13 +79,14 @@ export const ApollonPlayground: React.FC = () => {
             className="border-2 border-gray-400 p-1 rounded-md flex w-[200px] bg-white"
             onChange={(e) => {
               const selectedType = e.target.value as UMLDiagramType
-
+              const newModel = {
+                ...diagram.model,
+                type: selectedType,
+              }
               setApollonOptions((prev) => ({
-                ...prev!,
-                model: {
-                  ...prev.model!,
-                  type: selectedType,
-                },
+                ...prev,
+                type: selectedType,
+                model: newModel,
               }))
             }}
           >
@@ -140,6 +142,9 @@ export const ApollonPlayground: React.FC = () => {
           />
           <label className="font-semibold ">Readonly</label>
         </div>
+
+        {apollonOptions.mode === ApollonMode.Assessment &&
+          !apollonOptions.readonly && <FeedbackBoxes />}
 
         <button onClick={exportAsSvg} className="border p-1 rounded-sm">
           Export as SVG

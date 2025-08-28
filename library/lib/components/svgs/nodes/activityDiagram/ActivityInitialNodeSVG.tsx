@@ -27,7 +27,7 @@ export const ActivityInitialNodeSVG: React.FC<SVGComponentProps> = ({
       <circle cx={width / 2} cy={height / 2} r={width / 2} fill="black" />
 
       {showAssessmentResults && (
-        <AssessmentIcon x={width - 15} y={-5} score={nodeScore} />
+        <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />
       )}
     </svg>
   )

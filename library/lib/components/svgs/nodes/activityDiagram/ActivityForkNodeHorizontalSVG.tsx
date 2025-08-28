@@ -27,7 +27,7 @@ export const ActivityForkNodeHorizontalSVG: React.FC<SVGComponentProps> = ({
       <rect x={0} y={0} width={width} height={height} fill="black" />
 
       {showAssessmentResults && (
-        <AssessmentIcon x={width - 15} y={-5} score={nodeScore} />
+        <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />
       )}
     </svg>
   )
