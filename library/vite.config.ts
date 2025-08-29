@@ -32,9 +32,4 @@ export default defineConfig({
     },
     dedupe: ["react", "react-dom", "@emotion/react", "@emotion/styled"],
   },
-  server: {
-    fs: {
-      allow: [resolve(__dirname, "..")],
-    },
-  },
 })
