@@ -46,3 +46,10 @@ npm run start
 ## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](https://apollon2.readthedocs.io/en/latest/contributing.html) for detailed instructions.
+
+## Development with Hot Reload
+
+Run the full dev stack with hot reload:
+
+- npm run dev (from the repo root)
+- Starts: library build watch, server (tsx watch) on <http://localhost:8000>, webapp (Vite HMR) on <http://localhost:5173>

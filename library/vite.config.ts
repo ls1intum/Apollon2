@@ -13,27 +13,23 @@ export default defineConfig({
       entry: resolve(__dirname, "lib/index.tsx"),
       formats: ["es"],
     },
+    // Do not externalize React: bundle everything so consumers don't need React installed
     rollupOptions: {
-      external: ["react", "react-dom", "react/jsx-runtime"],
       output: {
         assetFileNames: "assets/[name][extname]",
         entryFileNames: "index.js",
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-        },
       },
     },
     minify: true,
     commonjsOptions: {
       include: [/node_modules/],
-      exclude: ["react", "react-dom"],
+      // No exclusions: allow bundling of all deps
     },
   },
   resolve: {
     alias: {
       "@": resolve(__dirname, "lib"),
     },
-    dedupe: ["@emotion/react", "@emotion/styled"],
+    dedupe: ["react", "react-dom", "@emotion/react", "@emotion/styled"],
   },
 })

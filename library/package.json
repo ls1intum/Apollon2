@@ -4,6 +4,7 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "source": "lib/index.tsx",
   "publishConfig": {
     "access": "public"
   },
@@ -16,6 +17,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:watch": "tsc -b --watch & vite build --watch",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
