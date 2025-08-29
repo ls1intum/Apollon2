@@ -104,11 +104,14 @@ export const useConnect = () => {
 
         if (!internalNodeData) return
 
-        const targetHandle = findClosestHandle(dropPosition, {
-          x: internalNodeData.internals.positionAbsolute.x,
-          y: internalNodeData.internals.positionAbsolute.y,
-          width: nodeOnTop.width!,
-          height: nodeOnTop.height!,
+        const targetHandle = findClosestHandle({
+          point: dropPosition,
+          rect: {
+            x: internalNodeData.internals.positionAbsolute.x,
+            y: internalNodeData.internals.positionAbsolute.y,
+            width: nodeOnTop.width!,
+            height: nodeOnTop.height!,
+          },
         })
 
         if (startEdge.current) {

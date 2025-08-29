@@ -14,12 +14,16 @@ import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 export const UseCaseEdge = ({
   id,
   type,
+  source,
+  target,
   sourceX,
   sourceY,
   targetX,
   targetY,
   sourcePosition,
   targetPosition,
+  sourceHandleId,
+  targetHandleId,
   data,
 }: BaseEdgeProps) => {
   const anchorRef = useRef<SVGSVGElement | null>(null)
@@ -54,13 +58,18 @@ export const UseCaseEdge = ({
     strokeDashArray,
     isDiagramModifiable,
   } = useStraightPathEdge({
+    id,
     type,
+    source,
+    target,
     sourceX,
     sourceY,
     targetX,
     targetY,
     sourcePosition,
     targetPosition,
+    sourceHandleId,
+    targetHandleId,
   })
 
   return (
