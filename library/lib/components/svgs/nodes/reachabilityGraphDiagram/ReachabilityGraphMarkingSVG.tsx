@@ -51,7 +51,7 @@ export const ReachabilityGraphMarkingSVG: React.FC<
         {/* Name Text */}
         <CustomText
           x={width / 2}
-          y={20}
+          y={height / 2}
           textAnchor="middle"
           fontWeight="600"
           dominantBaseline="hanging"
@@ -71,7 +71,7 @@ export const ReachabilityGraphMarkingSVG: React.FC<
       </g>
 
       {showAssessmentResults && (
-        <AssessmentIcon x={width - 15} y={-5} score={nodeScore} />
+        <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />
       )}
     </svg>
   )

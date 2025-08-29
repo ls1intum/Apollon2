@@ -19,6 +19,7 @@ import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 import { UseCaseSystemNodeSVG } from "@/components"
+import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 
 export function UseCaseSystem({
   id,
@@ -41,7 +42,7 @@ export function UseCaseSystem({
   }
 
   return (
-    <>
+    <FeedbackDropzone elementId={id} asElement="div">
       <NodeToolbar
         isVisible={isDiagramModifiable && !!selected}
         position={Position.Top}
@@ -84,6 +85,6 @@ export function UseCaseSystem({
         elementId={id}
         type="default"
       />
-    </>
+    </FeedbackDropzone>
   )
 }

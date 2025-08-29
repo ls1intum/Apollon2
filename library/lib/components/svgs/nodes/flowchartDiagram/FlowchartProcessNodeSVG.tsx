@@ -56,7 +56,7 @@ export const FlowchartProcessNodeSVG: React.FC<Props> = ({
       </g>
 
       {showAssessmentResults && (
-        <AssessmentIcon x={width - 15} y={-5} score={nodeScore} />
+        <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />
       )}
     </svg>
   )
