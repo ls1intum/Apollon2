@@ -44,12 +44,10 @@ export const AssessmentSelectableWrapper: React.FC<
       cursor: "pointer",
       ...(isSelected && {
         stroke: "rgba(25, 118, 210, 0.2)",
-        outline: "2px solid #1976d2",
       }),
       ...(isHighlighted &&
         !isSelected && {
           stroke: "rgba(25, 118, 210, 0.5)",
-          outline: "2px solid #1976d2",
         }),
     }
 
