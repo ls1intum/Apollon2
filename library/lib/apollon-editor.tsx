@@ -143,6 +143,15 @@ export class ApollonEditor {
     console.log("Disposing Apollon2 instance with diagramId", diagramId)
 
     try {
+      // Clean up all active subscriptions before destroying
+      Object.keys(this.subscribers).forEach((subscriberId) => {
+        const unsubscribeCallback = this.subscribers[parseInt(subscriberId)]
+        if (unsubscribeCallback) {
+          unsubscribeCallback()
+        }
+      })
+      this.subscribers = {}
+
       this.syncManager.stopSync()
       this.root.unmount()
       this.ydoc.destroy()

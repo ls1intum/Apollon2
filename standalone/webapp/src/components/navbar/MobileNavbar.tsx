@@ -38,12 +38,6 @@ export default function MobileNavbar() {
     if (editor) {
       setDiagramTitle(editor.getDiagramMetadata().diagramTitle || "")
     }
-    // Cleanup subscription
-    return () => {
-      if (unsubscribe.current) {
-        editor?.unsubscribe(unsubscribe.current)
-      }
-    }
   }, [editor])
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {

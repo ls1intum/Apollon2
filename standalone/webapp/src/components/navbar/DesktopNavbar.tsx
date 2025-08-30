@@ -28,21 +28,13 @@ export const DesktopNavbar = () => {
 
   useEffect(() => {
     if (editor && !unsubscribeId.current) {
-      unsubscribeId.current = editor.subscribeToDiagramNameChange(
-        (diagramTitle) => {
-          setDiagramTitle(diagramTitle)
-        }
-      )
+      editor.subscribeToDiagramNameChange((diagramTitle) => {
+        setDiagramTitle(diagramTitle)
+      })
     }
     // Update diagram title when editor is available
     if (editor) {
       setDiagramTitle(editor.getDiagramMetadata().diagramTitle || "")
-    }
-    // Cleanup subscription
-    return () => {
-      if (editor && unsubscribeId.current) {
-        editor.unsubscribe(unsubscribeId.current)
-      }
     }
   }, [editor, setDiagramTitle, unsubscribeId])
 
