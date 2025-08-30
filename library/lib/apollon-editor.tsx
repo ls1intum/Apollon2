@@ -14,9 +14,14 @@ import { createDiagramStore, DiagramStore } from "@/store/diagramStore"
 import { createMetadataStore, MetadataStore } from "@/store/metadataStore"
 import { createPopoverStore, PopoverStore } from "@/store/popoverStore"
 import {
+  createAssessmentSelectionStore,
+  AssessmentSelectionStore,
+} from "@/store/assessmentSelectionStore"
+import {
   DiagramStoreContext,
   MetadataStoreContext,
   PopoverStoreContext,
+  AssessmentSelectionStoreContext,
 } from "./store/context"
 import {
   MessageType,
@@ -35,6 +40,7 @@ export class ApollonEditor {
   private readonly diagramStore: StoreApi<DiagramStore>
   private readonly metadataStore: StoreApi<MetadataStore>
   private readonly popoverStore: StoreApi<PopoverStore>
+  private readonly assessmentSelectionStore: StoreApi<AssessmentSelectionStore>
   private subscribers: Apollon.Subscribers = {}
   constructor(element: HTMLElement, options?: Apollon.ApollonOptions) {
     if (!(element instanceof HTMLElement)) {
@@ -45,6 +51,7 @@ export class ApollonEditor {
     this.diagramStore = createDiagramStore(this.ydoc)
     this.metadataStore = createMetadataStore(this.ydoc)
     this.popoverStore = createPopoverStore()
+    this.assessmentSelectionStore = createAssessmentSelectionStore()
     this.syncManager = new YjsSyncClass(
       this.ydoc,
       this.diagramStore,
@@ -94,9 +101,13 @@ export class ApollonEditor {
       <DiagramStoreContext.Provider value={this.diagramStore}>
         <MetadataStoreContext.Provider value={this.metadataStore}>
           <PopoverStoreContext.Provider value={this.popoverStore}>
-            <AppWithProvider
-              onReactFlowInit={this.setReactFlowInstance.bind(this)}
-            />
+            <AssessmentSelectionStoreContext.Provider
+              value={this.assessmentSelectionStore}
+            >
+              <AppWithProvider
+                onReactFlowInit={this.setReactFlowInstance.bind(this)}
+              />
+            </AssessmentSelectionStoreContext.Provider>
           </PopoverStoreContext.Provider>
         </MetadataStoreContext.Provider>
       </DiagramStoreContext.Provider>
@@ -313,6 +324,10 @@ export class ApollonEditor {
     this.metadataStore
       .getState()
       .updateMetaData(model.title, parseDiagramType(model.type))
+  }
+
+  public getSelectedElements(): string[] {
+    return this.assessmentSelectionStore.getState().selectedElementIds
   }
 
   public addOrUpdateAssessment(assessment: Apollon.Assessment): void {

@@ -54,11 +54,6 @@ export type ApollonEdge = {
   }
 }
 
-export type Selection = {
-  nodes: { [id: string]: boolean }
-  edges: { [id: string]: boolean }
-}
-
 export type UMLModel = {
   version: `4.${number}.${number}`
   id: string

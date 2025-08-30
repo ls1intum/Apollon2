@@ -197,6 +197,7 @@ export function Class({
           showAssessmentResults={!isDiagramModifiable}
         />
       </div>
+
       <PopoverManager
         anchorEl={classSvgWrapperRef.current}
         elementId={id}
