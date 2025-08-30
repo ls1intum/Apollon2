@@ -1,3 +1,4 @@
+import { AssessmentSelectableWrapper } from "@/components/wrapper/AssessmentSelectableWrapper"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
@@ -133,25 +134,27 @@ export function DefaultNodeWrapper({
   ]
 
   return (
-    <FeedbackDropzone
-      className={className}
-      elementId={elementId}
-      asElement="div"
-    >
-      {handles.map(
-        (handle) =>
-          !hiddenHandles.includes(handle.id) && (
-            <Handle
-              key={handle.id}
-              id={handle.id}
-              type="source"
-              position={handle.position}
-              style={handle.style}
-              isConnectable={isDiagramModifiable}
-            />
-          )
-      )}
-      {children}
-    </FeedbackDropzone>
+    <AssessmentSelectableWrapper elementId={elementId}>
+      <FeedbackDropzone
+        className={className}
+        elementId={elementId}
+        asElement="div"
+      >
+        {handles.map(
+          (handle) =>
+            !hiddenHandles.includes(handle.id) && (
+              <Handle
+                key={handle.id}
+                id={handle.id}
+                type="source"
+                position={handle.position}
+                style={handle.style}
+                isConnectable={isDiagramModifiable}
+              />
+            )
+        )}
+        {children}
+      </FeedbackDropzone>
+    </AssessmentSelectableWrapper>
   )
 }

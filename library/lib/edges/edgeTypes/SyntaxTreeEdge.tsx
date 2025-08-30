@@ -7,6 +7,7 @@ import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
+import { AssessmentSelectableWrapper } from "@/components/wrapper"
 
 export const SyntaxTreeEdge = ({
   id,
@@ -72,17 +73,19 @@ export const SyntaxTreeEdge = ({
           }}
         />
 
-        <FeedbackDropzone elementId={id} asElement="path">
-          <path
-            ref={pathRef}
-            className="edge-overlay"
-            d={overlayPath}
-            fill="none"
-            strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
-            pointerEvents="stroke"
-            style={{ opacity: 0.4 }}
-          />
-        </FeedbackDropzone>
+        <AssessmentSelectableWrapper elementId={id} asElement="g">
+          <FeedbackDropzone elementId={id} asElement="path">
+            <path
+              ref={pathRef}
+              className="edge-overlay"
+              d={overlayPath}
+              fill="none"
+              strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
+              pointerEvents="stroke"
+              style={{ opacity: 0.4 }}
+            />
+          </FeedbackDropzone>
+        </AssessmentSelectableWrapper>
       </g>
 
       <CommonEdgeElements

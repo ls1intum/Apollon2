@@ -4,12 +4,14 @@ import {
   ConnectionMode,
   ReactFlow,
 } from "@xyflow/react"
+import { useCallback } from "react"
 import {
   CustomBackground,
   CustomControls,
   CustomMiniMap,
   Sidebar,
   SvgMarkers,
+  AssessmentSelectionDebug,
 } from "@/components"
 import "@xyflow/react/dist/style.css"
 import "@/styles/app.css"
@@ -31,6 +33,7 @@ import {
 import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts"
+import { useAssessmentSelectionMode } from "./hooks/useAssessmentSelectionMode"
 import { ApollonMode } from "./typings"
 import { getConnectionLineType } from "./utils/edgeUtils"
 
@@ -40,6 +43,8 @@ interface AppProps {
 const proOptions = { hideAttribution: true }
 
 function App({ onReactFlowInit }: AppProps) {
+  useKeyboardShortcuts()
+
   const { nodes, onNodesChange, edges, onEdgesChange, diagramId } =
     useDiagramStore(
       useShallow((state) => ({
@@ -55,9 +60,11 @@ function App({ onReactFlowInit }: AppProps) {
     useShallow((state) => ({
       mode: state.mode,
       diagramType: state.diagramType,
+      readonly: state.readonly,
     }))
   )
   const isDiagramModifiable = useDiagramModifiable()
+
   const connectionLineType = getConnectionLineType(diagramType)
   const onNodeDragStop = useNodeDragStop()
   const onDragOver = useDragOver()
@@ -66,8 +73,14 @@ function App({ onReactFlowInit }: AppProps) {
   const onReconnect = useReconnect()
   const { onBeforeDelete, onNodeDoubleClick, onEdgeDoubleClick } =
     useElementInteractions()
+  const { onPaneClicked } = useAssessmentSelectionMode()
 
-  useKeyboardShortcuts()
+  const handleReactFlowInit = useCallback(
+    (instance: ReactFlowInstance) => {
+      onReactFlowInit(instance)
+    },
+    [onReactFlowInit]
+  )
 
   return (
     <div
@@ -101,7 +114,7 @@ function App({ onReactFlowInit }: AppProps) {
         connectionMode={ConnectionMode.Loose}
         onInit={(instance) => {
           instance.fitView({ maxZoom: 1.0, minZoom: 1.0 })
-          onReactFlowInit(instance)
+          handleReactFlowInit(instance)
         }}
         minZoom={MIN_SCALE_TO_ZOOM_OUT}
         maxZoom={MAX_SCALE_TO_ZOOM_IN}
@@ -110,15 +123,16 @@ function App({ onReactFlowInit }: AppProps) {
         onNodeDoubleClick={onNodeDoubleClick}
         onEdgeDoubleClick={onEdgeDoubleClick}
         onBeforeDelete={onBeforeDelete}
+        onPaneClick={onPaneClicked}
         proOptions={proOptions}
         edgesReconnectable={isDiagramModifiable}
         nodesConnectable={isDiagramModifiable}
         nodesDraggable={isDiagramModifiable}
-        style={{ width: "100%", height: "100%" }}
       >
         <CustomBackground />
         <CustomMiniMap />
         <CustomControls />
+        <AssessmentSelectionDebug />
       </ReactFlow>
     </div>
   )

@@ -15,6 +15,7 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { AssessmentSelectableElement } from "@/components/AssessmentSelectableElement"
 
 export interface MinSize {
   minWidth: number
@@ -73,7 +74,12 @@ export const ClassSVG = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <g>
+      <AssessmentSelectableElement
+        elementId={id}
+        width={width}
+        itemHeight={headerHeight}
+        yOffset={0}
+      >
         {/* Outer Rectangle */}
         <rect
           x={0}
@@ -86,6 +92,7 @@ export const ClassSVG = ({
         />
 
         {/* Header Section */}
+
         <HeaderSection
           showStereotype={showStereotype}
           stereotype={stereotype}
@@ -134,7 +141,7 @@ export const ClassSVG = ({
         {showAssessmentResults && (
           <AssessmentIcon score={nodeScore} x={width - 15} y={-15} />
         )}
-      </g>
+      </AssessmentSelectableElement>
     </svg>
   )
 }

@@ -37,6 +37,7 @@ export const ApollonPlayground: React.FC = () => {
     mode: ApollonMode.Modelling,
     locale: Locale.en,
     readonly: false,
+    debug: false,
   })
 
   useEffect(() => {
@@ -129,6 +130,24 @@ export const ApollonPlayground: React.FC = () => {
           </select>
         </div>
 
+        {apollonOptions.mode === ApollonMode.Assessment && (
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={apollonOptions.debug}
+              onChange={(event) => {
+                setApollonOptions((prev) => ({
+                  ...prev!,
+                  debug: event.target.checked,
+                }))
+              }}
+            />
+            <label className="font-semibold">
+              Debug Mode for Give feedback
+            </label>
+          </div>
+        )}
+
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -140,7 +159,7 @@ export const ApollonPlayground: React.FC = () => {
               }))
             }}
           />
-          <label className="font-semibold ">Readonly</label>
+          <label className="font-semibold">Readonly</label>
         </div>
 
         {apollonOptions.mode === ApollonMode.Assessment &&
