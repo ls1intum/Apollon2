@@ -1,4 +1,4 @@
-import { UMLDiagramType } from "../types/DiagramType"
+
 import { IPoint } from "../edges/Connection"
 
 export type V3Selection = {
@@ -61,24 +61,21 @@ export type V3UMLReachabilityGraphMarking = {
   isInitialMarking: boolean;
 };
 
-export type V3UMLModel = {
-  version: `3.${number}.${number}`;
-  type: UMLDiagramType;
+export interface V3UMLModel {
+  version: string;
+  type: string; // Changed from UMLDiagramType to string to allow any type during conversion
   size: {
     width: number;
     height: number;
   };
-  elements: {
-    [id: string]: V3UMLElement;
+  interactive: {
+    elements: Record<string, boolean>;
+    relationships: Record<string, boolean>;
   };
-  interactive: V3Selection;
-  relationships: {
-    [id: string]: V3UMLRelationship;
-  };
-  assessments: {
-    [id: string]: V3Assessment;
-  };
-};
+  elements: Record<string, V3UMLElement>;
+  relationships: Record<string, V3UMLRelationship>;
+  assessments: Record<string, V3Assessment>;
+}
 
 export type V3UMLModelElementType = string;
 

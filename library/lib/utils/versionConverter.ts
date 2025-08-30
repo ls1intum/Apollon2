@@ -37,6 +37,105 @@ import {
   // SfcActionTableProps
 } from "../types/nodes/NodeProps"
 
+// V2 format interface for type checking (corrected based on real V2 format)
+interface V2DiagramFormat {
+  version: string;
+  size: {
+    width: number;
+    height: number;
+  };
+  type: string;
+  interactive: {
+    elements: string[];
+    relationships: string[];
+  };
+  elements: V3UMLElement[];
+  relationships: V3UMLRelationship[];
+  assessments: V3Assessment[];
+}
+
+/**
+ * Convert v2 format to v4 format
+ */
+export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
+  // First convert v2 to v3 structure
+  const v3Data: V3DiagramFormat = {
+    id: 'converted-diagram-' + Date.now(), // Generate a unique ID
+    title: 'Converted Diagram',
+    model: {
+      version: "3.0.0",
+      type: v2Data.type as any, // Cast to any to bypass strict typing during conversion
+      size: v2Data.size,
+      interactive: {
+        elements: {},
+        relationships: {}
+      },
+      elements: {},
+      relationships: {},
+      assessments: {}
+    }
+  };
+
+  // Convert interactive arrays to objects
+  if (v2Data.interactive?.elements) {
+    v2Data.interactive.elements.forEach(id => {
+      v3Data.model.interactive.elements[id] = true;
+    });
+  }
+  
+  if (v2Data.interactive?.relationships) {
+    v2Data.interactive.relationships.forEach(id => {
+      v3Data.model.interactive.relationships[id] = true;
+    });
+  }
+
+  // Convert elements array to object
+  if (v2Data.elements) {
+    v2Data.elements.forEach(element => {
+      v3Data.model.elements[element.id] = element;
+    });
+  }
+
+  // Convert relationships array to object
+  if (v2Data.relationships) {
+    v2Data.relationships.forEach(relationship => {
+      v3Data.model.relationships[relationship.id] = relationship;
+    });
+  }
+
+  // Convert assessments array to object
+  if (v2Data.assessments) {
+    v2Data.assessments.forEach(assessment => {
+      v3Data.model.assessments[assessment.modelElementId] = assessment;
+    });
+  }
+
+  // Now convert v3 to v4 using existing function
+  return convertV3ToV4(v3Data);
+}
+
+/**
+ * Check if data is in v2 format
+ */
+export function isV2Format(data: any): data is V2DiagramFormat {
+  return (
+    data &&
+    data.version &&
+    data.version.startsWith('2.') &&
+    // V2 has flat structure (no nested 'model' object)
+    data.size &&
+    data.type &&
+    Array.isArray(data.elements) &&
+    Array.isArray(data.relationships) &&
+    Array.isArray(data.assessments) &&
+    data.interactive &&
+    Array.isArray(data.interactive.elements) &&
+    Array.isArray(data.interactive.relationships) &&
+    // Ensure it's NOT V3 format (which has nested 'model')
+    !data.model
+  )
+}
+
 /**
  * Convert v3 handle directions to v4 handle IDs
  * V3 uses Direction enum, V4 uses HandleId enum
@@ -654,6 +753,7 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
     })
   }
 
+  
   // Validate diagram type compatibility
   const supportedDiagramTypes: UMLDiagramType[] = [
     'ClassDiagram',
@@ -696,6 +796,7 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
   return v4Model
 }
 
+
 /**
  * Check if data is in v3 format
  */
@@ -726,7 +827,7 @@ export function isV4Format(data: any): data is UMLModel {
 }
 
 /**
- * Universal import function that handles both v3 and v4 formats
+ * Universal import function that handles v2, v3 and v4 formats
  */
 export function importDiagram(data: any): UMLModel {
   if (isV4Format(data)) {
@@ -737,5 +838,9 @@ export function importDiagram(data: any): UMLModel {
     return convertV3ToV4(data)
   }
 
-  throw new Error("Unsupported diagram format. Only v3.x.x and v4.x.x formats are supported.")
+  if (isV2Format(data)) {
+    return convertV2ToV4(data)
+  }
+
+  throw new Error("Unsupported diagram format. Only 2.x.x, 3.x.x and 4.x.x formats are supported.")
 }
