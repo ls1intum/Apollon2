@@ -6,16 +6,21 @@ import { useShallow } from "zustand/shallow"
 import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
+import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 
 export const SyntaxTreeEdge = ({
   id,
   type,
+  source,
+  target,
   sourceX,
   sourceY,
   targetX,
   targetY,
   sourcePosition,
   targetPosition,
+  sourceHandleId,
+  targetHandleId,
 }: BaseEdgeProps) => {
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
@@ -39,13 +44,18 @@ export const SyntaxTreeEdge = ({
     strokeDashArray,
     isDiagramModifiable,
   } = useStraightPathEdge({
+    id,
     type,
+    source,
+    target,
     sourceX,
     sourceY,
     targetX,
     targetY,
     sourcePosition,
     targetPosition,
+    sourceHandleId,
+    targetHandleId,
   })
 
   return (
@@ -62,15 +72,17 @@ export const SyntaxTreeEdge = ({
           }}
         />
 
-        <path
-          ref={pathRef}
-          className="edge-overlay"
-          d={overlayPath}
-          fill="none"
-          strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
-          pointerEvents="stroke"
-          style={{ opacity: 0.4 }}
-        />
+        <FeedbackDropzone elementId={id} asElement="path">
+          <path
+            ref={pathRef}
+            className="edge-overlay"
+            d={overlayPath}
+            fill="none"
+            strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
+            pointerEvents="stroke"
+            style={{ opacity: 0.4 }}
+          />
+        </FeedbackDropzone>
       </g>
 
       <CommonEdgeElements

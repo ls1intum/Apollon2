@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "dev": "tsx watch --clear-screen=false src/server.ts",
     "start": "node dist/src/server.js",
     "lint": "echo bypass lint in server"
   },
@@ -19,6 +20,7 @@
     "@types/express": "5.0.3",
     "@types/node": "22.14.0",
     "@types/ws": "8.18.1",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "tsx": "4.19.2"
   }
 }

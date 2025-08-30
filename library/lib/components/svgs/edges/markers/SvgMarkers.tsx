@@ -44,7 +44,7 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="15"
+          refX="30"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -57,11 +57,28 @@ export function SvgMarkers() {
           />
         </marker>
         <marker
+          id="black-triangle"
+          viewBox="0 0 30 30"
+          markerWidth="22"
+          markerHeight="30"
+          refX="30"
+          refY="15"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,1 L0,29 L30,15 z"
+            fill="black"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+        </marker>
+        <marker
           id="black-arrow"
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="15"
+          refX="30"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
@@ -158,6 +175,66 @@ export function SvgMarkers() {
         >
           <path
             d="M 2 -7.8 C -1.5 -3 -1.2 3.4 2 7.8"
+            fill="none"
+            stroke="black"
+            strokeWidth="1.5"
+          />
+        </marker>
+
+        {/* BPMN Specific Markers */}
+        {/* Small White Arrow for BPMN */}
+        <marker
+          id="bpmn-white-triangle"
+          viewBox="0 0 20 20"
+          markerWidth="15"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M0,18 L20,10 L0,2 z"
+            fill="white"
+            stroke="black"
+            strokeWidth="1.2"
+          />
+        </marker>
+
+        {/* Small White Circle for BPMN */}
+        <marker
+          id="bpmn-white-circle"
+          viewBox="0 0 20 20"
+          markerWidth="12"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <circle
+            cx="10"
+            cy="10"
+            r="8"
+            fill="white"
+            stroke="black"
+            strokeWidth="1.5"
+          />
+        </marker>
+
+        {/* BPMN Message Flow Arrow */}
+        <marker
+          id="bpmn-arrow"
+          viewBox="0 0 20 20"
+          markerWidth="15"
+          markerHeight="20"
+          refX="10"
+          refY="10"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path
+            d="M2,18 L18,10 L2,2"
             fill="none"
             stroke="black"
             strokeWidth="1.5"

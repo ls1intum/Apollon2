@@ -5,6 +5,8 @@ import {
   RHOMBUS_MARKER_PADDING,
   TRIANGLE_MARKER_PADDING,
   USECASE_PADDING,
+  BPMN_SMALL_ARROW_PADDING,
+  BPMN_MESSAGE_ARROW_PADDING,
 } from "@/constants"
 import { IPoint } from "@/edges/Connection"
 import { DiagramEdgeType, UMLDiagramType } from "@/typings"
@@ -171,6 +173,7 @@ export const calculateDynamicEdgeLabels = (
 
 export interface EdgeMarkerStyles {
   markerEnd?: string
+  markerStart?: string
   markerPadding?: number
   strokeDashArray?: string
   offset?: number
@@ -182,6 +185,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
     case "DeploymentAssociation":
     case "ObjectLink":
     case "SyntaxTreeLink":
+    case "CommunicationLink":
       return {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "0",
@@ -195,7 +199,7 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
         strokeDashArray: "0",
-        offset: 11.5,
+        offset: 0,
       }
     case "ClassAggregation":
       return {
@@ -216,7 +220,14 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "0",
-        offset: 11,
+        offset: 0,
+      }
+    case "PetriNetArc":
+      return {
+        markerPadding: -3,
+        markerEnd: "url(#black-triangle)",
+        strokeDashArray: "0",
+        offset: 0,
       }
     case "ComponentDependency":
     case "ClassDependency":
@@ -225,37 +236,42 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: DOTTED_ARROW_MARKER_PADDING,
         markerEnd: "url(#black-arrow)",
         strokeDashArray: "8",
-        offset: 11.5,
+        offset: 0,
       }
     case "ClassRealization":
       return {
         markerPadding: TRIANGLE_MARKER_PADDING,
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "8",
-        offset: 11,
+        offset: 0,
       }
     case "BPMNSequenceFlow":
       return {
-        markerPadding: ARROW_MARKER_PADDING,
-        markerEnd: "url(#black-arrow)",
+        markerPadding: BPMN_SMALL_ARROW_PADDING,
+        markerEnd: "url(#bpmn-white-triangle)",
         strokeDashArray: "0",
+        offset: 8,
       }
     case "BPMNMessageFlow":
       return {
-        markerPadding: ARROW_MARKER_PADDING,
-        markerEnd: "url(#black-arrow)",
+        markerPadding: BPMN_MESSAGE_ARROW_PADDING,
+        markerEnd: "url(#bpmn-white-triangle)",
+        markerStart: "url(#bpmn-white-circle)",
         strokeDashArray: "8",
+        offset: 8,
       }
     case "BPMNAssociationFlow":
       return {
         markerPadding: MARKER_PADDING,
         strokeDashArray: "8",
+        offset: 0,
       }
     case "BPMNDataAssociationFlow":
       return {
-        markerPadding: ARROW_MARKER_PADDING,
-        markerEnd: "url(#black-arrow)",
+        markerPadding: BPMN_SMALL_ARROW_PADDING,
+        markerEnd: "url(#bpmn-arrow)",
         strokeDashArray: "8",
+        offset: 8,
       }
     case "UseCaseAssociation":
       return {
@@ -268,21 +284,21 @@ export function getEdgeMarkerStyles(edgeType: string): EdgeMarkerStyles {
         markerPadding: USECASE_PADDING,
         markerEnd: "url(#black-arrow)",
         strokeDashArray: "4",
-        offset: 10,
+        offset: 0,
       }
     case "UseCaseExtend":
       return {
         markerPadding: USECASE_PADDING,
         markerEnd: "url(#black-arrow)",
         strokeDashArray: "4",
-        offset: 10,
+        offset: 0,
       }
     case "UseCaseGeneralization":
       return {
         markerPadding: USECASE_PADDING,
         markerEnd: "url(#white-triangle)",
         strokeDashArray: "0",
-        offset: 10,
+        offset: 0,
       }
 
     case "ComponentProvidedInterface":
@@ -329,82 +345,68 @@ function distance(p1: XYPosition, p2: XYPosition): number {
   return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
 }
 
-export function findClosestHandle(point: XYPosition, rect: Rect): string {
-  const points: { label: string; position: XYPosition }[] = [
-    { label: "top-left", position: { x: rect.x + rect.width / 3, y: rect.y } },
-    { label: "top", position: { x: rect.x + rect.width / 2, y: rect.y } },
-    {
-      label: "top-right",
-      position: { x: rect.x + (2 / 3) * rect.width, y: rect.y },
-    },
-
-    {
-      label: "bottom-left",
-      position: { x: rect.x + rect.width / 3, y: rect.y + rect.height },
-    },
-    {
-      label: "bottom",
-      position: { x: rect.x + rect.width / 2, y: rect.y + rect.height },
-    },
-    {
-      label: "bottom-right",
-      position: { x: rect.x + (2 / 3) * rect.width, y: rect.y + rect.height },
-    },
-
-    { label: "left-top", position: { x: rect.x, y: rect.y + rect.height / 3 } },
-    { label: "left", position: { x: rect.x, y: rect.y + rect.height / 2 } },
-    {
-      label: "left-bottom",
-      position: { x: rect.x, y: rect.y + (2 / 3) * rect.height },
-    },
-
-    {
-      label: "right-top",
-      position: { x: rect.x + rect.width, y: rect.y + rect.height / 3 },
-    },
-    {
-      label: "right",
-      position: { x: rect.x + rect.width, y: rect.y + rect.height / 2 },
-    },
-    {
-      label: "right-bottom",
-      position: { x: rect.x + rect.width, y: rect.y + (2 / 3) * rect.height },
-    },
-  ]
-
-  let closest = points[0]
-  let minDist = distance(point, points[0].position)
-
-  for (const p of points) {
-    const d = distance(point, p.position)
-    if (d < minDist) {
-      minDist = d
-      closest = p
-    }
-  }
-
-  return closest.label
+interface FindClosestHandleParams {
+  point: XYPosition
+  rect: Rect
+  useFourHandles?: boolean
 }
 
-export function findClosestHandleForInterface(
-  point: XYPosition,
-  rect: Rect
-): string {
+export function findClosestHandle({
+  point,
+  rect,
+  useFourHandles = false,
+}: FindClosestHandleParams): string {
+  // Start with basic 4 handles (top, bottom, left, right)
   const points: { label: string; position: XYPosition }[] = [
     { label: "top", position: { x: rect.x + rect.width / 2, y: rect.y } },
-
     {
       label: "bottom",
       position: { x: rect.x + rect.width / 2, y: rect.y + rect.height },
     },
-
     { label: "left", position: { x: rect.x, y: rect.y + rect.height / 2 } },
-
     {
       label: "right",
       position: { x: rect.x + rect.width, y: rect.y + rect.height / 2 },
     },
   ]
+
+  // If not a 4-handle node, append additional handles
+  if (!useFourHandles) {
+    points.push(
+      {
+        label: "top-left",
+        position: { x: rect.x + rect.width / 3, y: rect.y },
+      },
+      {
+        label: "top-right",
+        position: { x: rect.x + (2 / 3) * rect.width, y: rect.y },
+      },
+      {
+        label: "bottom-left",
+        position: { x: rect.x + rect.width / 3, y: rect.y + rect.height },
+      },
+      {
+        label: "bottom-right",
+        position: { x: rect.x + (2 / 3) * rect.width, y: rect.y + rect.height },
+      },
+      {
+        label: "left-top",
+        position: { x: rect.x, y: rect.y + rect.height / 3 },
+      },
+      {
+        label: "left-bottom",
+        position: { x: rect.x, y: rect.y + (2 / 3) * rect.height },
+      },
+      {
+        label: "right-top",
+        position: { x: rect.x + rect.width, y: rect.y + rect.height / 3 },
+      },
+      {
+        label: "right-bottom",
+        position: { x: rect.x + rect.width, y: rect.y + (2 / 3) * rect.height },
+      }
+    )
+  }
 
   let closest = points[0]
   let minDist = distance(point, points[0].position)
@@ -459,19 +461,27 @@ export function calculateOverlayPath(
   if (
     type == "UseCaseInclude" ||
     type == "UseCaseExtend" ||
-    type == "UseCaseGeneralization"
+    type == "UseCaseGeneralization" ||
+    type == "CommunicationLink" ||
+    type == "PetriNetArc"
   ) {
     const { offset } = getEdgeMarkerStyles(type)
     const markerOffset = offset ?? 0
-    const dx = targetX - sourceX
-    const dy = targetY - sourceY
-    const length = Math.sqrt(dx * dx + dy * dy)
 
-    const normalizedDx = dx / length
-    const normalizedDy = dy / length
-    const adjustedTargetX = targetX + normalizedDx * markerOffset
-    const adjustedTargetY = targetY + normalizedDy * markerOffset
-    return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
+    if (markerOffset !== 0) {
+      const dx = targetX - sourceX
+      const dy = targetY - sourceY
+      const length = Math.sqrt(dx * dx + dy * dy)
+
+      if (length > 0) {
+        const normalizedDx = dx / length
+        const normalizedDy = dy / length
+        const adjustedTargetX = targetX + normalizedDx * markerOffset
+        const adjustedTargetY = targetY + normalizedDy * markerOffset
+
+        return `M ${sourceX},${sourceY} L ${adjustedTargetX},${adjustedTargetY}`
+      }
+    }
   }
   return `M ${sourceX},${sourceY} L ${targetX},${targetY}`
 }
@@ -614,12 +624,60 @@ export function calculateInnerMidpoints(
 ): IPoint[] {
   const round = (num: number) => Number(num.toFixed(decimals))
   const midpoints: IPoint[] = []
-  if (points.length < 4) return midpoints
-  for (let i = 1; i < points.length - 2; i++) {
-    const p1 = points[i]
-    const p2 = points[i + 1]
-    midpoints.push({ x: round((p1.x + p2.x) / 2), y: round((p1.y + p2.y) / 2) })
+  if (points.length < 3) return midpoints
+
+  // Group consecutive points that form straight lines (horizontal or vertical)
+  const segments: IPoint[][] = []
+  let currentSegment: IPoint[] = [points[0]]
+
+  for (let i = 1; i < points.length; i++) {
+    const prevPoint = currentSegment[currentSegment.length - 1]
+    const currentPoint = points[i]
+
+    // Check if this point continues the current segment (same direction)
+    const isHorizontal = Math.abs(prevPoint.y - currentPoint.y) < 0.1
+    const isVertical = Math.abs(prevPoint.x - currentPoint.x) < 0.1
+
+    if (currentSegment.length === 1) {
+      // First segment, just add the point
+      currentSegment.push(currentPoint)
+    } else {
+      // Check if the new point continues the same direction as the current segment
+      const segmentStart = currentSegment[0]
+      const segmentPrev = currentSegment[currentSegment.length - 1]
+      const wasHorizontal = Math.abs(segmentStart.y - segmentPrev.y) < 0.1
+      const wasVertical = Math.abs(segmentStart.x - segmentPrev.x) < 0.1
+
+      if ((wasHorizontal && isHorizontal) || (wasVertical && isVertical)) {
+        // Continue current segment
+        currentSegment.push(currentPoint)
+      } else {
+        // Start new segment
+        segments.push([...currentSegment])
+        currentSegment = [prevPoint, currentPoint]
+      }
+    }
   }
+
+  // Add the last segment
+  if (currentSegment.length > 1) {
+    segments.push(currentSegment)
+  }
+
+  // Calculate one midpoint per segment (excluding first and last segments to avoid endpoints)
+  for (let i = 1; i < segments.length - 1; i++) {
+    const segment = segments[i]
+    if (segment.length >= 2) {
+      const start = segment[0]
+      const end = segment[segment.length - 1]
+      const midpoint = {
+        x: round((start.x + end.x) / 2),
+        y: round((start.y + end.y) / 2),
+      }
+      midpoints.push(midpoint)
+    }
+  }
+
   return midpoints
 }
 
@@ -671,7 +729,6 @@ export const getDefaultEdgeType = (
 ): DiagramEdgeType => {
   switch (diagramType) {
     case "ClassDiagram":
-    case "BPMN":
       return "ClassUnidirectional"
     case "ActivityDiagram":
       return "ActivityControlFlow"
@@ -690,8 +747,14 @@ export const getDefaultEdgeType = (
       return "SyntaxTreeLink"
     case "ReachabilityGraph":
       return "ReachabilityGraphArc"
+    case "BPMN":
+      return "BPMNSequenceFlow"
     case "Sfc":
       return "SfcDiagramEdge"
+    case "CommunicationDiagram":
+      return "CommunicationLink"
+    case "PetriNet":
+      return "PetriNetArc"
     default:
       return "ClassUnidirectional"
   }
@@ -708,6 +771,7 @@ export function getConnectionLineType(
   switch (diagramType) {
     case "UseCaseDiagram":
     case "SyntaxTree":
+    case "PetriNet":
       return ConnectionLineType.Straight
 
     default:

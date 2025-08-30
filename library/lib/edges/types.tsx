@@ -9,6 +9,9 @@ import { FlowChartEdge } from "./edgeTypes/FlowChartEdge"
 import { SyntaxTreeEdge } from "./edgeTypes/SyntaxTreeEdge"
 import { SfcDiagramEdge } from "./edgeTypes/SfcDiagramEdge"
 import { ReachabilityGraphEdge } from "./edgeTypes/ReachabilityGraphArc"
+import { CommunicationDiagramEdge } from "./edgeTypes/CommunicationDiagramEdge"
+import { BPMNDiagramEdge } from "./edgeTypes/BPMNDiagramEdge"
+import { PetriNetEdge } from "./edgeTypes/PetriNetEdge"
 
 export const diagramEdgeTypes = {
   ClassAggregation: ClassDiagramEdge,
@@ -26,6 +29,10 @@ export const diagramEdgeTypes = {
   FlowChartFlowline: FlowChartEdge,
 
   SyntaxTreeLink: SyntaxTreeEdge,
+
+  CommunicationLink: CommunicationDiagramEdge,
+
+  PetriNetArc: PetriNetEdge,
 
   UseCaseAssociation: UseCaseEdge,
   UseCaseInclude: UseCaseEdge,
@@ -48,6 +55,11 @@ export const diagramEdgeTypes = {
   SfcDiagramEdge: SfcDiagramEdge,
 
   ReachabilityGraphArc: ReachabilityGraphEdge,
+
+  BPMNSequenceFlow: BPMNDiagramEdge,
+  BPMNMessageFlow: BPMNDiagramEdge,
+  BPMNAssociationFlow: BPMNDiagramEdge,
+  BPMNDataAssociationFlow: BPMNDiagramEdge,
 } satisfies EdgeTypes
 
 export const edgeConfig = {
@@ -72,11 +84,36 @@ export const edgeConfig = {
   SyntaxTreeLink: {},
 
   ReachabilityGraphArc: { allowMidpointDragging: true },
+
+  //PetriNet edge
+  PetriNetArc: { showRelationshipLabels: true },
+
+  // Communication diagram edge - allow midpoint dragging with multiple labels
+  CommunicationLink: { allowMidpointDragging: true },
+
   // Use case edges - some show relationship labels
   UseCaseAssociation: { showRelationshipLabels: true }, // Show association labels
   UseCaseInclude: { showRelationshipLabels: true }, // Show <<include>>
   UseCaseExtend: { showRelationshipLabels: true }, // Show <<extend>>
   UseCaseGeneralization: { showRelationshipLabels: false }, // No stereotype labels
+
+  //BPMN edges - all allow midpoint dragging
+  BPMNSequenceFlow: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: true,
+  },
+  BPMNMessageFlow: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: true,
+  },
+  BPMNAssociationFlow: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: true,
+  },
+  BPMNDataAssociationFlow: {
+    allowMidpointDragging: true,
+    showRelationshipLabels: true,
+  },
 
   // Component edges - different midpoint settings
   ComponentDependency: { allowMidpointDragging: true },

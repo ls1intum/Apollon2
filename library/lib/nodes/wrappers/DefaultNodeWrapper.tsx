@@ -1,3 +1,4 @@
+import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 import { Handle, Position } from "@xyflow/react"
@@ -132,7 +133,11 @@ export function DefaultNodeWrapper({
   ]
 
   return (
-    <div className={className}>
+    <FeedbackDropzone
+      className={className}
+      elementId={elementId}
+      asElement="div"
+    >
       {handles.map(
         (handle) =>
           !hiddenHandles.includes(handle.id) && (
@@ -147,6 +152,6 @@ export function DefaultNodeWrapper({
           )
       )}
       {children}
-    </div>
+    </FeedbackDropzone>
   )
 }

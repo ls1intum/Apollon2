@@ -10,6 +10,7 @@ interface EdgeMiddleLabelsProps {
   targetPoint?: IPoint
   showRelationshipLabels?: boolean
   isUseCasePath?: boolean
+  isPetriNet?: boolean // New prop to identify PetriNet edges
 }
 
 export const EdgeMiddleLabels = ({
@@ -20,7 +21,10 @@ export const EdgeMiddleLabels = ({
   targetPoint,
   showRelationshipLabels = false,
   isUseCasePath = false,
+  isPetriNet = false,
 }: EdgeMiddleLabelsProps) => {
+  if (isPetriNet && label === "1") return null
+
   if (!label || !showRelationshipLabels) return null
 
   let transform = ""
