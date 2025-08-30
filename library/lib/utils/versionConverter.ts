@@ -3,82 +3,70 @@ import { UMLDiagramType } from "../types/DiagramType"
 import { ClassType } from "../types/nodes/enums"
 import { IPoint } from "../edges/Connection"
 import { getEdgeMarkerStyles } from "./edgeUtils"
+import { 
+  V3DiagramFormat, 
+  V3UMLElement, 
+  V3UMLRelationship, 
+  V3Assessment 
+} from "./v3Typings"
 
-/**
- * Legacy v3 diagram format types
- */
-interface V3DiagramFormat {
-  id: string
-  title: string
-  model: {
-    version: string
-    type: string
-    size: { width: number; height: number }
-    interactive: { elements: Record<string, unknown>; relationships: Record<string, unknown> }
-    elements: Record<string, V3Element>
-    relationships: Record<string, V3Relationship>
-    assessments?: Record<string, unknown>
-  }
-}
-
-interface V3Element {
-  id: string
-  name: string
-  type: string
-  owner: string | null
-  bounds: { x: number; y: number; width: number; height: number }
-  attributes?: string[]
-  methods?: string[]
-  stereotype?: string
-}
-
-interface V3Relationship {
-  id: string
-  name: string
-  type: string
-  owner: string | null
-  bounds: { x: number; y: number; width: number; height: number }
-  path: IPoint[]
-  source: {
-    direction: string
-    element: string
-    multiplicity: string
-    role: string
-  }
-  target: {
-    direction: string
-    element: string
-    multiplicity: string
-    role: string
-  }
-  isManuallyLayouted: boolean
-}
-
-
+// Import V4 node prop types
+import {
+  ClassNodeProps,
+  ObjectNodeProps,
+  CommunicationObjectNodeProps,
+  ComponentNodeProps,
+  ComponentSubsystemNodeProps,
+  DeploymentNodeProps,
+  DeploymentComponentProps,
+  PetriNetPlaceProps,
+  BPMNTaskProps,
+  BPMNGatewayProps,
+  BPMNStartEventProps,
+  BPMNIntermediateEventProps,
+  BPMNEndEventProps,
+  // BPMNSubprocessProps,
+  // BPMNTransactionProps,
+  // BPMNCallActivityProps,
+  // BPMNAnnotationProps,
+  // BPMNDataObjectProps,
+  // BPMNDataStoreProps,
+  // BPMNPoolProps,
+  // BPMNGroupProps,
+  ReachabilityGraphMarkingProps,
+  // SfcActionTableProps
+} from "../types/nodes/NodeProps"
 
 /**
  * Convert v3 handle directions to v4 handle IDs
+ * V3 uses Direction enum, V4 uses HandleId enum
  */
 export function convertV3HandleToV4(v3Handle: string): string {
   const handleMap: Record<string, string> = {
-    'Right': 'right',
-    'Left': 'left', 
-    'Top': 'top',
-    'Bottom': 'bottom',
+    // Main directions
     'Up': 'top',
+    'Right': 'right', 
     'Down': 'bottom',
-    // Add variations just in case
-    'RIGHT': 'right',
-    'LEFT': 'left',
-    'TOP': 'top', 
-    'BOTTOM': 'bottom',
+    'Left': 'left',
+    
+    // Diagonal/corner handles
+    'Upright': 'right-top',
+    'Upleft': 'left-top',
+    'Downright': 'right-bottom', 
+    'Downleft': 'left-bottom',
+    
+    // Handle intermediate positions if they exist in V3
+    'RightTop': 'top-right',
+    'RightBottom': 'bottom-right',
+    'LeftTop': 'top-left',
+    'LeftBottom': 'bottom-left',
   }
   
   return handleMap[v3Handle] || v3Handle.toLowerCase()
 }
 
 /**
- * Convert v3 node types to v4 node types (PascalCase to camelCase)
+ * Convert v3 node types to v4 node types
  */
 export function convertV3NodeTypeToV4(v3Type: string): string {
   const typeMap: Record<string, string> = {
@@ -100,15 +88,15 @@ export function convertV3NodeTypeToV4(v3Type: string): string {
     'ActivityForkNodeHorizontal': 'activityForkNodeHorizontal',
     'ActivityMergeNode': 'activityMergeNode',
     'ActivityDecisionNode': 'activityDecisionNode',
+    'Activity': 'activity',
     
     // Use Case Diagram
     'UseCase': 'useCase',
-    'Actor': 'actor',
+    'UseCaseActor': 'useCaseActor',
     'UseCaseSystem': 'useCaseSystem',
     
     // Communication Diagram
-    'CommunicationLink': 'communicationLink',
-    'CommunicationObject': 'communicationObject',
+    'CommunicationObject': 'communicationObjectName',
     
     // Component Diagram
     'Component': 'component',
@@ -118,6 +106,8 @@ export function convertV3NodeTypeToV4(v3Type: string): string {
     // Deployment Diagram
     'DeploymentNode': 'deploymentNode',
     'DeploymentComponent': 'deploymentComponent',
+    'DeploymentArtifact': 'deploymentArtifact',
+    'DeploymentInterface': 'deploymentInterface',
     
     // Object Diagram
     'ObjectName': 'objectName',
@@ -129,7 +119,7 @@ export function convertV3NodeTypeToV4(v3Type: string): string {
     'PetriNetTransition': 'petriNetTransition',
     
     // Reachability Graph
-    'ReachabilityGraphNode': 'reachabilityGraphNode',
+    'ReachabilityGraphNode': 'reachabilityGraphMarking',
     
     // Syntax Tree
     'SyntaxTreeNonterminal': 'syntaxTreeNonterminal',
@@ -141,6 +131,33 @@ export function convertV3NodeTypeToV4(v3Type: string): string {
     'FlowchartInputOutput': 'flowchartInputOutput',
     'FlowchartFunctionCall': 'flowchartFunctionCall',
     'FlowchartTerminal': 'flowchartTerminal',
+    
+    // BPMN
+    'BPMNTask': 'bpmnTask',
+    'BPMNGateway': 'bpmnGateway',
+    'BPMNStartEvent': 'bpmnStartEvent',
+    'BPMNIntermediateEvent': 'bpmnIntermediateEvent',
+    'BPMNEndEvent': 'bpmnEndEvent',
+    'BPMNSubprocess': 'bpmnSubprocess',
+    'BPMNTransaction': 'bpmnTransaction',
+    'BPMNCallActivity': 'bpmnCallActivity',
+    'BPMNAnnotation': 'bpmnAnnotation',
+    'BPMNDataObject': 'bpmnDataObject',
+    'BPMNDataStore': 'bpmnDataStore',
+    'BPMNPool': 'bpmnPool',
+    'BPMNGroup': 'bpmnGroup',
+    
+    // SFC Diagram
+    'SfcStart': 'sfcStart',
+    'SfcStep': 'sfcStep',
+    'SfcActionTable': 'sfcActionTable',
+    'SfcTransitionBranch': 'sfcTransitionBranch',
+    'SfcJump': 'sfcJump',
+    'SfcPreviewSpacer': 'sfcPreviewSpacer',
+    
+    // Special nodes
+    'ColorDescription': 'colorDescription',
+    'TitleAndDescription': 'titleAndDesctiption', // Note the typo in V4: "desctiption"
   }
   
   return typeMap[v3Type] || v3Type.toLowerCase()
@@ -215,7 +232,7 @@ export function convertV3EdgeTypeToV4(v3Type: string): string {
 /**
  * Calculate relative position within parent bounds
  */
-function calculateRelativePosition(child: V3Element, parent: V3Element): { x: number; y: number } {
+function calculateRelativePosition(child: V3UMLElement, parent: V3UMLElement): { x: number; y: number } {
   return {
     x: child.bounds.x - parent.bounds.x,
     y: child.bounds.y - parent.bounds.y
@@ -223,41 +240,241 @@ function calculateRelativePosition(child: V3Element, parent: V3Element): { x: nu
 }
 
 /**
+ * Convert V3 node data to V4 node data format
+ */
+function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string, V3UMLElement>): any {
+  const baseData = {
+    name: element.name,
+    // Visual properties
+    ...(element.fillColor && { fillColor: element.fillColor }),
+    ...(element.strokeColor && { strokeColor: element.strokeColor }),
+    ...(element.textColor && { textColor: element.textColor }),
+    ...(element.highlight && { highlight: element.highlight }),
+    ...(element.assessmentNote && { assessmentNote: element.assessmentNote }),
+  }
+
+  // Convert based on element type
+  switch (element.type) {
+    case 'Class':
+    case 'AbstractClass':
+    case 'Interface':
+    case 'Enumeration': {
+      // Collect attributes and methods from child elements
+      const attributes: Array<{ id: string; name: string }> = []
+      const methods: Array<{ id: string; name: string }> = []
+
+      // Find child attributes and methods
+      Object.values(allElements).forEach(childElement => {
+        if (childElement.owner === element.id) {
+          if (childElement.type === 'ClassAttribute') {
+            attributes.push({ id: childElement.id, name: childElement.name })
+          } else if (childElement.type === 'ClassMethod') {
+            methods.push({ id: childElement.id, name: childElement.name })
+          }
+        }
+      })
+
+      // Also handle attributes/methods stored as ID arrays
+      if (element.attributes && Array.isArray(element.attributes)) {
+        element.attributes.forEach(attrId => {
+          const attr = allElements[attrId]
+          if (attr && !attributes.find(a => a.id === attr.id)) {
+            attributes.push({ id: attr.id, name: attr.name })
+          }
+        })
+      }
+
+      if (element.methods && Array.isArray(element.methods)) {
+        element.methods.forEach(methodId => {
+          const method = allElements[methodId]
+          if (method && !methods.find(m => m.id === method.id)) {
+            methods.push({ id: method.id, name: method.name })
+          }
+        })
+      }
+
+      // Determine stereotype
+      let stereotype: ClassType | undefined
+      if (element.type === 'AbstractClass') {
+        stereotype = ClassType.Abstract
+      } else if (element.type === 'Interface') {
+        stereotype = ClassType.Interface
+      } else if (element.type === 'Enumeration') {
+        stereotype = ClassType.Enumeration
+      }
+
+      const classData: ClassNodeProps = {
+        ...baseData,
+        methods,
+        attributes,
+        ...(stereotype && { stereotype }),
+      }
+      return classData
+    }
+
+    case 'ObjectName': {
+      // Similar to class but for objects
+      const attributes: Array<{ id: string; name: string }> = []
+      const methods: Array<{ id: string; name: string }> = []
+
+      Object.values(allElements).forEach(childElement => {
+        if (childElement.owner === element.id) {
+          if (childElement.type === 'ObjectAttribute') {
+            attributes.push({ id: childElement.id, name: childElement.name })
+          } else if (childElement.type === 'ObjectMethod') {
+            methods.push({ id: childElement.id, name: childElement.name })
+          }
+        }
+      })
+
+      const objectData: ObjectNodeProps = {
+        ...baseData,
+        methods,
+        attributes,
+      }
+      return objectData
+    }
+
+    case 'CommunicationObject': {
+      const attributes: Array<{ id: string; name: string }> = []
+      const methods: Array<{ id: string; name: string }> = []
+
+      const communicationData: CommunicationObjectNodeProps = {
+        ...baseData,
+        methods,
+        attributes,
+      }
+      return communicationData
+    }
+
+    case 'Component': {
+      const componentData: ComponentNodeProps = {
+        ...baseData,
+        isComponentHeaderShown: element.displayStereotype !== false,
+      }
+      return componentData
+    }
+
+    case 'ComponentSubsystem': {
+      const subsystemData: ComponentSubsystemNodeProps = {
+        ...baseData,
+        isComponentSubsystemHeaderShown: element.displayStereotype !== false,
+      }
+      return subsystemData
+    }
+
+    case 'DeploymentNode': {
+      const deploymentData: DeploymentNodeProps = {
+        ...baseData,
+        isComponentHeaderShown: element.displayStereotype !== false,
+        stereotype: element.stereotype || '',
+      }
+      return deploymentData
+    }
+
+    case 'DeploymentComponent': {
+      const deploymentComponentData: DeploymentComponentProps = {
+        ...baseData,
+        isComponentHeaderShown: element.displayStereotype !== false,
+      }
+      return deploymentComponentData
+    }
+
+    case 'PetriNetPlace': {
+      // Handle capacity type conversion - V3 allows string, V4 only allows number | "Infinity"
+      let capacity: number | "Infinity" = "Infinity"
+      if (element.capacity !== undefined) {
+        if (typeof element.capacity === 'number') {
+          capacity = element.capacity
+        } else if (typeof element.capacity === 'string') {
+          if (element.capacity === "Infinity" || element.capacity === "∞") {
+            capacity = "Infinity"
+          } else {
+            // Try to parse as number
+            const parsed = parseFloat(element.capacity)
+            capacity = isNaN(parsed) ? "Infinity" : parsed
+          }
+        }
+      }
+
+      const petriNetData: PetriNetPlaceProps = {
+        ...baseData,
+        tokens: element.amountOfTokens || 0,
+        capacity,
+      }
+      return petriNetData
+    }
+
+    case 'BPMNTask': {
+      const bpmnTaskData: BPMNTaskProps = {
+        ...baseData,
+        taskType: (element.taskType as any) || 'default',
+        marker: (element.marker as any) || 'none',
+      }
+      return bpmnTaskData
+    }
+
+    case 'BPMNGateway': {
+      const bpmnGatewayData: BPMNGatewayProps = {
+        ...baseData,
+        gatewayType: (element.gatewayType as any) || 'exclusive',
+      }
+      return bpmnGatewayData
+    }
+
+    case 'BPMNStartEvent': {
+      const bpmnStartEventData: BPMNStartEventProps = {
+        ...baseData,
+        eventType: (element.eventType as any) || 'default',
+      }
+      return bpmnStartEventData
+    }
+
+    case 'BPMNIntermediateEvent': {
+      const bpmnIntermediateEventData: BPMNIntermediateEventProps = {
+        ...baseData,
+        eventType: (element.eventType as any) || 'default',
+      }
+      return bpmnIntermediateEventData
+    }
+
+    case 'BPMNEndEvent': {
+      const bpmnEndEventData: BPMNEndEventProps = {
+        ...baseData,
+        eventType: (element.eventType as any) || 'default',
+      }
+      return bpmnEndEventData
+    }
+
+    case 'ReachabilityGraphNode': {
+      const reachabilityData: ReachabilityGraphMarkingProps = {
+        ...baseData,
+        isInitialMarking: element.isInitialMarking || false,
+      }
+      return reachabilityData
+    }
+
+    // For other BPMN elements that just need base data
+    case 'BPMNSubprocess':
+    case 'BPMNTransaction':
+    case 'BPMNCallActivity':
+    case 'BPMNAnnotation':
+    case 'BPMNDataObject':
+    case 'BPMNDataStore':
+    case 'BPMNPool':
+    case 'BPMNGroup':
+      return baseData
+
+    default:
+      // For all other node types, return base data
+      return baseData
+  }
+}
+
+/**
  * Convert v3 element to v4 node
  */
-function convertV3ElementToV4Node(element: V3Element, allElements: Record<string, V3Element>): ApollonNode {
-  // Determine stereotype for special class types
-  let stereotype: ClassType | undefined
-  if (element.type === 'AbstractClass') {
-    stereotype = ClassType.Abstract
-  } else if (element.type === 'Interface') {
-    stereotype = ClassType.Interface
-  } else if (element.type === 'Enumeration') {
-    stereotype = ClassType.Enumeration
-  }
-
-  // Convert child elements to method/attribute arrays (v4 format expects objects with id and name)
-  const attributes: Array<{ id: string; name: string }> = []
-  const methods: Array<{ id: string; name: string }> = []
-
-  if (element.attributes) {
-    element.attributes.forEach(attrId => {
-      const attr = allElements[attrId]
-      if (attr) {
-        attributes.push({ id: attr.id, name: attr.name })
-      }
-    })
-  }
-
-  if (element.methods) {
-    element.methods.forEach(methodId => {
-      const method = allElements[methodId]
-      if (method) {
-        methods.push({ id: method.id, name: method.name })
-      }
-    })
-  }
-
+function convertV3ElementToV4Node(element: V3UMLElement, allElements: Record<string, V3UMLElement>): ApollonNode {
   // Calculate position (relative to parent if it has one)
   let position = { x: element.bounds.x, y: element.bounds.y }
   if (element.owner) {
@@ -266,6 +483,9 @@ function convertV3ElementToV4Node(element: V3Element, allElements: Record<string
       position = calculateRelativePosition(element, parent)
     }
   }
+
+  // Convert element data to V4 format
+  const data = convertV3NodeDataToV4(element, allElements)
 
   const baseNode: ApollonNode = {
     id: element.id,
@@ -277,12 +497,7 @@ function convertV3ElementToV4Node(element: V3Element, allElements: Record<string
       width: element.bounds.width,
       height: element.bounds.height,
     },
-    data: {
-      name: element.name,
-      ...(attributes.length > 0 && { attributes }),
-      ...(methods.length > 0 && { methods }),
-      ...(stereotype && { stereotype }),
-    },
+    data,
     ...(element.owner && { parentId: element.owner }),
   }
 
@@ -292,7 +507,7 @@ function convertV3ElementToV4Node(element: V3Element, allElements: Record<string
 /**
  * Convert v3 relationship to v4 edge
  */
-function convertV3RelationshipToV4Edge(relationship: V3Relationship): ApollonEdge {
+function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): ApollonEdge {
   // Get marker styles for this edge type to determine padding
   const edgeType = convertV3EdgeTypeToV4(relationship.type)
   const { markerPadding } = getEdgeMarkerStyles(edgeType)
@@ -342,6 +557,29 @@ function convertV3RelationshipToV4Edge(relationship: V3Relationship): ApollonEdg
     }
   }
 
+  // Build data object with V3 relationship properties
+  const data: any = {
+    name: relationship.name || "",
+    // Include points only if we have them and they're meaningful
+    ...(points.length > 0 && { points }),
+    // Store source/target metadata
+    sourceMultiplicity: relationship.source.multiplicity || "",
+    targetMultiplicity: relationship.target.multiplicity || "",
+    sourceRole: relationship.source.role || "",
+    targetRole: relationship.target.role || "",
+    isManuallyLayouted: relationship.isManuallyLayouted || false,
+    // Communication Link specific
+    ...(relationship.messages && { messages: relationship.messages }),
+    // BPMN specific
+    ...(relationship.flowType && { flowType: relationship.flowType }),
+    // Visual properties
+    ...(relationship.fillColor && { fillColor: relationship.fillColor }),
+    ...(relationship.strokeColor && { strokeColor: relationship.strokeColor }),
+    ...(relationship.textColor && { textColor: relationship.textColor }),
+    ...(relationship.highlight && { highlight: relationship.highlight }),
+    ...(relationship.assessmentNote && { assessmentNote: relationship.assessmentNote }),
+  }
+
   const edge: ApollonEdge = {
     id: relationship.id,
     source: relationship.source.element,
@@ -349,20 +587,26 @@ function convertV3RelationshipToV4Edge(relationship: V3Relationship): ApollonEdg
     type: edgeType as any,
     sourceHandle: convertV3HandleToV4(relationship.source.direction || ""),
     targetHandle: convertV3HandleToV4(relationship.target.direction || ""),
-    data: {
-      name: relationship.name || "",
-      // Include points only if we have them and they're meaningful
-      ...(points.length > 0 && { points }),
-      // Store source/target metadata
-      sourceMultiplicity: relationship.source.multiplicity || "",
-      targetMultiplicity: relationship.target.multiplicity || "",
-      sourceRole: relationship.source.role || "",
-      targetRole: relationship.target.role || "",
-      isManuallyLayouted: relationship.isManuallyLayouted || false,
-    },
+    data,
   }
 
   return edge
+}
+
+/**
+ * Convert V3 assessment to V4 assessment
+ */
+function convertV3AssessmentToV4(v3Assessment: V3Assessment): Assessment {
+  return {
+    modelElementId: v3Assessment.modelElementId,
+    elementType: v3Assessment.elementType as any, // This needs proper typing
+    score: v3Assessment.score,
+    ...(v3Assessment.feedback && { feedback: v3Assessment.feedback }),
+    ...(v3Assessment.dropInfo && { dropInfo: v3Assessment.dropInfo }),
+    ...(v3Assessment.label && { label: v3Assessment.label }),
+    ...(v3Assessment.labelColor && { labelColor: v3Assessment.labelColor }),
+    ...(v3Assessment.correctionStatus && { correctionStatus: v3Assessment.correctionStatus }),
+  }
 }
 
 /**
@@ -372,45 +616,83 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
   const elements = v3Data.model.elements
   const relationships = v3Data.model.relationships
   
-  // Convert elements to nodes
+  console.log('Converting V3 elements:', Object.keys(elements).length)
+  console.log('Element types found:', Object.values(elements).map(el => el.type))
+  console.log('Diagram type:', v3Data.model.type) // Now using the diagram type
+  
+  // Convert elements to nodes, but exclude attribute/method elements since they're part of their parent class
   const nodes: ApollonNode[] = Object.values(elements)
     .filter(element => !['ClassAttribute', 'ClassMethod', 'ObjectAttribute', 'ObjectMethod'].includes(element.type))
-    .map(element => convertV3ElementToV4Node(element, elements))
+    .map(element => {
+      const node = convertV3ElementToV4Node(element, elements)
+      
+      // Safe access to attributes and methods for logging
+      const nodeData = node.data as any
+      const attributesCount = (nodeData && nodeData.attributes && Array.isArray(nodeData.attributes)) ? nodeData.attributes.length : 0
+      const methodsCount = (nodeData && nodeData.methods && Array.isArray(nodeData.methods)) ? nodeData.methods.length : 0
+      
+      console.log(`Converted ${element.type} "${element.name}" with ${attributesCount} attributes and ${methodsCount} methods`)
+      return node
+    })
 
   // Convert relationships to edges
   const edges: ApollonEdge[] = Object.values(relationships).map(relationship => 
     convertV3RelationshipToV4Edge(relationship)
   )
 
-  // Convert assessments if they exist
-  const assessments: Assessment[] = []
+  // Convert assessments from v3 to v4 format using the proper conversion function
+  const assessments: Record<string, Assessment> = {}
   if (v3Data.model.assessments) {
-    Object.entries(v3Data.model.assessments).forEach(([id, assessment]) => {
-      if (typeof assessment === 'object' && assessment !== null) {
-        assessments.push({
-          modelElementId: id,
-          elementType: 'unknown',
-          score: 0,
-          ...assessment
-        } as Assessment)
+    console.log('Converting assessments:', Object.keys(v3Data.model.assessments).length)
+    Object.entries(v3Data.model.assessments).forEach(([id, v3Assessment]) => {
+      try {
+        assessments[id] = convertV3AssessmentToV4(v3Assessment)
+        console.log(`Converted assessment for element ${id}`)
+      } catch (error) {
+        console.warn(`Failed to convert assessment for element ${id}:`, error)
       }
     })
   }
 
-  // Build v4 format
+  // Validate diagram type compatibility
+  const supportedDiagramTypes: UMLDiagramType[] = [
+    'ClassDiagram',
+    'ObjectDiagram', 
+    'ActivityDiagram',
+    'UseCaseDiagram',
+    'CommunicationDiagram',
+    'ComponentDiagram',
+    'DeploymentDiagram',
+    'PetriNet',
+    'ReachabilityGraph',
+    'SyntaxTree',
+    'Flowchart',
+    'BPMN',
+    'Sfc'
+  ]
+
+  if (!supportedDiagramTypes.includes(v3Data.model.type as UMLDiagramType)) {
+    console.warn(`Diagram type '${v3Data.model.type}' may not be fully supported in V4`)
+  }
+
+  // Build v4 format with proper type validation
   const v4Model: UMLModel = {
     version: '4.0.0',
     id: v3Data.id,
     title: v3Data.title,
-    type: v3Data.model.type as UMLDiagramType,
+    type: v3Data.model.type as UMLDiagramType, // Now properly typed
     nodes,
     edges,
-    assessments: assessments.reduce((acc, assessment) => {
-      acc[assessment.modelElementId] = assessment
-      return acc
-    }, {} as { [id: string]: Assessment }),
+    assessments,
   }
 
+  console.log('Final converted model:', {
+    ...v4Model,
+    nodeCount: v4Model.nodes.length,
+    edgeCount: v4Model.edges.length,
+    assessmentCount: Object.keys(v4Model.assessments).length
+  })
+  
   return v4Model
 }
 
