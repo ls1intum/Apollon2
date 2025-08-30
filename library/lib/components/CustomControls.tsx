@@ -1,14 +1,9 @@
 import { Controls, useReactFlow, useStore } from "@xyflow/react"
-import {
-  useDiagramStore,
-  useAssessmentSelectionStore,
-  useMetadataStore,
-} from "@/store/context"
+import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { UndoIcon } from "./Icon/UndoIcon"
 import { RedoIcon } from "./Icon/RedoIcon"
 import { Tooltip } from "@mui/material"
-import { ApollonMode } from "@/typings"
 
 export const CustomControls = () => {
   const { zoomTo } = useReactFlow()
@@ -25,23 +20,6 @@ export const CustomControls = () => {
     }))
   )
 
-  const { mode, readonly } = useMetadataStore(
-    useShallow((state) => ({
-      mode: state.mode,
-      readonly: state.readonly,
-    }))
-  )
-
-  const { isAssessmentSelectionMode, setAssessmentSelectionMode } =
-    useAssessmentSelectionStore(
-      useShallow((state) => ({
-        isAssessmentSelectionMode: state.isAssessmentSelectionMode,
-        setAssessmentSelectionMode: state.setAssessmentSelectionMode,
-      }))
-    )
-
-  const showAssessmentToggle = mode === ApollonMode.Assessment && readonly
-
   const handleUndo = () => {
     undo()
   }
@@ -50,34 +28,8 @@ export const CustomControls = () => {
     redo()
   }
 
-  const handleToggleAssessmentSelection = () => {
-    setAssessmentSelectionMode(!isAssessmentSelectionMode)
-  }
-
   return (
     <Controls orientation="horizontal" showInteractive={false}>
-      {/* Assessment Selection Toggle */}
-      {showAssessmentToggle && (
-        <Tooltip
-          title={
-            isAssessmentSelectionMode
-              ? "Disable Element Selection"
-              : "Enable Element Selection"
-          }
-        >
-          <button
-            className={`control-button ${isAssessmentSelectionMode ? "active" : ""}`}
-            onClick={handleToggleAssessmentSelection}
-            style={{
-              backgroundColor: isAssessmentSelectionMode ? "#1976d2" : "white",
-              color: isAssessmentSelectionMode ? "white" : "black",
-            }}
-          >
-            Assessment
-          </button>
-        </Tooltip>
-      )}
-
       {/* Undo Button */}
       {undoManagerExist && (
         <Tooltip title="Undo (Ctrl+Z)">

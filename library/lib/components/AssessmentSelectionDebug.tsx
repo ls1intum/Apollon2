@@ -1,7 +1,8 @@
-import { useAssessmentSelectionStore } from "../store/context"
+import { useAssessmentSelectionStore, useMetadataStore } from "../store/context"
 import { useShallow } from "zustand/shallow"
 
 export function AssessmentSelectionDebug() {
+  const debug = useMetadataStore(useShallow((state) => state.debug))
   const {
     selectedElementIds,
     highlightedElementId,
@@ -14,7 +15,7 @@ export function AssessmentSelectionDebug() {
     }))
   )
 
-  if (!isAssessmentSelectionMode) {
+  if (!isAssessmentSelectionMode || !debug) {
     return null
   }
 

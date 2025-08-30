@@ -93,6 +93,9 @@ export class ApollonEditor {
     if (options?.readonly !== undefined) {
       this.metadataStore.getState().setReadonly(options.readonly)
     }
+    if (options?.debug !== undefined) {
+      this.metadataStore.getState().setDebug(options.debug)
+    }
 
     if (this.metadataStore.getState().mode === Apollon.ApollonMode.Modelling) {
       this.diagramStore.getState().initializeUndoManager()
@@ -138,6 +141,7 @@ export class ApollonEditor {
   public destroy() {
     const diagramId = this.diagramStore.getState().diagramId
     console.log("Disposing Apollon2 instance with diagramId", diagramId)
+
     try {
       this.syncManager.stopSync()
       this.root.unmount()
@@ -271,10 +275,26 @@ export class ApollonEditor {
   public subscribeToDiagramNameChange(
     callback: (diagramTitle: string) => void
   ) {
-    return this.metadataStore.subscribe((state) => callback(state.diagramTitle))
+    const subscriberId = this.getNewSubscriptionId()
+    const unsubscribeCallback = this.metadataStore.subscribe((state) =>
+      callback(state.diagramTitle)
+    )
+    this.subscribers[subscriberId] = unsubscribeCallback
+    return subscriberId
   }
 
-  unsubscribeFromModelChange(subscriberId: number) {
+  public subscribeToAssessmentSelection(
+    callback: (selectedElementIds: string[]) => void
+  ) {
+    const subscriberId = this.getNewSubscriptionId()
+    const unsubscribeCallback = this.assessmentSelectionStore.subscribe(
+      (state) => callback(state.selectedElementIds)
+    )
+    this.subscribers[subscriberId] = unsubscribeCallback
+    return subscriberId
+  }
+
+  public unsubscribe(subscriberId: number) {
     const unsubscribeCallback = this.subscribers[subscriberId]
     if (unsubscribeCallback) {
       unsubscribeCallback()

@@ -24,7 +24,7 @@ export default function MobileNavbar() {
   const [diagramTitle, setDiagramTitle] = useState(
     editor?.getDiagramMetadata().diagramTitle || ""
   )
-  const unsubscribe = useRef<() => void>()
+  const unsubscribe = useRef<number>()
 
   useEffect(() => {
     if (editor && !unsubscribe.current) {
@@ -40,7 +40,9 @@ export default function MobileNavbar() {
     }
     // Cleanup subscription
     return () => {
-      unsubscribe.current?.()
+      if (unsubscribe.current) {
+        editor?.unsubscribe(unsubscribe.current)
+      }
     }
   }, [editor])
 

@@ -1,5 +1,5 @@
 import { create, StoreApi, UseBoundStore } from "zustand"
-import { devtools } from "zustand/middleware"
+import { devtools, subscribeWithSelector } from "zustand/middleware"
 
 export type AssessmentSelectionStore = {
   // Currently selected elements for assessment
@@ -37,7 +37,7 @@ export const createAssessmentSelectionStore = (): UseBoundStore<
 > =>
   create<AssessmentSelectionStore>()(
     devtools(
-      (set, get) => ({
+      subscribeWithSelector((set, get) => ({
         ...initialAssessmentSelectionState,
 
         setAssessmentSelectionMode: (isActive: boolean) => {
@@ -91,7 +91,7 @@ export const createAssessmentSelectionStore = (): UseBoundStore<
         reset: () => {
           set(initialAssessmentSelectionState, undefined, "reset")
         },
-      }),
+      })),
       { name: "AssessmentSelectionStore", enabled: true }
     )
   )

@@ -11,6 +11,7 @@ export type MetadataStore = {
   diagramType: UMLDiagramType
   mode: ApollonMode
   readonly: boolean
+  debug: boolean
   setMode: (mode: ApollonMode) => void
   setReadonly: (readonly: boolean) => void
   updateDiagramTitle: (diagramTitle: string) => void
@@ -18,6 +19,7 @@ export type MetadataStore = {
   updateMetaData: (diagramTitle: string, diagramType: UMLDiagramType) => void
   updateMetaDataFromYjs: () => void
   reset: () => void
+  setDebug: (debug: boolean) => void
 }
 
 type InitialMetadataState = {
@@ -25,12 +27,14 @@ type InitialMetadataState = {
   diagramType: UMLDiagramType
   mode: ApollonMode
   readonly: boolean
+  debug: boolean
 }
 const initialMetadataState: InitialMetadataState = {
   diagramTitle: "Untitled Diagram",
   diagramType: UMLDiagramType.ClassDiagram,
   mode: ApollonMode.Modelling,
   readonly: false,
+  debug: false,
 }
 
 export const createMetadataStore = (
@@ -90,6 +94,10 @@ export const createMetadataStore = (
 
         setReadonly: (readonly) => {
           set({ readonly }, undefined, "setReadonly")
+        },
+
+        setDebug: (debug) => {
+          set({ debug }, undefined, "setDebug")
         },
 
         reset: () => {

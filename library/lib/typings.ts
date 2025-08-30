@@ -81,6 +81,7 @@ export type ApollonOptions = {
   copyPasteToClipboard?: boolean
   colorEnabled?: boolean
   scale?: number
+  debug?: boolean
 }
 
 export type FeedbackCorrectionStatus = {

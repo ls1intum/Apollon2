@@ -18,7 +18,7 @@ export const DesktopNavbar = () => {
   const [diagramTitle, setDiagramTitle] = useState(
     editor?.getDiagramMetadata().diagramTitle || ""
   )
-  const unsubscribe = useRef<() => void>()
+  const unsubscribeId = useRef<number>()
   const { openModal } = useModalContext()
   const navigate = useNavigate()
 
@@ -27,8 +27,8 @@ export const DesktopNavbar = () => {
   }
 
   useEffect(() => {
-    if (editor && !unsubscribe.current) {
-      unsubscribe.current = editor.subscribeToDiagramNameChange(
+    if (editor && !unsubscribeId.current) {
+      unsubscribeId.current = editor.subscribeToDiagramNameChange(
         (diagramTitle) => {
           setDiagramTitle(diagramTitle)
         }
@@ -40,9 +40,11 @@ export const DesktopNavbar = () => {
     }
     // Cleanup subscription
     return () => {
-      unsubscribe.current?.()
+      if (editor && unsubscribeId.current) {
+        editor.unsubscribe(unsubscribeId.current)
+      }
     }
-  }, [editor, setDiagramTitle, unsubscribe])
+  }, [editor, setDiagramTitle, unsubscribeId])
 
   return (
     <AppBar
