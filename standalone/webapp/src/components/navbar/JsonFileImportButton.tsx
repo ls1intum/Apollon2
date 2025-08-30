@@ -2,6 +2,7 @@ import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { MenuItem } from "@mui/material"
 import React, { useRef } from "react"
 import { useNavigate } from "react-router"
+import { importDiagram } from "@tumaet/apollon"
 
 export const JsonFileImportButton: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -25,7 +26,11 @@ export const JsonFileImportButton: React.FC = () => {
       try {
         const timeStapToCreate = new Date().getTime()
         const json = JSON.parse(e.target?.result as string)
-        createModel(json.model)
+        
+        // Use importDiagram to handle both v3 and v4 formats with conversion
+        const processedModel = importDiagram(json)
+        createModel(processedModel)
+        
         navigate("..", {
           relative: "route",
           replace: true,
