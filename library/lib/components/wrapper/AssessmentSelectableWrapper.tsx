@@ -4,8 +4,7 @@ import { useAssessmentSelection } from "@/hooks/useAssessmentSelection"
 interface AssessmentSelectableWrapperProps {
   elementId: string
   children: React.ReactNode
-  className?: string
-  style?: React.CSSProperties
+  asElement?: "div" | "g"
 }
 
 /**
@@ -13,7 +12,7 @@ interface AssessmentSelectableWrapperProps {
  */
 export const AssessmentSelectableWrapper: React.FC<
   AssessmentSelectableWrapperProps
-> = ({ elementId, children, style = {} }) => {
+> = ({ elementId, children, asElement = "div" }) => {
   const {
     isSelected,
     isHighlighted,
@@ -28,7 +27,6 @@ export const AssessmentSelectableWrapper: React.FC<
   }
 
   const combinedStyle: React.CSSProperties = {
-    ...style,
     cursor: "pointer",
     ...(isSelected && {
       backgroundColor: "rgba(25, 118, 210, 0.2)",
@@ -41,6 +39,31 @@ export const AssessmentSelectableWrapper: React.FC<
       }),
   }
 
+  if (asElement == "g") {
+    const gStyle = {
+      cursor: "pointer",
+      ...(isSelected && {
+        stroke: "rgba(25, 118, 210, 0.2)",
+        outline: "2px solid #1976d2",
+      }),
+      ...(isHighlighted &&
+        !isSelected && {
+          stroke: "rgba(25, 118, 210, 0.5)",
+          outline: "2px solid #1976d2",
+        }),
+    }
+
+    return (
+      <g
+        style={gStyle}
+        onPointerDown={handleElementClick}
+        onMouseEnter={handleElementMouseEnter}
+        onMouseLeave={handleElementMouseLeave}
+      >
+        {children}
+      </g>
+    )
+  }
   return (
     <div
       style={combinedStyle}
