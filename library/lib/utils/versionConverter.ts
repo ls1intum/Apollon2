@@ -200,7 +200,7 @@ export function convertV3NodeTypeToV4(v3Type: string): string {
     // Component Diagram
     'Component': 'component',
     'ComponentInterface': 'componentInterface',
-    'ComponentSubsystem': 'componentSubsystem',
+    'Subsystem': 'componentSubsystem',
     
     // Deployment Diagram
     'DeploymentNode': 'deploymentNode',
@@ -290,18 +290,18 @@ export function convertV3EdgeTypeToV4(v3Type: string): string {
     
     // Component Diagram
     'ComponentDependency': 'ComponentDependency',
-    'ComponentProvidedInterface': 'ComponentProvidedInterface',
-    'ComponentRequiredInterface': 'ComponentRequiredInterface',
-    'ComponentRequiredQuarterInterface': 'ComponentRequiredQuarterInterface',
-    'ComponentRequiredThreeQuarterInterface': 'ComponentRequiredThreeQuarterInterface',
+    'ComponentInterfaceProvided': 'ComponentProvidedInterface',
+    'ComponentInterfaceRequired': 'ComponentRequiredInterface',
+    'ComponentInterfaceRequiredQuarter': 'ComponentRequiredQuarterInterface',
+    'ComponentInterfaceRequiredThreeQuarter': 'ComponentRequiredThreeQuarterInterface',
     
     // Deployment Diagram
     'DeploymentDependency': 'DeploymentDependency',
     'DeploymentAssociation': 'DeploymentAssociation',
-    'DeploymentProvidedInterface': 'DeploymentProvidedInterface',
-    'DeploymentRequiredInterface': 'DeploymentRequiredInterface',
-    'DeploymentRequiredQuarterInterface': 'DeploymentRequiredQuarterInterface',
-    'DeploymentRequiredThreeQuarterInterface': 'DeploymentRequiredThreeQuarterInterface',
+    'DeploymentInterfaceProvided': 'DeploymentProvidedInterface',
+    'DeploymentInterfaceRequired': 'DeploymentRequiredInterface',
+    'DeploymentInterfaceRequiredQuarter': 'DeploymentRequiredQuarterInterface',
+    'DeploymentInterfaceRequiredThreeQuarter': 'DeploymentRequiredThreeQuarterInterface',
     
     // Object Diagram
     'ObjectLink': 'ObjectLink',
@@ -344,7 +344,6 @@ function calculateRelativePosition(child: V3UMLElement, parent: V3UMLElement): {
 function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string, V3UMLElement>): any {
   const baseData = {
     name: element.name,
-    // Visual properties
     ...(element.fillColor && { fillColor: element.fillColor }),
     ...(element.strokeColor && { strokeColor: element.strokeColor }),
     ...(element.textColor && { textColor: element.textColor }),
@@ -361,8 +360,6 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       // Collect attributes and methods from child elements
       const attributes: Array<{ id: string; name: string }> = []
       const methods: Array<{ id: string; name: string }> = []
-
-      // Find child attributes and methods
       Object.values(allElements).forEach(childElement => {
         if (childElement.owner === element.id) {
           if (childElement.type === 'ClassAttribute') {
@@ -372,8 +369,6 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
           }
         }
       })
-
-      // Also handle attributes/methods stored as ID arrays
       if (element.attributes && Array.isArray(element.attributes)) {
         element.attributes.forEach(attrId => {
           const attr = allElements[attrId]
@@ -412,7 +407,6 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
     }
 
     case 'ObjectName': {
-      // Similar to class but for objects
       const attributes: Array<{ id: string; name: string }> = []
       const methods: Array<{ id: string; name: string }> = []
 
@@ -574,7 +568,6 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
  * Convert v3 element to v4 node
  */
 function convertV3ElementToV4Node(element: V3UMLElement, allElements: Record<string, V3UMLElement>): ApollonNode {
-  // Calculate position (relative to parent if it has one)
   let position = { x: element.bounds.x, y: element.bounds.y }
   if (element.owner) {
     const parent = allElements[element.owner]
@@ -583,7 +576,6 @@ function convertV3ElementToV4Node(element: V3UMLElement, allElements: Record<str
     }
   }
 
-  // Convert element data to V4 format
   const data = convertV3NodeDataToV4(element, allElements)
 
   const baseNode: ApollonNode = {
@@ -613,7 +605,7 @@ function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): Apollon
   
   // Convert v3 path (relative to bounds) to v4 points (absolute coordinates)
   let points: IPoint[] = []
-  
+  console.log(`Converting relationship ${relationship.path} of type ${edgeType}`)
   if (relationship.path && relationship.path.length > 0) {
     // Convert relative path points to absolute coordinates
     points = relationship.path.map(point => ({
@@ -830,6 +822,7 @@ export function isV4Format(data: any): data is UMLModel {
  * Universal import function that handles v2, v3 and v4 formats
  */
 export function importDiagram(data: any): UMLModel {
+  console.log(`Importing diagram of type: ${data.model.type}`);
   if (isV4Format(data)) {
     return data
   }
