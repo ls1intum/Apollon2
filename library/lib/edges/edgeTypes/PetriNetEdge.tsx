@@ -78,73 +78,76 @@ export const PetriNetEdge = ({
   })
 
   return (
-    <>
-      <g className="edge-container">
-        <BaseEdge
-          id={id}
-          path={tempReconnectPath || currentPath}
-          markerEnd={isReconnectingRef.current ? undefined : markerEnd}
-          pointerEvents="none"
-          style={{
-            stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
-            strokeDasharray: strokeDashArray,
-          }}
-        />
-
-        <AssessmentSelectableWrapper elementId={id} asElement="g">
-          <FeedbackDropzone elementId={id} asElement="path">
-            <path
-              ref={pathRef}
-              className="edge-overlay"
-              d={overlayPath}
-              fill="none"
-              strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
-              pointerEvents="stroke"
-              style={{ opacity: isReconnectingRef.current ? 0 : 0.4 }}
-            />
-          </FeedbackDropzone>
-        </AssessmentSelectableWrapper>
-        {/* Temporary reconnection path */}
-        {/* Removed - now using tempReconnectPath directly in BaseEdge */}
-
-        {isDiagramModifiable && !isReconnectingRef.current && (
-          <EdgeEndpointMarkers
-            sourcePoint={sourcePoint}
-            targetPoint={targetPoint}
-            isDiagramModifiable={isDiagramModifiable}
-            diagramType="petriNet"
-            pathType="straight"
-            onSourcePointerDown={(e) => handleEndpointPointerDown(e, "source")}
-            onTargetPointerDown={(e) => handleEndpointPointerDown(e, "target")}
-          />
-        )}
-      </g>
-
-      {!isReconnectingRef.current && (
-        <>
-          <EdgeMiddleLabels
-            label={data?.label}
-            pathMiddlePosition={edgeData.pathMiddlePosition}
-            isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-            showRelationshipLabels={showRelationshipLabels}
-            sourcePoint={edgeData.sourcePoint}
-            targetPoint={edgeData.targetPoint}
-            isUseCasePath={true}
-            isPetriNet={true}
-          />
-
-          <CommonEdgeElements
+    <AssessmentSelectableWrapper elementId={id} asElement="g">
+      <FeedbackDropzone elementId={id} asElement="path">
+        <g className="edge-container">
+          <BaseEdge
             id={id}
-            pathMiddlePosition={edgeData.pathMiddlePosition}
-            isDiagramModifiable={isDiagramModifiable}
-            assessments={assessments}
-            anchorRef={anchorRef}
-            handleDelete={handleDelete}
-            setPopOverElementId={setPopOverElementId}
-            type={type}
+            path={tempReconnectPath || currentPath}
+            markerEnd={isReconnectingRef.current ? undefined : markerEnd}
+            pointerEvents="none"
+            style={{
+              stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
+              strokeDasharray: strokeDashArray,
+            }}
           />
-        </>
-      )}
-    </>
+
+          <path
+            ref={pathRef}
+            className="edge-overlay"
+            d={overlayPath}
+            fill="none"
+            strokeWidth={EDGE_HIGHTLIGHT_STROKE_WIDTH}
+            pointerEvents="stroke"
+            style={{ opacity: isReconnectingRef.current ? 0 : 0.4 }}
+          />
+
+          {/* Temporary reconnection path */}
+          {/* Removed - now using tempReconnectPath directly in BaseEdge */}
+
+          {isDiagramModifiable && !isReconnectingRef.current && (
+            <EdgeEndpointMarkers
+              sourcePoint={sourcePoint}
+              targetPoint={targetPoint}
+              isDiagramModifiable={isDiagramModifiable}
+              diagramType="petriNet"
+              pathType="straight"
+              onSourcePointerDown={(e) =>
+                handleEndpointPointerDown(e, "source")
+              }
+              onTargetPointerDown={(e) =>
+                handleEndpointPointerDown(e, "target")
+              }
+            />
+          )}
+        </g>
+
+        {!isReconnectingRef.current && (
+          <>
+            <EdgeMiddleLabels
+              label={data?.label}
+              pathMiddlePosition={edgeData.pathMiddlePosition}
+              isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
+              showRelationshipLabels={showRelationshipLabels}
+              sourcePoint={edgeData.sourcePoint}
+              targetPoint={edgeData.targetPoint}
+              isUseCasePath={true}
+              isPetriNet={true}
+            />
+
+            <CommonEdgeElements
+              id={id}
+              pathMiddlePosition={edgeData.pathMiddlePosition}
+              isDiagramModifiable={isDiagramModifiable}
+              assessments={assessments}
+              anchorRef={anchorRef}
+              handleDelete={handleDelete}
+              setPopOverElementId={setPopOverElementId}
+              type={type}
+            />
+          </>
+        )}
+      </FeedbackDropzone>
+    </AssessmentSelectableWrapper>
   )
 }
