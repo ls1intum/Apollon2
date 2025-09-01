@@ -174,7 +174,16 @@ export class YjsSyncClass {
    *  Convert Uint8Array to Base64 string
    */
   static uint8ToBase64(uint8: Uint8Array): string {
-    return btoa(String.fromCharCode(...uint8))
+    // For large arrays, process in chunks to avoid stack overflow
+    const chunkSize = 8192 // Process 8KB at a time
+    let binary = ""
+
+    for (let i = 0; i < uint8.length; i += chunkSize) {
+      const chunk = uint8.slice(i, i + chunkSize)
+      binary += String.fromCharCode(...chunk)
+    }
+
+    return btoa(binary)
   }
 
   /**
