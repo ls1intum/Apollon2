@@ -75,6 +75,7 @@ export function BPMNCallActivity({
           id={id}
           name={data.name}
           variant="call"
+          showAssessmentResults={!isDiagramModifiable}
         />
       </div>
       <PopoverManager

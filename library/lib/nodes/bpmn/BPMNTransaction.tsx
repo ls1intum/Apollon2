@@ -75,6 +75,7 @@ export function BPMNTransaction({
           id={id}
           name={data.name}
           variant="transaction"
+          showAssessmentResults={!isDiagramModifiable}
         />
       </div>
       <PopoverManager

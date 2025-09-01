@@ -61,6 +61,7 @@ export function BPMNStartEvent({
           name={data.name}
           variant="start"
           eventType={data.eventType}
+          showAssessmentResults={!isDiagramModifiable}
         />
       </div>
       <PopoverManager
