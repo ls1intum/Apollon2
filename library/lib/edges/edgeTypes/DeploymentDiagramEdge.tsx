@@ -14,6 +14,7 @@ import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
+import { AssessmentSelectableWrapper } from "@/components"
 
 const arePositionsOpposite = (pos1: Position, pos2: Position): boolean => {
   return (
@@ -156,24 +157,26 @@ export const DeploymentDiagramEdge = ({
   })
 
   return (
-    <>
-      <g className="edge-container">
-        <BaseEdge
-          id={id}
-          path={currentPath}
-          markerEnd={isReconnectingRef.current ? undefined : markerEnd}
-          pointerEvents="none"
-          style={{
-            stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
-            strokeDasharray: isReconnectingRef.current
-              ? "none"
-              : strokeDashArray,
-            transition: hasInitialCalculation ? "opacity 0.1s ease-in" : "none",
-            opacity: 1,
-          }}
-        />
+    <AssessmentSelectableWrapper elementId={id} asElement="g">
+      <FeedbackDropzone elementId={id} asElement="path">
+        <g className="edge-container">
+          <BaseEdge
+            id={id}
+            path={currentPath}
+            markerEnd={isReconnectingRef.current ? undefined : markerEnd}
+            pointerEvents="none"
+            style={{
+              stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
+              strokeDasharray: isReconnectingRef.current
+                ? "none"
+                : strokeDashArray,
+              transition: hasInitialCalculation
+                ? "opacity 0.1s ease-in"
+                : "none",
+              opacity: 1,
+            }}
+          />
 
-        <FeedbackDropzone elementId={id} asElement="path">
           <path
             ref={pathRef}
             className="edge-overlay"
@@ -185,54 +188,54 @@ export const DeploymentDiagramEdge = ({
               opacity: isReconnectingRef.current ? 0 : 0.4,
             }}
           />
-        </FeedbackDropzone>
 
-        <EdgeEndpointMarkers
-          sourcePoint={sourcePoint}
-          targetPoint={targetPoint}
-          isDiagramModifiable={isDiagramModifiable}
-          diagramType="step"
-          pathType="step"
-          onSourcePointerDown={(e) => handleEndpointPointerDown(e, "source")}
-          onTargetPointerDown={(e) => handleEndpointPointerDown(e, "target")}
+          <EdgeEndpointMarkers
+            sourcePoint={sourcePoint}
+            targetPoint={targetPoint}
+            isDiagramModifiable={isDiagramModifiable}
+            diagramType="step"
+            pathType="step"
+            onSourcePointerDown={(e) => handleEndpointPointerDown(e, "source")}
+            onTargetPointerDown={(e) => handleEndpointPointerDown(e, "target")}
+          />
+
+          {isDiagramModifiable &&
+            !isReconnectingRef.current &&
+            allowMidpointDragging &&
+            midpoints.map((point, midPointIndex) => (
+              <circle
+                className="edge-circle"
+                pointerEvents="all"
+                key={`${id}-midpoint-${midPointIndex}`}
+                cx={point.x}
+                cy={point.y}
+                r={10}
+                fill="lightgray"
+                stroke="none"
+                style={{ cursor: "grab", zIndex: 9999 }}
+                onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
+              />
+            ))}
+        </g>
+
+        <EdgeMiddleLabels
+          label={data?.label}
+          pathMiddlePosition={edgeData.pathMiddlePosition}
+          isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
+          showRelationshipLabels={showRelationshipLabels}
         />
 
-        {isDiagramModifiable &&
-          !isReconnectingRef.current &&
-          allowMidpointDragging &&
-          midpoints.map((point, midPointIndex) => (
-            <circle
-              className="edge-circle"
-              pointerEvents="all"
-              key={`${id}-midpoint-${midPointIndex}`}
-              cx={point.x}
-              cy={point.y}
-              r={10}
-              fill="lightgray"
-              stroke="none"
-              style={{ cursor: "grab", zIndex: 9999 }}
-              onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
-            />
-          ))}
-      </g>
-
-      <EdgeMiddleLabels
-        label={data?.label}
-        pathMiddlePosition={edgeData.pathMiddlePosition}
-        isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-        showRelationshipLabels={showRelationshipLabels}
-      />
-
-      <CommonEdgeElements
-        id={id}
-        pathMiddlePosition={edgeData.pathMiddlePosition}
-        isDiagramModifiable={isDiagramModifiable}
-        assessments={assessments}
-        anchorRef={anchorRef}
-        handleDelete={handleDelete}
-        setPopOverElementId={setPopOverElementId}
-        type={dynamicEdgeType}
-      />
-    </>
+        <CommonEdgeElements
+          id={id}
+          pathMiddlePosition={edgeData.pathMiddlePosition}
+          isDiagramModifiable={isDiagramModifiable}
+          assessments={assessments}
+          anchorRef={anchorRef}
+          handleDelete={handleDelete}
+          setPopOverElementId={setPopOverElementId}
+          type={dynamicEdgeType}
+        />
+      </FeedbackDropzone>
+    </AssessmentSelectableWrapper>
   )
 }

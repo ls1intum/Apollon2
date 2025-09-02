@@ -24,7 +24,7 @@ export default function MobileNavbar() {
   const [diagramTitle, setDiagramTitle] = useState(
     editor?.getDiagramMetadata().diagramTitle || ""
   )
-  const unsubscribe = useRef<() => void>()
+  const unsubscribe = useRef<number>()
 
   useEffect(() => {
     if (editor && !unsubscribe.current) {
@@ -37,10 +37,6 @@ export default function MobileNavbar() {
     // Update diagram title when editor is available
     if (editor) {
       setDiagramTitle(editor.getDiagramMetadata().diagramTitle || "")
-    }
-    // Cleanup subscription
-    return () => {
-      unsubscribe.current?.()
     }
   }, [editor])
 
