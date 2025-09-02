@@ -39,6 +39,7 @@ export const ApollonWithConnection: React.FC = () => {
 
         const editorOptions: ApollonOptions = {
           model: diagram,
+          collaborationEnabled: true,
         }
 
         if (viewType === DiagramView.GIVE_FEEDBACK) {
