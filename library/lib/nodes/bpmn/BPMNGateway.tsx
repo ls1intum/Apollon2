@@ -60,6 +60,7 @@ export function BPMNGateway({
           id={id}
           name={data.name}
           gatewayType={data.gatewayType}
+          showAssessmentResults={!isDiagramModifiable}
         />
       </div>
       <PopoverManager

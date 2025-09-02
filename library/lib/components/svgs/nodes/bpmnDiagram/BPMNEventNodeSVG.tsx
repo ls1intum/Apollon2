@@ -1,6 +1,9 @@
 import { CustomText } from "@/components"
 import { LINE_WIDTH } from "@/constants"
+import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
+import { useShallow } from "zustand/shallow"
+import AssessmentIcon from "../../AssessmentIcon"
 import {
   BPMNStartEventType,
   BPMNIntermediateEventType,
@@ -23,7 +26,11 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
   transformScale,
   variant,
   eventType,
+  id,
+  showAssessmentResults = false,
 }) => {
+  const assessments = useDiagramStore(useShallow((state) => state.assessments))
+  const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
   const r = Math.min(width, height) / 2
@@ -322,6 +329,10 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
         >
           {name}
         </CustomText>
+      )}
+
+      {showAssessmentResults && (
+        <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />
       )}
     </svg>
   )

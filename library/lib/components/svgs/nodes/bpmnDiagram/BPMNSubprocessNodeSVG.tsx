@@ -1,6 +1,9 @@
 import { CustomText } from "@/components"
 import { LINE_WIDTH } from "@/constants"
+import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
+import { useShallow } from "zustand/shallow"
+import AssessmentIcon from "../../AssessmentIcon"
 
 export const BPMNSubprocessNodeSVG: React.FC<
   SVGComponentProps & {
@@ -14,7 +17,11 @@ export const BPMNSubprocessNodeSVG: React.FC<
   svgAttributes,
   transformScale,
   variant = "subprocess",
+  id,
+  showAssessmentResults = false,
 }) => {
+  const assessments = useDiagramStore(useShallow((state) => state.assessments))
+  const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
   const isTransaction = variant === "transaction"
@@ -117,6 +124,10 @@ export const BPMNSubprocessNodeSVG: React.FC<
       >
         {name}
       </CustomText>
+
+      {showAssessmentResults && (
+        <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />
+      )}
     </svg>
   )
 }
