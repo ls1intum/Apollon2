@@ -82,6 +82,7 @@ export type ApollonOptions = {
   colorEnabled?: boolean
   scale?: number
   debug?: boolean
+  collaborationEnabled?: boolean
 }
 
 export type FeedbackCorrectionStatus = {
