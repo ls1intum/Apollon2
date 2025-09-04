@@ -1,6 +1,7 @@
 import { UMLDiagramType } from "../types/DiagramType"
 import { IPoint } from "../edges/Connection"
 
+
 /**
  * V2 Selection structure - uses arrays instead of objects
  */

@@ -119,6 +119,7 @@ export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
  */
 export function isV2Format(data: any): data is V2DiagramFormat {
   return (
+    console.log("v2", data),
     data &&
     data.version &&
     data.version.startsWith('2.') &&
@@ -316,7 +317,7 @@ export function convertV3EdgeTypeToV4(v3Type: string): string {
     'SyntaxTreeLink': 'SyntaxTreeLink',
     
     // Flowchart
-    'FlowChartFlowline': 'FlowChartFlowline',
+    'FlowchartFlowline': 'FlowChartFlowline',
     
     // BPMN
     'BPMNSequenceFlow': 'BPMNSequenceFlow',
@@ -599,77 +600,44 @@ function convertV3ElementToV4Node(element: V3UMLElement, allElements: Record<str
  * Convert v3 relationship to v4 edge
  */
 function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): ApollonEdge {
-  // Get marker styles for this edge type to determine padding
   const edgeType = convertV3EdgeTypeToV4(relationship.type)
   const { markerPadding } = getEdgeMarkerStyles(edgeType)
-  
-  // Convert v3 path (relative to bounds) to v4 points (absolute coordinates)
   let points: IPoint[] = []
-  console.log(`Converting relationship ${relationship.path} of type ${edgeType}`)
   if (relationship.path && relationship.path.length > 0) {
-    // Convert relative path points to absolute coordinates
     points = relationship.path.map(point => ({
       x: point.x + relationship.bounds.x,
       y: point.y + relationship.bounds.y
     }))
     
-    // Log essential positioning information
     console.log(`Edge ${relationship.id}:`)
     console.log(`  Source: ${relationship.source.element} (${relationship.source.direction})`)
     console.log(`  Target: ${relationship.target.element} (${relationship.target.direction})`)
     console.log(`  First point: (${points[0].x}, ${points[0].y})`)
     console.log(`  Last point: (${points[points.length - 1].x}, ${points[points.length - 1].y})`)
     console.log(`  Marker padding: ${markerPadding}`)
-    
-    // Adjust the last point (target end) to account for marker padding
-    // This prevents the arrow from colliding with the target node
-    if (points.length > 0 && markerPadding !== undefined) {
-      const lastPoint = points[points.length - 1]
-      const secondLastPoint = points.length > 1 ? points[points.length - 2] : lastPoint
-      
-      // Calculate direction vector from second-to-last to last point
-      const dx = lastPoint.x - secondLastPoint.x
-      const dy = lastPoint.y - secondLastPoint.y
-      const length = Math.sqrt(dx * dx + dy * dy)
-      
-      if (length > 0) {
-        // Normalize and apply padding offset
-        const normalizedDx = dx / length
-        const normalizedDy = dy / length
-        
-        const adjustedPoint = {
-          x: lastPoint.x - normalizedDx * Math.abs(markerPadding + 2),
-          y: lastPoint.y - normalizedDy * Math.abs(markerPadding + 2)
-        }
-        
-        points[points.length - 1] = adjustedPoint
-        console.log(`  Adjusted last point: (${adjustedPoint.x}, ${adjustedPoint.y})`)
-      }
-    }
+
   }
 
-  // Build data object with V3 relationship properties
-  const data: any = {
-    name: relationship.name || "",
-    // Include points only if we have them and they're meaningful
-    ...(points.length > 0 && { points }),
-    // Store source/target metadata
-    sourceMultiplicity: relationship.source.multiplicity || "",
-    targetMultiplicity: relationship.target.multiplicity || "",
-    sourceRole: relationship.source.role || "",
-    targetRole: relationship.target.role || "",
-    isManuallyLayouted: relationship.isManuallyLayouted || false,
-    // Communication Link specific
-    ...(relationship.messages && { messages: relationship.messages }),
-    // BPMN specific
-    ...(relationship.flowType && { flowType: relationship.flowType }),
-    // Visual properties
-    ...(relationship.fillColor && { fillColor: relationship.fillColor }),
-    ...(relationship.strokeColor && { strokeColor: relationship.strokeColor }),
-    ...(relationship.textColor && { textColor: relationship.textColor }),
-    ...(relationship.highlight && { highlight: relationship.highlight }),
-    ...(relationship.assessmentNote && { assessmentNote: relationship.assessmentNote }),
-  }
+
+  // const data:  = {
+  //   ...(points.length > 0 && { points }),
+
+  //   sourceMultiplicity: relationship.source.multiplicity || "",
+  //   targetMultiplicity: relationship.target.multiplicity || "",
+  //   sourceRole: relationship.source.role || "",
+  //   targetRole: relationship.target.role || "",
+  //   isManuallyLayouted: relationship.isManuallyLayouted || false,
+  //   // Communication Link specific
+  //   ...(relationship.messages && { messages: relationship.messages }),
+  //   // BPMN specific
+  //   ...(relationship.flowType && { flowType: relationship.flowType }),
+  //   // Visual properties
+  //   ...(relationship.fillColor && { fillColor: relationship.fillColor }),
+  //   ...(relationship.strokeColor && { strokeColor: relationship.strokeColor }),
+  //   ...(relationship.textColor && { textColor: relationship.textColor }),
+  //   ...(relationship.highlight && { highlight: relationship.highlight }),
+  //   ...(relationship.assessmentNote && { assessmentNote: relationship.assessmentNote }),
+  // }
 
   const edge: ApollonEdge = {
     id: relationship.id,
@@ -678,7 +646,17 @@ function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): Apollon
     type: edgeType as any,
     sourceHandle: convertV3HandleToV4(relationship.source.direction || ""),
     targetHandle: convertV3HandleToV4(relationship.target.direction || ""),
-    data,
+    data:
+    {
+     // ...data,
+      label: relationship.name || "",
+      sourceMultiplicity: relationship.source.multiplicity || "",
+      targetMultiplicity: relationship.target.multiplicity || "",
+      sourceRole: relationship.source.role || "",
+      targetRole: relationship.target.role || "",
+      isManuallyLayouted: relationship.isManuallyLayouted || false,
+    },
+    points: points
   }
 
   return edge
@@ -822,7 +800,7 @@ export function isV4Format(data: any): data is UMLModel {
  * Universal import function that handles v2, v3 and v4 formats
  */
 export function importDiagram(data: any): UMLModel {
-  console.log(`Importing diagram of type: ${data.model.type}`);
+
   if (isV4Format(data)) {
     return data
   }

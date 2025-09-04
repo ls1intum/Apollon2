@@ -21,11 +21,10 @@ export const useExportAsJSON = () => {
       return
     }
 
-    const modelWithPathData = editor.modelWithPathData
-    const jsonContent = JSON.stringify(modelWithPathData, null, 2)
+    const model= editor.model
+    const jsonContent = JSON.stringify(model, null, 2)
     const diagramTitle = editor.model.title || "diagram"
     const fileName = `${diagramTitle}.json`
-
     const fileToDownload = new File([jsonContent], fileName, {
       type: "application/json",
     })
