@@ -6,14 +6,12 @@ import { calculateOffsets } from "@/utils"
 import { useMessagePositioning } from "../../hooks"
 
 export const EdgeMultipleLabels: React.FC<{
-  labels: string[]
   messages?: MessageData[]
   pathMiddlePosition: IPoint
   isMiddlePathHorizontal: boolean
   showRelationshipLabels: boolean
   isReconnectingRef?: React.MutableRefObject<boolean>
 }> = ({
-  labels,
   messages,
   pathMiddlePosition,
   isMiddlePathHorizontal,
@@ -21,11 +19,13 @@ export const EdgeMultipleLabels: React.FC<{
   isReconnectingRef,
 }) => {
   const displayMessages: MessageData[] =
-    messages ||
-    labels.map((label) => ({
-      text: label,
-      direction: "forward" as const,
-    }))
+    messages
+      ? messages.map((message) => ({
+        id: message.id || "",
+          text: message.text,
+          direction: message.direction,
+        }))
+      : []
 
   if (
     !displayMessages ||

@@ -154,3 +154,13 @@ export type V3DiagramFormat = {
   model: V3UMLModel;
   lastUpdate?: string;
 };
+
+export type V3Message = {
+  id: string
+  name: string
+  direction: 'source' | 'target'
+}
+
+export type V3Messages = {
+  [id: string]: V3Message
+}

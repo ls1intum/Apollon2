@@ -7,7 +7,10 @@ import {
   V3DiagramFormat, 
   V3UMLElement, 
   V3UMLRelationship, 
-  V3Assessment 
+  V3Assessment,
+  V3Message,
+  V3Messages
+
 } from "./v3Typings"
 
 // Import V4 node prop types
@@ -36,6 +39,7 @@ import {
   ReachabilityGraphMarkingProps,
   // SfcActionTableProps
 } from "../types/nodes/NodeProps"
+import { MessageData } from "@/edges/EdgeProps"
 
 // V2 format interface for type checking (corrected based on real V2 format)
 interface V2DiagramFormat {
@@ -54,6 +58,12 @@ interface V2DiagramFormat {
   assessments: V3Assessment[];
 }
 
+
+// export interface V3Message {
+//   id: string
+//   name: string
+//   direction: 'source' | 'target'
+// }
 /**
  * Convert v2 format to v4 format
  */
@@ -564,6 +574,32 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       return baseData
   }
 }
+/**
+ * Convert V3 messages format to V4 MessageData array
+ */
+export function convertV3MessagesToV4(
+  messages: V3Messages | MessageData[] | undefined
+): MessageData[] {
+  if (!messages) {
+    return []
+  }
+
+  // If already V4 format (array), return as is
+  if (Array.isArray(messages)) {
+    return messages as MessageData[]
+  }
+
+  // If V3 format (object with IDs), convert to array
+  if (typeof messages === 'object' && messages !== null) {
+    return Object.values(messages).map((message: V3Message) => ({
+      text: message.name,
+      direction: message.direction === 'source' ? 'forward' : 'backward',
+      id: message.id,
+    }))
+  }
+
+  return []
+}
 
 /**
  * Convert v3 element to v4 node
@@ -655,6 +691,7 @@ function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): Apollon
       sourceRole: relationship.source.role || "",
       targetRole: relationship.target.role || "",
       isManuallyLayouted: relationship.isManuallyLayouted || false,
+      messages: convertV3MessagesToV4(relationship.messages)
     },
     points: points
   }

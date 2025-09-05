@@ -6,6 +6,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import { PopoverProps } from "../types"
 import { useState, useEffect } from "react"
+import { generateUUID } from "@/index"
 
 export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -26,13 +27,7 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
       const edgeData = edge.data as CustomEdgeProps
       if (edgeData.messages) {
         setMessages(edgeData.messages)
-      } else if (edgeData.labels) {
-        const convertedMessages = edgeData.labels.map((label) => ({
-          text: label,
-          direction: "forward" as const,
-        }))
-        setMessages(convertedMessages)
-      }
+      } 
     }
   }, [edge])
 
@@ -73,6 +68,7 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
       setDuplicateError(false)
 
       const newMessage: MessageData = {
+        id: generateUUID(),
         text: trimmedInput,
         direction: "forward",
       }

@@ -3,6 +3,7 @@ import { IPoint } from "./Connection"
 
 // Define message structure with direction
 export interface MessageData {
+  id: string
   text: string
   direction: "forward" | "backward" // forward = source to target, backward = target to source
 }
@@ -14,7 +15,6 @@ export type CustomEdgeProps = {
   targetMultiplicity: string | null
   points: IPoint[]
   label?: string | null
-  labels?: string[] // For communication diagram edges with multiple labels (backward compatibility)
   messages?: MessageData[] // For communication diagram edges with direction-aware messages
 }
 
