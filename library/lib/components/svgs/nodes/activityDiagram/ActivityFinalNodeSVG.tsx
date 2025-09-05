@@ -24,13 +24,18 @@ export const ActivityFinalNodeSVG: React.FC<SVGComponentProps> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <circle cx={width / 2} cy={height / 2} r={width / 2} fill="black" />
+      <circle
+        cx={width / 2}
+        cy={height / 2}
+        r={width / 2}
+        fill="var(--apollon-primary-contrast)"
+      />
       <circle
         cx={width / 2}
         cy={height / 2}
         r={(width / 2) * 0.8}
-        fill="black"
-        stroke="white"
+        fill="var(--apollon-primary-contrast)"
+        stroke="var(--apollon-background)"
         strokeWidth={2}
       />
 

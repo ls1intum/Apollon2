@@ -1,24 +1,15 @@
-import {
-  NodeProps,
-  NodeResizer,
-  NodeToolbar,
-  Position,
-  type Node,
-} from "@xyflow/react"
+import { NodeProps, NodeResizer, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
-import Box from "@mui/material/Box"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import EditIcon from "@mui/icons-material/Edit"
 import { useRef, useMemo, useEffect } from "react"
-import { usePopoverStore, useDiagramStore } from "@/store/context"
+import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
-import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 import { SfcActionTableProps } from "@/types"
 import { SfcActionTableNodeSVG } from "@/components"
 import { DEFAULT_ATTRIBUTE_HEIGHT } from "@/constants"
+import { NodeToolbar } from "@/components/toolbars/NodeToolbar"
 
 export function SfcActionTable({
   id,
@@ -29,15 +20,12 @@ export function SfcActionTable({
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
   const selected = useIsOnlyThisElementSelected(id)
-  const setPopOverElementId = usePopoverStore(
-    useShallow((state) => state.setPopOverElementId)
-  )
+
   const { setNodes } = useDiagramStore(
     useShallow((state) => ({
       setNodes: state.setNodes,
     }))
   )
-  const handleDelete = useHandleDelete(id)
 
   if (!width || !height) {
     return null
@@ -75,6 +63,8 @@ export function SfcActionTable({
 
   return (
     <DefaultNodeWrapper width={width} height={height} elementId={id}>
+      <NodeToolbar elementId={id} />
+
       <NodeResizer
         nodeId={id}
         isVisible={isDiagramModifiable && !!selected}
@@ -83,27 +73,6 @@ export function SfcActionTable({
         maxHeight={minHeight}
         handleStyle={{ width: 8, height: 8 }}
       />
-      <NodeToolbar
-        isVisible={isDiagramModifiable && !!selected}
-        position={Position.Top}
-        align="end"
-        offset={10}
-      >
-        <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
-          <DeleteOutlineOutlinedIcon
-            onClick={handleDelete}
-            style={{ cursor: "pointer", width: 16, height: 16 }}
-          />
-
-          <EditIcon
-            onClick={(e) => {
-              e.stopPropagation()
-              setPopOverElementId(id)
-            }}
-            style={{ cursor: "pointer", width: 16, height: 16 }}
-          />
-        </Box>
-      </NodeToolbar>
 
       <div ref={svgWrapperRef}>
         <SfcActionTableNodeSVG

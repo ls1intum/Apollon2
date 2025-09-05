@@ -1,19 +1,14 @@
-import { NodeProps, NodeToolbar, Position, type Node } from "@xyflow/react"
+import { NodeProps, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
-import Box from "@mui/material/Box"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import EditIcon from "@mui/icons-material/Edit"
 import { useRef, useMemo, useEffect } from "react"
-import { usePopoverStore, useDiagramStore } from "@/store/context"
+import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
-import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
-import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
-import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 import { DefaultNodeProps } from "@/types"
 import { SfcJumpNodeSVG } from "@/components"
 import { measureTextWidth, calculateMinWidth } from "@/utils"
 import { DEFAULT_PADDING, DEFAULT_FONT } from "@/constants"
+import { NodeToolbar } from "@/components/toolbars/NodeToolbar"
 
 export function SfcJump({
   id,
@@ -22,17 +17,12 @@ export function SfcJump({
   data: { name },
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
-  const isDiagramModifiable = useDiagramModifiable()
-  const selected = useIsOnlyThisElementSelected(id)
-  const setPopOverElementId = usePopoverStore(
-    useShallow((state) => state.setPopOverElementId)
-  )
+
   const { setNodes } = useDiagramStore(
     useShallow((state) => ({
       setNodes: state.setNodes,
     }))
   )
-  const handleDelete = useHandleDelete(id)
 
   if (!width || !height) {
     return null
@@ -69,26 +59,8 @@ export function SfcJump({
 
   return (
     <DefaultNodeWrapper width={finalWidth} height={height} elementId={id}>
-      <NodeToolbar
-        isVisible={isDiagramModifiable && !!selected}
-        position={Position.Top}
-        align="end"
-        offset={10}
-      >
-        <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
-          <DeleteOutlineOutlinedIcon
-            onClick={handleDelete}
-            style={{ cursor: "pointer", width: 16, height: 16 }}
-          />
+      <NodeToolbar elementId={id} />
 
-          <EditIcon
-            onClick={() => {
-              setPopOverElementId(id)
-            }}
-            style={{ cursor: "pointer", width: 16, height: 16 }}
-          />
-        </Box>
-      </NodeToolbar>
       <div ref={svgWrapperRef}>
         <SfcJumpNodeSVG
           width={finalWidth}

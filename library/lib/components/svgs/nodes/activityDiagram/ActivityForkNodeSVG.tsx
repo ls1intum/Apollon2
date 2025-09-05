@@ -24,7 +24,13 @@ export const ActivityForkNodeSVG: React.FC<SVGComponentProps> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <rect x={0} y={0} width={width} height={height} fill="black" />
+      <rect
+        x={0}
+        y={0}
+        width={width}
+        height={height}
+        fill="var(--apollon-primary-contrast)"
+      />
 
       {showAssessmentResults && (
         <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />

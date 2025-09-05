@@ -1,5 +1,4 @@
-import { CustomText } from "@/components"
-import { LINE_WIDTH } from "@/constants"
+import { CustomText, StyledRect } from "@/components"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
@@ -32,17 +31,7 @@ export const ActivitySVG: React.FC<ActivitySVGProps> = ({
       {...svgAttributes}
     >
       <g>
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          stroke="black"
-          strokeWidth={LINE_WIDTH}
-          fill="white"
-          rx={10}
-          ry={10}
-        />
+        <StyledRect x={0} y={0} width={width} height={height} rx={10} ry={10} />
 
         {/* Name Text */}
         <CustomText
