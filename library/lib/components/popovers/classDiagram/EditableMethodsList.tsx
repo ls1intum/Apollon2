@@ -113,7 +113,6 @@ export const EditableMethodsList: React.FC<Props> = ({ nodeId }) => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleAttributeChange(item.id, e.target.value)
             }
-            sx={{ backgroundColor: "#fff" }}
           />
           <DeleteOutlineOutlinedIcon
             sx={{ cursor: "pointer", width: 16, height: 16 }}
@@ -138,9 +137,6 @@ export const EditableMethodsList: React.FC<Props> = ({ nodeId }) => {
           }
         }}
         onKeyDown={handleKeyDown}
-        sx={{
-          backgroundColor: "#fff",
-        }}
       />
     </Box>
   )

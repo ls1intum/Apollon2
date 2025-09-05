@@ -49,11 +49,11 @@ import {
   BPMNGroupNodeSVG,
   ReachabilityGraphMarkingSVG,
 } from "./svgs"
-import SouthEastIcon from "@mui/icons-material/SouthEast"
-import MapIcon from "@mui/icons-material/Map"
 import { DiagramNodeType } from "@/typings"
 import { ClassType } from "@/types/nodes/enums"
 import { ZINDEX_MINIMAP, ZINDEX_PANEL } from "@/constants/zindexConstants"
+import { MapIcon } from "./Icon/MapIcon"
+import { SouthEastArrowIcon } from "./Icon/SouthEastArrowIcon"
 
 export const CustomMiniMap = () => {
   const [minimapCollapsed, setMinimapCollapsed] = useState(true)
@@ -61,7 +61,7 @@ export const CustomMiniMap = () => {
   if (minimapCollapsed) {
     return (
       <Panel position="bottom-right" onClick={() => setMinimapCollapsed(false)}>
-        <MapIcon />
+        <MapIcon fill="var(--apollon-primary-contrast)" />
       </Panel>
     )
   }
@@ -80,7 +80,7 @@ export const CustomMiniMap = () => {
           display: "flex",
           zIndex: ZINDEX_PANEL,
           padding: 8,
-          backgroundColor: "white",
+          backgroundColor: "var(--apollon-background)",
           borderRadius: "4px",
           justifyContent: "center",
           alignItems: "center",
@@ -88,7 +88,7 @@ export const CustomMiniMap = () => {
           boxShadow: "0 0 4px 0 rgb(0 0 0 / 0.2)",
         }}
       >
-        <SouthEastIcon width={16} height={16} />
+        <SouthEastArrowIcon fill="var(--apollon-primary-contrast)" />
       </div>
 
       <MiniMap

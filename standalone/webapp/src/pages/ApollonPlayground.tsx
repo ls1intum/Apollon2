@@ -31,8 +31,6 @@ export const ApollonPlayground: React.FC = () => {
   )
   const updateModel = usePersistenceModelStore((store) => store.updateModel)
 
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
   const [apollonOptions, setApollonOptions] = useState<ApollonOptions>({
     mode: ApollonMode.Modelling,
     locale: Locale.en,
@@ -186,8 +184,6 @@ export const ApollonPlayground: React.FC = () => {
         <button onClick={exportAsPDF} className="border p-1 rounded-sm">
           Export as PDF
         </button>
-        <div id="testing"></div>
-        <canvas ref={canvasRef} id="canvas"></canvas>
       </div>
 
       <div

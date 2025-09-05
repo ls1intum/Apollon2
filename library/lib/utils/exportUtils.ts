@@ -1,6 +1,32 @@
 import { IPoint } from "@/edges/types"
 import { ReactFlowInstance, type Node, type Edge, Rect } from "@xyflow/react"
 
+// Define CSS variables to embed in the SVG
+// Light theme variables
+const cssVariables = `
+    :root {
+      --apollon-primary: #3e8acc;
+      --apollon-primary-contrast: #212529;
+      --apollon-secondary: #6c757d;
+      --apollon-alert-warning-yellow: #ffc107;
+      --apollon-alert-warning-background: #fff3cd;
+      --apollon-alert-warning-border: #ffeeba;
+      --apollon-background: white;
+      --apollon-background-inverse: #000000;
+      --apollon-background-variant: #f8f9fa;
+      --apollon-gray: #e9ecef;
+      --apollon-grid: rgba(36, 39, 36, 0.1);
+      --apollon-gray-variant: #495057;
+      --apollon-alert-danger-color: #721c24;
+      --apollon-alert-danger-background: #f8d7da;
+      --apollon-alert-danger-border: #f5c6cb;
+      --apollon-switch-box-border-color: #dee2e6;
+      --apollon-list-group-color: #ffffff;
+      --apollon-btn-outline-secondary-color: #6c757d;
+      --apollon-modal-bottom-border: #e9ecef;
+    }
+  `
+
 export const getSVG = (container: HTMLElement, clip: Rect): string => {
   const emptySVG = "<svg></svg>"
 
@@ -14,6 +40,8 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
   const SVG_NS = "http://www.w3.org/2000/svg"
   const mainSVG = document.createElementNS(SVG_NS, "svg")
   mainSVG.setAttribute("xmlns", "http://www.w3.org/2000/svg")
+  mainSVG.appendChild(document.createElementNS(SVG_NS, "style")).textContent =
+    cssVariables
   mainSVG.setAttribute("viewBox", `${clip.x} ${clip.y} ${width} ${height}`)
   mainSVG.setAttribute("width", `${width}`)
   mainSVG.setAttribute("height", `${height}`)

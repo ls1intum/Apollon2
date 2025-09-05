@@ -3,6 +3,7 @@ export function SvgMarkers() {
     <svg
       style={{ position: "absolute", top: 0, left: 0, width: 0, height: 0 }}
       id="apollon2_svg-markers"
+      color="var(--apollon-primary-contrast)"
     >
       <defs>
         <marker
@@ -17,7 +18,7 @@ export function SvgMarkers() {
         >
           <path
             d="M0,15 L15,22 L30,15 L15,8 z"
-            fill="black"
+            fill="currentColor"
             stroke="currentColor"
             strokeWidth="1.5"
           />
@@ -34,7 +35,7 @@ export function SvgMarkers() {
         >
           <path
             d="M0,15 L15,22 L30,15 L15,8 z"
-            fill="white"
+            fill="var(--apollon-background)"
             stroke="currentColor"
             strokeWidth="1.5"
           />

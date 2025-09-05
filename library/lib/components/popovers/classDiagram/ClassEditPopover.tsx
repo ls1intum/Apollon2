@@ -47,7 +47,6 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
         onChange={(event) => handleNameChange(event.target.value)}
         size="small"
         value={nodeData.name}
-        sx={{ backgroundColor: "#fff" }}
       />
       <DividerLine width="100%" />
       <StereotypeButtonGroup

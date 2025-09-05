@@ -27,7 +27,6 @@ export const HeaderSection: FC<HeaderSectionProps> = ({
       y={headerHeight / 2}
       dominantBaseline="middle"
       textAnchor="middle"
-      // font={font}
       fontWeight="bold"
       textDecoration={isUnderlined ? "underline" : "normal"}
     >

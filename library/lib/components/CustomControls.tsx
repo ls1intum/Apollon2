@@ -29,7 +29,11 @@ export const CustomControls = () => {
   }
 
   return (
-    <Controls orientation="horizontal" showInteractive={false}>
+    <Controls
+      orientation="horizontal"
+      showInteractive={false}
+      style={{ display: "flex", gap: 4, alignItems: "center" }}
+    >
       {/* Undo Button */}
       {undoManagerExist && (
         <Tooltip title="Undo (Ctrl+Z)">
@@ -41,7 +45,11 @@ export const CustomControls = () => {
             <UndoIcon
               width={16}
               height={16}
-              className={canUndo ? "icon-enabled" : "icon-disabled"}
+              fill={
+                canUndo
+                  ? "var(--apollon-primary-contrast)"
+                  : "var(--apollon-secondary)"
+              }
             />
           </button>
         </Tooltip>
@@ -57,7 +65,11 @@ export const CustomControls = () => {
             <RedoIcon
               width={16}
               height={16}
-              className={canRedo ? "icon-enabled" : "icon-disabled"}
+              fill={
+                canRedo
+                  ? "var(--apollon-primary-contrast)"
+                  : "var(--apollon-secondary)"
+              }
             />
           </button>
         </Tooltip>
@@ -65,12 +77,16 @@ export const CustomControls = () => {
       <div
         style={{
           userSelect: "none",
-          backgroundColor: "white",
-          border: "1px solid black",
+          border: "1px solid var(--apollon-primary-contrast)",
           borderRadius: 8,
-          paddingLeft: 1.5,
-          paddingRight: 1.5,
+          paddingLeft: 4,
+          paddingRight: 4,
           cursor: "pointer",
+          display: "flex",
+          height: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "var(--apollon-primary-contrast)",
         }}
         onClick={() => zoomTo(1)}
       >

@@ -2,13 +2,33 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  --apollon-primary: #3e8acc;
+  --apollon-primary-contrast: #212529;
+  --apollon-secondary: #6c757d;
+  --apollon-alert-warning-yellow: #ffc107;
+  --apollon-alert-warning-background: #fff3cd;
+  --apollon-alert-warning-border: #ffeeba;
+  --apollon-background: white;
+  --apollon-background-inverse: #000000;
+  --apollon-background-variant: #f8f9fa;
+  --apollon-gray: #e9ecef;
+  --apollon-grid: rgba(36, 39, 36, 0.1);
+  --apollon-gray-variant: #495057;
+  --apollon-alert-danger-color: #721c24;
+  --apollon-alert-danger-background: #f8d7da;
+  --apollon-alert-danger-border: #f5c6cb;
+  --apollon-switch-box-border-color: #dee2e6;
+  --apollon-list-group-color: #ffffff;
+  --apollon-btn-outline-secondary-color: #6c757d;
+  --apollon-modal-bottom-border: #e9ecef;
 }
 
+
 .react-flow {
-  --panel-background: #fff;
-  --panel-shadow: 0 0 4px 0 rgb(0 0 0 / 0.2);
-  --text: #0a0a0a;
-  --xy-edge-stroke: black;
+  --panel-background: var(--apollon-background);
+  --panel-shadow: 0 0 4px 0 var(--apollon-background-variant);
+  --text: var(--apollon-primary-contrast);
+  --xy-edge-stroke: var(--apollon-primary-contrast);
   --xy-minimap-mask-background-color-props: #00000020;
 }
 
@@ -129,8 +149,8 @@
 }
 
 .control-button {
-  background-color: white;
-  border: 1px solid black;
+  background-color: var(--apollon-background);
+  border: 1px solid var(--apollon-gray-variant);
   border-radius: 8px;
   padding: 6px 8px;
   cursor: pointer;
@@ -146,7 +166,7 @@
 }
 
 .control-button:hover:not(.disabled) {
-  background-color: #f0f0f0;
+  background-color: var(--apollon-background-variant);
 }
 
 .control-button.disabled {
@@ -155,15 +175,7 @@
 }
 
 .control-button.disabled:hover {
-  background-color: white; /* Prevent hover effect when disabled */
-}
-
-.icon-enabled {
-  color: #000000;
-}
-
-.icon-disabled {
-  color: #999;
+  background-color: var(--apollon-background); /* Prevent hover effect when disabled */
 }
 
 .horizontally-not-resizable .react-flow__resize-control.top.line:hover {

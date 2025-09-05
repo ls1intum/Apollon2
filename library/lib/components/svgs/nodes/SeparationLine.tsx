@@ -12,7 +12,7 @@ export const SeparationLine: FC<SeparationLineProps> = ({ y, width }) => (
     x2={width}
     y1={y}
     y2={y}
-    stroke="black"
+    stroke="var(--apollon-primary-contrast)"
     strokeWidth={LINE_WIDTH}
   />
 )

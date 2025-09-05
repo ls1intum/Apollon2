@@ -56,7 +56,6 @@ export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
           size="small"
           value={nodeData.name}
           placeholder={placeholder}
-          sx={{ backgroundColor: "#fff" }}
           fullWidth
         />
         {sideElements}

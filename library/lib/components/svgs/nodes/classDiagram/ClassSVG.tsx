@@ -86,9 +86,9 @@ export const ClassSVG = ({
           y={0}
           width={width}
           height={height}
-          stroke="black"
           strokeWidth={LINE_WIDTH}
-          fill="white"
+          stroke="var(--apollon-primary-contrast)"
+          fill="var(--apollon-background)"
         />
 
         {/* Header Section */}

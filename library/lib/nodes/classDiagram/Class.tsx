@@ -7,8 +7,6 @@ import {
 } from "@xyflow/react"
 import { DefaultNodeWrapper } from "@/nodes/wrappers"
 import { ClassSVG } from "@/components"
-import EditIcon from "@mui/icons-material/Edit"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import { useEffect, useMemo, useRef } from "react"
 import { Box } from "@mui/material"
 import { ClassNodeProps } from "@/types"
@@ -31,6 +29,7 @@ import { useHandleDelete } from "@/hooks/useHandleDelete"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
+import { DeleteIcon, EditIcon } from "@/components/Icon"
 
 export function Class({
   id,
@@ -171,7 +170,7 @@ export function Class({
         offset={10}
       >
         <Box sx={{ display: "flex", gap: 1, flexDirection: "column" }}>
-          <DeleteOutlineOutlinedIcon
+          <DeleteIcon
             onClick={handleDelete}
             style={{ cursor: "pointer", width: 16, height: 16 }}
           />

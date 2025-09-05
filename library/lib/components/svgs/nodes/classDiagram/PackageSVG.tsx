@@ -42,9 +42,9 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
           y={0}
           width={40}
           height={leftTopBoxHeight}
-          stroke="black"
           strokeWidth={LINE_WIDTH}
-          fill="white"
+          stroke="var(--apollon-primary-contrast)"
+          fill="var(--apollon-background)"
         />
 
         {/* Main Box */}
@@ -53,9 +53,9 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
           y={leftTopBoxHeight}
           width={width}
           height={height - leftTopBoxHeight}
-          stroke="black"
           strokeWidth={LINE_WIDTH}
-          fill="white"
+          stroke="var(--apollon-primary-contrast)"
+          fill="var(--apollon-background)"
         />
 
         {/* Name Text */}
