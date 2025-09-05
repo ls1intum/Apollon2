@@ -45,7 +45,7 @@ export const EdgeIncludeExtendLabel = ({
               className="edge-label"
               style={{
                 fontSize: "12px",
-                fill: "black",
+                fill: "var(--apollon-primary-contrast)",
                 fontStyle: "italic",
                 userSelect: "none",
                 fontWeight: "bold",

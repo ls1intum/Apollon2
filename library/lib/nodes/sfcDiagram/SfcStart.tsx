@@ -21,7 +21,7 @@ export function SfcStart({
 
   return (
     <DefaultNodeWrapper width={width} height={height} elementId={id}>
-      <NodeToolbar elementId={id} />
+      <NodeToolbar elementId={id} showEdit={false} />
 
       <div ref={svgWrapperRef}>
         <SfcStartNodeSVG

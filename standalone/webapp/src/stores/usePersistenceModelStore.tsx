@@ -95,9 +95,6 @@ export const usePersistenceModelStore = create<PersistenceModelStore>()(
 
           set(
             (state) => {
-              const old = state.models[model.id]
-              if (!old) return state
-
               return {
                 models: {
                   ...state.models,

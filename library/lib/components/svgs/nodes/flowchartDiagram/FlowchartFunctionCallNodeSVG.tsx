@@ -1,4 +1,4 @@
-import { CustomText } from "@/components"
+import { CustomText, StyledRect } from "@/components"
 import { LINE_WIDTH } from "@/constants"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
@@ -32,15 +32,7 @@ export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
     >
       <g>
         {/* Rectangle with double left and right borders for predefined process */}
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          stroke="black"
-          strokeWidth={LINE_WIDTH}
-          fill="white"
-        />
+        <StyledRect x={0} y={0} width={width} height={height} />
 
         {/* Left vertical line */}
         <line
@@ -48,7 +40,7 @@ export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
           y1={0}
           x2={10}
           y2={height}
-          stroke="black"
+          stroke="var(--apollon-primary-contrast)"
           strokeWidth={LINE_WIDTH}
         />
 
@@ -58,7 +50,7 @@ export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
           y1={0}
           x2={width - 10}
           y2={height}
-          stroke="black"
+          stroke="var(--apollon-primary-contrast)"
           strokeWidth={LINE_WIDTH}
         />
 

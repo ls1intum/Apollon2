@@ -83,8 +83,8 @@ export const PetriNetPlaceSVG: React.FC<Props> = ({
         cx={centerX}
         cy={centerY}
         r={width / 2}
-        fill="white"
-        stroke="black"
+        stroke="var(--apollon-primary-contrast)"
+        fill="var(--apollon-background)"
         strokeWidth={LINE_WIDTH}
       />
 

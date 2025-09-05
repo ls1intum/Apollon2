@@ -10,8 +10,9 @@ import { DeleteIcon, EditIcon } from "../Icon"
 
 interface Props {
   elementId: string
+  showEdit?: boolean
 }
-export const NodeToolbar: FC<Props> = ({ elementId }) => {
+export const NodeToolbar: FC<Props> = ({ elementId, showEdit = true }) => {
   const setPopOverElementId = usePopoverStore(
     useShallow((state) => state.setPopOverElementId)
   )
@@ -33,12 +34,14 @@ export const NodeToolbar: FC<Props> = ({ elementId }) => {
           style={{ cursor: "pointer", width: 16, height: 16 }}
         />
 
-        <EditIcon
-          onClick={() => {
-            setPopOverElementId(elementId)
-          }}
-          style={{ cursor: "pointer", width: 16, height: 16 }}
-        />
+        {showEdit && (
+          <EditIcon
+            onClick={() => {
+              setPopOverElementId(elementId)
+            }}
+            style={{ cursor: "pointer", width: 16, height: 16 }}
+          />
+        )}
       </Box>
     </ReactFlowNodeToolbar>
   )

@@ -161,7 +161,7 @@ export const SfcDiagramEdge = ({
                 y1={edgeData.pathMiddlePosition.y}
                 x2={edgeData.pathMiddlePosition.x + 20}
                 y2={edgeData.pathMiddlePosition.y}
-                stroke="black"
+                stroke="var(--apollon-primary-contrast)"
                 strokeWidth="10"
               />
             )}
@@ -170,7 +170,7 @@ export const SfcDiagramEdge = ({
               <text
                 x={edgeData.pathMiddlePosition.x}
                 y={edgeData.pathMiddlePosition.y - 20}
-                fill="black"
+                fill="var(--apollon-primary-contrast)"
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fontSize="14"

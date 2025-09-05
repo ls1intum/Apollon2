@@ -30,16 +30,17 @@ export const SfcJumpNodeSVG: React.FC<Props> = ({
         y={0}
         width={width}
         height={height}
-        fill="#00000000"
+        fill="var(--apollon-background)"
         stroke="none"
       />
       <polyline
         points={`0,0 0,${sideLength} ${sideLength},${halfSideLength} 0,0`}
         fill="white"
-        stroke="black"
+        stroke="var(--apollon-primary-contrast)"
         strokeWidth={LINE_WIDTH}
       />
       <text
+        fill="var(--apollon-primary-contrast)"
         x={sideLength + 5}
         y={halfSideLength + 5}
         style={{ fontWeight: 600 }}

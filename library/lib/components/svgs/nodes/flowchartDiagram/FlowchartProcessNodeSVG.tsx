@@ -1,5 +1,4 @@
-import { CustomText } from "@/components"
-import { LINE_WIDTH } from "@/constants"
+import { CustomText, StyledRect } from "@/components"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
@@ -31,15 +30,7 @@ export const FlowchartProcessNodeSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          stroke="black"
-          strokeWidth={LINE_WIDTH}
-          fill="white"
-        />
+        <StyledRect x={0} y={0} width={width} height={height} />
 
         {/* Name Text */}
         <CustomText

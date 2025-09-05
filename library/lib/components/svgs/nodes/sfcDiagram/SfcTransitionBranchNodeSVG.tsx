@@ -1,3 +1,4 @@
+import { CustomText } from "@/components"
 import { SVGComponentProps } from "@/types/SVG"
 
 interface Props extends SVGComponentProps {
@@ -24,11 +25,11 @@ export const SfcTransitionBranchNodeSVG: React.FC<Props> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <circle cx={10} cy={10} r={10} fill="black" />
+      <circle cx={10} cy={10} r={10} fill="var(--apollon-primary-contrast)" />
       {showHint && (
-        <text x={0} y={30} fill="gray" style={{ fontWeight: "normal" }}>
+        <CustomText x={0} y={30}>
           {name}
-        </text>
+        </CustomText>
       )}
     </svg>
   )

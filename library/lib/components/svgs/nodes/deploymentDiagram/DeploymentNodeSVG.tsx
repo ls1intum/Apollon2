@@ -1,4 +1,4 @@
-import { CustomText } from "@/components"
+import { CustomText, StyledRect } from "@/components"
 import { LINE_WIDTH } from "@/constants"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
@@ -40,27 +40,19 @@ export const DeploymentNodeSVG: React.FC<Props> = ({
           {/* Top face */}
           <path
             d={`M 0 8 l 8 -8 H ${width} l -8 8 Z`}
-            stroke="black"
             strokeWidth={LINE_WIDTH}
-            fill="white"
+            stroke="var(--apollon-primary-contrast)"
+            fill="var(--apollon-background)"
           />
           {/* Right face */}
           <path
             d={`M ${width} 0 V ${height - 8} l -8 8 V 8 Z`}
-            stroke="black"
             strokeWidth={LINE_WIDTH}
-            fill="white"
+            stroke="var(--apollon-primary-contrast)"
+            fill="var(--apollon-background)"
           />
           {/* Front face */}
-          <rect
-            x="0"
-            y="8"
-            width={width - 8}
-            height={height - 8}
-            stroke="black"
-            strokeWidth={LINE_WIDTH}
-            fill="white"
-          />
+          <StyledRect x="0" y="8" width={width - 8} height={height - 8} />
         </g>
 
         {/* Name Text */}

@@ -3,7 +3,7 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { CustomText } from "../CustomText"
-import { LINE_WIDTH } from "@/constants"
+import { StyledRect } from "@/components"
 
 interface Props extends SVGComponentProps {
   name: string
@@ -31,15 +31,7 @@ export const PetriNetTransitionSVG: React.FC<Props> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <rect
-        x={0}
-        y={0}
-        width={width}
-        height={height}
-        fill="white"
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-      />
+      <StyledRect x={0} y={0} width={width} height={height} />
 
       <CustomText
         x={width / 2}

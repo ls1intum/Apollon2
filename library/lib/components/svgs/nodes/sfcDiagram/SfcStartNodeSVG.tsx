@@ -1,3 +1,4 @@
+import { CustomText, StyledRect } from "@/components"
 import { LINE_WIDTH } from "@/constants"
 import { SVGComponentProps } from "@/types/SVG"
 
@@ -24,25 +25,17 @@ export const SfcStartNodeSVG: React.FC<Props> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <rect
-        x={0}
-        y={0}
-        width={width}
-        height={height}
-        fill="white"
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-      />
+      <StyledRect x={0} y={0} width={width} height={height} />
       <rect
         x={innerPadding}
         y={innerPadding}
         width={width - innerPadding * 2}
         height={height - innerPadding * 2}
         fill="none"
-        stroke="black"
+        stroke="var(--apollon-primary-contrast)"
         strokeWidth={LINE_WIDTH}
       />
-      <text
+      <CustomText
         x={width / 2}
         y={height / 2}
         textAnchor="middle"
@@ -50,7 +43,7 @@ export const SfcStartNodeSVG: React.FC<Props> = ({
         style={{ fontWeight: 600 }}
       >
         {name}
-      </text>
+      </CustomText>
     </svg>
   )
 }
