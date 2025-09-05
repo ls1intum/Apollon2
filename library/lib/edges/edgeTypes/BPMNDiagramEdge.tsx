@@ -103,7 +103,7 @@ export const BPMNDiagramEdge = ({
             markerStart={isReconnectingRef.current ? undefined : markerStart}
             pointerEvents="none"
             style={{
-              stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
+              stroke: "var(--apollon-primary-contrast)",
               strokeDasharray: isReconnectingRef.current
                 ? "4 4"
                 : strokeDashArray,

@@ -1,4 +1,4 @@
-import { CustomText } from "@/components"
+import { CustomText, StyledRect } from "@/components"
 import { LINE_WIDTH } from "@/constants"
 import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
@@ -32,15 +32,7 @@ export const BPMNPoolNodeSVG: React.FC<
       {...svgAttributes}
     >
       {/* Pool outer border */}
-      <rect
-        x={0}
-        y={0}
-        width={width}
-        height={height}
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-        fill="white"
-      />
+      <StyledRect x={0} y={0} width={width} height={height} />
 
       {/* Pool header separator line */}
       <line
@@ -48,7 +40,7 @@ export const BPMNPoolNodeSVG: React.FC<
         y1={0}
         x2={headerWidth}
         y2={height}
-        stroke="black"
+        stroke="var(--apollon-primary-contrast)"
         strokeWidth={LINE_WIDTH}
       />
 

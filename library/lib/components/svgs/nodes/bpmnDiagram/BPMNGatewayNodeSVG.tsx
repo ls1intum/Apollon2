@@ -45,9 +45,9 @@ export const BPMNGatewayNodeSVG: React.FC<
     >
       <polygon
         points={points}
-        stroke="black"
+        stroke="var(--apollon-primary-contrast)"
         strokeWidth={LINE_WIDTH}
-        fill="white"
+        fill="var(--apollon-background)"
       />
       {gatewayType === "exclusive" && (
         <g>
@@ -56,14 +56,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             y1={13}
             x2={width - 13}
             y2={height - 13}
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
           <line
             x1={13}
             y1={height - 13}
             x2={width - 13}
             y2={13}
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
         </g>
       )}
@@ -74,14 +74,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             y1={10}
             x2={width / 2}
             y2={height - 10}
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
           <line
             x1={10}
             y1={height / 2}
             x2={width - 10}
             y2={height / 2}
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
         </g>
       )}
@@ -91,7 +91,7 @@ export const BPMNGatewayNodeSVG: React.FC<
           cy={height / 2}
           r={Math.min(width, height) / 2 - 12}
           fill="none"
-          stroke="black"
+          stroke="var(--apollon-primary-contrast)"
         />
       )}
       {gatewayType === "event-based" && (
@@ -101,14 +101,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             cy={height / 2}
             r={Math.min(width, height) / 2 - 9}
             fill="none"
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
           <circle
             cx={width / 2}
             cy={height / 2}
             r={Math.min(width, height) / 2 - 12}
             fill="none"
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
           {/* small pentagon */}
           <path
@@ -116,7 +116,7 @@ export const BPMNGatewayNodeSVG: React.FC<
               height / 2 + 3.5
             } L${width / 2 - 2} ${height / 2 + 3.5} L${width / 2 - 3.5} ${height / 2 - 1} Z`}
             fill="none"
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
         </g>
       )}
@@ -128,14 +128,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             y1={13}
             x2={width - 13}
             y2={height - 13}
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
           <line
             x1={13}
             y1={height - 13}
             x2={width - 13}
             y2={13}
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
           {/* + */}
           <line
@@ -143,14 +143,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             y1={10}
             x2={width / 2}
             y2={height - 10}
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
           <line
             x1={10}
             y1={height / 2}
             x2={width - 10}
             y2={height / 2}
-            stroke="black"
+            stroke="var(--apollon-primary-contrast)"
           />
         </g>
       )}

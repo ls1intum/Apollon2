@@ -83,7 +83,7 @@ export const UseCaseEdge = ({
             markerEnd={markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "black",
+              stroke: "var(--apollon-primary-contrast)",
               strokeDasharray: strokeDashArray,
             }}
           />

@@ -166,7 +166,7 @@ export const DeploymentDiagramEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
+              stroke: "var(--apollon-primary-contrast)",
               strokeDasharray: isReconnectingRef.current
                 ? "none"
                 : strokeDashArray,

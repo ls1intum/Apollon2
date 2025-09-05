@@ -33,25 +33,25 @@ export const BPMNDataStoreNodeSVG: React.FC<
         d={`M 0 10 L 0 ${height - 10} A ${width / 2} 10 0 0 0 ${width} ${
           height - 10
         } L ${width} 10 A ${width / 2} 10 180 0 0 0 10`}
-        stroke="black"
         strokeWidth={LINE_WIDTH}
-        fill="white"
+        stroke="var(--apollon-primary-contrast)"
+        fill="var(--apollon-background)"
       />
       <path
         d={`M 0 30 A ${width / 2} 10 0 0 0 ${width} 30`}
-        stroke="black"
         strokeWidth={LINE_WIDTH}
+        stroke="var(--apollon-primary-contrast)"
         fill="none"
       />
       <path
         d={`M 0 20 A ${width / 2} 10 0 0 0 ${width} 20`}
-        stroke="black"
+        stroke="var(--apollon-primary-contrast)"
         strokeWidth={LINE_WIDTH}
         fill="none"
       />
       <path
         d={`M 0 10 A ${width / 2} 10 0 0 0 ${width} 10`}
-        stroke="black"
+        stroke="var(--apollon-primary-contrast)"
         strokeWidth={LINE_WIDTH}
         fill="none"
       />

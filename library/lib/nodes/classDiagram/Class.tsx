@@ -144,6 +144,8 @@ export function Class({
       elementId={id}
       className="horizontally-not-resizable"
     >
+      <NodeToolbar elementId={id} />
+
       <NodeResizer
         nodeId={id}
         isVisible={isDiagramModifiable && !!selected}
@@ -152,8 +154,6 @@ export function Class({
         maxHeight={minHeight}
         handleStyle={{ width: 8, height: 8 }}
       />
-      <NodeToolbar elementId={id} />
-
       <div ref={classSvgWrapperRef}>
         <ClassSVG
           width={finalWidth}
