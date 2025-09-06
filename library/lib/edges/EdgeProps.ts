@@ -5,7 +5,7 @@ import { IPoint } from "./Connection"
 export interface MessageData {
   id: string
   text: string
-  direction: "forward" | "backward" // forward = source to target, backward = target to source
+  direction: "target" | "source" // target = source to target, source = target to source
 }
 
 export type CustomEdgeProps = {

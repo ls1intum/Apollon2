@@ -15,96 +15,117 @@ interface MessagePositioningResult {
   backwardArrowBoxPosition: { x: number; y: number }
   backwardLabelBoxPosition: { x: number; y: number }
   isPositioned: boolean
+  isHorizontalEdge?: boolean
 }
 
-/**
- * Custom hook for calculating message positioning logic for communication diagram edges
- * @param displayMessages Array of messages with direction information
- * @param isMiddlePathHorizontal Whether the edge path is horizontal
- * @returns Positioning data for forward and backward messages
- */
 export const useMessagePositioning = (
   displayMessages: MessageData[],
-  isMiddlePathHorizontal: boolean
+  sourcePosition: { x: number; y: number },
+  targetPosition: { x: number; y: number },
+  pathMiddlePosition: { x: number; y: number },
+  edgePoints?: Array<{ x: number; y: number }> // Add edge points parameter
 ): MessagePositioningResult => {
   const [isPositioned, setIsPositioned] = useState(false)
 
   const positioningData = useMemo(() => {
     // Group messages by direction
     const forwardMessages = displayMessages.filter(
-      (msg) => msg.direction === "forward"
+      (msg) => msg.direction === "target"
     )
     const backwardMessages = displayMessages.filter(
-      (msg) => msg.direction === "backward"
+      (msg) => msg.direction === "source"
     )
 
-    // Direction-based positioning following the old version's logic
-    const isHorizontalEdge = isMiddlePathHorizontal
-    let sourceArrowDirection: ArrowDirection
-    let targetArrowDirection: ArrowDirection
-    let forwardArrowRotation = 0
-    let backwardArrowRotation = 180
+    // Calculate edge direction from the middle segment
+    const calculateMiddleSegmentDirection = (
+      points?: Array<{ x: number; y: number }>,
+      fallbackSource?: { x: number; y: number },
+      fallbackTarget?: { x: number; y: number }
+    ) => {
+      let isHorizontalEdge = false
+      if (points && points.length >= 2) {
+        // Find the middle point index
+        const middleIndex = Math.floor(points.length / 2) -1 
+        const middlePoint = points[middleIndex]
+        const nextPoint = points[Math.min(middleIndex +1, points.length - 1)]
+        
+        // If we're at the last point, use the previous point instead
+        const referencePoint = middleIndex === points.length - 1 
+          ? points[Math.max(middleIndex - 1, 0)]
+          : nextPoint
+        const dx = Math.abs(referencePoint.x - middlePoint.x)
+        const dy = Math.abs(referencePoint.y - middlePoint.y)
+        isHorizontalEdge = dx > dy
+      } else {
+        // Fallback to source/target comparison if no points available
+        if (fallbackSource && fallbackTarget) {
+          const dx = Math.abs(fallbackTarget.x - fallbackSource.x)
+          const dy = Math.abs(fallbackTarget.y - fallbackSource.y)
+          isHorizontalEdge = dx > dy
+        }
+      }
 
-    if (isHorizontalEdge) {
-      // Horizontal path: arrows point left/right
-      sourceArrowDirection = "Right" // Forward messages (source -> target)
-      targetArrowDirection = "Left" // Backward messages (target -> source)
-    } else {
-      // Vertical path: arrows point up/down
-      sourceArrowDirection = "Down" // Forward messages (source -> target)
-      targetArrowDirection = "Up" // Backward messages (target -> source)
+      return isHorizontalEdge
     }
 
-    const arrowSize = { width: 16, height: 16 }
+    const isHorizontalEdge = calculateMiddleSegmentDirection(
+      edgePoints,
+      sourcePosition,
+      targetPosition
+    )
 
+    // Calculate arrow directions based on which node is which relative to the middle
+    const sourceIsLeft = sourcePosition.x < targetPosition.x
+    const sourceIsAbove = sourcePosition.y < targetPosition.y
+
+    let sourceArrowDirection: ArrowDirection
+    let targetArrowDirection: ArrowDirection
+
+    if (isHorizontalEdge) {
+      sourceArrowDirection = sourceIsLeft ? "Left" : "Right"
+      targetArrowDirection = sourceIsLeft ? "Right" : "Left"
+    } else {
+      sourceArrowDirection = sourceIsAbove ? "Up" : "Down"
+      targetArrowDirection = sourceIsAbove ? "Down" : "Up"
+    }
+
+    const calculateRotation = (direction: ArrowDirection): number => {
+      switch (direction) {
+        case "Right": return 0
+        case "Left": return 180
+        case "Down": return 90
+        case "Up": return -90
+        default: return 0
+      }
+    }
+
+    const forwardArrowRotation = calculateRotation(targetArrowDirection)
+    const backwardArrowRotation = calculateRotation(sourceArrowDirection)
+
+    const baseOffset = 30
+    const labelOffset = 25
+
+    // Position labels and arrows based on actual middle segment orientation
     let forwardArrowBoxPosition: { x: number; y: number }
     let forwardLabelBoxPosition: { x: number; y: number }
     let backwardArrowBoxPosition: { x: number; y: number }
     let backwardLabelBoxPosition: { x: number; y: number }
 
-    if (sourceArrowDirection === "Right") {
-      // Forward: ⟶ messages (horizontal edge, top side)
-      forwardArrowBoxPosition = { x: 0, y: -arrowSize.height }
-      forwardLabelBoxPosition = { x: 25, y: -arrowSize.height } // 25px offset to the right from arrow
-    } else if (sourceArrowDirection === "Down") {
-      // Forward: ↓ messages (vertical edge, right side)
-      forwardArrowBoxPosition = { x: arrowSize.width, y: 0 }
-      forwardLabelBoxPosition = { x: arrowSize.width + 25, y: 0 } // 25px offset to the right from arrow
+    if (isHorizontalEdge) {
+      // Horizontal middle segment: messages above and below
+      forwardArrowBoxPosition = { x: 0, y: -baseOffset }
+      forwardLabelBoxPosition = { x: labelOffset, y: -baseOffset }
+      
+      backwardArrowBoxPosition = { x: 0, y: baseOffset }
+      backwardLabelBoxPosition = { x: labelOffset, y: baseOffset }
     } else {
-      // sourceArrowDirection === "Up" (this case doesn't exist in current logic, but keeping for completeness)
-      // Forward: ↑ messages (vertical edge, left side)
-      forwardArrowBoxPosition = { x: -arrowSize.width, y: 0 }
-      forwardLabelBoxPosition = { x: -arrowSize.width - 25, y: 0 } // 25px offset to the left from arrow
+      // Vertical middle segment: messages left and right
+      forwardArrowBoxPosition = { x: baseOffset, y: 0 }
+      forwardLabelBoxPosition = { x: baseOffset + labelOffset, y: 0 }
+      
+      backwardArrowBoxPosition = { x: -baseOffset, y: 0 }
+      backwardLabelBoxPosition = { x: -baseOffset - labelOffset, y: 0 }
     }
-
-    if (targetArrowDirection === "Left") {
-      // Backward: ⟵ messages (horizontal edge, bottom side)
-      backwardArrowBoxPosition = { x: 0, y: arrowSize.height }
-      backwardLabelBoxPosition = { x: 25, y: arrowSize.height } // 25px offset to the right from arrow
-    } else if (targetArrowDirection === "Up") {
-      // Backward: ↑ messages (vertical edge, left side)
-      backwardArrowBoxPosition = { x: -arrowSize.width, y: 0 }
-      backwardLabelBoxPosition = { x: -arrowSize.width - 25, y: 0 } // 25px offset to the left from arrow
-    } else {
-      // targetArrowDirection === "Down"
-      // Backward: ↓ messages (vertical edge, right side)
-      backwardArrowBoxPosition = { x: arrowSize.width, y: 0 }
-      backwardLabelBoxPosition = { x: arrowSize.width + 25, y: 0 } // 25px offset to the right from arrow
-    }
-
-    forwardArrowRotation =
-      sourceArrowDirection === "Right"
-        ? 0
-        : sourceArrowDirection === "Down"
-          ? 90
-          : -90
-
-    backwardArrowRotation =
-      targetArrowDirection === "Left"
-        ? 180
-        : targetArrowDirection === "Up"
-          ? -90
-          : 90
 
     return {
       forwardMessages,
@@ -117,8 +138,9 @@ export const useMessagePositioning = (
       forwardLabelBoxPosition,
       backwardArrowBoxPosition,
       backwardLabelBoxPosition,
+      isHorizontalEdge
     }
-  }, [displayMessages, isMiddlePathHorizontal])
+  }, [displayMessages, sourcePosition, targetPosition, pathMiddlePosition, edgePoints])
 
   useEffect(() => {
     if (displayMessages && displayMessages.length > 0) {
@@ -130,10 +152,9 @@ export const useMessagePositioning = (
     } else {
       setIsPositioned(false)
     }
-  }, [displayMessages, isMiddlePathHorizontal])
+  }, [displayMessages, sourcePosition, targetPosition, pathMiddlePosition, edgePoints])
 
   return {
     ...positioningData,
     isPositioned,
-  }
-}
+  }}

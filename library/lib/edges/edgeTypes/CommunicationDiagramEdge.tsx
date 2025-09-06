@@ -80,8 +80,8 @@ export const CommunicationDiagramEdge = ({
     allowMidpointDragging,
     enableReconnection: true,
     enableStraightPath: false,
-  })
-
+    })
+    console.log("Rendering CommunicationDiagramEdge:", data, edgeData)
   return (
     <>
       <g className="edge-container">
@@ -143,12 +143,14 @@ export const CommunicationDiagramEdge = ({
           ))}
       </g>
 
-      <EdgeMultipleLabels
+   <EdgeMultipleLabels
         messages={data?.messages}
         pathMiddlePosition={edgeData.pathMiddlePosition}
-        isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
         showRelationshipLabels={true}
         isReconnectingRef={isReconnectingRef}
+        sourcePosition={{ x: sourceX, y: sourceY }}
+        targetPosition={{ x: targetX, y: targetY }}
+        edgePoints={edgeData.activePoints} // Pass the edge points
       />
 
       <CommonEdgeElements

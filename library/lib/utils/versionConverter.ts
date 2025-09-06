@@ -13,7 +13,6 @@ import {
 
 } from "./v3Typings"
 
-// Import V4 node prop types
 import {
   ClassNodeProps,
   ObjectNodeProps,
@@ -41,7 +40,6 @@ import {
 } from "../types/nodes/NodeProps"
 import { MessageData } from "@/edges/EdgeProps"
 
-// V2 format interface for type checking (corrected based on real V2 format)
 interface V2DiagramFormat {
   version: string;
   size: {
@@ -58,12 +56,6 @@ interface V2DiagramFormat {
   assessments: V3Assessment[];
 }
 
-
-// export interface V3Message {
-//   id: string
-//   name: string
-//   direction: 'source' | 'target'
-// }
 /**
  * Convert v2 format to v4 format
  */
@@ -74,7 +66,7 @@ export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
     title: 'Converted Diagram',
     model: {
       version: "3.0.0",
-      type: v2Data.type as any, // Cast to any to bypass strict typing during conversion
+      type: v2Data.type,
       size: v2Data.size,
       interactive: {
         elements: {},
@@ -86,7 +78,6 @@ export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
     }
   };
 
-  // Convert interactive arrays to objects
   if (v2Data.interactive?.elements) {
     v2Data.interactive.elements.forEach(id => {
       v3Data.model.interactive.elements[id] = true;
@@ -99,28 +90,23 @@ export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
     });
   }
 
-  // Convert elements array to object
   if (v2Data.elements) {
     v2Data.elements.forEach(element => {
       v3Data.model.elements[element.id] = element;
     });
   }
-
-  // Convert relationships array to object
   if (v2Data.relationships) {
     v2Data.relationships.forEach(relationship => {
       v3Data.model.relationships[relationship.id] = relationship;
     });
   }
 
-  // Convert assessments array to object
   if (v2Data.assessments) {
     v2Data.assessments.forEach(assessment => {
       v3Data.model.assessments[assessment.modelElementId] = assessment;
     });
   }
 
-  // Now convert v3 to v4 using existing function
   return convertV3ToV4(v3Data);
 }
 
@@ -129,11 +115,9 @@ export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
  */
 export function isV2Format(data: any): data is V2DiagramFormat {
   return (
-    console.log("v2", data),
     data &&
     data.version &&
     data.version.startsWith('2.') &&
-    // V2 has flat structure (no nested 'model' object)
     data.size &&
     data.type &&
     Array.isArray(data.elements) &&
@@ -142,7 +126,6 @@ export function isV2Format(data: any): data is V2DiagramFormat {
     data.interactive &&
     Array.isArray(data.interactive.elements) &&
     Array.isArray(data.interactive.relationships) &&
-    // Ensure it's NOT V3 format (which has nested 'model')
     !data.model
   )
 }
@@ -362,13 +345,11 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
     ...(element.assessmentNote && { assessmentNote: element.assessmentNote }),
   }
 
-  // Convert based on element type
   switch (element.type) {
     case 'Class':
     case 'AbstractClass':
     case 'Interface':
     case 'Enumeration': {
-      // Collect attributes and methods from child elements
       const attributes: Array<{ id: string; name: string }> = []
       const methods: Array<{ id: string; name: string }> = []
       Object.values(allElements).forEach(childElement => {
@@ -593,7 +574,7 @@ export function convertV3MessagesToV4(
   if (typeof messages === 'object' && messages !== null) {
     return Object.values(messages).map((message: V3Message) => ({
       text: message.name,
-      direction: message.direction === 'source' ? 'forward' : 'backward',
+      direction: message.direction === 'source' ? 'target' : 'source',
       id: message.id,
     }))
   }
@@ -637,7 +618,6 @@ function convertV3ElementToV4Node(element: V3UMLElement, allElements: Record<str
  */
 function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): ApollonEdge {
   const edgeType = convertV3EdgeTypeToV4(relationship.type)
-  const { markerPadding } = getEdgeMarkerStyles(edgeType)
   let points: IPoint[] = []
   if (relationship.path && relationship.path.length > 0) {
     points = relationship.path.map(point => ({
@@ -645,13 +625,6 @@ function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): Apollon
       y: point.y + relationship.bounds.y
     }))
     
-    console.log(`Edge ${relationship.id}:`)
-    console.log(`  Source: ${relationship.source.element} (${relationship.source.direction})`)
-    console.log(`  Target: ${relationship.target.element} (${relationship.target.direction})`)
-    console.log(`  First point: (${points[0].x}, ${points[0].y})`)
-    console.log(`  Last point: (${points[points.length - 1].x}, ${points[points.length - 1].y})`)
-    console.log(`  Marker padding: ${markerPadding}`)
-
   }
 
 
@@ -684,7 +657,6 @@ function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): Apollon
     targetHandle: convertV3HandleToV4(relationship.target.direction || ""),
     data:
     {
-     // ...data,
       label: relationship.name || "",
       sourceMultiplicity: relationship.source.multiplicity || "",
       targetMultiplicity: relationship.target.multiplicity || "",
@@ -721,47 +693,31 @@ function convertV3AssessmentToV4(v3Assessment: V3Assessment): Assessment {
 export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
   const elements = v3Data.model.elements
   const relationships = v3Data.model.relationships
-  
-  console.log('Converting V3 elements:', Object.keys(elements).length)
-  console.log('Element types found:', Object.values(elements).map(el => el.type))
-  console.log('Diagram type:', v3Data.model.type) // Now using the diagram type
-  
-  // Convert elements to nodes, but exclude attribute/method elements since they're part of their parent class
   const nodes: ApollonNode[] = Object.values(elements)
     .filter(element => !['ClassAttribute', 'ClassMethod', 'ObjectAttribute', 'ObjectMethod'].includes(element.type))
     .map(element => {
       const node = convertV3ElementToV4Node(element, elements)
-      
-      // Safe access to attributes and methods for logging
-      const nodeData = node.data as any
-      const attributesCount = (nodeData && nodeData.attributes && Array.isArray(nodeData.attributes)) ? nodeData.attributes.length : 0
-      const methodsCount = (nodeData && nodeData.methods && Array.isArray(nodeData.methods)) ? nodeData.methods.length : 0
-      
-      console.log(`Converted ${element.type} "${element.name}" with ${attributesCount} attributes and ${methodsCount} methods`)
+
       return node
     })
-
-  // Convert relationships to edges
   const edges: ApollonEdge[] = Object.values(relationships).map(relationship => 
     convertV3RelationshipToV4Edge(relationship)
   )
 
-  // Convert assessments from v3 to v4 format using the proper conversion function
   const assessments: Record<string, Assessment> = {}
   if (v3Data.model.assessments) {
-    console.log('Converting assessments:', Object.keys(v3Data.model.assessments).length)
+   
     Object.entries(v3Data.model.assessments).forEach(([id, v3Assessment]) => {
       try {
         assessments[id] = convertV3AssessmentToV4(v3Assessment)
-        console.log(`Converted assessment for element ${id}`)
+   
       } catch (error) {
         console.warn(`Failed to convert assessment for element ${id}:`, error)
       }
     })
   }
 
-  
-  // Validate diagram type compatibility
+
   const supportedDiagramTypes: UMLDiagramType[] = [
     'ClassDiagram',
     'ObjectDiagram', 
@@ -782,7 +738,6 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
     console.warn(`Diagram type '${v3Data.model.type}' may not be fully supported in V4`)
   }
 
-  // Build v4 format with proper type validation
   const v4Model: UMLModel = {
     version: '4.0.0',
     id: v3Data.id,
@@ -792,13 +747,6 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
     edges,
     assessments,
   }
-
-  console.log('Final converted model:', {
-    ...v4Model,
-    nodeCount: v4Model.nodes.length,
-    edgeCount: v4Model.edges.length,
-    assessmentCount: Object.keys(v4Model.assessments).length
-  })
   
   return v4Model
 }
