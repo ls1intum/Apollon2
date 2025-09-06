@@ -7,6 +7,7 @@ import { useToolbar } from "@/hooks"
 import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
+import { AssessmentSelectableWrapper } from "@/components/wrapper"
 
 export const SyntaxTreeEdge = ({
   id,
@@ -59,20 +60,20 @@ export const SyntaxTreeEdge = ({
   })
 
   return (
-    <>
-      <g className="edge-container">
-        <BaseEdge
-          id={id}
-          path={currentPath}
-          markerEnd={markerEnd}
-          pointerEvents="none"
-          style={{
-            stroke: "black",
-            strokeDasharray: strokeDashArray,
-          }}
-        />
+    <AssessmentSelectableWrapper elementId={id} asElement="g">
+      <FeedbackDropzone elementId={id} asElement="path">
+        <g className="edge-container">
+          <BaseEdge
+            id={id}
+            path={currentPath}
+            markerEnd={markerEnd}
+            pointerEvents="none"
+            style={{
+              stroke: "black",
+              strokeDasharray: strokeDashArray,
+            }}
+          />
 
-        <FeedbackDropzone elementId={id} asElement="path">
           <path
             ref={pathRef}
             className="edge-overlay"
@@ -82,19 +83,19 @@ export const SyntaxTreeEdge = ({
             pointerEvents="stroke"
             style={{ opacity: 0.4 }}
           />
-        </FeedbackDropzone>
-      </g>
+        </g>
 
-      <CommonEdgeElements
-        id={id}
-        pathMiddlePosition={edgeData.pathMiddlePosition}
-        isDiagramModifiable={isDiagramModifiable}
-        assessments={assessments}
-        anchorRef={anchorRef}
-        handleDelete={handleDelete}
-        setPopOverElementId={setPopOverElementId}
-        type={type}
-      />
-    </>
+        <CommonEdgeElements
+          id={id}
+          pathMiddlePosition={edgeData.pathMiddlePosition}
+          isDiagramModifiable={isDiagramModifiable}
+          assessments={assessments}
+          anchorRef={anchorRef}
+          handleDelete={handleDelete}
+          setPopOverElementId={setPopOverElementId}
+          type={type}
+        />
+      </FeedbackDropzone>
+    </AssessmentSelectableWrapper>
   )
 }

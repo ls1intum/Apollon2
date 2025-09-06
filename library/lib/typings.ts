@@ -55,11 +55,6 @@ export type ApollonEdge = {
   points: IPoint[]
 }
 
-export type Selection = {
-  nodes: { [id: string]: boolean }
-  edges: { [id: string]: boolean }
-}
-
 export type UMLModel = {
   version: `4.${number}.${number}`
   id: string
@@ -87,6 +82,8 @@ export type ApollonOptions = {
   copyPasteToClipboard?: boolean
   colorEnabled?: boolean
   scale?: number
+  debug?: boolean
+  collaborationEnabled?: boolean
 }
 
 export type FeedbackCorrectionStatus = {

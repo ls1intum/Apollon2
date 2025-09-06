@@ -74,6 +74,7 @@ export function BPMNAnnotation({
           height={height}
           id={id}
           name={data.name}
+          showAssessmentResults={!isDiagramModifiable}
         />
       </div>
       <PopoverManager

@@ -6,6 +6,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import Typography from "@mui/material/Typography/Typography"
 import { secondary } from "@/constants"
 import { useModalContext } from "@/contexts"
+import { useNavigate } from "react-router"
 
 interface Props {
   color?: string
@@ -17,6 +18,7 @@ export const bugReportURL =
 
 export const NavbarHelp: FC<Props> = ({ color }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const navigate = useNavigate()
   const { openModal } = useModalContext()
 
   const open = Boolean(anchorEl)
@@ -41,6 +43,11 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
 
   const openBugReport = () => {
     window.open(bugReportURL, "_blank")
+    handleClose()
+  }
+
+  const linkToPlayground = () => {
+    navigate("/playground")
     handleClose()
   }
 
@@ -71,6 +78,7 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
         <MenuItem onClick={openHelpModal}>How does this Editor Work?</MenuItem>
         <MenuItem onClick={openAboutModal}>About Apollon</MenuItem>
         <MenuItem onClick={openBugReport}>Report a Problem</MenuItem>
+        <MenuItem onClick={linkToPlayground}>Open Playground</MenuItem>
       </Menu>
     </>
   )

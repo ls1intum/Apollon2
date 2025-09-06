@@ -1,5 +1,8 @@
 import { LINE_WIDTH } from "@/constants"
+import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
+import { useShallow } from "zustand/shallow"
+import AssessmentIcon from "../../AssessmentIcon"
 import { BPMNGatewayType } from "@/types"
 import { CustomText } from "@/components"
 
@@ -12,7 +15,11 @@ export const BPMNGatewayNodeSVG: React.FC<
   svgAttributes,
   transformScale,
   gatewayType = "exclusive",
+  id,
+  showAssessmentResults = false,
 }) => {
+  const assessments = useDiagramStore(useShallow((state) => state.assessments))
+  const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
 
@@ -157,6 +164,10 @@ export const BPMNGatewayNodeSVG: React.FC<
         >
           {name}
         </CustomText>
+      )}
+
+      {showAssessmentResults && (
+        <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />
       )}
     </svg>
   )

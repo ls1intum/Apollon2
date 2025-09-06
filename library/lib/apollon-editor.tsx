@@ -14,9 +14,14 @@ import { createDiagramStore, DiagramStore } from "@/store/diagramStore"
 import { createMetadataStore, MetadataStore } from "@/store/metadataStore"
 import { createPopoverStore, PopoverStore } from "@/store/popoverStore"
 import {
+  createAssessmentSelectionStore,
+  AssessmentSelectionStore,
+} from "@/store/assessmentSelectionStore"
+import {
   DiagramStoreContext,
   MetadataStoreContext,
   PopoverStoreContext,
+  AssessmentSelectionStoreContext,
 } from "./store/context"
 import {
   MessageType,
@@ -35,6 +40,7 @@ export class ApollonEditor {
   private readonly diagramStore: StoreApi<DiagramStore>
   private readonly metadataStore: StoreApi<MetadataStore>
   private readonly popoverStore: StoreApi<PopoverStore>
+  private readonly assessmentSelectionStore: StoreApi<AssessmentSelectionStore>
   private subscribers: Apollon.Subscribers = {}
   constructor(element: HTMLElement, options?: Apollon.ApollonOptions) {
     if (!(element instanceof HTMLElement)) {
@@ -45,6 +51,7 @@ export class ApollonEditor {
     this.diagramStore = createDiagramStore(this.ydoc)
     this.metadataStore = createMetadataStore(this.ydoc)
     this.popoverStore = createPopoverStore()
+    this.assessmentSelectionStore = createAssessmentSelectionStore()
     this.syncManager = new YjsSyncClass(
       this.ydoc,
       this.diagramStore,
@@ -86,17 +93,28 @@ export class ApollonEditor {
     if (options?.readonly !== undefined) {
       this.metadataStore.getState().setReadonly(options.readonly)
     }
+    if (options?.debug !== undefined) {
+      this.metadataStore.getState().setDebug(options.debug)
+    }
 
-    if (this.metadataStore.getState().mode === Apollon.ApollonMode.Modelling) {
+    if (
+      this.metadataStore.getState().mode === Apollon.ApollonMode.Modelling &&
+      !options?.collaborationEnabled
+    ) {
       this.diagramStore.getState().initializeUndoManager()
     }
+
     this.root.render(
       <DiagramStoreContext.Provider value={this.diagramStore}>
         <MetadataStoreContext.Provider value={this.metadataStore}>
           <PopoverStoreContext.Provider value={this.popoverStore}>
-            <AppWithProvider
-              onReactFlowInit={this.setReactFlowInstance.bind(this)}
-            />
+            <AssessmentSelectionStoreContext.Provider
+              value={this.assessmentSelectionStore}
+            >
+              <AppWithProvider
+                onReactFlowInit={this.setReactFlowInstance.bind(this)}
+              />
+            </AssessmentSelectionStoreContext.Provider>
           </PopoverStoreContext.Provider>
         </MetadataStoreContext.Provider>
       </DiagramStoreContext.Provider>
@@ -127,7 +145,17 @@ export class ApollonEditor {
   public destroy() {
     const diagramId = this.diagramStore.getState().diagramId
     console.log("Disposing Apollon2 instance with diagramId", diagramId)
+
     try {
+      // Clean up all active subscriptions before destroying
+      Object.keys(this.subscribers).forEach((subscriberId) => {
+        const unsubscribeCallback = this.subscribers[parseInt(subscriberId)]
+        if (unsubscribeCallback) {
+          unsubscribeCallback()
+        }
+      })
+      this.subscribers = {}
+
       this.syncManager.stopSync()
       this.root.unmount()
       this.ydoc.destroy()
@@ -260,10 +288,26 @@ export class ApollonEditor {
   public subscribeToDiagramNameChange(
     callback: (diagramTitle: string) => void
   ) {
-    return this.metadataStore.subscribe((state) => callback(state.diagramTitle))
+    const subscriberId = this.getNewSubscriptionId()
+    const unsubscribeCallback = this.metadataStore.subscribe((state) =>
+      callback(state.diagramTitle)
+    )
+    this.subscribers[subscriberId] = unsubscribeCallback
+    return subscriberId
   }
 
-  unsubscribeFromModelChange(subscriberId: number) {
+  public subscribeToAssessmentSelection(
+    callback: (selectedElementIds: string[]) => void
+  ) {
+    const subscriberId = this.getNewSubscriptionId()
+    const unsubscribeCallback = this.assessmentSelectionStore.subscribe(
+      (state) => callback(state.selectedElementIds)
+    )
+    this.subscribers[subscriberId] = unsubscribeCallback
+    return subscriberId
+  }
+
+  public unsubscribe(subscriberId: number) {
     const unsubscribeCallback = this.subscribers[subscriberId]
     if (unsubscribeCallback) {
       unsubscribeCallback()
@@ -313,6 +357,10 @@ export class ApollonEditor {
     this.metadataStore
       .getState()
       .updateMetaData(model.title, parseDiagramType(model.type))
+  }
+
+  public getSelectedElements(): string[] {
+    return this.assessmentSelectionStore.getState().selectedElementIds
   }
 
   public addOrUpdateAssessment(assessment: Apollon.Assessment): void {

@@ -61,6 +61,7 @@ export function BPMNIntermediateEvent({
           name={data.name}
           variant="intermediate"
           eventType={data.eventType}
+          showAssessmentResults={!isDiagramModifiable}
         />
       </div>
       <PopoverManager
