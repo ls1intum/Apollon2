@@ -69,7 +69,7 @@ export function SvgMarkers() {
         >
           <path
             d="M0,1 L0,29 L30,15 z"
-            fill="black"
+            fill="currentColor"
             stroke="currentColor"
             strokeWidth="1.5"
           />

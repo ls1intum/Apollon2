@@ -89,7 +89,7 @@ export const EdgeMultipleLabels: React.FC<{
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   style={{
-                    color: "black",
+                    color: "var(--apollon2-primary-contrast)",
                     transform: `rotate(${forwardArrowRotation}deg)`,
                     transformOrigin: "center",
                   }}
@@ -111,7 +111,7 @@ export const EdgeMultipleLabels: React.FC<{
                       : `translate(${pathMiddlePosition.x + labelOffset.x}px, ${pathMiddlePosition.y + labelOffset.y}px) translate(-100%, -50%)`, // Right-anchored for vertical left labels (expand left)
                 fontSize: "16px",
                 fontWeight: 400,
-                color: "black",
+                color: "var(--apollon2-primary-contrast)",
                 whiteSpace: "nowrap",
                 pointerEvents: "none",
                 zIndex: ZINDEX_LABEL,
@@ -160,7 +160,7 @@ export const EdgeMultipleLabels: React.FC<{
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   style={{
-                    color: "black",
+                    color: "var(--apollon2-primary-contrast)",
                     transform: `rotate(${backwardArrowRotation}deg)`,
                     transformOrigin: "center",
                   }}
@@ -182,7 +182,7 @@ export const EdgeMultipleLabels: React.FC<{
                       : `translate(${pathMiddlePosition.x + labelOffset.x}px, ${pathMiddlePosition.y + labelOffset.y}px) translate(0%, -50%)`, // Left-anchored for vertical right labels (expand right)
                 fontSize: "16px",
                 fontWeight: 400,
-                color: "black",
+                color: "var(--apollon2-primary-contrast)",
                 whiteSpace: "nowrap",
                 pointerEvents: "none",
                 zIndex: ZINDEX_LABEL,
