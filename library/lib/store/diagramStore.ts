@@ -14,10 +14,17 @@ import { sortNodesTopologically } from "@/utils"
 import { getNodesMap, getEdgesMap, getAssessments } from "@/sync/ydoc"
 import { deepEqual } from "@/utils/storeUtils"
 import { Assessment } from "@/typings"
+import { generateUUID } from "@/utils" // Add this import
 
 export type DiagramStoreData = {
   nodes: Node[]
   edges: Edge[]
+}
+
+interface ClipboardData {
+  nodes: Node[]
+  edges: Edge[]
+  timestamp: number
 }
 
 type InitialDiagramState = {
@@ -77,7 +84,13 @@ export type DiagramStore = {
   redo: () => void
   initializeUndoManager: () => void
   updateUndoRedoState: () => void
+  // Add these copy/paste methods to the type
+  copySelectedElements: () => Promise<boolean>
+  pasteElements: () => Promise<boolean>
+  hasSelectedElements: () => boolean
 }
+
+const PASTE_OFFSET = 20
 
 export const createDiagramStore = (
   ydoc: Y.Doc
@@ -174,7 +187,6 @@ export const createDiagramStore = (
           }, "store")
           set({ edges: [...get().edges, edge] }, undefined, "addEdge")
         },
-
         setNodes: (payload) => {
           const nodes =
             typeof payload === "function" ? payload(get().nodes) : payload
@@ -514,6 +526,138 @@ export const createDiagramStore = (
             "addOrUpdateAssessment"
           )
         },
+
+        // Add these copy/paste methods to the store implementation
+        copySelectedElements: async () => {
+          const { selectedElementIds, nodes, edges } = get()
+          
+          if (selectedElementIds.length === 0) {
+            return false
+          }
+
+          // Get selected nodes and their connected edges
+          const selectedNodes = nodes.filter(node => selectedElementIds.includes(node.id))
+          const selectedEdges = edges.filter(edge => selectedElementIds.includes(edge.id))
+          
+          // Also include edges that connect selected nodes
+          const connectedEdges = edges.filter(edge => 
+            selectedElementIds.includes(edge.source) && selectedElementIds.includes(edge.target)
+          )
+          
+          // Combine selected edges and connected edges (remove duplicates)
+          const allRelevantEdges = [...selectedEdges]
+          connectedEdges.forEach(edge => {
+            if (!allRelevantEdges.some(e => e.id === edge.id)) {
+              allRelevantEdges.push(edge)
+            }
+          })
+
+          const clipboardData: ClipboardData = {
+            nodes: selectedNodes,
+            edges: allRelevantEdges,
+            timestamp: Date.now()
+          }
+
+          try {
+            const jsonString = JSON.stringify(clipboardData)
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(jsonString)
+              return true
+            }
+          } catch (error) {
+            console.error('Failed to copy to clipboard:', error)
+            return false
+          }
+          
+          return false
+        },
+
+        pasteElements: async () => {
+          try {
+            let text: string
+            if (navigator.clipboard && window.isSecureContext) {
+              text = await navigator.clipboard.readText()
+            } else {
+              return false
+            }
+            
+            const clipboardData = JSON.parse(text) as ClipboardData
+            
+            if (!clipboardData || !Array.isArray(clipboardData.nodes) || !Array.isArray(clipboardData.edges)) {
+              return false
+            }
+
+            // Create ID mappings for nodes
+            const nodeIdMap = new Map<string, string>()
+            const newElementIds: string[] = []
+
+            // Clone and paste nodes with new IDs and offset positions
+            const pastedNodes = clipboardData.nodes.map((node: Node) => {
+              const newId = generateUUID()
+              nodeIdMap.set(node.id, newId)
+              newElementIds.push(newId)
+
+              const newNode = {
+                ...node,
+                id: newId,
+                position: {
+                  x: node.position.x + PASTE_OFFSET,
+                  y: node.position.y + PASTE_OFFSET
+                },
+                selected: true,
+              }
+
+              return newNode
+            })
+
+            // Clone and paste edges with updated source/target IDs
+            const pastedEdges = clipboardData.edges
+              .filter((edge: Edge) => {
+                return nodeIdMap.has(edge.source) && nodeIdMap.has(edge.target)
+              })
+              .map((edge: Edge) => {
+                const newId = generateUUID()
+                newElementIds.push(newId)
+
+                const newEdge = {
+                  ...edge,
+                  id: newId,
+                  source: nodeIdMap.get(edge.source)!,
+                  target: nodeIdMap.get(edge.target)!,
+                  selected: true,
+                }
+
+                return newEdge
+              })
+
+            // Add to Yjs and update store state in transaction
+            ydoc.transact(() => {
+              pastedNodes.forEach(node => getNodesMap(ydoc).set(node.id, node))
+              pastedEdges.forEach(edge => getEdgesMap(ydoc).set(edge.id, edge))
+            }, "store")
+
+            // Update store state
+            set(
+              (state) => ({
+                nodes: [...state.nodes, ...pastedNodes],
+                edges: [...state.edges, ...pastedEdges],
+                selectedElementIds: newElementIds
+              }),
+              undefined,
+              "pasteElements"
+            )
+
+            return true
+          } catch (error) {
+            console.error('Failed to paste from clipboard:', error)
+            return false
+          }
+        },
+
+        hasSelectedElements: () => {
+          return get().selectedElementIds.length > 0
+        },
+
       })),
       { name: "DiagramStore", enabled: true }
     )
