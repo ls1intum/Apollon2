@@ -2,7 +2,6 @@ import { UMLModel, ApollonNode, ApollonEdge, Assessment } from "../typings"
 import { UMLDiagramType } from "../types/DiagramType"
 import { ClassType } from "../types/nodes/enums"
 import { IPoint } from "../edges/Connection"
-import { getEdgeMarkerStyles } from "./edgeUtils"
 import { 
   V3DiagramFormat, 
   V3UMLElement, 
@@ -212,7 +211,7 @@ export function convertV3NodeTypeToV4(v3Type: string): string {
     'PetriNetTransition': 'petriNetTransition',
     
     // Reachability Graph
-    'ReachabilityGraphNode': 'reachabilityGraphMarking',
+    'ReachabilityGraphMarking': 'reachabilityGraphMarking',
     
     // Syntax Tree
     'SyntaxTreeNonterminal': 'syntaxTreeNonterminal',
@@ -343,6 +342,7 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
     ...(element.textColor && { textColor: element.textColor }),
     ...(element.highlight && { highlight: element.highlight }),
     ...(element.assessmentNote && { assessmentNote: element.assessmentNote }),
+
   }
 
   switch (element.type) {
@@ -531,12 +531,13 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       return bpmnEndEventData
     }
 
-    case 'ReachabilityGraphNode': {
+    case 'ReachabilityGraphMarking': {
       const reachabilityData: ReachabilityGraphMarkingProps = {
         ...baseData,
         isInitialMarking: element.isInitialMarking || false,
       }
       return reachabilityData
+      
     }
 
     // For other BPMN elements that just need base data
