@@ -368,9 +368,21 @@ function convertV3NodeDataToV4(
       Object.values(allElements).forEach((childElement) => {
         if (childElement.owner === element.id) {
           if (childElement.type === "ClassAttribute") {
-            attributes.push({ id: childElement.id, name: childElement.name })
+            attributes.push({ 
+              id: childElement.id, 
+              name: childElement.name,
+              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
+              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
+              ...(childElement.textColor && { textColor: childElement.textColor }),
+            })
           } else if (childElement.type === "ClassMethod") {
-            methods.push({ id: childElement.id, name: childElement.name })
+            methods.push({ 
+              id: childElement.id, 
+              name: childElement.name,
+              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
+              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
+              ...(childElement.textColor && { textColor: childElement.textColor }),
+            })
           }
         }
       })
@@ -378,16 +390,13 @@ function convertV3NodeDataToV4(
         element.attributes.forEach((attrId) => {
           const attr = allElements[attrId]
           if (attr && !attributes.find((a) => a.id === attr.id)) {
-            attributes.push({ id: attr.id, name: attr.name })
-          }
-        })
-      }
-
-      if (element.methods && Array.isArray(element.methods)) {
-        element.methods.forEach((methodId) => {
-          const method = allElements[methodId]
-          if (method && !methods.find((m) => m.id === method.id)) {
-            methods.push({ id: method.id, name: method.name })
+            attributes.push({ 
+              id: attr.id, 
+              name: attr.name,
+              ...(attr.fillColor && { fillColor: attr.fillColor }),
+              ...(attr.strokeColor && { strokeColor: attr.strokeColor }),
+              ...(attr.textColor && { textColor: attr.textColor }),
+            })
           }
         })
       }
@@ -418,9 +427,21 @@ function convertV3NodeDataToV4(
       Object.values(allElements).forEach((childElement) => {
         if (childElement.owner === element.id) {
           if (childElement.type === "ObjectAttribute") {
-            attributes.push({ id: childElement.id, name: childElement.name })
+            attributes.push({ 
+              id: childElement.id, 
+              name: childElement.name,
+              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
+              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
+              ...(childElement.textColor && { textColor: childElement.textColor }),
+            })
           } else if (childElement.type === "ObjectMethod") {
-            methods.push({ id: childElement.id, name: childElement.name })
+            methods.push({ 
+              id: childElement.id, 
+              name: childElement.name,
+              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
+              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
+              ...(childElement.textColor && { textColor: childElement.textColor }),
+            })
           }
         }
       })
@@ -436,7 +457,27 @@ function convertV3NodeDataToV4(
     case "CommunicationObject": {
       const attributes: Array<{ id: string; name: string }> = []
       const methods: Array<{ id: string; name: string }> = []
-
+            Object.values(allElements).forEach((childElement) => {
+        if (childElement.owner === element.id) {
+          if (childElement.type === "ObjectAttribute") {
+            attributes.push({ 
+              id: childElement.id, 
+              name: childElement.name,
+              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
+              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
+              ...(childElement.textColor && { textColor: childElement.textColor }),
+            })
+          } else if (childElement.type === "ObjectMethod") {
+            methods.push({ 
+              id: childElement.id, 
+              name: childElement.name,
+              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
+              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
+              ...(childElement.textColor && { textColor: childElement.textColor }),
+            })
+          }
+        }
+      })
       const communicationData: CommunicationObjectNodeProps = {
         ...baseData,
         methods,
