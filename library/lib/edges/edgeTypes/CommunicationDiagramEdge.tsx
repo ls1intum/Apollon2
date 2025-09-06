@@ -82,7 +82,6 @@ export const CommunicationDiagramEdge = ({
     enableReconnection: true,
     enableStraightPath: false,
   })
-  console.log("Rendering CommunicationDiagramEdge:", data, edgeData)
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path">
@@ -145,35 +144,6 @@ export const CommunicationDiagramEdge = ({
             ))}
         </g>
 
-        <EdgeMultipleLabels
-          labels={data?.labels || []}
-          messages={data?.messages}
-          pathMiddlePosition={edgeData.pathMiddlePosition}
-          isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-          showRelationshipLabels={true}
-          isReconnectingRef={isReconnectingRef}
-        />
-
-<<<<<<< HEAD
-        {isDiagramModifiable &&
-          !isReconnectingRef.current &&
-          allowMidpointDragging &&
-          midpoints.map((point, midPointIndex) => (
-            <circle
-              className="edge-circle"
-              pointerEvents="all"
-              key={`${id}-midpoint-${midPointIndex}`}
-              cx={point.x}
-              cy={point.y}
-              r={10}
-              fill="lightgray"
-              stroke="none"
-              style={{ cursor: "grab", zIndex: 9999 }}
-              onPointerDown={(e) => handlePointerDown(e, midPointIndex)}
-            />
-          ))}
-      </g>
-
       <EdgeMultipleLabels
         messages={data?.messages}
         pathMiddlePosition={edgeData.pathMiddlePosition}
@@ -184,18 +154,6 @@ export const CommunicationDiagramEdge = ({
         edgePoints={edgeData.activePoints} // Pass the edge points
       />
 
-      <CommonEdgeElements
-        id={id}
-        pathMiddlePosition={edgeData.pathMiddlePosition}
-        isDiagramModifiable={isDiagramModifiable}
-        assessments={assessments}
-        anchorRef={anchorRef}
-        handleDelete={handleDelete}
-        setPopOverElementId={setPopOverElementId}
-        type={type}
-      />
-    </>
-=======
         <CommonEdgeElements
           id={id}
           pathMiddlePosition={edgeData.pathMiddlePosition}
@@ -208,6 +166,5 @@ export const CommunicationDiagramEdge = ({
         />
       </FeedbackDropzone>
     </AssessmentSelectableWrapper>
->>>>>>> main
   )
 }
