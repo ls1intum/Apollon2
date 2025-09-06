@@ -32,8 +32,8 @@ export const BPMNDataObjectNodeSVG: React.FC<
       <path
         d={`M0,0 L0,${height} L${width},${height} L${width},15 L${width - 15},0 L${width - 15},15 L${width},15 L${width - 15},0 L0,0`}
         strokeWidth={LINE_WIDTH}
-        stroke="var(--apollon-primary-contrast)"
-        fill="var(--apollon-background)"
+        stroke="var(--apollon2-primary-contrast)"
+        fill="var(--apollon2-background)"
       />
       <CustomText
         x={width / 2}

@@ -32,7 +32,7 @@ export const BPMNAnnotationNodeSVG: React.FC<
       <path
         d={`M20,0 L10,0 A 10 10 280 0 0 0 10 L0,${height - 10} A 10 10 180 0 0 10 ${height} L20, ${height}`}
         strokeWidth={LINE_WIDTH}
-        stroke="var(--apollon-primary-contrast)"
+        stroke="var(--apollon2-primary-contrast)"
         fill="none"
       />
       <CustomText

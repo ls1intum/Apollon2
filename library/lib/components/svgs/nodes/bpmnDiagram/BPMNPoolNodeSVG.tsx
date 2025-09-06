@@ -40,7 +40,7 @@ export const BPMNPoolNodeSVG: React.FC<
         y1={0}
         x2={headerWidth}
         y2={height}
-        stroke="var(--apollon-primary-contrast)"
+        stroke="var(--apollon2-primary-contrast)"
         strokeWidth={LINE_WIDTH}
       />
 

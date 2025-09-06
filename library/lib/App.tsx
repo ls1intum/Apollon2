@@ -89,7 +89,7 @@ function App({ onReactFlowInit }: AppProps) {
         height: "100%",
         width: "100%",
         overflow: "hidden",
-        backgroundColor: "var(--apollon-background)",
+        backgroundColor: "var(--apollon2-background)",
       }}
     >
       {mode === ApollonMode.Modelling && <Sidebar />}

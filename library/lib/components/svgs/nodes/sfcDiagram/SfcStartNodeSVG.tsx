@@ -32,7 +32,7 @@ export const SfcStartNodeSVG: React.FC<Props> = ({
         width={width - innerPadding * 2}
         height={height - innerPadding * 2}
         fill="none"
-        stroke="var(--apollon-primary-contrast)"
+        stroke="var(--apollon2-primary-contrast)"
         strokeWidth={LINE_WIDTH}
       />
       <CustomText

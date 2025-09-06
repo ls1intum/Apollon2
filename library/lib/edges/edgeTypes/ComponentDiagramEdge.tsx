@@ -167,7 +167,7 @@ export const ComponentDiagramEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon-primary-contrast)",
+              stroke: "var(--apollon2-primary-contrast)",
               strokeDasharray: isReconnectingRef.current
                 ? "none"
                 : strokeDashArray,

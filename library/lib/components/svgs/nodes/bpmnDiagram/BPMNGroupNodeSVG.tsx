@@ -34,7 +34,7 @@ export const BPMNGroupNodeSVG: React.FC<
         y={0}
         width={width}
         height={height}
-        stroke="var(--apollon-primary-contrast)"
+        stroke="var(--apollon2-primary-contrast)"
         strokeWidth={LINE_WIDTH}
         fill="none"
         strokeDasharray="4"

@@ -35,8 +35,8 @@ export const FlowchartInputOutputNodeSVG: React.FC<Props> = ({
         <polygon
           points={`20,0 ${width},0 ${width - 20},${height} 0,${height}`}
           strokeWidth={LINE_WIDTH}
-          stroke="var(--apollon-primary-contrast)"
-          fill="var(--apollon-background)"
+          stroke="var(--apollon2-primary-contrast)"
+          fill="var(--apollon2-background)"
         />
 
         {/* Name Text */}

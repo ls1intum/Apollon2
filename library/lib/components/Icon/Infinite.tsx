@@ -8,7 +8,7 @@ export const Infinite = ({ width = 16, height = 16, ...props }: Props) => (
     height={height}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 330 220"
-    fill="var(--apollon-primary-contrast, #e3e3e3)"
+    fill="var(--apollon2-primary-contrast, #e3e3e3)"
     {...props}
   >
     <path

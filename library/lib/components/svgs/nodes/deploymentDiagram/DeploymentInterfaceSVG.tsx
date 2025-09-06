@@ -37,8 +37,8 @@ export const DeploymentInterfaceSVG: React.FC<Props> = ({
           cy={height / 2}
           r={width / 2}
           strokeWidth={LINE_WIDTH}
-          stroke="var(--apollon-primary-contrast)"
-          fill="var(--apollon-background)"
+          stroke="var(--apollon2-primary-contrast)"
+          fill="var(--apollon2-background)"
         />
 
         {/* Name Text */}

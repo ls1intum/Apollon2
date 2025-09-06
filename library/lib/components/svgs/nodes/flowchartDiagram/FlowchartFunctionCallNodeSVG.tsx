@@ -40,7 +40,7 @@ export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
           y1={0}
           x2={10}
           y2={height}
-          stroke="var(--apollon-primary-contrast)"
+          stroke="var(--apollon2-primary-contrast)"
           strokeWidth={LINE_WIDTH}
         />
 
@@ -50,7 +50,7 @@ export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
           y1={0}
           x2={width - 10}
           y2={height}
-          stroke="var(--apollon-primary-contrast)"
+          stroke="var(--apollon2-primary-contrast)"
           strokeWidth={LINE_WIDTH}
         />
 

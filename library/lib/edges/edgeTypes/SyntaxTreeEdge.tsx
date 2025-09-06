@@ -69,7 +69,7 @@ export const SyntaxTreeEdge = ({
             markerEnd={markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon-primary-contrast)",
+              stroke: "var(--apollon2-primary-contrast)",
               strokeDasharray: strokeDashArray,
             }}
           />

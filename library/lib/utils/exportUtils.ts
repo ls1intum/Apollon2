@@ -5,25 +5,25 @@ import { ReactFlowInstance, type Node, type Edge, Rect } from "@xyflow/react"
 // Light theme variables
 const cssVariables = `
     :root {
-      --apollon-primary: #3e8acc;
-      --apollon-primary-contrast: #212529;
-      --apollon-secondary: #6c757d;
-      --apollon-alert-warning-yellow: #ffc107;
-      --apollon-alert-warning-background: #fff3cd;
-      --apollon-alert-warning-border: #ffeeba;
-      --apollon-background: white;
-      --apollon-background-inverse: #000000;
-      --apollon-background-variant: #f8f9fa;
-      --apollon-gray: #e9ecef;
-      --apollon-grid: rgba(36, 39, 36, 0.1);
-      --apollon-gray-variant: #495057;
-      --apollon-alert-danger-color: #721c24;
-      --apollon-alert-danger-background: #f8d7da;
-      --apollon-alert-danger-border: #f5c6cb;
-      --apollon-switch-box-border-color: #dee2e6;
-      --apollon-list-group-color: #ffffff;
-      --apollon-btn-outline-secondary-color: #6c757d;
-      --apollon-modal-bottom-border: #e9ecef;
+  --apollon2-primary: var(--apollon-primary, #3e8acc);
+  --apollon2-primary-contrast: var(--apollon-primary-contrast, #212529);
+  --apollon2-secondary: var(--apollon-secondary, #6c757d);
+  --apollon2-alert-warning-yellow: var(--apollon-alert-warning-yellow, #ffc107);
+  --apollon2-alert-warning-background: var(--apollon-alert-warning-background, #fff3cd);
+  --apollon2-alert-warning-border: var(--apollon-alert-warning-border, #ffeeba);
+  --apollon2-background: var(--apollon-background, white);
+  --apollon2-background-inverse: var(--apollon-background-inverse, #000000);
+  --apollon2-background-variant: var(--apollon-background-variant, #f8f9fa);
+  --apollon2-gray: var(--apollon-gray, #e9ecef);
+  --apollon2-grid: var(--apollon-grid, rgba(36, 39, 36, 0.1));
+  --apollon2-gray-variant: var(--apollon-gray-variant, #495057);
+  --apollon2-alert-danger-color: var(--apollon-alert-danger-color, #721c24);
+  --apollon2-alert-danger-background: var(--apollon-alert-danger-background, #f8d7da);
+  --apollon2-alert-danger-border: var(--apollon-alert-danger-border, #f5c6cb);
+  --apollon2-switch-box-border-color: var(--apollon-switch-box-border-color, #dee2e6);
+  --apollon2-list-group-color: var(--apollon-list-group-color, #ffffff);
+  --apollon2-btn-outline-secondary-color: var(--apollon-btn-outline-secondary-color, #6c757d);
+  --apollon2-modal-bottom-border: var(--apollon-modal-bottom-border, #e9ecef);
     }
   `
 

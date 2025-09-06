@@ -41,15 +41,15 @@ export const DeploymentNodeSVG: React.FC<Props> = ({
           <path
             d={`M 0 8 l 8 -8 H ${width} l -8 8 Z`}
             strokeWidth={LINE_WIDTH}
-            stroke="var(--apollon-primary-contrast)"
-            fill="var(--apollon-background)"
+            stroke="var(--apollon2-primary-contrast)"
+            fill="var(--apollon2-background)"
           />
           {/* Right face */}
           <path
             d={`M ${width} 0 V ${height - 8} l -8 8 V 8 Z`}
             strokeWidth={LINE_WIDTH}
-            stroke="var(--apollon-primary-contrast)"
-            fill="var(--apollon-background)"
+            stroke="var(--apollon2-primary-contrast)"
+            fill="var(--apollon2-background)"
           />
           {/* Front face */}
           <StyledRect x="0" y="8" width={width - 8} height={height - 8} />

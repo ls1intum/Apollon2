@@ -37,8 +37,8 @@ export const UseCaseNodeSVG: React.FC<Props> = ({
           cy={height / 2}
           rx={width / 2}
           ry={height / 2}
-          fill="var(--apollon-background)"
-          stroke="var(--apollon-primary-contrast)"
+          fill="var(--apollon2-background)"
+          stroke="var(--apollon2-primary-contrast)"
           strokeWidth={LINE_WIDTH}
         />
 

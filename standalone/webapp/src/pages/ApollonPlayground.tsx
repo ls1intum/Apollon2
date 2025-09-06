@@ -8,7 +8,10 @@ import {
 } from "@tumaet/apollon"
 import { useEditorContext } from "@/contexts"
 import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
-import { PlaygroundDefaultModel } from "@/constants/playgroundDefaultDiagram"
+import {
+  PlaygroundDefaultModel,
+  playgroundModelId,
+} from "@/constants/playgroundDefaultDiagram"
 import {
   useExportAsSVG,
   useExportAsPNG,
@@ -16,6 +19,7 @@ import {
   useExportAsPDF,
 } from "@/hooks"
 import { FeedbackBoxes } from "@/components/FeedbackBoxes"
+import { useShallow } from "zustand/shallow"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
 
@@ -29,7 +33,12 @@ export const ApollonPlayground: React.FC = () => {
   const diagram = usePersistenceModelStore(
     (store) => store.models[PlaygroundDefaultModel.id]
   )
-  const updateModel = usePersistenceModelStore((store) => store.updateModel)
+  const { updateModel, setCurrentModelId } = usePersistenceModelStore(
+    useShallow((store) => ({
+      updateModel: store.updateModel,
+      setCurrentModelId: store.setCurrentModelId,
+    }))
+  )
 
   const [apollonOptions, setApollonOptions] = useState<ApollonOptions>({
     mode: ApollonMode.Modelling,
@@ -37,6 +46,10 @@ export const ApollonPlayground: React.FC = () => {
     readonly: false,
     debug: false,
   })
+
+  useEffect(() => {
+    setCurrentModelId(playgroundModelId)
+  }, [])
 
   useEffect(() => {
     if (containerRef.current) {

@@ -29,7 +29,7 @@ export const ActivityForkNodeHorizontalSVG: React.FC<SVGComponentProps> = ({
         y={0}
         width={width}
         height={height}
-        fill="var(--apollon-primary-contrast)"
+        fill="var(--apollon2-primary-contrast)"
       />
 
       {showAssessmentResults && (

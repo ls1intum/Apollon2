@@ -111,7 +111,7 @@ export const SfcDiagramEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon-primary-contrast)",
+              stroke: "var(--apollon2-primary-contrast)",
               strokeDasharray: isReconnectingRef.current
                 ? "none"
                 : strokeDashArray,
@@ -161,7 +161,7 @@ export const SfcDiagramEdge = ({
                 y1={edgeData.pathMiddlePosition.y}
                 x2={edgeData.pathMiddlePosition.x + 20}
                 y2={edgeData.pathMiddlePosition.y}
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
                 strokeWidth="10"
               />
             )}
@@ -170,7 +170,7 @@ export const SfcDiagramEdge = ({
               <text
                 x={edgeData.pathMiddlePosition.x}
                 y={edgeData.pathMiddlePosition.y - 20}
-                fill="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fontSize="14"

@@ -39,8 +39,8 @@ export const ActivityMergeNodeSVG: React.FC<Props> = ({
               ${width / 2},${height} 
               0,${height / 2} 
               ${width / 2},0`}
-          fill="var(--apollon-background)"
-          stroke="var(--apollon-primary-contrast)"
+          fill="var(--apollon2-background)"
+          stroke="var(--apollon2-primary-contrast)"
           strokeWidth={LINE_WIDTH}
         />
 

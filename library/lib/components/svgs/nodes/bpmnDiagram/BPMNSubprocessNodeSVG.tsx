@@ -87,21 +87,21 @@ export const BPMNSubprocessNodeSVG: React.FC<
             width={14}
             height={14}
             fill="none"
-            stroke="var(--apollon-primary-contrast)"
+            stroke="var(--apollon2-primary-contrast)"
           />
           <line
             x1={width / 2 - 4}
             y1={height - 7}
             x2={width / 2 + 4}
             y2={height - 7}
-            stroke="var(--apollon-primary-contrast)"
+            stroke="var(--apollon2-primary-contrast)"
           />
           <line
             x1={width / 2}
             y1={height - 11}
             x2={width / 2}
             y2={height - 3}
-            stroke="var(--apollon-primary-contrast)"
+            stroke="var(--apollon2-primary-contrast)"
           />
         </>
       )}

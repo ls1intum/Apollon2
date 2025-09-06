@@ -39,14 +39,14 @@ export const DeploymentArtifactSVG: React.FC<Props> = ({
             d="M 0 0 L 13 0 L 19.2 7.25 L 19.2 24 L 0 24 L 0 0 Z"
             strokeWidth="1.2"
             strokeMiterlimit="10"
-            stroke="var(--apollon-primary-contrast)"
-            fill="var(--apollon-background)"
+            stroke="var(--apollon2-primary-contrast)"
+            fill="var(--apollon2-background)"
           ></path>
           <path
             d="M 13 0 L 13 7.25 L 19.2 7.25"
             strokeWidth="1.2"
             strokeMiterlimit="10"
-            stroke="var(--apollon-primary-contrast)"
+            stroke="var(--apollon2-primary-contrast)"
             fill="none"
           ></path>
         </g>

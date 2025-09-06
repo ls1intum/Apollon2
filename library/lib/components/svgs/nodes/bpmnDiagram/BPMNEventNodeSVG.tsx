@@ -52,7 +52,7 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
               <polyline
                 points="0 3, 0 17, 20 17, 20 3, 10 11, 0 3, 20 3"
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -64,14 +64,14 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
                 cy={10}
                 r={10}
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="10 4, 10 10, 13 13"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -84,15 +84,15 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
                 width={16}
                 height={16}
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="6 7, 14 7"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="6 13, 14 13"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -102,7 +102,7 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
               <polyline
                 points="10 3, 3 15, 17 15, 10 3"
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -116,7 +116,7 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
               <polyline
                 points="0 3, 0 17, 20 17, 20 3, 10 11, 0 3, 20 3"
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -125,13 +125,13 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="0.2 3, 19.8 3, 10 11, 0.2 3"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="0 5.5, 0 17, 20 17, 20 5.5, 10 13.5, 0 5.5"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -143,14 +143,14 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
                 cy={10}
                 r={10}
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="10 4, 10 10, 13 13"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -159,8 +159,8 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="10 3, 4 15, 10 12, 16 15, 10 3"
-                stroke="var(--apollon-primary-contrast)"
-                fill="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -173,15 +173,15 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
                 width={16}
                 height={16}
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="6 7, 14 7"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="6 13, 14 13"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -191,7 +191,7 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
               <polyline
                 points="3 7, 13 7, 13 4, 18 10, 13 16, 13 13, 3 13, 3 7"
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -200,8 +200,8 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="3 7, 13 7, 13 4, 18 10, 13 16, 13 13, 3 13, 3 7"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -210,13 +210,13 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="3 10, 9 6, 9 14, 3 10"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="10 10, 16 6, 16 14, 10 10"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -226,7 +226,7 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
               <polyline
                 points="10 3, 3 15, 17 15, 10 3"
                 fill="none"
-                stroke="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -235,8 +235,8 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="10 3, 3 15, 17 15, 10 3"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -249,13 +249,13 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="0.2 3, 19.8 3, 10 11, 0.2 3"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="0 5.5, 0 17, 20 17, 20 5.5, 10 13.5, 0 5.5"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -264,8 +264,8 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="10 3, 4 15, 10 12, 16 15, 10 3"
-                stroke="var(--apollon-primary-contrast)"
-                fill="var(--apollon-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -274,8 +274,8 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="3 16, 6 4, 13 11, 17 4, 14 16, 7 10, 3 16"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -284,13 +284,13 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="3 10, 9 6, 9 14, 3 10"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
               <polyline
                 points="10 10, 16 6, 16 14, 10 10"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -299,8 +299,8 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
             <g transform={translate}>
               <polyline
                 points="10 3, 3 15, 17 15, 10 3"
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -311,8 +311,8 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
                 cx={10}
                 cy={10}
                 r={8}
-                fill="var(--apollon-primary-contrast)"
-                stroke="var(--apollon-primary-contrast)"
+                fill="var(--apollon2-primary-contrast)"
+                stroke="var(--apollon2-primary-contrast)"
               />
             </g>
           )
@@ -333,18 +333,18 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
         cx={width / 2}
         cy={height / 2}
         r={r}
-        stroke="var(--apollon-primary-contrast)"
+        stroke="var(--apollon2-primary-contrast)"
         strokeWidth={thickStroke ? LINE_WIDTH * 2 : LINE_WIDTH}
-        fill="var(--apollon-background)"
+        fill="var(--apollon2-background)"
       />
       {innerCircle && (
         <circle
           cx={width / 2}
           cy={height / 2}
           r={r - 3.5}
-          stroke="var(--apollon-primary-contrast)"
+          stroke="var(--apollon2-primary-contrast)"
           strokeWidth={LINE_WIDTH}
-          fill="var(--apollon-background)"
+          fill="var(--apollon2-background)"
         />
       )}
       {icon}

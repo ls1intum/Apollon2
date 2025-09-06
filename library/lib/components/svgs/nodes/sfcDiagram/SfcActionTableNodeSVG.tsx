@@ -72,7 +72,7 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
           y1={y}
           x2={width}
           y2={y}
-          stroke="var(--apollon-primary-contrast)"
+          stroke="var(--apollon2-primary-contrast)"
           strokeWidth={LINE_WIDTH}
         />
       ))}
@@ -81,7 +81,7 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
         y1={0}
         x2={30}
         y2={height}
-        stroke="var(--apollon-primary-contrast)"
+        stroke="var(--apollon2-primary-contrast)"
         strokeWidth={LINE_WIDTH}
       />
     </svg>
