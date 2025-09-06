@@ -25,9 +25,6 @@
 
 }
 
-.MuiOutlinedInput-notchedOutline{
-  border-color: var(--apollon2-primary-contrast) !important;
-}
 
 .react-flow {
   --panel-background: var(--apollon2-background);
@@ -198,4 +195,17 @@
 }
 .vertically-not-resizable .react-flow__resize-control.left.line:hover {
   cursor: grab; 
+}
+
+.MuiSelect-select{
+  color: var(--apollon2-primary-contrast) !important;
+}
+.MuiFormLabel-root{
+  color: var(--apollon2-primary-contrast) !important;
+}
+.MuiOutlinedInput-notchedOutline{
+  border-color: var(--apollon2-primary-contrast) !important;
+}
+.MuiSvgIcon-root{
+  color: var(--apollon2-primary-contrast) !important;
 }
