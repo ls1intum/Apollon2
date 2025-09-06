@@ -368,20 +368,32 @@ function convertV3NodeDataToV4(
       Object.values(allElements).forEach((childElement) => {
         if (childElement.owner === element.id) {
           if (childElement.type === "ClassAttribute") {
-            attributes.push({ 
-              id: childElement.id, 
+            attributes.push({
+              id: childElement.id,
               name: childElement.name,
-              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
-              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
-              ...(childElement.textColor && { textColor: childElement.textColor }),
+              ...(childElement.fillColor && {
+                fillColor: childElement.fillColor,
+              }),
+              ...(childElement.strokeColor && {
+                strokeColor: childElement.strokeColor,
+              }),
+              ...(childElement.textColor && {
+                textColor: childElement.textColor,
+              }),
             })
           } else if (childElement.type === "ClassMethod") {
-            methods.push({ 
-              id: childElement.id, 
+            methods.push({
+              id: childElement.id,
               name: childElement.name,
-              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
-              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
-              ...(childElement.textColor && { textColor: childElement.textColor }),
+              ...(childElement.fillColor && {
+                fillColor: childElement.fillColor,
+              }),
+              ...(childElement.strokeColor && {
+                strokeColor: childElement.strokeColor,
+              }),
+              ...(childElement.textColor && {
+                textColor: childElement.textColor,
+              }),
             })
           }
         }
@@ -390,8 +402,8 @@ function convertV3NodeDataToV4(
         element.attributes.forEach((attrId) => {
           const attr = allElements[attrId]
           if (attr && !attributes.find((a) => a.id === attr.id)) {
-            attributes.push({ 
-              id: attr.id, 
+            attributes.push({
+              id: attr.id,
               name: attr.name,
               ...(attr.fillColor && { fillColor: attr.fillColor }),
               ...(attr.strokeColor && { strokeColor: attr.strokeColor }),
@@ -427,20 +439,32 @@ function convertV3NodeDataToV4(
       Object.values(allElements).forEach((childElement) => {
         if (childElement.owner === element.id) {
           if (childElement.type === "ObjectAttribute") {
-            attributes.push({ 
-              id: childElement.id, 
+            attributes.push({
+              id: childElement.id,
               name: childElement.name,
-              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
-              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
-              ...(childElement.textColor && { textColor: childElement.textColor }),
+              ...(childElement.fillColor && {
+                fillColor: childElement.fillColor,
+              }),
+              ...(childElement.strokeColor && {
+                strokeColor: childElement.strokeColor,
+              }),
+              ...(childElement.textColor && {
+                textColor: childElement.textColor,
+              }),
             })
           } else if (childElement.type === "ObjectMethod") {
-            methods.push({ 
-              id: childElement.id, 
+            methods.push({
+              id: childElement.id,
               name: childElement.name,
-              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
-              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
-              ...(childElement.textColor && { textColor: childElement.textColor }),
+              ...(childElement.fillColor && {
+                fillColor: childElement.fillColor,
+              }),
+              ...(childElement.strokeColor && {
+                strokeColor: childElement.strokeColor,
+              }),
+              ...(childElement.textColor && {
+                textColor: childElement.textColor,
+              }),
             })
           }
         }
@@ -457,23 +481,35 @@ function convertV3NodeDataToV4(
     case "CommunicationObject": {
       const attributes: Array<{ id: string; name: string }> = []
       const methods: Array<{ id: string; name: string }> = []
-            Object.values(allElements).forEach((childElement) => {
+      Object.values(allElements).forEach((childElement) => {
         if (childElement.owner === element.id) {
           if (childElement.type === "ObjectAttribute") {
-            attributes.push({ 
-              id: childElement.id, 
+            attributes.push({
+              id: childElement.id,
               name: childElement.name,
-              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
-              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
-              ...(childElement.textColor && { textColor: childElement.textColor }),
+              ...(childElement.fillColor && {
+                fillColor: childElement.fillColor,
+              }),
+              ...(childElement.strokeColor && {
+                strokeColor: childElement.strokeColor,
+              }),
+              ...(childElement.textColor && {
+                textColor: childElement.textColor,
+              }),
             })
           } else if (childElement.type === "ObjectMethod") {
-            methods.push({ 
-              id: childElement.id, 
+            methods.push({
+              id: childElement.id,
               name: childElement.name,
-              ...(childElement.fillColor && { fillColor: childElement.fillColor }),
-              ...(childElement.strokeColor && { strokeColor: childElement.strokeColor }),
-              ...(childElement.textColor && { textColor: childElement.textColor }),
+              ...(childElement.fillColor && {
+                fillColor: childElement.fillColor,
+              }),
+              ...(childElement.strokeColor && {
+                strokeColor: childElement.strokeColor,
+              }),
+              ...(childElement.textColor && {
+                textColor: childElement.textColor,
+              }),
             })
           }
         }
