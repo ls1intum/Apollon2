@@ -37,3 +37,8 @@ body {
 .apollon-editor {
   flex-grow: 1;
 }
+
+.MuiMenu-list {
+  background-color: var(--apollon2-background) !important;
+  color: var(--apollon2-primary-contrast) !important;
+}

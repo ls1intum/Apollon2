@@ -2,8 +2,6 @@ import { useState, MouseEvent, FC, useCallback } from "react"
 import Button from "@mui/material/Button"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
 import Typography from "@mui/material/Typography"
 import { secondary } from "@/constants"
 import { useModalContext } from "@/contexts"
@@ -14,6 +12,7 @@ import {
   useExportAsPDF,
 } from "@/hooks"
 import { JsonFileImportButton } from "./JsonFileImportButton"
+import { KeyboardArrowDownIcon } from "../Icon"
 
 interface Props {
   color?: string
@@ -74,7 +73,9 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
           File
         </Typography>
         <KeyboardArrowDownIcon
-          sx={{ width: 16, height: 16, color: secondary, ml: 0.5 }}
+          width={16}
+          height={16}
+          style={{ marginLeft: 4 }}
         />
       </Button>
       <Menu
@@ -106,7 +107,9 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
           aria-expanded={isSubMenuOpen ? "true" : undefined}
         >
           Export
-          <KeyboardArrowRightIcon />
+          <KeyboardArrowDownIcon
+            style={{ marginLeft: 4, transform: "rotate(-90deg)" }}
+          />
         </MenuItem>
       </Menu>
       <Menu

@@ -9,7 +9,8 @@ import {
 } from "@/components/modals"
 import { useModalContext } from "@/contexts"
 import { ModalName, ModalProps } from "@/types"
-import { Modal, Paper, Box, Typography, Button, Divider } from "@mui/material"
+import { Modal, Paper, Box, Button, Divider } from "@mui/material"
+import { Typography } from "@/components/Typography"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
 
 interface ModalWrapperProps {
@@ -50,6 +51,7 @@ const style = {
   maxWidth: "90vw", // to limit on very large screens
   width: "50vw", // ensures it's at least half screen
   gap: 1,
+  bgcolor: "var(--apollon2-background)",
 }
 
 export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
@@ -90,7 +92,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
             <CloseOutlinedIcon sx={{ color: "grey" }} />
           </Button>
         </Box>
-        <Divider />
+        <Divider sx={{ bgcolor: "var(--apollon2-background-variant)" }} />
 
         {/* Scrollable Content */}
         <Box

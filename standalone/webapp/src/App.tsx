@@ -9,6 +9,8 @@ import {
 } from "@/pages"
 import { SafeArea } from "capacitor-plugin-safe-area"
 import { ToastContainer } from "react-toastify"
+import { useShallow } from "zustand/shallow"
+import { useThemeStore } from "./stores/useThemeStore"
 
 // To set the safe area insets as for mobile devices
 SafeArea.getSafeAreaInsets().then(
@@ -33,6 +35,7 @@ SafeArea.getSafeAreaInsets().then(
 )
 
 function App() {
+  const currentTheme = useThemeStore(useShallow((state) => state.currentTheme))
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <BrowserRouter>
@@ -47,7 +50,7 @@ function App() {
             </Routes>
           </div>
 
-          <ToastContainer />
+          <ToastContainer theme={currentTheme === "dark" ? "dark" : "light"} />
         </AppProviders>
       </BrowserRouter>
     </div>

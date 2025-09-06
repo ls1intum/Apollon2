@@ -80,15 +80,15 @@ export const ApollonPlayground: React.FC = () => {
       style={{
         display: "flex",
         flexDirection: "row",
-        flexGrow: 1,
+        flex: 1,
         height: "100%",
       }}
     >
-      <div className="flex flex-col p-4 gap-2 overflow-scroll max-w-[300px]">
+      <div className="flex flex-col p-4 gap-2 overflow-scroll max-w-[300px]  bg-[var(--apollon2-background-variant)] text-[var(--apollon2-primary-contrast)]">
         <div>
           <label className="font-semibold ">Select Diagram Type</label>
           <select
-            className="border-2 border-gray-400 p-1 rounded-md flex w-[200px] bg-white"
+            className="border-2 border-gray-400 p-1 rounded-md flex w-[200px]"
             onChange={(e) => {
               const selectedType = e.target.value as UMLDiagramType
               const newModel = {
@@ -112,7 +112,7 @@ export const ApollonPlayground: React.FC = () => {
         <div>
           <label className="font-semibold ">Language</label>
           <select
-            className="border-2 border-gray-400 p-1 rounded-md flex w-[200px] bg-white"
+            className="border-2 border-gray-400 p-1 rounded-md flex w-[200px]"
             onChange={(e) => {
               const selectedLocale = e.target.value as Locale
               console.log("DEBUG selectedLocale", selectedLocale)
@@ -126,7 +126,7 @@ export const ApollonPlayground: React.FC = () => {
           <label className="font-semibold ">Mode</label>
           <select
             value={apollonOptions.mode}
-            className="border-2 border-gray-400 p-1 rounded-md flex w-[200px] bg-white"
+            className="border-2 border-gray-400 p-1 rounded-md flex w-[200px] "
             onChange={(e) => {
               const selectedMode = e.target.value as ApollonMode
               setApollonOptions((prev) => ({

@@ -11,7 +11,6 @@ interface ThemeState {
   setTheme: (theming: string) => void
   toggleTheme: () => void
   initializeTheme: () => void
-  removeUserThemePreference: () => void
 }
 
 export const useThemeStore = create<ThemeState>()(
@@ -63,9 +62,6 @@ export const useThemeStore = create<ThemeState>()(
         } else {
           setTheme(userThemePreference)
         }
-      },
-      removeUserThemePreference: () => {
-        set({ userThemePreference: null })
       },
     }),
     {
