@@ -3,6 +3,7 @@ export function SvgMarkers() {
     <svg
       style={{ position: "absolute", top: 0, left: 0, width: 0, height: 0 }}
       id="apollon2_svg-markers"
+      color="var(--apollon2-primary-contrast)"
     >
       <defs>
         <marker
@@ -17,7 +18,7 @@ export function SvgMarkers() {
         >
           <path
             d="M0,15 L15,22 L30,15 L15,8 z"
-            fill="black"
+            fill="currentColor"
             stroke="currentColor"
             strokeWidth="1.5"
           />
@@ -34,7 +35,7 @@ export function SvgMarkers() {
         >
           <path
             d="M0,15 L15,22 L30,15 L15,8 z"
-            fill="white"
+            fill="var(--apollon2-background)"
             stroke="currentColor"
             strokeWidth="1.5"
           />
@@ -68,7 +69,7 @@ export function SvgMarkers() {
         >
           <path
             d="M0,1 L0,29 L30,15 z"
-            fill="black"
+            fill="currentColor"
             stroke="currentColor"
             strokeWidth="1.5"
           />
@@ -139,7 +140,7 @@ export function SvgMarkers() {
           <path
             d="M 18,2 A 16,16 0 0,0 18,34"
             fill="none"
-            stroke="black"
+            stroke="currentColor"
             strokeWidth="2"
           />
         </marker>
@@ -157,7 +158,7 @@ export function SvgMarkers() {
           <path
             d="M 8 -12.5 C -3.5 -7.5 -3.3 7.9 8 12.5"
             fill="none"
-            stroke="black"
+            stroke="currentColor"
             strokeWidth="2"
           />
         </marker>
@@ -176,7 +177,7 @@ export function SvgMarkers() {
           <path
             d="M 2 -7.8 C -1.5 -3 -1.2 3.4 2 7.8"
             fill="none"
-            stroke="black"
+            stroke="currentColor"
             strokeWidth="1.5"
           />
         </marker>
@@ -195,8 +196,8 @@ export function SvgMarkers() {
         >
           <path
             d="M0,18 L20,10 L0,2 z"
-            fill="white"
-            stroke="black"
+            fill="var(--apollon2-background)"
+            stroke="currentColor"
             strokeWidth="1.2"
           />
         </marker>
@@ -216,8 +217,8 @@ export function SvgMarkers() {
             cx="10"
             cy="10"
             r="8"
-            fill="white"
-            stroke="black"
+            fill="var(--apollon2-background)"
+            stroke="currentColor"
             strokeWidth="1.5"
           />
         </marker>
@@ -236,7 +237,7 @@ export function SvgMarkers() {
           <path
             d="M2,18 L18,10 L2,2"
             fill="none"
-            stroke="black"
+            stroke="currentColor"
             strokeWidth="1.5"
           />
         </marker>

@@ -102,7 +102,7 @@ export const EdgeMultipleLabels: React.FC<{
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 style={{
-                  color: "black",
+                  color: "var(--apollon2-primary-contrast)",
                   transform: `rotate(${arrowRotation}deg)`,
                   transformOrigin: "center",
                 }}
@@ -120,7 +120,7 @@ export const EdgeMultipleLabels: React.FC<{
               transform: `translate(${pathMiddlePosition.x + labelBoxPosition.x + offset.x}px, ${pathMiddlePosition.y + labelBoxPosition.y + offset.y}px) translate(-50%, -50%)`,
               fontSize: "14px",
               fontWeight: 400,
-              color: "black",
+              color: "var(--apollon2-primary-contrast)",
               whiteSpace: "nowrap",
               pointerEvents: "none",
               zIndex: ZINDEX_LABEL,

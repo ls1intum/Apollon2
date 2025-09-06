@@ -59,7 +59,13 @@ export const PetriNetPlaceSVG: React.FC<Props> = ({
       }
 
       return tokenPositions.map((pos, index) => (
-        <circle key={index} cx={pos.x} cy={pos.y} r="9.25" fill="black" />
+        <circle
+          key={index}
+          cx={pos.x}
+          cy={pos.y}
+          r="9.25"
+          fill="var(--apollon2-primary-contrast)"
+        />
       ))
     } else {
       // Show number for larger values
@@ -83,8 +89,8 @@ export const PetriNetPlaceSVG: React.FC<Props> = ({
         cx={centerX}
         cy={centerY}
         r={width / 2}
-        fill="white"
-        stroke="black"
+        stroke="var(--apollon2-primary-contrast)"
+        fill="var(--apollon2-background)"
         strokeWidth={LINE_WIDTH}
       />
 

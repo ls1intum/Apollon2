@@ -1,10 +1,11 @@
 import React, { useState, KeyboardEvent, ChangeEvent } from "react"
-import { Box, TextField, Typography } from "@mui/material"
+import { Box } from "@mui/material"
+import { TextField, Typography } from "@/components/ui"
 import { generateUUID } from "@/utils"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import { ClassNodeProps } from "@/types"
+import { DeleteIcon } from "@/components/Icon"
 
 interface Props {
   nodeId: string
@@ -113,10 +114,11 @@ export const EditableMethodsList: React.FC<Props> = ({ nodeId }) => {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleAttributeChange(item.id, e.target.value)
             }
-            sx={{ backgroundColor: "#fff" }}
           />
-          <DeleteOutlineOutlinedIcon
-            sx={{ cursor: "pointer", width: 16, height: 16 }}
+          <DeleteIcon
+            width={16}
+            height={16}
+            style={{ cursor: "pointer" }}
             onClick={() => handleItemDelete(item.id)}
           />
         </Box>
@@ -138,9 +140,6 @@ export const EditableMethodsList: React.FC<Props> = ({ nodeId }) => {
           }
         }}
         onKeyDown={handleKeyDown}
-        sx={{
-          backgroundColor: "#fff",
-        }}
       />
     </Box>
   )

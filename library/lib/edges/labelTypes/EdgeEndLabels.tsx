@@ -71,7 +71,7 @@ export const EdgeEndLabels = ({
           textAnchor={sourceLabels.roleTextAnchor}
           style={{
             fontSize: "16px",
-            fill: "black",
+            fill: "var(--apollon2-primary-contrast)",
             userSelect: "none",
           }}
         >
@@ -87,7 +87,7 @@ export const EdgeEndLabels = ({
           textAnchor={sourceLabels.multiplicityTextAnchor}
           style={{
             fontSize: "16px",
-            fill: "black",
+            fill: "var(--apollon2-primary-contrast)",
             userSelect: "none",
           }}
         >
@@ -103,7 +103,7 @@ export const EdgeEndLabels = ({
           textAnchor={targetLabels.roleTextAnchor}
           style={{
             fontSize: "16px",
-            fill: "black",
+            fill: "var(--apollon2-primary-contrast)",
             userSelect: "none",
           }}
         >
@@ -119,7 +119,7 @@ export const EdgeEndLabels = ({
           textAnchor={targetLabels.multiplicityTextAnchor}
           style={{
             fontSize: "16px",
-            fill: "black",
+            fill: "var(--apollon2-primary-contrast)",
             userSelect: "none",
           }}
         >

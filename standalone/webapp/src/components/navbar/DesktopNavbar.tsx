@@ -12,6 +12,7 @@ import TumLogo from "assets/images/tum-logo.png"
 import { useEffect, useRef, useState } from "react"
 import { useModalContext, useEditorContext } from "@/contexts"
 import { useNavigate } from "react-router"
+import { ThemeSwitcherMenu } from "./ThemeSwitcher"
 
 export const DesktopNavbar = () => {
   const { editor } = useEditorContext()
@@ -41,10 +42,17 @@ export const DesktopNavbar = () => {
   return (
     <AppBar
       position="static"
-      sx={{ bgcolor: NAVBAR_BACKGROUND_COLOR }}
+      sx={{
+        bgcolor: NAVBAR_BACKGROUND_COLOR,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        px: 2,
+      }}
       elevation={0}
     >
-      <Toolbar disableGutters sx={{ ml: 2 }}>
+      <Toolbar disableGutters>
         <div
           onClick={goHome}
           style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
@@ -87,6 +95,7 @@ export const DesktopNavbar = () => {
           />
         </Box>
       </Toolbar>
+      <ThemeSwitcherMenu />
     </AppBar>
   )
 }

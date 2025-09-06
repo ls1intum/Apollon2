@@ -1,4 +1,4 @@
-import { CustomText } from "@/components"
+import { CustomText, StyledRect } from "@/components"
 import { LINE_WIDTH } from "@/constants"
 import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
@@ -39,25 +39,19 @@ export const BPMNSubprocessNodeSVG: React.FC<
       {/* Transaction: double border */}
       {isTransaction && (
         <>
-          <rect
+          <StyledRect
             x={0}
             y={0}
             width={width}
             height={height}
-            stroke="black"
-            strokeWidth={LINE_WIDTH}
-            fill="white"
             rx={10}
             ry={10}
           />
-          <rect
+          <StyledRect
             x={3}
             y={3}
             width={width - 6}
             height={height - 6}
-            stroke="black"
-            strokeWidth={LINE_WIDTH}
-            fill="white"
             rx={7}
             ry={7}
           />
@@ -65,14 +59,12 @@ export const BPMNSubprocessNodeSVG: React.FC<
       )}
       {/* Call Activity: single thick border */}
       {isCall && (
-        <rect
+        <StyledRect
           x={0}
           y={0}
           width={width}
           height={height}
-          stroke="black"
           strokeWidth={LINE_WIDTH * 3}
-          fill="white"
           rx={10}
           ry={10}
         />
@@ -80,14 +72,11 @@ export const BPMNSubprocessNodeSVG: React.FC<
       {/* Subprocess: single border + plus box */}
       {isSubprocess && (
         <>
-          <rect
+          <StyledRect
             x={0}
             y={0}
             width={width}
             height={height}
-            stroke="black"
-            strokeWidth={LINE_WIDTH}
-            fill="white"
             rx={10}
             ry={10}
           />
@@ -98,21 +87,21 @@ export const BPMNSubprocessNodeSVG: React.FC<
             width={14}
             height={14}
             fill="none"
-            stroke="black"
+            stroke="var(--apollon2-primary-contrast)"
           />
           <line
             x1={width / 2 - 4}
             y1={height - 7}
             x2={width / 2 + 4}
             y2={height - 7}
-            stroke="black"
+            stroke="var(--apollon2-primary-contrast)"
           />
           <line
             x1={width / 2}
             y1={height - 11}
             x2={width / 2}
             y2={height - 3}
-            stroke="black"
+            stroke="var(--apollon2-primary-contrast)"
           />
         </>
       )}

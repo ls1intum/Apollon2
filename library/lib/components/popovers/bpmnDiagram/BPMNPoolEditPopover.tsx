@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { TextField, Box } from "@mui/material"
+import { Box } from "@mui/material"
+import { TextField } from "@/components/ui"
 import { PopoverProps } from "../types"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"

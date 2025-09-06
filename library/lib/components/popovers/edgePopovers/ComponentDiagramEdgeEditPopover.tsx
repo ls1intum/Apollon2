@@ -1,14 +1,7 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Typography,
-} from "@mui/material"
-
+import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
+import { Typography } from "@/components/ui"
 import { useReactFlow } from "@xyflow/react"
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
+import { SwapHorizIcon } from "@/components/Icon"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 
@@ -39,7 +32,7 @@ export const ComponentEdgeEditPopover: React.FC<PopoverProps> = ({
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
       {handleSwap && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
+          <SwapHorizIcon style={{ cursor: "pointer" }} onClick={handleSwap} />
         </Box>
       )}
 

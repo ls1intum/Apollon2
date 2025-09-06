@@ -3,7 +3,7 @@ import {
   dropElementConfigs,
   transformScale,
 } from "@/constants/dropElementConfig"
-import { DividerLine } from "./DividerLine"
+import { DividerLine } from "./ui/DividerLine"
 import { useMetadataStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { DraggableGhost } from "./DraggableGhost"
@@ -27,7 +27,7 @@ export const Sidebar = () => {
         width: "180px",
         minWidth: "180px",
         height: "100%",
-        backgroundColor: "white",
+        backgroundColor: "var(--apollon2-background)",
         display: "flex",
         flexDirection: "column",
         padding: "10px",

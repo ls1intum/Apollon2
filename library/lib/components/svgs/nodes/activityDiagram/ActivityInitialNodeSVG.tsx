@@ -24,7 +24,12 @@ export const ActivityInitialNodeSVG: React.FC<SVGComponentProps> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <circle cx={width / 2} cy={height / 2} r={width / 2} fill="black" />
+      <circle
+        cx={width / 2}
+        cy={height / 2}
+        r={width / 2}
+        fill="var(--apollon2-primary-contrast)"
+      />
 
       {showAssessmentResults && (
         <AssessmentIcon x={width - 15} y={-15} score={nodeScore} />

@@ -1,4 +1,5 @@
-import { Box, TextField, Typography } from "@mui/material"
+import { Box } from "@mui/material"
+import { TextField, Typography } from "@/components/ui"
 import { PopoverProps } from "../types"
 import { useReactFlow } from "@xyflow/react"
 

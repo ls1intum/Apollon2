@@ -29,11 +29,16 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  background-color: var(--apollon-background);
+  /* background-color: var(--apollon2-background); */
   height: 100%;
+
 }
 
 .apollon-editor {
   flex-grow: 1;
-  background-color: var(--apollon-background);
+}
+
+.MuiMenu-list {
+  background-color: var(--apollon2-background) !important;
+  color: var(--apollon2-primary-contrast) !important;
 }

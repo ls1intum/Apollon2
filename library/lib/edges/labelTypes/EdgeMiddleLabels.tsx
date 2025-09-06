@@ -76,6 +76,7 @@ export const EdgeMiddleLabels = ({
           whiteSpace: "nowrap",
           pointerEvents: "none",
           zIndex: ZINDEX_LABEL,
+          color: "var(--apollon2-primary-contrast)",
         }}
         className="nodrag nopan"
       >

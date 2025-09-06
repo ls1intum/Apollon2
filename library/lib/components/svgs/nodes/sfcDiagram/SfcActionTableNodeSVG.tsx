@@ -1,6 +1,6 @@
 import { LINE_WIDTH } from "@/constants"
 import { SVGComponentProps } from "@/types/SVG"
-import { CustomText } from "@/components"
+import { CustomText, StyledRect } from "@/components"
 import { SfcActionRow } from "@/types"
 
 interface Props extends SVGComponentProps {
@@ -31,15 +31,7 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <rect
-        x={0}
-        y={0}
-        width={width}
-        height={height}
-        stroke="black"
-        strokeWidth={LINE_WIDTH}
-        fill="white"
-      />
+      <StyledRect x={0} y={0} width={width} height={height} />
 
       {/* Render action rows */}
       {actionRows.map((row, index) => {
@@ -80,7 +72,7 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
           y1={y}
           x2={width}
           y2={y}
-          stroke="black"
+          stroke="var(--apollon2-primary-contrast)"
           strokeWidth={LINE_WIDTH}
         />
       ))}
@@ -89,7 +81,7 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
         y1={0}
         x2={30}
         y2={height}
-        stroke="black"
+        stroke="var(--apollon2-primary-contrast)"
         strokeWidth={LINE_WIDTH}
       />
     </svg>

@@ -1,5 +1,5 @@
 import React from "react"
-import { CheckIcon, ExclamationIcon, Cross } from "../Icon"
+import { CheckIcon, ExclamationIcon, CrossIcon } from "../Icon"
 
 interface AssessmentIconProps {
   score?: number
@@ -26,7 +26,7 @@ const AssessmentIcon: React.FC<AssessmentIconProps> = ({ score, x, y }) => {
     if (score > 0) {
       return { Icon: CheckIcon, fill: "green" }
     } else if (score < 0) {
-      return { Icon: Cross, fill: "red" }
+      return { Icon: CrossIcon, fill: "red" }
     } else {
       return { Icon: ExclamationIcon, fill: "blue" }
     }

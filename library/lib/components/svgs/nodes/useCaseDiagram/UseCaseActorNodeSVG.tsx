@@ -32,8 +32,8 @@ export const UseCaseActorNodeSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <g strokeWidth={LINE_WIDTH} stroke="black">
-          <circle cx="45" cy="25" r="15" fill="white" />
+        <g strokeWidth={LINE_WIDTH} stroke="var(--apollon2-primary-contrast)">
+          <circle cx="45" cy="25" r="15" fill="var(--apollon2-background)" />
           <line x1="45" y1="40" x2="45" y2="80" />
           <line x1="15" y1="55" x2="75" y2="55" />
           <line x1="45" y1="80" x2="15" y2="110" />

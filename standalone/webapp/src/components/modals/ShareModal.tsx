@@ -1,4 +1,5 @@
-import { Tooltip, Typography } from "@mui/material"
+import { Tooltip } from "@mui/material"
+import { Typography } from "@/components/Typography"
 import Info from "@mui/icons-material/Info"
 import { APButton } from "../APButton"
 import { toast } from "react-toastify"
@@ -94,13 +95,15 @@ export const ShareModal = () => {
         </div>
       </div>
       <fieldset className="border border-gray-300 p-2 rounded-xl w-fill ">
-        <legend className="text-sm  px-2">Recently shared Diagram:</legend>
+        <legend className="text-sm px-2 text-[var(--apollon2-primary-contrast)]">
+          Recently shared Diagram:
+        </legend>
         <div className="flex items-center ">
           <input
             type="text"
             value={window.location.href}
             readOnly
-            className="grow h-[42px] px-3 py-2 border rounded-md border-r-0 rounded-r-none"
+            className="grow h-[42px] px-3 py-2 border rounded-md border-r-0 rounded-r-none border-[var(--apollon2-primary-contrast)] bg-[var(--apollon2-background)] text-[var(--apollon2-primary-contrast)]"
           />
           <APButton
             onClick={() => copyToClipboard(window.location.href)}

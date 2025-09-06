@@ -1,14 +1,8 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material"
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import { useReactFlow } from "@xyflow/react"
 import { PopoverProps } from "../types"
 import { BPMNStartEventType } from "@/types"
+import { TextField } from "@/components/ui"
 
 export const BPMNStartEventEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -33,8 +27,11 @@ export const BPMNStartEventEditPopover: React.FC<PopoverProps> = ({
         onChange={(e) => handleNameChange(e.target.value)}
       />
       <FormControl fullWidth size="small">
-        <InputLabel id="bpmn-start-type-label">Start Type</InputLabel>
+        <InputLabel sx={{ color: "red" }} id="bpmn-start-type-label">
+          Start Type
+        </InputLabel>
         <Select
+          sx={{ color: "red" }}
           labelId="bpmn-start-type-label"
           id="bpmn-start-type-select"
           value={data.eventType ?? "default"}

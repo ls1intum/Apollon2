@@ -1,12 +1,13 @@
 import React, { useState, KeyboardEvent, ChangeEvent } from "react"
-import { Box, TextField, Typography } from "@mui/material"
+import { Box } from "@mui/material"
+import { TextField, Typography } from "@/components/ui"
 import { generateUUID } from "@/utils"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import { SfcActionTableProps, SfcActionRow } from "@/types"
 import { PopoverProps } from "../types"
 import { DEFAULT_ATTRIBUTE_HEIGHT } from "@/constants"
+import { DeleteIcon } from "@/components/Icon"
 
 export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -151,8 +152,10 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
             }
             sx={{ backgroundColor: "#fff" }}
           />
-          <DeleteOutlineOutlinedIcon
-            sx={{ cursor: "pointer", width: 16, height: 16 }}
+          <DeleteIcon
+            width={16}
+            height={16}
+            style={{ cursor: "pointer" }}
             onClick={() => handleRowDelete(row.id)}
           />
         </Box>

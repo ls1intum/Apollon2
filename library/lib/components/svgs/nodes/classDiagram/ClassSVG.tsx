@@ -6,7 +6,6 @@ import {
   DEFAULT_METHOD_HEIGHT,
   DEFAULT_PADDING,
   DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE,
-  LINE_WIDTH,
 } from "@/constants/dropElementConfig"
 import { SeparationLine } from "@/components/svgs/nodes/SeparationLine"
 import { HeaderSection } from "../HeaderSection"
@@ -16,6 +15,7 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { AssessmentSelectableElement } from "@/components/AssessmentSelectableElement"
+import { StyledRect } from "../../StyledElements"
 
 export interface MinSize {
   minWidth: number
@@ -80,16 +80,7 @@ export const ClassSVG = ({
         itemHeight={headerHeight}
         yOffset={0}
       >
-        {/* Outer Rectangle */}
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          stroke="black"
-          strokeWidth={LINE_WIDTH}
-          fill="white"
-        />
+        <StyledRect x={0} y={0} width={width} height={height} />
 
         {/* Header Section */}
 

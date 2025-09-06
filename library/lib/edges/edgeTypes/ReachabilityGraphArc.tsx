@@ -92,7 +92,7 @@ export const ReachabilityGraphEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: isReconnectingRef.current ? "#b1b1b7" : "black",
+              stroke: "var(--apollon2-primary-contrast)",
               strokeDasharray: isReconnectingRef.current
                 ? "4 4"
                 : strokeDashArray,

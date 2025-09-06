@@ -34,9 +34,9 @@ export const FlowchartDecisionNodeSVG: React.FC<Props> = ({
         {/* Diamond shape for decision */}
         <polygon
           points={`${width / 2},0 ${width},${height / 2} ${width / 2},${height} 0,${height / 2}`}
-          stroke="black"
+          stroke="var(--apollon2-primary-contrast)"
+          fill="var(--apollon2-background)"
           strokeWidth={LINE_WIDTH}
-          fill="white"
         />
 
         {/* Name Text */}

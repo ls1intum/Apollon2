@@ -183,14 +183,18 @@ export class ApollonEditor {
     container.style.display = "flex"
     container.style.width = "100px"
     container.style.height = "100px"
+    container.style.zIndex = "-1000"
+    container.style.top = "0"
     container.style.position = "absolute"
     container.style.left = "-99px"
+
     document.body.appendChild(container)
 
     const ydoc = new Y.Doc()
     const diagramStore = createDiagramStore(ydoc)
     const metadataStore = createMetadataStore(ydoc)
     const popoverStore = createPopoverStore()
+    const assessmentSelectionStore = createAssessmentSelectionStore()
     const diagramId = Math.random().toString(36).substring(2, 15)
 
     let setReactFlowInstance: (instance: ReactFlowInstance) => void = () => {}
@@ -213,7 +217,11 @@ export class ApollonEditor {
       <DiagramStoreContext.Provider value={diagramStore}>
         <MetadataStoreContext.Provider value={metadataStore}>
           <PopoverStoreContext.Provider value={popoverStore}>
-            <AppWithProvider onReactFlowInit={setReactFlowInstance} />
+            <AssessmentSelectionStoreContext.Provider
+              value={assessmentSelectionStore}
+            >
+              <AppWithProvider onReactFlowInit={setReactFlowInstance} />
+            </AssessmentSelectionStoreContext.Provider>
           </PopoverStoreContext.Provider>
         </MetadataStoreContext.Provider>
       </DiagramStoreContext.Provider>

@@ -1,12 +1,11 @@
-import { Box, TextField, Typography, IconButton } from "@mui/material"
+import { Box, IconButton } from "@mui/material"
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps, MessageData } from "@/edges/EdgeProps"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon } from "@/components/Icon"
 import { PopoverProps } from "../types"
 import { useState, useEffect } from "react"
 import { generateUUID } from "@/index"
+import { TextField, Typography } from "@/components/ui"
 
 export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -184,8 +183,10 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
             />
 
             {/* Delete Button */}
-            <DeleteOutlineOutlinedIcon
-              sx={{ cursor: "pointer", width: 16, height: 16 }}
+            <DeleteIcon
+              width={16}
+              height={16}
+              style={{ cursor: "pointer" }}
               onClick={() => handleDeleteMessage(index)}
             />
           </Box>

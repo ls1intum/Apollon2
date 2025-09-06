@@ -2,11 +2,11 @@ import { useState, MouseEvent, FC } from "react"
 import Button from "@mui/material/Button"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import Typography from "@mui/material/Typography/Typography"
 import { secondary } from "@/constants"
 import { useModalContext } from "@/contexts"
 import { useNavigate } from "react-router"
+import { KeyboardArrowDownIcon } from "../Icon"
 
 interface Props {
   color?: string
@@ -62,9 +62,7 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
         sx={{ textTransform: "none" }} // This removes the uppercase transformation
       >
         <Typography color={color ?? secondary}>Help</Typography>
-        <KeyboardArrowDownIcon
-          sx={{ width: 16, height: 16, color: secondary }}
-        />
+        <KeyboardArrowDownIcon width={16} height={16} />
       </Button>
       <Menu
         id="basic-menu"
@@ -75,7 +73,15 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={openHelpModal}>How does this Editor Work?</MenuItem>
+        <MenuItem
+          sx={{
+            background: "var(--apollon2-background)",
+            color: "var(--apollon2-primary-contrast)",
+          }}
+          onClick={openHelpModal}
+        >
+          How does this Editor Work?
+        </MenuItem>
         <MenuItem onClick={openAboutModal}>About Apollon</MenuItem>
         <MenuItem onClick={openBugReport}>Report a Problem</MenuItem>
         <MenuItem onClick={linkToPlayground}>Open Playground</MenuItem>

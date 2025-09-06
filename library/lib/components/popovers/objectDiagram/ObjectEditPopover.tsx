@@ -1,7 +1,6 @@
-import { DividerLine } from "@/components"
+import { DividerLine, TextField } from "@/components/ui"
 import { useDiagramStore } from "@/store"
 import { ObjectNodeProps } from "@/types"
-import { TextField } from "@mui/material"
 import { useShallow } from "zustand/shallow"
 import { EditableAttributeList } from "../classDiagram/EditableAttributesList"
 import { EditableMethodsList } from "../classDiagram/EditableMethodsList"

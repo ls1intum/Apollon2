@@ -1,7 +1,8 @@
 import React from "react"
 import { useAssessmentSelectionStore } from "@/store"
 import { useShallow } from "zustand/shallow"
-import { Box, Typography, Chip } from "@mui/material"
+import { Box, Chip } from "@mui/material"
+import { Typography } from "@/components/ui"
 
 /**
  * Debug component to show currently selected elements in assessment mode

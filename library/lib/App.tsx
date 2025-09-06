@@ -60,9 +60,9 @@ function App({ onReactFlowInit }: AppProps) {
     useShallow((state) => ({
       mode: state.mode,
       diagramType: state.diagramType,
-      readonly: state.readonly,
     }))
   )
+
   const isDiagramModifiable = useDiagramModifiable()
 
   const connectionLineType = getConnectionLineType(diagramType)
@@ -89,10 +89,10 @@ function App({ onReactFlowInit }: AppProps) {
         height: "100%",
         width: "100%",
         overflow: "hidden",
+        backgroundColor: "var(--apollon2-background)",
       }}
     >
       {mode === ApollonMode.Modelling && <Sidebar />}
-
       <SvgMarkers />
       <ReactFlow
         id={`react-flow-library-${diagramId}`}

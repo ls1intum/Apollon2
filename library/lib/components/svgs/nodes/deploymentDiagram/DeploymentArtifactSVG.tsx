@@ -1,5 +1,4 @@
-import { CustomText } from "@/components"
-import { LINE_WIDTH } from "@/constants"
+import { CustomText, StyledRect } from "@/components"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
@@ -32,15 +31,7 @@ export const DeploymentArtifactSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          stroke="black"
-          strokeWidth={LINE_WIDTH}
-          fill="white"
-        />
+        <StyledRect x={0} y={0} width={width} height={height} />
 
         {/* Artifact Icon - Document-like representation */}
         <g transform={`translate(${width - 25}, 7)`}>
@@ -48,17 +39,15 @@ export const DeploymentArtifactSVG: React.FC<Props> = ({
             d="M 0 0 L 13 0 L 19.2 7.25 L 19.2 24 L 0 24 L 0 0 Z"
             strokeWidth="1.2"
             strokeMiterlimit="10"
-            stroke="black"
-            fill="var(--apollon-background, #ffffff)"
-            className="sc-gEvEer fkqzOi"
+            stroke="var(--apollon2-primary-contrast)"
+            fill="var(--apollon2-background)"
           ></path>
           <path
             d="M 13 0 L 13 7.25 L 19.2 7.25"
             strokeWidth="1.2"
             strokeMiterlimit="10"
-            stroke="black"
+            stroke="var(--apollon2-primary-contrast)"
             fill="none"
-            className="sc-gEvEer bFSwyf"
           ></path>
         </g>
 

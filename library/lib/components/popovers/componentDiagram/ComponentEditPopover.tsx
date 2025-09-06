@@ -3,7 +3,7 @@ import { DefaultNodeEditPopover } from "../DefaultNodeEditPopover"
 import { PopoverProps } from "../types"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
-import { ZINDEX_HEADER_SWITCH } from "@/constants/zindexConstants"
+import { HeaderSwitchElement } from "@/components"
 
 export const ComponentEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -40,22 +40,10 @@ export const ComponentEditPopover: React.FC<PopoverProps> = ({
   }
 
   const HeaderSwitcher = (
-    <div
+    <HeaderSwitchElement
       onClick={switchHeaderShown}
-      style={{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: ZINDEX_HEADER_SWITCH,
-        ...(nodeData.isComponentHeaderShown && {
-          background:
-            "linear-gradient(to top right, transparent calc(50% - 1px), black 50%, transparent calc(50% + 1px))",
-        }),
-      }}
-    >
-      {"«»"}
-    </div>
+      isComponentHeaderShown={nodeData.isComponentHeaderShown}
+    />
   )
   return (
     <DefaultNodeEditPopover

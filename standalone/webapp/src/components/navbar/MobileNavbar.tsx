@@ -15,6 +15,7 @@ import { useEditorContext, useModalContext } from "@/contexts"
 import TextField from "@mui/material/TextField/TextField"
 import TumLogo from "assets/images/tum-logo.png"
 import { useNavigate } from "react-router"
+import { ThemeSwitcherMenu } from "./ThemeSwitcher"
 
 export default function MobileNavbar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
@@ -64,10 +65,11 @@ export default function MobileNavbar() {
             flex: 1,
             justifyContent: "space-between",
             alignItems: "center",
+            px: 2,
           }}
         >
           {/* Mobile Menu Button */}
-          <Box sx={{ ml: 2, display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             {/* Logo */}
             <img alt="Logo" src={TumLogo} width="60" height="30" />
 
@@ -143,7 +145,7 @@ export default function MobileNavbar() {
             <BrandAndVersion />
           </div>
 
-          <div />
+          <ThemeSwitcherMenu />
         </Box>
       </Toolbar>
     </AppBar>

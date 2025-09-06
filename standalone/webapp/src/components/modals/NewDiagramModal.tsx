@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
+import { Typography } from "@/components/Typography"
 import { useState } from "react"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
@@ -87,12 +87,7 @@ export const NewDiagramModal = () => {
     >
       {/* Diagram Title */}
       <Box>
-        <Typography
-          variant="body2"
-          component="label"
-          htmlFor="diagram-title"
-          className="form-label"
-        >
+        <Typography variant="body2" component="label" className="form-label">
           Diagram Title
         </Typography>
         <TextField
@@ -102,6 +97,11 @@ export const NewDiagramModal = () => {
           onChange={handleDiagramNameChange}
           placeholder="Enter diagram title"
           variant="outlined"
+          sx={{
+            input: {
+              color: "var(--apollon2-primary-contrast)",
+            },
+          }}
         />
       </Box>
 

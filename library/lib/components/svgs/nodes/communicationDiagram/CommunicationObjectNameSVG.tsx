@@ -5,7 +5,6 @@ import {
   DEFAULT_ATTRIBUTE_HEIGHT,
   DEFAULT_METHOD_HEIGHT,
   DEFAULT_PADDING,
-  LINE_WIDTH,
 } from "@/constants/dropElementConfig"
 import { SeparationLine } from "@/components/svgs/nodes/SeparationLine"
 import { HeaderSection } from "../HeaderSection"
@@ -14,6 +13,7 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { StyledRect } from "@/components"
 
 export type CommunicationObjectNameSVGProps = SVGComponentProps & {
   methods: ClassNodeElement[]
@@ -64,15 +64,7 @@ export const CommunicationObjectNameSVG = ({
     >
       <g>
         {/* Outer Rectangle */}
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          stroke="black"
-          strokeWidth={LINE_WIDTH}
-          fill="white"
-        />
+        <StyledRect x={0} y={0} width={width} height={height} />
 
         {/* Header Section - Communication object name with underline */}
         <HeaderSection

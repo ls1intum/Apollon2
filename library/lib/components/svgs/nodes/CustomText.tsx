@@ -36,6 +36,7 @@ export const CustomText: FC<Props & Record<string, unknown>> = ({
   return (
     <text
       {...pos}
+      fill="var(--apollon2-primary-contrast)"
       style={fill ? { fill } : {}}
       dominantBaseline={dominantBaseline}
       textAnchor={textAnchor}
