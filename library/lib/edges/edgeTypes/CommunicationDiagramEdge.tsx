@@ -144,15 +144,15 @@ export const CommunicationDiagramEdge = ({
             ))}
         </g>
 
-      <EdgeMultipleLabels
-        messages={data?.messages}
-        pathMiddlePosition={edgeData.pathMiddlePosition}
-        showRelationshipLabels={true}
-        isReconnectingRef={isReconnectingRef}
-        sourcePosition={{ x: sourceX, y: sourceY }}
-        targetPosition={{ x: targetX, y: targetY }}
-        edgePoints={edgeData.activePoints} // Pass the edge points
-      />
+        <EdgeMultipleLabels
+          messages={data?.messages}
+          pathMiddlePosition={edgeData.pathMiddlePosition}
+          showRelationshipLabels={true}
+          isReconnectingRef={isReconnectingRef}
+          sourcePosition={{ x: sourceX, y: sourceY }}
+          targetPosition={{ x: targetX, y: targetY }}
+          edgePoints={edgeData.activePoints} // Pass the edge points
+        />
 
         <CommonEdgeElements
           id={id}

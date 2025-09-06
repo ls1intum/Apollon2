@@ -1,4 +1,3 @@
-
 /* eslint-disable */
 import { UMLModel, ApollonNode, ApollonEdge, Assessment } from "../typings"
 import { UMLDiagramType } from "../types/DiagramType"
