@@ -5,7 +5,7 @@ import { useShallow } from "zustand/shallow"
 import { PopoverProps } from "../types"
 import { DefaultNodeEditPopover } from "../DefaultNodeEditPopover"
 import { DividerLine } from "@/components"
-import { Infinite } from "@/components/Icon/Infinite"
+import { InfiniteIcon } from "@/components/Icon"
 
 export const PetriNetPlaceEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -141,7 +141,7 @@ export const PetriNetPlaceEditPopover: React.FC<PopoverProps> = ({
             />
             {nodeData.capacity === "Infinity" && (
               <div style={{ position: "absolute", top: 12, left: 8 }}>
-                <Infinite />
+                <InfiniteIcon />
               </div>
             )}
           </div>
@@ -149,7 +149,7 @@ export const PetriNetPlaceEditPopover: React.FC<PopoverProps> = ({
             onClick={() => handleCapacityChange("Infinity")}
             style={{ padding: 4 }}
           >
-            <Infinite />
+            <InfiniteIcon />
           </div>
         </div>
       </div>

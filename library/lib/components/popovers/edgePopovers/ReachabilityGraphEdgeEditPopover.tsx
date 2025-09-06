@@ -2,7 +2,7 @@ import { Box, TextField, Typography } from "@mui/material"
 
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps } from "@/edges/EdgeProps"
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
+import { SwapHorizIcon } from "@/components/Icon"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 
@@ -35,7 +35,7 @@ export const ReachabilityGraphEdgeEditPopover: React.FC<PopoverProps> = ({
         {/* Swap icon for source/target swap */}
         {handleSwap && (
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
+            <SwapHorizIcon style={{ cursor: "pointer" }} onClick={handleSwap} />
           </Box>
         )}
       </div>

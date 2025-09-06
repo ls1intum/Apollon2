@@ -2,7 +2,7 @@ import { SVGAttributes } from "react"
 
 type Props = SVGAttributes<SVGSVGElement>
 
-export const Cross = ({ width = 24, height = 24, ...props }: Props) => (
+export const CrossIcon = ({ width = 24, height = 24, ...props }: Props) => (
   <svg
     width={width}
     height={height}

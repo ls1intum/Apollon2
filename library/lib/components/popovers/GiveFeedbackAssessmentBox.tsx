@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useDiagramStore } from "@/store"
 import { Assessment } from "@/typings"
 import { useShallow } from "zustand/shallow"
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined"
+import { DeleteIcon } from "../Icon"
 
 interface Props {
   elementId: string
@@ -84,7 +84,7 @@ export const GiveFeedbackAssessmentBox = ({ elementId, name, type }: Props) => {
           />
         </div>
 
-        <DeleteOutlineOutlinedIcon onClick={handleDelete} />
+        <DeleteIcon onClick={handleDelete} />
       </div>
       <div style={{ marginTop: "8px" }}>
         <div>Feedback:</div>

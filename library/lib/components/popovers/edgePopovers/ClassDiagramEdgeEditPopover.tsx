@@ -10,7 +10,7 @@ import {
 
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps } from "@/edges/EdgeProps"
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
+import { SwapHorizIcon } from "@/components/Icon"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 
@@ -55,7 +55,7 @@ export const EdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
       {handleSwap && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <SwapHorizIcon sx={{ cursor: "pointer" }} onClick={handleSwap} />
+          <SwapHorizIcon style={{ cursor: "pointer" }} onClick={handleSwap} />
         </Box>
       )}
       <FormControl fullWidth size="small">

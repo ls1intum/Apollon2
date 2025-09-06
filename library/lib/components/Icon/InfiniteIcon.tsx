@@ -2,7 +2,7 @@ import { SVGAttributes } from "react"
 
 type Props = SVGAttributes<SVGSVGElement>
 
-export const Infinite = ({ width = 16, height = 16, ...props }: Props) => (
+export const InfiniteIcon = ({ width = 16, height = 16, ...props }: Props) => (
   <svg
     width={width}
     height={height}
