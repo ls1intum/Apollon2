@@ -1,4 +1,4 @@
-import { DiagramEdgeType } from "./edges/types"
+import { DiagramEdgeType, IPoint } from "./edges/types"
 import { DiagramNodeType } from "./nodes/types"
 import { UMLDiagramType } from "./types/DiagramType"
 import { Styles } from "./styles/theme"
@@ -52,6 +52,7 @@ export type ApollonEdge = {
   data: {
     [key: string]: unknown
   }
+  points: IPoint[]
 }
 
 export type UMLModel = {

@@ -46,7 +46,9 @@ export const mapFromReactFlowEdgeToApollonEdge = (edge: Edge): ApollonEdge => {
     type: edge.type! as DiagramEdgeType,
     sourceHandle: edge.sourceHandle ?? "",
     targetHandle: edge.targetHandle ?? "",
-
-    data: edge.data ?? {},
+    data: {
+      ...edge.data,
+    },
+    points: Array.isArray(edge.data?.points) ? edge.data.points : [],
   }
 }
