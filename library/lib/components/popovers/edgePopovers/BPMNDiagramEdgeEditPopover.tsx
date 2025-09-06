@@ -1,17 +1,10 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Typography,
-  TextField,
-} from "@mui/material"
+import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
 import { CustomEdgeProps } from "@/edges/EdgeProps"
 import { useReactFlow } from "@xyflow/react"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 import { SwapHorizIcon } from "@/components/Icon"
+import { TextField, Typography } from "@/components/ui"
 
 export const BPMNDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,

@@ -1,11 +1,10 @@
-import { DividerLine } from "@/components"
 import { useDiagramStore } from "@/store"
 import { CommunicationObjectNodeProps } from "@/types"
-import { TextField } from "@mui/material"
 import { useShallow } from "zustand/shallow"
 import { EditableAttributeList } from "../classDiagram/EditableAttributesList"
 import { EditableMethodsList } from "../classDiagram/EditableMethodsList"
 import { PopoverProps } from "../types"
+import { TextField, DividerLine } from "@/components/ui"
 
 export const CommunicationObjectNameEditPopover: React.FC<PopoverProps> = ({
   elementId,

@@ -1,9 +1,10 @@
-import { Box, TextField, Typography, IconButton } from "@mui/material"
+import { Box, IconButton } from "@mui/material"
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps, MessageData } from "@/edges/EdgeProps"
 import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon } from "@/components/Icon"
 import { PopoverProps } from "../types"
 import { useState, useEffect } from "react"
+import { TextField, Typography } from "@/components/ui"
 
 export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,

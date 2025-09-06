@@ -1,5 +1,5 @@
-import { Box, TextField, Typography } from "@mui/material"
-
+import { Box } from "@mui/material"
+import { TextField, Typography } from "@/components/ui"
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps } from "@/edges/EdgeProps"
 import { SwapHorizIcon } from "@/components/Icon"

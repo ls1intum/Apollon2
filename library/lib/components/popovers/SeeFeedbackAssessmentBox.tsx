@@ -1,6 +1,6 @@
-import { Typography } from "@mui/material"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
+import { Typography } from "@/components/ui"
 
 export const SeeFeedbackAssessmentBox = ({
   type,
