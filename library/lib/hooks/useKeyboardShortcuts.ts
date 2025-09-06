@@ -1,8 +1,11 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
 export const useKeyboardShortcuts = () => {
+  // Track paste count for progressive offset
+  const pasteCountRef = useRef(0)
+  
   const { 
     undo, 
     redo, 
@@ -58,6 +61,8 @@ export const useKeyboardShortcuts = () => {
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
             if (selectedElementIds.length > 0) {
+              // Reset paste count when copying new elements
+              pasteCountRef.current = 0
               const success = await copySelectedElements()
               if (success) {
                 console.log('Elements copied to clipboard')
@@ -68,7 +73,9 @@ export const useKeyboardShortcuts = () => {
         case "v":
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
-            const success = await pasteElements()
+            // Increment paste count for progressive offset
+            pasteCountRef.current += 1
+            const success = await pasteElements(pasteCountRef.current)
             if (success) {
               console.log('Elements pasted from clipboard')
             }

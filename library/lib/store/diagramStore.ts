@@ -86,7 +86,7 @@ export type DiagramStore = {
   updateUndoRedoState: () => void
   // Add these copy/paste methods to the type
   copySelectedElements: () => Promise<boolean>
-  pasteElements: () => Promise<boolean>
+  pasteElements: (pasteCount?: number) => Promise<boolean> // Updated signature
   hasSelectedElements: () => boolean
 }
 
@@ -572,7 +572,7 @@ export const createDiagramStore = (
           return false
         },
 
-        pasteElements: async () => {
+        pasteElements: async (pasteCount: number = 1) => {
           try {
             let text: string
             if (navigator.clipboard && window.isSecureContext) {
@@ -590,8 +590,11 @@ export const createDiagramStore = (
             // Create ID mappings for nodes
             const nodeIdMap = new Map<string, string>()
             const newElementIds: string[] = []
+            
+            // Progressive offset based on paste count
+            const progressiveOffset = PASTE_OFFSET * pasteCount
 
-            // Clone and paste nodes with new IDs and offset positions
+            // Clone and paste nodes with new IDs and progressive offset positions
             const pastedNodes = clipboardData.nodes.map((node: Node) => {
               const newId = generateUUID()
               nodeIdMap.set(node.id, newId)
@@ -601,8 +604,8 @@ export const createDiagramStore = (
                 ...node,
                 id: newId,
                 position: {
-                  x: node.position.x + PASTE_OFFSET,
-                  y: node.position.y + PASTE_OFFSET
+                  x: node.position.x + progressiveOffset,
+                  y: node.position.y + progressiveOffset
                 },
                 selected: true,
               }
