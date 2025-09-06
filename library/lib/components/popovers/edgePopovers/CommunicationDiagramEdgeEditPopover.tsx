@@ -4,6 +4,7 @@ import { CustomEdgeProps, MessageData } from "@/edges/EdgeProps"
 import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon } from "@/components/Icon"
 import { PopoverProps } from "../types"
 import { useState, useEffect } from "react"
+import { generateUUID } from "@/index"
 import { TextField, Typography } from "@/components/ui"
 
 export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
@@ -25,12 +26,6 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
       const edgeData = edge.data as CustomEdgeProps
       if (edgeData.messages) {
         setMessages(edgeData.messages)
-      } else if (edgeData.labels) {
-        const convertedMessages = edgeData.labels.map((label) => ({
-          text: label,
-          direction: "forward" as const,
-        }))
-        setMessages(convertedMessages)
       }
     }
   }, [edge])
@@ -72,8 +67,9 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
       setDuplicateError(false)
 
       const newMessage: MessageData = {
+        id: generateUUID(),
         text: trimmedInput,
-        direction: "forward",
+        direction: "target",
       }
       const newMessages = [...messages, newMessage]
       handleMessagesChange(newMessages)
@@ -112,7 +108,7 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
     newMessages[index] = {
       ...newMessages[index],
       direction:
-        newMessages[index].direction === "forward" ? "backward" : "forward",
+        newMessages[index].direction === "target" ? "source" : "target",
     }
     handleMessagesChange(newMessages)
   }
@@ -161,14 +157,14 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
             <IconButton
               size="small"
               onClick={() => handleMessageDirectionToggle(index)}
-              color={message.direction === "forward" ? "primary" : "secondary"}
+              color={message.direction === "target" ? "primary" : "secondary"}
               title={`Direction: ${
-                message.direction === "forward"
+                message.direction === "target"
                   ? `${sourceName} → ${targetName}`
                   : `${targetName} → ${sourceName}`
               }`}
             >
-              {message.direction === "forward" ? (
+              {message.direction === "target" ? (
                 <ArrowForwardIcon fontSize="small" />
               ) : (
                 <ArrowBackIcon fontSize="small" />

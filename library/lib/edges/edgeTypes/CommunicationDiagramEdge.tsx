@@ -82,7 +82,6 @@ export const CommunicationDiagramEdge = ({
     enableReconnection: true,
     enableStraightPath: false,
   })
-
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path">
@@ -146,12 +145,13 @@ export const CommunicationDiagramEdge = ({
         </g>
 
         <EdgeMultipleLabels
-          labels={data?.labels || []}
           messages={data?.messages}
           pathMiddlePosition={edgeData.pathMiddlePosition}
-          isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
           showRelationshipLabels={true}
           isReconnectingRef={isReconnectingRef}
+          sourcePosition={{ x: sourceX, y: sourceY }}
+          targetPosition={{ x: targetX, y: targetY }}
+          edgePoints={edgeData.activePoints} // Pass the edge points
         />
 
         <CommonEdgeElements
