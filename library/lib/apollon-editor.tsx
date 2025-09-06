@@ -97,7 +97,10 @@ export class ApollonEditor {
       this.metadataStore.getState().setDebug(options.debug)
     }
 
-    if (this.metadataStore.getState().mode === Apollon.ApollonMode.Modelling) {
+    if (
+      this.metadataStore.getState().mode === Apollon.ApollonMode.Modelling &&
+      !options?.collaborationEnabled
+    ) {
       this.diagramStore.getState().initializeUndoManager()
     }
 
