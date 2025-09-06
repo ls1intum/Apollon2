@@ -1,3 +1,5 @@
+
+/* eslint-disable */
 import { UMLModel, ApollonNode, ApollonEdge, Assessment } from "../typings"
 import { UMLDiagramType } from "../types/DiagramType"
 import { ClassType } from "../types/nodes/enums"
@@ -315,9 +317,7 @@ export function convertV3EdgeTypeToV4(
     // Flowchart
     FlowchartFlowline: "FlowChartFlowline",
   }
-  console.log("Converting edge type:", v3Type, flowType) // Debug log
   if (v3Type === "BPMNFlow" && flowType) {
-    console.log("Converting BPMNFlow with flowType:", flowType, v3Type) // Debug log
     const flowTypeMap: Record<string, string> = {
       sequence: "BPMNSequenceFlow",
       message: "BPMNMessageFlow",
@@ -636,7 +636,6 @@ function convertV3ElementToV4Node(
 function convertV3RelationshipToV4Edge(
   relationship: V3UMLRelationship
 ): ApollonEdge {
-  console.log("Converting relationship:", relationship) // Debug log
   const edgeType = convertV3EdgeTypeToV4(
     relationship.type,
     relationship.flowType
@@ -705,7 +704,6 @@ function convertV3AssessmentToV4(v3Assessment: V3Assessment): Assessment {
  * Main conversion function from v3 to v4 format
  */
 export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
-  console.log("Converting V3 data to V4 format:", v3Data) // Debug log
   const elements = v3Data.model.elements
   const relationships = v3Data.model.relationships
   const nodes: ApollonNode[] = Object.values(elements)

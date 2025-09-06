@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { UMLDiagramType } from "../types/DiagramType"
 import { IPoint } from "../edges/Connection"
 

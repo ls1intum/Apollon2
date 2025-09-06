@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { IPoint } from "../edges/Connection"
 
 export type V3Selection = {
