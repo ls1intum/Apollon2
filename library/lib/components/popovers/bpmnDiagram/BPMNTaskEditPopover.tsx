@@ -1,11 +1,5 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material"
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material"
+import { TextField } from "@/components/ui"
 import { useReactFlow } from "@xyflow/react"
 import { PopoverProps } from "../types"
 import { BPMNMarkerType, BPMNTaskType } from "@/types"

@@ -3,7 +3,7 @@ import {
   dropElementConfigs,
   transformScale,
 } from "@/constants/dropElementConfig"
-import { DividerLine } from "./DividerLine"
+import { DividerLine } from "./ui/DividerLine"
 import { useMetadataStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { DraggableGhost } from "./DraggableGhost"

@@ -1,14 +1,8 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material"
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import { useReactFlow } from "@xyflow/react"
 import { PopoverProps } from "../types"
 import { BPMNIntermediateEventType } from "@/types"
+import { TextField } from "@/components/ui"
 
 export const BPMNIntermediateEventEditPopover: React.FC<PopoverProps> = ({
   elementId,

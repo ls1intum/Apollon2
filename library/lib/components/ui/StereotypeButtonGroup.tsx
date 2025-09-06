@@ -1,8 +1,8 @@
 import React from "react"
-import { Button, ButtonGroup } from "@mui/material"
 import { ClassType } from "@/types"
 import { useShallow } from "zustand/shallow"
 import { useDiagramStore } from "@/store"
+import { PrimaryButton } from "./PrimaryButton"
 
 interface StereotypeButtonGroupProps {
   nodeId: string
@@ -14,6 +14,10 @@ const stereotypes: ClassType[] = [
   ClassType.Interface,
   ClassType.Enumeration,
 ]
+
+const buttonGroupStyle: React.CSSProperties = {
+  display: "flex",
+}
 
 export const StereotypeButtonGroup: React.FC<StereotypeButtonGroupProps> = ({
   nodeId,
@@ -53,16 +57,21 @@ export const StereotypeButtonGroup: React.FC<StereotypeButtonGroupProps> = ({
   }
 
   return (
-    <ButtonGroup aria-label="Stereotype selection" size="small">
-      {stereotypes.map((stereotype) => (
-        <Button
+    <div style={buttonGroupStyle}>
+      {stereotypes.map((stereotype, index) => (
+        <PrimaryButton
+          style={
+            index === 0
+              ? { borderLeft: "1px solid var(--apollon2-primary)" }
+              : {}
+          }
           key={stereotype}
-          variant={selectedStereotype === stereotype ? "contained" : "outlined"}
+          isSelected={selectedStereotype === stereotype}
           onClick={() => handleStereotypeChange(stereotype)}
         >
           {stereotype}
-        </Button>
+        </PrimaryButton>
       ))}
-    </ButtonGroup>
+    </div>
   )
 }

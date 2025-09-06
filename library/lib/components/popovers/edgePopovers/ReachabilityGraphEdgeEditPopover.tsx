@@ -1,4 +1,5 @@
-import { Box, TextField, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
+import { TextField } from "@/components/ui"
 
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps } from "@/edges/EdgeProps"

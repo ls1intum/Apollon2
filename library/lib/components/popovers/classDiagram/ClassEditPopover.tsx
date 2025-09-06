@@ -1,7 +1,7 @@
 import { DividerLine, StereotypeButtonGroup } from "@/components"
 import { useDiagramStore } from "@/store"
 import { ClassNodeProps } from "@/types"
-import { TextField } from "@mui/material"
+import { TextField } from "@/components/ui"
 import { useShallow } from "zustand/shallow"
 import { EditableAttributeList } from "./EditableAttributesList"
 import { EditableMethodsList } from "./EditableMethodsList"

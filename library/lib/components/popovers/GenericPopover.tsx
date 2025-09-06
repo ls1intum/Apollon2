@@ -48,6 +48,7 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
         display: "flex",
         flex: 1,
         flexDirection: "column",
+        backgroundColor: "var(--apollon2-background)",
       }}
     >
       {children}

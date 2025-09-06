@@ -3,7 +3,8 @@ import { DeploymentNodeProps } from "@/types"
 import { useShallow } from "zustand/shallow"
 import { DefaultNodeEditPopover } from "../DefaultNodeEditPopover"
 import { PopoverProps } from "../types"
-import { Divider, TextField } from "@mui/material"
+import { Divider } from "@mui/material"
+import { TextField } from "@/components/ui"
 import { ZINDEX_HEADER_SWITCH } from "@/constants/zindexConstants"
 
 export const DeploymentNodeEditPopover: React.FC<PopoverProps> = ({

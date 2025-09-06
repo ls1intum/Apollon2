@@ -25,7 +25,9 @@
 
 }
 
-
+.MuiOutlinedInput-notchedOutline{
+  border-color: var(--apollon2-primary-contrast) !important;
+}
 
 .react-flow {
   --panel-background: var(--apollon2-background);

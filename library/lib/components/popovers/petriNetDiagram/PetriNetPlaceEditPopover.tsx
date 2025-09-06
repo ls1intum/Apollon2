@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material"
+import { TextField } from "@/components/ui"
 import { PetriNetPlaceProps } from "@/types"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"

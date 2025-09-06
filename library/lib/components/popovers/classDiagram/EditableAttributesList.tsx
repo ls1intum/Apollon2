@@ -1,5 +1,6 @@
 import React, { useState, KeyboardEvent, ChangeEvent } from "react"
-import { Box, TextField, Typography } from "@mui/material"
+import { Box } from "@mui/material"
+import { TextField, Typography } from "@/components/ui"
 import { generateUUID } from "@/utils"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"

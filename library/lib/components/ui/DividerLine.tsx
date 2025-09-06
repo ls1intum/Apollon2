@@ -1,5 +1,4 @@
 import React from "react"
-import { Box } from "@mui/material"
 
 interface DividerLineProps {
   width?: string | number
@@ -12,12 +11,12 @@ export const DividerLine: React.FC<DividerLineProps> = ({
   height = "1px",
   style,
 }) => (
-  <Box
-    sx={{
+  <div
+    style={{
       width: width,
       height: height,
-      background: "black",
-      my: 1,
+      background: "var(--apollon2-primary-contrast)",
+      margin: "8px 0",
       ...style,
     }}
   />
