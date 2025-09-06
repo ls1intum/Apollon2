@@ -40,7 +40,7 @@ export const mapFromReactFlowNodeToApollonNode = (node: Node): ApollonNode => {
 
 export const mapFromReactFlowEdgeToApollonEdge = (edge: Edge): ApollonEdge => {
   console.log("Mapping React Flow edge to Apollon edge:", edge)
-  
+
   return {
     id: edge.id,
     source: edge.source,
@@ -49,8 +49,7 @@ export const mapFromReactFlowEdgeToApollonEdge = (edge: Edge): ApollonEdge => {
     sourceHandle: edge.sourceHandle ?? "",
     targetHandle: edge.targetHandle ?? "",
     data: {
-      ...edge.data
-
+      ...edge.data,
     },
     points: Array.isArray(edge.data?.points) ? edge.data.points : [],
   }

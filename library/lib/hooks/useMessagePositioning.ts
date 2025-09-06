@@ -45,14 +45,15 @@ export const useMessagePositioning = (
       let isHorizontalEdge = false
       if (points && points.length >= 2) {
         // Find the middle point index
-        const middleIndex = Math.floor(points.length / 2) -1 
+        const middleIndex = Math.floor(points.length / 2) - 1
         const middlePoint = points[middleIndex]
-        const nextPoint = points[Math.min(middleIndex +1, points.length - 1)]
-        
+        const nextPoint = points[Math.min(middleIndex + 1, points.length - 1)]
+
         // If we're at the last point, use the previous point instead
-        const referencePoint = middleIndex === points.length - 1 
-          ? points[Math.max(middleIndex - 1, 0)]
-          : nextPoint
+        const referencePoint =
+          middleIndex === points.length - 1
+            ? points[Math.max(middleIndex - 1, 0)]
+            : nextPoint
         const dx = Math.abs(referencePoint.x - middlePoint.x)
         const dy = Math.abs(referencePoint.y - middlePoint.y)
         isHorizontalEdge = dx > dy
@@ -91,11 +92,16 @@ export const useMessagePositioning = (
 
     const calculateRotation = (direction: ArrowDirection): number => {
       switch (direction) {
-        case "Right": return 0
-        case "Left": return 180
-        case "Down": return 90
-        case "Up": return -90
-        default: return 0
+        case "Right":
+          return 0
+        case "Left":
+          return 180
+        case "Down":
+          return 90
+        case "Up":
+          return -90
+        default:
+          return 0
       }
     }
 
@@ -115,14 +121,14 @@ export const useMessagePositioning = (
       // Horizontal middle segment: messages above and below
       forwardArrowBoxPosition = { x: 0, y: -baseOffset }
       forwardLabelBoxPosition = { x: labelOffset, y: -baseOffset }
-      
+
       backwardArrowBoxPosition = { x: 0, y: baseOffset }
       backwardLabelBoxPosition = { x: labelOffset, y: baseOffset }
     } else {
       // Vertical middle segment: messages left and right
       forwardArrowBoxPosition = { x: baseOffset, y: 0 }
       forwardLabelBoxPosition = { x: baseOffset + labelOffset, y: 0 }
-      
+
       backwardArrowBoxPosition = { x: -baseOffset, y: 0 }
       backwardLabelBoxPosition = { x: -baseOffset - labelOffset, y: 0 }
     }
@@ -138,9 +144,15 @@ export const useMessagePositioning = (
       forwardLabelBoxPosition,
       backwardArrowBoxPosition,
       backwardLabelBoxPosition,
-      isHorizontalEdge
+      isHorizontalEdge,
     }
-  }, [displayMessages, sourcePosition, targetPosition, pathMiddlePosition, edgePoints])
+  }, [
+    displayMessages,
+    sourcePosition,
+    targetPosition,
+    pathMiddlePosition,
+    edgePoints,
+  ])
 
   useEffect(() => {
     if (displayMessages && displayMessages.length > 0) {
@@ -152,9 +164,16 @@ export const useMessagePositioning = (
     } else {
       setIsPositioned(false)
     }
-  }, [displayMessages, sourcePosition, targetPosition, pathMiddlePosition, edgePoints])
+  }, [
+    displayMessages,
+    sourcePosition,
+    targetPosition,
+    pathMiddlePosition,
+    edgePoints,
+  ])
 
   return {
     ...positioningData,
     isPositioned,
-  }}
+  }
+}

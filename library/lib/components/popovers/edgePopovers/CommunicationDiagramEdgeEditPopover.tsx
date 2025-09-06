@@ -27,7 +27,7 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
       const edgeData = edge.data as CustomEdgeProps
       if (edgeData.messages) {
         setMessages(edgeData.messages)
-      } 
+      }
     }
   }, [edge])
 

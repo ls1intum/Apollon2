@@ -33,7 +33,7 @@ export const EdgeMultipleLabels: React.FC<{
     backwardArrowBoxPosition,
     backwardLabelBoxPosition,
     isPositioned,
-    isHorizontalEdge
+    isHorizontalEdge,
   } = useMessagePositioning(
     displayMessages,
     sourcePosition,
@@ -54,10 +54,10 @@ export const EdgeMultipleLabels: React.FC<{
 
   const getMessageOffset = (index: number, isForward: boolean) => {
     const spacing = 25
-    
+
     if (isHorizontalEdge) {
       if (isForward) {
-        return {y: -index * spacing, x: 0 }
+        return { y: -index * spacing, x: 0 }
       } else {
         return { y: index * spacing, x: 0 }
       }
@@ -65,7 +65,6 @@ export const EdgeMultipleLabels: React.FC<{
       return { y: index * spacing, x: 0 }
     }
   }
-
 
   const renderMessages = (
     messageList: MessageData[],

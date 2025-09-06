@@ -21,7 +21,7 @@ export const useExportAsJSON = () => {
       return
     }
 
-    const model= editor.model
+    const model = editor.model
     const jsonContent = JSON.stringify(model, null, 2)
     const diagramTitle = editor.model.title || "diagram"
     const fileName = `${diagramTitle}.json`

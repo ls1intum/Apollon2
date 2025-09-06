@@ -2,14 +2,13 @@ import { UMLModel, ApollonNode, ApollonEdge, Assessment } from "../typings"
 import { UMLDiagramType } from "../types/DiagramType"
 import { ClassType } from "../types/nodes/enums"
 import { IPoint } from "../edges/Connection"
-import { 
-  V3DiagramFormat, 
-  V3UMLElement, 
-  V3UMLRelationship, 
+import {
+  V3DiagramFormat,
+  V3UMLElement,
+  V3UMLRelationship,
   V3Assessment,
   V3Message,
-  V3Messages
-
+  V3Messages,
 } from "./v3Typings"
 
 import {
@@ -40,19 +39,19 @@ import {
 import { MessageData } from "@/edges/EdgeProps"
 
 interface V2DiagramFormat {
-  version: string;
+  version: string
   size: {
-    width: number;
-    height: number;
-  };
-  type: string;
+    width: number
+    height: number
+  }
+  type: string
   interactive: {
-    elements: string[];
-    relationships: string[];
-  };
-  elements: V3UMLElement[];
-  relationships: V3UMLRelationship[];
-  assessments: V3Assessment[];
+    elements: string[]
+    relationships: string[]
+  }
+  elements: V3UMLElement[]
+  relationships: V3UMLRelationship[]
+  assessments: V3Assessment[]
 }
 
 /**
@@ -61,52 +60,52 @@ interface V2DiagramFormat {
 export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
   // First convert v2 to v3 structure
   const v3Data: V3DiagramFormat = {
-    id: 'converted-diagram-' + Date.now(), // Generate a unique ID
-    title: 'Converted Diagram',
+    id: "converted-diagram-" + Date.now(), // Generate a unique ID
+    title: "Converted Diagram",
     model: {
       version: "3.0.0",
       type: v2Data.type,
       size: v2Data.size,
       interactive: {
         elements: {},
-        relationships: {}
+        relationships: {},
       },
       elements: {},
       relationships: {},
-      assessments: {}
-    }
-  };
+      assessments: {},
+    },
+  }
 
   if (v2Data.interactive?.elements) {
-    v2Data.interactive.elements.forEach(id => {
-      v3Data.model.interactive.elements[id] = true;
-    });
+    v2Data.interactive.elements.forEach((id) => {
+      v3Data.model.interactive.elements[id] = true
+    })
   }
-  
+
   if (v2Data.interactive?.relationships) {
-    v2Data.interactive.relationships.forEach(id => {
-      v3Data.model.interactive.relationships[id] = true;
-    });
+    v2Data.interactive.relationships.forEach((id) => {
+      v3Data.model.interactive.relationships[id] = true
+    })
   }
 
   if (v2Data.elements) {
-    v2Data.elements.forEach(element => {
-      v3Data.model.elements[element.id] = element;
-    });
+    v2Data.elements.forEach((element) => {
+      v3Data.model.elements[element.id] = element
+    })
   }
   if (v2Data.relationships) {
-    v2Data.relationships.forEach(relationship => {
-      v3Data.model.relationships[relationship.id] = relationship;
-    });
+    v2Data.relationships.forEach((relationship) => {
+      v3Data.model.relationships[relationship.id] = relationship
+    })
   }
 
   if (v2Data.assessments) {
-    v2Data.assessments.forEach(assessment => {
-      v3Data.model.assessments[assessment.modelElementId] = assessment;
-    });
+    v2Data.assessments.forEach((assessment) => {
+      v3Data.model.assessments[assessment.modelElementId] = assessment
+    })
   }
 
-  return convertV3ToV4(v3Data);
+  return convertV3ToV4(v3Data)
 }
 
 /**
@@ -116,7 +115,7 @@ export function isV2Format(data: any): data is V2DiagramFormat {
   return (
     data &&
     data.version &&
-    data.version.startsWith('2.') &&
+    data.version.startsWith("2.") &&
     data.size &&
     data.type &&
     Array.isArray(data.elements) &&
@@ -136,24 +135,24 @@ export function isV2Format(data: any): data is V2DiagramFormat {
 export function convertV3HandleToV4(v3Handle: string): string {
   const handleMap: Record<string, string> = {
     // Main directions
-    'Up': 'top',
-    'Right': 'right', 
-    'Down': 'bottom',
-    'Left': 'left',
-    
+    Up: "top",
+    Right: "right",
+    Down: "bottom",
+    Left: "left",
+
     // Diagonal/corner handles
-    'Upright': 'right-top',
-    'Upleft': 'left-top',
-    'Downright': 'right-bottom', 
-    'Downleft': 'left-bottom',
-    
+    Upright: "right-top",
+    Upleft: "left-top",
+    Downright: "right-bottom",
+    Downleft: "left-bottom",
+
     // Handle intermediate positions if they exist in V3
-    'RightTop': 'top-right',
-    'RightBottom': 'bottom-right',
-    'LeftTop': 'top-left',
-    'LeftBottom': 'bottom-left',
+    RightTop: "top-right",
+    RightBottom: "bottom-right",
+    LeftTop: "top-left",
+    LeftBottom: "bottom-left",
   }
-  
+
   return handleMap[v3Handle] || v3Handle.toLowerCase()
 }
 
@@ -163,178 +162,194 @@ export function convertV3HandleToV4(v3Handle: string): string {
 export function convertV3NodeTypeToV4(v3Type: string): string {
   const typeMap: Record<string, string> = {
     // Class Diagram
-    'Class': 'class',
-    'AbstractClass': 'class',
-    'Interface': 'class', 
-    'Enumeration': 'class',
-    'Package': 'package',
-    'ClassAttribute': 'classAttribute',
-    'ClassMethod': 'classMethod',
-    
+    Class: "class",
+    AbstractClass: "class",
+    Interface: "class",
+    Enumeration: "class",
+    Package: "package",
+    ClassAttribute: "classAttribute",
+    ClassMethod: "classMethod",
+
     // Activity Diagram
-    'ActivityInitialNode': 'activityInitialNode',
-    'ActivityFinalNode': 'activityFinalNode',
-    'ActivityActionNode': 'activityActionNode',
-    'ActivityObjectNode': 'activityObjectNode',
-    'ActivityForkNode': 'activityForkNode',
-    'ActivityForkNodeHorizontal': 'activityForkNodeHorizontal',
-    'ActivityMergeNode': 'activityMergeNode',
-    'ActivityDecisionNode': 'activityDecisionNode',
-    'Activity': 'activity',
-    
+    ActivityInitialNode: "activityInitialNode",
+    ActivityFinalNode: "activityFinalNode",
+    ActivityActionNode: "activityActionNode",
+    ActivityObjectNode: "activityObjectNode",
+    ActivityForkNode: "activityForkNode",
+    ActivityForkNodeHorizontal: "activityForkNodeHorizontal",
+    ActivityMergeNode: "activityMergeNode",
+    ActivityDecisionNode: "activityDecisionNode",
+    Activity: "activity",
+
     // Use Case Diagram
-    'UseCase': 'useCase',
-    'UseCaseActor': 'useCaseActor',
-    'UseCaseSystem': 'useCaseSystem',
-    
+    UseCase: "useCase",
+    UseCaseActor: "useCaseActor",
+    UseCaseSystem: "useCaseSystem",
+
     // Communication Diagram
-    'CommunicationObject': 'communicationObjectName',
-    
+    CommunicationObject: "communicationObjectName",
+
     // Component Diagram
-    'Component': 'component',
-    'ComponentInterface': 'componentInterface',
-    'Subsystem': 'componentSubsystem',
-    
+    Component: "component",
+    ComponentInterface: "componentInterface",
+    Subsystem: "componentSubsystem",
+
     // Deployment Diagram
-    'DeploymentNode': 'deploymentNode',
-    'DeploymentComponent': 'deploymentComponent',
-    'DeploymentArtifact': 'deploymentArtifact',
-    'DeploymentInterface': 'deploymentInterface',
-    
+    DeploymentNode: "deploymentNode",
+    DeploymentComponent: "deploymentComponent",
+    DeploymentArtifact: "deploymentArtifact",
+    DeploymentInterface: "deploymentInterface",
+
     // Object Diagram
-    'ObjectName': 'objectName',
-    'ObjectAttribute': 'objectAttribute',
-    'ObjectMethod': 'objectMethod',
-    
+    ObjectName: "objectName",
+    ObjectAttribute: "objectAttribute",
+    ObjectMethod: "objectMethod",
+
     // Petri Net
-    'PetriNetPlace': 'petriNetPlace',
-    'PetriNetTransition': 'petriNetTransition',
-    
+    PetriNetPlace: "petriNetPlace",
+    PetriNetTransition: "petriNetTransition",
+
     // Reachability Graph
-    'ReachabilityGraphMarking': 'reachabilityGraphMarking',
-    
+    ReachabilityGraphMarking: "reachabilityGraphMarking",
+
     // Syntax Tree
-    'SyntaxTreeNonterminal': 'syntaxTreeNonterminal',
-    'SyntaxTreeTerminal': 'syntaxTreeTerminal',
-    
+    SyntaxTreeNonterminal: "syntaxTreeNonterminal",
+    SyntaxTreeTerminal: "syntaxTreeTerminal",
+
     // Flowchart
-    'FlowchartProcess': 'flowchartProcess',
-    'FlowchartDecision': 'flowchartDecision',
-    'FlowchartInputOutput': 'flowchartInputOutput',
-    'FlowchartFunctionCall': 'flowchartFunctionCall',
-    'FlowchartTerminal': 'flowchartTerminal',
-    
+    FlowchartProcess: "flowchartProcess",
+    FlowchartDecision: "flowchartDecision",
+    FlowchartInputOutput: "flowchartInputOutput",
+    FlowchartFunctionCall: "flowchartFunctionCall",
+    FlowchartTerminal: "flowchartTerminal",
+
     // BPMN
-    'BPMNTask': 'bpmnTask',
-    'BPMNGateway': 'bpmnGateway',
-    'BPMNStartEvent': 'bpmnStartEvent',
-    'BPMNIntermediateEvent': 'bpmnIntermediateEvent',
-    'BPMNEndEvent': 'bpmnEndEvent',
-    'BPMNSubprocess': 'bpmnSubprocess',
-    'BPMNTransaction': 'bpmnTransaction',
-    'BPMNCallActivity': 'bpmnCallActivity',
-    'BPMNAnnotation': 'bpmnAnnotation',
-    'BPMNDataObject': 'bpmnDataObject',
-    'BPMNDataStore': 'bpmnDataStore',
-    'BPMNPool': 'bpmnPool',
-    'BPMNGroup': 'bpmnGroup',
-    
+    BPMNTask: "bpmnTask",
+    BPMNGateway: "bpmnGateway",
+    BPMNStartEvent: "bpmnStartEvent",
+    BPMNIntermediateEvent: "bpmnIntermediateEvent",
+    BPMNEndEvent: "bpmnEndEvent",
+    BPMNSubprocess: "bpmnSubprocess",
+    BPMNTransaction: "bpmnTransaction",
+    BPMNCallActivity: "bpmnCallActivity",
+    BPMNAnnotation: "bpmnAnnotation",
+    BPMNDataObject: "bpmnDataObject",
+    BPMNDataStore: "bpmnDataStore",
+    BPMNPool: "bpmnPool",
+    BPMNGroup: "bpmnGroup",
+
     // SFC Diagram
-    'SfcStart': 'sfcStart',
-    'SfcStep': 'sfcStep',
-    'SfcActionTable': 'sfcActionTable',
-    'SfcTransitionBranch': 'sfcTransitionBranch',
-    'SfcJump': 'sfcJump',
-    'SfcPreviewSpacer': 'sfcPreviewSpacer',
-    
+    SfcStart: "sfcStart",
+    SfcStep: "sfcStep",
+    SfcActionTable: "sfcActionTable",
+    SfcTransitionBranch: "sfcTransitionBranch",
+    SfcJump: "sfcJump",
+    SfcPreviewSpacer: "sfcPreviewSpacer",
+
     // Special nodes
-    'ColorDescription': 'colorDescription',
-    'TitleAndDescription': 'titleAndDesctiption', // Note the typo in V4: "desctiption"
+    ColorDescription: "colorDescription",
+    TitleAndDescription: "titleAndDesctiption", // Note the typo in V4: "desctiption"
   }
-  
+
   return typeMap[v3Type] || v3Type.toLowerCase()
 }
 
 /**
  * Convert v3 edge types to v4 edge types
  */
-export function convertV3EdgeTypeToV4(v3Type: string): string {
+export function convertV3EdgeTypeToV4(
+  v3Type: string,
+  flowType?: string
+): string {
   const edgeTypeMap: Record<string, string> = {
     // Class Diagram
-    'ClassBidirectional': 'ClassBidirectional',
-    'ClassUnidirectional': 'ClassUnidirectional',
-    'ClassInheritance': 'ClassInheritance',
-    'ClassRealization': 'ClassRealization',
-    'ClassDependency': 'ClassDependency',
-    'ClassAggregation': 'ClassAggregation',
-    'ClassComposition': 'ClassComposition',
-    
+    ClassBidirectional: "ClassBidirectional",
+    ClassUnidirectional: "ClassUnidirectional",
+    ClassInheritance: "ClassInheritance",
+    ClassRealization: "ClassRealization",
+    ClassDependency: "ClassDependency",
+    ClassAggregation: "ClassAggregation",
+    ClassComposition: "ClassComposition",
+
     // Activity Diagram
-    'ActivityControlFlow': 'ActivityControlFlow',
-    
+    ActivityControlFlow: "ActivityControlFlow",
+
     // Use Case Diagram
-    'UseCaseAssociation': 'UseCaseAssociation',
-    'UseCaseInclude': 'UseCaseInclude',
-    'UseCaseExtend': 'UseCaseExtend',
-    'UseCaseGeneralization': 'UseCaseGeneralization',
-    
+    UseCaseAssociation: "UseCaseAssociation",
+    UseCaseInclude: "UseCaseInclude",
+    UseCaseExtend: "UseCaseExtend",
+    UseCaseGeneralization: "UseCaseGeneralization",
+
     // Communication Diagram
-    'CommunicationLink': 'CommunicationLink',
-    
+    CommunicationLink: "CommunicationLink",
+
     // Component Diagram
-    'ComponentDependency': 'ComponentDependency',
-    'ComponentInterfaceProvided': 'ComponentProvidedInterface',
-    'ComponentInterfaceRequired': 'ComponentRequiredInterface',
-    'ComponentInterfaceRequiredQuarter': 'ComponentRequiredQuarterInterface',
-    'ComponentInterfaceRequiredThreeQuarter': 'ComponentRequiredThreeQuarterInterface',
-    
+    ComponentDependency: "ComponentDependency",
+    ComponentInterfaceProvided: "ComponentProvidedInterface",
+    ComponentInterfaceRequired: "ComponentRequiredInterface",
+    ComponentInterfaceRequiredQuarter: "ComponentRequiredQuarterInterface",
+    ComponentInterfaceRequiredThreeQuarter:
+      "ComponentRequiredThreeQuarterInterface",
+
     // Deployment Diagram
-    'DeploymentDependency': 'DeploymentDependency',
-    'DeploymentAssociation': 'DeploymentAssociation',
-    'DeploymentInterfaceProvided': 'DeploymentProvidedInterface',
-    'DeploymentInterfaceRequired': 'DeploymentRequiredInterface',
-    'DeploymentInterfaceRequiredQuarter': 'DeploymentRequiredQuarterInterface',
-    'DeploymentInterfaceRequiredThreeQuarter': 'DeploymentRequiredThreeQuarterInterface',
-    
+    DeploymentDependency: "DeploymentDependency",
+    DeploymentAssociation: "DeploymentAssociation",
+    DeploymentInterfaceProvided: "DeploymentProvidedInterface",
+    DeploymentInterfaceRequired: "DeploymentRequiredInterface",
+    DeploymentInterfaceRequiredQuarter: "DeploymentRequiredQuarterInterface",
+    DeploymentInterfaceRequiredThreeQuarter:
+      "DeploymentRequiredThreeQuarterInterface",
+
     // Object Diagram
-    'ObjectLink': 'ObjectLink',
-    
+    ObjectLink: "ObjectLink",
+
     // Petri Net
-    'PetriNetArc': 'PetriNetArc',
-    
+    PetriNetArc: "PetriNetArc",
+
     // Reachability Graph
-    'ReachabilityGraphArc': 'ReachabilityGraphArc',
-    
+    ReachabilityGraphArc: "ReachabilityGraphArc",
+
     // Syntax Tree
-    'SyntaxTreeLink': 'SyntaxTreeLink',
-    
+    SyntaxTreeLink: "SyntaxTreeLink",
+
     // Flowchart
-    'FlowchartFlowline': 'FlowChartFlowline',
-    
-    // BPMN
-    'BPMNSequenceFlow': 'BPMNSequenceFlow',
-    'BPMNMessageFlow': 'BPMNMessageFlow',
-    'BPMNAssociationFlow': 'BPMNAssociationFlow',
-    'BPMNDataAssociationFlow': 'BPMNDataAssociationFlow',
+    FlowchartFlowline: "FlowChartFlowline",
   }
-  
+  console.log("Converting edge type:", v3Type, flowType) // Debug log
+  if (v3Type === "BPMNFlow" && flowType) {
+    console.log("Converting BPMNFlow with flowType:", flowType, v3Type) // Debug log
+    const flowTypeMap: Record<string, string> = {
+      sequence: "BPMNSequenceFlow",
+      message: "BPMNMessageFlow",
+      association: "BPMNAssociationFlow",
+      dataAssociation: "BPMNDataAssociationFlow",
+    }
+    return flowTypeMap[flowType] || "BPMNSequenceFlow" // Default to sequence flow
+  }
+
   return edgeTypeMap[v3Type] || v3Type
 }
 
 /**
  * Calculate relative position within parent bounds
  */
-function calculateRelativePosition(child: V3UMLElement, parent: V3UMLElement): { x: number; y: number } {
+function calculateRelativePosition(
+  child: V3UMLElement,
+  parent: V3UMLElement
+): { x: number; y: number } {
   return {
     x: child.bounds.x - parent.bounds.x,
-    y: child.bounds.y - parent.bounds.y
+    y: child.bounds.y - parent.bounds.y,
   }
 }
 
 /**
  * Convert V3 node data to V4 node data format
  */
-function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string, V3UMLElement>): any {
+function convertV3NodeDataToV4(
+  element: V3UMLElement,
+  allElements: Record<string, V3UMLElement>
+): any {
   const baseData = {
     name: element.name,
     ...(element.fillColor && { fillColor: element.fillColor }),
@@ -342,38 +357,37 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
     ...(element.textColor && { textColor: element.textColor }),
     ...(element.highlight && { highlight: element.highlight }),
     ...(element.assessmentNote && { assessmentNote: element.assessmentNote }),
-
   }
 
   switch (element.type) {
-    case 'Class':
-    case 'AbstractClass':
-    case 'Interface':
-    case 'Enumeration': {
+    case "Class":
+    case "AbstractClass":
+    case "Interface":
+    case "Enumeration": {
       const attributes: Array<{ id: string; name: string }> = []
       const methods: Array<{ id: string; name: string }> = []
-      Object.values(allElements).forEach(childElement => {
+      Object.values(allElements).forEach((childElement) => {
         if (childElement.owner === element.id) {
-          if (childElement.type === 'ClassAttribute') {
+          if (childElement.type === "ClassAttribute") {
             attributes.push({ id: childElement.id, name: childElement.name })
-          } else if (childElement.type === 'ClassMethod') {
+          } else if (childElement.type === "ClassMethod") {
             methods.push({ id: childElement.id, name: childElement.name })
           }
         }
       })
       if (element.attributes && Array.isArray(element.attributes)) {
-        element.attributes.forEach(attrId => {
+        element.attributes.forEach((attrId) => {
           const attr = allElements[attrId]
-          if (attr && !attributes.find(a => a.id === attr.id)) {
+          if (attr && !attributes.find((a) => a.id === attr.id)) {
             attributes.push({ id: attr.id, name: attr.name })
           }
         })
       }
 
       if (element.methods && Array.isArray(element.methods)) {
-        element.methods.forEach(methodId => {
+        element.methods.forEach((methodId) => {
           const method = allElements[methodId]
-          if (method && !methods.find(m => m.id === method.id)) {
+          if (method && !methods.find((m) => m.id === method.id)) {
             methods.push({ id: method.id, name: method.name })
           }
         })
@@ -381,11 +395,11 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
 
       // Determine stereotype
       let stereotype: ClassType | undefined
-      if (element.type === 'AbstractClass') {
+      if (element.type === "AbstractClass") {
         stereotype = ClassType.Abstract
-      } else if (element.type === 'Interface') {
+      } else if (element.type === "Interface") {
         stereotype = ClassType.Interface
-      } else if (element.type === 'Enumeration') {
+      } else if (element.type === "Enumeration") {
         stereotype = ClassType.Enumeration
       }
 
@@ -398,15 +412,15 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       return classData
     }
 
-    case 'ObjectName': {
+    case "ObjectName": {
       const attributes: Array<{ id: string; name: string }> = []
       const methods: Array<{ id: string; name: string }> = []
 
-      Object.values(allElements).forEach(childElement => {
+      Object.values(allElements).forEach((childElement) => {
         if (childElement.owner === element.id) {
-          if (childElement.type === 'ObjectAttribute') {
+          if (childElement.type === "ObjectAttribute") {
             attributes.push({ id: childElement.id, name: childElement.name })
-          } else if (childElement.type === 'ObjectMethod') {
+          } else if (childElement.type === "ObjectMethod") {
             methods.push({ id: childElement.id, name: childElement.name })
           }
         }
@@ -420,7 +434,7 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       return objectData
     }
 
-    case 'CommunicationObject': {
+    case "CommunicationObject": {
       const attributes: Array<{ id: string; name: string }> = []
       const methods: Array<{ id: string; name: string }> = []
 
@@ -432,7 +446,7 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       return communicationData
     }
 
-    case 'Component': {
+    case "Component": {
       const componentData: ComponentNodeProps = {
         ...baseData,
         isComponentHeaderShown: element.displayStereotype !== false,
@@ -440,7 +454,7 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       return componentData
     }
 
-    case 'ComponentSubsystem': {
+    case "ComponentSubsystem": {
       const subsystemData: ComponentSubsystemNodeProps = {
         ...baseData,
         isComponentSubsystemHeaderShown: element.displayStereotype !== false,
@@ -448,16 +462,16 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       return subsystemData
     }
 
-    case 'DeploymentNode': {
+    case "DeploymentNode": {
       const deploymentData: DeploymentNodeProps = {
         ...baseData,
         isComponentHeaderShown: element.displayStereotype !== false,
-        stereotype: element.stereotype || '',
+        stereotype: element.stereotype || "",
       }
       return deploymentData
     }
 
-    case 'DeploymentComponent': {
+    case "DeploymentComponent": {
       const deploymentComponentData: DeploymentComponentProps = {
         ...baseData,
         isComponentHeaderShown: element.displayStereotype !== false,
@@ -465,13 +479,13 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       return deploymentComponentData
     }
 
-    case 'PetriNetPlace': {
+    case "PetriNetPlace": {
       // Handle capacity type conversion - V3 allows string, V4 only allows number | "Infinity"
       let capacity: number | "Infinity" = "Infinity"
       if (element.capacity !== undefined) {
-        if (typeof element.capacity === 'number') {
+        if (typeof element.capacity === "number") {
           capacity = element.capacity
-        } else if (typeof element.capacity === 'string') {
+        } else if (typeof element.capacity === "string") {
           if (element.capacity === "Infinity" || element.capacity === "∞") {
             capacity = "Infinity"
           } else {
@@ -490,65 +504,64 @@ function convertV3NodeDataToV4(element: V3UMLElement, allElements: Record<string
       return petriNetData
     }
 
-    case 'BPMNTask': {
+    case "BPMNTask": {
       const bpmnTaskData: BPMNTaskProps = {
         ...baseData,
-        taskType: (element.taskType as any) || 'default',
-        marker: (element.marker as any) || 'none',
+        taskType: (element.taskType as any) || "default",
+        marker: (element.marker as any) || "none",
       }
       return bpmnTaskData
     }
 
-    case 'BPMNGateway': {
+    case "BPMNGateway": {
       const bpmnGatewayData: BPMNGatewayProps = {
         ...baseData,
-        gatewayType: (element.gatewayType as any) || 'exclusive',
+        gatewayType: (element.gatewayType as any) || "exclusive",
       }
       return bpmnGatewayData
     }
 
-    case 'BPMNStartEvent': {
+    case "BPMNStartEvent": {
       const bpmnStartEventData: BPMNStartEventProps = {
         ...baseData,
-        eventType: (element.eventType as any) || 'default',
+        eventType: (element.eventType as any) || "default",
       }
       return bpmnStartEventData
     }
 
-    case 'BPMNIntermediateEvent': {
+    case "BPMNIntermediateEvent": {
       const bpmnIntermediateEventData: BPMNIntermediateEventProps = {
         ...baseData,
-        eventType: (element.eventType as any) || 'default',
+        eventType: (element.eventType as any) || "default",
       }
       return bpmnIntermediateEventData
     }
 
-    case 'BPMNEndEvent': {
+    case "BPMNEndEvent": {
       const bpmnEndEventData: BPMNEndEventProps = {
         ...baseData,
-        eventType: (element.eventType as any) || 'default',
+        eventType: (element.eventType as any) || "default",
       }
       return bpmnEndEventData
     }
 
-    case 'ReachabilityGraphMarking': {
+    case "ReachabilityGraphMarking": {
       const reachabilityData: ReachabilityGraphMarkingProps = {
         ...baseData,
         isInitialMarking: element.isInitialMarking || false,
       }
       return reachabilityData
-      
     }
 
     // For other BPMN elements that just need base data
-    case 'BPMNSubprocess':
-    case 'BPMNTransaction':
-    case 'BPMNCallActivity':
-    case 'BPMNAnnotation':
-    case 'BPMNDataObject':
-    case 'BPMNDataStore':
-    case 'BPMNPool':
-    case 'BPMNGroup':
+    case "BPMNSubprocess":
+    case "BPMNTransaction":
+    case "BPMNCallActivity":
+    case "BPMNAnnotation":
+    case "BPMNDataObject":
+    case "BPMNDataStore":
+    case "BPMNPool":
+    case "BPMNGroup":
       return baseData
 
     default:
@@ -572,10 +585,10 @@ export function convertV3MessagesToV4(
   }
 
   // If V3 format (object with IDs), convert to array
-  if (typeof messages === 'object' && messages !== null) {
+  if (typeof messages === "object" && messages !== null) {
     return Object.values(messages).map((message: V3Message) => ({
       text: message.name,
-      direction: message.direction === 'source' ? 'target' : 'source',
+      direction: message.direction === "source" ? "target" : "source",
       id: message.id,
     }))
   }
@@ -586,7 +599,10 @@ export function convertV3MessagesToV4(
 /**
  * Convert v3 element to v4 node
  */
-function convertV3ElementToV4Node(element: V3UMLElement, allElements: Record<string, V3UMLElement>): ApollonNode {
+function convertV3ElementToV4Node(
+  element: V3UMLElement,
+  allElements: Record<string, V3UMLElement>
+): ApollonNode {
   let position = { x: element.bounds.x, y: element.bounds.y }
   if (element.owner) {
     const parent = allElements[element.owner]
@@ -617,37 +633,21 @@ function convertV3ElementToV4Node(element: V3UMLElement, allElements: Record<str
 /**
  * Convert v3 relationship to v4 edge
  */
-function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): ApollonEdge {
-  const edgeType = convertV3EdgeTypeToV4(relationship.type)
+function convertV3RelationshipToV4Edge(
+  relationship: V3UMLRelationship
+): ApollonEdge {
+  console.log("Converting relationship:", relationship) // Debug log
+  const edgeType = convertV3EdgeTypeToV4(
+    relationship.type,
+    relationship.flowType
+  )
   let points: IPoint[] = []
   if (relationship.path && relationship.path.length > 0) {
-    points = relationship.path.map(point => ({
+    points = relationship.path.map((point) => ({
       x: point.x + relationship.bounds.x,
-      y: point.y + relationship.bounds.y
+      y: point.y + relationship.bounds.y,
     }))
-    
   }
-
-
-  // const data:  = {
-  //   ...(points.length > 0 && { points }),
-
-  //   sourceMultiplicity: relationship.source.multiplicity || "",
-  //   targetMultiplicity: relationship.target.multiplicity || "",
-  //   sourceRole: relationship.source.role || "",
-  //   targetRole: relationship.target.role || "",
-  //   isManuallyLayouted: relationship.isManuallyLayouted || false,
-  //   // Communication Link specific
-  //   ...(relationship.messages && { messages: relationship.messages }),
-  //   // BPMN specific
-  //   ...(relationship.flowType && { flowType: relationship.flowType }),
-  //   // Visual properties
-  //   ...(relationship.fillColor && { fillColor: relationship.fillColor }),
-  //   ...(relationship.strokeColor && { strokeColor: relationship.strokeColor }),
-  //   ...(relationship.textColor && { textColor: relationship.textColor }),
-  //   ...(relationship.highlight && { highlight: relationship.highlight }),
-  //   ...(relationship.assessmentNote && { assessmentNote: relationship.assessmentNote }),
-  // }
 
   const edge: ApollonEdge = {
     id: relationship.id,
@@ -656,17 +656,28 @@ function convertV3RelationshipToV4Edge(relationship: V3UMLRelationship): Apollon
     type: edgeType as any,
     sourceHandle: convertV3HandleToV4(relationship.source.direction || ""),
     targetHandle: convertV3HandleToV4(relationship.target.direction || ""),
-    data:
-    {
+    data: {
       label: relationship.name || "",
       sourceMultiplicity: relationship.source.multiplicity || "",
       targetMultiplicity: relationship.target.multiplicity || "",
       sourceRole: relationship.source.role || "",
       targetRole: relationship.target.role || "",
       isManuallyLayouted: relationship.isManuallyLayouted || false,
-      messages: convertV3MessagesToV4(relationship.messages)
+      messages: convertV3MessagesToV4(relationship.messages),
+      // Preserve flowType for BPMN edges
+      ...(relationship.flowType && { flowType: relationship.flowType }),
+      // Visual properties
+      ...(relationship.fillColor && { fillColor: relationship.fillColor }),
+      ...(relationship.strokeColor && {
+        strokeColor: relationship.strokeColor,
+      }),
+      ...(relationship.textColor && { textColor: relationship.textColor }),
+      ...(relationship.highlight && { highlight: relationship.highlight }),
+      ...(relationship.assessmentNote && {
+        assessmentNote: relationship.assessmentNote,
+      }),
     },
-    points: points
+    points: points,
   }
 
   return edge
@@ -684,7 +695,9 @@ function convertV3AssessmentToV4(v3Assessment: V3Assessment): Assessment {
     ...(v3Assessment.dropInfo && { dropInfo: v3Assessment.dropInfo }),
     ...(v3Assessment.label && { label: v3Assessment.label }),
     ...(v3Assessment.labelColor && { labelColor: v3Assessment.labelColor }),
-    ...(v3Assessment.correctionStatus && { correctionStatus: v3Assessment.correctionStatus }),
+    ...(v3Assessment.correctionStatus && {
+      correctionStatus: v3Assessment.correctionStatus,
+    }),
   }
 }
 
@@ -692,55 +705,63 @@ function convertV3AssessmentToV4(v3Assessment: V3Assessment): Assessment {
  * Main conversion function from v3 to v4 format
  */
 export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
+  console.log("Converting V3 data to V4 format:", v3Data) // Debug log
   const elements = v3Data.model.elements
   const relationships = v3Data.model.relationships
   const nodes: ApollonNode[] = Object.values(elements)
-    .filter(element => !['ClassAttribute', 'ClassMethod', 'ObjectAttribute', 'ObjectMethod'].includes(element.type))
-    .map(element => {
+    .filter(
+      (element) =>
+        ![
+          "ClassAttribute",
+          "ClassMethod",
+          "ObjectAttribute",
+          "ObjectMethod",
+        ].includes(element.type)
+    )
+    .map((element) => {
       const node = convertV3ElementToV4Node(element, elements)
 
       return node
     })
-  const edges: ApollonEdge[] = Object.values(relationships).map(relationship => 
-    convertV3RelationshipToV4Edge(relationship)
+  const edges: ApollonEdge[] = Object.values(relationships).map(
+    (relationship) => convertV3RelationshipToV4Edge(relationship)
   )
 
   const assessments: Record<string, Assessment> = {}
   if (v3Data.model.assessments) {
-   
     Object.entries(v3Data.model.assessments).forEach(([id, v3Assessment]) => {
       try {
         assessments[id] = convertV3AssessmentToV4(v3Assessment)
-   
       } catch (error) {
         console.warn(`Failed to convert assessment for element ${id}:`, error)
       }
     })
   }
 
-
   const supportedDiagramTypes: UMLDiagramType[] = [
-    'ClassDiagram',
-    'ObjectDiagram', 
-    'ActivityDiagram',
-    'UseCaseDiagram',
-    'CommunicationDiagram',
-    'ComponentDiagram',
-    'DeploymentDiagram',
-    'PetriNet',
-    'ReachabilityGraph',
-    'SyntaxTree',
-    'Flowchart',
-    'BPMN',
-    'Sfc'
+    "ClassDiagram",
+    "ObjectDiagram",
+    "ActivityDiagram",
+    "UseCaseDiagram",
+    "CommunicationDiagram",
+    "ComponentDiagram",
+    "DeploymentDiagram",
+    "PetriNet",
+    "ReachabilityGraph",
+    "SyntaxTree",
+    "Flowchart",
+    "BPMN",
+    "Sfc",
   ]
 
   if (!supportedDiagramTypes.includes(v3Data.model.type as UMLDiagramType)) {
-    console.warn(`Diagram type '${v3Data.model.type}' may not be fully supported in V4`)
+    console.warn(
+      `Diagram type '${v3Data.model.type}' may not be fully supported in V4`
+    )
   }
 
   const v4Model: UMLModel = {
-    version: '4.0.0',
+    version: "4.0.0",
     id: v3Data.id,
     title: v3Data.title,
     type: v3Data.model.type as UMLDiagramType, // Now properly typed
@@ -748,10 +769,9 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
     edges,
     assessments,
   }
-  
+
   return v4Model
 }
-
 
 /**
  * Check if data is in v3 format
@@ -761,11 +781,11 @@ export function isV3Format(data: any): data is V3DiagramFormat {
     data &&
     data.model &&
     data.model.version &&
-    data.model.version.startsWith('3.') &&
+    data.model.version.startsWith("3.") &&
     data.model.elements &&
     data.model.relationships &&
-    typeof data.model.elements === 'object' &&
-    typeof data.model.relationships === 'object'
+    typeof data.model.elements === "object" &&
+    typeof data.model.relationships === "object"
   )
 }
 
@@ -776,7 +796,7 @@ export function isV4Format(data: any): data is UMLModel {
   return (
     data &&
     data.version &&
-    data.version.startsWith('4.') &&
+    data.version.startsWith("4.") &&
     Array.isArray(data.nodes) &&
     Array.isArray(data.edges)
   )
@@ -786,11 +806,10 @@ export function isV4Format(data: any): data is UMLModel {
  * Universal import function that handles v2, v3 and v4 formats
  */
 export function importDiagram(data: any): UMLModel {
-
   if (isV4Format(data)) {
     return data
   }
-  
+
   if (isV3Format(data)) {
     return convertV3ToV4(data)
   }
@@ -799,5 +818,12 @@ export function importDiagram(data: any): UMLModel {
     return convertV2ToV4(data)
   }
 
-  throw new Error("Unsupported diagram format. Only 2.x.x, 3.x.x and 4.x.x formats are supported.")
+  if (data.model) {
+    //playground
+    return importDiagram(data.model)
+  }
+
+  throw new Error(
+    "Unsupported diagram format. Only 2.x.x, 3.x.x and 4.x.x formats are supported."
+  )
 }

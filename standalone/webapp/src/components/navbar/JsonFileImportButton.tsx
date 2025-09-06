@@ -26,11 +26,12 @@ export const JsonFileImportButton: React.FC = () => {
       try {
         const timeStapToCreate = new Date().getTime()
         const json = JSON.parse(e.target?.result as string)
-        
+        console.log("Imported JSON:", json)
+
         // Use importDiagram to handle both v3 and v4 formats with conversion
         const processedModel = importDiagram(json)
         createModel(processedModel)
-        
+
         navigate("..", {
           relative: "route",
           replace: true,
