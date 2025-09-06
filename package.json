@@ -48,23 +48,23 @@
     "npm": ">=11.1.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.6.0",
-    "@commitlint/config-conventional": "19.6.0",
-    "@emotion/react": "11.11.1",
-    "@emotion/styled": "11.11.0",
-    "@types/node": "22.13.1",
-    "concurrently": "9.1.0",
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
+    "@types/node": "22.18.1",
+    "concurrently": "9.2.1",
     "husky": "9.1.7",
-    "prettier": "3.4.2",
-    "vite": "6.3.4"
+    "prettier": "3.6.2",
+    "vite": "6.3.5"
   },
   "dependencies": {
-    "@capacitor/android": "7.0.1",
+    "@capacitor/android": "7.4.3",
     "@capacitor/assets": "3.0.5",
-    "@capacitor/cli": "7.0.1",
-    "@capacitor/core": "7.0.1",
-    "@capacitor/ios": "7.0.1",
-    "@capacitor/splash-screen": "7.0.0",
+    "@capacitor/cli": "7.4.3",
+    "@capacitor/core": "7.4.3",
+    "@capacitor/ios": "7.4.3",
+    "@capacitor/splash-screen": "7.0.3",
     "capacitor-plugin-safe-area": "4.0.0"
   }
 }
