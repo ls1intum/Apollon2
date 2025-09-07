@@ -62,6 +62,7 @@ import {
   DeploymentNodeProps,
   ObjectNodeProps,
   PetriNetPlaceProps,
+  ReachabilityGraphMarkingProps,
   SfcActionTableProps,
   SfcTransitionBranchNodeProps,
 } from "@/types/nodes/NodeProps"
@@ -651,9 +652,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
-          isInitialMarking={nodeInfo.data.isInitialMarking as boolean}
+          data={nodeInfo.data as ReachabilityGraphMarkingProps}
         />
       )
 
