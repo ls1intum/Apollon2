@@ -48,3 +48,12 @@ export const getCustomColorsFromData = (data: DefaultNodeProps) => {
   const textColor = data.textColor || "var(--apollon2-primary-contrast)"
   return { strokeColor, fillColor, textColor }
 }
+
+export const getCustomColorsFromDataForEdge = (data?: {
+  strokeColor?: string
+  textColor?: string
+}) => {
+  const strokeColor = data?.strokeColor || "var(--apollon2-primary-contrast)"
+  const textColor = data?.textColor || "var(--apollon2-primary-contrast)"
+  return { strokeColor, textColor }
+}

@@ -15,6 +15,7 @@ import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
+import { getCustomColorsFromDataForEdge } from "@/index"
 
 export const ClassDiagramEdge = ({
   id,
@@ -96,6 +97,8 @@ export const ClassDiagramEdge = ({
     enableStraightPath,
   })
 
+  const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
+
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path">
@@ -106,7 +109,7 @@ export const ClassDiagramEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon2-primary-contrast)",
+              stroke: strokeColor,
               strokeDasharray: isReconnectingRef.current
                 ? "none"
                 : strokeDashArray,
@@ -167,6 +170,7 @@ export const ClassDiagramEdge = ({
           targetY={targetY}
           sourcePosition={sourcePosition}
           targetPosition={targetPosition}
+          textColor={textColor}
         />
 
         <EdgeMiddleLabels

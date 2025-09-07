@@ -17,6 +17,7 @@ interface EdgeEndLabelsProps {
   targetY: number
   sourcePosition: string
   targetPosition: string
+  textColor?: string
 }
 
 export const EdgeEndLabels = ({
@@ -28,6 +29,7 @@ export const EdgeEndLabels = ({
   targetY,
   sourcePosition,
   targetPosition,
+  textColor = "var(--apollon2-primary-contrast)",
 }: EdgeEndLabelsProps) => {
   const sourceLabels = useMemo(() => {
     if (activePoints.length < 2) {
@@ -71,7 +73,7 @@ export const EdgeEndLabels = ({
           textAnchor={sourceLabels.roleTextAnchor}
           style={{
             fontSize: "16px",
-            fill: "var(--apollon2-primary-contrast)",
+            fill: textColor,
             userSelect: "none",
           }}
         >
@@ -87,7 +89,7 @@ export const EdgeEndLabels = ({
           textAnchor={sourceLabels.multiplicityTextAnchor}
           style={{
             fontSize: "16px",
-            fill: "var(--apollon2-primary-contrast)",
+            fill: textColor,
             userSelect: "none",
           }}
         >
@@ -103,7 +105,7 @@ export const EdgeEndLabels = ({
           textAnchor={targetLabels.roleTextAnchor}
           style={{
             fontSize: "16px",
-            fill: "var(--apollon2-primary-contrast)",
+            fill: textColor,
             userSelect: "none",
           }}
         >
@@ -119,7 +121,7 @@ export const EdgeEndLabels = ({
           textAnchor={targetLabels.multiplicityTextAnchor}
           style={{
             fontSize: "16px",
-            fill: "var(--apollon2-primary-contrast)",
+            fill: textColor,
             userSelect: "none",
           }}
         >

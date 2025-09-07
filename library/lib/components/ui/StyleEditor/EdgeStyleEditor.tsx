@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from "react"
-import { DividerLine, TextField, Typography } from "@/components/ui"
+import React, { useState } from "react"
+import { DividerLine, Typography } from "@/components/ui"
 import { PaintRollerIcon } from "@/components/Icon/PaintRollerIcon"
 import { CrossIcon } from "@/components/Icon"
 import { ColorButton, ColorButtons } from "./ColorButtons"
-import { DefaultNodeProps } from "@/types"
+import { CustomEdgeProps } from "@/edges"
 
-interface NodeStyleEditorProps {
-  nodeData: DefaultNodeProps
-  handleDataFieldUpdate: (key: keyof DefaultNodeProps, value: string) => void
+type updateEdgeDataColorsKeys = "strokeColor" | "textColor"
+
+interface EdgeStyleEditorProps {
+  edgeData?: CustomEdgeProps
+  handleDataFieldUpdate: (key: updateEdgeDataColorsKeys, value: string) => void
   sideElements?: React.ReactNode[]
-  inputPlaceholder?: string
-  noStrokeUpdate?: boolean
+  label: string
 }
 
 const styles = {
@@ -18,6 +19,7 @@ const styles = {
     display: "flex",
     flexDirection: "row" as const,
     alignItems: "center",
+    justifyContent: "space-between",
     gap: "5px",
     flex: 1,
   },
@@ -67,57 +69,44 @@ const ColorOption: React.FC<{
   </div>
 )
 
-export const NodeStyleEditor: React.FC<NodeStyleEditorProps> = ({
-  nodeData,
+const colorFields: { key: updateEdgeDataColorsKeys; label: string }[] = [
+  { key: "strokeColor", label: "Line Color" },
+  { key: "textColor", label: "Text Color" },
+]
+
+export const EdgeStyleEditor: React.FC<EdgeStyleEditorProps> = ({
+  edgeData,
   handleDataFieldUpdate,
   sideElements = [],
-  inputPlaceholder = "Enter node name",
-  noStrokeUpdate = false,
+  label,
 }) => {
-  // Mapping for color fields
-  const colorFields: { key: keyof DefaultNodeProps; label: string }[] =
-    useMemo(() => {
-      if (noStrokeUpdate) {
-        return [
-          { key: "fillColor", label: "Fill Color" },
-          { key: "textColor", label: "Text Color" },
-        ]
-      }
-      return [
-        { key: "fillColor", label: "Fill Color" },
-        { key: "strokeColor", label: "Line Color" },
-        { key: "textColor", label: "Text Color" },
-      ]
-    }, [noStrokeUpdate])
-
   const [paintOpen, setPaintOpen] = useState(false)
-  const [activeColorField, setActiveColorField] = useState<
-    keyof DefaultNodeProps | null
-  >(null)
+  const [activeColorField, setActiveColorField] =
+    useState<updateEdgeDataColorsKeys | null>(null)
 
-  const toggleColorField = (key: keyof DefaultNodeProps) => {
+  const toggleColorField = (key: updateEdgeDataColorsKeys) => {
     setActiveColorField((prev) => (prev === key ? null : key))
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        marginTop: 10,
+        marginBottom: 10,
+      }}
+    >
       <div style={styles.container}>
-        <TextField
-          id="outlined-basic"
-          variant="outlined"
-          onChange={(event) =>
-            handleDataFieldUpdate("name", event.target.value)
-          }
-          fullWidth
-          size="small"
-          value={nodeData.name}
-          placeholder={inputPlaceholder}
-        />
-        <PaintRollerIcon
-          onClick={() => setPaintOpen(!paintOpen)}
-          aria-label="Toggle color settings"
-        />
-        {sideElements}
+        <Typography>{label}</Typography>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <PaintRollerIcon
+            onClick={() => setPaintOpen(!paintOpen)}
+            aria-label="Toggle color settings"
+          />
+          {sideElements}
+        </div>
       </div>
 
       {paintOpen && (
@@ -128,7 +117,7 @@ export const NodeStyleEditor: React.FC<NodeStyleEditorProps> = ({
                 <ColorOption
                   key={key}
                   label={label}
-                  color={nodeData[key]}
+                  color={edgeData ? edgeData[key] : undefined}
                   onSelect={() => toggleColorField(key)}
                 />
                 {key !== colorFields[colorFields.length - 1].key && (
