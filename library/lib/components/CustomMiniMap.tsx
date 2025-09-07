@@ -61,6 +61,7 @@ import {
   DeploymentComponentProps,
   DeploymentNodeProps,
   ObjectNodeProps,
+  PetriNetPlaceProps,
   SfcActionTableProps,
   SfcTransitionBranchNodeProps,
 } from "@/types/nodes/NodeProps"
@@ -467,9 +468,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
-          capacity={nodeInfo.data.capacity as number | "Infinity"}
-          tokens={nodeInfo.data.tokens as number}
-          name={nodeInfo.data.name as string}
+          data={nodeInfo.data as PetriNetPlaceProps}
         />
       )
     case "petriNetTransition":
@@ -479,7 +478,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
-          name={nodeInfo.data.name as string}
+          data={nodeInfo.data as DefaultNodeProps}
         />
       )
     case "bpmnTask":
