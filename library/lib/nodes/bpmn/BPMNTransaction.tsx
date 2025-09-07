@@ -40,7 +40,7 @@ export function BPMNTransaction({
           width={width}
           height={height}
           id={id}
-          name={data.name}
+          data={data}
           variant="transaction"
           showAssessmentResults={!isDiagramModifiable}
         />

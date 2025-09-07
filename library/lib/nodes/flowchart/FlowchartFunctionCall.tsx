@@ -13,7 +13,7 @@ export function FlowchartFunctionCall({
   id,
   width,
   height,
-  data: { name },
+  data,
   parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -39,9 +39,9 @@ export function FlowchartFunctionCall({
         <FlowchartFunctionCallNodeSVG
           width={width}
           height={height}
-          name={name}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
+          data={data}
         />
       </div>
 

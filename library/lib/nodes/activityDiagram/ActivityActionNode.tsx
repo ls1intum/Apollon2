@@ -13,7 +13,7 @@ export function ActivityActionNode({
   id,
   width,
   height,
-  data: { name },
+  data,
   parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -39,7 +39,7 @@ export function ActivityActionNode({
         <ActivityActionNodeSVG
           width={width}
           height={height}
-          name={name}
+          data={data}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

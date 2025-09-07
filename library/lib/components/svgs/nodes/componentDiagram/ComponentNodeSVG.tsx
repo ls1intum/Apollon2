@@ -3,25 +3,29 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { ComponentNodeProps } from "@/types"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
-  isComponentHeaderShown: boolean
+  data: ComponentNodeProps
 }
+
 export const ComponentNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,
-  name,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
-  isComponentHeaderShown,
+  data,
 }) => {
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+  const { name, isComponentHeaderShown } = data
+
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -32,7 +36,14 @@ export const ComponentNodeSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <StyledRect x={0} y={0} width={width} height={height} />
+        <StyledRect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          fill={fillColor}
+          stroke={strokeColor}
+        />
 
         {/* right top book */}
         <g transform={`translate(${width - 32}, 8)`}>
@@ -40,14 +51,14 @@ export const ComponentNodeSVG: React.FC<Props> = ({
             d="M 4.8 0 L 24 0 L 24 24 L 4.8 24 L 4.8 19.2 L 0 19.2 L 0 14.4 L 4.8 14.4 L 4.8 9.6 L 0 9.6 L 0 4.8 L 4.8 4.8 Z"
             strokeWidth="1.2"
             strokeMiterlimit="10"
-            stroke="var(--apollon2-primary-contrast)"
-            fill="var(--apollon2-background)"
+            stroke={strokeColor}
+            fill="none"
           ></path>
           <path
             d="M 4.8 4.8 L 9.6 4.8 L 9.6 9.6 L 4.8 9.6 M 4.8 14.4 L 9.6 14.4 L 9.6 19.2 L 4.8 19.2"
             strokeWidth="1.2"
             strokeMiterlimit="10"
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
             fill="none"
           ></path>
         </g>
@@ -59,6 +70,7 @@ export const ComponentNodeSVG: React.FC<Props> = ({
           textAnchor="middle"
           fontWeight="bold"
           dominantBaseline="central"
+          fill={textColor}
         >
           {isComponentHeaderShown ? (
             <>

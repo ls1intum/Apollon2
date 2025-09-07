@@ -85,9 +85,7 @@ export const SfcEdgeEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
   if (!edge) return null
 
   return (
-    <Box
-      sx={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 300 }}
-    >
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
         Edit Transition
       </Typography>

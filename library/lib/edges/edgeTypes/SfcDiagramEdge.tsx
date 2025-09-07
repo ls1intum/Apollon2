@@ -8,6 +8,7 @@ import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
+import { getCustomColorsFromDataForEdge } from "@/utils/layoutUtils"
 
 function getParsedEdgeData(data: unknown): {
   isNegated: boolean
@@ -100,6 +101,7 @@ export const SfcDiagramEdge = ({
   })
 
   const { isNegated, displayName, showBar } = getParsedEdgeData(data)
+  const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
 
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
@@ -111,7 +113,7 @@ export const SfcDiagramEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon2-primary-contrast)",
+              stroke: strokeColor,
               strokeDasharray: isReconnectingRef.current
                 ? "none"
                 : strokeDashArray,
@@ -161,7 +163,7 @@ export const SfcDiagramEdge = ({
                 y1={edgeData.pathMiddlePosition.y}
                 x2={edgeData.pathMiddlePosition.x + 20}
                 y2={edgeData.pathMiddlePosition.y}
-                stroke="var(--apollon2-primary-contrast)"
+                stroke={strokeColor}
                 strokeWidth="10"
               />
             )}
@@ -170,7 +172,7 @@ export const SfcDiagramEdge = ({
               <text
                 x={edgeData.pathMiddlePosition.x}
                 y={edgeData.pathMiddlePosition.y - 20}
-                fill="var(--apollon2-primary-contrast)"
+                fill={textColor}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fontSize="14"

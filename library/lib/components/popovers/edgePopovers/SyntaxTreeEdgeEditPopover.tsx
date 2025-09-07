@@ -1,31 +1,26 @@
-import { Box } from "@mui/material"
 import { useReactFlow } from "@xyflow/react"
 import { PopoverProps } from "../types"
-import { Typography } from "@/components/ui"
+import { EdgeStyleEditor } from "@/components/ui"
+import { CustomEdgeProps } from "@/edges"
 
 export const SyntaxTreeEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,
 }) => {
-  const { getEdge } = useReactFlow()
+  const { getEdge, updateEdgeData } = useReactFlow()
   const edge = getEdge(elementId)
 
   if (!edge) {
     return null
   }
 
+  const edgeData = edge.data as CustomEdgeProps | undefined
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-          Relationship
-        </Typography>
-      </div>
-    </Box>
+    <EdgeStyleEditor
+      edgeData={edgeData}
+      handleDataFieldUpdate={(key, value) =>
+        updateEdgeData(elementId, { ...edge.data, [key]: value })
+      }
+      label="Relations"
+    />
   )
 }

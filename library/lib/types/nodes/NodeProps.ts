@@ -2,12 +2,14 @@ import { ClassType } from "./enums"
 
 export type DefaultNodeProps = {
   name: string
+  fillColor?: string
+  strokeColor?: string
+  textColor?: string
 }
 
 export type ClassNodeElement = {
   id: string
-  name: string
-}
+} & DefaultNodeProps
 
 export type ClassNodeProps = {
   methods: ClassNodeElement[]
@@ -96,16 +98,8 @@ export type BPMNEndEventType =
   | "signal"
   | "terminate"
 
-export type BPMNStartEventProps = DefaultNodeProps & {
+export type BPMNEventProps = DefaultNodeProps & {
   eventType: BPMNStartEventType
-}
-
-export type BPMNIntermediateEventProps = DefaultNodeProps & {
-  eventType: BPMNIntermediateEventType
-}
-
-export type BPMNEndEventProps = DefaultNodeProps & {
-  eventType: BPMNEndEventType
 }
 
 export type BPMNGatewayType =
@@ -140,4 +134,7 @@ export type SfcActionRow = {
 
 export type SfcActionTableProps = DefaultNodeProps & {
   actionRows: SfcActionRow[]
+}
+export type SfcTransitionBranchNodeProps = DefaultNodeProps & {
+  showHint: boolean
 }

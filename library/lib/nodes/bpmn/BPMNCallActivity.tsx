@@ -41,7 +41,7 @@ export function BPMNCallActivity({
           width={width}
           height={height}
           id={id}
-          name={data.name}
+          data={data}
           variant="call"
           showAssessmentResults={!isDiagramModifiable}
         />

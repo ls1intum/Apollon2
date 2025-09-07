@@ -11,7 +11,7 @@ export function ComponentInterface({
   id,
   width,
   height,
-  data: { name },
+  data,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
@@ -42,7 +42,7 @@ export function ComponentInterface({
         <ComponentInterfaceNodeSVG
           width={width}
           height={height}
-          name={name}
+          data={data}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

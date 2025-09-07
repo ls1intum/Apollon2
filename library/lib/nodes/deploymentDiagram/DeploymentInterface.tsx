@@ -11,7 +11,7 @@ export function DeploymentInterface({
   id,
   width,
   height,
-  data: { name },
+  data,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -43,7 +43,7 @@ export function DeploymentInterface({
         <DeploymentInterfaceSVG
           width={width}
           height={height}
-          name={name}
+          data={data}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

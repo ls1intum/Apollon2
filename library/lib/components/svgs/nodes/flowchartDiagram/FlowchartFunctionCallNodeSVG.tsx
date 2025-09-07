@@ -4,23 +4,28 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { DefaultNodeProps } from "@/types/nodes/NodeProps"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
+  data: DefaultNodeProps
 }
 export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -32,7 +37,14 @@ export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
     >
       <g>
         {/* Rectangle with double left and right borders for predefined process */}
-        <StyledRect x={0} y={0} width={width} height={height} />
+        <StyledRect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          fill={fillColor}
+          stroke={strokeColor}
+        />
 
         {/* Left vertical line */}
         <line
@@ -40,7 +52,7 @@ export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
           y1={0}
           x2={10}
           y2={height}
-          stroke="var(--apollon2-primary-contrast)"
+          stroke={strokeColor}
           strokeWidth={LINE_WIDTH}
         />
 
@@ -50,7 +62,7 @@ export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
           y1={0}
           x2={width - 10}
           y2={height}
-          stroke="var(--apollon2-primary-contrast)"
+          stroke={strokeColor}
           strokeWidth={LINE_WIDTH}
         />
 
@@ -61,6 +73,7 @@ export const FlowchartFunctionCallNodeSVG: React.FC<Props> = ({
           textAnchor="middle"
           fontWeight="600"
           dominantBaseline="central"
+          fill={textColor}
         >
           <tspan x={width / 2} dy="0">
             {name}

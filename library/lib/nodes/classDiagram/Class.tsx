@@ -27,13 +27,14 @@ export function Class({
   id,
   width,
   height,
-  data: { methods, attributes, stereotype, name },
+  data,
 }: NodeProps<Node<ClassNodeProps>>) {
   const { setNodes } = useDiagramStore(
     useShallow((state) => ({
       setNodes: state.setNodes,
     }))
   )
+  const { name, stereotype, attributes, methods } = data
 
   const selected = useIsOnlyThisElementSelected(id)
   const isDiagramModifiable = useDiagramModifiable()
@@ -158,10 +159,7 @@ export function Class({
         <ClassSVG
           width={finalWidth}
           height={minHeight}
-          attributes={attributes}
-          methods={methods}
-          stereotype={stereotype}
-          name={name}
+          data={data}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

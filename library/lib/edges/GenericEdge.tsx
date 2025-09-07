@@ -135,7 +135,6 @@ export const EdgeEndpointMarkers = ({
   return (
     <>
       <circle
-        className="source-edge-marker-grab"
         cx={sourcePoint.x}
         cy={sourcePoint.y}
         r={pathType === "straight" ? 8 : 10}

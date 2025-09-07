@@ -14,6 +14,7 @@ import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
+import { getCustomColorsFromDataForEdge } from "@/index"
 
 export const BPMNDiagramEdge = ({
   id,
@@ -92,6 +93,8 @@ export const BPMNDiagramEdge = ({
     enableStraightPath: false,
   })
 
+  const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
+
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path">
@@ -103,7 +106,7 @@ export const BPMNDiagramEdge = ({
             markerStart={isReconnectingRef.current ? undefined : markerStart}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon2-primary-contrast)",
+              stroke: strokeColor,
               strokeDasharray: isReconnectingRef.current
                 ? "4 4"
                 : strokeDashArray,
@@ -160,6 +163,7 @@ export const BPMNDiagramEdge = ({
           pathMiddlePosition={edgeData.pathMiddlePosition}
           isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
           showRelationshipLabels={showRelationshipLabels}
+          textColor={textColor}
         />
 
         <CommonEdgeElements

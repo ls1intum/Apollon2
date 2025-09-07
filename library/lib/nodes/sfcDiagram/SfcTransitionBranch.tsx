@@ -1,16 +1,16 @@
 import { NodeProps, type Node } from "@xyflow/react"
 import { DefaultNodeWrapper } from "../wrappers"
 import { useRef } from "react"
-import { DefaultNodeProps } from "@/types"
-import { SfcTransitionBranchNodeSVG } from "@/components"
+import { SfcTransitionBranchNodeProps } from "@/types"
 import { NodeToolbar } from "@/components/toolbars/NodeToolbar"
+import { SfcTransitionBranchNodeSVG } from "@/components/"
 
 export function SfcTransitionBranch({
   id,
   width,
   height,
-  data: { name },
-}: NodeProps<Node<DefaultNodeProps>>) {
+  data,
+}: NodeProps<Node<SfcTransitionBranchNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
 
   if (!width || !height) {
@@ -24,7 +24,7 @@ export function SfcTransitionBranch({
         <SfcTransitionBranchNodeSVG
           width={width}
           height={height}
-          name={name}
+          data={data}
           id={id}
         />
       </div>

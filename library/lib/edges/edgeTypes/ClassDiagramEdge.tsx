@@ -5,7 +5,6 @@ import {
   CommonEdgeElements,
 } from "../GenericEdge"
 import { EdgeEndLabels } from "../labelTypes/EdgeEndLabels"
-import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 import { useStepPathEdge } from "@/hooks/useStepPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
@@ -15,6 +14,7 @@ import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
+import { getCustomColorsFromDataForEdge } from "@/index"
 
 export const ClassDiagramEdge = ({
   id,
@@ -96,6 +96,8 @@ export const ClassDiagramEdge = ({
     enableStraightPath,
   })
 
+  const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
+
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path">
@@ -106,7 +108,7 @@ export const ClassDiagramEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon2-primary-contrast)",
+              stroke: strokeColor,
               strokeDasharray: isReconnectingRef.current
                 ? "none"
                 : strokeDashArray,
@@ -167,13 +169,7 @@ export const ClassDiagramEdge = ({
           targetY={targetY}
           sourcePosition={sourcePosition}
           targetPosition={targetPosition}
-        />
-
-        <EdgeMiddleLabels
-          label={data?.label}
-          pathMiddlePosition={edgeData.pathMiddlePosition}
-          isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-          showRelationshipLabels={true}
+          textColor={textColor}
         />
 
         <CommonEdgeElements

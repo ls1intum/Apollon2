@@ -4,9 +4,11 @@ import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { CustomText } from "../CustomText"
 import { StyledRect } from "@/components"
+import { DefaultNodeProps } from "@/types"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
+  data: DefaultNodeProps
 }
 
 export const PetriNetTransitionSVG: React.FC<Props> = ({
@@ -16,13 +18,15 @@ export const PetriNetTransitionSVG: React.FC<Props> = ({
   showAssessmentResults = false,
   width,
   height,
-  name,
+  data,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
 
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
   return (
     <svg
       width={scaledWidth}
@@ -31,7 +35,14 @@ export const PetriNetTransitionSVG: React.FC<Props> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <StyledRect x={0} y={0} width={width} height={height} />
+      <StyledRect
+        x={0}
+        y={0}
+        width={width}
+        height={height}
+        fill={fillColor}
+        stroke={strokeColor}
+      />
 
       <CustomText
         x={width / 2}
@@ -39,6 +50,7 @@ export const PetriNetTransitionSVG: React.FC<Props> = ({
         textAnchor="middle"
         fontWeight="600"
         dominantBaseline="hanging"
+        fill={textColor}
       >
         {name}
       </CustomText>

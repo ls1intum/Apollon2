@@ -13,7 +13,7 @@ export function Component({
   id,
   width,
   height,
-  data: { isComponentHeaderShown, name },
+  data,
   parentId,
 }: NodeProps<Node<ComponentNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -39,10 +39,9 @@ export function Component({
         <ComponentNodeSVG
           width={width}
           height={height}
-          name={name}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
-          isComponentHeaderShown={isComponentHeaderShown}
+          data={data}
         />
       </div>
 

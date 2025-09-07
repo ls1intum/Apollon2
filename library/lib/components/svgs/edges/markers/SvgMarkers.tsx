@@ -82,14 +82,10 @@ export function SvgMarkers() {
           refX="30"
           refY="15"
           orient="auto"
+          stroke="context-stroke"
           markerUnits="strokeWidth"
         >
-          <path
-            d="M0,29 L30,15 L0,1"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
+          <path d="M0,29 L30,15 L0,1" fill="none" strokeWidth="1.5" />
         </marker>
         <marker
           id="usecase-arrow"
