@@ -37,7 +37,7 @@ function getParsedEdgeData(data: unknown): {
     return { isNegated: false, displayName: label, showBar: true }
   }
 }
-
+const crossbarLength = 20
 export const SfcDiagramEdge = ({
   id,
   type,
@@ -115,7 +115,7 @@ export const SfcDiagramEdge = ({
       ? "middle"
       : ("middle" as const),
   }
-  const crossbarLength = 20
+
   const crossbarCoordinates = useMemo(() => {
     if (edgeData.isMiddlePathHorizontal) {
       // If middle segment is horizontal, make crossbar vertical
