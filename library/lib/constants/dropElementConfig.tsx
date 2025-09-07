@@ -210,6 +210,9 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       type: "activityForkNodeHorizontal",
       width: 100,
       height: 20,
+      defaultData: {
+        name: "ActivityForkNodeHorizontal",
+      },
       svg: (props) => <ActivityForkNodeHorizontalSVG {...props} />,
     },
   ],

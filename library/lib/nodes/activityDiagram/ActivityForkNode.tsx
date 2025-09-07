@@ -14,6 +14,7 @@ export function ActivityForkNode({
   width,
   height,
   parentId,
+  data,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
   const { onResize } = useHandleOnResize(parentId)
@@ -51,6 +52,7 @@ export function ActivityForkNode({
           height={height}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
+          data={data}
         />
       </div>
 

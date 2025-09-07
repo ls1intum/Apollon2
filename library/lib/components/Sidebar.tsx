@@ -63,7 +63,7 @@ export const Sidebar = () => {
         </React.Fragment>
       ))}
 
-      <DividerLine style={{ margin: "3px 0" }} height={2} />
+      <DividerLine style={{ margin: "3px 0" }} />
       <DraggableGhost dropElementConfig={ColorDescriptionConfig}>
         <div
           className="prevent-select"

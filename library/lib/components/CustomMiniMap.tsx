@@ -61,6 +61,7 @@ import {
   DeploymentNodeProps,
   ObjectNodeProps,
   SfcActionTableProps,
+  SfcTransitionBranchNodeProps,
 } from "@/types/nodes/NodeProps"
 
 export const CustomMiniMap = () => {
@@ -152,7 +153,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
         <ActivitySVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
         />
@@ -180,7 +181,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
         <ActivityActionNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
         />
@@ -190,7 +191,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
         <ActivityObjectNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
         />
@@ -201,7 +202,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -212,6 +213,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
+          data={nodeInfo.data as DefaultNodeProps}
         />
       )
     case "activityForkNodeHorizontal":
@@ -221,6 +223,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
+          data={nodeInfo.data as DefaultNodeProps}
         />
       )
     case "useCase":
@@ -360,7 +363,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as SfcTransitionBranchNodeProps}
           svgAttributes={{ x, y }}
         />
       )

@@ -4,25 +4,29 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { DefaultNodeProps } from "@/types"
+import { getCustomColorsFromData } from "@/index"
 
 type Props = SVGComponentProps & {
-  name: string
+  data: DefaultNodeProps
 }
 
 export const ActivityMergeNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
 
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
   return (
     <svg
       width={scaledWidth}
@@ -39,8 +43,8 @@ export const ActivityMergeNodeSVG: React.FC<Props> = ({
               ${width / 2},${height} 
               0,${height / 2} 
               ${width / 2},0`}
-          fill="var(--apollon2-background)"
-          stroke="var(--apollon2-primary-contrast)"
+          fill={fillColor}
+          stroke={strokeColor}
           strokeWidth={LINE_WIDTH}
         />
 
@@ -50,6 +54,7 @@ export const ActivityMergeNodeSVG: React.FC<Props> = ({
           y={height / 2}
           textAnchor="middle"
           fontWeight="bold"
+          fill={textColor}
         >
           {name}
         </CustomText>
