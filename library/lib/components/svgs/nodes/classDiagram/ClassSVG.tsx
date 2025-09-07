@@ -15,6 +15,7 @@ import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { AssessmentSelectableElement } from "@/components/AssessmentSelectableElement"
 import { StyledRect } from "../../StyledElements"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 export interface MinSize {
   minWidth: number
@@ -35,15 +36,7 @@ export const ClassSVG = ({
   data,
 }: ClassSVGProps) => {
   // Layout constants
-  const {
-    attributes,
-    methods,
-    name,
-    stereotype,
-    fillColor,
-    strokeColor,
-    textColor,
-  } = data
+  const { attributes, methods, name, stereotype } = data
   const showStereotype = !!stereotype
   const headerHeight = showStereotype
     ? DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE
@@ -66,6 +59,7 @@ export const ClassSVG = ({
 
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg

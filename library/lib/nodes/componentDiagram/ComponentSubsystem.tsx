@@ -13,7 +13,7 @@ export function ComponentSubsystem({
   id,
   width,
   height,
-  data: { name, isComponentSubsystemHeaderShown },
+  data,
   parentId,
 }: NodeProps<Node<ComponentSubsystemNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -40,10 +40,9 @@ export function ComponentSubsystem({
         <ComponentSubsystemNodeSVG
           width={width}
           height={height}
-          name={name}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
-          isComponentSubsystemHeaderShown={isComponentSubsystemHeaderShown}
+          data={data}
         />
       </div>
 

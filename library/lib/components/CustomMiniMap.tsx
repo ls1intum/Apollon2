@@ -55,6 +55,8 @@ import { MapIcon } from "./Icon/MapIcon"
 import { SouthEastArrowIcon } from "./Icon/SouthEastArrowIcon"
 import {
   ClassNodeProps,
+  ComponentNodeProps,
+  ComponentSubsystemNodeProps,
   DefaultNodeProps,
   ObjectNodeProps,
 } from "@/types/nodes/NodeProps"
@@ -256,10 +258,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
-          isComponentHeaderShown={
-            nodeInfo.data.isComponentHeaderShown as boolean
-          }
+          data={nodeInfo.data as ComponentNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -269,10 +268,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
-          isComponentSubsystemHeaderShown={
-            nodeInfo.data.isComponentSubsystemHeaderShown as boolean
-          }
+          data={nodeInfo.data as ComponentSubsystemNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -282,7 +278,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
