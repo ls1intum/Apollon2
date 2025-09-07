@@ -374,9 +374,6 @@ function convertV3NodeDataToV4(
               ...(childElement.fillColor && {
                 fillColor: childElement.fillColor,
               }),
-              ...(childElement.strokeColor && {
-                strokeColor: childElement.strokeColor,
-              }),
               ...(childElement.textColor && {
                 textColor: childElement.textColor,
               }),
@@ -388,9 +385,6 @@ function convertV3NodeDataToV4(
               ...(childElement.fillColor && {
                 fillColor: childElement.fillColor,
               }),
-              ...(childElement.strokeColor && {
-                strokeColor: childElement.strokeColor,
-              }),
               ...(childElement.textColor && {
                 textColor: childElement.textColor,
               }),
@@ -398,20 +392,6 @@ function convertV3NodeDataToV4(
           }
         }
       })
-      if (element.attributes && Array.isArray(element.attributes)) {
-        element.attributes.forEach((attrId) => {
-          const attr = allElements[attrId]
-          if (attr && !attributes.find((a) => a.id === attr.id)) {
-            attributes.push({
-              id: attr.id,
-              name: attr.name,
-              ...(attr.fillColor && { fillColor: attr.fillColor }),
-              ...(attr.strokeColor && { strokeColor: attr.strokeColor }),
-              ...(attr.textColor && { textColor: attr.textColor }),
-            })
-          }
-        })
-      }
 
       // Determine stereotype
       let stereotype: ClassType | undefined
@@ -445,9 +425,6 @@ function convertV3NodeDataToV4(
               ...(childElement.fillColor && {
                 fillColor: childElement.fillColor,
               }),
-              ...(childElement.strokeColor && {
-                strokeColor: childElement.strokeColor,
-              }),
               ...(childElement.textColor && {
                 textColor: childElement.textColor,
               }),
@@ -458,9 +435,6 @@ function convertV3NodeDataToV4(
               name: childElement.name,
               ...(childElement.fillColor && {
                 fillColor: childElement.fillColor,
-              }),
-              ...(childElement.strokeColor && {
-                strokeColor: childElement.strokeColor,
               }),
               ...(childElement.textColor && {
                 textColor: childElement.textColor,
@@ -490,9 +464,6 @@ function convertV3NodeDataToV4(
               ...(childElement.fillColor && {
                 fillColor: childElement.fillColor,
               }),
-              ...(childElement.strokeColor && {
-                strokeColor: childElement.strokeColor,
-              }),
               ...(childElement.textColor && {
                 textColor: childElement.textColor,
               }),
@@ -503,9 +474,6 @@ function convertV3NodeDataToV4(
               name: childElement.name,
               ...(childElement.fillColor && {
                 fillColor: childElement.fillColor,
-              }),
-              ...(childElement.strokeColor && {
-                strokeColor: childElement.strokeColor,
               }),
               ...(childElement.textColor && {
                 textColor: childElement.textColor,
@@ -556,7 +524,6 @@ function convertV3NodeDataToV4(
     }
 
     case "PetriNetPlace": {
-      // Handle capacity type conversion - V3 allows string, V4 only allows number | "Infinity"
       let capacity: number | "Infinity" = "Infinity"
       if (element.capacity !== undefined) {
         if (typeof element.capacity === "number") {
@@ -565,7 +532,6 @@ function convertV3NodeDataToV4(
           if (element.capacity === "Infinity" || element.capacity === "∞") {
             capacity = "Infinity"
           } else {
-            // Try to parse as number
             const parsed = parseFloat(element.capacity)
             capacity = isNaN(parsed) ? "Infinity" : parsed
           }
