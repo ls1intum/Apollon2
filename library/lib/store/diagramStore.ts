@@ -88,6 +88,8 @@ export type DiagramStore = {
   copySelectedElements: () => Promise<boolean>
   pasteElements: (pasteCount?: number) => Promise<boolean> // Updated signature
   hasSelectedElements: () => boolean
+  selectAll: () => void
+  clearSelection: () => void
 }
 
 const PASTE_OFFSET = 20
@@ -527,7 +529,6 @@ export const createDiagramStore = (
           )
         },
 
-        // Add these copy/paste methods to the store implementation
         copySelectedElements: async () => {
           const { selectedElementIds, nodes, edges } = get()
           
@@ -535,16 +536,14 @@ export const createDiagramStore = (
             return false
           }
 
-          // Get selected nodes and their connected edges
           const selectedNodes = nodes.filter(node => selectedElementIds.includes(node.id))
           const selectedEdges = edges.filter(edge => selectedElementIds.includes(edge.id))
           
-          // Also include edges that connect selected nodes
+     
           const connectedEdges = edges.filter(edge => 
             selectedElementIds.includes(edge.source) && selectedElementIds.includes(edge.target)
           )
           
-          // Combine selected edges and connected edges (remove duplicates)
           const allRelevantEdges = [...selectedEdges]
           connectedEdges.forEach(edge => {
             if (!allRelevantEdges.some(e => e.id === edge.id)) {
@@ -587,14 +586,9 @@ export const createDiagramStore = (
               return false
             }
 
-            // Create ID mappings for nodes
             const nodeIdMap = new Map<string, string>()
             const newElementIds: string[] = []
-            
-            // Progressive offset based on paste count
             const progressiveOffset = PASTE_OFFSET * pasteCount
-
-            // Clone and paste nodes with new IDs and progressive offset positions
             const pastedNodes = clipboardData.nodes.map((node: Node) => {
               const newId = generateUUID()
               nodeIdMap.set(node.id, newId)
@@ -613,7 +607,7 @@ export const createDiagramStore = (
               return newNode
             })
 
-            // Clone and paste edges with updated source/target IDs
+    
             const pastedEdges = clipboardData.edges
               .filter((edge: Edge) => {
                 return nodeIdMap.has(edge.source) && nodeIdMap.has(edge.target)
@@ -632,14 +626,11 @@ export const createDiagramStore = (
 
                 return newEdge
               })
-
-            // Add to Yjs and update store state in transaction
             ydoc.transact(() => {
               pastedNodes.forEach(node => getNodesMap(ydoc).set(node.id, node))
               pastedEdges.forEach(edge => getEdgesMap(ydoc).set(edge.id, edge))
             }, "store")
 
-            // Update store state
             set(
               (state) => ({
                 nodes: [...state.nodes, ...pastedNodes],
@@ -659,6 +650,36 @@ export const createDiagramStore = (
 
         hasSelectedElements: () => {
           return get().selectedElementIds.length > 0
+        },
+
+        selectAll: () => {
+          const { nodes, edges } = get()
+          const allElementIds = [
+            ...nodes.map(node => node.id),
+            ...edges.map(edge => edge.id)
+          ]
+          
+          set(
+            (state) => ({
+              selectedElementIds: allElementIds,
+              nodes: state.nodes.map(node => ({ ...node, selected: true })),
+              edges: state.edges.map(edge => ({ ...edge, selected: true })),
+            }),
+            undefined,
+            "selectAll"
+          )
+        },
+
+        clearSelection: () => {
+          set(
+            (state) => ({
+              selectedElementIds: [],
+              nodes: state.nodes.map(node => ({ ...node, selected: false })),
+              edges: state.edges.map(edge => ({ ...edge, selected: false })),
+            }),
+            undefined,
+            "clearSelection"
+          )
         },
 
       })),

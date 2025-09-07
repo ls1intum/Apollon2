@@ -3,7 +3,6 @@ import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
 export const useKeyboardShortcuts = () => {
-  // Track paste count for progressive offset
   const pasteCountRef = useRef(0)
   
   const { 
@@ -14,7 +13,9 @@ export const useKeyboardShortcuts = () => {
     undoManager,
     copySelectedElements,
     pasteElements,
-    selectedElementIds
+    selectedElementIds,
+    selectAll,
+    clearSelection
   } = useDiagramStore(
     useShallow((state) => ({
       undo: state.undo,
@@ -24,8 +25,9 @@ export const useKeyboardShortcuts = () => {
       undoManager: state.undoManager,
       copySelectedElements: state.copySelectedElements,
       pasteElements: state.pasteElements,
-      hasSelectedElements: state.hasSelectedElements,
       selectedElementIds: state.selectedElementIds,
+      selectAll: state.selectAll,
+      clearSelection: state.clearSelection,
     }))
   )
 
@@ -36,8 +38,13 @@ export const useKeyboardShortcuts = () => {
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
         return
       }
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        clearSelection()
+        return
+      }
 
-      // Check if Ctrl (or Cmd on Mac) is pressed
+      // Check if Ctrl (or Cmd on Mac) is pressed for other shortcuts
       const isModifierPressed = event.ctrlKey || event.metaKey
 
       if (!isModifierPressed) return
@@ -51,46 +58,61 @@ export const useKeyboardShortcuts = () => {
             undo()
           }
           break
+          
         case "y":
           if (!event.shiftKey) {
             event.preventDefault()
             redo()
           }
           break
+          
+        case "a":
+          if (!event.shiftKey && !event.altKey) {
+            event.preventDefault()
+            selectAll()
+          }
+          break
+          
         case "c":
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
             if (selectedElementIds.length > 0) {
-              // Reset paste count when copying new elements
               pasteCountRef.current = 0
               const success = await copySelectedElements()
               if (success) {
-                console.log('Elements copied to clipboard')
+                console.log(`${selectedElementIds.length} elements copied to clipboard`)
               }
             }
           }
           break
+          
         case "v":
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
-            // Increment paste count for progressive offset
             pasteCountRef.current += 1
             const success = await pasteElements(pasteCountRef.current)
             if (success) {
-              console.log('Elements pasted from clipboard')
+           
             }
           }
           break
+          
+        case "d":
+          if (!event.shiftKey && !event.altKey) {
+            event.preventDefault()
+            clearSelection()
+    
+          }
+          break
+          
         default:
           break
       }
     }
 
     document.addEventListener("keydown", handleKeyDown)
-
-    // Cleanup
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [undo, redo, canUndo, canRedo, undoManager, copySelectedElements, pasteElements, selectedElementIds])
+  }, [undo, redo, canUndo, canRedo, undoManager, copySelectedElements, pasteElements, selectedElementIds, selectAll, clearSelection])
 }
