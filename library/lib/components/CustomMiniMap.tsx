@@ -54,6 +54,7 @@ import { MapIcon } from "./Icon/MapIcon"
 import { SouthEastArrowIcon } from "./Icon/SouthEastArrowIcon"
 import {
   ClassNodeProps,
+  CommunicationObjectNodeProps,
   ComponentNodeProps,
   ComponentSubsystemNodeProps,
   DefaultNodeProps,
@@ -455,10 +456,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
-          methods={(nodeInfo.data.methods as []) || []}
-          attributes={(nodeInfo.data.attributes as []) || []}
+          data={nodeInfo.data as CommunicationObjectNodeProps}
         />
       )
     case "petriNetPlace":
