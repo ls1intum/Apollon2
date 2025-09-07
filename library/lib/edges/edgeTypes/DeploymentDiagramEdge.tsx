@@ -15,6 +15,7 @@ import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
+import { getCustomColorsFromDataForEdge } from "@/utils/layoutUtils"
 
 const arePositionsOpposite = (pos1: Position, pos2: Position): boolean => {
   return (
@@ -156,6 +157,8 @@ export const DeploymentDiagramEdge = ({
     enableStraightPath: true,
   })
 
+  const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
+
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path">
@@ -166,7 +169,7 @@ export const DeploymentDiagramEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon2-primary-contrast)",
+              stroke: strokeColor,
               strokeDasharray: isReconnectingRef.current
                 ? "none"
                 : strokeDashArray,
@@ -223,6 +226,7 @@ export const DeploymentDiagramEdge = ({
           pathMiddlePosition={edgeData.pathMiddlePosition}
           isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
           showRelationshipLabels={showRelationshipLabels}
+          textColor={textColor}
         />
 
         <CommonEdgeElements

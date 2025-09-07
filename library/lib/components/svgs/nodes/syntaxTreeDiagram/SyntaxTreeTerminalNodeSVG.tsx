@@ -3,24 +3,29 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { DefaultNodeProps } from "@/types/nodes/NodeProps"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
+  data: DefaultNodeProps
 }
 
 export const SyntaxTreeTerminalNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -31,7 +36,14 @@ export const SyntaxTreeTerminalNodeSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <StyledRect x={0} y={0} width={width} height={height} />
+        <StyledRect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          fill={fillColor}
+          stroke={strokeColor}
+        />
 
         {/* Name Text */}
         <CustomText
@@ -40,6 +52,7 @@ export const SyntaxTreeTerminalNodeSVG: React.FC<Props> = ({
           textAnchor="middle"
           fontWeight="bold"
           dominantBaseline="central"
+          fill={textColor}
         >
           {name}
         </CustomText>

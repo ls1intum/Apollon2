@@ -58,7 +58,6 @@ import {
   SfcActionTable,
   SfcTransitionBranch,
   SfcJump,
-  SfcPreviewSpacer,
 } from "./sfcDiagram"
 
 export const diagramNodeTypes = {
@@ -114,7 +113,6 @@ export const diagramNodeTypes = {
   sfcActionTable: SfcActionTable,
   sfcTransitionBranch: SfcTransitionBranch,
   sfcJump: SfcJump,
-  sfcPreviewSpacer: SfcPreviewSpacer,
 } satisfies NodeTypes
 
 // 2. Union type from keys
@@ -174,5 +172,4 @@ export const DiagramNodeTypeRecord: Record<DiagramNodeType, DiagramNodeType> = {
   sfcActionTable: "sfcActionTable",
   sfcTransitionBranch: "sfcTransitionBranch",
   sfcJump: "sfcJump",
-  sfcPreviewSpacer: "sfcPreviewSpacer",
 } as const

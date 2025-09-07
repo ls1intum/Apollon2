@@ -3,7 +3,7 @@ import { DefaultNodeWrapper, FOUR_WAY_HANDLES_PRESET } from "../wrappers"
 import { useRef } from "react"
 import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
-import { BPMNStartEventProps } from "@/types"
+import { BPMNEventProps } from "@/types"
 import { BPMNEventNodeSVG } from "@/components"
 import { NodeToolbar } from "@/components/toolbars/NodeToolbar"
 
@@ -12,7 +12,7 @@ export function BPMNStartEvent({
   width = 40,
   height = 40,
   data,
-}: NodeProps<Node<BPMNStartEventProps>>) {
+}: NodeProps<Node<BPMNEventProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
 
@@ -30,9 +30,8 @@ export function BPMNStartEvent({
           width={width}
           height={height}
           id={id}
-          name={data.name}
           variant="start"
-          eventType={data.eventType}
+          data={data}
           showAssessmentResults={!isDiagramModifiable}
         />
       </div>

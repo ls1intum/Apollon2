@@ -11,6 +11,7 @@ interface GenericPopoverProps {
   transformOrigin?: PopoverOrigin
   maxHeight?: number
   maxWidth?: number
+  minWidth?: number
   style?: React.CSSProperties
 }
 
@@ -23,7 +24,8 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
   anchorOrigin = { vertical: "top", horizontal: "right" },
   transformOrigin = { vertical: "top", horizontal: "left" },
   maxHeight = 500,
-  maxWidth = 500,
+  maxWidth = 278,
+  minWidth = 200,
   style,
 }) => (
   <Popover
@@ -43,6 +45,7 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
       sx={{
         width: "100%",
         maxWidth,
+        minWidth,
         px: 1,
         py: 1.25,
         display: "flex",

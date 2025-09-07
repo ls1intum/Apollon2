@@ -1,22 +1,25 @@
 import { CustomText } from "@/components"
+import { SfcTransitionBranchNodeProps } from "@/types"
 import { SVGComponentProps } from "@/types/SVG"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name?: string
-  showHint?: boolean
+  data: SfcTransitionBranchNodeProps
 }
 
 export const SfcTransitionBranchNodeSVG: React.FC<Props> = ({
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
-  showHint = false,
 }) => {
+  const { name, showHint } = data
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
 
+  const { strokeColor } = getCustomColorsFromData(data)
+  const fillColor = data.fillColor || "var(--apollon2-primary-contrast)"
   return (
     <svg
       width={scaledWidth}
@@ -25,7 +28,7 @@ export const SfcTransitionBranchNodeSVG: React.FC<Props> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <circle cx={10} cy={10} r={10} fill="var(--apollon2-primary-contrast)" />
+      <circle cx={10} cy={10} r={10} fill={fillColor} stroke={strokeColor} />
       {showHint && (
         <CustomText x={0} y={30}>
           {name}

@@ -1,4 +1,4 @@
-import { DividerLine, TextField } from "@/components/ui"
+import { DividerLine, NodeStyleEditor } from "@/components/ui"
 import { useDiagramStore } from "@/store"
 import { ObjectNodeProps } from "@/types"
 import { useShallow } from "zustand/shallow"
@@ -21,7 +21,7 @@ export const ObjectEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   const nodeData = node.data as ObjectNodeProps
 
-  const handleNameChange = (newName: string) => {
+  const handleDataFieldUpdate = (key: string, value: string) => {
     setNodes((nodes) =>
       nodes.map((node) => {
         if (node.id === elementId) {
@@ -29,7 +29,7 @@ export const ObjectEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
             ...node,
             data: {
               ...node.data,
-              name: newName,
+              [key]: value,
             },
           }
         }
@@ -40,13 +40,9 @@ export const ObjectEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   return (
     <>
-      <TextField
-        id="outlined-basic"
-        variant="outlined"
-        onChange={(event) => handleNameChange(event.target.value)}
-        size="small"
-        value={nodeData.name}
-        sx={{ backgroundColor: "#fff" }}
+      <NodeStyleEditor
+        nodeData={nodeData}
+        handleDataFieldUpdate={handleDataFieldUpdate}
       />
       <DividerLine width="100%" />
       <EditableAttributeList nodeId={elementId} />

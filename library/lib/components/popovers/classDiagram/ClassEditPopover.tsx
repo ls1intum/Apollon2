@@ -1,7 +1,10 @@
-import { DividerLine, StereotypeButtonGroup } from "@/components"
+import {
+  DividerLine,
+  StereotypeButtonGroup,
+  NodeStyleEditor,
+} from "@/components"
 import { useDiagramStore } from "@/store"
 import { ClassNodeProps } from "@/types"
-import { TextField } from "@/components/ui"
 import { useShallow } from "zustand/shallow"
 import { EditableAttributeList } from "./EditableAttributesList"
 import { EditableMethodsList } from "./EditableMethodsList"
@@ -22,7 +25,7 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   const nodeData = node.data as ClassNodeProps
 
-  const handleNameChange = (newName: string) => {
+  const handleDataFieldUpdate = (key: string, value: string) => {
     setNodes((nodes) =>
       nodes.map((node) => {
         if (node.id === elementId) {
@@ -30,7 +33,7 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
             ...node,
             data: {
               ...node.data,
-              name: newName,
+              [key]: value,
             },
           }
         }
@@ -41,12 +44,9 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   return (
     <>
-      <TextField
-        id="outlined-basic"
-        variant="outlined"
-        onChange={(event) => handleNameChange(event.target.value)}
-        size="small"
-        value={nodeData.name}
+      <NodeStyleEditor
+        nodeData={nodeData}
+        handleDataFieldUpdate={handleDataFieldUpdate}
       />
       <DividerLine width="100%" />
       <StereotypeButtonGroup

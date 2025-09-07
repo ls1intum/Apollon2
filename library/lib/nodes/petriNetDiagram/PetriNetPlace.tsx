@@ -11,7 +11,7 @@ export function PetriNetPlace({
   id,
   width,
   height,
-  data: { name, tokens, capacity },
+  data,
 }: NodeProps<Node<PetriNetPlaceProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
@@ -43,9 +43,7 @@ export function PetriNetPlace({
           height={height}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
-          name={name}
-          tokens={tokens}
-          capacity={capacity}
+          data={data}
         />
       </div>
 

@@ -13,7 +13,7 @@ export function DeploymentComponent({
   id,
   width,
   height,
-  data: { isComponentHeaderShown, name },
+  data,
   parentId,
 }: NodeProps<Node<DeploymentComponentProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -40,10 +40,9 @@ export function DeploymentComponent({
         <DeploymentComponentSVG
           width={width}
           height={height}
-          name={name}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
-          isComponentHeaderShown={isComponentHeaderShown}
+          data={data}
         />
       </div>
 

@@ -5,12 +5,12 @@ import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon } from "@/components/Icon"
 import { PopoverProps } from "../types"
 import { useState, useEffect } from "react"
 import { generateUUID } from "@/index"
-import { TextField, Typography } from "@/components/ui"
+import { EdgeStyleEditor, TextField } from "@/components/ui"
 
 export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,
 }) => {
-  const { getEdge, setEdges, getNode } = useReactFlow()
+  const { getEdge, setEdges, getNode, updateEdgeData } = useReactFlow()
   const edge = getEdge(elementId)
   const [messages, setMessages] = useState<MessageData[]>([])
   const [newLabelInput, setNewLabelInput] = useState("")
@@ -123,22 +123,17 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   if (!edge) {
     return null
   }
+  const edgeData = edge.data as CustomEdgeProps | undefined
 
   return (
-    <Box
-      sx={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 300 }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-          Communication Link
-        </Typography>
-      </div>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <EdgeStyleEditor
+        edgeData={edgeData}
+        handleDataFieldUpdate={(key, value) =>
+          updateEdgeData(elementId, { ...edge.data, [key]: value })
+        }
+        label="Communication Link"
+      />
 
       {messages.map((message, index) => {
         const isDuplicateText = messages.some(

@@ -1,21 +1,26 @@
 import { LINE_WIDTH } from "@/constants"
+import { DefaultNodeProps } from "@/types"
 import { SVGComponentProps } from "@/types/SVG"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
+  data: DefaultNodeProps
 }
 
 export const SfcJumpNodeSVG: React.FC<Props> = ({
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
 }) => {
+  const { name } = data
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
   const sideLength = 20
   const halfSideLength = sideLength / 2
+
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -30,17 +35,17 @@ export const SfcJumpNodeSVG: React.FC<Props> = ({
         y={0}
         width={width}
         height={height}
-        fill="var(--apollon2-background)"
+        fill="none"
         stroke="none"
       />
       <polyline
         points={`0,0 0,${sideLength} ${sideLength},${halfSideLength} 0,0`}
-        fill="white"
-        stroke="var(--apollon2-primary-contrast)"
+        fill={fillColor}
+        stroke={strokeColor}
         strokeWidth={LINE_WIDTH}
       />
       <text
-        fill="var(--apollon2-primary-contrast)"
+        fill={textColor}
         x={sideLength + 5}
         y={halfSideLength + 5}
         style={{ fontWeight: 600 }}

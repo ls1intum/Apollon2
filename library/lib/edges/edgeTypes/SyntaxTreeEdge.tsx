@@ -8,6 +8,7 @@ import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components/wrapper"
+import { getCustomColorsFromDataForEdge } from "@/utils/layoutUtils"
 
 export const SyntaxTreeEdge = ({
   id,
@@ -22,6 +23,7 @@ export const SyntaxTreeEdge = ({
   targetPosition,
   sourceHandleId,
   targetHandleId,
+  data,
 }: BaseEdgeProps) => {
   const anchorRef = useRef<SVGSVGElement | null>(null)
   const { handleDelete } = useToolbar({ id })
@@ -58,6 +60,7 @@ export const SyntaxTreeEdge = ({
     sourceHandleId,
     targetHandleId,
   })
+  const { strokeColor } = getCustomColorsFromDataForEdge(data)
 
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
@@ -69,7 +72,7 @@ export const SyntaxTreeEdge = ({
             markerEnd={markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon2-primary-contrast)",
+              stroke: strokeColor,
               strokeDasharray: strokeDashArray,
             }}
           />

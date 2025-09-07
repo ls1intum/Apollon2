@@ -16,6 +16,7 @@ import {
   AssessmentSelectableWrapper,
   FeedbackDropzone,
 } from "@/components/wrapper"
+import { getCustomColorsFromDataForEdge } from "@/utils/layoutUtils"
 
 export const PetriNetEdge = ({
   id,
@@ -77,6 +78,8 @@ export const PetriNetEdge = ({
     targetHandleId,
   })
 
+  const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
+
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path">
@@ -87,7 +90,7 @@ export const PetriNetEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon2-primary-contrast)",
+              stroke: strokeColor,
               strokeDasharray: strokeDashArray,
             }}
           />
@@ -133,6 +136,7 @@ export const PetriNetEdge = ({
               targetPoint={edgeData.targetPoint}
               isUseCasePath={true}
               isPetriNet={true}
+              textColor={textColor}
             />
 
             <CommonEdgeElements

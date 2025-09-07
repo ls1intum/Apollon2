@@ -41,9 +41,7 @@ export function BPMNTask({
           width={width}
           height={height}
           id={id}
-          name={data.name}
-          taskType={data.taskType}
-          marker={data.marker}
+          data={data}
           showAssessmentResults={!isDiagramModifiable}
         />
       </div>

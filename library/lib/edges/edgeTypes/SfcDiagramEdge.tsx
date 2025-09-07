@@ -8,6 +8,7 @@ import { useMemo, useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
+import { getCustomColorsFromDataForEdge } from "@/utils/layoutUtils"
 
 function getParsedEdgeData(data: unknown): {
   isNegated: boolean
@@ -100,6 +101,7 @@ export const SfcDiagramEdge = ({
   })
 
   const { isNegated, displayName, showBar } = getParsedEdgeData(data)
+  const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
 
   const labelPosition = {
     x: edgeData.isMiddlePathHorizontal
@@ -150,7 +152,7 @@ export const SfcDiagramEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon2-primary-contrast)",
+              stroke: strokeColor,
               strokeDasharray: isReconnectingRef.current
                 ? "none"
                 : strokeDashArray,
@@ -200,7 +202,7 @@ export const SfcDiagramEdge = ({
                 y1={crossbarCoordinates.y1}
                 x2={crossbarCoordinates.x2}
                 y2={crossbarCoordinates.y2}
-                stroke="var(--apollon2-primary-contrast)"
+                stroke={strokeColor}
                 strokeWidth="10"
               />
             )}
@@ -208,9 +210,12 @@ export const SfcDiagramEdge = ({
             {/* SFC Label - positioned based on edge orientation */}
             {displayName && (
               <text
+
+                fill={textColor}
+
                 x={labelPosition.x}
                 y={labelPosition.y}
-                fill="var(--apollon2-primary-contrast)"
+        
                 textAnchor={labelPosition.textAnchor}
                 dominantBaseline={labelPosition.dominantBaseline}
                 fontSize="14"

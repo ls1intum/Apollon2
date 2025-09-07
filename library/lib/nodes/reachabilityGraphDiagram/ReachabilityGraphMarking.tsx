@@ -13,7 +13,7 @@ export function ReachabilityGraphMarking({
   id,
   width,
   height,
-  data: { name, isInitialMarking },
+  data,
   parentId,
 }: NodeProps<Node<ReachabilityGraphMarkingProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -39,9 +39,8 @@ export function ReachabilityGraphMarking({
         <ReachabilityGraphMarkingSVG
           width={width}
           height={height}
-          name={name}
+          data={data}
           id={id}
-          isInitialMarking={isInitialMarking}
           showAssessmentResults={!isDiagramModifiable}
         />
       </div>

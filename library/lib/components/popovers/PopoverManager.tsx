@@ -624,8 +624,8 @@ export const PopoverManager = ({
       onClose={onClose}
       anchorOrigin={popoverOrigin.anchorOrigin}
       transformOrigin={popoverOrigin.transformOrigin}
-      maxHeight={700}
-      maxWidth={isEditing ? 500 : 400}
+      maxHeight={500}
+      maxWidth={isEditing ? 278 : 400}
     >
       <Component elementId={elementId} />
     </GenericPopover>

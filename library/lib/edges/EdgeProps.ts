@@ -16,6 +16,8 @@ export type CustomEdgeProps = {
   points: IPoint[]
   label?: string | null
   messages?: MessageData[] // For communication diagram edges with direction-aware messages
+  strokeColor?: string
+  textColor?: string
 }
 
 export type ExtendedEdgeProps = EdgeProps<Edge<CustomEdgeProps>> & {

@@ -3,21 +3,24 @@ import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
-import { BPMNGatewayType } from "@/types"
+import { BPMNGatewayProps } from "@/types"
 import { CustomText } from "@/components"
+import { getCustomColorsFromData } from "@/index"
 
-export const BPMNGatewayNodeSVG: React.FC<
-  SVGComponentProps & { name?: string; gatewayType?: BPMNGatewayType }
-> = ({
+type BPMNGatewayNodeSVGProps = SVGComponentProps & {
+  data: BPMNGatewayProps
+}
+
+export const BPMNGatewayNodeSVG: React.FC<BPMNGatewayNodeSVGProps> = ({
   width,
   height,
-  name,
   svgAttributes,
   transformScale,
-  gatewayType = "exclusive",
   id,
+  data,
   showAssessmentResults = false,
 }) => {
+  const { name, gatewayType = "exclusive" } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
@@ -35,6 +38,8 @@ export const BPMNGatewayNodeSVG: React.FC<
     `${cx - half},${cy}`,
   ].join(" ")
 
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
+
   return (
     <svg
       width={scaledWidth}
@@ -45,9 +50,9 @@ export const BPMNGatewayNodeSVG: React.FC<
     >
       <polygon
         points={points}
-        stroke="var(--apollon2-primary-contrast)"
         strokeWidth={LINE_WIDTH}
-        fill="var(--apollon2-background)"
+        stroke={strokeColor}
+        fill={fillColor}
       />
       {gatewayType === "exclusive" && (
         <g>
@@ -56,14 +61,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             y1={13}
             x2={width - 13}
             y2={height - 13}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
           <line
             x1={13}
             y1={height - 13}
             x2={width - 13}
             y2={13}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
         </g>
       )}
@@ -74,14 +79,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             y1={10}
             x2={width / 2}
             y2={height - 10}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
           <line
             x1={10}
             y1={height / 2}
             x2={width - 10}
             y2={height / 2}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
         </g>
       )}
@@ -91,7 +96,7 @@ export const BPMNGatewayNodeSVG: React.FC<
           cy={height / 2}
           r={Math.min(width, height) / 2 - 12}
           fill="none"
-          stroke="var(--apollon2-primary-contrast)"
+          stroke={strokeColor}
         />
       )}
       {gatewayType === "event-based" && (
@@ -101,14 +106,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             cy={height / 2}
             r={Math.min(width, height) / 2 - 9}
             fill="none"
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
           <circle
             cx={width / 2}
             cy={height / 2}
             r={Math.min(width, height) / 2 - 12}
             fill="none"
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
           {/* small pentagon */}
           <path
@@ -116,7 +121,7 @@ export const BPMNGatewayNodeSVG: React.FC<
               height / 2 + 3.5
             } L${width / 2 - 2} ${height / 2 + 3.5} L${width / 2 - 3.5} ${height / 2 - 1} Z`}
             fill="none"
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
         </g>
       )}
@@ -128,14 +133,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             y1={13}
             x2={width - 13}
             y2={height - 13}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
           <line
             x1={13}
             y1={height - 13}
             x2={width - 13}
             y2={13}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
           {/* + */}
           <line
@@ -143,14 +148,14 @@ export const BPMNGatewayNodeSVG: React.FC<
             y1={10}
             x2={width / 2}
             y2={height - 10}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
           <line
             x1={10}
             y1={height / 2}
             x2={width - 10}
             y2={height / 2}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
         </g>
       )}
@@ -161,6 +166,7 @@ export const BPMNGatewayNodeSVG: React.FC<
           textAnchor="middle"
           fontSize={14}
           dominantBaseline="hanging"
+          fill={textColor}
         >
           {name}
         </CustomText>

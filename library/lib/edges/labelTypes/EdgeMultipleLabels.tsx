@@ -13,6 +13,7 @@ interface EdgeMultipleLabelsProps {
   targetPosition: IPoint
   edgePoints?: IPoint[]
   isHorizontalEdge?: boolean
+  textColor: string
 }
 export const EdgeMultipleLabels = ({
   messages,
@@ -23,6 +24,7 @@ export const EdgeMultipleLabels = ({
   targetPosition,
   edgePoints,
   isHorizontalEdge,
+  textColor,
 }: EdgeMultipleLabelsProps) => {
   const displayMessages: MessageData[] = messages || []
 
@@ -92,6 +94,7 @@ export const EdgeMultipleLabels = ({
                 alignItems: "center",
                 justifyContent: "center",
                 zIndex: ZINDEX_LABEL,
+                stroke: textColor,
               }}
               className="nodrag nopan"
             >
@@ -105,7 +108,7 @@ export const EdgeMultipleLabels = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 style={{
-                  color: "var(--apollon2-primary-contrast)",
+                  color: textColor,
                   transform: `rotate(${arrowRotation}deg)`,
                   transformOrigin: "center",
                 }}
@@ -123,7 +126,7 @@ export const EdgeMultipleLabels = ({
               transform: `translate(${pathMiddlePosition.x + labelBoxPosition.x + offset.x}px, ${pathMiddlePosition.y + labelBoxPosition.y + offset.y}px) translate(-50%, -50%)`,
               fontSize: "14px",
               fontWeight: 400,
-              color: "var(--apollon2-primary-contrast)",
+              color: textColor,
               whiteSpace: "nowrap",
               pointerEvents: "none",
               zIndex: ZINDEX_LABEL,

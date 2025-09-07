@@ -4,31 +4,27 @@ import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
-import {
-  BPMNStartEventType,
-  BPMNIntermediateEventType,
-  BPMNEndEventType,
-} from "@/types"
+import { BPMNEventProps } from "@/types"
+import { getCustomColorsFromData } from "@/index"
 
 export type BPMNEventVariant = "start" | "intermediate" | "end"
 
 export type BPMNEventNodeSVGProps = SVGComponentProps & {
-  name?: string
   variant: BPMNEventVariant
-  eventType?: BPMNStartEventType | BPMNIntermediateEventType | BPMNEndEventType
+  data: BPMNEventProps
 }
 
 export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
   width,
   height,
-  name,
   svgAttributes,
   transformScale,
   variant,
-  eventType,
+  data,
   id,
   showAssessmentResults = false,
 }) => {
+  const { name, eventType } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
@@ -37,6 +33,8 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
 
   const innerCircle = variant === "intermediate"
   const thickStroke = variant === "end"
+
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   const icon = (() => {
     const centerX = width / 2 - 10
@@ -333,18 +331,18 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
         cx={width / 2}
         cy={height / 2}
         r={r}
-        stroke="var(--apollon2-primary-contrast)"
         strokeWidth={thickStroke ? LINE_WIDTH * 2 : LINE_WIDTH}
-        fill="var(--apollon2-background)"
+        stroke={strokeColor}
+        fill={fillColor}
       />
       {innerCircle && (
         <circle
           cx={width / 2}
           cy={height / 2}
           r={r - 3.5}
-          stroke="var(--apollon2-primary-contrast)"
+          stroke={strokeColor}
           strokeWidth={LINE_WIDTH}
-          fill="var(--apollon2-background)"
+          fill={fillColor}
         />
       )}
       {icon}
@@ -356,6 +354,7 @@ export const BPMNEventNodeSVG: React.FC<BPMNEventNodeSVGProps> = ({
           fontWeight="normal"
           fontSize={14}
           dominantBaseline="hanging"
+          fill={textColor}
         >
           {name}
         </CustomText>

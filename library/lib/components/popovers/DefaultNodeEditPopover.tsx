@@ -1,8 +1,8 @@
-import { TextField } from "@/components/ui"
 import { DefaultNodeProps } from "@/types"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { PopoverProps } from "./types"
+import { NodeStyleEditor } from "../ui"
 
 export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -17,7 +17,7 @@ export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
     }))
   )
 
-  const handleNameChange = (newName: string) => {
+  const handleDataFieldUpdate = (key: string, value: string) => {
     setNodes((nodes) =>
       nodes.map((node) => {
         if (node.id === elementId) {
@@ -25,7 +25,7 @@ export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
             ...node,
             data: {
               ...node.data,
-              name: newName,
+              [key]: value,
             },
           }
         }
@@ -48,18 +48,13 @@ export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
         flexDirection: "column",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <TextField
-          id="outlined-basic"
-          variant="outlined"
-          onChange={(event) => handleNameChange(event.target.value)}
-          size="small"
-          value={nodeData.name}
-          placeholder={placeholder}
-          fullWidth
-        />
-        {sideElements}
-      </div>
+      <NodeStyleEditor
+        nodeData={nodeData}
+        handleDataFieldUpdate={handleDataFieldUpdate}
+        sideElements={sideElements}
+        inputPlaceholder={placeholder}
+      />
+
       {children}
     </div>
   )
