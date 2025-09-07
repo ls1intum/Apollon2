@@ -232,7 +232,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -242,7 +242,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -252,7 +252,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )

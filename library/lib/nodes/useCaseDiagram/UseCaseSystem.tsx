@@ -6,14 +6,14 @@ import { PopoverManager } from "@/components/popovers/PopoverManager"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 import { UseCaseSystemNodeSVG } from "@/components"
-import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { NodeToolbar } from "@/components/toolbars/NodeToolbar"
+import { DefaultNodeWrapper } from "../wrappers"
 
 export function UseCaseSystem({
   id,
   width,
   height,
-  data: { name },
+  data,
   parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -26,7 +26,7 @@ export function UseCaseSystem({
   }
 
   return (
-    <FeedbackDropzone elementId={id} asElement="div">
+    <DefaultNodeWrapper width={width} height={height} elementId={id}>
       <NodeToolbar elementId={id} />
       <NodeResizer
         isVisible={isDiagramModifiable && !!selected}
@@ -39,7 +39,7 @@ export function UseCaseSystem({
         <UseCaseSystemNodeSVG
           width={width}
           height={height}
-          name={name}
+          data={data}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />
@@ -50,6 +50,6 @@ export function UseCaseSystem({
         elementId={id}
         type="default"
       />
-    </FeedbackDropzone>
+    </DefaultNodeWrapper>
   )
 }
