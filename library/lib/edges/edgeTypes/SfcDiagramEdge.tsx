@@ -210,12 +210,9 @@ export const SfcDiagramEdge = ({
             {/* SFC Label - positioned based on edge orientation */}
             {displayName && (
               <text
-
                 fill={textColor}
-
                 x={labelPosition.x}
                 y={labelPosition.y}
-        
                 textAnchor={labelPosition.textAnchor}
                 dominantBaseline={labelPosition.dominantBaseline}
                 fontSize="14"
