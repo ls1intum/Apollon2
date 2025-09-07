@@ -1,10 +1,11 @@
 import { LINE_WIDTH } from "@/constants"
 import { SVGComponentProps } from "@/types/SVG"
 import { CustomText, StyledRect } from "@/components"
-import { SfcActionRow } from "@/types"
+import { SfcActionTableProps } from "@/types"
+import { getCustomColorsFromData } from "@/index"
 
 interface Props extends SVGComponentProps {
-  actionRows?: SfcActionRow[]
+  data: SfcActionTableProps
 }
 
 export const SfcActionTableNodeSVG: React.FC<Props> = ({
@@ -12,8 +13,9 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
   height,
   svgAttributes,
   transformScale,
-  actionRows = [],
+  data,
 }) => {
+  const { actionRows } = data
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
   const rowHeight = 30
@@ -23,6 +25,8 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
     (_, i) => (i + 1) * rowHeight
   )
 
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
+
   return (
     <svg
       width={scaledWidth}
@@ -31,7 +35,14 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <StyledRect x={0} y={0} width={width} height={height} />
+      <StyledRect
+        x={0}
+        y={0}
+        width={width}
+        height={height}
+        fill={fillColor}
+        stroke={strokeColor}
+      />
 
       {/* Render action rows */}
       {actionRows.map((row, index) => {
@@ -47,6 +58,7 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
               dominantBaseline="middle"
               fontSize="14"
               fontWeight="normal"
+              fill={textColor}
             >
               {row.identifier}
             </CustomText>
@@ -57,6 +69,7 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
               dominantBaseline="middle"
               fontSize="14"
               fontWeight="normal"
+              fill={textColor}
             >
               {row.description}
             </CustomText>

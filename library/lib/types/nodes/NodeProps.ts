@@ -143,3 +143,6 @@ export type SfcActionRow = {
 export type SfcActionTableProps = DefaultNodeProps & {
   actionRows: SfcActionRow[]
 }
+export type SfcTransitionBranchNodeProps = DefaultNodeProps & {
+  showHint: boolean
+}

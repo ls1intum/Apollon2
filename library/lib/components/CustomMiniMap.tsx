@@ -26,7 +26,6 @@ import {
   SfcActionTableNodeSVG,
   SfcJumpNodeSVG,
   SfcTransitionBranchNodeSVG,
-  SfcPreviewSpacerNodeSVG,
   FlowchartTerminalNodeSVG,
   FlowchartProcessNodeSVG,
   FlowchartDecisionNodeSVG,
@@ -61,6 +60,7 @@ import {
   DeploymentComponentProps,
   DeploymentNodeProps,
   ObjectNodeProps,
+  SfcActionTableProps,
 } from "@/types/nodes/NodeProps"
 
 export const CustomMiniMap = () => {
@@ -330,7 +330,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -340,7 +340,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -350,6 +350,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
+          data={nodeInfo.data as SfcActionTableProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -363,25 +364,18 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           svgAttributes={{ x, y }}
         />
       )
+
     case "sfcJump":
       return (
         <SfcJumpNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
-    case "sfcPreviewSpacer":
-      return (
-        <SfcPreviewSpacerNodeSVG
-          width={nodeInfo.width ?? 0}
-          height={nodeInfo.height ?? 0}
-          id={`minimap_${id}`}
-          svgAttributes={{ x, y }}
-        />
-      )
+
     case "flowchartTerminal":
       return (
         <FlowchartTerminalNodeSVG

@@ -52,7 +52,6 @@ import {
   SfcJumpNodeSVG,
   SfcTransitionBranchNodeSVG,
   SfcActionTableNodeSVG,
-  SfcPreviewSpacerNodeSVG,
 } from "@/components"
 
 export * from "./layoutConstants"
@@ -572,13 +571,6 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
         ],
       },
       svg: (props) => <SfcActionTableNodeSVG {...props} />,
-    },
-    {
-      type: "sfcPreviewSpacer",
-      width: droppedElementWidth,
-      height: 30,
-      defaultData: {},
-      svg: (props) => <SfcPreviewSpacerNodeSVG {...props} />,
     },
   ],
 }

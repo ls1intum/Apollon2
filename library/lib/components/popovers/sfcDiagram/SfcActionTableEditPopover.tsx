@@ -120,9 +120,7 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
   }
 
   return (
-    <Box
-      sx={{ display: "flex", flexDirection: "column", gap: 0.5, minWidth: 400 }}
-    >
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
       <Typography variant="h6">Actions</Typography>
       {actionRows.map((row) => (
         <Box
@@ -140,7 +138,7 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleRowChange(row.id, "identifier", e.target.value)
             }
-            sx={{ backgroundColor: "#fff", width: "60px" }}
+            sx={{ width: "60px" }}
           />
           <TextField
             size="small"
@@ -150,7 +148,6 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleRowChange(row.id, "description", e.target.value)
             }
-            sx={{ backgroundColor: "#fff" }}
           />
           <DeleteIcon
             width={16}

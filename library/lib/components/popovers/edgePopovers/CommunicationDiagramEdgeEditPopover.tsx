@@ -125,9 +125,7 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   }
 
   return (
-    <Box
-      sx={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 300 }}
-    >
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
       <div
         style={{
           display: "flex",
