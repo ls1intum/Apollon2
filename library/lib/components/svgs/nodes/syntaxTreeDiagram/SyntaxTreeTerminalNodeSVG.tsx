@@ -41,8 +41,6 @@ export const SyntaxTreeTerminalNodeSVG: React.FC<Props> = ({
           y={0}
           width={width}
           height={height}
-          rx={10}
-          ry={10}
           fill={fillColor}
           stroke={strokeColor}
         />
