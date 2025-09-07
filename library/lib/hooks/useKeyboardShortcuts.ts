@@ -82,12 +82,7 @@ export const useKeyboardShortcuts = () => {
             event.preventDefault()
             if (selectedElementIds.length > 0) {
               pasteCountRef.current = 0
-              const success = await copySelectedElements()
-              if (success) {
-                console.log(
-                  `${selectedElementIds.length} elements copied to clipboard`
-                )
-              }
+              copySelectedElements()
             }
           }
           break
@@ -96,9 +91,7 @@ export const useKeyboardShortcuts = () => {
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
             pasteCountRef.current += 1
-            const success = await pasteElements(pasteCountRef.current)
-            if (success) {
-            }
+            pasteElements(pasteCountRef.current)
           }
           break
 
