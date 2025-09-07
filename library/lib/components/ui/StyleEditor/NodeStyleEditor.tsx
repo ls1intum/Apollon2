@@ -13,7 +13,6 @@ interface NodeStyleEditorProps {
   noStrokeUpdate?: boolean
 }
 
-// Centralized styles for reusability
 const styles = {
   container: {
     display: "flex",
@@ -68,7 +67,7 @@ const ColorOption: React.FC<{
   </div>
 )
 
-export const StyleEditor: React.FC<NodeStyleEditorProps> = ({
+export const NodeStyleEditor: React.FC<NodeStyleEditorProps> = ({
   nodeData,
   handleDataFieldUpdate,
   sideElements = [],

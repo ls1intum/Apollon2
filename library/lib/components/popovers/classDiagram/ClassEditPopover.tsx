@@ -1,11 +1,14 @@
-import { DividerLine, StereotypeButtonGroup } from "@/components"
+import {
+  DividerLine,
+  StereotypeButtonGroup,
+  NodeStyleEditor,
+} from "@/components"
 import { useDiagramStore } from "@/store"
 import { ClassNodeProps } from "@/types"
 import { useShallow } from "zustand/shallow"
 import { EditableAttributeList } from "./EditableAttributesList"
 import { EditableMethodsList } from "./EditableMethodsList"
 import { PopoverProps } from "../types"
-import { StyleEditor } from "@/components/ui/StyleEditor"
 
 export const ClassEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
   const { nodes, setNodes } = useDiagramStore(
@@ -41,7 +44,7 @@ export const ClassEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   return (
     <>
-      <StyleEditor
+      <NodeStyleEditor
         nodeData={nodeData}
         handleDataFieldUpdate={handleDataFieldUpdate}
       />

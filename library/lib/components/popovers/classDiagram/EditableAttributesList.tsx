@@ -1,6 +1,6 @@
 import React, { useState, KeyboardEvent, ChangeEvent } from "react"
 import { Box } from "@mui/material"
-import { StyleEditor, TextField, Typography } from "@/components/ui"
+import { NodeStyleEditor, TextField, Typography } from "@/components/ui"
 import { generateUUID } from "@/utils"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
@@ -107,7 +107,7 @@ export const EditableAttributeList: React.FC<Props> = ({ nodeId }) => {
             alignItems: "center",
           }}
         >
-          <StyleEditor
+          <NodeStyleEditor
             noStrokeUpdate
             nodeData={item}
             handleDataFieldUpdate={(key, value) =>

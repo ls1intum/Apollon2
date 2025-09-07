@@ -2,7 +2,7 @@ import { DefaultNodeProps } from "@/types"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { PopoverProps } from "./types"
-import { StyleEditor } from "../ui/StyleEditor"
+import { NodeStyleEditor } from "../ui"
 
 export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -48,7 +48,7 @@ export const DefaultNodeEditPopover: React.FC<PopoverProps> = ({
         flexDirection: "column",
       }}
     >
-      <StyleEditor
+      <NodeStyleEditor
         nodeData={nodeData}
         handleDataFieldUpdate={handleDataFieldUpdate}
         sideElements={sideElements}

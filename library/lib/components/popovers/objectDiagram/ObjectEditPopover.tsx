@@ -1,4 +1,4 @@
-import { DividerLine, StyleEditor } from "@/components/ui"
+import { DividerLine, NodeStyleEditor } from "@/components/ui"
 import { useDiagramStore } from "@/store"
 import { ObjectNodeProps } from "@/types"
 import { useShallow } from "zustand/shallow"
@@ -40,7 +40,7 @@ export const ObjectEditPopover: React.FC<PopoverProps> = ({ elementId }) => {
 
   return (
     <>
-      <StyleEditor
+      <NodeStyleEditor
         nodeData={nodeData}
         handleDataFieldUpdate={handleDataFieldUpdate}
       />
