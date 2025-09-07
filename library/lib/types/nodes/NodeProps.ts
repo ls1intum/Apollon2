@@ -9,8 +9,7 @@ export type DefaultNodeProps = {
 
 export type ClassNodeElement = {
   id: string
-  name: string
-}
+} & DefaultNodeProps
 
 export type ClassNodeProps = {
   methods: ClassNodeElement[]

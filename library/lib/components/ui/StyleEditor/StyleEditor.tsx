@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { DividerLine, TextField, Typography } from "@/components/ui"
 import { PaintRollerIcon } from "@/components/Icon/PaintRollerIcon"
 import { CrossIcon } from "@/components/Icon"
@@ -10,6 +10,7 @@ interface NodeStyleEditorProps {
   handleDataFieldUpdate: (key: keyof DefaultNodeProps, value: string) => void
   sideElements?: React.ReactNode[]
   inputPlaceholder?: string
+  noStrokeUpdate?: boolean
 }
 
 // Centralized styles for reusability
@@ -55,13 +56,6 @@ const styles = {
   },
 }
 
-// Mapping for color fields
-const colorFields: { key: keyof DefaultNodeProps; label: string }[] = [
-  { key: "fillColor", label: "Fill Color" },
-  { key: "strokeColor", label: "Stroke Color" },
-  { key: "textColor", label: "Text Color" },
-]
-
 // Subcomponent for rendering a single color option
 const ColorOption: React.FC<{
   label: string
@@ -79,7 +73,24 @@ export const StyleEditor: React.FC<NodeStyleEditorProps> = ({
   handleDataFieldUpdate,
   sideElements = [],
   inputPlaceholder = "Enter node name",
+  noStrokeUpdate = false,
 }) => {
+  // Mapping for color fields
+  const colorFields: { key: keyof DefaultNodeProps; label: string }[] =
+    useMemo(() => {
+      if (noStrokeUpdate) {
+        return [
+          { key: "fillColor", label: "Fill Color" },
+          { key: "textColor", label: "Text Color" },
+        ]
+      }
+      return [
+        { key: "fillColor", label: "Fill Color" },
+        { key: "strokeColor", label: "Stroke Color" },
+        { key: "textColor", label: "Text Color" },
+      ]
+    }, [noStrokeUpdate])
+
   const [paintOpen, setPaintOpen] = useState(false)
   const [activeColorField, setActiveColorField] = useState<
     keyof DefaultNodeProps | null
@@ -90,7 +101,7 @@ export const StyleEditor: React.FC<NodeStyleEditorProps> = ({
   }
 
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <div style={styles.container}>
         <TextField
           id="outlined-basic"
@@ -158,6 +169,6 @@ export const StyleEditor: React.FC<NodeStyleEditorProps> = ({
           )}
         </div>
       )}
-    </>
+    </div>
   )
 }

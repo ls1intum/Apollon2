@@ -4,6 +4,7 @@ import { FC } from "react"
 import AssessmentIcon from "../AssessmentIcon"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableElement } from "@/components/AssessmentSelectableElement"
+import { getCustomColorsFromData } from "@/index"
 
 interface RowBlockSectionProps {
   items: (ClassNodeElement & { score?: number })[]
@@ -27,7 +28,7 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
         const y = index * itemHeight
         const iconY = y - 12
         const iconX = width - 15
-
+        const { fillColor, textColor } = getCustomColorsFromData(item)
         return (
           <AssessmentSelectableElement
             key={item.id}
@@ -38,17 +39,18 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
           >
             <FeedbackDropzone elementId={item.id}>
               <rect
-                x={0}
-                y={y}
-                width={width}
-                height={itemHeight}
-                fill="transparent"
+                x={0.5}
+                y={y + 0.5}
+                width={width - 1}
+                height={itemHeight - 1}
+                fill={fillColor}
               />
               <CustomText
                 x={padding}
                 y={15 + index * itemHeight}
                 dominantBaseline="middle"
                 textAnchor="start"
+                fill={textColor}
               >
                 {item.name}
               </CustomText>

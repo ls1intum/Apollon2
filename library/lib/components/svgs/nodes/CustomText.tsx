@@ -37,7 +37,6 @@ export const CustomText: FC<Props & Record<string, unknown>> = ({
     <text
       {...pos}
       fill={fill}
-      style={fill ? { fill } : {}}
       dominantBaseline={dominantBaseline}
       textAnchor={textAnchor}
       fontWeight={fontWeight}

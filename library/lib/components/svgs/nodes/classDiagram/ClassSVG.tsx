@@ -86,12 +86,10 @@ export const ClassSVG = ({
           y={0}
           width={width}
           height={height}
-          fill={fillColor}
           stroke={strokeColor}
         />
 
         {/* Header Section */}
-
         <HeaderSection
           showStereotype={showStereotype}
           stereotype={stereotype}
@@ -99,13 +97,18 @@ export const ClassSVG = ({
           width={width}
           headerHeight={headerHeight}
           textColor={textColor}
+          fill={fillColor}
         />
 
         {/* Attributes Section */}
         {attributes.length > 0 && (
           <>
             {/* Separation Line After Header */}
-            <SeparationLine y={headerHeight} width={width} />
+            <SeparationLine
+              y={headerHeight}
+              width={width}
+              strokeColor={strokeColor}
+            />
             <RowBlockSection
               items={processedAttributes}
               padding={padding}
@@ -123,6 +126,7 @@ export const ClassSVG = ({
             <SeparationLine
               y={headerHeight + attributes.length * attributeHeight}
               width={width}
+              strokeColor={strokeColor}
             />
             <RowBlockSection
               items={processedMethods}
