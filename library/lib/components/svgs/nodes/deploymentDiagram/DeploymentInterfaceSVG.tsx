@@ -4,24 +4,28 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { DefaultNodeProps } from "@/types"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
+  data: DefaultNodeProps
 }
 
 export const DeploymentInterfaceSVG: React.FC<Props> = ({
   id,
   width,
   height,
-  name,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
+  data,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -37,8 +41,8 @@ export const DeploymentInterfaceSVG: React.FC<Props> = ({
           cy={height / 2}
           r={width / 2}
           strokeWidth={LINE_WIDTH}
-          stroke="var(--apollon2-primary-contrast)"
-          fill="var(--apollon2-background)"
+          stroke={strokeColor}
+          fill={fillColor}
         />
 
         {/* Name Text */}
@@ -48,6 +52,7 @@ export const DeploymentInterfaceSVG: React.FC<Props> = ({
           textAnchor="start"
           fontWeight="bold"
           dominantBaseline="hanging"
+          fill={textColor}
         >
           {name}
         </CustomText>

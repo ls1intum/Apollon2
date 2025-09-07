@@ -58,6 +58,8 @@ import {
   ComponentNodeProps,
   ComponentSubsystemNodeProps,
   DefaultNodeProps,
+  DeploymentComponentProps,
+  DeploymentNodeProps,
   ObjectNodeProps,
 } from "@/types/nodes/NodeProps"
 
@@ -288,12 +290,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
-          isComponentHeaderShown={
-            nodeInfo.data.isComponentHeaderShown as boolean
-          }
-          stereotype={nodeInfo.data.stereotype as string}
+          data={nodeInfo.data as DeploymentNodeProps}
         />
       )
     case "deploymentComponent":
@@ -302,11 +300,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
-          isComponentHeaderShown={
-            nodeInfo.data.isComponentHeaderShown as boolean
-          }
+          data={nodeInfo.data as DeploymentComponentProps}
         />
       )
     case "deploymentArtifact":
@@ -315,8 +310,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
+          data={nodeInfo.data as DefaultNodeProps}
         />
       )
     case "deploymentInterface":
@@ -325,7 +320,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )

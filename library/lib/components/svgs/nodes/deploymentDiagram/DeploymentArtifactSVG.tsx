@@ -3,24 +3,28 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { DefaultNodeProps } from "@/types"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
+  data: DefaultNodeProps
 }
 
 export const DeploymentArtifactSVG: React.FC<Props> = ({
   id,
   width,
   height,
-  name,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
+  data,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -31,7 +35,14 @@ export const DeploymentArtifactSVG: React.FC<Props> = ({
       {...svgAttributes}
     >
       <g>
-        <StyledRect x={0} y={0} width={width} height={height} />
+        <StyledRect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          stroke={strokeColor}
+          fill={fillColor}
+        />
 
         {/* Artifact Icon - Document-like representation */}
         <g transform={`translate(${width - 25}, 7)`}>
@@ -39,14 +50,14 @@ export const DeploymentArtifactSVG: React.FC<Props> = ({
             d="M 0 0 L 13 0 L 19.2 7.25 L 19.2 24 L 0 24 L 0 0 Z"
             strokeWidth="1.2"
             strokeMiterlimit="10"
-            stroke="var(--apollon2-primary-contrast)"
-            fill="var(--apollon2-background)"
+            stroke={strokeColor}
+            fill={fillColor}
           ></path>
           <path
             d="M 13 0 L 13 7.25 L 19.2 7.25"
             strokeWidth="1.2"
             strokeMiterlimit="10"
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
             fill="none"
           ></path>
         </g>
@@ -58,6 +69,7 @@ export const DeploymentArtifactSVG: React.FC<Props> = ({
           textAnchor="middle"
           fontWeight="bold"
           dominantBaseline="middle"
+          fill={textColor}
         >
           {name}
         </CustomText>
