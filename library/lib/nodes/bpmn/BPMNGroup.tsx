@@ -41,7 +41,7 @@ export function BPMNGroup({
           width={width}
           height={height}
           id={id}
-          name={data.name}
+          data={data}
           showAssessmentResults={!isDiagramModifiable}
         />
       </div>

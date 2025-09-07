@@ -53,6 +53,10 @@ import { ZINDEX_MINIMAP, ZINDEX_PANEL } from "@/constants/zindexConstants"
 import { MapIcon } from "./Icon/MapIcon"
 import { SouthEastArrowIcon } from "./Icon/SouthEastArrowIcon"
 import {
+  BPMNEventProps,
+  BPMNGatewayProps,
+  BPMNSubprocessProps,
+  BPMNTaskProps,
   ClassNodeProps,
   CommunicationObjectNodeProps,
   ComponentNodeProps,
@@ -488,17 +492,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNTaskProps}
           svgAttributes={{ x, y }}
-          taskType={
-            (nodeInfo.data
-              .taskType as unknown as import("@/types").BPMNTaskType) ||
-            "default"
-          }
-          marker={
-            (nodeInfo.data
-              .marker as unknown as import("@/types").BPMNMarkerType) || "none"
-          }
         />
       )
     case "bpmnStartEvent":
@@ -507,14 +502,9 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
           variant="start"
-          eventType={
-            (nodeInfo.data
-              .eventType as unknown as import("@/types").BPMNStartEventType) ||
-            "default"
-          }
+          data={nodeInfo.data as BPMNEventProps}
         />
       )
     case "bpmnIntermediateEvent":
@@ -523,14 +513,9 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
           variant="intermediate"
-          eventType={
-            (nodeInfo.data
-              .eventType as unknown as import("@/types").BPMNIntermediateEventType) ||
-            "default"
-          }
+          data={nodeInfo.data as BPMNEventProps}
         />
       )
     case "bpmnEndEvent":
@@ -539,14 +524,9 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNEventProps}
           svgAttributes={{ x, y }}
           variant="end"
-          eventType={
-            (nodeInfo.data
-              .eventType as unknown as import("@/types").BPMNEndEventType) ||
-            "default"
-          }
         />
       )
     case "bpmnGateway":
@@ -555,13 +535,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNGatewayProps}
           svgAttributes={{ x, y }}
-          gatewayType={
-            (nodeInfo.data
-              .gatewayType as unknown as import("@/types").BPMNGatewayType) ||
-            "exclusive"
-          }
         />
       )
     case "bpmnSubprocess":
@@ -570,7 +545,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNSubprocessProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -580,7 +555,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNSubprocessProps}
           svgAttributes={{ x, y }}
           variant="transaction"
         />
@@ -591,7 +566,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNSubprocessProps}
           svgAttributes={{ x, y }}
           variant="call"
         />
@@ -602,7 +577,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -612,7 +587,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -622,7 +597,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -632,7 +607,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -642,7 +617,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )

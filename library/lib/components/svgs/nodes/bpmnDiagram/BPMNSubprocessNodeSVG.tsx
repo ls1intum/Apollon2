@@ -4,22 +4,24 @@ import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
+import { BPMNSubprocessProps } from "@/types/nodes/NodeProps"
 
-export const BPMNSubprocessNodeSVG: React.FC<
-  SVGComponentProps & {
-    name: string
-    variant?: "subprocess" | "transaction" | "call"
-  }
-> = ({
+interface BPMNSubprocessNodeSVGProps extends SVGComponentProps {
+  data: BPMNSubprocessProps
+  variant?: "subprocess" | "transaction" | "call"
+}
+export const BPMNSubprocessNodeSVG: React.FC<BPMNSubprocessNodeSVGProps> = ({
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
-  variant = "subprocess",
   id,
   showAssessmentResults = false,
+  variant = "subprocess",
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
@@ -28,6 +30,7 @@ export const BPMNSubprocessNodeSVG: React.FC<
   const isCall = variant === "call"
   const isSubprocess = !isTransaction && !isCall
 
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
   return (
     <svg
       width={scaledWidth}
@@ -46,6 +49,8 @@ export const BPMNSubprocessNodeSVG: React.FC<
             height={height}
             rx={10}
             ry={10}
+            fill={fillColor}
+            stroke={strokeColor}
           />
           <StyledRect
             x={3}
@@ -54,6 +59,8 @@ export const BPMNSubprocessNodeSVG: React.FC<
             height={height - 6}
             rx={7}
             ry={7}
+            fill="none"
+            stroke={strokeColor}
           />
         </>
       )}
@@ -67,6 +74,8 @@ export const BPMNSubprocessNodeSVG: React.FC<
           strokeWidth={LINE_WIDTH * 3}
           rx={10}
           ry={10}
+          fill={fillColor}
+          stroke={strokeColor}
         />
       )}
       {/* Subprocess: single border + plus box */}
@@ -79,6 +88,8 @@ export const BPMNSubprocessNodeSVG: React.FC<
             height={height}
             rx={10}
             ry={10}
+            fill={fillColor}
+            stroke={strokeColor}
           />
           {/* Plus box marker */}
           <rect
@@ -87,21 +98,21 @@ export const BPMNSubprocessNodeSVG: React.FC<
             width={14}
             height={14}
             fill="none"
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
           <line
             x1={width / 2 - 4}
             y1={height - 7}
             x2={width / 2 + 4}
             y2={height - 7}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
           <line
             x1={width / 2}
             y1={height - 11}
             x2={width / 2}
             y2={height - 3}
-            stroke="var(--apollon2-primary-contrast)"
+            stroke={strokeColor}
           />
         </>
       )}
@@ -110,6 +121,7 @@ export const BPMNSubprocessNodeSVG: React.FC<
         y={height / 2}
         textAnchor="middle"
         fontWeight="bold"
+        fill={textColor}
       >
         {name}
       </CustomText>

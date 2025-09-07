@@ -98,16 +98,8 @@ export type BPMNEndEventType =
   | "signal"
   | "terminate"
 
-export type BPMNStartEventProps = DefaultNodeProps & {
+export type BPMNEventProps = DefaultNodeProps & {
   eventType: BPMNStartEventType
-}
-
-export type BPMNIntermediateEventProps = DefaultNodeProps & {
-  eventType: BPMNIntermediateEventType
-}
-
-export type BPMNEndEventProps = DefaultNodeProps & {
-  eventType: BPMNEndEventType
 }
 
 export type BPMNGatewayType =

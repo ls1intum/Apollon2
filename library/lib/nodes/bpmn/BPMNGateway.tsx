@@ -30,8 +30,7 @@ export function BPMNGateway({
           width={width}
           height={height}
           id={id}
-          name={data.name}
-          gatewayType={data.gatewayType}
+          data={data}
           showAssessmentResults={!isDiagramModifiable}
         />
       </div>

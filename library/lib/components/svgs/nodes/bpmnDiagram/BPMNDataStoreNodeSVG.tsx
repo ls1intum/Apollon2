@@ -4,23 +4,29 @@ import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
+import { DefaultNodeProps } from "@/types"
 
-export const BPMNDataStoreNodeSVG: React.FC<
-  SVGComponentProps & { name: string }
-> = ({
+type BPMNDataStoreNodeSVGProps = SVGComponentProps & {
+  data: DefaultNodeProps
+}
+
+export const BPMNDataStoreNodeSVG: React.FC<BPMNDataStoreNodeSVGProps> = ({
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
   id,
   showAssessmentResults = false,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
 
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
   return (
     <svg
       width={scaledWidth}
@@ -34,24 +40,24 @@ export const BPMNDataStoreNodeSVG: React.FC<
           height - 10
         } L ${width} 10 A ${width / 2} 10 180 0 0 0 10`}
         strokeWidth={LINE_WIDTH}
-        stroke="var(--apollon2-primary-contrast)"
-        fill="var(--apollon2-background)"
+        stroke={strokeColor}
+        fill={fillColor}
       />
       <path
         d={`M 0 30 A ${width / 2} 10 0 0 0 ${width} 30`}
         strokeWidth={LINE_WIDTH}
-        stroke="var(--apollon2-primary-contrast)"
+        stroke={strokeColor}
         fill="none"
       />
       <path
         d={`M 0 20 A ${width / 2} 10 0 0 0 ${width} 20`}
-        stroke="var(--apollon2-primary-contrast)"
+        stroke={strokeColor}
         strokeWidth={LINE_WIDTH}
         fill="none"
       />
       <path
         d={`M 0 10 A ${width / 2} 10 0 0 0 ${width} 10`}
-        stroke="var(--apollon2-primary-contrast)"
+        stroke={strokeColor}
         strokeWidth={LINE_WIDTH}
         fill="none"
       />
@@ -61,6 +67,7 @@ export const BPMNDataStoreNodeSVG: React.FC<
         textAnchor="middle"
         fontSize={14}
         dominantBaseline="hanging"
+        fill={textColor}
       >
         {name}
       </CustomText>
