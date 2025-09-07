@@ -11,6 +11,7 @@ interface EdgeMiddleLabelsProps {
   showRelationshipLabels?: boolean
   isUseCasePath?: boolean
   isPetriNet?: boolean // New prop to identify PetriNet edges
+  textColor: string
 }
 
 export const EdgeMiddleLabels = ({
@@ -22,6 +23,7 @@ export const EdgeMiddleLabels = ({
   showRelationshipLabels = false,
   isUseCasePath = false,
   isPetriNet = false,
+  textColor,
 }: EdgeMiddleLabelsProps) => {
   if (isPetriNet && label === "1") return null
 
@@ -76,7 +78,7 @@ export const EdgeMiddleLabels = ({
           whiteSpace: "nowrap",
           pointerEvents: "none",
           zIndex: ZINDEX_LABEL,
-          color: "var(--apollon2-primary-contrast)",
+          color: textColor,
         }}
         className="nodrag nopan"
       >

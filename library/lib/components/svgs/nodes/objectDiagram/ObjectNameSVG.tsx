@@ -1,6 +1,5 @@
-import { ClassNodeElement } from "@/types"
+import { ClassNodeElement, ObjectNodeProps } from "@/types"
 import {
-  DEFAULT_FONT,
   DEFAULT_HEADER_HEIGHT,
   DEFAULT_ATTRIBUTE_HEIGHT,
   DEFAULT_METHOD_HEIGHT,
@@ -14,29 +13,26 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { StyledRect } from "@/components"
+import { getCustomColorsFromData } from "@/index"
 
 interface Props extends SVGComponentProps {
-  methods: ClassNodeElement[]
-  attributes: ClassNodeElement[]
-  name: string
+  data: ObjectNodeProps
 }
 
 export const ObjectNameSVG = ({
   id,
   width,
   height,
-  methods,
-  attributes,
-  name,
+  data,
   transformScale,
   svgAttributes,
   showAssessmentResults = false,
 }: Props) => {
+  const { name, attributes, methods } = data
   const headerHeight = DEFAULT_HEADER_HEIGHT
   const attributeHeight = DEFAULT_ATTRIBUTE_HEIGHT
   const methodHeight = DEFAULT_METHOD_HEIGHT
   const padding = DEFAULT_PADDING
-  const font = DEFAULT_FONT
 
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
 
@@ -52,6 +48,7 @@ export const ObjectNameSVG = ({
 
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -63,7 +60,13 @@ export const ObjectNameSVG = ({
     >
       <g>
         {/* Outer Rectangle */}
-        <StyledRect x={0} y={0} width={width} height={height} />
+        <StyledRect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          stroke={strokeColor}
+        />
 
         {/* Header Section - Object name with underline */}
         <HeaderSection
@@ -71,22 +74,26 @@ export const ObjectNameSVG = ({
           stereotype={undefined}
           name={name}
           width={width}
-          font={font}
           headerHeight={headerHeight}
           isUnderlined={true}
+          fill={fillColor}
+          textColor={textColor}
         />
 
         {/* Attributes Section */}
         {attributes.length > 0 && (
           <>
             {/* Separation Line After Header */}
-            <SeparationLine y={headerHeight} width={width} />
+            <SeparationLine
+              y={headerHeight}
+              width={width}
+              strokeColor={strokeColor}
+            />
             <RowBlockSection
               items={processedAttributes}
               padding={padding}
               itemHeight={attributeHeight}
               width={width}
-              font={font}
               offsetFromTop={headerHeight}
               showAssessmentResults={showAssessmentResults}
             />
@@ -99,13 +106,13 @@ export const ObjectNameSVG = ({
             <SeparationLine
               y={headerHeight + attributes.length * attributeHeight}
               width={width}
+              strokeColor={strokeColor}
             />
             <RowBlockSection
               items={processedMethods}
               padding={padding}
               itemHeight={methodHeight}
               width={width}
-              font={font}
               offsetFromTop={headerHeight + attributes.length * methodHeight}
               showAssessmentResults={showAssessmentResults}
             />

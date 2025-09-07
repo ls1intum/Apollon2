@@ -4,11 +4,11 @@ import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { CustomText } from "../CustomText"
 import { LINE_WIDTH } from "@/constants"
+import { PetriNetPlaceProps } from "@/types"
+import { getCustomColorsFromData } from "@/index"
 
 interface Props extends SVGComponentProps {
-  name: string
-  tokens: number
-  capacity: number | "Infinity"
+  data: PetriNetPlaceProps
 }
 
 export const PetriNetPlaceSVG: React.FC<Props> = ({
@@ -16,12 +16,11 @@ export const PetriNetPlaceSVG: React.FC<Props> = ({
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
-  name,
-  tokens,
-  capacity,
+  data,
   width,
   height,
 }) => {
+  const { name, tokens, capacity } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
@@ -29,6 +28,8 @@ export const PetriNetPlaceSVG: React.FC<Props> = ({
 
   const centerX = width / 2
   const centerY = height / 2
+
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   const renderTokens = () => {
     if (tokens === 0) return null
@@ -59,18 +60,12 @@ export const PetriNetPlaceSVG: React.FC<Props> = ({
       }
 
       return tokenPositions.map((pos, index) => (
-        <circle
-          key={index}
-          cx={pos.x}
-          cy={pos.y}
-          r="9.25"
-          fill="var(--apollon2-primary-contrast)"
-        />
+        <circle key={index} cx={pos.x} cy={pos.y} r="9.25" fill={strokeColor} />
       ))
     } else {
       // Show number for larger values
       return (
-        <CustomText fontWeight="bold" x={centerX} y={centerY}>
+        <CustomText fontWeight="bold" x={centerX} y={centerY} fill={textColor}>
           {tokens}
         </CustomText>
       )
@@ -89,13 +84,13 @@ export const PetriNetPlaceSVG: React.FC<Props> = ({
         cx={centerX}
         cy={centerY}
         r={width / 2}
-        stroke="var(--apollon2-primary-contrast)"
-        fill="var(--apollon2-background)"
+        fill={fillColor}
+        stroke={strokeColor}
         strokeWidth={LINE_WIDTH}
       />
 
       {typeof capacity === "number" && (
-        <CustomText x={width + 8} y={-8} textAnchor="middle">
+        <CustomText x={width + 8} y={-8} textAnchor="middle" fill={textColor}>
           C={capacity}
         </CustomText>
       )}
@@ -106,6 +101,7 @@ export const PetriNetPlaceSVG: React.FC<Props> = ({
         textAnchor="middle"
         fontWeight="600"
         dominantBaseline="central"
+        fill={textColor}
       >
         {name}
       </CustomText>

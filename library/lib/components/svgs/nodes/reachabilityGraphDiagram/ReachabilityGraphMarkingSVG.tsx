@@ -3,10 +3,11 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { ReachabilityGraphMarkingProps } from "@/types"
+import { getCustomColorsFromData } from "@/index"
 
 type ReachabilityGraphMarkingSVGProps = SVGComponentProps & {
-  name: string
-  isInitialMarking?: boolean
+  data: ReachabilityGraphMarkingProps
 }
 
 export const ReachabilityGraphMarkingSVG: React.FC<
@@ -15,16 +16,18 @@ export const ReachabilityGraphMarkingSVG: React.FC<
   id,
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
-  isInitialMarking,
 }) => {
+  const { name, isInitialMarking } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -35,7 +38,16 @@ export const ReachabilityGraphMarkingSVG: React.FC<
       {...svgAttributes}
     >
       <g>
-        <StyledRect x={0} y={0} width={width} height={height} rx={10} ry={10} />
+        <StyledRect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          rx={10}
+          ry={10}
+          fill={fillColor}
+          stroke={strokeColor}
+        />
 
         {/* Name Text */}
         <CustomText
@@ -44,6 +56,7 @@ export const ReachabilityGraphMarkingSVG: React.FC<
           textAnchor="middle"
           fontWeight="600"
           dominantBaseline="hanging"
+          fill={textColor}
         >
           {name}
         </CustomText>
@@ -52,8 +65,9 @@ export const ReachabilityGraphMarkingSVG: React.FC<
           <polyline
             points="-50,-50 -5,-5"
             strokeWidth="1"
+            color={strokeColor}
             markerEnd="url(#black-arrow)"
-            stroke="black"
+            stroke={strokeColor}
             fill="none"
           />
         )}

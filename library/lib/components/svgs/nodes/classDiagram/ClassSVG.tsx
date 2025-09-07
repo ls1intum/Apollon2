@@ -1,6 +1,5 @@
-import { ClassType, ClassNodeElement } from "@/types"
+import { ClassNodeElement, ClassNodeProps } from "@/types"
 import {
-  DEFAULT_FONT,
   DEFAULT_HEADER_HEIGHT,
   DEFAULT_ATTRIBUTE_HEIGHT,
   DEFAULT_METHOD_HEIGHT,
@@ -16,6 +15,7 @@ import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { AssessmentSelectableElement } from "@/components/AssessmentSelectableElement"
 import { StyledRect } from "../../StyledElements"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 export interface MinSize {
   minWidth: number
@@ -23,25 +23,20 @@ export interface MinSize {
 }
 
 export type ClassSVGProps = SVGComponentProps & {
-  methods: ClassNodeElement[]
-  attributes: ClassNodeElement[]
-  stereotype?: ClassType
-  name: string
+  data: ClassNodeProps
 }
 
 export const ClassSVG = ({
   id,
   width,
   height,
-  methods,
-  attributes,
-  stereotype,
-  name,
   transformScale,
   svgAttributes,
   showAssessmentResults = false,
+  data,
 }: ClassSVGProps) => {
   // Layout constants
+  const { attributes, methods, name, stereotype } = data
   const showStereotype = !!stereotype
   const headerHeight = showStereotype
     ? DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE
@@ -49,7 +44,6 @@ export const ClassSVG = ({
   const attributeHeight = DEFAULT_ATTRIBUTE_HEIGHT
   const methodHeight = DEFAULT_METHOD_HEIGHT
   const padding = DEFAULT_PADDING
-  const font = DEFAULT_FONT
 
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
 
@@ -65,6 +59,7 @@ export const ClassSVG = ({
 
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -80,30 +75,39 @@ export const ClassSVG = ({
         itemHeight={headerHeight}
         yOffset={0}
       >
-        <StyledRect x={0} y={0} width={width} height={height} />
+        <StyledRect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          stroke={strokeColor}
+        />
 
         {/* Header Section */}
-
         <HeaderSection
           showStereotype={showStereotype}
           stereotype={stereotype}
           name={name}
           width={width}
-          font={font}
           headerHeight={headerHeight}
+          textColor={textColor}
+          fill={fillColor}
         />
 
         {/* Attributes Section */}
         {attributes.length > 0 && (
           <>
             {/* Separation Line After Header */}
-            <SeparationLine y={headerHeight} width={width} />
+            <SeparationLine
+              y={headerHeight}
+              width={width}
+              strokeColor={strokeColor}
+            />
             <RowBlockSection
               items={processedAttributes}
               padding={padding}
               itemHeight={attributeHeight}
               width={width}
-              font={font}
               offsetFromTop={headerHeight}
               showAssessmentResults={showAssessmentResults}
             />
@@ -116,13 +120,13 @@ export const ClassSVG = ({
             <SeparationLine
               y={headerHeight + attributes.length * attributeHeight}
               width={width}
+              strokeColor={strokeColor}
             />
             <RowBlockSection
               items={processedMethods}
               padding={padding}
               itemHeight={methodHeight}
               width={width}
-              font={font}
               offsetFromTop={headerHeight + attributes.length * methodHeight}
               showAssessmentResults={showAssessmentResults}
             />

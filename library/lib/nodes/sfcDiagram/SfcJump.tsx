@@ -14,8 +14,9 @@ export function SfcJump({
   id,
   width,
   height,
-  data: { name },
+  data,
 }: NodeProps<Node<DefaultNodeProps>>) {
+  const { name } = data || {}
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
 
   const { setNodes } = useDiagramStore(
@@ -65,7 +66,7 @@ export function SfcJump({
         <SfcJumpNodeSVG
           width={finalWidth}
           height={height}
-          name={name}
+          data={data}
           id={id}
         />
       </div>

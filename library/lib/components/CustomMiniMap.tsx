@@ -26,7 +26,6 @@ import {
   SfcActionTableNodeSVG,
   SfcJumpNodeSVG,
   SfcTransitionBranchNodeSVG,
-  SfcPreviewSpacerNodeSVG,
   FlowchartTerminalNodeSVG,
   FlowchartProcessNodeSVG,
   FlowchartDecisionNodeSVG,
@@ -50,10 +49,27 @@ import {
   ReachabilityGraphMarkingSVG,
 } from "./svgs"
 import { DiagramNodeType } from "@/typings"
-import { ClassType } from "@/types/nodes/enums"
 import { ZINDEX_MINIMAP, ZINDEX_PANEL } from "@/constants/zindexConstants"
 import { MapIcon } from "./Icon/MapIcon"
 import { SouthEastArrowIcon } from "./Icon/SouthEastArrowIcon"
+import {
+  BPMNEventProps,
+  BPMNGatewayProps,
+  BPMNSubprocessProps,
+  BPMNTaskProps,
+  ClassNodeProps,
+  CommunicationObjectNodeProps,
+  ComponentNodeProps,
+  ComponentSubsystemNodeProps,
+  DefaultNodeProps,
+  DeploymentComponentProps,
+  DeploymentNodeProps,
+  ObjectNodeProps,
+  PetriNetPlaceProps,
+  ReachabilityGraphMarkingProps,
+  SfcActionTableProps,
+  SfcTransitionBranchNodeProps,
+} from "@/types/nodes/NodeProps"
 
 export const CustomMiniMap = () => {
   const [minimapCollapsed, setMinimapCollapsed] = useState(true)
@@ -116,10 +132,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          stereotype={nodeInfo.data.stereotype as ClassType | undefined}
-          methods={(nodeInfo.data.methods as []) || []}
-          attributes={(nodeInfo.data.attributes as []) || []}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as ClassNodeProps}
         />
       )
     case "package":
@@ -128,7 +141,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -138,9 +151,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
-          methods={(nodeInfo.data.methods as []) || []}
-          attributes={(nodeInfo.data.attributes as []) || []}
+          data={nodeInfo.data as ObjectNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -149,7 +160,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
         <ActivitySVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
         />
@@ -177,7 +188,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
         <ActivityActionNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
         />
@@ -187,7 +198,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
         <ActivityObjectNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
         />
@@ -198,7 +209,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -209,6 +220,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
+          data={nodeInfo.data as DefaultNodeProps}
         />
       )
     case "activityForkNodeHorizontal":
@@ -218,6 +230,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
+          data={nodeInfo.data as DefaultNodeProps}
         />
       )
     case "useCase":
@@ -226,7 +239,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -236,7 +249,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -246,7 +259,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -257,10 +270,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
-          isComponentHeaderShown={
-            nodeInfo.data.isComponentHeaderShown as boolean
-          }
+          data={nodeInfo.data as ComponentNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -270,10 +280,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
-          isComponentSubsystemHeaderShown={
-            nodeInfo.data.isComponentSubsystemHeaderShown as boolean
-          }
+          data={nodeInfo.data as ComponentSubsystemNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -283,7 +290,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -293,12 +300,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
-          isComponentHeaderShown={
-            nodeInfo.data.isComponentHeaderShown as boolean
-          }
-          stereotype={nodeInfo.data.stereotype as string}
+          data={nodeInfo.data as DeploymentNodeProps}
         />
       )
     case "deploymentComponent":
@@ -307,11 +310,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
-          isComponentHeaderShown={
-            nodeInfo.data.isComponentHeaderShown as boolean
-          }
+          data={nodeInfo.data as DeploymentComponentProps}
         />
       )
     case "deploymentArtifact":
@@ -320,8 +320,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
+          data={nodeInfo.data as DefaultNodeProps}
         />
       )
     case "deploymentInterface":
@@ -330,7 +330,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -340,7 +340,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -350,7 +350,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -360,6 +360,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
+          data={nodeInfo.data as SfcActionTableProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -369,36 +370,29 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as SfcTransitionBranchNodeProps}
           svgAttributes={{ x, y }}
         />
       )
+
     case "sfcJump":
       return (
         <SfcJumpNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
-    case "sfcPreviewSpacer":
-      return (
-        <SfcPreviewSpacerNodeSVG
-          width={nodeInfo.width ?? 0}
-          height={nodeInfo.height ?? 0}
-          id={`minimap_${id}`}
-          svgAttributes={{ x, y }}
-        />
-      )
+
     case "flowchartTerminal":
       return (
         <FlowchartTerminalNodeSVG
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -408,7 +402,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -418,7 +412,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -428,7 +422,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -438,7 +432,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -448,7 +442,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -458,7 +452,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -468,10 +462,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
-          methods={(nodeInfo.data.methods as []) || []}
-          attributes={(nodeInfo.data.attributes as []) || []}
+          data={nodeInfo.data as CommunicationObjectNodeProps}
         />
       )
     case "petriNetPlace":
@@ -481,9 +473,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
-          capacity={nodeInfo.data.capacity as number | "Infinity"}
-          tokens={nodeInfo.data.tokens as number}
-          name={nodeInfo.data.name as string}
+          data={nodeInfo.data as PetriNetPlaceProps}
         />
       )
     case "petriNetTransition":
@@ -493,7 +483,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
           svgAttributes={{ x, y }}
-          name={nodeInfo.data.name as string}
+          data={nodeInfo.data as DefaultNodeProps}
         />
       )
     case "bpmnTask":
@@ -502,17 +492,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNTaskProps}
           svgAttributes={{ x, y }}
-          taskType={
-            (nodeInfo.data
-              .taskType as unknown as import("@/types").BPMNTaskType) ||
-            "default"
-          }
-          marker={
-            (nodeInfo.data
-              .marker as unknown as import("@/types").BPMNMarkerType) || "none"
-          }
         />
       )
     case "bpmnStartEvent":
@@ -521,14 +502,9 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
           variant="start"
-          eventType={
-            (nodeInfo.data
-              .eventType as unknown as import("@/types").BPMNStartEventType) ||
-            "default"
-          }
+          data={nodeInfo.data as BPMNEventProps}
         />
       )
     case "bpmnIntermediateEvent":
@@ -537,14 +513,9 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
           variant="intermediate"
-          eventType={
-            (nodeInfo.data
-              .eventType as unknown as import("@/types").BPMNIntermediateEventType) ||
-            "default"
-          }
+          data={nodeInfo.data as BPMNEventProps}
         />
       )
     case "bpmnEndEvent":
@@ -553,14 +524,9 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNEventProps}
           svgAttributes={{ x, y }}
           variant="end"
-          eventType={
-            (nodeInfo.data
-              .eventType as unknown as import("@/types").BPMNEndEventType) ||
-            "default"
-          }
         />
       )
     case "bpmnGateway":
@@ -569,13 +535,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNGatewayProps}
           svgAttributes={{ x, y }}
-          gatewayType={
-            (nodeInfo.data
-              .gatewayType as unknown as import("@/types").BPMNGatewayType) ||
-            "exclusive"
-          }
         />
       )
     case "bpmnSubprocess":
@@ -584,7 +545,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNSubprocessProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -594,7 +555,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNSubprocessProps}
           svgAttributes={{ x, y }}
           variant="transaction"
         />
@@ -605,7 +566,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as BPMNSubprocessProps}
           svgAttributes={{ x, y }}
           variant="call"
         />
@@ -616,7 +577,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -626,7 +587,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -636,7 +597,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -646,7 +607,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -656,7 +617,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )
@@ -666,9 +627,8 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
           svgAttributes={{ x, y }}
-          isInitialMarking={nodeInfo.data.isInitialMarking as boolean}
+          data={nodeInfo.data as ReachabilityGraphMarkingProps}
         />
       )
 

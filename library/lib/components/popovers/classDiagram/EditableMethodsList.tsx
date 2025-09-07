@@ -1,6 +1,6 @@
 import React, { useState, KeyboardEvent, ChangeEvent } from "react"
 import { Box } from "@mui/material"
-import { TextField, Typography } from "@/components/ui"
+import { NodeStyleEditor, TextField, Typography } from "@/components/ui"
 import { generateUUID } from "@/utils"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
@@ -20,9 +20,9 @@ export const EditableMethodsList: React.FC<Props> = ({ nodeId }) => {
     ?.data as ClassNodeProps
   const methods = nodeData.methods
 
-  const handleAttributeChange = (id: string, newName: string) => {
+  const handleMethodChange = (id: string, key: string, newName: string) => {
     const updatedItems = methods.map((item) =>
-      item.id === id ? { ...item, name: newName } : item
+      item.id === id ? { ...item, [key]: newName } : item
     )
     setNodes((nodes) =>
       nodes.map((node) => {
@@ -107,19 +107,21 @@ export const EditableMethodsList: React.FC<Props> = ({ nodeId }) => {
             alignItems: "center",
           }}
         >
-          <TextField
-            size="small"
-            value={item.name}
-            fullWidth
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              handleAttributeChange(item.id, e.target.value)
+          <NodeStyleEditor
+            noStrokeUpdate
+            nodeData={item}
+            handleDataFieldUpdate={(key, value) =>
+              handleMethodChange(item.id, key, value)
             }
-          />
-          <DeleteIcon
-            width={16}
-            height={16}
-            style={{ cursor: "pointer" }}
-            onClick={() => handleItemDelete(item.id)}
+            sideElements={[
+              <DeleteIcon
+                key={`delete_${item.id}`}
+                width={16}
+                height={16}
+                style={{ cursor: "pointer" }}
+                onClick={() => handleItemDelete(item.id)}
+              />,
+            ]}
           />
         </Box>
       ))}

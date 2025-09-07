@@ -79,7 +79,7 @@ export function SfcActionTable({
           width={width}
           height={minHeight}
           id={id}
-          actionRows={actionRows}
+          data={data}
         />
       </div>
 

@@ -4,18 +4,20 @@ interface DividerLineProps {
   width?: string | number
   height?: string | number
   style?: React.CSSProperties
+  backgroundColor?: string
 }
 
 export const DividerLine: React.FC<DividerLineProps> = ({
   width = "100%",
   height = "1px",
   style,
+  backgroundColor = "var(--apollon2-primary-contrast)",
 }) => (
   <div
     style={{
       width: width,
       height: height,
-      background: "var(--apollon2-primary-contrast)",
+      backgroundColor: backgroundColor,
       margin: "8px 0",
       ...style,
     }}

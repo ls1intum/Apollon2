@@ -10,7 +10,7 @@ export function SfcStart({
   id,
   width,
   height,
-  data: { name },
+  data,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
   const isDiagramModifiable = useDiagramModifiable()
@@ -27,7 +27,7 @@ export function SfcStart({
         <SfcStartNodeSVG
           width={width}
           height={height}
-          name={name}
+          data={data}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

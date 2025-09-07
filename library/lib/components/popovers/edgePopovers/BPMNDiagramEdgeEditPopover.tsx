@@ -4,12 +4,12 @@ import { useReactFlow } from "@xyflow/react"
 import { useEdgePopOver } from "@/hooks"
 import { PopoverProps } from "../types"
 import { SwapHorizIcon } from "@/components/Icon"
-import { TextField, Typography } from "@/components/ui"
+import { EdgeStyleEditor, TextField, Typography } from "@/components/ui"
 
 export const BPMNDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,
 }) => {
-  const { getEdge, getNode } = useReactFlow()
+  const { getEdge, getNode, updateEdgeData } = useReactFlow()
 
   const edge = getEdge(elementId)
   const { handleEdgeTypeChange, handleSwap, handleLabelChange } =
@@ -33,12 +33,23 @@ export const BPMNDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      {handleSwap && (
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <SwapHorizIcon style={{ cursor: "pointer" }} onClick={handleSwap} />
-        </Box>
-      )}
-
+      <EdgeStyleEditor
+        edgeData={edgeData}
+        handleDataFieldUpdate={(key, value) =>
+          updateEdgeData(elementId, { ...edge.data, [key]: value })
+        }
+        label="Control Flow"
+        sideElements={[
+          handleSwap && (
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <SwapHorizIcon
+                style={{ cursor: "pointer" }}
+                onClick={handleSwap}
+              />
+            </Box>
+          ),
+        ]}
+      />
       <FormControl fullWidth size="small">
         <InputLabel id="edge-type-label">Edge Type</InputLabel>
         <Select

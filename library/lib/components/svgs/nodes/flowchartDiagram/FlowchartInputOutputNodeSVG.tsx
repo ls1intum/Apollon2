@@ -4,23 +4,28 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { DefaultNodeProps } from "@/types/nodes/NodeProps"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
+  data: DefaultNodeProps
 }
 export const FlowchartInputOutputNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -35,8 +40,8 @@ export const FlowchartInputOutputNodeSVG: React.FC<Props> = ({
         <polygon
           points={`20,0 ${width},0 ${width - 20},${height} 0,${height}`}
           strokeWidth={LINE_WIDTH}
-          stroke="var(--apollon2-primary-contrast)"
-          fill="var(--apollon2-background)"
+          stroke={strokeColor}
+          fill={fillColor}
         />
 
         {/* Name Text */}
@@ -46,6 +51,7 @@ export const FlowchartInputOutputNodeSVG: React.FC<Props> = ({
           textAnchor="middle"
           fontWeight="600"
           dominantBaseline="central"
+          fill={textColor}
         >
           <tspan x={width / 2} dy="0">
             {name}

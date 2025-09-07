@@ -40,6 +40,7 @@ import {
   BPMNDataStoreNodeSVG,
   BPMNPoolNodeSVG,
   BPMNGroupNodeSVG,
+  ColorDescriptionSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -51,7 +52,6 @@ import {
   SfcJumpNodeSVG,
   SfcTransitionBranchNodeSVG,
   SfcActionTableNodeSVG,
-  SfcPreviewSpacerNodeSVG,
 } from "@/components"
 
 export * from "./layoutConstants"
@@ -210,6 +210,9 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       type: "activityForkNodeHorizontal",
       width: 100,
       height: 20,
+      defaultData: {
+        name: "ActivityForkNodeHorizontal",
+      },
       svg: (props) => <ActivityForkNodeHorizontalSVG {...props} />,
     },
   ],
@@ -263,44 +266,42 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       width: 40,
       height: 40,
       defaultData: { name: "", eventType: "default" },
-      svg: (props) => <BPMNEventNodeSVG variant="start" {...props} name="" />,
+      svg: (props) => <BPMNEventNodeSVG variant="start" {...props} />,
     },
     {
       type: "bpmnIntermediateEvent",
       width: 40,
       height: 40,
       defaultData: { name: "", eventType: "default" },
-      svg: (props) => (
-        <BPMNEventNodeSVG variant="intermediate" {...props} name="" />
-      ),
+      svg: (props) => <BPMNEventNodeSVG variant="intermediate" {...props} />,
     },
     {
       type: "bpmnEndEvent",
       width: 40,
       height: 40,
       defaultData: { name: "", eventType: "default" },
-      svg: (props) => <BPMNEventNodeSVG variant="end" {...props} name="" />,
+      svg: (props) => <BPMNEventNodeSVG variant="end" {...props} />,
     },
     {
       type: "bpmnGateway",
       width: 40,
       height: 40,
       defaultData: { name: "", gatewayType: "exclusive" },
-      svg: (props) => <BPMNGatewayNodeSVG {...props} name="" />,
+      svg: (props) => <BPMNGatewayNodeSVG {...props} />,
     },
     {
       type: "bpmnDataObject",
       width: 40,
       height: 60,
-      defaultData: { name: "Data Object" },
-      svg: (props) => <BPMNDataObjectNodeSVG {...props} name="" />,
+      defaultData: { name: "" },
+      svg: (props) => <BPMNDataObjectNodeSVG {...props} />,
     },
     {
       type: "bpmnDataStore",
       width: 60,
       height: 60,
-      defaultData: { name: "Data Store" },
-      svg: (props) => <BPMNDataStoreNodeSVG {...props} name="" />,
+      defaultData: { name: "" },
+      svg: (props) => <BPMNDataStoreNodeSVG {...props} />,
     },
     {
       type: "bpmnPool",
@@ -572,12 +573,15 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       },
       svg: (props) => <SfcActionTableNodeSVG {...props} />,
     },
-    {
-      type: "sfcPreviewSpacer",
-      width: droppedElementWidth,
-      height: 30,
-      defaultData: {},
-      svg: (props) => <SfcPreviewSpacerNodeSVG {...props} />,
-    },
   ],
+}
+
+export const ColorDescriptionConfig: DropElementConfig = {
+  type: "colorDescription",
+  width: droppedElementWidth,
+  height: 50,
+  defaultData: {
+    name: "Color Description",
+  },
+  svg: (props) => <ColorDescriptionSVG {...props} />,
 }

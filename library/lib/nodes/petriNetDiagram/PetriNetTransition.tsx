@@ -12,7 +12,7 @@ export function PetriNetTransition({
   id,
   width,
   height,
-  data: { name },
+  data,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const svgWrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -38,7 +38,7 @@ export function PetriNetTransition({
           height={height}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
-          name={name}
+          data={data}
         />
       </div>
 

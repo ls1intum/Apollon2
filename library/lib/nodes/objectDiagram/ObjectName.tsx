@@ -26,8 +26,9 @@ export function ObjectName({
   id,
   width,
   height,
-  data: { methods, attributes, name },
+  data,
 }: NodeProps<Node<ObjectNodeProps>>) {
+  const { attributes, methods, name } = data
   const { setNodes } = useDiagramStore(
     useShallow((state) => ({
       setNodes: state.setNodes,
@@ -151,9 +152,7 @@ export function ObjectName({
         <ObjectNameSVG
           width={finalWidth}
           height={minHeight}
-          attributes={attributes}
-          methods={methods}
-          name={name}
+          data={data}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

@@ -4,7 +4,7 @@ import { useShallow } from "zustand/shallow"
 import { EditableAttributeList } from "../classDiagram/EditableAttributesList"
 import { EditableMethodsList } from "../classDiagram/EditableMethodsList"
 import { PopoverProps } from "../types"
-import { TextField, DividerLine } from "@/components/ui"
+import { DividerLine, NodeStyleEditor } from "@/components/ui"
 
 export const CommunicationObjectNameEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -23,7 +23,7 @@ export const CommunicationObjectNameEditPopover: React.FC<PopoverProps> = ({
 
   const nodeData = node.data as CommunicationObjectNodeProps
 
-  const handleNameChange = (newName: string) => {
+  const handleDataFieldUpdate = (key: string, value: string) => {
     setNodes((nodes) =>
       nodes.map((node) => {
         if (node.id === elementId) {
@@ -31,7 +31,7 @@ export const CommunicationObjectNameEditPopover: React.FC<PopoverProps> = ({
             ...node,
             data: {
               ...node.data,
-              name: newName,
+              [key]: value,
             },
           }
         }
@@ -42,13 +42,9 @@ export const CommunicationObjectNameEditPopover: React.FC<PopoverProps> = ({
 
   return (
     <>
-      <TextField
-        id="outlined-basic"
-        variant="outlined"
-        onChange={(event) => handleNameChange(event.target.value)}
-        size="small"
-        value={nodeData.name}
-        sx={{ backgroundColor: "#fff" }}
+      <NodeStyleEditor
+        nodeData={nodeData}
+        handleDataFieldUpdate={handleDataFieldUpdate}
       />
       <DividerLine width="100%" />
       <EditableAttributeList nodeId={elementId} />

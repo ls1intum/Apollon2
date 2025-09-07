@@ -1,22 +1,26 @@
 import { CustomText, StyledRect } from "@/components"
 import { LINE_WIDTH } from "@/constants"
+import { DefaultNodeProps } from "@/types"
 import { SVGComponentProps } from "@/types/SVG"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
+  data: DefaultNodeProps
 }
 
 export const SfcStartNodeSVG: React.FC<Props> = ({
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
 }) => {
+  const { name } = data
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
   const innerPadding = 5
 
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
   return (
     <svg
       width={scaledWidth}
@@ -25,14 +29,21 @@ export const SfcStartNodeSVG: React.FC<Props> = ({
       overflow="visible"
       {...svgAttributes}
     >
-      <StyledRect x={0} y={0} width={width} height={height} />
+      <StyledRect
+        x={0}
+        y={0}
+        width={width}
+        height={height}
+        fill={fillColor}
+        stroke={strokeColor}
+      />
       <rect
         x={innerPadding}
         y={innerPadding}
         width={width - innerPadding * 2}
         height={height - innerPadding * 2}
         fill="none"
-        stroke="var(--apollon2-primary-contrast)"
+        stroke={strokeColor}
         strokeWidth={LINE_WIDTH}
       />
       <CustomText
@@ -41,6 +52,7 @@ export const SfcStartNodeSVG: React.FC<Props> = ({
         textAnchor="middle"
         dominantBaseline="central"
         style={{ fontWeight: 600 }}
+        fill={textColor}
       >
         {name}
       </CustomText>

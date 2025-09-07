@@ -1,5 +1,5 @@
 import { Box } from "@mui/material"
-import { TextField, Typography } from "@/components/ui"
+import { EdgeStyleEditor, TextField } from "@/components/ui"
 import { useReactFlow } from "@xyflow/react"
 import { CustomEdgeProps } from "@/edges/EdgeProps"
 import { SwapHorizIcon } from "@/components/Icon"
@@ -9,7 +9,7 @@ import { PopoverProps } from "../types"
 export const ReachabilityGraphEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,
 }) => {
-  const { getEdge } = useReactFlow()
+  const { getEdge, updateEdgeData } = useReactFlow()
   const edge = getEdge(elementId)
 
   const { handleLabelChange, handleSwap } = useEdgePopOver(elementId)
@@ -22,23 +22,23 @@ export const ReachabilityGraphEdgeEditPopover: React.FC<PopoverProps> = ({
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-          Reachability Arc
-        </Typography>
-        {/* Swap icon for source/target swap */}
-        {handleSwap && (
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <SwapHorizIcon style={{ cursor: "pointer" }} onClick={handleSwap} />
-          </Box>
-        )}
-      </div>
+      <EdgeStyleEditor
+        edgeData={edgeData}
+        handleDataFieldUpdate={(key, value) =>
+          updateEdgeData(elementId, { ...edge.data, [key]: value })
+        }
+        label="Reachability Arc"
+        sideElements={[
+          handleSwap && (
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <SwapHorizIcon
+                style={{ cursor: "pointer" }}
+                onClick={handleSwap}
+              />
+            </Box>
+          ),
+        ]}
+      />
 
       {/* Label update */}
       <TextField

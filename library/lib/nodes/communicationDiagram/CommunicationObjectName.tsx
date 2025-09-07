@@ -26,8 +26,9 @@ export function CommunicationObjectName({
   id,
   width,
   height,
-  data: { methods, attributes, name },
+  data,
 }: NodeProps<Node<CommunicationObjectNodeProps>>) {
+  const { name, attributes = [], methods = [] } = data
   const { setNodes } = useDiagramStore(
     useShallow((state) => ({
       setNodes: state.setNodes,
@@ -150,9 +151,7 @@ export function CommunicationObjectName({
         <CommunicationObjectNameSVG
           width={finalWidth}
           height={minHeight}
-          attributes={attributes}
-          methods={methods}
-          name={name}
+          data={data}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

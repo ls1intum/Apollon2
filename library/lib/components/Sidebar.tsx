@@ -1,5 +1,6 @@
 import React from "react"
 import {
+  ColorDescriptionConfig,
   dropElementConfigs,
   transformScale,
 } from "@/constants/dropElementConfig"
@@ -39,9 +40,6 @@ export const Sidebar = () => {
     >
       {dropElementConfigs[diagramType].map((config, index) => (
         <React.Fragment key={`${config.type}_${config.defaultData?.name}`}>
-          {config.type === "colorDescription" && (
-            <DividerLine style={{ margin: "3px 0" }} height={2} />
-          )}
           <DraggableGhost dropElementConfig={config}>
             <div
               className="prevent-select"
@@ -56,6 +54,7 @@ export const Sidebar = () => {
                 width: config.width,
                 height: config.height,
                 ...config.defaultData,
+                data: config.defaultData,
                 transformScale,
                 id: `sidebarElement_${index}`,
               })}
@@ -63,6 +62,28 @@ export const Sidebar = () => {
           </DraggableGhost>
         </React.Fragment>
       ))}
+
+      <DividerLine style={{ margin: "3px 0" }} />
+      <DraggableGhost dropElementConfig={ColorDescriptionConfig}>
+        <div
+          className="prevent-select"
+          style={{
+            width: ColorDescriptionConfig.width * transformScale,
+            height: ColorDescriptionConfig.height * transformScale,
+            zIndex: ZINDEX_DRAGGABLE_GHOST,
+            marginTop: ColorDescriptionConfig.marginTop,
+          }}
+        >
+          {React.createElement(ColorDescriptionConfig.svg, {
+            width: ColorDescriptionConfig.width,
+            height: ColorDescriptionConfig.height,
+            ...ColorDescriptionConfig.defaultData,
+            data: ColorDescriptionConfig.defaultData,
+            transformScale,
+            id: "sidebarElement_ColorDescription",
+          })}
+        </div>
+      </DraggableGhost>
     </aside>
   )
 }

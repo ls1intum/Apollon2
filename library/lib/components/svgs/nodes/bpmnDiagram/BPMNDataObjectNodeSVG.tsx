@@ -4,22 +4,28 @@ import { useDiagramStore } from "@/store"
 import { SVGComponentProps } from "@/types/SVG"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
+import { DefaultNodeProps } from "@/types"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
-export const BPMNDataObjectNodeSVG: React.FC<
-  SVGComponentProps & { name: string }
-> = ({
+type BPMNDataObjectNodeSVGProps = SVGComponentProps & {
+  data: DefaultNodeProps
+}
+
+export const BPMNDataObjectNodeSVG: React.FC<BPMNDataObjectNodeSVGProps> = ({
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
   id,
   showAssessmentResults = false,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -32,8 +38,8 @@ export const BPMNDataObjectNodeSVG: React.FC<
       <path
         d={`M0,0 L0,${height} L${width},${height} L${width},15 L${width - 15},0 L${width - 15},15 L${width},15 L${width - 15},0 L0,0`}
         strokeWidth={LINE_WIDTH}
-        stroke="var(--apollon2-primary-contrast)"
-        fill="var(--apollon2-background)"
+        stroke={strokeColor}
+        fill={fillColor}
       />
       <CustomText
         x={width / 2}
@@ -41,6 +47,7 @@ export const BPMNDataObjectNodeSVG: React.FC<
         textAnchor="middle"
         fontSize={14}
         dominantBaseline="hanging"
+        fill={textColor}
       >
         {name}
       </CustomText>

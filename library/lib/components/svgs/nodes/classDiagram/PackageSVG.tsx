@@ -4,9 +4,10 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { DefaultNodeProps } from "@/types"
 
 export type PackageSVGProps = SVGComponentProps & {
-  name: string
+  data: DefaultNodeProps
 }
 
 const leftTopBoxHeight = 10
@@ -16,16 +17,21 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
   id,
   width,
   height,
-  name,
+  data,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
 }) => {
+  const { name } = data
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
 
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+
+  const strokeColor = data.strokeColor || "var(--apollon2-primary-contrast)"
+  const fillColor = data.fillColor || "var(--apollon2-background)"
+  const textColor = data.textColor || "var(--apollon2-primary-contrast)"
 
   return (
     <svg
@@ -43,8 +49,8 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
           width={40}
           height={leftTopBoxHeight}
           strokeWidth={LINE_WIDTH}
-          stroke="var(--apollon2-primary-contrast)"
-          fill="var(--apollon2-background)"
+          stroke={strokeColor}
+          fill={fillColor}
         />
 
         {/* Main Box */}
@@ -54,8 +60,8 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
           width={width}
           height={height - leftTopBoxHeight}
           strokeWidth={LINE_WIDTH}
-          stroke="var(--apollon2-primary-contrast)"
-          fill="var(--apollon2-background)"
+          stroke={strokeColor}
+          fill={fillColor}
         />
 
         {/* Name Text */}
@@ -65,6 +71,7 @@ export const PackageSVG: React.FC<PackageSVGProps> = ({
           textAnchor="middle"
           fontWeight="600"
           dominantBaseline="hanging"
+          fill={textColor}
         >
           {name}
         </CustomText>

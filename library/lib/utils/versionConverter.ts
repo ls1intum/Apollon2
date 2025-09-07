@@ -23,9 +23,7 @@ import {
   PetriNetPlaceProps,
   BPMNTaskProps,
   BPMNGatewayProps,
-  BPMNStartEventProps,
-  BPMNIntermediateEventProps,
-  BPMNEndEventProps,
+  BPMNEventProps,
   // BPMNSubprocessProps,
   // BPMNTransactionProps,
   // BPMNCallActivityProps,
@@ -564,7 +562,7 @@ function convertV3NodeDataToV4(
     }
 
     case "BPMNStartEvent": {
-      const bpmnStartEventData: BPMNStartEventProps = {
+      const bpmnStartEventData: BPMNEventProps = {
         ...baseData,
         eventType: (element.eventType as any) || "default",
       }
@@ -572,7 +570,7 @@ function convertV3NodeDataToV4(
     }
 
     case "BPMNIntermediateEvent": {
-      const bpmnIntermediateEventData: BPMNIntermediateEventProps = {
+      const bpmnIntermediateEventData: BPMNEventProps = {
         ...baseData,
         eventType: (element.eventType as any) || "default",
       }
@@ -580,7 +578,7 @@ function convertV3NodeDataToV4(
     }
 
     case "BPMNEndEvent": {
-      const bpmnEndEventData: BPMNEndEventProps = {
+      const bpmnEndEventData: BPMNEventProps = {
         ...baseData,
         eventType: (element.eventType as any) || "default",
       }

@@ -12,6 +12,7 @@ export const EdgeMultipleLabels: React.FC<{
   sourcePosition: IPoint
   targetPosition: IPoint
   edgePoints?: Array<{ x: number; y: number }>
+  textColor: string
 }> = ({
   messages,
   pathMiddlePosition,
@@ -20,6 +21,7 @@ export const EdgeMultipleLabels: React.FC<{
   sourcePosition,
   targetPosition,
   edgePoints,
+  textColor,
 }) => {
   const displayMessages: MessageData[] = messages || []
 
@@ -89,6 +91,7 @@ export const EdgeMultipleLabels: React.FC<{
                 alignItems: "center",
                 justifyContent: "center",
                 zIndex: ZINDEX_LABEL,
+                stroke: textColor,
               }}
               className="nodrag nopan"
             >
@@ -102,7 +105,7 @@ export const EdgeMultipleLabels: React.FC<{
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 style={{
-                  color: "var(--apollon2-primary-contrast)",
+                  color: textColor,
                   transform: `rotate(${arrowRotation}deg)`,
                   transformOrigin: "center",
                 }}
@@ -120,7 +123,7 @@ export const EdgeMultipleLabels: React.FC<{
               transform: `translate(${pathMiddlePosition.x + labelBoxPosition.x + offset.x}px, ${pathMiddlePosition.y + labelBoxPosition.y + offset.y}px) translate(-50%, -50%)`,
               fontSize: "14px",
               fontWeight: 400,
-              color: "var(--apollon2-primary-contrast)",
+              color: textColor,
               whiteSpace: "nowrap",
               pointerEvents: "none",
               zIndex: ZINDEX_LABEL,

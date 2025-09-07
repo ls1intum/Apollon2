@@ -13,7 +13,7 @@ export default function Package({
   id,
   width,
   height,
-  data: { name },
+  data,
   parentId,
 }: NodeProps<Node<DefaultNodeProps>>) {
   const packageSvgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -40,7 +40,7 @@ export default function Package({
         <PackageSVG
           width={width}
           height={height}
-          name={name}
+          data={data}
           id={id}
           showAssessmentResults={!isDiagramModifiable}
         />

@@ -4,28 +4,29 @@ import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
+import { DeploymentNodeProps } from "@/types"
+import { getCustomColorsFromData } from "@/utils/layoutUtils"
 
 interface Props extends SVGComponentProps {
-  name: string
-  isComponentHeaderShown: boolean
-  stereotype: string
+  data: DeploymentNodeProps
 }
 
 export const DeploymentNodeSVG: React.FC<Props> = ({
   id,
   width,
   height,
-  name,
   svgAttributes,
   transformScale,
   showAssessmentResults = false,
-  isComponentHeaderShown,
-  stereotype,
+  data,
 }) => {
+  const { name, stereotype, isComponentHeaderShown } = data
+
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
   const nodeScore = assessments[id]?.score
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -41,18 +42,25 @@ export const DeploymentNodeSVG: React.FC<Props> = ({
           <path
             d={`M 0 8 l 8 -8 H ${width} l -8 8 Z`}
             strokeWidth={LINE_WIDTH}
-            stroke="var(--apollon2-primary-contrast)"
-            fill="var(--apollon2-background)"
+            stroke={strokeColor}
+            fill={fillColor}
           />
           {/* Right face */}
           <path
             d={`M ${width} 0 V ${height - 8} l -8 8 V 8 Z`}
             strokeWidth={LINE_WIDTH}
-            stroke="var(--apollon2-primary-contrast)"
-            fill="var(--apollon2-background)"
+            stroke={strokeColor}
+            fill={fillColor}
           />
           {/* Front face */}
-          <StyledRect x="0" y="8" width={width - 8} height={height - 8} />
+          <StyledRect
+            x="0"
+            y="8"
+            width={width - 8}
+            height={height - 8}
+            stroke={strokeColor}
+            fill={fillColor}
+          />
         </g>
 
         {/* Name Text */}
@@ -62,6 +70,7 @@ export const DeploymentNodeSVG: React.FC<Props> = ({
           textAnchor="middle"
           fontWeight="bold"
           dominantBaseline="middle"
+          fill={textColor}
         >
           {isComponentHeaderShown && stereotype.length > 0 ? (
             <>
