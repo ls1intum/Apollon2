@@ -2,6 +2,9 @@ import { ClassType } from "./enums"
 
 export type DefaultNodeProps = {
   name: string
+  fillColor?: string
+  strokeColor?: string
+  textColor?: string
 }
 
 export type ClassNodeElement = {

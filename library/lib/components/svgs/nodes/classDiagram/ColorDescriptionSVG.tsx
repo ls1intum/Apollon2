@@ -1,10 +1,12 @@
 import { CustomText } from "@/components/svgs/nodes/CustomText"
+import { DefaultNodeProps } from "@/types"
+import { getCustomColorsFromData } from "@/utils"
 import { SVGAttributes } from "react"
 
 export type ColorDescriptionSVGProps = {
   width: number
   height: number
-  description: string
+  data: DefaultNodeProps
   transformScale?: number
   svgAttributes?: SVGAttributes<SVGElement>
 }
@@ -12,17 +14,17 @@ export type ColorDescriptionSVGProps = {
 export function ColorDescriptionSVG({
   width,
   height,
-  description,
+  data,
   svgAttributes,
   transformScale,
 }: ColorDescriptionSVGProps) {
-  const margin = 2
-  const innerWidth = width - 2 * margin // Adjusted content width
-  const innerHeight = height - 2 * margin // Adjusted content height
   const strokeWidth = 0.5
 
   const scaledWidth = width * (transformScale ?? 1)
   const scaledHeight = height * (transformScale ?? 1)
+  const { name } = data
+
+  const { strokeColor, fillColor, textColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -32,30 +34,33 @@ export function ColorDescriptionSVG({
       overflow="visible"
       {...svgAttributes}
     >
-      <g transform={`translate(${margin}, ${margin})`}>
+      <g>
         {/* Main Path */}
         <path
-          d={`M 0 0 L ${innerWidth - 15} 0 L ${innerWidth} 15 L ${innerWidth} ${innerHeight} L 0 ${innerHeight} L 0 0 Z`}
+          d={`M 0 0 L ${width - 15} 0 L ${width - 15} 15 L ${width} 15 L ${width} ${height} L 0 ${height} L 0 0 Z`}
           strokeWidth={strokeWidth}
           strokeMiterlimit="10"
-          stroke="black"
+          stroke={strokeColor}
+          fill={fillColor}
         />
         {/* Small Path for Top-Right Corner */}
         <path
-          d={`M ${innerWidth - 15} 0 L ${innerWidth - 15} 15 L ${innerWidth} 15`}
+          d={`M ${width - 15} 0 L ${width - 15} 15 L ${width} 15 L ${width - 15} 0 Z`}
           strokeWidth={strokeWidth}
           strokeMiterlimit="10"
-          stroke="black"
+          stroke={strokeColor}
+          fill={fillColor}
         />
         {/* Description Text */}
         <CustomText
-          x={innerWidth / 2}
-          y={innerHeight / 2}
+          x={width / 2}
+          y={height / 2}
           dominantBaseline="middle"
           textAnchor="middle"
           fontWeight="600"
+          fill={textColor}
         >
-          {description}
+          {name}
         </CustomText>
       </g>
     </svg>

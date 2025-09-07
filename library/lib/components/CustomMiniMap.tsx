@@ -50,10 +50,10 @@ import {
   ReachabilityGraphMarkingSVG,
 } from "./svgs"
 import { DiagramNodeType } from "@/typings"
-import { ClassType } from "@/types/nodes/enums"
 import { ZINDEX_MINIMAP, ZINDEX_PANEL } from "@/constants/zindexConstants"
 import { MapIcon } from "./Icon/MapIcon"
 import { SouthEastArrowIcon } from "./Icon/SouthEastArrowIcon"
+import { ClassNodeProps, DefaultNodeProps } from "@/types/nodes/NodeProps"
 
 export const CustomMiniMap = () => {
   const [minimapCollapsed, setMinimapCollapsed] = useState(true)
@@ -116,10 +116,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          stereotype={nodeInfo.data.stereotype as ClassType | undefined}
-          methods={(nodeInfo.data.methods as []) || []}
-          attributes={(nodeInfo.data.attributes as []) || []}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as ClassNodeProps}
         />
       )
     case "package":
@@ -128,7 +125,7 @@ function MiniMapNode({ id, x, y }: MiniMapNodeProps) {
           width={nodeInfo.width ?? 0}
           height={nodeInfo.height ?? 0}
           id={`minimap_${id}`}
-          name={(nodeInfo.data.name as string) || ""}
+          data={nodeInfo.data as DefaultNodeProps}
           svgAttributes={{ x, y }}
         />
       )

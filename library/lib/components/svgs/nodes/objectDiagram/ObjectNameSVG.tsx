@@ -1,6 +1,5 @@
 import { ClassNodeElement } from "@/types"
 import {
-  DEFAULT_FONT,
   DEFAULT_HEADER_HEIGHT,
   DEFAULT_ATTRIBUTE_HEIGHT,
   DEFAULT_METHOD_HEIGHT,
@@ -36,7 +35,6 @@ export const ObjectNameSVG = ({
   const attributeHeight = DEFAULT_ATTRIBUTE_HEIGHT
   const methodHeight = DEFAULT_METHOD_HEIGHT
   const padding = DEFAULT_PADDING
-  const font = DEFAULT_FONT
 
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
 
@@ -71,7 +69,6 @@ export const ObjectNameSVG = ({
           stereotype={undefined}
           name={name}
           width={width}
-          font={font}
           headerHeight={headerHeight}
           isUnderlined={true}
         />
@@ -86,7 +83,6 @@ export const ObjectNameSVG = ({
               padding={padding}
               itemHeight={attributeHeight}
               width={width}
-              font={font}
               offsetFromTop={headerHeight}
               showAssessmentResults={showAssessmentResults}
             />
@@ -105,7 +101,6 @@ export const ObjectNameSVG = ({
               padding={padding}
               itemHeight={methodHeight}
               width={width}
-              font={font}
               offsetFromTop={headerHeight + attributes.length * methodHeight}
               showAssessmentResults={showAssessmentResults}
             />

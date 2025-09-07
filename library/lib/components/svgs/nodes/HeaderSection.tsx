@@ -7,9 +7,9 @@ interface HeaderSectionProps {
   stereotype?: ClassType
   name: string
   width: number
-  font: string
   headerHeight: number
   isUnderlined?: boolean
+  textColor?: string
 }
 
 export const HeaderSection: FC<HeaderSectionProps> = ({
@@ -17,9 +17,9 @@ export const HeaderSection: FC<HeaderSectionProps> = ({
   stereotype,
   name,
   width,
-  // font,
   headerHeight,
   isUnderlined = false,
+  textColor,
 }) => {
   return (
     <CustomText
@@ -29,6 +29,7 @@ export const HeaderSection: FC<HeaderSectionProps> = ({
       textAnchor="middle"
       fontWeight="bold"
       textDecoration={isUnderlined ? "underline" : "normal"}
+      fill={textColor}
     >
       {showStereotype && (
         <tspan x={width / 2} dy="-8" fontSize="85%">

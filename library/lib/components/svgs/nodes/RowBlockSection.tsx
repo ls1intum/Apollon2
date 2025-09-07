@@ -10,7 +10,6 @@ interface RowBlockSectionProps {
   padding: number
   itemHeight: number
   width: number
-  font: string
   offsetFromTop: number
   showAssessmentResults?: boolean
 }
@@ -18,7 +17,6 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
   items,
   padding,
   itemHeight,
-  font,
   offsetFromTop,
   width,
   showAssessmentResults = false,
@@ -51,7 +49,6 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
                 y={15 + index * itemHeight}
                 dominantBaseline="middle"
                 textAnchor="start"
-                font={font}
               >
                 {item.name}
               </CustomText>

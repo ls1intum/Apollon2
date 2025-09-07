@@ -40,6 +40,7 @@ import {
   BPMNDataStoreNodeSVG,
   BPMNPoolNodeSVG,
   BPMNGroupNodeSVG,
+  ColorDescriptionSVG,
 } from "@/components"
 import { generateUUID } from "@/utils"
 import { ClassType, UMLDiagramType } from "@/types"
@@ -580,4 +581,14 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       svg: (props) => <SfcPreviewSpacerNodeSVG {...props} />,
     },
   ],
+}
+
+export const ColorDescriptionConfig: DropElementConfig = {
+  type: "colorDescription",
+  width: droppedElementWidth,
+  height: 50,
+  defaultData: {
+    name: "Color Description",
+  },
+  svg: (props) => <ColorDescriptionSVG {...props} />,
 }

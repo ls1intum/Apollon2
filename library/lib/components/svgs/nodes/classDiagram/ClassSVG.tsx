@@ -1,6 +1,5 @@
-import { ClassType, ClassNodeElement } from "@/types"
+import { ClassNodeElement, ClassNodeProps } from "@/types"
 import {
-  DEFAULT_FONT,
   DEFAULT_HEADER_HEIGHT,
   DEFAULT_ATTRIBUTE_HEIGHT,
   DEFAULT_METHOD_HEIGHT,
@@ -23,25 +22,28 @@ export interface MinSize {
 }
 
 export type ClassSVGProps = SVGComponentProps & {
-  methods: ClassNodeElement[]
-  attributes: ClassNodeElement[]
-  stereotype?: ClassType
-  name: string
+  data: ClassNodeProps
 }
 
 export const ClassSVG = ({
   id,
   width,
   height,
-  methods,
-  attributes,
-  stereotype,
-  name,
   transformScale,
   svgAttributes,
   showAssessmentResults = false,
+  data,
 }: ClassSVGProps) => {
   // Layout constants
+  const {
+    attributes,
+    methods,
+    name,
+    stereotype,
+    fillColor,
+    strokeColor,
+    textColor,
+  } = data
   const showStereotype = !!stereotype
   const headerHeight = showStereotype
     ? DEFAULT_HEADER_HEIGHT_WITH_STREOTYPE
@@ -49,7 +51,6 @@ export const ClassSVG = ({
   const attributeHeight = DEFAULT_ATTRIBUTE_HEIGHT
   const methodHeight = DEFAULT_METHOD_HEIGHT
   const padding = DEFAULT_PADDING
-  const font = DEFAULT_FONT
 
   const assessments = useDiagramStore(useShallow((state) => state.assessments))
 
@@ -80,7 +81,14 @@ export const ClassSVG = ({
         itemHeight={headerHeight}
         yOffset={0}
       >
-        <StyledRect x={0} y={0} width={width} height={height} />
+        <StyledRect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          fill={fillColor}
+          stroke={strokeColor}
+        />
 
         {/* Header Section */}
 
@@ -89,8 +97,8 @@ export const ClassSVG = ({
           stereotype={stereotype}
           name={name}
           width={width}
-          font={font}
           headerHeight={headerHeight}
+          textColor={textColor}
         />
 
         {/* Attributes Section */}
@@ -103,7 +111,6 @@ export const ClassSVG = ({
               padding={padding}
               itemHeight={attributeHeight}
               width={width}
-              font={font}
               offsetFromTop={headerHeight}
               showAssessmentResults={showAssessmentResults}
             />
@@ -122,7 +129,6 @@ export const ClassSVG = ({
               padding={padding}
               itemHeight={methodHeight}
               width={width}
-              font={font}
               offsetFromTop={headerHeight + attributes.length * methodHeight}
               showAssessmentResults={showAssessmentResults}
             />

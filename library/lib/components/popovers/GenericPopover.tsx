@@ -23,7 +23,7 @@ export const GenericPopover: React.FC<GenericPopoverProps> = ({
   anchorOrigin = { vertical: "top", horizontal: "right" },
   transformOrigin = { vertical: "top", horizontal: "left" },
   maxHeight = 500,
-  maxWidth = 500,
+  maxWidth = 278,
   style,
 }) => (
   <Popover

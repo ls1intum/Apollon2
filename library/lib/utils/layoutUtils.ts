@@ -1,4 +1,5 @@
 import { EXTRA_SPACE_FOR_EXTENTION } from "@/constants"
+import { DefaultNodeProps } from "@/types"
 
 /**
  * Calculates the minimum width required to fit the text with specified padding and margin.
@@ -39,4 +40,11 @@ export const calculateMinHeight = (
   const minHeightWithSnapToGrid =
     Math.ceil(minHeight / EXTRA_SPACE_FOR_EXTENTION) * EXTRA_SPACE_FOR_EXTENTION
   return minHeightWithSnapToGrid
+}
+
+export const getCustomColorsFromData = (data: DefaultNodeProps) => {
+  const strokeColor = data.strokeColor || "var(--apollon2-primary-contrast)"
+  const fillColor = data.fillColor || "var(--apollon2-background)"
+  const textColor = data.textColor || "var(--apollon2-primary-contrast)"
+  return { strokeColor, fillColor, textColor }
 }

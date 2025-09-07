@@ -37,7 +37,7 @@ interface Props {
   width?: number
   height?: number
   elementId: string
-  hiddenHandles?: HandleId[]
+  hiddenHandles?: HandleId[] | true
   className?: string
 }
 
@@ -140,19 +140,24 @@ export function DefaultNodeWrapper({
         elementId={elementId}
         asElement="div"
       >
-        {handles.map(
-          (handle) =>
-            !hiddenHandles.includes(handle.id) && (
-              <Handle
-                key={handle.id}
-                id={handle.id}
-                type="source"
-                position={handle.position}
-                style={handle.style}
-                isConnectable={isDiagramModifiable}
-              />
-            )
+        {hiddenHandles !== true && (
+          <>
+            {handles.map(
+              (handle) =>
+                !hiddenHandles.includes(handle.id) && (
+                  <Handle
+                    key={handle.id}
+                    id={handle.id}
+                    type="source"
+                    position={handle.position}
+                    style={handle.style}
+                    isConnectable={isDiagramModifiable}
+                  />
+                )
+            )}
+          </>
         )}
+
         {children}
       </FeedbackDropzone>
     </AssessmentSelectableWrapper>
