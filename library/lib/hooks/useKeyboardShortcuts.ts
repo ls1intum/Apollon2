@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { useSelectionForCopyPaste } from "./useSelectionForCopyPaste"
+import { useDiagramModifiable } from "./useDiagramModifiable"
 
 export const useKeyboardShortcuts = () => {
   const pasteCountRef = useRef(0)
@@ -15,7 +16,7 @@ export const useKeyboardShortcuts = () => {
       undoManager: state.undoManager,
     }))
   )
-
+  const isDiagramModifiable = useDiagramModifiable()
   const {
     selectedElementIds,
     hasSelectedElements,
@@ -48,6 +49,8 @@ export const useKeyboardShortcuts = () => {
       const isModifierPressed = event.ctrlKey || event.metaKey
 
       if (!isModifierPressed) return
+
+      if (!isDiagramModifiable) return
 
       switch (event.key.toLowerCase()) {
         case "z":
