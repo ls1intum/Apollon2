@@ -1,35 +1,29 @@
 import { useEffect, useRef } from "react"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
+import { useSelectionForCopyPaste } from "./useSelectionForCopyPaste"
 
 export const useKeyboardShortcuts = () => {
   const pasteCountRef = useRef(0)
 
-  const {
-    undo,
-    redo,
-    canUndo,
-    canRedo,
-    undoManager,
-    copySelectedElements,
-    pasteElements,
-    selectedElementIds,
-    selectAll,
-    clearSelection,
-  } = useDiagramStore(
+  const { undo, redo, canUndo, canRedo, undoManager } = useDiagramStore(
     useShallow((state) => ({
       undo: state.undo,
       redo: state.redo,
       canUndo: state.canUndo,
       canRedo: state.canRedo,
       undoManager: state.undoManager,
-      copySelectedElements: state.copySelectedElements,
-      pasteElements: state.pasteElements,
-      selectedElementIds: state.selectedElementIds,
-      selectAll: state.selectAll,
-      clearSelection: state.clearSelection,
     }))
   )
+
+  const {
+    selectedElementIds,
+    hasSelectedElements,
+    selectAll,
+    clearSelection,
+    copySelectedElements,
+    pasteElements,
+  } = useSelectionForCopyPaste()
 
   useEffect(() => {
     const handleKeyDown = async (event: KeyboardEvent) => {
@@ -42,6 +36,7 @@ export const useKeyboardShortcuts = () => {
       ) {
         return
       }
+
       if (event.key === "Escape") {
         event.preventDefault()
         clearSelection()
@@ -80,9 +75,10 @@ export const useKeyboardShortcuts = () => {
         case "c":
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
-            if (selectedElementIds.length > 0) {
+            if (hasSelectedElements()) {
               pasteCountRef.current = 0
               copySelectedElements()
+    
             }
           }
           break
@@ -92,6 +88,7 @@ export const useKeyboardShortcuts = () => {
             event.preventDefault()
             pasteCountRef.current += 1
             pasteElements(pasteCountRef.current)
+ 
           }
           break
 
@@ -117,10 +114,11 @@ export const useKeyboardShortcuts = () => {
     canUndo,
     canRedo,
     undoManager,
-    copySelectedElements,
-    pasteElements,
     selectedElementIds,
+    hasSelectedElements,
     selectAll,
     clearSelection,
+    copySelectedElements,
+    pasteElements,
   ])
 }
