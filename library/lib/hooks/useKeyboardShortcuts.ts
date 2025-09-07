@@ -23,6 +23,7 @@ export const useKeyboardShortcuts = () => {
     clearSelection,
     copySelectedElements,
     pasteElements,
+    cutSelectedElements, // Add this
   } = useSelectionForCopyPaste()
 
   useEffect(() => {
@@ -78,7 +79,16 @@ export const useKeyboardShortcuts = () => {
             if (hasSelectedElements()) {
               pasteCountRef.current = 0
               copySelectedElements()
-    
+            }
+          }
+          break
+
+        case "x":
+          if (!event.shiftKey && !event.altKey) {
+            event.preventDefault()
+            if (hasSelectedElements()) {
+              pasteCountRef.current = 0
+              cutSelectedElements()
             }
           }
           break
@@ -88,7 +98,6 @@ export const useKeyboardShortcuts = () => {
             event.preventDefault()
             pasteCountRef.current += 1
             pasteElements(pasteCountRef.current)
- 
           }
           break
 
@@ -119,6 +128,7 @@ export const useKeyboardShortcuts = () => {
     selectAll,
     clearSelection,
     copySelectedElements,
+    cutSelectedElements, // Add this to dependencies
     pasteElements,
   ])
 }
