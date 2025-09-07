@@ -531,22 +531,27 @@ export const createDiagramStore = (
 
         copySelectedElements: async () => {
           const { selectedElementIds, nodes, edges } = get()
-          
+
           if (selectedElementIds.length === 0) {
             return false
           }
 
-          const selectedNodes = nodes.filter(node => selectedElementIds.includes(node.id))
-          const selectedEdges = edges.filter(edge => selectedElementIds.includes(edge.id))
-          
-     
-          const connectedEdges = edges.filter(edge => 
-            selectedElementIds.includes(edge.source) && selectedElementIds.includes(edge.target)
+          const selectedNodes = nodes.filter((node) =>
+            selectedElementIds.includes(node.id)
           )
-          
+          const selectedEdges = edges.filter((edge) =>
+            selectedElementIds.includes(edge.id)
+          )
+
+          const connectedEdges = edges.filter(
+            (edge) =>
+              selectedElementIds.includes(edge.source) &&
+              selectedElementIds.includes(edge.target)
+          )
+
           const allRelevantEdges = [...selectedEdges]
-          connectedEdges.forEach(edge => {
-            if (!allRelevantEdges.some(e => e.id === edge.id)) {
+          connectedEdges.forEach((edge) => {
+            if (!allRelevantEdges.some((e) => e.id === edge.id)) {
               allRelevantEdges.push(edge)
             }
           })
@@ -554,7 +559,7 @@ export const createDiagramStore = (
           const clipboardData: ClipboardData = {
             nodes: selectedNodes,
             edges: allRelevantEdges,
-            timestamp: Date.now()
+            timestamp: Date.now(),
           }
 
           try {
@@ -564,10 +569,10 @@ export const createDiagramStore = (
               return true
             }
           } catch (error) {
-            console.error('Failed to copy to clipboard:', error)
+            console.error("Failed to copy to clipboard:", error)
             return false
           }
-          
+
           return false
         },
 
@@ -579,10 +584,14 @@ export const createDiagramStore = (
             } else {
               return false
             }
-            
+
             const clipboardData = JSON.parse(text) as ClipboardData
-            
-            if (!clipboardData || !Array.isArray(clipboardData.nodes) || !Array.isArray(clipboardData.edges)) {
+
+            if (
+              !clipboardData ||
+              !Array.isArray(clipboardData.nodes) ||
+              !Array.isArray(clipboardData.edges)
+            ) {
               return false
             }
 
@@ -599,7 +608,7 @@ export const createDiagramStore = (
                 id: newId,
                 position: {
                   x: node.position.x + progressiveOffset,
-                  y: node.position.y + progressiveOffset
+                  y: node.position.y + progressiveOffset,
                 },
                 selected: true,
               }
@@ -607,7 +616,6 @@ export const createDiagramStore = (
               return newNode
             })
 
-    
             const pastedEdges = clipboardData.edges
               .filter((edge: Edge) => {
                 return nodeIdMap.has(edge.source) && nodeIdMap.has(edge.target)
@@ -627,15 +635,19 @@ export const createDiagramStore = (
                 return newEdge
               })
             ydoc.transact(() => {
-              pastedNodes.forEach(node => getNodesMap(ydoc).set(node.id, node))
-              pastedEdges.forEach(edge => getEdgesMap(ydoc).set(edge.id, edge))
+              pastedNodes.forEach((node) =>
+                getNodesMap(ydoc).set(node.id, node)
+              )
+              pastedEdges.forEach((edge) =>
+                getEdgesMap(ydoc).set(edge.id, edge)
+              )
             }, "store")
 
             set(
               (state) => ({
                 nodes: [...state.nodes, ...pastedNodes],
                 edges: [...state.edges, ...pastedEdges],
-                selectedElementIds: newElementIds
+                selectedElementIds: newElementIds,
               }),
               undefined,
               "pasteElements"
@@ -643,7 +655,7 @@ export const createDiagramStore = (
 
             return true
           } catch (error) {
-            console.error('Failed to paste from clipboard:', error)
+            console.error("Failed to paste from clipboard:", error)
             return false
           }
         },
@@ -655,15 +667,15 @@ export const createDiagramStore = (
         selectAll: () => {
           const { nodes, edges } = get()
           const allElementIds = [
-            ...nodes.map(node => node.id),
-            ...edges.map(edge => edge.id)
+            ...nodes.map((node) => node.id),
+            ...edges.map((edge) => edge.id),
           ]
-          
+
           set(
             (state) => ({
               selectedElementIds: allElementIds,
-              nodes: state.nodes.map(node => ({ ...node, selected: true })),
-              edges: state.edges.map(edge => ({ ...edge, selected: true })),
+              nodes: state.nodes.map((node) => ({ ...node, selected: true })),
+              edges: state.edges.map((edge) => ({ ...edge, selected: true })),
             }),
             undefined,
             "selectAll"
@@ -674,14 +686,13 @@ export const createDiagramStore = (
           set(
             (state) => ({
               selectedElementIds: [],
-              nodes: state.nodes.map(node => ({ ...node, selected: false })),
-              edges: state.edges.map(edge => ({ ...edge, selected: false })),
+              nodes: state.nodes.map((node) => ({ ...node, selected: false })),
+              edges: state.edges.map((edge) => ({ ...edge, selected: false })),
             }),
             undefined,
             "clearSelection"
           )
         },
-
       })),
       { name: "DiagramStore", enabled: true }
     )

@@ -1,19 +1,19 @@
-import { useCallback } from 'react'
-import { useDiagramStore } from '../store'
-import { useShallow } from 'zustand/shallow'
-import { useClipboard } from './useClipboard'
-import { generateUUID } from '../utils'
+import { useCallback } from "react"
+import { useDiagramStore } from "../store"
+import { useShallow } from "zustand/shallow"
+import { useClipboard } from "./useClipboard"
+import { generateUUID } from "../utils"
 
 const PASTE_OFFSET = 20
 
 export const useCopyPaste = () => {
-  const { 
-    nodes, 
-    edges, 
-    selectedElementIds, 
-    addNode, 
-    addEdge, 
-    setSelectedElementsId 
+  const {
+    nodes,
+    edges,
+    selectedElementIds,
+    addNode,
+    addEdge,
+    setSelectedElementsId,
   } = useDiagramStore(
     useShallow((state) => ({
       nodes: state.nodes,
@@ -24,7 +24,7 @@ export const useCopyPaste = () => {
       setSelectedElementsId: state.setSelectedElementsId,
     }))
   )
-  
+
   const { copyToClipboard, readFromClipboard } = useClipboard()
 
   const copySelectedElements = useCallback(async () => {
@@ -33,18 +33,24 @@ export const useCopyPaste = () => {
     }
 
     // Get selected nodes and their connected edges
-    const selectedNodes = nodes.filter(node => selectedElementIds.includes(node.id))
-    const selectedEdges = edges.filter(edge => selectedElementIds.includes(edge.id))
-    
-    // Also include edges that connect selected nodes
-    const connectedEdges = edges.filter(edge => 
-      selectedElementIds.includes(edge.source) && selectedElementIds.includes(edge.target)
+    const selectedNodes = nodes.filter((node) =>
+      selectedElementIds.includes(node.id)
     )
-    
+    const selectedEdges = edges.filter((edge) =>
+      selectedElementIds.includes(edge.id)
+    )
+
+    // Also include edges that connect selected nodes
+    const connectedEdges = edges.filter(
+      (edge) =>
+        selectedElementIds.includes(edge.source) &&
+        selectedElementIds.includes(edge.target)
+    )
+
     // Combine selected edges and connected edges (remove duplicates)
     const allRelevantEdges = [...selectedEdges]
-    connectedEdges.forEach(edge => {
-      if (!allRelevantEdges.some(e => e.id === edge.id)) {
+    connectedEdges.forEach((edge) => {
+      if (!allRelevantEdges.some((e) => e.id === edge.id)) {
         allRelevantEdges.push(edge)
       }
     })
@@ -52,7 +58,7 @@ export const useCopyPaste = () => {
     const clipboardData = {
       nodes: selectedNodes,
       edges: allRelevantEdges,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }
 
     return await copyToClipboard(clipboardData)
@@ -60,7 +66,7 @@ export const useCopyPaste = () => {
 
   const pasteElements = useCallback(async () => {
     const clipboardData = await readFromClipboard()
-    
+
     if (!clipboardData) {
       return false
     }
@@ -70,7 +76,7 @@ export const useCopyPaste = () => {
     const newNodeIds: string[] = []
 
     // Clone and paste nodes with new IDs and offset positions
-    const pastedNodes = clipboardData.nodes.map(node => {
+    const pastedNodes = clipboardData.nodes.map((node) => {
       const newId = generateUUID()
       nodeIdMap.set(node.id, newId)
       newNodeIds.push(newId)
@@ -80,7 +86,7 @@ export const useCopyPaste = () => {
         id: newId,
         position: {
           x: node.position.x + PASTE_OFFSET,
-          y: node.position.y + PASTE_OFFSET
+          y: node.position.y + PASTE_OFFSET,
         },
         selected: true, // Select pasted elements
       }
@@ -88,11 +94,11 @@ export const useCopyPaste = () => {
 
     // Clone and paste edges with updated source/target IDs
     const pastedEdges = clipboardData.edges
-      .filter(edge => {
+      .filter((edge) => {
         // Only paste edges where both source and target nodes are being pasted
         return nodeIdMap.has(edge.source) && nodeIdMap.has(edge.target)
       })
-      .map(edge => {
+      .map((edge) => {
         const newId = generateUUID()
         newNodeIds.push(newId)
 
@@ -106,8 +112,8 @@ export const useCopyPaste = () => {
       })
 
     // Add pasted elements to the diagram
-    pastedNodes.forEach(node => addNode(node))
-    pastedEdges.forEach(edge => addEdge(edge))
+    pastedNodes.forEach((node) => addNode(node))
+    pastedEdges.forEach((edge) => addEdge(edge))
 
     // Select the pasted elements
     setSelectedElementsId(newNodeIds)
@@ -118,6 +124,6 @@ export const useCopyPaste = () => {
   return {
     copySelectedElements,
     pasteElements,
-    hasSelectedElements: selectedElementIds.length > 0
+    hasSelectedElements: selectedElementIds.length > 0,
   }
 }

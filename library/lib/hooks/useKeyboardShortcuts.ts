@@ -4,18 +4,18 @@ import { useShallow } from "zustand/shallow"
 
 export const useKeyboardShortcuts = () => {
   const pasteCountRef = useRef(0)
-  
-  const { 
-    undo, 
-    redo, 
-    canUndo, 
-    canRedo, 
+
+  const {
+    undo,
+    redo,
+    canUndo,
+    canRedo,
     undoManager,
     copySelectedElements,
     pasteElements,
     selectedElementIds,
     selectAll,
-    clearSelection
+    clearSelection,
   } = useDiagramStore(
     useShallow((state) => ({
       undo: state.undo,
@@ -35,10 +35,14 @@ export const useKeyboardShortcuts = () => {
     const handleKeyDown = async (event: KeyboardEvent) => {
       // Check if we're in an input field or textarea
       const target = event.target as HTMLElement
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable
+      ) {
         return
       }
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         event.preventDefault()
         clearSelection()
         return
@@ -58,21 +62,21 @@ export const useKeyboardShortcuts = () => {
             undo()
           }
           break
-          
+
         case "y":
           if (!event.shiftKey) {
             event.preventDefault()
             redo()
           }
           break
-          
+
         case "a":
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
             selectAll()
           }
           break
-          
+
         case "c":
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
@@ -80,31 +84,31 @@ export const useKeyboardShortcuts = () => {
               pasteCountRef.current = 0
               const success = await copySelectedElements()
               if (success) {
-                console.log(`${selectedElementIds.length} elements copied to clipboard`)
+                console.log(
+                  `${selectedElementIds.length} elements copied to clipboard`
+                )
               }
             }
           }
           break
-          
+
         case "v":
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
             pasteCountRef.current += 1
             const success = await pasteElements(pasteCountRef.current)
             if (success) {
-           
             }
           }
           break
-          
+
         case "d":
           if (!event.shiftKey && !event.altKey) {
             event.preventDefault()
             clearSelection()
-    
           }
           break
-          
+
         default:
           break
       }
@@ -114,5 +118,16 @@ export const useKeyboardShortcuts = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [undo, redo, canUndo, canRedo, undoManager, copySelectedElements, pasteElements, selectedElementIds, selectAll, clearSelection])
+  }, [
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    undoManager,
+    copySelectedElements,
+    pasteElements,
+    selectedElementIds,
+    selectAll,
+    clearSelection,
+  ])
 }
