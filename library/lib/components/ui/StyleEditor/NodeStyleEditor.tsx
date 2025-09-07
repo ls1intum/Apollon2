@@ -126,7 +126,7 @@ export const NodeStyleEditor: React.FC<NodeStyleEditorProps> = ({
             colorFields.map(({ key, label }) => (
               <>
                 <ColorOption
-                  key={key}
+                  key={`${nodeData.name}-${key}-option`}
                   label={label}
                   color={nodeData[key]}
                   onSelect={() => toggleColorField(key)}

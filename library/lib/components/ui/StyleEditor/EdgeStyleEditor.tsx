@@ -117,7 +117,7 @@ export const EdgeStyleEditor: React.FC<EdgeStyleEditorProps> = ({
             colorFields.map(({ key, label }) => (
               <>
                 <ColorOption
-                  key={key}
+                  key={`${edgeData?.label}-${key}-option`}
                   label={label}
                   color={edgeData ? edgeData[key] : undefined}
                   onSelect={() => toggleColorField(key)}
