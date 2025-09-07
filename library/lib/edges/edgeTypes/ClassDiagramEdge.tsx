@@ -5,7 +5,6 @@ import {
   CommonEdgeElements,
 } from "../GenericEdge"
 import { EdgeEndLabels } from "../labelTypes/EdgeEndLabels"
-import { EdgeMiddleLabels } from "../labelTypes/EdgeMiddleLabels"
 import { useEdgeConfig } from "@/hooks/useEdgeConfig"
 import { useStepPathEdge } from "@/hooks/useStepPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
@@ -171,13 +170,6 @@ export const ClassDiagramEdge = ({
           sourcePosition={sourcePosition}
           targetPosition={targetPosition}
           textColor={textColor}
-        />
-
-        <EdgeMiddleLabels
-          label={data?.label}
-          pathMiddlePosition={edgeData.pathMiddlePosition}
-          isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
-          showRelationshipLabels={true}
         />
 
         <CommonEdgeElements

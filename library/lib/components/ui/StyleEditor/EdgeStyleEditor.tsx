@@ -99,7 +99,9 @@ export const EdgeStyleEditor: React.FC<EdgeStyleEditorProps> = ({
       }}
     >
       <div style={styles.container}>
-        <Typography>{label}</Typography>
+        <Typography variant="subtitle1" fontWeight="bold">
+          {label}
+        </Typography>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <PaintRollerIcon
             onClick={() => setPaintOpen(!paintOpen)}

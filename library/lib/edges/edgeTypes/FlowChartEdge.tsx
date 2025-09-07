@@ -14,6 +14,7 @@ import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
+import { getCustomColorsFromDataForEdge } from "@/utils/layoutUtils"
 
 export const FlowChartEdge = ({
   id,
@@ -82,6 +83,8 @@ export const FlowChartEdge = ({
     enableStraightPath: false,
   })
 
+  const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
+
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path">
@@ -92,7 +95,7 @@ export const FlowChartEdge = ({
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
             pointerEvents="none"
             style={{
-              stroke: "var(--apollon2-primary-contrast)",
+              stroke: strokeColor,
               strokeDasharray: isReconnectingRef.current
                 ? "none"
                 : strokeDashArray,
@@ -149,6 +152,7 @@ export const FlowChartEdge = ({
           pathMiddlePosition={edgeData.pathMiddlePosition}
           isMiddlePathHorizontal={edgeData.isMiddlePathHorizontal}
           showRelationshipLabels={true}
+          textColor={textColor}
         />
 
         <CommonEdgeElements
