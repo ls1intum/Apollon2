@@ -153,6 +153,48 @@ const createClipboardData = (
   }
 }
 
+// Add this helper function after the existing helper functions
+const createNewNodeDataWithNewIds = (originalNodeData: any) => {
+  if (!originalNodeData) return originalNodeData
+
+  const newNodeData = { ...originalNodeData }
+
+  // Create completely NEW attributes array with NEW IDs for pasted node
+  if (originalNodeData.attributes && Array.isArray(originalNodeData.attributes)) {
+    newNodeData.attributes = originalNodeData.attributes.map((originalAttr: any) => {
+      return {
+        ...originalAttr, // Copy all properties
+        id: generateUUID(), // Generate NEW ID for the attribute
+      }
+    })
+  }
+
+  // Create completely NEW methods array with NEW IDs for pasted node
+  if (originalNodeData.methods && Array.isArray(originalNodeData.methods)) {
+    newNodeData.methods = originalNodeData.methods.map((originalMethod: any) => {
+      return {
+        ...originalMethod, // Copy all properties
+        id: generateUUID(), // Generate NEW ID for the method
+        // If method has parameters, create new IDs for them too
+        parameters: originalMethod.parameters ? originalMethod.parameters.map((originalParam: any) => ({
+          ...originalParam,
+          id: generateUUID(), // NEW ID for each parameter
+        })) : originalMethod.parameters,
+      }
+    })
+  }
+
+  // Handle any other arrays that might need new IDs
+  if (originalNodeData.properties && Array.isArray(originalNodeData.properties)) {
+    newNodeData.properties = originalNodeData.properties.map((originalProp: any) => ({
+      ...originalProp,
+      id: generateUUID(), // NEW ID for each property
+    }))
+  }
+
+  return newNodeData
+}
+
 export const useSelectionForCopyPaste = () => {
   const {
     nodes,
@@ -244,6 +286,7 @@ export const useSelectionForCopyPaste = () => {
           newElementIds.push(newId)
         })
 
+        console.log("old nodes", clipboardData.nodes)
         const rootParentIds = new Set(
           clipboardData.nodes
             .filter((node) => !node.parentId)
@@ -255,6 +298,9 @@ export const useSelectionForCopyPaste = () => {
 
         const pastedNodes = sortedNodes.map((node: Node) => {
           const newId = nodeIdMap.get(node.id)!
+
+          // Create NEW node data with NEW IDs for attributes and methods
+          const newNodeData = createNewNodeDataWithNewIds(node.data)
 
           if (node.parentId && nodeIdMap.has(node.parentId)) {
             const newParentId = nodeIdMap.get(node.parentId)!
@@ -273,11 +319,12 @@ export const useSelectionForCopyPaste = () => {
                 nodePositions.set(node.id, newPosition)
 
                 return {
-                  ...node,
-                  id: newId,
-                  parentId: newParentId,
+                  ...node, // Copy all node properties (type, parentId will be updated below)
+                  id: newId, // NEW node ID
+                  parentId: newParentId, // NEW parent ID (mapped)
                   position: newPosition,
                   selected: true,
+                  data: newNodeData, // NEW data with NEW IDs for attributes/methods
                 }
               }
             }
@@ -296,10 +343,11 @@ export const useSelectionForCopyPaste = () => {
           nodePositions.set(node.id, newPosition)
 
           return {
-            ...node,
-            id: newId,
+            ...node, // Copy all node properties (type, style, etc.)
+            id: newId, // NEW node ID
             position: newPosition,
             selected: true,
+            data: newNodeData, // NEW data with NEW IDs for attributes/methods
           }
         })
 
@@ -312,16 +360,16 @@ export const useSelectionForCopyPaste = () => {
             newElementIds.push(newId)
 
             return {
-              ...edge,
-              id: newId,
-              source: nodeIdMap.get(edge.source)!,
-              target: nodeIdMap.get(edge.target)!,
+              ...edge, // Copy all edge properties
+              id: newId, // NEW edge ID
+              source: nodeIdMap.get(edge.source)!, // Reference NEW pasted nodes
+              target: nodeIdMap.get(edge.target)!, // Reference NEW pasted nodes
               selected: true,
             }
           })
 
         const updatedNodes = sortNodesTopologically([...nodes, ...pastedNodes])
-
+        console.log("updated nodes", pastedNodes)
         setNodes(updatedNodes)
         setEdges([...edges, ...pastedEdges])
         setSelectedElementsId(newElementIds)
