@@ -4,46 +4,46 @@ import { IPoint } from "@/edges"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
 import { Box } from "@mui/material"
-import { forwardRef, ForwardedRef, useMemo } from "react"
+import { useMemo } from "react"
 
 interface CustomEdgeToolbarProps {
   edgeId: string
   position: IPoint
   onEditClick: (event: React.MouseEvent<HTMLElement>) => void
   onDeleteClick: (event: React.MouseEvent<HTMLElement>) => void
+  anchorRef: React.RefObject<SVGForeignObjectElement>
 }
 
-export const CustomEdgeToolbar = forwardRef(
-  (
-    { edgeId, position, onEditClick, onDeleteClick }: CustomEdgeToolbarProps,
-    ref: ForwardedRef<SVGForeignObjectElement>
-  ) => {
-    const isDiagramModifiable = useDiagramModifiable()
-    const selected = useIsOnlyThisElementSelected(edgeId)
+export const CustomEdgeToolbar: React.FC<CustomEdgeToolbarProps> = ({
+  edgeId,
+  position,
+  onEditClick,
+  onDeleteClick,
+  anchorRef,
+}) => {
+  const isDiagramModifiable = useDiagramModifiable()
+  const selected = useIsOnlyThisElementSelected(edgeId)
 
-    const showToolbar = useMemo(() => {
-      return selected && isDiagramModifiable
-    }, [selected, isDiagramModifiable])
+  const showToolbar = useMemo(() => {
+    return selected && isDiagramModifiable
+  }, [selected, isDiagramModifiable])
 
-    const toolbarPosition = useMemo(() => {
-      return {
-        x: position.x - 16,
-        y: position.y - 28,
-      }
-    }, [position.x, position.y, edgeId])
-
-    if (!showToolbar) {
-      return null
+  const toolbarPosition = useMemo(() => {
+    return {
+      x: position.x - 16,
+      y: position.y - 28,
     }
+  }, [position.x, position.y, edgeId])
 
-    return (
-      <foreignObject
-        ref={ref}
-        width={32}
-        height={56}
-        x={toolbarPosition.x + 20}
-        y={toolbarPosition.y + 20}
-      >
+  return (
+    <foreignObject
+      ref={anchorRef}
+      width={32}
+      height={56}
+      x={toolbarPosition.x + 20}
+      y={toolbarPosition.y + 20}
+    >
+      {showToolbar && (
         <Box
           sx={{
             backgroundColor: "var(--apollon2-background)",
@@ -99,9 +99,7 @@ export const CustomEdgeToolbar = forwardRef(
             <EditIcon style={{ width: 16, height: 16 }} />
           </Box>
         </Box>
-      </foreignObject>
-    )
-  }
-)
-
-CustomEdgeToolbar.displayName = "CustomEdgeToolbar"
+      )}
+    </foreignObject>
+  )
+}

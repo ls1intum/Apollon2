@@ -153,9 +153,7 @@ export const ApollonPlayground: React.FC = () => {
                 }))
               }}
             />
-            <label className="font-semibold">
-              Debug Mode for Give feedback
-            </label>
+            <label className="font-semibold">Debug Mode for See feedback</label>
           </div>
         )}
 
