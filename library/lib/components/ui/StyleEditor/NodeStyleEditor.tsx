@@ -8,9 +8,12 @@ import { DefaultNodeProps } from "@/types"
 interface NodeStyleEditorProps {
   nodeData: DefaultNodeProps
   handleDataFieldUpdate: (key: keyof DefaultNodeProps, value: string) => void
+  preElements?: React.ReactNode[]
   sideElements?: React.ReactNode[]
   inputPlaceholder?: string
   noStrokeUpdate?: boolean
+  showNameInputChange?: boolean
+  title?: string
 }
 
 const styles = {
@@ -18,6 +21,7 @@ const styles = {
     display: "flex",
     flexDirection: "row" as const,
     alignItems: "center",
+    justifyContent: "space-between",
     gap: "5px",
     flex: 1,
   },
@@ -73,6 +77,9 @@ export const NodeStyleEditor: React.FC<NodeStyleEditorProps> = ({
   sideElements = [],
   inputPlaceholder = "Enter node name",
   noStrokeUpdate = false,
+  showNameInputChange = true,
+  title,
+  preElements = [],
 }) => {
   // Mapping for color fields
   const colorFields: { key: keyof DefaultNodeProps; label: string }[] =
@@ -102,21 +109,30 @@ export const NodeStyleEditor: React.FC<NodeStyleEditorProps> = ({
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <div style={styles.container}>
-        <TextField
-          id="outlined-basic"
-          variant="outlined"
-          onChange={(event) =>
-            handleDataFieldUpdate("name", event.target.value)
-          }
-          fullWidth
-          size="small"
-          value={nodeData.name}
-          placeholder={inputPlaceholder}
-        />
+        {preElements}
+        {title && (
+          <Typography style={{ fontWeight: "bold", marginRight: 8 }}>
+            {title}
+          </Typography>
+        )}
+        {showNameInputChange && (
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            onChange={(event) =>
+              handleDataFieldUpdate("name", event.target.value)
+            }
+            sx={{ flex: 1 }}
+            size="small"
+            value={nodeData.name}
+            placeholder={inputPlaceholder}
+          />
+        )}
         <PaintRollerIcon
           onClick={() => setPaintOpen(!paintOpen)}
           aria-label="Toggle color settings"
         />
+
         {sideElements}
       </div>
 

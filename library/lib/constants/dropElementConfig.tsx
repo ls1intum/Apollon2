@@ -568,7 +568,7 @@ export const dropElementConfigs: Record<UMLDiagramType, DropElementConfig[]> = {
       defaultData: {
         name: "",
         actionRows: [
-          { id: crypto.randomUUID(), identifier: "A", description: "Actions" },
+          { id: crypto.randomUUID(), identifier: "A", name: "Actions" },
         ],
       },
       svg: (props) => <SfcActionTableNodeSVG {...props} />,

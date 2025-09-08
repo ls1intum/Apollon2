@@ -25,7 +25,7 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
     (_, i) => (i + 1) * rowHeight
   )
 
-  const { fillColor, strokeColor, textColor } = getCustomColorsFromData(data)
+  const { strokeColor } = getCustomColorsFromData(data)
 
   return (
     <svg
@@ -40,8 +40,29 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
         y={0}
         width={width}
         height={height}
-        fill={fillColor}
+        fill={"var(--apollon2-background)"}
         stroke={strokeColor}
+      />
+
+      {/* Grid lines */}
+      {horizontalLines.map((y) => (
+        <line
+          key={y}
+          x1={0}
+          y1={y}
+          x2={width}
+          y2={y}
+          stroke={strokeColor}
+          strokeWidth={LINE_WIDTH}
+        />
+      ))}
+      <line
+        x1={30}
+        y1={0}
+        x2={30}
+        y2={height}
+        stroke={strokeColor}
+        strokeWidth={LINE_WIDTH}
       />
 
       {/* Render action rows */}
@@ -49,8 +70,19 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
         const y = index * rowHeight // Start from top, no header
         if (y + rowHeight > height) return null // Don't render if it would overflow
 
+        const { fillColor, strokeColor, textColor } =
+          getCustomColorsFromData(row)
+
         return (
           <g key={row.id}>
+            <rect
+              x={0}
+              y={y}
+              width={width}
+              height={rowHeight}
+              fill={fillColor}
+              stroke={strokeColor}
+            />
             <CustomText
               x={15}
               y={y + 15}
@@ -71,32 +103,11 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
               fontWeight="normal"
               fill={textColor}
             >
-              {row.description}
+              {row.name}
             </CustomText>
           </g>
         )
       })}
-
-      {/* Grid lines */}
-      {horizontalLines.map((y) => (
-        <line
-          key={y}
-          x1={0}
-          y1={y}
-          x2={width}
-          y2={y}
-          stroke="var(--apollon2-primary-contrast)"
-          strokeWidth={LINE_WIDTH}
-        />
-      ))}
-      <line
-        x1={30}
-        y1={0}
-        x2={30}
-        y2={height}
-        stroke="var(--apollon2-primary-contrast)"
-        strokeWidth={LINE_WIDTH}
-      />
     </svg>
   )
 }
