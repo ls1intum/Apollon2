@@ -103,12 +103,6 @@ export const useSelectionForCopyPaste = () => {
           newElementIds.push(newId)
         })
 
-        const rootParentIds = new Set(
-          clipboardData.nodes
-            .filter((node) => !node.parentId)
-            .map((node) => node.id)
-        )
-
         const sortedNodes = sortNodesTopologically(clipboardData.nodes)
         const nodePositions = new Map<string, { x: number; y: number }>()
 
@@ -116,44 +110,10 @@ export const useSelectionForCopyPaste = () => {
           const newId = nodeIdMap.get(node.id)!
 
           const newNodeData = createNewNodeDataWithNewIds(node.data)
-
-          if (node.parentId && nodeIdMap.has(node.parentId)) {
-            const newParentId = nodeIdMap.get(node.parentId)!
-            const relation = clipboardData.parentChildRelations?.find(
-              (r) => r.childId === node.id && r.parentId === node.parentId
-            )
-
-            if (relation) {
-              const parentNewPosition = nodePositions.get(node.parentId)
-
-              if (parentNewPosition) {
-                const newPosition = {
-                  x: parentNewPosition.x + relation.relativePosition.x,
-                  y: parentNewPosition.y + relation.relativePosition.y,
-                }
-                nodePositions.set(node.id, newPosition)
-
-                return {
-                  ...node,
-                  id: newId,
-                  parentId: newParentId,
-                  position: newPosition,
-                  selected: true,
-                  data: newNodeData,
-                }
-              }
-            }
+          const newPosition = {
+            x: node.position.x + progressiveOffset,
+            y: node.position.y + progressiveOffset,
           }
-
-          const newPosition = rootParentIds.has(node.id)
-            ? {
-                x: node.position.x + progressiveOffset,
-                y: node.position.y + progressiveOffset,
-              }
-            : {
-                x: node.position.x + progressiveOffset,
-                y: node.position.y + progressiveOffset,
-              }
 
           nodePositions.set(node.id, newPosition)
 
