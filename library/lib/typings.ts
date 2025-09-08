@@ -53,7 +53,6 @@ export type ApollonEdge = {
     [key: string]: unknown
     points: IPoint[]
   }
-  
 }
 
 export type UMLModel = {

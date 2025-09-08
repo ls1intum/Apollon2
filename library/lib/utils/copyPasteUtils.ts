@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { generateUUID} from "@/utils"
+import { generateUUID } from "@/utils"
 import type { Node, Edge } from "@xyflow/react"
 
 export interface ClipboardData {
@@ -13,14 +13,20 @@ export interface ClipboardData {
   timestamp: number
 }
 
-export const calculateRelativePosition = (childNode: Node, parentNode: Node) => {
+export const calculateRelativePosition = (
+  childNode: Node,
+  parentNode: Node
+) => {
   return {
     x: childNode.position.x - parentNode.position.x,
     y: childNode.position.y - parentNode.position.y,
   }
 }
 
-export const getAllDescendants = (nodeIds: string[], allNodes: Node[]): Node[] => {
+export const getAllDescendants = (
+  nodeIds: string[],
+  allNodes: Node[]
+): Node[] => {
   const descendants: Node[] = []
   const visited = new Set<string>()
 
@@ -62,7 +68,6 @@ export const getRelevantEdges = (
   const selectedEdges = allEdges.filter((edge) =>
     selectedElementIds.includes(edge.id)
   )
-
 
   return [...selectedEdges]
 }
@@ -120,10 +125,7 @@ export const createClipboardData = (
 ): ClipboardData => {
   const allNodesToCopy = getAllNodesToInclude(selectedElementIds, allNodes)
   const allNodeIds = allNodesToCopy.map((node) => node.id)
-  const allRelevantEdges = getRelevantEdges(
-    selectedElementIds,
-   allEdges
-  )
+  const allRelevantEdges = getRelevantEdges(selectedElementIds, allEdges)
   const parentChildRelations = buildParentChildRelations(
     allNodesToCopy,
     allNodeIds

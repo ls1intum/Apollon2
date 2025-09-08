@@ -1,4 +1,8 @@
-import { useAssessmentSelectionStore, useMetadataStore } from "@/store"
+import {
+  useAssessmentSelectionStore,
+  useDiagramStore,
+  useMetadataStore,
+} from "@/store"
 import { useShallow } from "zustand/shallow"
 import { ApollonMode } from "@/typings"
 import { useCallback, useEffect } from "react"
@@ -10,6 +14,17 @@ export const useAssessmentSelectionMode = () => {
       readonly: state.readonly,
     }))
   )
+  const { nodes, edges, setSelectedElementsId, setNodes, setEdges } =
+    useDiagramStore(
+      useShallow((state) => ({
+        nodes: state.nodes,
+        edges: state.edges,
+        selectedElementIds: state.selectedElementIds,
+        setSelectedElementsId: state.setSelectedElementsId,
+        setNodes: state.setNodes,
+        setEdges: state.setEdges,
+      }))
+    )
 
   const {
     isAssessmentSelectionMode,
@@ -36,7 +51,29 @@ export const useAssessmentSelectionMode = () => {
     if (isAssessmentSelectionMode) {
       clearSelection()
     }
-  }, [isAssessmentSelectionMode, clearSelection])
+    setSelectedElementsId([])
+    const updatedExistingNodes = nodes.map((node) => ({
+      ...node,
+      selected: false,
+      dragging: false,
+    }))
+
+    const updatedExistingEdges = edges.map((edge) => ({
+      ...edge,
+      selected: false,
+      dragging: false,
+    }))
+    setNodes(updatedExistingNodes)
+    setEdges(updatedExistingEdges)
+  }, [
+    isAssessmentSelectionMode,
+    clearSelection,
+    setSelectedElementsId,
+    nodes,
+    edges,
+    setNodes,
+    setEdges,
+  ])
 
   return { onPaneClicked }
 }

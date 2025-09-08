@@ -1,13 +1,16 @@
-/* eslint-disable */
 import { useCallback } from "react"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { generateUUID, sortNodesTopologically } from "@/utils"
-import type { Node} from "@xyflow/react"
-import { ClipboardData, createClipboardData, createNewNodeDataWithNewIds, getAllNodesToInclude, getEdgesToRemove } from "@/utils/copyPasteUtils"
+import type { Node } from "@xyflow/react"
+import {
+  ClipboardData,
+  createClipboardData,
+  createNewNodeDataWithNewIds,
+  getAllNodesToInclude,
+  getEdgesToRemove,
+} from "@/utils/copyPasteUtils"
 import { PASTE_OFFSET } from "@/constants"
-
-
 
 export const useSelectionForCopyPaste = () => {
   const {
@@ -163,48 +166,53 @@ export const useSelectionForCopyPaste = () => {
           }
         })
 
-          const pastedEdges = clipboardData.edges.filter((edge) => {
-    return nodeIdMap.has(edge.source) && nodeIdMap.has(edge.target)
-  })
-          
-  .map((edge) => {
-    const newId = generateUUID()
-    newElementIds.push(newId)
-    console.log("edge:", edge);
-    return {
-      ...edge,
-      id: newId,
-      source: nodeIdMap.get(edge.source)!,
-      target: nodeIdMap.get(edge.target)!,
-      selected: true,
-      data: {
-        ...edge.data, 
-        points: Array.isArray(edge.data?.points) 
-          ? edge.data.points.map(point => ({
-              x: point.x + progressiveOffset,
-              y: point.y + progressiveOffset,
-            }))
-          : undefined,
-      },
-    }
-  })
+        const pastedEdges = clipboardData.edges
+          .filter((edge) => {
+            return nodeIdMap.has(edge.source) && nodeIdMap.has(edge.target)
+          })
+
+          .map((edge) => {
+            const newId = generateUUID()
+            newElementIds.push(newId)
+            return {
+              ...edge,
+              id: newId,
+              source: nodeIdMap.get(edge.source)!,
+              target: nodeIdMap.get(edge.target)!,
+              selected: true,
+              data: {
+                ...edge.data,
+                points: Array.isArray(edge.data?.points)
+                  ? edge.data.points.map((point) => ({
+                      x: point.x + progressiveOffset,
+                      y: point.y + progressiveOffset,
+                    }))
+                  : undefined,
+              },
+            }
+          })
 
         const updatedExistingNodes = nodes.map((node) => ({
           ...node,
-          selected: false, 
+          selected: false,
         }))
 
         const updatedExistingEdges = edges.map((edge) => ({
           ...edge,
-          selected: false, 
+          selected: false,
         }))
 
-        const allUpdatedNodes = sortNodesTopologically([...updatedExistingNodes, ...pastedNodes])
+        const allUpdatedNodes = sortNodesTopologically([
+          ...updatedExistingNodes,
+          ...pastedNodes,
+        ])
         const allUpdatedEdges = [...updatedExistingEdges, ...pastedEdges]
 
         setNodes(allUpdatedNodes)
         setEdges(allUpdatedEdges)
-        console.log("paste edges", allUpdatedEdges)
+
+        setSelectedElementsId(newElementIds)
+
         return true
       } catch (error) {
         console.error("Failed to paste from clipboard:", error)

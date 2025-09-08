@@ -717,7 +717,6 @@ function convertV3RelationshipToV4Edge(
       }),
       points: points,
     },
-    
   }
 
   return edge

@@ -88,7 +88,7 @@ export const useCopyPaste = () => {
           x: node.position.x + PASTE_OFFSET,
           y: node.position.y + PASTE_OFFSET,
         },
-        selected: true, // Select pasted elements
+        selected: true,
       }
     })
 
@@ -107,7 +107,7 @@ export const useCopyPaste = () => {
           id: newId,
           source: nodeIdMap.get(edge.source)!,
           target: nodeIdMap.get(edge.target)!,
-          selected: true, // Select pasted elements
+          selected: true,
         }
       })
 
