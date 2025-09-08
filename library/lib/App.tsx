@@ -128,6 +128,13 @@ function App({ onReactFlowInit }: AppProps) {
         edgesReconnectable={isDiagramModifiable}
         nodesConnectable={isDiagramModifiable}
         nodesDraggable={isDiagramModifiable}
+        selectionOnDrag={false}
+          elementsSelectable={false}        // ✅ Disable element selection       // ✅ Disable node connections during selection
+  selectNodesOnDrag={false}         // ✅ Disable selection on drag
+  panOnDrag={[1, 2]}               // ✅ Only pan with left/right mouse, not middle         // ✅ Disable React Flow's selection box
+  multiSelectionKeyCode={null}     // ✅ Disable multi-selection key
+  deleteKeyCode={null}    // Disable selection box
+
       >
         <CustomBackground />
         <CustomMiniMap />

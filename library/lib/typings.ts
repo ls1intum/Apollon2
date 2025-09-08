@@ -51,8 +51,9 @@ export type ApollonEdge = {
   targetHandle: string
   data: {
     [key: string]: unknown
+    points: IPoint[]
   }
-  points: IPoint[]
+  
 }
 
 export type UMLModel = {

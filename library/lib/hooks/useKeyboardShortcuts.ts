@@ -24,7 +24,7 @@ export const useKeyboardShortcuts = () => {
     clearSelection,
     copySelectedElements,
     pasteElements,
-    cutSelectedElements, // Add this
+    cutSelectedElements,
   } = useSelectionForCopyPaste()
 
   useEffect(() => {
@@ -45,7 +45,6 @@ export const useKeyboardShortcuts = () => {
         return
       }
 
-      // Check if Ctrl (or Cmd on Mac) is pressed for other shortcuts
       const isModifierPressed = event.ctrlKey || event.metaKey
 
       if (!isModifierPressed) return

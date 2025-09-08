@@ -3,189 +3,11 @@ import { useCallback } from "react"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { generateUUID, sortNodesTopologically } from "@/utils"
-import type { Node, Edge } from "@xyflow/react"
+import type { Node} from "@xyflow/react"
+import { ClipboardData, createClipboardData, createNewNodeDataWithNewIds, getAllNodesToInclude, getEdgesToRemove } from "@/utils/copyPasteUtils"
+import { PASTE_OFFSET } from "@/constants"
 
-interface ClipboardData {
-  nodes: Node[]
-  edges: Edge[]
-  parentChildRelations: Array<{
-    parentId: string
-    childId: string
-    relativePosition: { x: number; y: number }
-  }>
-  timestamp: number
-}
 
-const PASTE_OFFSET = 20
-
-// Helper function to calculate relative position of child to parent
-const calculateRelativePosition = (childNode: Node, parentNode: Node) => {
-  return {
-    x: childNode.position.x - parentNode.position.x,
-    y: childNode.position.y - parentNode.position.y,
-  }
-}
-
-const getAllDescendants = (nodeIds: string[], allNodes: Node[]): Node[] => {
-  const descendants: Node[] = []
-  const visited = new Set<string>()
-
-  const findChildren = (parentIds: string[]) => {
-    const children = allNodes.filter(
-      (node) =>
-        node.parentId &&
-        parentIds.includes(node.parentId) &&
-        !visited.has(node.id)
-    )
-
-    children.forEach((child) => visited.add(child.id))
-    descendants.push(...children)
-
-    if (children.length > 0) {
-      findChildren(children.map((child) => child.id))
-    }
-  }
-
-  findChildren(nodeIds)
-  return descendants
-}
-
-const getAllNodesToInclude = (
-  selectedElementIds: string[],
-  allNodes: Node[]
-) => {
-  const selectedNodes = allNodes.filter((node) =>
-    selectedElementIds.includes(node.id)
-  )
-  const descendants = getAllDescendants(selectedElementIds, allNodes)
-  return [...selectedNodes, ...descendants]
-}
-
-const getRelevantEdges = (
-  selectedElementIds: string[],
-//  nodeIds: string[],
-  allEdges: Edge[]
-) => {
-  const selectedEdges = allEdges.filter((edge) =>
-    selectedElementIds.includes(edge.id)
-  )
-  // const connectedEdges = allEdges.filter(
-  //   (edge) => nodeIds.includes(edge.source) && nodeIds.includes(edge.target)
-  // )
-
-  const allRelevantEdges = [...selectedEdges]
-  // connectedEdges.forEach((edge) => {
-  //   if (!allRelevantEdges.some((e) => e.id === edge.id)) {
-  //     allRelevantEdges.push(edge)
-  //   }
-  // })
-
-  return allRelevantEdges
-}
-
-const buildParentChildRelations = (
-  nodesToInclude: Node[],
-  nodeIds: string[]
-) => {
-  const parentChildRelations: Array<{
-    parentId: string
-    childId: string
-    relativePosition: { x: number; y: number }
-  }> = []
-
-  nodesToInclude.forEach((node) => {
-    if (node.parentId && nodeIds.includes(node.parentId)) {
-      const parentNode = nodesToInclude.find((n) => n.id === node.parentId)
-      if (parentNode) {
-        parentChildRelations.push({
-          parentId: node.parentId,
-          childId: node.id,
-          relativePosition: calculateRelativePosition(node, parentNode),
-        })
-      }
-    }
-  })
-
-  return parentChildRelations
-}
-
-const getEdgesToRemove = (
-  selectedElementIds: string[],
-  expandedNodeIds: string[],
-  allEdges: Edge[]
-) => {
-  const selectedEdges = allEdges.filter((edge) =>
-    selectedElementIds.includes(edge.id)
-  )
-  const connectedEdges = allEdges.filter(
-    (edge) =>
-      expandedNodeIds.includes(edge.source) ||
-      expandedNodeIds.includes(edge.target)
-  )
-
-  return new Set([
-    ...selectedEdges.map((e) => e.id),
-    ...connectedEdges.map((e) => e.id),
-  ])
-}
-
-const createClipboardData = (
-  selectedElementIds: string[],
-  allNodes: Node[],
-  allEdges: Edge[]
-): ClipboardData => {
-  const allNodesToCopy = getAllNodesToInclude(selectedElementIds, allNodes)
-  const allNodeIds = allNodesToCopy.map((node) => node.id)
-  const allRelevantEdges = getRelevantEdges(
-    selectedElementIds,
-    //allNodeIds,
-   allEdges
-  )
-  const parentChildRelations = buildParentChildRelations(
-    allNodesToCopy,
-    allNodeIds
-  )
-
-  return {
-    nodes: allNodesToCopy,
-    edges: allRelevantEdges,
-    parentChildRelations,
-    timestamp: Date.now(),
-  }
-}
-
-const createNewNodeDataWithNewIds = (originalNodeData: any) => {
-  if (!originalNodeData) return originalNodeData
-
-  const newNodeData = { ...originalNodeData }
-
-  if (
-    originalNodeData.attributes &&
-    Array.isArray(originalNodeData.attributes)
-  ) {
-    newNodeData.attributes = originalNodeData.attributes.map(
-      (originalAttr: any) => {
-        return {
-          ...originalAttr,
-          id: generateUUID(),
-        }
-      }
-    )
-  }
-
-  if (originalNodeData.methods && Array.isArray(originalNodeData.methods)) {
-    newNodeData.methods = originalNodeData.methods.map(
-      (originalMethod: any) => {
-        return {
-          ...originalMethod,
-          id: generateUUID(),
-        }
-      }
-    )
-  }
-
-  return newNodeData
-}
 
 export const useSelectionForCopyPaste = () => {
   const {
@@ -272,7 +94,6 @@ export const useSelectionForCopyPaste = () => {
         const newElementIds: string[] = []
         const progressiveOffset = PASTE_OFFSET * pasteCount
 
-        // First pass: create new IDs for nodes
         clipboardData.nodes.forEach((node) => {
           const newId = generateUUID()
           nodeIdMap.set(node.id, newId)
@@ -337,48 +158,45 @@ export const useSelectionForCopyPaste = () => {
             ...node,
             id: newId,
             position: newPosition,
-            selected: true, // ✅ Pasted nodes are selected
+            selected: true,
             data: newNodeData,
           }
         })
 
-        const pastedEdges = clipboardData.edges
-          .filter((edge: Edge) => {
-            // Only include edges where BOTH source and target nodes were copied
-            const hasValidSource = nodeIdMap.has(edge.source)
-            const hasValidTarget = nodeIdMap.has(edge.target)
+          const pastedEdges = clipboardData.edges.filter((edge) => {
+    return nodeIdMap.has(edge.source) && nodeIdMap.has(edge.target)
+  })
+          
+  .map((edge) => {
+    const newId = generateUUID()
+    newElementIds.push(newId)
+    console.log("edge:", edge);
+    return {
+      ...edge,
+      id: newId,
+      source: nodeIdMap.get(edge.source)!,
+      target: nodeIdMap.get(edge.target)!,
+      selected: true,
+      data: {
+        ...edge.data, 
+        points: Array.isArray(edge.data?.points) 
+          ? edge.data.points.map(point => ({
+              x: point.x + progressiveOffset,
+              y: point.y + progressiveOffset,
+            }))
+          : undefined,
+      },
+    }
+  })
 
-            if (!hasValidSource || !hasValidTarget) {
-              console.log(
-                `Skipping edge ${edge.id}: source ${edge.source} (${hasValidSource}), target ${edge.target} (${hasValidTarget})`
-              )
-              return false
-            }
-
-            return true
-          })
-          .map((edge: Edge) => {
-            const newId = generateUUID()
-            newElementIds.push(newId)
-
-            return {
-              ...edge,
-              id: newId,
-              source: nodeIdMap.get(edge.source)!,
-              target: nodeIdMap.get(edge.target)!,
-              selected: true, // ✅ Pasted edges are selected
-            }
-          })
-
-        // ✅ DESELECT ALL EXISTING ELEMENTS, SELECT ONLY PASTED ONES
         const updatedExistingNodes = nodes.map((node) => ({
           ...node,
-          selected: false, // Deselect all existing nodes
+          selected: false, 
         }))
 
         const updatedExistingEdges = edges.map((edge) => ({
           ...edge,
-          selected: false, // Deselect all existing edges
+          selected: false, 
         }))
 
         const allUpdatedNodes = sortNodesTopologically([...updatedExistingNodes, ...pastedNodes])
@@ -386,8 +204,7 @@ export const useSelectionForCopyPaste = () => {
 
         setNodes(allUpdatedNodes)
         setEdges(allUpdatedEdges)
-        setSelectedElementsId(newElementIds) // Only pasted element IDs
-
+        console.log("paste edges", allUpdatedEdges)
         return true
       } catch (error) {
         console.error("Failed to paste from clipboard:", error)

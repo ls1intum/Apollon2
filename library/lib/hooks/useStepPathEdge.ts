@@ -97,7 +97,7 @@ export const useStepPathEdge = ({
     tempReconnectPoints,
     setTempReconnectPoints,
   } = useEdgeState(data?.points)
-
+  console.log("customPoints", customPoints)
   const {
     isReconnectingRef,
     reconnectingEndRef,
@@ -298,8 +298,11 @@ export const useStepPathEdge = ({
     if (tempReconnectPoints) {
       return tempReconnectPoints
     }
+      if (data?.points && data.points.length > 0) {
+    return data.points
+  }
     return customPoints.length ? customPoints : computedPoints
-  }, [customPoints, computedPoints, tempReconnectPoints])
+  }, [customPoints, computedPoints, tempReconnectPoints, data?.points])
 
   const currentPath = useMemo(() => {
     return pointsToSvgPath(activePoints)

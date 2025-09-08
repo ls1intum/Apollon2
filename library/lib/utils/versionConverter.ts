@@ -715,8 +715,9 @@ function convertV3RelationshipToV4Edge(
       ...(relationship.assessmentNote && {
         assessmentNote: relationship.assessmentNote,
       }),
+      points: points,
     },
-    points: points,
+    
   }
 
   return edge

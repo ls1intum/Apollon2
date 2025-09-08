@@ -17,9 +17,9 @@ export const useEdgeState = (initialPoints?: IPoint[]) => {
   const [tempReconnectPoints, setTempReconnectPoints] = useState<
     IPoint[] | null
   >(null)
-
+  console.log("initialPoints", initialPoints)
   useEffect(() => {
-    if (initialPoints) {
+    if (initialPoints && initialPoints.length > 0) {
       setCustomPoints(initialPoints)
     }
   }, [initialPoints])
