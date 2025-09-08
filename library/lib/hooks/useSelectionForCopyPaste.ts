@@ -63,22 +63,22 @@ const getAllNodesToInclude = (
 
 const getRelevantEdges = (
   selectedElementIds: string[],
-  nodeIds: string[],
+//  nodeIds: string[],
   allEdges: Edge[]
 ) => {
   const selectedEdges = allEdges.filter((edge) =>
     selectedElementIds.includes(edge.id)
   )
-  const connectedEdges = allEdges.filter(
-    (edge) => nodeIds.includes(edge.source) && nodeIds.includes(edge.target)
-  )
+  // const connectedEdges = allEdges.filter(
+  //   (edge) => nodeIds.includes(edge.source) && nodeIds.includes(edge.target)
+  // )
 
   const allRelevantEdges = [...selectedEdges]
-  connectedEdges.forEach((edge) => {
-    if (!allRelevantEdges.some((e) => e.id === edge.id)) {
-      allRelevantEdges.push(edge)
-    }
-  })
+  // connectedEdges.forEach((edge) => {
+  //   if (!allRelevantEdges.some((e) => e.id === edge.id)) {
+  //     allRelevantEdges.push(edge)
+  //   }
+  // })
 
   return allRelevantEdges
 }
@@ -138,8 +138,8 @@ const createClipboardData = (
   const allNodeIds = allNodesToCopy.map((node) => node.id)
   const allRelevantEdges = getRelevantEdges(
     selectedElementIds,
-    allNodeIds,
-    allEdges
+    //allNodeIds,
+   allEdges
   )
   const parentChildRelations = buildParentChildRelations(
     allNodesToCopy,
@@ -272,6 +272,7 @@ export const useSelectionForCopyPaste = () => {
         const newElementIds: string[] = []
         const progressiveOffset = PASTE_OFFSET * pasteCount
 
+        // First pass: create new IDs for nodes
         clipboardData.nodes.forEach((node) => {
           const newId = generateUUID()
           nodeIdMap.set(node.id, newId)
@@ -336,14 +337,25 @@ export const useSelectionForCopyPaste = () => {
             ...node,
             id: newId,
             position: newPosition,
-            selected: true,
+            selected: true, // ✅ Pasted nodes are selected
             data: newNodeData,
           }
         })
 
         const pastedEdges = clipboardData.edges
           .filter((edge: Edge) => {
-            return nodeIdMap.has(edge.source) && nodeIdMap.has(edge.target)
+            // Only include edges where BOTH source and target nodes were copied
+            const hasValidSource = nodeIdMap.has(edge.source)
+            const hasValidTarget = nodeIdMap.has(edge.target)
+
+            if (!hasValidSource || !hasValidTarget) {
+              console.log(
+                `Skipping edge ${edge.id}: source ${edge.source} (${hasValidSource}), target ${edge.target} (${hasValidTarget})`
+              )
+              return false
+            }
+
+            return true
           })
           .map((edge: Edge) => {
             const newId = generateUUID()
@@ -351,15 +363,30 @@ export const useSelectionForCopyPaste = () => {
 
             return {
               ...edge,
+              id: newId,
+              source: nodeIdMap.get(edge.source)!,
               target: nodeIdMap.get(edge.target)!,
-              selected: true,
+              selected: true, // ✅ Pasted edges are selected
             }
           })
 
-        const updatedNodes = sortNodesTopologically([...nodes, ...pastedNodes])
-        setNodes(updatedNodes)
-        setEdges([...edges, ...pastedEdges])
-        setSelectedElementsId(newElementIds)
+        // ✅ DESELECT ALL EXISTING ELEMENTS, SELECT ONLY PASTED ONES
+        const updatedExistingNodes = nodes.map((node) => ({
+          ...node,
+          selected: false, // Deselect all existing nodes
+        }))
+
+        const updatedExistingEdges = edges.map((edge) => ({
+          ...edge,
+          selected: false, // Deselect all existing edges
+        }))
+
+        const allUpdatedNodes = sortNodesTopologically([...updatedExistingNodes, ...pastedNodes])
+        const allUpdatedEdges = [...updatedExistingEdges, ...pastedEdges]
+
+        setNodes(allUpdatedNodes)
+        setEdges(allUpdatedEdges)
+        setSelectedElementsId(newElementIds) // Only pasted element IDs
 
         return true
       } catch (error) {
