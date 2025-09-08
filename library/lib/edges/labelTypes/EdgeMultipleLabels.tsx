@@ -4,16 +4,18 @@ import { EdgeLabelRenderer } from "@xyflow/react"
 import { MessageData } from "../EdgeProps"
 import { useMessagePositioning } from "../../hooks"
 
-export const EdgeMultipleLabels: React.FC<{
+interface EdgeMultipleLabelsProps {
   messages?: MessageData[]
   pathMiddlePosition: IPoint
   showRelationshipLabels: boolean
   isReconnectingRef?: React.MutableRefObject<boolean>
   sourcePosition: IPoint
   targetPosition: IPoint
-  edgePoints?: Array<{ x: number; y: number }>
+  edgePoints?: IPoint[]
+  isHorizontalEdge?: boolean
   textColor: string
-}> = ({
+}
+export const EdgeMultipleLabels = ({
   messages,
   pathMiddlePosition,
   showRelationshipLabels,
@@ -21,8 +23,9 @@ export const EdgeMultipleLabels: React.FC<{
   sourcePosition,
   targetPosition,
   edgePoints,
+  isHorizontalEdge,
   textColor,
-}) => {
+}: EdgeMultipleLabelsProps) => {
   const displayMessages: MessageData[] = messages || []
 
   const {
@@ -35,13 +38,13 @@ export const EdgeMultipleLabels: React.FC<{
     backwardArrowBoxPosition,
     backwardLabelBoxPosition,
     isPositioned,
-    isHorizontalEdge,
   } = useMessagePositioning(
     displayMessages,
     sourcePosition,
     targetPosition,
     pathMiddlePosition,
-    edgePoints
+    edgePoints,
+    isHorizontalEdge
   )
 
   if (
