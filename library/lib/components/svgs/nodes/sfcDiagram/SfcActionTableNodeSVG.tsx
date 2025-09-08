@@ -55,14 +55,7 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
           strokeWidth={LINE_WIDTH}
         />
       ))}
-      <line
-        x1={30}
-        y1={0}
-        x2={30}
-        y2={height}
-        stroke={strokeColor}
-        strokeWidth={LINE_WIDTH}
-      />
+
       {/* Render action rows */}
       {actionRows.map((row, index) => {
         const y = index * rowHeight // Start from top, no header
@@ -111,6 +104,14 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
           </g>
         )
       })}
+      <line
+        x1={30}
+        y1={0}
+        x2={30}
+        y2={height}
+        stroke={strokeColor}
+        strokeWidth={LINE_WIDTH}
+      />
     </svg>
   )
 }
