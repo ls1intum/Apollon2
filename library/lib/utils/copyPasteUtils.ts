@@ -168,6 +168,19 @@ export const createNewNodeDataWithNewIds = (originalNodeData: any) => {
       }
     )
   }
+  if (
+    originalNodeData.actionRows &&
+    Array.isArray(originalNodeData.actionRows)
+  ) {
+    newNodeData.actionRows = originalNodeData.actionRows.map(
+      (originalActionRow: any) => {
+        return {
+          ...originalActionRow,
+          id: generateUUID(),
+        }
+      }
+    )
+  }
 
   return newNodeData
 }

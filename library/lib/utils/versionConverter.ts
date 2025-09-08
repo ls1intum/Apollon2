@@ -24,16 +24,7 @@ import {
   BPMNTaskProps,
   BPMNGatewayProps,
   BPMNEventProps,
-  // BPMNSubprocessProps,
-  // BPMNTransactionProps,
-  // BPMNCallActivityProps,
-  // BPMNAnnotationProps,
-  // BPMNDataObjectProps,
-  // BPMNDataStoreProps,
-  // BPMNPoolProps,
-  // BPMNGroupProps,
   ReachabilityGraphMarkingProps,
-  // SfcActionTableProps
 } from "../types/nodes/NodeProps"
 import { MessageData } from "@/edges/EdgeProps"
 
