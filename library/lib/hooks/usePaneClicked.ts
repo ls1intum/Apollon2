@@ -7,7 +7,7 @@ import { useShallow } from "zustand/shallow"
 import { ApollonMode } from "@/typings"
 import { useCallback, useEffect } from "react"
 
-export const useAssessmentSelectionMode = () => {
+export const usePaneClicked = () => {
   const { mode, readonly } = useMetadataStore(
     useShallow((state) => ({
       mode: state.mode,
