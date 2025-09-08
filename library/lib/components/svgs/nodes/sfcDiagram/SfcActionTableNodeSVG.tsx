@@ -40,10 +40,9 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
         y={0}
         width={width}
         height={height}
-        fill={"var(--apollon2-background)"}
+        fill="none"
         stroke={strokeColor}
       />
-
       {/* Grid lines */}
       {horizontalLines.map((y) => (
         <line
@@ -64,14 +63,17 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
         stroke={strokeColor}
         strokeWidth={LINE_WIDTH}
       />
-
       {/* Render action rows */}
       {actionRows.map((row, index) => {
         const y = index * rowHeight // Start from top, no header
         if (y + rowHeight > height) return null // Don't render if it would overflow
 
-        const { fillColor, strokeColor, textColor } =
-          getCustomColorsFromData(row)
+        const {
+          fillColor,
+
+          textColor,
+        } = getCustomColorsFromData(row)
+        const rowStrokeColor = row.strokeColor ?? strokeColor
 
         return (
           <g key={row.id}>
@@ -81,8 +83,9 @@ export const SfcActionTableNodeSVG: React.FC<Props> = ({
               width={width}
               height={rowHeight}
               fill={fillColor}
-              stroke={strokeColor}
+              stroke={rowStrokeColor}
             />
+
             <CustomText
               x={15}
               y={y + 15}
