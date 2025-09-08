@@ -155,8 +155,9 @@ export const CommunicationDiagramEdge = ({
           isReconnectingRef={isReconnectingRef}
           sourcePosition={{ x: sourceX, y: sourceY }}
           targetPosition={{ x: targetX, y: targetY }}
-          edgePoints={edgeData.activePoints} // Pass the edge points
           textColor={textColor}
+          edgePoints={edgeData.activePoints}
+          isHorizontalEdge={edgeData.isMiddlePathHorizontal}
         />
 
         <CommonEdgeElements

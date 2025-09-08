@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from "react"
 import { MessageData } from "../edges/EdgeProps"
+import { IPoint } from "@/edges"
 
 type ArrowDirection = "Up" | "Down" | "Left" | "Right"
 
@@ -15,15 +16,15 @@ interface MessagePositioningResult {
   backwardArrowBoxPosition: { x: number; y: number }
   backwardLabelBoxPosition: { x: number; y: number }
   isPositioned: boolean
-  isHorizontalEdge?: boolean
 }
 
 export const useMessagePositioning = (
   displayMessages: MessageData[],
-  sourcePosition: { x: number; y: number },
-  targetPosition: { x: number; y: number },
-  pathMiddlePosition: { x: number; y: number },
-  edgePoints?: Array<{ x: number; y: number }> // Add edge points parameter
+  sourcePosition: IPoint,
+  targetPosition: IPoint,
+  pathMiddlePosition: IPoint,
+  edgePoints?: IPoint[],
+  isHorizontalEdge?: boolean
 ): MessagePositioningResult => {
   const [isPositioned, setIsPositioned] = useState(false)
 
@@ -34,45 +35,6 @@ export const useMessagePositioning = (
     )
     const backwardMessages = displayMessages.filter(
       (msg) => msg.direction === "source"
-    )
-
-    // Calculate edge direction from the middle segment
-    const calculateMiddleSegmentDirection = (
-      points?: Array<{ x: number; y: number }>,
-      fallbackSource?: { x: number; y: number },
-      fallbackTarget?: { x: number; y: number }
-    ) => {
-      let isHorizontalEdge = false
-      if (points && points.length >= 2) {
-        // Find the middle point index
-        const middleIndex = Math.floor(points.length / 2) - 1
-        const middlePoint = points[middleIndex]
-        const nextPoint = points[Math.min(middleIndex + 1, points.length - 1)]
-
-        // If we're at the last point, use the previous point instead
-        const referencePoint =
-          middleIndex === points.length - 1
-            ? points[Math.max(middleIndex - 1, 0)]
-            : nextPoint
-        const dx = Math.abs(referencePoint.x - middlePoint.x)
-        const dy = Math.abs(referencePoint.y - middlePoint.y)
-        isHorizontalEdge = dx > dy
-      } else {
-        // Fallback to source/target comparison if no points available
-        if (fallbackSource && fallbackTarget) {
-          const dx = Math.abs(fallbackTarget.x - fallbackSource.x)
-          const dy = Math.abs(fallbackTarget.y - fallbackSource.y)
-          isHorizontalEdge = dx > dy
-        }
-      }
-
-      return isHorizontalEdge
-    }
-
-    const isHorizontalEdge = calculateMiddleSegmentDirection(
-      edgePoints,
-      sourcePosition,
-      targetPosition
     )
 
     // Calculate arrow directions based on which node is which relative to the middle
@@ -151,7 +113,7 @@ export const useMessagePositioning = (
     sourcePosition,
     targetPosition,
     pathMiddlePosition,
-    edgePoints,
+    isHorizontalEdge,
   ])
 
   useEffect(() => {
