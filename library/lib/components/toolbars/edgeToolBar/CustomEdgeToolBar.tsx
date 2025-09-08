@@ -32,10 +32,6 @@ export const CustomEdgeToolbar = forwardRef(
       }
     }, [position.x, position.y, edgeId])
 
-    if (!showToolbar) {
-      return null
-    }
-
     return (
       <foreignObject
         ref={ref}
@@ -44,61 +40,63 @@ export const CustomEdgeToolbar = forwardRef(
         x={toolbarPosition.x + 20}
         y={toolbarPosition.y + 20}
       >
-        <Box
-          sx={{
-            backgroundColor: "var(--apollon2-background)",
-            boxShadow: "0 0 4px 0 var(--apollon2-background-variant)",
-            borderRadius: "8px",
-            padding: "8px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            cursor: "pointer",
-            gap: "8px",
-            width: "100%",
-            height: "100%",
-            boxSizing: "border-box",
-            WebkitTransform: "translateZ(0)",
-            transform: "translateZ(0)",
-            position: "relative",
-            zIndex: ZINDEX_TOOLTIP,
-          }}
-        >
+        {showToolbar && (
           <Box
             sx={{
-              width: "16px",
-              height: "16px",
               backgroundColor: "var(--apollon2-background)",
-              borderRadius: 1,
+              boxShadow: "0 0 4px 0 var(--apollon2-background-variant)",
+              borderRadius: "8px",
+              padding: "8px",
               display: "flex",
-              justifyContent: "center",
+              flexDirection: "column",
               alignItems: "center",
-            }}
-            onClick={(e) => {
-              e.stopPropagation()
-              onDeleteClick(e)
+              cursor: "pointer",
+              gap: "8px",
+              width: "100%",
+              height: "100%",
+              boxSizing: "border-box",
+              WebkitTransform: "translateZ(0)",
+              transform: "translateZ(0)",
+              position: "relative",
+              zIndex: ZINDEX_TOOLTIP,
             }}
           >
-            <DeleteIcon style={{ width: 16, height: 16 }} />
+            <Box
+              sx={{
+                width: "16px",
+                height: "16px",
+                backgroundColor: "var(--apollon2-background)",
+                borderRadius: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
+                onDeleteClick(e)
+              }}
+            >
+              <DeleteIcon style={{ width: 16, height: 16 }} />
+            </Box>
+            <Box
+              sx={{
+                width: "16px",
+                height: "16px",
+                backgroundColor: "var(--apollon2-background)",
+                borderRadius: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
+                onEditClick(e)
+              }}
+            >
+              <EditIcon style={{ width: 16, height: 16 }} />
+            </Box>
           </Box>
-          <Box
-            sx={{
-              width: "16px",
-              height: "16px",
-              backgroundColor: "var(--apollon2-background)",
-              borderRadius: 1,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onClick={(e) => {
-              e.stopPropagation()
-              onEditClick(e)
-            }}
-          >
-            <EditIcon style={{ width: 16, height: 16 }} />
-          </Box>
-        </Box>
+        )}
       </foreignObject>
     )
   }

@@ -3,6 +3,7 @@ import { useDiagramStore } from "@/store"
 import { Assessment } from "@/typings"
 import { useShallow } from "zustand/shallow"
 import { DeleteIcon } from "../Icon"
+import { Typography } from "../ui"
 
 interface Props {
   elementId: string
@@ -52,7 +53,7 @@ export const GiveFeedbackAssessmentBox = ({ elementId, name, type }: Props) => {
 
   return (
     <>
-      <div>{`Assessment for ${type} "${name}"`}</div>
+      <Typography>{`Assessment for ${type} "${name}"`}</Typography>
       <div
         style={{
           display: "flex",
@@ -65,13 +66,15 @@ export const GiveFeedbackAssessmentBox = ({ elementId, name, type }: Props) => {
         <div
           style={{ display: "flex", gap: "4px", alignItems: "center", flex: 1 }}
         >
-          <div>Points:</div>
+          <Typography>Points:</Typography>
           <input
             style={{
               border: "1px solid black",
               borderRadius: "4px",
               padding: "4px",
               flex: 1,
+              backgroundColor: "var(--apollon2-background)",
+              color: "var(--apollon2-primary-contrast)",
             }}
             maxLength={20}
             type="number"
@@ -87,7 +90,7 @@ export const GiveFeedbackAssessmentBox = ({ elementId, name, type }: Props) => {
         <DeleteIcon onClick={handleDelete} />
       </div>
       <div style={{ marginTop: "8px" }}>
-        <div>Feedback:</div>
+        <Typography>Feedback:</Typography>
         <div style={{ display: "flex" }}>
           <textarea
             style={{
@@ -96,6 +99,8 @@ export const GiveFeedbackAssessmentBox = ({ elementId, name, type }: Props) => {
               padding: "4px",
               flex: 1,
               resize: "vertical",
+              backgroundColor: "var(--apollon2-background)",
+              color: "var(--apollon2-primary-contrast)",
             }}
             placeholder="You can enter feedback here..."
             maxLength={500}
