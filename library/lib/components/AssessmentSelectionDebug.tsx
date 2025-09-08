@@ -1,4 +1,8 @@
-import { useAssessmentSelectionStore, useMetadataStore } from "../store/context"
+import {
+  useAssessmentSelectionStore,
+  useDiagramStore,
+  useMetadataStore,
+} from "../store/context"
 import { useShallow } from "zustand/shallow"
 
 export function AssessmentSelectionDebug() {
@@ -14,6 +18,7 @@ export function AssessmentSelectionDebug() {
       isAssessmentSelectionMode: state.isAssessmentSelectionMode,
     }))
   )
+  const assessments = useDiagramStore(useShallow((state) => state.assessments))
 
   if (!isAssessmentSelectionMode || !debug) {
     return null
@@ -42,11 +47,53 @@ export function AssessmentSelectionDebug() {
       <div>Highlighted: {highlightedElementId || "none"}</div>
       <div>Selected ({selectedElementIds.length}):</div>
       {selectedElementIds.length > 0 ? (
-        <ul style={{ margin: "5px 0", paddingLeft: "15px" }}>
-          {Array.from(selectedElementIds).map((id) => (
-            <li key={id}>{id}</li>
-          ))}
-        </ul>
+        <div
+          style={{
+            margin: "1px 0",
+            paddingLeft: "15px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "4px",
+          }}
+        >
+          {Array.from(selectedElementIds).map((id) => {
+            const assessment = assessments[id] ? assessments[id] : null
+            if (!assessment)
+              return (
+                <div key={id}>
+                  <strong>ID:</strong> {id}
+                </div>
+              )
+
+            return (
+              <div
+                key={id}
+                style={{
+                  border: "2px solid var(--apollon2-grid)",
+                  padding: "4px",
+                }}
+              >
+                <div>
+                  <strong>ID:</strong> {id}
+                </div>
+                <div>
+                  <strong>Score:</strong> {assessment.score}
+                </div>
+                <div>
+                  <strong>Element Type:</strong> {assessment.elementType}
+                </div>
+                <div>
+                  <strong>Correction Status:</strong>{" "}
+                  {assessment.correctionStatus?.status}
+                </div>
+                <div>
+                  <strong>Correction Description:</strong>{" "}
+                  {assessment.correctionStatus?.description}
+                </div>
+              </div>
+            )
+          })}
+        </div>
       ) : (
         <div style={{ fontStyle: "italic", color: "#666" }}>
           No elements selected

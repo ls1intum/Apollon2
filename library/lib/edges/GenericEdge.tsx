@@ -186,7 +186,7 @@ export const CommonEdgeElements = ({
     <>
       <CustomEdgeToolbar
         edgeId={id}
-        ref={anchorRef}
+        anchorRef={anchorRef}
         position={pathMiddlePosition}
         onEditClick={() => setPopOverElementId(id)}
         onDeleteClick={handleDelete}

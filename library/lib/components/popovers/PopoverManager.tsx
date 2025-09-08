@@ -586,6 +586,10 @@ export const PopoverManager = ({
   }
 
   const open = popoverElementId === elementId
+
+  if (!open) {
+    return null
+  }
   const onClose = () => {
     setPopOverElementId(null)
   }
