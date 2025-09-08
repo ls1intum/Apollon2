@@ -4,7 +4,7 @@ import { useStepPathEdge } from "@/hooks/useStepPathEdge"
 import { useDiagramStore, usePopoverStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { useToolbar } from "@/hooks"
-import { useRef } from "react"
+import { useMemo, useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
@@ -37,7 +37,7 @@ function getParsedEdgeData(data: unknown): {
     return { isNegated: false, displayName: label, showBar: true }
   }
 }
-
+const crossbarLength = 20
 export const SfcDiagramEdge = ({
   id,
   type,
@@ -103,6 +103,45 @@ export const SfcDiagramEdge = ({
   const { isNegated, displayName, showBar } = getParsedEdgeData(data)
   const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
 
+  const labelPosition = {
+    x: edgeData.isMiddlePathHorizontal
+      ? edgeData.pathMiddlePosition.x
+      : edgeData.pathMiddlePosition.x + 30,
+    y: edgeData.isMiddlePathHorizontal
+      ? edgeData.pathMiddlePosition.y - 30
+      : edgeData.pathMiddlePosition.y,
+    textAnchor: edgeData.isMiddlePathHorizontal ? "middle" : ("start" as const),
+    dominantBaseline: edgeData.isMiddlePathHorizontal
+      ? "middle"
+      : ("middle" as const),
+  }
+
+  const crossbarCoordinates = useMemo(() => {
+    if (edgeData.isMiddlePathHorizontal) {
+      // If middle segment is horizontal, make crossbar vertical
+      return {
+        x1: edgeData.pathMiddlePosition.x,
+        y1: edgeData.pathMiddlePosition.y - crossbarLength,
+        x2: edgeData.pathMiddlePosition.x,
+        y2: edgeData.pathMiddlePosition.y + crossbarLength,
+        orientation: "vertical" as const,
+      }
+    } else {
+      // If middle segment is vertical, make crossbar horizontal
+      return {
+        x1: edgeData.pathMiddlePosition.x - crossbarLength,
+        y1: edgeData.pathMiddlePosition.y,
+        x2: edgeData.pathMiddlePosition.x + crossbarLength,
+        y2: edgeData.pathMiddlePosition.y,
+        orientation: "horizontal" as const,
+      }
+    }
+  }, [
+    edgeData.isMiddlePathHorizontal,
+    edgeData.pathMiddlePosition,
+    crossbarLength,
+  ])
+
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path">
@@ -156,25 +195,26 @@ export const SfcDiagramEdge = ({
 
           {/* SFC Transition - show crossbar and label */}
           <g>
-            {/* Crossbar - thick horizontal line at the middle */}
+            {/* Crossbar - perpendicular to middle segment direction */}
             {showBar && (
               <line
-                x1={edgeData.pathMiddlePosition.x - 20}
-                y1={edgeData.pathMiddlePosition.y}
-                x2={edgeData.pathMiddlePosition.x + 20}
-                y2={edgeData.pathMiddlePosition.y}
+                x1={crossbarCoordinates.x1}
+                y1={crossbarCoordinates.y1}
+                x2={crossbarCoordinates.x2}
+                y2={crossbarCoordinates.y2}
                 stroke={strokeColor}
                 strokeWidth="10"
               />
             )}
 
+            {/* SFC Label - positioned based on edge orientation */}
             {displayName && (
               <text
-                x={edgeData.pathMiddlePosition.x}
-                y={edgeData.pathMiddlePosition.y - 20}
                 fill={textColor}
-                textAnchor="middle"
-                dominantBaseline="middle"
+                x={labelPosition.x}
+                y={labelPosition.y}
+                textAnchor={labelPosition.textAnchor}
+                dominantBaseline={labelPosition.dominantBaseline}
                 fontSize="14"
                 textDecoration={isNegated ? "overline" : undefined}
               >

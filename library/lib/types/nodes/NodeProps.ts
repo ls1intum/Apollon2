@@ -126,10 +126,9 @@ export type ReachabilityGraphMarkingProps = DefaultNodeProps & {
   isInitialMarking: boolean
 }
 
-export type SfcActionRow = {
+export type SfcActionRow = DefaultNodeProps & {
   id: string
   identifier: string
-  description: string
 }
 
 export type SfcActionTableProps = DefaultNodeProps & {

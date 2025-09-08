@@ -1,6 +1,6 @@
 import React, { useState, KeyboardEvent, ChangeEvent } from "react"
 import { Box } from "@mui/material"
-import { TextField, Typography } from "@/components/ui"
+import { NodeStyleEditor, TextField } from "@/components/ui"
 import { generateUUID } from "@/utils"
 import { useDiagramStore } from "@/store"
 import { useShallow } from "zustand/shallow"
@@ -8,15 +8,17 @@ import { SfcActionTableProps, SfcActionRow } from "@/types"
 import { PopoverProps } from "../types"
 import { DEFAULT_ATTRIBUTE_HEIGHT } from "@/constants"
 import { DeleteIcon } from "@/components/Icon"
+import { useReactFlow } from "@xyflow/react"
 
 export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
   elementId,
 }) => {
+  const { updateNodeData } = useReactFlow()
   const { nodes, setNodes } = useDiagramStore(
     useShallow((state) => ({ setNodes: state.setNodes, nodes: state.nodes }))
   )
   const [newIdentifier, setNewIdentifier] = useState("")
-  const [newDescription, setNewDescription] = useState("")
+  const [newName, setNewName] = useState("")
 
   const nodeData = nodes.find((node) => node.id === elementId)
     ?.data as SfcActionTableProps
@@ -24,11 +26,11 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
 
   const handleRowChange = (
     id: string,
-    field: "identifier" | "description",
+    key: keyof SfcActionRow,
     newValue: string
   ) => {
     const updatedRows = actionRows.map((row) =>
-      row.id === id ? { ...row, [field]: newValue } : row
+      row.id === id ? { ...row, [key]: newValue } : row
     )
     setNodes((nodes) =>
       nodes.map((node) => {
@@ -69,12 +71,12 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
   }
 
   const handleAddRow = () => {
-    if (newIdentifier.trim() === "" && newDescription.trim() === "") return
+    if (newIdentifier.trim() === "" && newName.trim() === "") return
 
     const newRow: SfcActionRow = {
       id: generateUUID(),
       identifier: newIdentifier.trim(),
-      description: newDescription.trim(),
+      name: newName.trim(),
     }
 
     setNodes((nodes) =>
@@ -98,20 +100,20 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
     )
 
     setNewIdentifier("")
-    setNewDescription("")
+    setNewName("")
   }
 
   const handleKeyDown = (
     event: KeyboardEvent<HTMLInputElement | HTMLDivElement>,
-    field: "identifier" | "description"
+    field: "identifier" | "name"
   ) => {
     if (event.key === "Enter") {
       if (field === "identifier") {
-        // Move focus to description field
-        const descInput = document.querySelector(
-          '[data-field="description"][data-new="true"]'
+        // Move focus to name field
+        const nameInput = document.querySelector(
+          '[data-field="name"][data-new="true"]'
         ) as HTMLInputElement
-        descInput?.focus()
+        nameInput?.focus()
       } else {
         // Add the row
         handleAddRow()
@@ -119,9 +121,21 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
     }
   }
 
+  const handleDataFieldUpdate = (key: string, value: string) => {
+    updateNodeData(elementId, {
+      ...nodeData,
+      [key]: value,
+    })
+  }
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-      <Typography variant="h6">Actions</Typography>
+      <NodeStyleEditor
+        title="Actions"
+        nodeData={nodeData}
+        handleDataFieldUpdate={handleDataFieldUpdate}
+        showNameInputChange={false}
+      />
       {actionRows.map((row) => (
         <Box
           key={row.id}
@@ -131,29 +145,35 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
             alignItems: "center",
           }}
         >
-          <TextField
-            size="small"
-            value={row.identifier}
-            placeholder="ID"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              handleRowChange(row.id, "identifier", e.target.value)
-            }
-            sx={{ width: "60px" }}
-          />
-          <TextField
-            size="small"
-            value={row.description}
-            placeholder="Description"
-            fullWidth
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              handleRowChange(row.id, "description", e.target.value)
-            }
-          />
-          <DeleteIcon
-            width={16}
-            height={16}
-            style={{ cursor: "pointer" }}
-            onClick={() => handleRowDelete(row.id)}
+          <NodeStyleEditor
+            nodeData={row}
+            handleDataFieldUpdate={(key, value) => {
+              handleRowChange(row.id, key, value)
+            }}
+            sideElements={[
+              <DeleteIcon
+                key={`${row.id}-delete`}
+                width={16}
+                height={16}
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowDelete(row.id)}
+              />,
+            ]}
+            preElements={[
+              <TextField
+                key={`${row.id}-identifier`}
+                size="small"
+                value={row.identifier}
+                placeholder="ID"
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  handleRowChange(row.id, "identifier", e.target.value)
+                }
+                sx={{
+                  width: "60px",
+                }}
+              />,
+            ]}
+            inputPlaceholder="Description"
           />
         </Box>
       ))}
@@ -173,12 +193,9 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
             setNewIdentifier(e.target.value)
           }
           onBlur={() => {
-            if (newIdentifier.trim() === "" && newDescription.trim() === "") {
+            if (newIdentifier.trim() === "" && newName.trim() === "") {
               setNewIdentifier("")
-            } else if (
-              newIdentifier.trim() !== "" &&
-              newDescription.trim() !== ""
-            ) {
+            } else if (newIdentifier.trim() !== "" && newName.trim() !== "") {
               handleAddRow()
             }
           }}
@@ -193,23 +210,20 @@ export const SfcActionTableEditPopover: React.FC<PopoverProps> = ({
         <TextField
           size="small"
           fullWidth
-          placeholder="+ Add action description"
-          value={newDescription}
+          placeholder="+ Add action name"
+          value={newName}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setNewDescription(e.target.value)
+            setNewName(e.target.value)
           }
           onBlur={() => {
-            if (newIdentifier.trim() === "" && newDescription.trim() === "") {
-              setNewDescription("")
-            } else if (
-              newIdentifier.trim() !== "" &&
-              newDescription.trim() !== ""
-            ) {
+            if (newIdentifier.trim() === "" && newName.trim() === "") {
+              setNewName("")
+            } else if (newIdentifier.trim() !== "" && newName.trim() !== "") {
               handleAddRow()
             }
           }}
-          onKeyDown={(e) => handleKeyDown(e, "description")}
-          data-field="description"
+          onKeyDown={(e) => handleKeyDown(e, "name")}
+          data-field="name"
           data-new="true"
           sx={{
             backgroundColor: "#fff",
