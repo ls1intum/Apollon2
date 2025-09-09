@@ -97,7 +97,6 @@ export const useStepPathEdge = ({
     tempReconnectPoints,
     setTempReconnectPoints,
   } = useEdgeState(data?.points)
-
   const {
     isReconnectingRef,
     reconnectingEndRef,
@@ -268,17 +267,40 @@ export const useStepPathEdge = ({
       }
 
       if (customPoints.length > 0) {
-        setCustomPoints([])
-        setEdges((edges) =>
-          edges.map((edge) =>
-            edge.id === id
-              ? {
-                  ...edge,
-                  data: { ...edge.data, points: undefined },
-                }
-              : edge
+        if (sourceChanged && targetChanged) {
+          const deltaX = currentSourcePos.x - prevSourcePos.x
+          const deltaY = currentSourcePos.y - prevSourcePos.y
+          const newPoints = customPoints.map((point) =>
+            screenToFlowPosition({
+              x: point.x + deltaX,
+              y: point.y + deltaY,
+            })
           )
-        )
+
+          setCustomPoints(newPoints)
+          setEdges((edges) =>
+            edges.map((edge) =>
+              edge.id === id
+                ? {
+                    ...edge,
+                    data: { ...edge.data, points: newPoints },
+                  }
+                : edge
+            )
+          )
+        } else {
+          setCustomPoints([])
+          setEdges((edges) =>
+            edges.map((edge) =>
+              edge.id === id
+                ? {
+                    ...edge,
+                    data: { ...edge.data, points: undefined },
+                  }
+                : edge
+            )
+          )
+        }
       }
     }
   }, [
@@ -298,8 +320,11 @@ export const useStepPathEdge = ({
     if (tempReconnectPoints) {
       return tempReconnectPoints
     }
+    if (data?.points && data.points.length > 0) {
+      return data.points
+    }
     return customPoints.length ? customPoints : computedPoints
-  }, [customPoints, computedPoints, tempReconnectPoints])
+  }, [customPoints, computedPoints, tempReconnectPoints, data?.points])
 
   const currentPath = useMemo(() => {
     return pointsToSvgPath(activePoints)

@@ -24,16 +24,7 @@ import {
   BPMNTaskProps,
   BPMNGatewayProps,
   BPMNEventProps,
-  // BPMNSubprocessProps,
-  // BPMNTransactionProps,
-  // BPMNCallActivityProps,
-  // BPMNAnnotationProps,
-  // BPMNDataObjectProps,
-  // BPMNDataStoreProps,
-  // BPMNPoolProps,
-  // BPMNGroupProps,
   ReachabilityGraphMarkingProps,
-  // SfcActionTableProps
 } from "../types/nodes/NodeProps"
 import { MessageData } from "@/edges/EdgeProps"
 
@@ -715,8 +706,8 @@ function convertV3RelationshipToV4Edge(
       ...(relationship.assessmentNote && {
         assessmentNote: relationship.assessmentNote,
       }),
+      points: points,
     },
-    points: points,
   }
 
   return edge

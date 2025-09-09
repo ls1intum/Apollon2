@@ -85,6 +85,10 @@
   background-color: rgb(99, 154, 242);
 }
 
+.react-flow__node.selected .react-flow__handle {
+  opacity: 0.6;
+  background-color: rgb(99, 154, 242);
+}
 
 .edge-circle {
   opacity: 0;

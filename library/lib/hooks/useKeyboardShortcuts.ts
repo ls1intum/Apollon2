@@ -1,8 +1,12 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
+import { useSelectionForCopyPaste } from "./useSelectionForCopyPaste"
+import { useDiagramModifiable } from "./useDiagramModifiable"
 
 export const useKeyboardShortcuts = () => {
+  const pasteCountRef = useRef(0)
+
   const { undo, redo, canUndo, canRedo, undoManager } = useDiagramStore(
     useShallow((state) => ({
       undo: state.undo,
@@ -12,13 +16,40 @@ export const useKeyboardShortcuts = () => {
       undoManager: state.undoManager,
     }))
   )
+  const isDiagramModifiable = useDiagramModifiable()
+  const {
+    selectedElementIds,
+    hasSelectedElements,
+    selectAll,
+    clearSelection,
+    copySelectedElements,
+    pasteElements,
+    cutSelectedElements,
+  } = useSelectionForCopyPaste()
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Check if Ctrl (or Cmd on Mac) is pressed
+    const handleKeyDown = async (event: KeyboardEvent) => {
+      // Check if we're in an input field or textarea
+      const target = event.target as HTMLElement
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable
+      ) {
+        return
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault()
+        clearSelection()
+        return
+      }
+
       const isModifierPressed = event.ctrlKey || event.metaKey
 
       if (!isModifierPressed) return
+
+      if (!isDiagramModifiable) return
 
       switch (event.key.toLowerCase()) {
         case "z":
@@ -29,22 +60,77 @@ export const useKeyboardShortcuts = () => {
             undo()
           }
           break
+
         case "y":
           if (!event.shiftKey) {
             event.preventDefault()
             redo()
           }
           break
+
+        case "a":
+          if (!event.shiftKey && !event.altKey) {
+            event.preventDefault()
+            selectAll()
+          }
+          break
+
+        case "c":
+          if (!event.shiftKey && !event.altKey) {
+            event.preventDefault()
+            if (hasSelectedElements()) {
+              pasteCountRef.current = 0
+              copySelectedElements()
+            }
+          }
+          break
+
+        case "x":
+          if (!event.shiftKey && !event.altKey) {
+            event.preventDefault()
+            if (hasSelectedElements()) {
+              pasteCountRef.current = 0
+              cutSelectedElements()
+            }
+          }
+          break
+
+        case "v":
+          if (!event.shiftKey && !event.altKey) {
+            event.preventDefault()
+            pasteCountRef.current += 1
+            pasteElements(pasteCountRef.current)
+          }
+          break
+
+        case "d":
+          if (!event.shiftKey && !event.altKey) {
+            event.preventDefault()
+            clearSelection()
+          }
+          break
+
         default:
           break
       }
     }
 
     document.addEventListener("keydown", handleKeyDown)
-
-    // Cleanup
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [undo, redo, canUndo, canRedo, undoManager])
+  }, [
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    undoManager,
+    selectedElementIds,
+    hasSelectedElements,
+    selectAll,
+    clearSelection,
+    copySelectedElements,
+    cutSelectedElements, // Add this to dependencies
+    pasteElements,
+  ])
 }

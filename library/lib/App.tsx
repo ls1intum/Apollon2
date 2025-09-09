@@ -33,7 +33,7 @@ import {
 import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts"
-import { useAssessmentSelectionMode } from "./hooks/useAssessmentSelectionMode"
+import { usePaneClicked } from "./hooks/usePaneClicked"
 import { ApollonMode } from "./typings"
 import { getConnectionLineType } from "./utils/edgeUtils"
 
@@ -73,7 +73,7 @@ function App({ onReactFlowInit }: AppProps) {
   const onReconnect = useReconnect()
   const { onBeforeDelete, onNodeDoubleClick, onEdgeDoubleClick } =
     useElementInteractions()
-  const { onPaneClicked } = useAssessmentSelectionMode()
+  const { onPaneClicked } = usePaneClicked()
 
   const handleReactFlowInit = useCallback(
     (instance: ReactFlowInstance) => {

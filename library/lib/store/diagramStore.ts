@@ -174,7 +174,6 @@ export const createDiagramStore = (
           }, "store")
           set({ edges: [...get().edges, edge] }, undefined, "addEdge")
         },
-
         setNodes: (payload) => {
           const nodes =
             typeof payload === "function" ? payload(get().nodes) : payload

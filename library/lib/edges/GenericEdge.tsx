@@ -19,7 +19,7 @@ export const useEdgeState = (initialPoints?: IPoint[]) => {
   >(null)
 
   useEffect(() => {
-    if (initialPoints) {
+    if (initialPoints && initialPoints.length > 0) {
       setCustomPoints(initialPoints)
     }
   }, [initialPoints])
