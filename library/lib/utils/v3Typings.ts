@@ -8,8 +8,8 @@ export type V3Selection = {
 
 // Add specific V3 element types based on the old typings
 export type V3UMLClassifier = {
-  attributes: string[] // Array of attribute element IDs
-  methods: string[] // Array of method element IDs
+  attributes: string[]
+  methods: string[]
 }
 
 export type V3UMLDeploymentNode = {
@@ -35,6 +35,9 @@ export type V3UMLPetriNetPlace = {
   capacity: number | string
 }
 
+export type V3UMLSfcActionTable = {
+  actionRows: string[]
+}
 export type V3BPMNTask = {
   taskType:
     | "default"
@@ -96,7 +99,7 @@ export type V3UMLReachabilityGraphMarking = {
 
 export interface V3UMLModel {
   version: string
-  type: string // Changed from UMLDiagramType to string to allow any type during conversion
+  type: string
   size: {
     width: number
     height: number
@@ -125,7 +128,6 @@ export type V3UMLModelElement = {
   assessmentNote?: string
 }
 
-// Union type for all V3 element types with their specific properties
 export type V3UMLElement = V3UMLModelElement &
   Partial<V3UMLClassifier> &
   Partial<V3UMLDeploymentNode> &
@@ -138,7 +140,8 @@ export type V3UMLElement = V3UMLModelElement &
   Partial<V3BPMNStartEvent> &
   Partial<V3BPMNIntermediateEvent> &
   Partial<V3BPMNEndEvent> &
-  Partial<V3UMLReachabilityGraphMarking>
+  Partial<V3UMLReachabilityGraphMarking> &
+  Partial<V3UMLSfcActionTable>
 
 export type V3UMLRelationship = V3UMLModelElement & {
   path: IPoint[]

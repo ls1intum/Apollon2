@@ -31,6 +31,7 @@ import {
 import * as Y from "yjs"
 import { StoreApi } from "zustand"
 import * as Apollon from "./typings"
+import { importDiagram } from "./utils/versionConverter"
 
 export class ApollonEditor {
   private root: ReactDOM.Root
@@ -57,18 +58,14 @@ export class ApollonEditor {
       this.diagramStore,
       this.metadataStore
     )
-
     const diagramId =
       options?.model?.id || Math.random().toString(36).substring(2, 15)
 
-    // Initialize React root
     this.root = ReactDOM.createRoot(element, {
       identifierPrefix: `apollon2-${diagramId}`,
     })
 
     this.diagramStore.getState().setDiagramId(diagramId)
-
-    // Initialize metadata and diagram type
     const diagramName = options?.model?.title || "Untitled Diagram"
     const diagramType =
       options?.type || options?.model?.type || UMLDiagramType.ClassDiagram
@@ -77,11 +74,31 @@ export class ApollonEditor {
       .updateMetaData(diagramName, parseDiagramType(diagramType))
 
     if (options?.model) {
-      const nodes = options.model.nodes || []
-      const edges = options.model.edges || []
-      const assessments = options.model.assessments || {}
-      this.diagramStore.getState().setNodesAndEdges(nodes, edges)
-      this.diagramStore.getState().setAssessments(assessments)
+      let processedModel: Apollon.UMLModel
+
+      try {
+        processedModel = importDiagram(options.model)
+
+        const nodes = processedModel.nodes || []
+        const edges = processedModel.edges || []
+        const assessments = processedModel.assessments || {}
+
+        this.diagramStore.getState().setNodesAndEdges(nodes, edges)
+        this.diagramStore.getState().setAssessments(assessments)
+
+        if (processedModel.title !== diagramName) {
+          this.metadataStore.getState().updateDiagramTitle(processedModel.title)
+        }
+        if (processedModel.type !== diagramType) {
+          this.metadataStore
+            .getState()
+            .updateDiagramType(parseDiagramType(processedModel.type))
+        }
+      } catch (error) {
+        console.warn("Using empty model due to conversion failure")
+        this.diagramStore.getState().setNodesAndEdges([], [])
+        this.diagramStore.getState().setAssessments({})
+      }
     }
 
     if (options?.mode) {
@@ -147,7 +164,6 @@ export class ApollonEditor {
     console.log("Disposing Apollon2 instance with diagramId", diagramId)
 
     try {
-      // Clean up all active subscriptions before destroying
       Object.keys(this.subscribers).forEach((subscriberId) => {
         const unsubscribeCallback = this.subscribers[parseInt(subscriberId)]
         if (unsubscribeCallback) {
@@ -155,12 +171,10 @@ export class ApollonEditor {
         }
       })
       this.subscribers = {}
-
       this.syncManager.stopSync()
       this.root.unmount()
       this.ydoc.destroy()
       this.reactFlowInstance = null
-      // Zustand stores are automatically garbage-collected when references are gone
     } catch (error) {
       console.error("Error during Apollon2 disposal:", error)
     }
@@ -211,8 +225,6 @@ export class ApollonEditor {
 
     diagramStore.getState().setNodesAndEdges(model.nodes, model.edges)
     diagramStore.getState().setAssessments(model.assessments)
-
-    // Render the component
     svgRoot.render(
       <DiagramStoreContext.Provider value={diagramStore}>
         <MetadataStoreContext.Provider value={metadataStore}>
@@ -277,7 +289,6 @@ export class ApollonEditor {
 
   private getNewSubscriptionId(): number {
     const subscribers = this.subscribers
-    // largest key + 1
     if (Object.keys(subscribers).length === 0) return 0
     return Math.max(...Object.keys(subscribers).map((key) => parseInt(key))) + 1
   }
@@ -345,8 +356,11 @@ export class ApollonEditor {
   }
 
   get model(): Apollon.UMLModel {
+    console.log("Getting model")
+
     const { nodes, edges, diagramId } = this.diagramStore.getState()
     const { diagramTitle, diagramType } = this.metadataStore.getState()
+    console.log("Nodes:", nodes, edges)
     return {
       id: diagramId,
       version: "4.0.0",
@@ -356,15 +370,18 @@ export class ApollonEditor {
       edges: edges.map((edge) => mapFromReactFlowEdgeToApollonEdge(edge)),
       assessments: this.diagramStore.getState().assessments,
     }
+    //return this.model
   }
 
   set model(model: Apollon.UMLModel) {
-    const { nodes, edges, assessments } = model
+    console.log("Setting model", model)
+    const newmodel = importDiagram(model)
+    const { nodes, edges, assessments } = newmodel
     this.diagramStore.getState().setNodesAndEdges(nodes, edges)
     this.diagramStore.getState().setAssessments(assessments)
     this.metadataStore
       .getState()
-      .updateMetaData(model.title, parseDiagramType(model.type))
+      .updateMetaData(newmodel.title, parseDiagramType(newmodel.type))
   }
 
   public getSelectedElements(): string[] {
