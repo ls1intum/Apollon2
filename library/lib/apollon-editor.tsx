@@ -95,7 +95,7 @@ export class ApollonEditor {
             .updateDiagramType(parseDiagramType(processedModel.type))
         }
       } catch (error) {
-        console.warn("Using empty model due to conversion failure")
+        console.error("Using empty model due to conversion failure", error)
         this.diagramStore.getState().setNodesAndEdges([], [])
         this.diagramStore.getState().setAssessments({})
       }
