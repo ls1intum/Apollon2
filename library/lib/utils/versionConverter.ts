@@ -39,18 +39,36 @@ interface V2DiagramFormat {
     elements: string[]
     relationships: string[]
   }
-  elements: V3UMLElement[]
+  elements: V2Element[]
   relationships: V3UMLRelationship[]
-  assessments: V3Assessment[]
+  assessments: Record<string, V3Assessment> | {}
+}
+
+interface V2Element {
+  id: string
+  name: string
+  type: string
+  owner: string | null
+  bounds: {
+    x: number
+    y: number
+    width: number
+    height: number
+  }
+  attributes?: string[]
+  methods?: string[]
+
+  [key: string]: any
 }
 
 /**
  * Convert v2 format to v4 format
  */
 export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
-  // First convert v2 to v3 structure
+  console.log("Converting V2 data:", v2Data)
+
   const v3Data: V3DiagramFormat = {
-    id: "converted-diagram-" + Date.now(), // Generate a unique ID
+    id: "converted-diagram-" + Date.now(),
     title: "Converted Diagram",
     model: {
       version: "3.0.0",
@@ -80,21 +98,45 @@ export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
 
   if (v2Data.elements) {
     v2Data.elements.forEach((element) => {
-      v3Data.model.elements[element.id] = element
+      const v3Element: V3UMLElement = {
+        ...element,
+      }
+
+      if (element.type === "Class" || element.type === "ObjectName") {
+        const { attributes, methods, ...elementWithoutChildren } = element
+        v3Data.model.elements[element.id] = {
+          ...elementWithoutChildren,
+          bounds: element.bounds,
+        } as V3UMLElement
+      } else {
+        v3Data.model.elements[element.id] = v3Element
+      }
     })
   }
+
   if (v2Data.relationships) {
     v2Data.relationships.forEach((relationship) => {
       v3Data.model.relationships[relationship.id] = relationship
     })
   }
 
-  if (v2Data.assessments) {
-    v2Data.assessments.forEach((assessment) => {
-      v3Data.model.assessments[assessment.modelElementId] = assessment
-    })
+  if (v2Data.assessments && typeof v2Data.assessments === "object") {
+    if (Array.isArray(v2Data.assessments)) {
+      v2Data.assessments.forEach((assessment) => {
+        if (assessment && assessment.modelElementId) {
+          v3Data.model.assessments[assessment.modelElementId] = assessment
+        }
+      })
+    } else {
+      Object.entries(v2Data.assessments).forEach(([id, assessment]) => {
+        if (assessment && typeof assessment === "object") {
+          v3Data.model.assessments[id] = assessment as V3Assessment
+        }
+      })
+    }
   }
 
+  console.log("V3 intermediate data:", v3Data)
   return convertV3ToV4(v3Data)
 }
 
@@ -102,19 +144,20 @@ export function convertV2ToV4(v2Data: V2DiagramFormat): UMLModel {
  * Check if data is in v2 format
  */
 export function isV2Format(data: any): data is V2DiagramFormat {
+  console.log("Checking V2 format for:", data)
+
   return (
     data &&
-    data.version &&
-    data.version.startsWith("2.") &&
+    data.version === "2.0.0" && // Exact match
     data.size &&
     data.type &&
     Array.isArray(data.elements) &&
     Array.isArray(data.relationships) &&
-    Array.isArray(data.assessments) &&
+    typeof data.assessments === "object" && // V2 assessments are objects
     data.interactive &&
     Array.isArray(data.interactive.elements) &&
     Array.isArray(data.interactive.relationships) &&
-    !data.model
+    !data.model // V2 doesn't have nested model structure
   )
 }
 
@@ -238,7 +281,7 @@ export function convertV3NodeTypeToV4(v3Type: string): string {
 
     // Special nodes
     ColorDescription: "colorDescription",
-    TitleAndDescription: "titleAndDesctiption", // Note the typo in V4: "desctiption"
+    TitleAndDescription: "titleAndDesctription",
   }
 
   return typeMap[v3Type] || v3Type.toLowerCase()
@@ -312,7 +355,7 @@ export function convertV3EdgeTypeToV4(
       association: "BPMNAssociationFlow",
       dataAssociation: "BPMNDataAssociationFlow",
     }
-    return flowTypeMap[flowType] || "BPMNSequenceFlow" // Default to sequence flow
+    return flowTypeMap[flowType] || "BPMNSequenceFlow"
   }
 
   return edgeTypeMap[v3Type] || v3Type
@@ -354,33 +397,70 @@ function convertV3NodeDataToV4(
     case "Enumeration": {
       const attributes: Array<{ id: string; name: string }> = []
       const methods: Array<{ id: string; name: string }> = []
-      Object.values(allElements).forEach((childElement) => {
-        if (childElement.owner === element.id) {
-          if (childElement.type === "ClassAttribute") {
+
+      // ✅ Handle both V2 and V3 formats
+      if (element.attributes && Array.isArray(element.attributes)) {
+        // V2 format: attributes is array of IDs
+        element.attributes.forEach((attrId: string) => {
+          const attrElement = allElements[attrId]
+          if (attrElement && attrElement.type === "ClassAttribute") {
             attributes.push({
-              id: childElement.id,
-              name: childElement.name,
-              ...(childElement.fillColor && {
-                fillColor: childElement.fillColor,
+              id: attrElement.id,
+              name: attrElement.name,
+              ...(attrElement.fillColor && {
+                fillColor: attrElement.fillColor,
               }),
-              ...(childElement.textColor && {
-                textColor: childElement.textColor,
-              }),
-            })
-          } else if (childElement.type === "ClassMethod") {
-            methods.push({
-              id: childElement.id,
-              name: childElement.name,
-              ...(childElement.fillColor && {
-                fillColor: childElement.fillColor,
-              }),
-              ...(childElement.textColor && {
-                textColor: childElement.textColor,
+              ...(attrElement.textColor && {
+                textColor: attrElement.textColor,
               }),
             })
           }
-        }
-      })
+        })
+
+        element.methods?.forEach((methodId: string) => {
+          const methodElement = allElements[methodId]
+          if (methodElement && methodElement.type === "ClassMethod") {
+            methods.push({
+              id: methodElement.id,
+              name: methodElement.name,
+              ...(methodElement.fillColor && {
+                fillColor: methodElement.fillColor,
+              }),
+              ...(methodElement.textColor && {
+                textColor: methodElement.textColor,
+              }),
+            })
+          }
+        })
+      } else {
+        Object.values(allElements).forEach((childElement) => {
+          if (childElement.owner === element.id) {
+            if (childElement.type === "ClassAttribute") {
+              attributes.push({
+                id: childElement.id,
+                name: childElement.name,
+                ...(childElement.fillColor && {
+                  fillColor: childElement.fillColor,
+                }),
+                ...(childElement.textColor && {
+                  textColor: childElement.textColor,
+                }),
+              })
+            } else if (childElement.type === "ClassMethod") {
+              methods.push({
+                id: childElement.id,
+                name: childElement.name,
+                ...(childElement.fillColor && {
+                  fillColor: childElement.fillColor,
+                }),
+                ...(childElement.textColor && {
+                  textColor: childElement.textColor,
+                }),
+              })
+            }
+          }
+        })
+      }
 
       // Determine stereotype
       let stereotype: ClassType | undefined
@@ -610,12 +690,10 @@ export function convertV3MessagesToV4(
     return []
   }
 
-  // If already V4 format (array), return as is
   if (Array.isArray(messages)) {
     return messages as MessageData[]
   }
 
-  // If V3 format (object with IDs), convert to array
   if (typeof messages === "object" && messages !== null) {
     return Object.values(messages).map((message: V3Message) => ({
       text: message.name,
@@ -719,7 +797,7 @@ function convertV3RelationshipToV4Edge(
 function convertV3AssessmentToV4(v3Assessment: V3Assessment): Assessment {
   return {
     modelElementId: v3Assessment.modelElementId,
-    elementType: v3Assessment.elementType as any, // This needs proper typing
+    elementType: v3Assessment.elementType as any,
     score: v3Assessment.score,
     ...(v3Assessment.feedback && { feedback: v3Assessment.feedback }),
     ...(v3Assessment.dropInfo && { dropInfo: v3Assessment.dropInfo }),
@@ -793,7 +871,7 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
     version: "4.0.0",
     id: v3Data.id,
     title: v3Data.title,
-    type: v3Data.model.type as UMLDiagramType, // Now properly typed
+    type: v3Data.model.type as UMLDiagramType,
     nodes,
     edges,
     assessments,
