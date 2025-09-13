@@ -13,7 +13,7 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { StyledRect } from "@/components"
-import { getCustomColorsFromData } from "@/index"
+import { getCustomColorsFromData } from "@/utils"
 
 interface Props extends SVGComponentProps {
   data: ObjectNodeProps

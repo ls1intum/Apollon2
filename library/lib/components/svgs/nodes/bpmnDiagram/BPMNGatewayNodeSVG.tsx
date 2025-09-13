@@ -5,7 +5,7 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { BPMNGatewayProps } from "@/types"
 import { CustomText } from "@/components"
-import { getCustomColorsFromData } from "@/index"
+import { getCustomColorsFromData } from "@/utils"
 
 type BPMNGatewayNodeSVGProps = SVGComponentProps & {
   data: BPMNGatewayProps

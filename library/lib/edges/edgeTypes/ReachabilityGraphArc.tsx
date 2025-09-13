@@ -14,7 +14,7 @@ import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
-import { getCustomColorsFromDataForEdge } from "@/index"
+import { getCustomColorsFromDataForEdge } from "@/utils"
 
 export const ReachabilityGraphEdge = ({
   id,
