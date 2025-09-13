@@ -56,7 +56,59 @@ export const getNodeAssessmentDataByNodeElementId = (
   }
 
   // Check all gradable sub-elements in nodes here (e.g. attributes, methods, actionRow) for the given elementId
+  for (const node of model.nodes) {
+    if (node.data) {
+      // Check attributes
+      if ("attributes" in node.data && Array.isArray(node.data.attributes)) {
+        const foundAttribute = node.data.attributes.find(
+          (attr) => attr.id === nodeElementId
+        )
+        if (foundAttribute) {
+          return {
+            elementId: nodeElementId,
+            elementType: nodeAssessment.elementType,
+            name: `${node.data.name}::${foundAttribute.name}`,
+            feedback: nodeAssessment.feedback ?? "",
+            score: nodeAssessment.score,
+          }
+        }
+      }
 
+      // Check methods
+      if ("methods" in node.data && Array.isArray(node.data.methods)) {
+        const foundMethod = node.data.methods.find(
+          (method) => method.id === nodeElementId
+        )
+        if (foundMethod) {
+          return {
+            elementId: nodeElementId,
+            elementType: nodeAssessment.elementType,
+            name: `${node.data.name}::${foundMethod.name}()`,
+            feedback: nodeAssessment.feedback ?? "",
+            score: nodeAssessment.score,
+          }
+        }
+      }
+
+      // Check action rows
+      if ("actionRows" in node.data && Array.isArray(node.data.actionRows)) {
+        const foundActionRow = node.data.actionRows.find(
+          (actionRow) => actionRow.id === nodeElementId
+        )
+        if (foundActionRow) {
+          return {
+            elementId: nodeElementId,
+            elementType: nodeAssessment.elementType,
+            name: `${node.data.name}::${foundActionRow.name}`,
+            feedback: nodeAssessment.feedback ?? "",
+            score: nodeAssessment.score,
+          }
+        }
+      }
+    }
+  }
+
+  // No node or sub-element with the given elementId found
   return undefined
 }
 

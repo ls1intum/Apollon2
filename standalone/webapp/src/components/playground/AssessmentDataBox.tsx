@@ -14,10 +14,6 @@ interface Props {
 export const AssessmentDataBox: React.FC<Props> = ({
   assessmentSelectedElements,
 }) => {
-  console.log(
-    "Rendering AssessmentDataBox with selected elements:",
-    assessmentSelectedElements
-  )
   const diagram = usePersistenceModelStore(
     (store) => store.models[PlaygroundDefaultModel.id]
   )
