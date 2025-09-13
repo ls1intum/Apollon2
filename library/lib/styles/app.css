@@ -23,6 +23,7 @@
   --apollon2-list-group-color: var(--apollon-list-group-color, #ffffff);
   --apollon2-btn-outline-secondary-color: var(--apollon-btn-outline-secondary-color, #6c757d);
   --apollon2-modal-bottom-border: var(--apollon-modal-bottom-border, #e9ecef);
+  --xy-controls-button-background-color: var(--apollon2-background);
 
 }
 

@@ -5,7 +5,7 @@ import { SVGComponentProps } from "@/types/SVG"
 import { CustomText } from "../CustomText"
 import { LINE_WIDTH } from "@/constants"
 import { PetriNetPlaceProps } from "@/types"
-import { getCustomColorsFromData } from "@/index"
+import { getCustomColorsFromData } from "@/utils"
 
 interface Props extends SVGComponentProps {
   data: PetriNetPlaceProps

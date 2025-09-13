@@ -4,7 +4,7 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { ReachabilityGraphMarkingProps } from "@/types"
-import { getCustomColorsFromData } from "@/index"
+import { getCustomColorsFromData } from "@/utils"
 
 type ReachabilityGraphMarkingSVGProps = SVGComponentProps & {
   data: ReachabilityGraphMarkingProps

@@ -5,7 +5,7 @@ import { SVGComponentProps } from "@/types/SVG"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { BPMNEventProps } from "@/types"
-import { getCustomColorsFromData } from "@/index"
+import { getCustomColorsFromData } from "@/utils"
 
 export type BPMNEventVariant = "start" | "intermediate" | "end"
 

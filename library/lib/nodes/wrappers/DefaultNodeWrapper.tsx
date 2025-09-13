@@ -2,7 +2,7 @@ import { AssessmentSelectableWrapper } from "@/components/wrapper/AssessmentSele
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { useDiagramModifiable } from "@/hooks/useDiagramModifiable"
 import { useIsOnlyThisElementSelected } from "@/hooks/useIsOnlyThisElementSelected"
-import { Handle, Position } from "@xyflow/react"
+import { Handle, Position, useReactFlow } from "@xyflow/react"
 
 // Define enum for handle IDs
 export enum HandleId {
@@ -54,6 +54,8 @@ export function DefaultNodeWrapper({
   hiddenHandles = [],
   className,
 }: Props) {
+  const { getNode } = useReactFlow()
+  const nodeType = getNode(elementId)?.type
   const adjustedWidth = calculateAdjustedQuarter(width)
   const adjustedHeight = calculateAdjustedQuarter(height)
   const selected = useIsOnlyThisElementSelected(elementId)
@@ -139,6 +141,7 @@ export function DefaultNodeWrapper({
         className={className}
         elementId={elementId}
         asElement="div"
+        elementType={nodeType}
       >
         {hiddenHandles !== true && (
           <>

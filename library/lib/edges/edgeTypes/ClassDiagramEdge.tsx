@@ -14,7 +14,7 @@ import { useRef } from "react"
 import { EDGE_HIGHTLIGHT_STROKE_WIDTH } from "@/constants"
 import { FeedbackDropzone } from "@/components/wrapper/FeedbackDropzone"
 import { AssessmentSelectableWrapper } from "@/components"
-import { getCustomColorsFromDataForEdge } from "@/index"
+import { getCustomColorsFromDataForEdge } from "@/utils"
 
 export const ClassDiagramEdge = ({
   id,
@@ -100,7 +100,7 @@ export const ClassDiagramEdge = ({
 
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
-      <FeedbackDropzone elementId={id} asElement="path">
+      <FeedbackDropzone elementId={id} asElement="path" elementType={type}>
         <g className="edge-container">
           <BaseEdge
             id={id}
