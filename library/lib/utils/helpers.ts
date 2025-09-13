@@ -66,15 +66,18 @@ const getEdgeTypeSymbol = (edgeType: DiagramEdgeType) => {
   if (loweredType.includes("bidirectional")) return "<->"
   if (loweredType.includes("unidirectional")) return "-->"
   if (loweredType.includes("aggregation")) return "--◇"
-  if (loweredType.includes("inheritance")) return "--▷"
+  if (loweredType.includes("inheritance")) return "--▶"
   if (loweredType.includes("dependency")) return "⋯⋯>"
   if (loweredType.includes("composition")) return "--◆"
   if (loweredType.includes("controlflow")) return "-->"
-
+  if (loweredType.includes("include")) return "-->"
+  if (loweredType.includes("extend")) return "-->"
   if (loweredType.includes("aggregation")) return "--◇"
   if (loweredType.includes("association")) return "—-"
   if (loweredType.includes("implementation")) return "⇨"
   if (loweredType.includes("generalization")) return "⇨"
+  if (loweredType.includes("realization")) return "⋯⋯▶"
+  if (loweredType.includes("link")) return "<—>"
 
   return "—-"
 }

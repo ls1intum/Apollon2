@@ -22,7 +22,7 @@ export const DefaultNodeGiveFeedbackPopover = ({ elementId }: PopoverProps) => {
       <GiveFeedbackAssessmentBox
         elementId={elementId}
         name={nodeData.name}
-        type="Node"
+        type={node.type || "Node"} //fallback to node is never expected since all nodes should have a type
       />
       <Button variant="outlined" onClick={handleGoToNextAssessment}>
         Next Assessment

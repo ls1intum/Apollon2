@@ -97,6 +97,7 @@ export const CommunicationObjectNameSVG = ({
               width={width}
               offsetFromTop={headerHeight}
               showAssessmentResults={showAssessmentResults}
+              itemElementType="attribute"
             />
           </>
         )}
@@ -116,6 +117,7 @@ export const CommunicationObjectNameSVG = ({
               width={width}
               offsetFromTop={headerHeight + attributes.length * methodHeight}
               showAssessmentResults={showAssessmentResults}
+              itemElementType="method"
             />
           </>
         )}

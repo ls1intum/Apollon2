@@ -13,6 +13,7 @@ interface RowBlockSectionProps {
   width: number
   offsetFromTop: number
   showAssessmentResults?: boolean
+  itemElementType?: string
 }
 export const RowBlockSection: FC<RowBlockSectionProps> = ({
   items,
@@ -21,6 +22,7 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
   offsetFromTop,
   width,
   showAssessmentResults = false,
+  itemElementType,
 }) => {
   return (
     <g transform={`translate(0, ${offsetFromTop})`}>
@@ -37,7 +39,7 @@ export const RowBlockSection: FC<RowBlockSectionProps> = ({
             itemHeight={itemHeight}
             yOffset={y}
           >
-            <FeedbackDropzone elementId={item.id}>
+            <FeedbackDropzone elementId={item.id} elementType={itemElementType}>
               <rect
                 x={0.5}
                 y={y + 0.5}

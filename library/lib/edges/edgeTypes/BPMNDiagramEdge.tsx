@@ -76,7 +76,7 @@ export const BPMNDiagramEdge = ({
     isDiagramModifiable,
   } = useStepPathEdge({
     id,
-    type: type,
+    type,
     source,
     target,
     sourceX,
@@ -97,7 +97,7 @@ export const BPMNDiagramEdge = ({
 
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
-      <FeedbackDropzone elementId={id} asElement="path">
+      <FeedbackDropzone elementId={id} asElement="path" elementType={type}>
         <g className="edge-container">
           <BaseEdge
             id={id}
