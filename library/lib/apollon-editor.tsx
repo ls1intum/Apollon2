@@ -360,6 +360,7 @@ export class ApollonEditor {
 
   set model(model: Apollon.UMLModel) {
     const { nodes, edges, assessments } = model
+
     this.diagramStore.getState().setNodesAndEdges(nodes, edges)
     this.diagramStore.getState().setAssessments(assessments)
     this.metadataStore

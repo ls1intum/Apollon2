@@ -8,6 +8,34 @@ export type AssessmentViewData = {
   score: number
 }
 
+// Returns the name and type of an element (node, edge, attribute, method, actionRow) by its ID
+// It is needed for Artemis to display name and type of an element in the assessment view
+// Artemis does not keep assessment data in model, so model.assessments cannot be used here
+// Returns undefined if the element is not found
+export const getAssessmentNameAndTypeByElementId = (
+  elementId: string,
+  model: UMLModel
+): { name: string; type: string } | undefined => {
+  const foundNode = getNodeAssessmentDataByNodeElementId(elementId, model)
+  if (foundNode) {
+    return {
+      name: foundNode.name,
+      type: foundNode.elementType,
+    }
+  }
+
+  const foundEdge = getEdgeAssessmentDataById(elementId, model)
+  if (foundEdge) {
+    return {
+      name: foundEdge.name,
+      type: foundEdge.elementType,
+    }
+  }
+
+  // If not found, return undefined
+  return undefined
+}
+
 export const getEdgeAssessmentDataById = (
   edgeId: string,
   model: UMLModel
