@@ -59,6 +59,7 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={openMenu}
+        onMouseEnter={openMenu}
         sx={{ textTransform: "none" }} // This removes the uppercase transformation
       >
         <Typography color={color ?? secondary}>Help</Typography>
@@ -71,6 +72,7 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
         onClose={handleClose}
         MenuListProps={{
           "aria-labelledby": "basic-button",
+          onMouseLeave: handleClose,
         }}
       >
         <MenuItem
