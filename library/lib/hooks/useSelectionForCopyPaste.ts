@@ -66,10 +66,10 @@ export const useSelectionForCopyPaste = () => {
         await navigator.clipboard.writeText(jsonString)
         return true
       }
-      } catch (error) {
-        log.error("Failed to copy to clipboard:", error as Error)
-        return false
-      }
+    } catch (error) {
+      log.error("Failed to copy to clipboard:", error as Error)
+      return false
+    }
 
     return false
   }, [selectedElementIds, nodes, edges])
@@ -205,10 +205,10 @@ export const useSelectionForCopyPaste = () => {
         setSelectedElementsId(newElementIds)
 
         return true
-        } catch (error) {
-          log.error("Failed to paste from clipboard:", error as Error)
-          return false
-        }
+      } catch (error) {
+        log.error("Failed to paste from clipboard:", error as Error)
+        return false
+      }
     },
     [nodes, edges, setNodes, setEdges, setSelectedElementsId]
   )
@@ -227,10 +227,10 @@ export const useSelectionForCopyPaste = () => {
       } else {
         return false
       }
-      } catch (error) {
-        log.error("Failed to copy to clipboard:", error as Error)
-        return false
-      }
+    } catch (error) {
+      log.error("Failed to copy to clipboard:", error as Error)
+      return false
+    }
 
     const allNodesToCut = getAllNodesToInclude(selectedElementIds, nodes)
     const expandedNodeIds = allNodesToCut.map((node) => node.id)

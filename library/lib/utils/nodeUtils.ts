@@ -80,9 +80,9 @@ export function sortNodesTopologically(nodes: Node[]): Node[] {
       if (parentNode) {
         visit(parentNode)
       } else {
-          log.warn(
-            `Parent node with id ${node.parentId} not found for node ${node.id}`
-          )
+        log.warn(
+          `Parent node with id ${node.parentId} not found for node ${node.id}`
+        )
       }
     }
 

@@ -68,11 +68,11 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
     (event: PointerEvent) => {
       event.preventDefault()
 
-        const canvas = document.getElementById(`react-flow-library-${diagramId}`)
-        if (!canvas) {
-          log.warn("Canvas element not found")
-          return
-        }
+      const canvas = document.getElementById(`react-flow-library-${diagramId}`)
+      if (!canvas) {
+        log.warn("Canvas element not found")
+        return
+      }
 
       // Convert drop position from screen to flow coordinates (with grid snapping)
       const dropPosition = screenToFlowPosition(

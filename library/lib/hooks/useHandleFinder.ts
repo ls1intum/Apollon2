@@ -39,7 +39,7 @@ export const useHandleFinder = () => {
       const internalNodeData = getInternalNode(nodeOnTop.id)
 
       if (!internalNodeData) {
-          log.warn("No internal node data found for:", nodeOnTop.id)
+        log.warn("No internal node data found for:", nodeOnTop.id)
         return {
           handle: null,
           node: null,
@@ -47,7 +47,7 @@ export const useHandleFinder = () => {
         }
       }
       if (nodeOnTop.width == null || nodeOnTop.height == null) {
-          log.warn("Node dimensions not available:", nodeOnTop.id)
+        log.warn("Node dimensions not available:", nodeOnTop.id)
         return {
           handle: null,
           node: null,

@@ -60,9 +60,9 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
       )
 
       if (messageExists) {
-          setDuplicateError(true)
-          log.warn(`Message "${trimmedInput}" already exists`)
-          return
+        setDuplicateError(true)
+        log.warn(`Message "${trimmedInput}" already exists`)
+        return
       }
 
       setDuplicateError(false)

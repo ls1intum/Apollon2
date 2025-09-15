@@ -32,7 +32,7 @@ export const useClipboard = () => {
 
       return true
     } catch (error) {
-        log.error("Failed to copy to clipboard:", error as Error)
+      log.error("Failed to copy to clipboard:", error as Error)
       return false
     }
   }, [])
@@ -63,7 +63,7 @@ export const useClipboard = () => {
 
         return null
       } catch (error) {
-          log.error("Failed to read from clipboard:", error as Error)
+        log.error("Failed to read from clipboard:", error as Error)
         return null
       }
     }, [])
