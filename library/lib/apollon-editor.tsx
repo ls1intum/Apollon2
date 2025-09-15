@@ -35,8 +35,6 @@ import * as Apollon from "./typings"
 export class ApollonEditor {
   private root: ReactDOM.Root
   private reactFlowInstance: ReactFlowInstance | null = null
-  private readyPromise: Promise<void>
-  private resolveReady!: () => void
   private readonly syncManager: YjsSyncClass
   private readonly ydoc: Y.Doc
   private readonly diagramStore: StoreApi<DiagramStore>
@@ -50,9 +48,6 @@ export class ApollonEditor {
     }
 
     this.ydoc = new Y.Doc()
-    this.readyPromise = new Promise((resolve) => {
-      this.resolveReady = resolve
-    })
     this.diagramStore = createDiagramStore(this.ydoc)
     this.metadataStore = createMetadataStore(this.ydoc)
     this.popoverStore = createPopoverStore()
@@ -128,11 +123,6 @@ export class ApollonEditor {
 
   private setReactFlowInstance(instance: ReactFlowInstance) {
     this.reactFlowInstance = instance
-    this.resolveReady()
-  }
-
-  public ready() {
-    return this.readyPromise
   }
 
   public getNodes(): Node[] {
