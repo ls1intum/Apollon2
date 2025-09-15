@@ -12,23 +12,74 @@ export type AssessmentViewData = {
 // It is needed for Artemis to display name and type of an element in the assessment view
 // Artemis does not keep assessment data in model, so model.assessments cannot be used here
 // Returns undefined if the element is not found
-export const getAssessmentNameAndTypeByElementId = (
+export const getAssessmentNameForArtemis = (
   elementId: string,
   model: UMLModel
 ): { name: string; type: string } | undefined => {
-  const foundNode = getNodeAssessmentDataByNodeElementId(elementId, model)
+  // Search in nodes
+  const foundNode = model.nodes.find((node) => node.id === elementId)
   if (foundNode) {
     return {
-      name: foundNode.name,
-      type: foundNode.elementType,
+      name:
+        (foundNode.data?.name as string) || foundNode.type || "Unnamed Node",
+      type: foundNode.type,
     }
   }
 
-  const foundEdge = getEdgeAssessmentDataById(elementId, model)
+  // Search in edges
+  const foundEdge = model.edges.find((edge) => edge.id === elementId)
   if (foundEdge) {
+    const sourceNode = model.nodes.find((node) => node.id === foundEdge.source)
+    const targetNode = model.nodes.find((node) => node.id === foundEdge.target)
+    const name = `${sourceNode?.data?.name || sourceNode?.type || ""} ${getEdgeTypeSymbol(foundEdge.type)} ${targetNode?.data?.name || targetNode?.type || ""}`
+
     return {
-      name: foundEdge.name,
-      type: foundEdge.elementType,
+      name,
+      type: foundEdge.type,
+    }
+  }
+
+  // Search in node sub-elements (attributes, methods, actionRows)
+  for (const node of model.nodes) {
+    if (node.data) {
+      // Check attributes
+      if ("attributes" in node.data && Array.isArray(node.data.attributes)) {
+        const foundAttribute = node.data.attributes.find(
+          (attr) => attr.id === elementId
+        )
+        if (foundAttribute) {
+          return {
+            name: `${node.data.name}::${foundAttribute.name}`,
+            type: "attribute",
+          }
+        }
+      }
+
+      // Check methods
+      if ("methods" in node.data && Array.isArray(node.data.methods)) {
+        const foundMethod = node.data.methods.find(
+          (method) => method.id === elementId
+        )
+        if (foundMethod) {
+          return {
+            name: `${node.data.name}::${foundMethod.name}()`,
+            type: "method",
+          }
+        }
+      }
+
+      // Check action rows
+      if ("actionRows" in node.data && Array.isArray(node.data.actionRows)) {
+        const foundActionRow = node.data.actionRows.find(
+          (actionRow) => actionRow.id === elementId
+        )
+        if (foundActionRow) {
+          return {
+            name: `${node.data.name}::${foundActionRow.name}`,
+            type: "actionRow",
+          }
+        }
+      }
     }
   }
 
