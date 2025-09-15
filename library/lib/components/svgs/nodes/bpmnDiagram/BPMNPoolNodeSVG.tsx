@@ -5,7 +5,7 @@ import { SVGComponentProps } from "@/types/SVG"
 import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { DefaultNodeProps } from "@/types"
-import { getCustomColorsFromData } from "@/index"
+import { getCustomColorsFromData } from "@/utils"
 
 interface BPMNPoolNodeSVGProps extends SVGComponentProps {
   data: DefaultNodeProps

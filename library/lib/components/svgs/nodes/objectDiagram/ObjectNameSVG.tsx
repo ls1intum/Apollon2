@@ -13,7 +13,7 @@ import { useShallow } from "zustand/shallow"
 import AssessmentIcon from "../../AssessmentIcon"
 import { SVGComponentProps } from "@/types/SVG"
 import { StyledRect } from "@/components"
-import { getCustomColorsFromData } from "@/index"
+import { getCustomColorsFromData } from "@/utils"
 
 interface Props extends SVGComponentProps {
   data: ObjectNodeProps
@@ -96,6 +96,7 @@ export const ObjectNameSVG = ({
               width={width}
               offsetFromTop={headerHeight}
               showAssessmentResults={showAssessmentResults}
+              itemElementType="attribute"
             />
           </>
         )}
@@ -115,6 +116,7 @@ export const ObjectNameSVG = ({
               width={width}
               offsetFromTop={headerHeight + attributes.length * methodHeight}
               showAssessmentResults={showAssessmentResults}
+              itemElementType="method"
             />
           </>
         )}

@@ -5,6 +5,7 @@ import { PopoverProps } from "../types"
 import { GiveFeedbackAssessmentBox } from "../GiveFeedbackAssessmentBox"
 import Button from "@mui/material/Button"
 import { useGoToNextAssessment } from "@/hooks"
+import { DiagramNodeTypeRecord } from "@/nodes"
 
 export const CommunicationObjectNameGiveFeedbackPopover = ({
   elementId,
@@ -22,14 +23,14 @@ export const CommunicationObjectNameGiveFeedbackPopover = ({
       <GiveFeedbackAssessmentBox
         elementId={elementId}
         name={nodeData.name}
-        type="Node"
+        type={node.type || DiagramNodeTypeRecord.communicationObjectName}
       />
       {nodeData.attributes.map((attr) => (
         <GiveFeedbackAssessmentBox
           key={attr.id}
           elementId={attr.id}
           name={attr.name}
-          type="Attribute"
+          type="attribute"
         />
       ))}
       {nodeData.methods.map((method) => (
@@ -37,7 +38,7 @@ export const CommunicationObjectNameGiveFeedbackPopover = ({
           key={method.id}
           elementId={method.id}
           name={method.name}
-          type="Method"
+          type="method"
         />
       ))}
       <Button

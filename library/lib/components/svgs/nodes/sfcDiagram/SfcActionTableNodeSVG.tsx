@@ -2,7 +2,7 @@ import { LINE_WIDTH } from "@/constants"
 import { SVGComponentProps } from "@/types/SVG"
 import { CustomText, StyledRect } from "@/components"
 import { SfcActionTableProps } from "@/types"
-import { getCustomColorsFromData } from "@/index"
+import { getCustomColorsFromData } from "@/utils"
 
 interface Props extends SVGComponentProps {
   data: SfcActionTableProps
