@@ -7,6 +7,7 @@ import { useEditorContext, useModalContext } from "@/contexts"
 import { useNavigate } from "react-router"
 import { DiagramView } from "@/types"
 import { DiagramAPIManager } from "@/services/DiagramAPIManager"
+import { log } from "@/logger"
 
 export const ShareModal = () => {
   const { editor } = useEditorContext()
@@ -35,7 +36,7 @@ export const ShareModal = () => {
       )
       closeModal()
     } catch (err) {
-      console.error("Error creating diagram:", err)
+      log.error("Error creating diagram:", err as Error)
       toast.error("Could not create diagram.")
     }
   }

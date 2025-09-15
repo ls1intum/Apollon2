@@ -1,5 +1,6 @@
 import { useCallback } from "react"
 import { Node, Edge } from "@xyflow/react"
+import { log } from "../logger"
 
 interface ClipboardData {
   nodes: Node[]
@@ -31,7 +32,7 @@ export const useClipboard = () => {
 
       return true
     } catch (error) {
-      console.error("Failed to copy to clipboard:", error)
+        log.error("Failed to copy to clipboard:", error as Error)
       return false
     }
   }, [])
@@ -62,7 +63,7 @@ export const useClipboard = () => {
 
         return null
       } catch (error) {
-        console.error("Failed to read from clipboard:", error)
+          log.error("Failed to read from clipboard:", error as Error)
         return null
       }
     }, [])

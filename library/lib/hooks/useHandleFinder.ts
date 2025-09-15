@@ -2,6 +2,7 @@ import { useCallback } from "react"
 import { type Node, useReactFlow } from "@xyflow/react"
 import { findClosestHandle } from "../utils/edgeUtils"
 import { DiagramNodeTypeRecord } from "../nodes"
+import { log } from "../logger"
 
 interface HandleFinderResult {
   handle: string | null
@@ -38,7 +39,7 @@ export const useHandleFinder = () => {
       const internalNodeData = getInternalNode(nodeOnTop.id)
 
       if (!internalNodeData) {
-        console.warn("No internal node data found for:", nodeOnTop.id)
+          log.warn("No internal node data found for:", nodeOnTop.id)
         return {
           handle: null,
           node: null,
@@ -46,7 +47,7 @@ export const useHandleFinder = () => {
         }
       }
       if (nodeOnTop.width == null || nodeOnTop.height == null) {
-        console.warn("Node dimensions not available:", nodeOnTop.id)
+          log.warn("Node dimensions not available:", nodeOnTop.id)
         return {
           handle: null,
           node: null,

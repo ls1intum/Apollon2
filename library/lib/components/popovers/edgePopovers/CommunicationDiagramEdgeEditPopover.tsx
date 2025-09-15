@@ -6,6 +6,7 @@ import { PopoverProps } from "../types"
 import { useState, useEffect } from "react"
 import { generateUUID } from "@/index"
 import { EdgeStyleEditor, TextField } from "@/components/ui"
+import { log } from "../../../logger"
 
 export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
   elementId,
@@ -59,9 +60,9 @@ export const CommunicationDiagramEdgeEditPopover: React.FC<PopoverProps> = ({
       )
 
       if (messageExists) {
-        setDuplicateError(true)
-        console.warn(`Message "${trimmedInput}" already exists`)
-        return
+          setDuplicateError(true)
+          log.warn(`Message "${trimmedInput}" already exists`)
+          return
       }
 
       setDuplicateError(false)

@@ -1,5 +1,6 @@
 import { useEditorContext } from "@/contexts"
 import { jsPDF } from "jspdf"
+import { log } from "@/logger"
 
 export const useExportAsPDF = () => {
   const { editor } = useEditorContext()
@@ -27,7 +28,7 @@ export const useExportAsPDF = () => {
 
       const ctx = canvas.getContext("2d")
       if (!ctx) {
-        console.error("Could not get canvas context")
+        log.error("Could not get canvas context")
         return
       }
 
@@ -47,7 +48,7 @@ export const useExportAsPDF = () => {
     }
 
     img.onerror = (e) => {
-      console.error("Failed to load SVG image", e)
+      log.error("Failed to load SVG image", e as unknown as Error)
     }
 
     img.src = url

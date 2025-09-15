@@ -17,6 +17,7 @@ import { canDropIntoParent } from "@/utils/bpmnConstraints"
 import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { ZINDEX_DRAGGABLE_ELEMENT } from "@/constants/zindexConstants"
+import { log } from "../logger"
 
 /* ========================================================================
    Utility functions to manage page scrolling during dragging
@@ -67,11 +68,11 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
     (event: PointerEvent) => {
       event.preventDefault()
 
-      const canvas = document.getElementById(`react-flow-library-${diagramId}`)
-      if (!canvas) {
-        console.warn("Canvas element not found")
-        return
-      }
+        const canvas = document.getElementById(`react-flow-library-${diagramId}`)
+        if (!canvas) {
+          log.warn("Canvas element not found")
+          return
+        }
 
       // Convert drop position from screen to flow coordinates (with grid snapping)
       const dropPosition = screenToFlowPosition(

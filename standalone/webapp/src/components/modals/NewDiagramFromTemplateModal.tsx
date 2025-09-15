@@ -9,6 +9,7 @@ import { Typography } from "@/components/Typography"
 import { useState } from "react"
 import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { useNavigate } from "react-router"
+import { log } from "@/logger"
 
 enum TemplateType {
   Adapter = "Adapter",
@@ -53,7 +54,7 @@ export const NewDiagramFromTemplateModal = () => {
 
       closeModal()
     } catch (err: unknown) {
-      console.error("Error creating diagram from template:", err)
+      log.error("Error creating diagram from template:", err as Error)
 
       if (err instanceof Error) {
         setError(err.message)

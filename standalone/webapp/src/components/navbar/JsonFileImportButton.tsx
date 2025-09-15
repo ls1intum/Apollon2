@@ -3,6 +3,7 @@ import { MenuItem } from "@mui/material"
 import React, { useRef } from "react"
 import { useNavigate } from "react-router"
 import { importDiagram } from "@tumaet/apollon"
+import { log } from "@/logger"
 
 export const JsonFileImportButton: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -36,7 +37,7 @@ export const JsonFileImportButton: React.FC = () => {
           state: { timeStapToCreate },
         }) // Navigate to the parent route after loading the model
       } catch (error) {
-        console.error("Invalid JSON file", error)
+        log.error("Invalid JSON file", error as Error)
       }
     }
     reader.readAsText(file)

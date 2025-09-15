@@ -1,5 +1,6 @@
 import { useFileDownload } from "./useFileDownload"
 import { useEditorContext } from "@/contexts"
+import { log } from "@/logger"
 
 export const useExportAsSVG = () => {
   const { editor } = useEditorContext()
@@ -8,7 +9,7 @@ export const useExportAsSVG = () => {
   const exportSVG = async () => {
     const apollonSVG = await editor?.exportAsSVG()
     if (!apollonSVG) {
-      console.error("Failed to export SVG")
+      log.error("Failed to export SVG")
       return
     }
 

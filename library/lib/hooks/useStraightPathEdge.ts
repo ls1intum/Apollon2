@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import { useReactFlow } from "@xyflow/react"
+import { log } from "../logger"
 import {
   calculateOverlayPath,
   calculateStraightPath,
@@ -178,7 +179,7 @@ export const useStraightPathEdge = ({
         setIsMiddlePathHorizontal(isHorizontal)
         setPathMiddlePosition({ x: middlePoint.x, y: middlePoint.y })
       } catch (error) {
-        console.warn("Path calculation failed, using fallback:", error)
+        log.warn("Path calculation failed, using fallback:", error)
         const middleX = (sourceX + targetX) / 2
         const middleY = (sourceY + targetY) / 2
         setPathMiddlePosition({ x: middleX, y: middleY })

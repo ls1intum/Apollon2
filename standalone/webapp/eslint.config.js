@@ -11,7 +11,7 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   reactPlugin.configs.flat.recommended,
-  reactPlugin.configs.flat["jsx-runtime"], // Add this if you are using React 17+
+  reactPlugin.configs.flat["jsx-runtime"],
   {
     settings: {
       react: {

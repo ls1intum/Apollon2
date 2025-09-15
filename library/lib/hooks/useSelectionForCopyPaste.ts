@@ -3,6 +3,7 @@ import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { generateUUID, sortNodesTopologically } from "@/utils"
 import type { Node } from "@xyflow/react"
+import { log } from "../logger"
 import {
   ClipboardData,
   createClipboardData,
@@ -65,10 +66,10 @@ export const useSelectionForCopyPaste = () => {
         await navigator.clipboard.writeText(jsonString)
         return true
       }
-    } catch (error) {
-      console.error("Failed to copy to clipboard:", error)
-      return false
-    }
+      } catch (error) {
+        log.error("Failed to copy to clipboard:", error as Error)
+        return false
+      }
 
     return false
   }, [selectedElementIds, nodes, edges])
@@ -204,10 +205,10 @@ export const useSelectionForCopyPaste = () => {
         setSelectedElementsId(newElementIds)
 
         return true
-      } catch (error) {
-        console.error("Failed to paste from clipboard:", error)
-        return false
-      }
+        } catch (error) {
+          log.error("Failed to paste from clipboard:", error as Error)
+          return false
+        }
     },
     [nodes, edges, setNodes, setEdges, setSelectedElementsId]
   )
@@ -226,10 +227,10 @@ export const useSelectionForCopyPaste = () => {
       } else {
         return false
       }
-    } catch (error) {
-      console.error("Failed to copy to clipboard:", error)
-      return false
-    }
+      } catch (error) {
+        log.error("Failed to copy to clipboard:", error as Error)
+        return false
+      }
 
     const allNodesToCut = getAllNodesToInclude(selectedElementIds, nodes)
     const expandedNodeIds = allNodesToCut.map((node) => node.id)

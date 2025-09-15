@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react"
 import { readFileContent } from "@/utils/readFileContent" // Assume you move readFileContent to utils
 import { useEditorContext } from "@/contexts"
+import { log } from "@/logger"
 
 export const useImportHandler = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -29,7 +30,7 @@ export const useImportHandler = () => {
       try {
         const content = await readFileContent(file)
         event.target.value = ""
-        console.log("Importing content:", content)
+        log.debug("Importing content:", content)
       } catch {
         setErrorMessage("An error occurred during import.")
         setSnackbarOpen(true)

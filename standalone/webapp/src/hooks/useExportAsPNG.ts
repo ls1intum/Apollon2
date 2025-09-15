@@ -1,6 +1,7 @@
 import { SVG } from "@tumaet/apollon"
 import { useFileDownload } from "./useFileDownload"
 import { useEditorContext } from "@/contexts"
+import { log } from "@/logger"
 
 type exportAsPNGOptions = {
   setWhiteBackground: boolean
@@ -11,7 +12,7 @@ export const useExportAsPNG = () => {
 
   const exportAsPNG = async ({ setWhiteBackground }: exportAsPNGOptions) => {
     if (!editor) {
-      console.error("Editor context is not available")
+      log.error("Editor context is not available")
       return
     }
 
