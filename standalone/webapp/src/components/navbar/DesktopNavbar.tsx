@@ -72,6 +72,8 @@ export const DesktopNavbar = () => {
         <Box
           sx={{
             flexGrow: 1,
+            pl: 2,
+            gap: 2,
             alignItems: "center",
           }}
         >

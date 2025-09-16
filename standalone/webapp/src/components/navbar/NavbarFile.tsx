@@ -65,7 +65,6 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         aria-haspopup="true"
         aria-expanded={isMenuOpen ? "true" : undefined}
         onClick={openMainMenu}
-        onMouseEnter={openMainMenu}
         sx={{
           textTransform: "none",
         }}
