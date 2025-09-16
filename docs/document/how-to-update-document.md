@@ -7,8 +7,7 @@ This guide explains how to update and maintain the documentation. Our documentat
 Before you start, make sure you have:
 
 1. Python 3.8 or higher installed
-2. Git installed and repository cloned locally.
-3. [Apollon2 GitHub repository](https://github.com/ls1intum/apollon2)
+2. Git installed and [repository](https://github.com/ls1intum/apollon2) cloned locally.
 
 ## Local Setup
 
@@ -21,13 +20,13 @@ Before you start, make sure you have:
 2. Create and activate a Python virtual environment:
 
    ```bash
-   python3 -m venv .venv
+   python -m venv .venv # use python3 if needed
    source .venv/bin/activate  # On Windows, use: .venv\Scripts\activate
    ```
 
 3. Install documentation dependencies:
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements.txt # use pip3 if needed
    ```
 
 ## Writing Documentation
@@ -87,7 +86,7 @@ Our documentation is automatically deployed through Read the Docs when changes a
    ```
 
 2. Make your changes following our documentation structure
-3. Build and test locally
+3. Build and test new documents locally
 4. Commit your changes with a descriptive message:
 
    ```bash

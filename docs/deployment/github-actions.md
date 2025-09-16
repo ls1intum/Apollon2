@@ -1,6 +1,7 @@
 # Github actions
 
-Deployment is through github action trigers https://github.com/ls1intum/Apollon2/actions/workflows/deploy-prod.yml
+Deployment is through [github action trigers](https://github.com/ls1intum/Apollon2/actions/workflows/deploy-prod.yml).
+
 Click on "Run workflow" dropdown and select main branch and then run the workflow.
 
 ## Run Docker Locally
