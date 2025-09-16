@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react"
-import { readFileContent } from "@/utils/readFileContent" // Assume you move readFileContent to utils
+import { readFileContent } from "@/utils/readFileContent"
 import { useEditorContext } from "@/contexts"
 import { log } from "@/logger"
 
@@ -20,7 +20,6 @@ export const useImportHandler = () => {
         return
       }
 
-      // Ensure the file has a .json extension
       if (!file.name.endsWith(".json")) {
         setErrorMessage("Please select a file with a .json extension.")
         setSnackbarOpen(true)

@@ -7,6 +7,15 @@ const rootElement = document.getElementById("root")
 
 useThemeStore.getState().initializeTheme()
 
+const apollonSink = {
+  debug: (...args: unknown[]) => log.debug(...args),
+  warn: (...args: unknown[]) => log.warn(...args),
+  error: (...args: unknown[]) => log.error(...args),
+}
+
+setApollonLogger(apollonSink)
+setApollonLogLevel(import.meta.env.DEV ? "debug" : "warn")
+
 if (rootElement) {
   createRoot(rootElement).render(<App />)
 } else {

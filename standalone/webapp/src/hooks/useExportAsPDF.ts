@@ -17,7 +17,7 @@ export const useExportAsPDF = () => {
 
     const img = new Image()
     img.onload = () => {
-      const scale = 2 // Increase for higher resolution
+      const scale = 2
 
       const width = img.width
       const height = img.height
@@ -32,7 +32,6 @@ export const useExportAsPDF = () => {
         return
       }
 
-      // Improve image quality
       ctx.setTransform(scale, 0, 0, scale, 0, 0)
       ctx.drawImage(img, 0, 0)
 

@@ -23,7 +23,6 @@ export const ApollonLocal: React.FC = () => {
 
   useEffect(() => {
     if (!diagram) {
-      // Create a default diagram on first visit
       createModelByTitleAndType("Class Diagram", UMLDiagramType.ClassDiagram)
       return
     }

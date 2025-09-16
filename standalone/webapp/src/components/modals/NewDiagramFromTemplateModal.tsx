@@ -48,10 +48,6 @@ export const NewDiagramFromTemplateModal = () => {
         state: { timeStapToCreate },
       })
 
-      // Handle passed diagram model from new page location data
-      // const JsonDataINStringFormat = JSON.stringify(jsonData)
-      // const diagramName = jsonData.title as string
-
       closeModal()
     } catch (err: unknown) {
       log.error("Error creating diagram from template:", err as Error)

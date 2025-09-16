@@ -50,7 +50,7 @@ export const ShareModal = () => {
       <div>
         <Typography>
           After sharing, this diagram will be accessible to everyone with access
-          to the link for at least 12 weeks.{" "}
+          to the link for at least 12 weeks{" "}
           <Tooltip title="Copy link to clipboard">
             <Info />
           </Tooltip>
