@@ -2,6 +2,10 @@ import { createRoot } from "react-dom/client"
 import App from "./App.tsx"
 import { useThemeStore } from "./stores/useThemeStore.tsx"
 import { log } from "./logger"
+import {
+  setLogger as setApollonLogger,
+  setLogLevel as setApollonLogLevel,
+} from "@tumaet/apollon"
 
 const rootElement = document.getElementById("root")
 
