@@ -24,6 +24,9 @@ npm install
 # Build all packages
 npm run build
 
+# Setup DB (make sure docker is running)
+npm run start:localdb
+
 # Start the project
 npm run start
 ```
@@ -33,7 +36,7 @@ npm run start
 - **🚀 [Getting Started](https://apollon2.readthedocs.io/en/latest/getting-started/requirements.html)** - Requirements and setup instructions
 - **💻 [Development](https://apollon2.readthedocs.io/en/latest/development/project-structure.html)** - Project structure and development workflow
 - **📱 [Mobile Development](https://apollon2.readthedocs.io/en/latest/mobile/ios-android-setup.html)** - iOS and Android setup with Capacitor
-- **🚀 [Deployment](https://apollon2.readthedocs.io/en/latest/deployment/docker.html)** - Docker deployment and NPM publishing
+- **🚀 [Deployment](https://apollon2.readthedocs.io/en/latest/deployment/github-actions.html)** - Github actions deployment and NPM publishing
 - **🛠️ [Troubleshooting](https://apollon2.readthedocs.io/en/latest/troubleshooting/common-issues.html)** - Common issues and solutions
 - **🤝 [Contributing](https://apollon2.readthedocs.io/en/latest/contributing.html)** - How to contribute to the project
 

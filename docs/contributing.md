@@ -61,8 +61,7 @@ We welcome contributions to the Apollon2 project! Please follow the steps below 
 
 1. Install dependencies: `npm install`
 2. Start development: `npm run start`
-3. Run tests: `npm run test` (if available)
-4. Check linting: `npm run lint`
-5. Format code: `npm run format`
+3. Check linting: `npm run lint`
+4. Format code: `npm run format`
 
 Thank you for contributing to Apollon2!
