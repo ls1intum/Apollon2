@@ -71,6 +71,7 @@ export const NavbarHelp: FC<Props> = ({ color }) => {
         onClose={handleClose}
         MenuListProps={{
           "aria-labelledby": "basic-button",
+          onMouseLeave: handleClose,
         }}
       >
         <MenuItem
