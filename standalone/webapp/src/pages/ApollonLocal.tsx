@@ -3,6 +3,7 @@ import { useEditorContext } from "@/contexts"
 import { ApollonEditor, UMLDiagramType } from "@tumaet/apollon"
 import React, { useEffect, useRef } from "react"
 import { useLocation } from "react-router"
+import { log } from "@/logger"
 
 export const ApollonLocal: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -22,7 +23,6 @@ export const ApollonLocal: React.FC = () => {
 
   useEffect(() => {
     if (!diagram) {
-      // Create a default diagram on first visit
       createModelByTitleAndType("Class Diagram", UMLDiagramType.ClassDiagram)
       return
     }
@@ -40,7 +40,7 @@ export const ApollonLocal: React.FC = () => {
     setEditor(instance)
 
     return () => {
-      console.log("Cleaning up Apollon2 instance")
+      log.debug("Cleaning up Apollon2 instance")
       instance.destroy()
     }
   }, [diagram?.id, state?.timeStapToCreate])

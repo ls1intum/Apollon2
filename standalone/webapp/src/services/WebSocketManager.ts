@@ -1,6 +1,7 @@
 import { ApollonEditor } from "@tumaet/apollon"
 import { backendWSSUrl } from "@/constants"
 import { WebSocketMessage } from "@/types"
+import { log } from "@/logger"
 
 type ReconnectionStep = {
   interval: number
@@ -86,7 +87,7 @@ export class WebSocketManager {
     }
 
     if (!currentStep) {
-      console.warn("WebSocket reconnection attempts stopped.")
+      log.warn("WebSocket reconnection attempts stopped.")
       return
     }
 

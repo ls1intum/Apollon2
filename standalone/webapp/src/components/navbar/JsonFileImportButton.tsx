@@ -3,20 +3,17 @@ import { MenuItem } from "@mui/material"
 import React, { useRef } from "react"
 import { useNavigate } from "react-router"
 import { importDiagram } from "@tumaet/apollon"
+import { log } from "@/logger"
 
 export const JsonFileImportButton: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const createModel = usePersistenceModelStore((state) => state.createModel)
   const navigate = useNavigate()
 
-  // handleFileChange will be when user selects a file
-  // data in the file will be processed by handleFileChange function
   const handleButtonClick = () => {
     fileInputRef.current?.click()
   }
 
-  // This function will be called when the user selects a file
-  // It reads the file and processes the JSON data
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
@@ -34,14 +31,13 @@ export const JsonFileImportButton: React.FC = () => {
           relative: "route",
           replace: true,
           state: { timeStapToCreate },
-        }) // Navigate to the parent route after loading the model
+        })
       } catch (error) {
-        console.error("Invalid JSON file", error)
+        log.error("Invalid JSON file", error as Error)
       }
     }
     reader.readAsText(file)
 
-    // Reset input so selecting the same file again will trigger the event
     event.target.value = ""
   }
 

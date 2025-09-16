@@ -6,6 +6,7 @@ import diagramRouter from "./diagramRouter"
 import { startSocketServer } from "./relaySocketServer"
 import { connectToMongoDB } from "./database/connect"
 import { startDiagramCleanupJob } from "./database/cleanupJob"
+import { log } from "./logger"
 
 const PORT = process.env.PORT || 8000
 const serverHost = process.env.HOST || "localhost"
@@ -21,7 +22,7 @@ app.use("/api", diagramRouter)
 
 // Start servers immediately for a fast dev feedback loop
 app.listen(PORT, () => {
-  console.log(`HTTP server running on http://${serverHost}:${PORT}`)
+  log.debug(`HTTP server running on http://${serverHost}:${PORT}`)
 })
 startSocketServer()
 startDiagramCleanupJob()
@@ -29,10 +30,10 @@ startDiagramCleanupJob()
 // Connect to DB in background; log status but don't block server startup
 connectToMongoDB(mongoURI)
   .then(() => {
-    console.log("Database connected")
+    log.debug("Database connected")
   })
   .catch((err) => {
-    console.warn(
+    log.warn(
       "Database not connected. Continuing without DB:",
       (err as Error)?.message || err
     )

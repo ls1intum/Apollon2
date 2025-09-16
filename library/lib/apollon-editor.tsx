@@ -143,16 +143,11 @@ export class ApollonEditor {
   }
 
   public destroy() {
-    const diagramId = this.diagramStore.getState().diagramId
-    console.log("Disposing Apollon2 instance with diagramId", diagramId)
-
     try {
       // Clean up all active subscriptions before destroying
       Object.keys(this.subscribers).forEach((subscriberId) => {
         const unsubscribeCallback = this.subscribers[parseInt(subscriberId)]
-        if (unsubscribeCallback) {
-          unsubscribeCallback()
-        }
+        unsubscribeCallback?.()
       })
       this.subscribers = {}
 
@@ -161,8 +156,8 @@ export class ApollonEditor {
       this.ydoc.destroy()
       this.reactFlowInstance = null
       // Zustand stores are automatically garbage-collected when references are gone
-    } catch (error) {
-      console.error("Error during Apollon2 disposal:", error)
+    } catch {
+      // ignore
     }
   }
 
@@ -177,8 +172,8 @@ export class ApollonEditor {
     options?: Apollon.ExportOptions,
     theme?: DeepPartial<Apollon.Styles>
   ): Promise<Apollon.SVG> {
-    console.log("Exporting model as SVG options", options)
-    console.log("Exporting model as SVG theme", theme)
+    void options
+    void theme
     const container = document.createElement("div")
     container.style.display = "flex"
     container.style.width = "100px"
@@ -240,7 +235,6 @@ export class ApollonEditor {
 
     if (!reactFlowInstance) {
       document.body.removeChild(container)
-      console.error("React Flow instance not initialized during SVG export")
       throw new Error("React Flow instance not initialized")
     }
 
@@ -320,10 +314,6 @@ export class ApollonEditor {
     if (unsubscribeCallback) {
       unsubscribeCallback()
       delete this.subscribers[subscriberId]
-    } else {
-      console.warn(
-        `No subscriber found with ID ${subscriberId}. Unable to unsubscribe.`
-      )
     }
   }
 

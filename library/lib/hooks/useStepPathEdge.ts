@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useEffect, useRef, useState } from "react"
 import { getSmoothStepPath, useReactFlow } from "@xyflow/react"
+import { log } from "../logger"
 import {
   STEP_BOARDER_RADIUS,
   MARKER_PADDING,
@@ -371,7 +372,7 @@ export const useStepPathEdge = ({
             }
           }
         } catch (error) {
-          console.warn("Path calculation error:", error)
+          log.warn("Path calculation error:", error)
           setPathMiddlePosition({
             x: (sourceX + targetX) / 2,
             y: (sourceY + targetY) / 2,

@@ -20,6 +20,7 @@ import {
 } from "@/hooks"
 import { FeedbackBoxes } from "@/components/FeedbackBoxes"
 import { useShallow } from "zustand/shallow"
+import { log } from "@/logger"
 import { AssessmentDataBox } from "@/components/playground/AssessmentDataBox"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
@@ -77,6 +78,7 @@ export const ApollonPlayground: React.FC = () => {
       setEditor(instance)
 
       return () => {
+        log.debug("disposing instance")
         instance.destroy()
       }
     }
@@ -122,7 +124,7 @@ export const ApollonPlayground: React.FC = () => {
             className="border-2 border-gray-400 p-1 rounded-md flex w-[200px]"
             onChange={(e) => {
               const selectedLocale = e.target.value as Locale
-              console.log("DEBUG selectedLocale", selectedLocale)
+              log.debug("DEBUG selectedLocale", selectedLocale)
             }}
           >
             <option value={Locale.en}>English</option>

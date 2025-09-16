@@ -1,5 +1,6 @@
 import cron from "node-cron"
 import Diagram from "./models/Diagram"
+import { log } from "../logger"
 
 export const startDiagramCleanupJob = (): void => {
   // every day at 00:00 (midnight).
@@ -13,9 +14,9 @@ export const startDiagramCleanupJob = (): void => {
         updatedAt: { $lt: cutoffDate },
       })
 
-      console.log(`Deleted ${result.deletedCount} diagrams older than 30 days.`)
+      log.debug(`Deleted ${result.deletedCount} diagrams older than 30 days.`)
     } catch (error) {
-      console.error("Error during scheduled diagram cleanup:", error)
+      log.error("Error during scheduled diagram cleanup:", error as Error)
     }
   })
 }
