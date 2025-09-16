@@ -1,6 +1,7 @@
 import { SVG } from "@tumaet/apollon"
 import { useFileDownload } from "./useFileDownload"
 import { useEditorContext } from "@/contexts"
+import { log } from "@/logger"
 
 type exportAsPNGOptions = {
   setWhiteBackground: boolean
@@ -11,7 +12,7 @@ export const useExportAsPNG = () => {
 
   const exportAsPNG = async ({ setWhiteBackground }: exportAsPNGOptions) => {
     if (!editor) {
-      console.error("Editor context is not available")
+      log.error("Editor context is not available")
       return
     }
 
@@ -39,10 +40,9 @@ function convertRenderedSVGToPNG(
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const { width, height } = renderedSVG.clip
-    const margin = 0 // Add margin if needed
-    const scale = 1.5 // Adjust scale for higher resolution
+    const margin = 0
+    const scale = 1.5
 
-    // Add margin to canvas dimensions
     const canvasWidth = width * scale + margin * 2
     const canvasHeight = height * scale + margin * 2
 
@@ -65,12 +65,11 @@ function convertRenderedSVGToPNG(
         context.fillRect(0, 0, canvasWidth, canvasHeight)
       }
 
-      // Apply scale and draw image with margin offset
       context.scale(scale, scale)
       context.drawImage(image, margin, margin)
 
       canvas.toBlob((blob) => {
-        URL.revokeObjectURL(blobUrl) // Cleanup the blob URL
+        URL.revokeObjectURL(blobUrl)
         resolve(blob as Blob)
       })
     }

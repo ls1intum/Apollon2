@@ -6,6 +6,7 @@ import { toast } from "react-toastify"
 import { DiagramView } from "@/types"
 import { WebSocketManager } from "@/services/WebSocketManager"
 import { DiagramAPIManager } from "@/services/DiagramAPIManager"
+import { log } from "@/logger"
 
 export const ApollonWithConnection: React.FC = () => {
   const { diagramId } = useParams()
@@ -32,10 +33,10 @@ export const ApollonWithConnection: React.FC = () => {
           navigate("/")
           return
         }
-        console.log("Initializing Apollon editor with view type:", viewType)
+        log.debug("Initializing Apollon editor with view type:", viewType)
 
         const diagram = await DiagramAPIManager.fetchDiagramData(diagramId)
-        console.log("Fetched diagram data:", diagram)
+        log.debug("Fetched diagram data:", diagram)
 
         const editorOptions: ApollonOptions = {
           model: diagram,

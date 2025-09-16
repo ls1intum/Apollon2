@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Router, Request, Response } from "express"
 import Diagram from "./database/models/Diagram"
+import { log } from "./logger"
 
 const router = Router()
 
@@ -13,7 +14,7 @@ router.get("/:diagramID", async (req: Request, res: Response): Promise<any> => {
 
     res.status(200).json(diagram)
   } catch (error) {
-    console.error("Error in getDiagram endpoint:", error)
+    log.error("Error in getDiagram endpoint:", error as Error)
     res.status(500).json({ error: "Internal server error" })
   }
 })
@@ -52,7 +53,7 @@ router.post("/", async (req: Request, res: Response): Promise<any> => {
     const savedDiagram = await newDiagram.save()
     res.status(201).json(savedDiagram)
   } catch (error) {
-    console.error("Error in setDiagram endpoint:", error)
+    log.error("Error in setDiagram endpoint:", error as Error)
     res.status(500).json({ error: "Internal server error" })
   }
 })
@@ -93,7 +94,7 @@ router.put("/:diagramID", async (req: Request, res: Response): Promise<any> => {
 
     res.status(200).json(updatedDiagram)
   } catch (error) {
-    console.error("Error in updateDiagram endpoint:", error)
+    log.error("Error in updateDiagram endpoint:", error as Error)
     res.status(500).json({ error: "Internal server error" })
   }
 })

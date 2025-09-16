@@ -12,6 +12,7 @@ import { ModalName, ModalProps } from "@/types"
 import { Modal, Paper, Box, Button, Divider } from "@mui/material"
 import { Typography } from "@/components/Typography"
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined"
+import { log } from "@/logger"
 
 interface ModalWrapperProps {
   name: ModalName
@@ -59,7 +60,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({ name, props }) => {
   const { closeModal } = useModalContext()
 
   if (!SpecificModal) {
-    console.error(`No modal found for name: ${name}`)
+    log.error(`No modal found for name: ${name}`)
     return null
   }
 

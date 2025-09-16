@@ -2,16 +2,16 @@ import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import dts from "vite-plugin-dts"
 import { resolve } from "path"
-import libInjectCss from "../plugins/lib_inject_css"
 
 export default defineConfig({
-  plugins: [react(), dts({ include: ["lib"] }), libInjectCss()],
+  plugins: [react(), dts({ include: ["lib"] })],
   build: {
     copyPublicDir: false,
     lib: {
       name: "apollon2-library",
       entry: resolve(__dirname, "lib/index.tsx"),
       formats: ["es"],
+      cssFileName: "style",
     },
     // Do not externalize React: bundle everything so consumers don't need React installed
     rollupOptions: {
@@ -32,4 +32,5 @@ export default defineConfig({
     },
     dedupe: ["react", "react-dom", "@emotion/react", "@emotion/styled"],
   },
+  esbuild: { drop: ["console", "debugger"] },
 })

@@ -1,6 +1,7 @@
 import WebSocket, { WebSocketServer } from "ws"
 import { IncomingMessage } from "http"
 import { URL } from "url"
+import { log } from "./logger"
 
 interface ExtendedWebSocket extends WebSocket {
   diagramId?: string
@@ -18,9 +19,9 @@ export const startSocketServer = (): void => {
   const diagrams: Map<string, Set<ExtendedWebSocket>> = new Map()
 
   wss.on("error", (error: NodeJS.ErrnoException) => {
-    console.error("WebSocket server error:", error)
+    log.error("WebSocket server error:", error)
     if (error.code === "EADDRINUSE") {
-      console.error(
+      log.error(
         `Port ${wsServerPort} is already in use. Please check if another instance is running.`
       )
     }
@@ -64,7 +65,7 @@ export const startSocketServer = (): void => {
         }
       })
 
-      console.log(`Message sent to ${count} clients in diagram ${ws.diagramId}`)
+      log.debug(`Message sent to ${count} clients in diagram ${ws.diagramId}`)
     })
 
     ws.on("close", () => {
@@ -76,11 +77,11 @@ export const startSocketServer = (): void => {
     })
 
     ws.on("error", (error: Error) => {
-      console.error("WebSocket error:", error)
+      log.error("WebSocket error:", error)
     })
   })
 
-  console.log(
+  log.debug(
     `Relay websocket server running on ws://${serverHost}:${wsServerPort}`
   )
 }
