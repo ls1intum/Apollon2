@@ -37,41 +37,45 @@ export const CustomControls = () => {
       {/* Undo Button */}
       {undoManagerExist && (
         <Tooltip title="Undo (Ctrl+Z)">
-          <button
-            className={`control-button ${!canUndo ? "disabled" : ""}`}
-            onClick={handleUndo}
-            disabled={!canUndo}
-          >
-            <UndoIcon
-              width={16}
-              height={16}
-              fill={
-                canUndo
-                  ? "var(--apollon2-primary-contrast)"
-                  : "var(--apollon2-secondary)"
-              }
-            />
-          </button>
+          <span>
+            <button
+              className={`control-button ${!canUndo ? "disabled" : ""}`}
+              onClick={handleUndo}
+              disabled={!canUndo}
+            >
+              <UndoIcon
+                width={16}
+                height={16}
+                fill={
+                  canUndo
+                    ? "var(--apollon2-primary-contrast)"
+                    : "var(--apollon2-secondary)"
+                }
+              />
+            </button>
+          </span>
         </Tooltip>
       )}
       {/* Redo Button */}
       {undoManagerExist && (
         <Tooltip title="Redo (Ctrl+Y or Ctrl+Shift+Z)">
-          <button
-            className={`control-button ${!canRedo ? "disabled" : ""}`}
-            onClick={handleRedo}
-            disabled={!canRedo}
-          >
-            <RedoIcon
-              width={16}
-              height={16}
-              fill={
-                canRedo
-                  ? "var(--apollon2-primary-contrast)"
-                  : "var(--apollon2-secondary)"
-              }
-            />
-          </button>
+          <span>
+            <button
+              className={`control-button ${!canRedo ? "disabled" : ""}`}
+              onClick={handleRedo}
+              disabled={!canRedo}
+            >
+              <RedoIcon
+                width={16}
+                height={16}
+                fill={
+                  canRedo
+                    ? "var(--apollon2-primary-contrast)"
+                    : "var(--apollon2-secondary)"
+                }
+              />
+            </button>
+          </span>
         </Tooltip>
       )}
       <div

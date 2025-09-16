@@ -21,11 +21,15 @@ import {
 import { FeedbackBoxes } from "@/components/FeedbackBoxes"
 import { useShallow } from "zustand/shallow"
 import { log } from "@/logger"
+import { AssessmentDataBox } from "@/components/playground/AssessmentDataBox"
 
 const UMLDiagramTypes = Object.values(UMLDiagramType)
 
 export const ApollonPlayground: React.FC = () => {
   const { setEditor } = useEditorContext()
+  const [assessmentSelectedElements, setAssessmentSelectedElements] = useState<
+    string[]
+  >([])
   const exportAsSvg = useExportAsSVG()
   const exportAsPNG = useExportAsPNG()
   const exportAsJSON = useExportAsJSON()
@@ -67,6 +71,10 @@ export const ApollonPlayground: React.FC = () => {
         updateModel(model)
       })
 
+      instance.subscribeToAssessmentSelection((selectedElements) => {
+        setAssessmentSelectedElements(selectedElements)
+      })
+
       setEditor(instance)
 
       return () => {
@@ -85,7 +93,7 @@ export const ApollonPlayground: React.FC = () => {
         height: "100%",
       }}
     >
-      <div className="flex flex-col p-4 gap-2 overflow-scroll max-w-[300px]  bg-[var(--apollon2-background-variant)] text-[var(--apollon2-primary-contrast)]">
+      <div className="flex flex-col p-4 gap-2 overflow-scroll w-[300px]  bg-[var(--apollon2-background-variant)] text-[var(--apollon2-primary-contrast)]">
         <div>
           <label className="font-semibold ">Select Diagram Type</label>
           <select
@@ -196,6 +204,10 @@ export const ApollonPlayground: React.FC = () => {
         <button onClick={exportAsPDF} className="border p-1 rounded-sm">
           Export as PDF
         </button>
+
+        <AssessmentDataBox
+          assessmentSelectedElements={assessmentSelectedElements}
+        />
       </div>
 
       <div

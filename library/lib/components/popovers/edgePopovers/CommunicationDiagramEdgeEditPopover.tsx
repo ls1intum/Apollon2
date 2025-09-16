@@ -4,7 +4,7 @@ import { CustomEdgeProps, MessageData } from "@/edges/EdgeProps"
 import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon } from "@/components/Icon"
 import { PopoverProps } from "../types"
 import { useState, useEffect } from "react"
-import { generateUUID } from "@/index"
+import { generateUUID } from "@/utils"
 import { EdgeStyleEditor, TextField } from "@/components/ui"
 import { log } from "../../../logger"
 

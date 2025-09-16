@@ -88,7 +88,7 @@ export const CommunicationDiagramEdge = ({
 
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
-      <FeedbackDropzone elementId={id} asElement="path">
+      <FeedbackDropzone elementId={id} asElement="path" elementType={type}>
         <g className="edge-container">
           <BaseEdge
             id={id}
