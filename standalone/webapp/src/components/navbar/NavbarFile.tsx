@@ -97,6 +97,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         <JsonFileImportButton />
         <MenuItem
           onClick={openSubMenu}
+          onMouseEnter={openSubMenu}
           sx={{
             display: "flex",
             justifyContent: "space-between",
@@ -121,6 +122,7 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         transformOrigin={{ vertical: "top", horizontal: "left" }}
         MenuListProps={{
           "aria-labelledby": "export-sub-menu-button",
+          onMouseLeave: () => setSubMenuAnchorEl(null),
         }}
       >
         <MenuItem onClick={exportAsSvg}>As SVG</MenuItem>

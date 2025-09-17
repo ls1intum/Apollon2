@@ -1,5 +1,6 @@
 import { DiagramNodeTypeRecord } from "@/nodes"
 import { XYPosition, type Node } from "@xyflow/react"
+import { log } from "../logger"
 
 export const getPositionOnCanvas = (
   node: Node,
@@ -79,7 +80,7 @@ export function sortNodesTopologically(nodes: Node[]): Node[] {
       if (parentNode) {
         visit(parentNode)
       } else {
-        console.warn(
+        log.warn(
           `Parent node with id ${node.parentId} not found for node ${node.id}`
         )
       }

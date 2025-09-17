@@ -1,6 +1,7 @@
 import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { useFileDownload } from "./useFileDownload"
 import { useEditorContext } from "@/contexts"
+import { log } from "@/logger"
 
 export const useExportAsJSON = () => {
   const { editor } = useEditorContext()
@@ -11,13 +12,13 @@ export const useExportAsJSON = () => {
 
   const exportAsJSON = () => {
     if (!editor) {
-      console.error("Editor context is not available")
+      log.error("Editor context is not available")
       return
     }
 
     const currentModel = getCurrentModel()
     if (!currentModel) {
-      console.error("Current model is not available")
+      log.error("Current model is not available")
       return
     }
 

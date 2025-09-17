@@ -1,11 +1,12 @@
 import mongoose from "mongoose"
+import { log } from "../logger"
 
 export const connectToMongoDB = async (mongoURI: string): Promise<void> => {
   try {
     await mongoose.connect(mongoURI)
-    console.log("Connected to MongoDB")
+    log.debug("Connected to MongoDB")
   } catch (error) {
-    console.error("MongoDB connection error:", error)
+    log.error("MongoDB connection error:", error as Error)
     throw error
   }
 }

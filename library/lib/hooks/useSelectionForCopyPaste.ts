@@ -3,6 +3,7 @@ import { useDiagramStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 import { generateUUID, sortNodesTopologically } from "@/utils"
 import type { Node } from "@xyflow/react"
+import { log } from "../logger"
 import {
   ClipboardData,
   createClipboardData,
@@ -66,7 +67,7 @@ export const useSelectionForCopyPaste = () => {
         return true
       }
     } catch (error) {
-      console.error("Failed to copy to clipboard:", error)
+      log.error("Failed to copy to clipboard:", error as Error)
       return false
     }
 
@@ -205,7 +206,7 @@ export const useSelectionForCopyPaste = () => {
 
         return true
       } catch (error) {
-        console.error("Failed to paste from clipboard:", error)
+        log.error("Failed to paste from clipboard:", error as Error)
         return false
       }
     },
@@ -227,7 +228,7 @@ export const useSelectionForCopyPaste = () => {
         return false
       }
     } catch (error) {
-      console.error("Failed to copy to clipboard:", error)
+      log.error("Failed to copy to clipboard:", error as Error)
       return false
     }
 

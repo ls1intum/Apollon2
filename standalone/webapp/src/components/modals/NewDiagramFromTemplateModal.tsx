@@ -9,6 +9,7 @@ import { Typography } from "@/components/Typography"
 import { useState } from "react"
 import { usePersistenceModelStore } from "@/stores/usePersistenceModelStore"
 import { useNavigate } from "react-router"
+import { log } from "@/logger"
 
 enum TemplateType {
   Adapter = "Adapter",
@@ -47,13 +48,9 @@ export const NewDiagramFromTemplateModal = () => {
         state: { timeStapToCreate },
       })
 
-      // Handle passed diagram model from new page location data
-      // const JsonDataINStringFormat = JSON.stringify(jsonData)
-      // const diagramName = jsonData.title as string
-
       closeModal()
     } catch (err: unknown) {
-      console.error("Error creating diagram from template:", err)
+      log.error("Error creating diagram from template:", err as Error)
 
       if (err instanceof Error) {
         setError(err.message)

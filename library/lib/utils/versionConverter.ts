@@ -11,6 +11,7 @@ import {
   V3Message,
   V3Messages,
 } from "./v3Typings"
+import { log } from "../logger"
 
 import {
   ClassNodeProps,
@@ -762,7 +763,7 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
       try {
         assessments[id] = convertV3AssessmentToV4(v3Assessment)
       } catch (error) {
-        console.warn(`Failed to convert assessment for element ${id}:`, error)
+        log.warn(`Failed to convert assessment for element ${id}:`, error)
       }
     })
   }
@@ -784,7 +785,7 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
   ]
 
   if (!supportedDiagramTypes.includes(v3Data.model.type as UMLDiagramType)) {
-    console.warn(
+    log.warn(
       `Diagram type '${v3Data.model.type}' may not be fully supported in V4`
     )
   }
