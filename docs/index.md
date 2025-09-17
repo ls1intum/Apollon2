@@ -41,7 +41,7 @@ mobile/ios-android-setup
 :includehidden:
 :maxdepth: 2
 
-deployment/docker
+deployment/github-actions
 deployment/npm-publishing
 ```
 
@@ -51,6 +51,14 @@ deployment/npm-publishing
 :maxdepth: 2
 
 troubleshooting/common-issues
+```
+
+```{toctree}
+:caption: Update Documents
+:includehidden:
+:maxdepth: 2
+
+document/how-to-update-document
 ```
 
 ```{toctree}
