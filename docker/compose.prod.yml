@@ -64,6 +64,7 @@ services:
       - dbdata:/data/db
     networks:
       - shared-network
+    restart: unless-stopped
 
 volumes:
   caddy_data:
