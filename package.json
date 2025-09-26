@@ -48,8 +48,8 @@
     "npm": ">=11.1.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.6.0",
-    "@commitlint/config-conventional": "19.6.0",
+    "@commitlint/cli": "20.0.0",
+    "@commitlint/config-conventional": "20.0.0",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@types/node": "22.13.1",
