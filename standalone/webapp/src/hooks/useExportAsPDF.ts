@@ -1,6 +1,7 @@
 import { useEditorContext } from "@/contexts"
 import { jsPDF } from "jspdf"
 import { log } from "@/logger"
+import { svg2pdf } from "svg2pdf.js"
 
 export const useExportAsPDF = () => {
   const { editor } = useEditorContext()
@@ -10,47 +11,36 @@ export const useExportAsPDF = () => {
 
     const ApollonSVG = await editor.exportAsSVG()
 
-    const blob = new Blob([ApollonSVG.svg], {
-      type: "image/svg+xml;charset=utf-8",
+    // Parse the SVG string into a DOM element
+    const parser = new DOMParser()
+    const svgDoc = parser.parseFromString(ApollonSVG.svg, "image/svg+xml")
+    const svgElement = svgDoc.documentElement as unknown as SVGSVGElement
+
+    // Get dimensions from the SVG
+    const width = ApollonSVG.clip.width
+    const height = ApollonSVG.clip.height
+
+    // Create PDF with appropriate dimensions
+    const pdf = new jsPDF({
+      orientation: width > height ? "l" : "p",
+      unit: "pt",
+      format: [width, height],
     })
-    const url = URL.createObjectURL(blob)
 
-    const img = new Image()
-    img.onload = () => {
-      const scale = 2
-
-      const width = img.width
-      const height = img.height
-
-      const canvas = document.createElement("canvas")
-      canvas.width = width * scale
-      canvas.height = height * scale
-
-      const ctx = canvas.getContext("2d")
-      if (!ctx) {
-        log.error("Could not get canvas context")
-        return
-      }
-
-      ctx.setTransform(scale, 0, 0, scale, 0, 0)
-      ctx.drawImage(img, 0, 0)
-
-      const pngData = canvas.toDataURL("image/png")
-
-      const pdf = new jsPDF("l", "pt", [width, height])
-      pdf.addImage(pngData, "PNG", 0, 0, width, height)
+    try {
+      // Convert SVG to PDF
+      await svg2pdf(svgElement, pdf, {
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+      })
 
       const fileName = editor.getDiagramMetadata().diagramTitle || "diagram"
       pdf.save(`${fileName}.pdf`)
-
-      URL.revokeObjectURL(url)
+    } catch (e) {
+      log.error("Failed to export PDF", e as unknown as Error)
     }
-
-    img.onerror = (e) => {
-      log.error("Failed to load SVG image", e as unknown as Error)
-    }
-
-    img.src = url
   }
 
   return exportAsPDF
