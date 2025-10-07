@@ -78,6 +78,7 @@ export const SfcDiagramEdge = ({
     hasInitialCalculation,
     isReconnectingRef,
     markerEnd,
+    markerStart,
     strokeDashArray,
     handlePointerDown,
     isDiagramModifiable,
@@ -102,6 +103,7 @@ export const SfcDiagramEdge = ({
 
   const { isNegated, displayName, showBar } = getParsedEdgeData(data)
   const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
+  const markerKey = `${id}-${markerStart ?? "none"}-${markerEnd ?? "none"}`
 
   const labelPosition = {
     x: edgeData.isMiddlePathHorizontal
@@ -147,6 +149,7 @@ export const SfcDiagramEdge = ({
       <FeedbackDropzone elementId={id} asElement="path" elementType={type}>
         <g className="edge-container">
           <BaseEdge
+            key={markerKey}
             id={id}
             path={currentPath}
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}
