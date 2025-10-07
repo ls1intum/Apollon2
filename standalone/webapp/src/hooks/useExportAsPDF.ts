@@ -1,7 +1,7 @@
 import { useEditorContext } from "@/contexts"
 import { jsPDF } from "jspdf"
 import { log } from "@/logger"
-import { svg2pdf } from "svg2pdf.js"
+import "svg2pdf.js"
 
 export const useExportAsPDF = () => {
   const { editor } = useEditorContext()
@@ -16,6 +16,14 @@ export const useExportAsPDF = () => {
     const svgDoc = parser.parseFromString(ApollonSVG.svg, "image/svg+xml")
     const svgElement = svgDoc.documentElement as unknown as SVGSVGElement
 
+    // Temporarily add SVG to the DOM (required for svg2pdf.js to work properly)
+    const container = document.createElement("div")
+    container.style.position = "absolute"
+    container.style.left = "-9999px"
+    container.style.top = "-9999px"
+    container.appendChild(svgElement)
+    document.body.appendChild(container)
+
     // Get dimensions from the SVG
     const width = ApollonSVG.clip.width
     const height = ApollonSVG.clip.height
@@ -28,8 +36,8 @@ export const useExportAsPDF = () => {
     })
 
     try {
-      // Convert SVG to PDF
-      await svg2pdf(svgElement, pdf, {
+      // Convert SVG to PDF using the .svg() method from svg2pdf.js
+      await pdf.svg(svgElement, {
         x: 0,
         y: 0,
         width: width,
@@ -40,6 +48,9 @@ export const useExportAsPDF = () => {
       pdf.save(`${fileName}.pdf`)
     } catch (e) {
       log.error("Failed to export PDF", e as unknown as Error)
+    } finally {
+      // Clean up - remove the temporary container
+      document.body.removeChild(container)
     }
   }
 
