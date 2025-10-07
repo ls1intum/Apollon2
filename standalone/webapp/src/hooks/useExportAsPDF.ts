@@ -1,7 +1,6 @@
 import { useEditorContext } from "@/contexts"
 import { jsPDF } from "jspdf"
 import { log } from "@/logger"
-import "svg2pdf.js"
 
 export const useExportAsPDF = () => {
   const { editor } = useEditorContext()
@@ -11,47 +10,54 @@ export const useExportAsPDF = () => {
 
     const ApollonSVG = await editor.exportAsSVG()
 
-    // Parse the SVG string into a DOM element
-    const parser = new DOMParser()
-    const svgDoc = parser.parseFromString(ApollonSVG.svg, "image/svg+xml")
-    const svgElement = svgDoc.documentElement as unknown as SVGSVGElement
-
-    // Temporarily add SVG to the DOM (required for svg2pdf.js to work properly)
-    const container = document.createElement("div")
-    container.style.position = "absolute"
-    container.style.left = "-9999px"
-    container.style.top = "-9999px"
-    container.appendChild(svgElement)
-    document.body.appendChild(container)
-
-    // Get dimensions from the SVG
-    const width = ApollonSVG.clip.width
-    const height = ApollonSVG.clip.height
-
-    // Create PDF with appropriate dimensions
-    const pdf = new jsPDF({
-      orientation: width > height ? "l" : "p",
-      unit: "pt",
-      format: [width, height],
+    const blob = new Blob([ApollonSVG.svg], {
+      type: "image/svg+xml;charset=utf-8",
     })
+    const url = URL.createObjectURL(blob)
 
-    try {
-      // Convert SVG to PDF using the .svg() method from svg2pdf.js
-      await pdf.svg(svgElement, {
-        x: 0,
-        y: 0,
-        width: width,
-        height: height,
+    const img = new Image()
+    img.onload = () => {
+      const scale = 2
+
+      const width = img.width
+      const height = img.height
+
+      const canvas = document.createElement("canvas")
+      canvas.width = width * scale
+      canvas.height = height * scale
+
+      const ctx = canvas.getContext("2d")
+      if (!ctx) {
+        log.error("Could not get canvas context")
+        return
+      }
+
+      ctx.setTransform(scale, 0, 0, scale, 0, 0)
+      ctx.drawImage(img, 0, 0)
+
+      const pngData = canvas.toDataURL("image/png")
+
+      const pdf = new jsPDF({
+        orientation: "l",
+        unit: "pt",
+        format: [width, height],
+        compress: true,
+        precision: 2
       })
+      
+      pdf.addImage(pngData, "PNG", 0, 0, width, height)
 
       const fileName = editor.getDiagramMetadata().diagramTitle || "diagram"
       pdf.save(`${fileName}.pdf`)
-    } catch (e) {
-      log.error("Failed to export PDF", e as unknown as Error)
-    } finally {
-      // Clean up - remove the temporary container
-      document.body.removeChild(container)
+
+      URL.revokeObjectURL(url)
     }
+
+    img.onerror = (e) => {
+      log.error("Failed to load SVG image", e as unknown as Error)
+    }
+
+    img.src = url
   }
 
   return exportAsPDF
