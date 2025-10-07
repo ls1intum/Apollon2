@@ -58,6 +58,7 @@ export const FlowChartEdge = ({
     hasInitialCalculation,
     isReconnectingRef,
     markerEnd,
+    markerStart,
     strokeDashArray,
     handlePointerDown,
     handleEndpointPointerDown,
@@ -84,12 +85,14 @@ export const FlowChartEdge = ({
   })
 
   const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
+  const markerKey = `${id}-${markerStart ?? "none"}-${markerEnd ?? "none"}`
 
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path" elementType={type}>
         <g className="edge-container">
           <BaseEdge
+            key={markerKey}
             id={id}
             path={currentPath}
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}

@@ -56,6 +56,7 @@ export const PetriNetEdge = ({
     currentPath,
     overlayPath,
     markerEnd,
+    markerStart,
     strokeDashArray,
     sourcePoint,
     targetPoint,
@@ -79,12 +80,14 @@ export const PetriNetEdge = ({
   })
 
   const { strokeColor, textColor } = getCustomColorsFromDataForEdge(data)
+  const markerKey = `${id}-${markerStart ?? "none"}-${markerEnd ?? "none"}`
 
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path" elementType={type}>
         <g className="edge-container">
           <BaseEdge
+            key={markerKey}
             id={id}
             path={tempReconnectPath || currentPath}
             markerEnd={isReconnectingRef.current ? undefined : markerEnd}

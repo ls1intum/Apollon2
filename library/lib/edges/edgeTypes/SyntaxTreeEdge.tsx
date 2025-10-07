@@ -44,6 +44,7 @@ export const SyntaxTreeEdge = ({
     currentPath,
     overlayPath,
     markerEnd,
+    markerStart,
     strokeDashArray,
     isDiagramModifiable,
   } = useStraightPathEdge({
@@ -61,12 +62,14 @@ export const SyntaxTreeEdge = ({
     targetHandleId,
   })
   const { strokeColor } = getCustomColorsFromDataForEdge(data)
+  const markerKey = `${id}-${markerStart ?? "none"}-${markerEnd ?? "none"}`
 
   return (
     <AssessmentSelectableWrapper elementId={id} asElement="g">
       <FeedbackDropzone elementId={id} asElement="path" elementType={type}>
         <g className="edge-container">
           <BaseEdge
+            key={markerKey}
             id={id}
             path={currentPath}
             markerEnd={markerEnd}
