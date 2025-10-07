@@ -25,6 +25,9 @@ const cssVariables = `
   --apollon2-btn-outline-secondary-color: var(--apollon-btn-outline-secondary-color, #6c757d);
   --apollon2-modal-bottom-border: var(--apollon-modal-bottom-border, #e9ecef);
     }
+    text {
+      font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    }
   `
 
 export const getSVG = (container: HTMLElement, clip: Rect): string => {
