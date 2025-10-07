@@ -42,9 +42,9 @@ export const useExportAsPDF = () => {
         unit: "pt",
         format: [width, height],
         compress: true,
-        precision: 2
+        precision: 2,
       })
-      
+
       pdf.addImage(pngData, "PNG", 0, 0, width, height)
 
       const fileName = editor.getDiagramMetadata().diagramTitle || "diagram"
