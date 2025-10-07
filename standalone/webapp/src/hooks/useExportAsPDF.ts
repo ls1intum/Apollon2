@@ -37,7 +37,14 @@ export const useExportAsPDF = () => {
 
       const pngData = canvas.toDataURL("image/png")
 
-      const pdf = new jsPDF("l", "pt", [width, height])
+      const pdf = new jsPDF({
+        orientation: "l",
+        unit: "pt",
+        format: [width, height],
+        compress: true,
+        precision: 2,
+      })
+
       pdf.addImage(pngData, "PNG", 0, 0, width, height)
 
       const fileName = editor.getDiagramMetadata().diagramTitle || "diagram"
