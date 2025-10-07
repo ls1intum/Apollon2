@@ -75,12 +75,100 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
     }
     MainNodesGTag.appendChild(newGTagForNode)
   })
-  const allEdges = vp.querySelectorAll(".react-flow__edge-path")
-
   const MainEdgesGTag = document.createElement("g")
   mainSVG.appendChild(MainEdgesGTag)
 
-  allEdges.forEach((edge) => MainEdgesGTag.appendChild(edge))
+  const allEdges = vp.querySelectorAll(".react-flow__edge") as NodeListOf<SVGGElement>
+
+  allEdges.forEach((edge) => {
+    const clonedEdge = edge.cloneNode(true) as SVGGElement
+
+    ;(
+      clonedEdge.querySelectorAll(".edge-overlay") as NodeListOf<SVGPathElement>
+    ).forEach((overlay) => overlay.remove())
+
+    ;(clonedEdge.querySelectorAll("circle") as NodeListOf<SVGCircleElement>).forEach(
+      (circle) => {
+        if (circle.getAttribute("pointer-events") === "all") {
+          circle.remove()
+        }
+      }
+    )
+
+    ;(
+      clonedEdge.querySelectorAll("foreignObject") as NodeListOf<SVGForeignObjectElement>
+    ).forEach((foreignObject) => foreignObject.remove())
+
+    MainEdgesGTag.appendChild(clonedEdge)
+  })
+
+  const edgeLabelRenderer = container.querySelector(
+    ".react-flow__edgelabel-renderer"
+  )
+
+  if (edgeLabelRenderer) {
+    const associationLabels = edgeLabelRenderer.querySelectorAll(
+      '[data-export-label-type="association"]'
+    ) as NodeListOf<HTMLElement>
+
+    associationLabels.forEach((labelElement) => {
+      const xValue = labelElement.dataset.exportX
+      const yValue = labelElement.dataset.exportY
+      if (!xValue || !yValue) {
+        return
+      }
+
+      const x = parseFloat(xValue)
+      const y = parseFloat(yValue)
+
+      if (!Number.isFinite(x) || !Number.isFinite(y)) {
+        return
+      }
+
+      const textContent = labelElement.textContent?.trim()
+      if (!textContent) {
+        return
+      }
+
+      const computedStyle = window.getComputedStyle(labelElement)
+      const svgText = document.createElementNS(SVG_NS, "text")
+      svgText.setAttribute("x", `${x}`)
+      svgText.setAttribute("y", `${y}`)
+      svgText.setAttribute("text-anchor", "middle")
+      svgText.setAttribute("dominant-baseline", "middle")
+
+      const styleAttributes = [
+        computedStyle.fontSize && `font-size: ${computedStyle.fontSize}`,
+        computedStyle.fontWeight && `font-weight: ${computedStyle.fontWeight}`,
+        computedStyle.fontStyle && computedStyle.fontStyle !== "normal"
+          ? `font-style: ${computedStyle.fontStyle}`
+          : "",
+        computedStyle.fontFamily && `font-family: ${computedStyle.fontFamily}`,
+        `fill: ${computedStyle.color}`,
+        "pointer-events: none",
+        "user-select: none",
+      ].filter(Boolean)
+
+      if (styleAttributes.length > 0) {
+        svgText.setAttribute("style", styleAttributes.join("; "))
+      }
+
+      const rotationValue = labelElement.dataset.exportRotation
+      if (rotationValue) {
+        const rotation = parseFloat(rotationValue)
+        if (Number.isFinite(rotation)) {
+          svgText.setAttribute(
+            "transform",
+            `rotate(${rotation}, ${x}, ${y})`
+          )
+        }
+      }
+
+      svgText.textContent = textContent
+
+      MainEdgesGTag.appendChild(svgText)
+    })
+  }
 
   return mainSVG.outerHTML
 }
