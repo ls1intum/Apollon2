@@ -77,12 +77,23 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
     }
     MainNodesGTag.appendChild(newGTagForNode)
   })
-  const allEdges = vp.querySelectorAll(".react-flow__edge-path")
+
+  // Get all edge elements
+  const allEdgeElements = vp.querySelectorAll(".react-flow__edge")
 
   const MainEdgesGTag = document.createElement("g")
   mainSVG.appendChild(MainEdgesGTag)
 
-  allEdges.forEach((edge) => MainEdgesGTag.appendChild(edge))
+  const edgeCircles = vp.querySelectorAll(".edge-circle")
+  edgeCircles.forEach((circle) => circle.remove())
+
+  // Add all SVG elements from each edge container
+  allEdgeElements.forEach((edgeContainer) => {
+    const svgElements = edgeContainer.querySelectorAll("path, text, g, circle")
+    svgElements.forEach((element) => {
+      MainEdgesGTag.appendChild(element.cloneNode(true))
+    })
+  })
 
   replaceCSSVariables(mainSVG)
 
