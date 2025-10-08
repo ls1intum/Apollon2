@@ -85,6 +85,9 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
   const MainEdgesGTag = document.createElement("g")
   mainSVG.appendChild(MainEdgesGTag)
 
+  const edgeCircles = vp.querySelectorAll(".edge-circle")
+  edgeCircles.forEach((circle) => circle.remove())
+
   // Add all SVG elements from each edge container
   allEdgeElements.forEach((edgeContainer) => {
     const svgElements = edgeContainer.querySelectorAll("path, text, g, circle")
