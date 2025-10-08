@@ -81,7 +81,9 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
   const MainEdgesGTag = document.createElement("g")
   mainSVG.appendChild(MainEdgesGTag)
 
-  const allEdges = vp.querySelectorAll(".react-flow__edge") as NodeListOf<SVGGElement>
+  const allEdges = vp.querySelectorAll(
+    ".react-flow__edge"
+  ) as NodeListOf<SVGGElement>
 
   allEdges.forEach((edge) => {
     const clonedEdge = edge.cloneNode(true) as SVGGElement
@@ -89,17 +91,17 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
     ;(
       clonedEdge.querySelectorAll(".edge-overlay") as NodeListOf<SVGPathElement>
     ).forEach((overlay) => overlay.remove())
-
-    ;(clonedEdge.querySelectorAll("circle") as NodeListOf<SVGCircleElement>).forEach(
-      (circle) => {
-        if (circle.getAttribute("pointer-events") === "all") {
-          circle.remove()
-        }
-      }
-    )
-
     ;(
-      clonedEdge.querySelectorAll("foreignObject") as NodeListOf<SVGForeignObjectElement>
+      clonedEdge.querySelectorAll("circle") as NodeListOf<SVGCircleElement>
+    ).forEach((circle) => {
+      if (circle.getAttribute("pointer-events") === "all") {
+        circle.remove()
+      }
+    })
+    ;(
+      clonedEdge.querySelectorAll(
+        "foreignObject"
+      ) as NodeListOf<SVGForeignObjectElement>
     ).forEach((foreignObject) => foreignObject.remove())
 
     MainEdgesGTag.appendChild(clonedEdge)
@@ -160,10 +162,7 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
       if (rotationValue) {
         const rotation = parseFloat(rotationValue)
         if (Number.isFinite(rotation)) {
-          svgText.setAttribute(
-            "transform",
-            `rotate(${rotation}, ${x}, ${y})`
-          )
+          svgText.setAttribute("transform", `rotate(${rotation}, ${x}, ${y})`)
         }
       }
 
