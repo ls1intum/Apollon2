@@ -78,10 +78,10 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
     }
     MainNodesGTag.appendChild(newGTagForNode)
   })
-  
-  // Get all edge elements (includes paths, labels, and other edge components)
+
+  // Get all edge elements
   const allEdgeElements = vp.querySelectorAll(".react-flow__edge")
-  
+
   const MainEdgesGTag = document.createElement("g")
   mainSVG.appendChild(MainEdgesGTag)
 
