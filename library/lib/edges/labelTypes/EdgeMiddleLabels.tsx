@@ -32,17 +32,14 @@ export const EdgeMiddleLabels = ({
   let transform = ""
   let offsetX = 0
   let offsetY = 0
-  let labelX = pathMiddlePosition.x
-  let labelY = pathMiddlePosition.y
-  let rotation: number | null = null
 
   if (isUseCasePath && sourcePoint && targetPoint) {
     const dx = targetPoint.x - sourcePoint.x
     const dy = targetPoint.y - sourcePoint.y
     const angle = Math.atan2(dy, dx) * (180 / Math.PI)
-    let computedRotation = angle
+    let rotation = angle
     if (angle > 90 || angle < -90) {
-      computedRotation = angle + 180
+      rotation = angle + 180
     }
 
     const offsetDistance = 15
@@ -57,25 +54,20 @@ export const EdgeMiddleLabels = ({
       offsetY = normalizedPerpY * offsetDistance
     }
 
-    labelX = (sourcePoint.x + targetPoint.x) / 2 + offsetX
-    labelY = (sourcePoint.y + targetPoint.y) / 2 + offsetY
-    rotation = computedRotation
-    transform = `translate(${labelX}px, ${labelY}px) translate(-50%, -50%) rotate(${computedRotation}deg)`
+    const middleX = (sourcePoint.x + targetPoint.x) / 2 + offsetX
+    const middleY = (sourcePoint.y + targetPoint.y) / 2 + offsetY
+
+    transform = `translate(${middleX}px, ${middleY}px) translate(-50%, -50%) rotate(${rotation}deg)`
   } else {
     offsetX = isMiddlePathHorizontal ? 0 : 10
     offsetY = isMiddlePathHorizontal ? +20 : 0
-    labelX = pathMiddlePosition.x + offsetX
-    labelY = pathMiddlePosition.y + offsetY
-    transform = `translate(${labelX}px, ${labelY}px) translate(-50%, -50%)`
+
+    transform = `translate(${pathMiddlePosition.x + offsetX}px, ${pathMiddlePosition.y + offsetY}px) translate(-50%, -50%)`
   }
 
   return (
     <EdgeLabelRenderer>
       <div
-        data-export-label-type="association"
-        data-export-x={labelX}
-        data-export-y={labelY}
-        data-export-rotation={rotation ?? undefined}
         style={{
           position: "absolute",
           transform: transform,
