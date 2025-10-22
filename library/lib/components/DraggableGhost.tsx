@@ -264,7 +264,14 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
 
   return (
     <>
-      <div onPointerDown={handlePointerDown}>{children}</div>
+      <div 
+        onPointerDown={handlePointerDown}
+        style={{
+          touchAction: "none", // Prevent default touch behaviors
+        }}
+      >
+        {children}
+      </div>
       {isDragging && createPortal(ghostElement, document.body)}
     </>
   )
