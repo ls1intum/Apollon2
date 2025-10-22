@@ -264,7 +264,7 @@ export const DraggableGhost: React.FC<DraggableGhostProps> = ({
 
   return (
     <>
-      <div 
+      <div
         onPointerDown={handlePointerDown}
         style={{
           touchAction: "none",
