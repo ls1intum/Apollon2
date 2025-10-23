@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button/Button"
 import { useModalContext } from "@/contexts/ModalContext"
-import ListItemText from "@mui/material/ListItemText"
+import { ListItemText } from "@/components/ListItemText"
 import MenuItem from "@mui/material/MenuItem"
 import MenuList from "@mui/material/MenuList"
 import Divider from "@mui/material/Divider"
@@ -77,7 +77,7 @@ export const NewDiagramFromTemplateModal = () => {
               p: 1,
               mt: 0.5,
               mb: 1,
-              bgcolor: "lightgray",
+              bgcolor: "var(--apollon2-gray)",
               borderRadius: 1,
             }}
           >
