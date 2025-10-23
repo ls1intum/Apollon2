@@ -1,5 +1,8 @@
 import React from "react"
-import { ListItemText as MUIListItemText, ListItemTextProps } from "@mui/material"
+import {
+  ListItemText as MUIListItemText,
+  ListItemTextProps,
+} from "@mui/material"
 
 export const ListItemText: React.FC<ListItemTextProps> = ({ sx, ...props }) => {
   return (
