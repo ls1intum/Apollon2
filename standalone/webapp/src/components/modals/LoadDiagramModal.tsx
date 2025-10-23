@@ -51,7 +51,7 @@ export const LoadDiagramModal = () => {
         return (
           <div
             key={model.id}
-            className={`flex flex-col cursor-pointer ${currentTheme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}${
+            className={`flex flex-col cursor-pointer ${currentTheme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-50"}${
               isSelected && isCurrentModelOnTop ? "rounded-t-lg" : ""
             } ${isSelected && isCurrentModelOnBottom ? "rounded-b-lg" : ""}`}
             onClick={() => handleLoadingDiagram(model.id)}
@@ -62,7 +62,12 @@ export const LoadDiagramModal = () => {
               }`}
             >
               <div className="flex gap-2 flex-col">
-                <span className="text-lg" style={{ color: 'var(--apollon2-primary-contrast)' }}>{model.title}</span>
+                <span
+                  className="text-lg"
+                  style={{ color: "var(--apollon2-primary-contrast)" }}
+                >
+                  {model.title}
+                </span>
                 <span
                   className={`text-sm ${isSelected ? "" : "text-gray-500"}`}
                 >
