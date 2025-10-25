@@ -3,6 +3,7 @@ import { IPoint } from "../Connection"
 import { EdgeLabelRenderer } from "@xyflow/react"
 import { MessageData } from "../EdgeProps"
 import { useMessagePositioning } from "../../hooks"
+import { Stack } from "@mui/material"
 
 interface EdgeMultipleLabelsProps {
   messages?: MessageData[]
@@ -33,9 +34,7 @@ export const EdgeMultipleLabels = ({
     backwardMessages,
     forwardArrowRotation,
     backwardArrowRotation,
-    forwardArrowBoxPosition,
     forwardLabelBoxPosition,
-    backwardArrowBoxPosition,
     backwardLabelBoxPosition,
     isPositioned,
   } = useMessagePositioning(
@@ -73,7 +72,6 @@ export const EdgeMultipleLabels = ({
 
   const renderMessages = (
     messageList: MessageData[],
-    arrowBoxPosition: { x: number; y: number },
     labelBoxPosition: { x: number; y: number },
     arrowRotation: number,
     keyPrefix: string,
@@ -84,20 +82,21 @@ export const EdgeMultipleLabels = ({
 
       return (
         <div key={`${keyPrefix}-${index}`}>
-          {/* Arrow (only for first message in group) */}
-          {index === 0 && (
-            <div
-              style={{
-                position: "absolute",
-                transform: `translate(${pathMiddlePosition.x + arrowBoxPosition.x}px, ${pathMiddlePosition.y + arrowBoxPosition.y}px) translate(-50%, -50%)`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: ZINDEX_LABEL,
-                stroke: textColor,
-              }}
-              className="nodrag nopan"
-            >
+          {/* Message container with arrow and text */}
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+            style={{
+              position: "absolute",
+              transform: `translate(${pathMiddlePosition.x + labelBoxPosition.x + offset.x}px, ${pathMiddlePosition.y + labelBoxPosition.y + offset.y}px) translate(-50%, -50%)`,
+              zIndex: ZINDEX_LABEL,
+              pointerEvents: "none",
+            }}
+            className="nodrag nopan"
+          >
+            {/* Arrow (only for first message in group) */}
+            {index === 0 && (
               <svg
                 width="16"
                 height="16"
@@ -111,31 +110,26 @@ export const EdgeMultipleLabels = ({
                   color: textColor,
                   transform: `rotate(${arrowRotation}deg)`,
                   transformOrigin: "center",
+                  flexShrink: 0,
                 }}
               >
                 <path d="M2 12h20" />
                 <path d="m17 5 5 7-5 7" />
               </svg>
-            </div>
-          )}
+            )}
 
-          {/* Label */}
-          <div
-            style={{
-              position: "absolute",
-              transform: `translate(${pathMiddlePosition.x + labelBoxPosition.x + offset.x}px, ${pathMiddlePosition.y + labelBoxPosition.y + offset.y}px) translate(-50%, -50%)`,
-              fontSize: "14px",
-              fontWeight: 400,
-              color: textColor,
-              whiteSpace: "nowrap",
-              pointerEvents: "none",
-              zIndex: ZINDEX_LABEL,
-              willChange: "transform",
-            }}
-            className="nodrag nopan"
-          >
-            {message.text}
-          </div>
+            {/* Label */}
+            <div
+              style={{
+                fontSize: "14px",
+                fontWeight: 400,
+                color: textColor,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {message.text}
+            </div>
+          </Stack>
         </div>
       )
     })
@@ -146,7 +140,6 @@ export const EdgeMultipleLabels = ({
       {/* Forward Messages (pointing to target) */}
       {renderMessages(
         forwardMessages,
-        forwardArrowBoxPosition,
         forwardLabelBoxPosition,
         forwardArrowRotation,
         "forward",
@@ -156,7 +149,6 @@ export const EdgeMultipleLabels = ({
       {/* Backward Messages (pointing to source) */}
       {renderMessages(
         backwardMessages,
-        backwardArrowBoxPosition,
         backwardLabelBoxPosition,
         backwardArrowRotation,
         "backward",
