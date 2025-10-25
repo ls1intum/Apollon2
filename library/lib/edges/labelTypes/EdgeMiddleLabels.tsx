@@ -1,6 +1,4 @@
-import { ZINDEX_LABEL } from "@/constants/zindexConstants"
 import { IPoint } from "../Connection"
-import { EdgeLabelRenderer } from "@xyflow/react"
 
 interface EdgeMiddleLabelsProps {
   label?: string | null
@@ -29,18 +27,16 @@ export const EdgeMiddleLabels = ({
 
   if (!label || !showRelationshipLabels) return null
 
-  let transform = ""
-  let offsetX = 0
-  let offsetY = 0
+  // Calculate position and rotation for the label
+  let x: number
+  let y: number
+  let rotation = 0
 
   if (isUseCasePath && sourcePoint && targetPoint) {
     const dx = targetPoint.x - sourcePoint.x
     const dy = targetPoint.y - sourcePoint.y
     const angle = Math.atan2(dy, dx) * (180 / Math.PI)
-    let rotation = angle
-    if (angle > 90 || angle < -90) {
-      rotation = angle + 180
-    }
+    rotation = angle > 90 || angle < -90 ? angle + 180 : angle
 
     const offsetDistance = 15
     const perpX = -dy
@@ -50,40 +46,36 @@ export const EdgeMiddleLabels = ({
     if (perpLength > 0) {
       const normalizedPerpX = perpX / perpLength
       const normalizedPerpY = perpY / perpLength
-      offsetX = normalizedPerpX * offsetDistance
-      offsetY = normalizedPerpY * offsetDistance
+      x = (sourcePoint.x + targetPoint.x) / 2 + normalizedPerpX * offsetDistance
+      y = (sourcePoint.y + targetPoint.y) / 2 + normalizedPerpY * offsetDistance
+    } else {
+      x = (sourcePoint.x + targetPoint.x) / 2
+      y = (sourcePoint.y + targetPoint.y) / 2
     }
-
-    const middleX = (sourcePoint.x + targetPoint.x) / 2 + offsetX
-    const middleY = (sourcePoint.y + targetPoint.y) / 2 + offsetY
-
-    transform = `translate(${middleX}px, ${middleY}px) translate(-50%, -50%) rotate(${rotation}deg)`
   } else {
-    offsetX = isMiddlePathHorizontal ? 0 : 10
-    offsetY = isMiddlePathHorizontal ? +20 : 0
-
-    transform = `translate(${pathMiddlePosition.x + offsetX}px, ${pathMiddlePosition.y + offsetY}px) translate(-50%, -50%)`
+    const offsetX = isMiddlePathHorizontal ? 0 : 10
+    const offsetY = isMiddlePathHorizontal ? 20 : 0
+    x = pathMiddlePosition.x + offsetX
+    y = pathMiddlePosition.y + offsetY
   }
 
   return (
-    <EdgeLabelRenderer>
-      <div
-        style={{
-          position: "absolute",
-          transform: transform,
-          borderRadius: 5,
-          fontSize: 12,
-          fontWeight: 700,
-          transformOrigin: "center center",
-          whiteSpace: "nowrap",
-          pointerEvents: "none",
-          zIndex: ZINDEX_LABEL,
-          color: textColor,
-        }}
-        className="nodrag nopan"
-      >
-        {label}
-      </div>
-    </EdgeLabelRenderer>
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      dominantBaseline="middle"
+      style={{
+        fontSize: "12px",
+        fontWeight: 700,
+        fill: textColor,
+        userSelect: "none",
+        pointerEvents: "none",
+      }}
+      transform={rotation !== 0 ? `rotate(${rotation} ${x} ${y})` : undefined}
+      className="nodrag nopan"
+    >
+      {label}
+    </text>
   )
 }
