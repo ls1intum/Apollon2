@@ -9,6 +9,9 @@ export const useExportAsPDF = () => {
     if (!editor) return
 
     const ApollonSVG = await editor.exportAsSVG()
+    const { clip } = ApollonSVG
+    const width = clip.width
+    const height = clip.height
 
     const blob = new Blob([ApollonSVG.svg], {
       type: "image/svg+xml;charset=utf-8",
@@ -18,9 +21,6 @@ export const useExportAsPDF = () => {
     const img = new Image()
     img.onload = () => {
       const scale = 2
-
-      const width = img.width
-      const height = img.height
 
       const canvas = document.createElement("canvas")
       canvas.width = width * scale
@@ -33,12 +33,12 @@ export const useExportAsPDF = () => {
       }
 
       ctx.setTransform(scale, 0, 0, scale, 0, 0)
-      ctx.drawImage(img, 0, 0)
+      ctx.drawImage(img, 0, 0, width, height)
 
       const pngData = canvas.toDataURL("image/png")
 
       const pdf = new jsPDF({
-        orientation: "l",
+        orientation: width > height ? "l" : "p",
         unit: "pt",
         format: [width, height],
         compress: true,
