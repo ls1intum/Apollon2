@@ -56,10 +56,11 @@ function App({ onReactFlowInit }: AppProps) {
       }))
     )
 
-  const { mode, diagramType } = useMetadataStore(
+  const { mode, diagramType, readonly } = useMetadataStore(
     useShallow((state) => ({
       mode: state.mode,
       diagramType: state.diagramType,
+      readonly: state.readonly,
     }))
   )
 
@@ -92,7 +93,7 @@ function App({ onReactFlowInit }: AppProps) {
         backgroundColor: "var(--apollon2-background)",
       }}
     >
-      {mode === ApollonMode.Modelling && <Sidebar />}
+      {mode === ApollonMode.Modelling && !readonly && <Sidebar />}
       <SvgMarkers />
       <ReactFlow
         id={`react-flow-library-${diagramId}`}
