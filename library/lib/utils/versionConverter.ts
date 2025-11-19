@@ -5,6 +5,7 @@ import { ClassType } from "../types/nodes/enums"
 import { IPoint } from "../edges/Connection"
 import {
   V3DiagramFormat,
+  V3UMLModel,
   V3UMLElement,
   V3UMLRelationship,
   V3Assessment,
@@ -735,10 +736,14 @@ function convertV3AssessmentToV4(v3Assessment: V3Assessment): Assessment {
 /**
  * Main conversion function from v3 to v4 format
  */
-export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
-  const elements = v3Data.model.elements
-  const relationships = v3Data.model.relationships
-  const nodes: ApollonNode[] = Object.values(elements)
+export function convertV3ToV4(v3Data: V3DiagramFormat | V3UMLModel): UMLModel {
+  // Support both wrapped and flat V3 shapes
+  const model: V3UMLModel =
+    (v3Data as V3DiagramFormat).model || (v3Data as V3UMLModel)
+  const id = (v3Data as V3DiagramFormat).id || "converted-diagram-" + Date.now()
+  const title = (v3Data as V3DiagramFormat).title || ""
+
+  const nodes: ApollonNode[] = Object.values(model.elements)
     .filter(
       (element) =>
         ![
@@ -748,18 +753,15 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
           "ObjectMethod",
         ].includes(element.type)
     )
-    .map((element) => {
-      const node = convertV3ElementToV4Node(element, elements)
+    .map((element) => convertV3ElementToV4Node(element, model.elements))
 
-      return node
-    })
-  const edges: ApollonEdge[] = Object.values(relationships).map(
+  const edges: ApollonEdge[] = Object.values(model.relationships).map(
     (relationship) => convertV3RelationshipToV4Edge(relationship)
   )
 
   const assessments: Record<string, Assessment> = {}
-  if (v3Data.model.assessments) {
-    Object.entries(v3Data.model.assessments).forEach(([id, v3Assessment]) => {
+  if (model.assessments) {
+    Object.entries(model.assessments).forEach(([id, v3Assessment]) => {
       try {
         assessments[id] = convertV3AssessmentToV4(v3Assessment)
       } catch (error) {
@@ -768,55 +770,44 @@ export function convertV3ToV4(v3Data: V3DiagramFormat): UMLModel {
     })
   }
 
-  const supportedDiagramTypes: UMLDiagramType[] = [
-    "ClassDiagram",
-    "ObjectDiagram",
-    "ActivityDiagram",
-    "UseCaseDiagram",
-    "CommunicationDiagram",
-    "ComponentDiagram",
-    "DeploymentDiagram",
-    "PetriNet",
-    "ReachabilityGraph",
-    "SyntaxTree",
-    "Flowchart",
-    "BPMN",
-    "Sfc",
-  ]
-
-  if (!supportedDiagramTypes.includes(v3Data.model.type as UMLDiagramType)) {
-    log.warn(
-      `Diagram type '${v3Data.model.type}' may not be fully supported in V4`
-    )
-  }
-
-  const v4Model: UMLModel = {
+  return {
     version: "4.0.0",
-    id: v3Data.id,
-    title: v3Data.title,
-    type: v3Data.model.type as UMLDiagramType, // Now properly typed
+    id,
+    title,
+    type: model.type as UMLDiagramType,
     nodes,
     edges,
     assessments,
   }
-
-  return v4Model
 }
 
 /**
  * Check if data is in v3 format
  */
 export function isV3Format(data: any): data is V3DiagramFormat {
-  return (
+  // Accept both wrapped ({ id, title, model: V3UMLModel }) and flat V3 model
+  const wrapped =
     data &&
     data.model &&
     data.model.version &&
+    typeof data.model.version === "string" &&
     data.model.version.startsWith("3.") &&
     data.model.elements &&
     data.model.relationships &&
     typeof data.model.elements === "object" &&
     typeof data.model.relationships === "object"
-  )
+
+  const flat =
+    data &&
+    data.version &&
+    typeof data.version === "string" &&
+    data.version.startsWith("3.") &&
+    data.elements &&
+    data.relationships &&
+    typeof data.elements === "object" &&
+    typeof data.relationships === "object"
+
+  return !!(wrapped || flat)
 }
 
 /**
@@ -835,7 +826,7 @@ export function isV4Format(data: any): data is UMLModel {
 /**
  * Universal import function that handles v2, v3 and v4 formats
  */
-export function importDiagram(data: any): UMLModel {
+export function importDiagram(data: any | V3UMLModel): UMLModel {
   if (isV4Format(data)) {
     return data
   }
