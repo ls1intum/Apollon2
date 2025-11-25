@@ -209,16 +209,9 @@ export const useStepPathEdge = ({
   const computedPoints = useMemo(() => {
     const simplifiedPath = simplifySvgPath(basePath)
     const parsed = parseSvgPath(simplifiedPath)
-    let result = removeDuplicatePoints(parsed)
-
-    if (result.length === 2 && !isDiagramModifiable) {
-      result = result.map((point) => ({
-        ...point,
-        y: point.y + 20,
-      }))
-    }
+    const result = removeDuplicatePoints(parsed)
     return result
-  }, [basePath, isDiagramModifiable])
+  }, [basePath])
 
   const prevNodePositionsRef = useRef<{
     source: { x: number; y: number; parentId?: string }
