@@ -1,0 +1,68 @@
+name: Bug Report
+description: Report a bug
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      placeholder: Missing label
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: To Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: What should have happened?
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Add screenshots or GIFs if possible
+      placeholder: Drag & drop or paste images here
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: e.g. macOS, Windows, Linux
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: e.g. Chrome, Safari, Firefox
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: App / browser version
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Web Console Output
+      description: Copy/paste relevant console logs
+      render: shell
