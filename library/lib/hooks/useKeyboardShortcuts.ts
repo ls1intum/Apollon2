@@ -25,6 +25,7 @@ export const useKeyboardShortcuts = () => {
     copySelectedElements,
     pasteElements,
     cutSelectedElements,
+    deleteSelectedElements,
   } = useSelectionForCopyPaste()
 
   useEffect(() => {
@@ -42,6 +43,15 @@ export const useKeyboardShortcuts = () => {
       if (event.key === "Escape") {
         event.preventDefault()
         clearSelection()
+        return
+      }
+
+      if (event.key === "Delete") {
+        if (!isDiagramModifiable) return
+        event.preventDefault()
+        if (hasSelectedElements()) {
+          deleteSelectedElements()
+        }
         return
       }
 

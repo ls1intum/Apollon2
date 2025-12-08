@@ -259,6 +259,38 @@ export const useSelectionForCopyPaste = () => {
     setSelectedElementsId,
   ])
 
+  const deleteSelectedElements = useCallback(() => {
+    if (selectedElementIds.length === 0) {
+      return false
+    }
+
+    const allNodesToDelete = getAllNodesToInclude(selectedElementIds, nodes)
+    const expandedNodeIds = allNodesToDelete.map((node) => node.id)
+    const edgeIdsToRemove = getEdgesToRemove(
+      selectedElementIds,
+      expandedNodeIds,
+      edges
+    )
+
+    const remainingNodes = nodes.filter(
+      (node) => !expandedNodeIds.includes(node.id)
+    )
+    const remainingEdges = edges.filter((edge) => !edgeIdsToRemove.has(edge.id))
+
+    setNodes(remainingNodes)
+    setEdges(remainingEdges)
+    setSelectedElementsId([])
+
+    return true
+  }, [
+    selectedElementIds,
+    nodes,
+    edges,
+    setNodes,
+    setEdges,
+    setSelectedElementsId,
+  ])
+
   return {
     selectedElementIds,
     hasSelectedElements,
@@ -267,5 +299,6 @@ export const useSelectionForCopyPaste = () => {
     copySelectedElements,
     pasteElements,
     cutSelectedElements,
+    deleteSelectedElements,
   }
 }
