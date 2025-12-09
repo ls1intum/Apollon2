@@ -12,6 +12,7 @@ import {
   Sidebar,
   SvgMarkers,
   AssessmentSelectionDebug,
+  ScrollProtectionOverlay,
 } from "@/components"
 import "@xyflow/react/dist/style.css"
 import "@/styles/app.css"
@@ -56,11 +57,12 @@ function App({ onReactFlowInit }: AppProps) {
       }))
     )
 
-  const { mode, diagramType, readonly } = useMetadataStore(
+  const { mode, diagramType, readonly, scrollProtection } = useMetadataStore(
     useShallow((state) => ({
       mode: state.mode,
       diagramType: state.diagramType,
       readonly: state.readonly,
+      scrollProtection: state.scrollProtection,
     }))
   )
 
@@ -129,11 +131,17 @@ function App({ onReactFlowInit }: AppProps) {
         edgesReconnectable={isDiagramModifiable}
         nodesConnectable={isDiagramModifiable}
         nodesDraggable={isDiagramModifiable}
+        // When scroll protection is enabled, disable React Flow's scroll-to-zoom
+        // and allow the page to scroll normally. The ScrollProtectionOverlay
+        // component handles zoom when the modifier key is pressed.
+        preventScrolling={!scrollProtection}
+        zoomOnScroll={!scrollProtection}
       >
         <CustomBackground />
         <CustomMiniMap />
         <CustomControls />
         <AssessmentSelectionDebug />
+        <ScrollProtectionOverlay />
       </ReactFlow>
     </div>
   )

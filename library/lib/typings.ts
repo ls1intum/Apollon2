@@ -84,6 +84,14 @@ export type ApollonOptions = {
   scale?: number
   debug?: boolean
   collaborationEnabled?: boolean
+  /**
+   * When enabled, prevents accidental scroll-to-zoom interactions when
+   * the editor is embedded in a scrolling page. Users must hold the
+   * modifier key (⌘ on macOS, Ctrl on Windows/Linux) to zoom with scroll.
+   * Pinch-to-zoom gestures are always allowed.
+   * @default false
+   */
+  scrollProtection?: boolean
 }
 
 export type FeedbackCorrectionStatus = {

@@ -12,6 +12,7 @@ export type MetadataStore = {
   mode: ApollonMode
   readonly: boolean
   debug: boolean
+  scrollProtection: boolean
   setMode: (mode: ApollonMode) => void
   setReadonly: (readonly: boolean) => void
   updateDiagramTitle: (diagramTitle: string) => void
@@ -20,6 +21,7 @@ export type MetadataStore = {
   updateMetaDataFromYjs: () => void
   reset: () => void
   setDebug: (debug: boolean) => void
+  setScrollProtection: (scrollProtection: boolean) => void
 }
 
 type InitialMetadataState = {
@@ -28,6 +30,7 @@ type InitialMetadataState = {
   mode: ApollonMode
   readonly: boolean
   debug: boolean
+  scrollProtection: boolean
 }
 const initialMetadataState: InitialMetadataState = {
   diagramTitle: "Untitled Diagram",
@@ -35,6 +38,7 @@ const initialMetadataState: InitialMetadataState = {
   mode: ApollonMode.Modelling,
   readonly: false,
   debug: false,
+  scrollProtection: false,
 }
 
 export const createMetadataStore = (
@@ -98,6 +102,10 @@ export const createMetadataStore = (
 
         setDebug: (debug) => {
           set({ debug }, undefined, "setDebug")
+        },
+
+        setScrollProtection: (scrollProtection) => {
+          set({ scrollProtection }, undefined, "setScrollProtection")
         },
 
         reset: () => {

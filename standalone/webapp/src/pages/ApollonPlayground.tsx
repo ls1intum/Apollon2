@@ -180,6 +180,20 @@ export const ApollonPlayground: React.FC = () => {
           <label className="font-semibold">Readonly</label>
         </div>
 
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={apollonOptions.scrollProtection}
+            onChange={(event) => {
+              setApollonOptions((prev) => ({
+                ...prev!,
+                scrollProtection: event.target.checked,
+              }))
+            }}
+          />
+          <label className="font-semibold">Scroll Protection</label>
+        </div>
+
         {apollonOptions.mode === ApollonMode.Assessment &&
           !apollonOptions.readonly && <FeedbackBoxes />}
 
@@ -210,11 +224,179 @@ export const ApollonPlayground: React.FC = () => {
         />
       </div>
 
-      <div
-        id="playground"
-        style={{ display: "flex", flex: 1, height: "100%" }}
-        ref={containerRef}
-      />
+      {/* When scroll protection is enabled, wrap in scrollable container with content above/below */}
+      {apollonOptions.scrollProtection ? (
+        <div
+          key="scroll-protection-enabled"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            flex: 1,
+            overflow: "auto",
+          }}
+        >
+          {/* Content above the editor */}
+          <div
+            style={{
+              padding: "40px",
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              color: "white",
+              textAlign: "center",
+              flexShrink: 0,
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "24px",
+                fontWeight: 600,
+                marginBottom: "16px",
+              }}
+            >
+              📜 Scroll Protection Test Area
+            </h2>
+            <p
+              style={{
+                fontSize: "16px",
+                opacity: 0.9,
+                maxWidth: "600px",
+                margin: "0 auto",
+              }}
+            >
+              Scroll down to see the Apollon editor. Try scrolling over the
+              diagram area - you should see the overlay message. Use{" "}
+              <kbd
+                style={{
+                  background: "rgba(255,255,255,0.2)",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  fontFamily: "inherit",
+                }}
+              >
+                ⌘
+              </kbd>{" "}
+              + scroll (or{" "}
+              <kbd
+                style={{
+                  background: "rgba(255,255,255,0.2)",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  fontFamily: "inherit",
+                }}
+              >
+                Ctrl
+              </kbd>{" "}
+              on Windows) to zoom.
+            </p>
+          </div>
+
+          {/* The Apollon Editor */}
+          <div
+            key="playground-with-scroll-protection"
+            id="playground"
+            style={{
+              display: "flex",
+              height: "500px",
+              minHeight: "500px",
+              flexShrink: 0,
+            }}
+            ref={containerRef}
+          />
+
+          {/* Content below the editor */}
+          <div
+            style={{
+              padding: "60px 40px",
+              background: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)",
+              color: "white",
+              textAlign: "center",
+              flexShrink: 0,
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "24px",
+                fontWeight: 600,
+                marginBottom: "16px",
+              }}
+            >
+              ⬇️ More Content Below
+            </h2>
+            <p
+              style={{
+                fontSize: "16px",
+                opacity: 0.9,
+                maxWidth: "600px",
+                margin: "0 auto 24px",
+              }}
+            >
+              This section simulates additional page content below the embedded
+              diagram. The scroll protection feature prevents accidental zoom
+              when scrolling the page.
+            </p>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "20px",
+                maxWidth: "800px",
+                margin: "0 auto",
+              }}
+            >
+              {["Feature 1", "Feature 2", "Feature 3"].map((feature) => (
+                <div
+                  key={feature}
+                  style={{
+                    background: "rgba(255,255,255,0.15)",
+                    padding: "24px",
+                    borderRadius: "12px",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  <h3 style={{ fontWeight: 600, marginBottom: "8px" }}>
+                    {feature}
+                  </h3>
+                  <p style={{ fontSize: "14px", opacity: 0.85 }}>
+                    Sample content to demonstrate a typical embedded diagram
+                    scenario.
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Even more content for scrolling */}
+          <div
+            style={{
+              padding: "80px 40px",
+              background: "#1a1a2e",
+              color: "white",
+              textAlign: "center",
+              flexShrink: 0,
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "24px",
+                fontWeight: 600,
+                marginBottom: "16px",
+              }}
+            >
+              🎯 End of Page
+            </h2>
+            <p style={{ fontSize: "16px", opacity: 0.7 }}>
+              You&apos;ve successfully scrolled past the diagram without
+              accidentally zooming!
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div
+          key="playground-normal"
+          id="playground"
+          style={{ display: "flex", flex: 1, height: "100%" }}
+          ref={containerRef}
+        />
+      )}
     </div>
   )
 }
