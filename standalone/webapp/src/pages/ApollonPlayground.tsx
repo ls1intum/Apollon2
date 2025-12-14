@@ -183,7 +183,7 @@ export const ApollonPlayground: React.FC = () => {
         {apollonOptions.mode === ApollonMode.Assessment &&
           !apollonOptions.readonly && <FeedbackBoxes />}
 
-        <button onClick={exportAsSvg} className="border p-1 rounded-sm">
+        <button onClick={() => exportAsSvg()} className="border p-1 rounded-sm">
           Export as SVG
         </button>
         <button
@@ -198,10 +198,10 @@ export const ApollonPlayground: React.FC = () => {
         >
           Export as PNG
         </button>
-        <button onClick={exportAsJSON} className="border p-1 rounded-sm">
+        <button onClick={() => exportAsJSON()} className="border p-1 rounded-sm">
           Export as JSON
         </button>
-        <button onClick={exportAsPDF} className="border p-1 rounded-sm">
+        <button onClick={() => exportAsPDF()} className="border p-1 rounded-sm">
           Export as PDF
         </button>
 
