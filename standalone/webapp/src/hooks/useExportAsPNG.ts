@@ -15,9 +15,7 @@ export const useExportAsPNG = () => {
   const { editor } = useEditorContext()
   const downloadFile = useFileDownload()
 
-  const exportAsPNG = async ({
-    setWhiteBackground,
-  }: exportAsPNGOptions) => {
+  const exportAsPNG = async ({ setWhiteBackground }: exportAsPNGOptions) => {
     if (!editor) {
       log.error("Editor context is not available")
       return
