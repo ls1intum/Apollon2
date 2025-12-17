@@ -28,7 +28,7 @@ export const useExportAsPDF = () => {
         precision: 2,
       })
 
-      if (isPlatform("ios")) {
+      if (isPlatform("ios") || isPlatform("android")) {
         // Render SVG to canvas for iOS
         const canvas = await renderSVGToCanvas(svgString, width, height)
         if (!canvas) {

@@ -29,7 +29,7 @@ export const useExportAsPNG = () => {
     )
     const fileName = `${editor.model.title}.png`
 
-    if (isPlatform("ios")) {
+    if (isPlatform("ios") || isPlatform("android")) {
       try {
         // Convert blob to base64
         const base64String = await blobToBase64(pngBlob)

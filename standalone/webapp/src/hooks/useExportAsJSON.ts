@@ -30,7 +30,7 @@ export const useExportAsJSON = () => {
     const diagramTitle = editor.model.title || "diagram"
     const fileName = `${diagramTitle}.json`
 
-    if (isPlatform("ios")) {
+    if (isPlatform("ios") || isPlatform("android")) {
       try {
         // Save JSON to temporary location
         await Filesystem.writeFile({

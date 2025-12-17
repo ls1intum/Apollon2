@@ -19,7 +19,7 @@ export const useExportAsSVG = () => {
     const diagramTitle = editor?.model.title || "diagram"
     const fileName = `${diagramTitle}.svg`
 
-    if (isPlatform("ios")) {
+    if (isPlatform("ios") || isPlatform("android")) {
       try {
         // Save SVG to temporary location first
         await Filesystem.writeFile({
