@@ -38,7 +38,16 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
 
   const vp = container.querySelector(".react-flow__viewport")
 
-  if (!vp) return emptySVG
+  if (!vp) {
+    console.warn("React Flow viewport not found")
+    return emptySVG
+  }
+
+  console.debug("Viewport found, scanning for edges/nodes...", {
+    viewportChildren: vp.children.length,
+    nodeElements: vp.querySelectorAll(".react-flow__node").length,
+    edgeElements: vp.querySelectorAll(".react-flow__edge").length,
+  })
 
   const SVG_NS = "http://www.w3.org/2000/svg"
   const mainSVG = document.createElementNS(SVG_NS, "svg")
@@ -88,13 +97,26 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
   const edgeCircles = vp.querySelectorAll(".edge-circle")
   edgeCircles.forEach((circle) => circle.remove())
 
+  // Log edge rendering status
+  if (allEdgeElements.length === 0) {
+    console.warn("[SVG Export] No edge elements found in viewport - edges may be missing from export")
+    console.warn("[SVG Export] Viewport innerHTML sample:", vp.innerHTML.substring(0, 500))
+  } else {
+    console.debug(`[SVG Export] Found ${allEdgeElements.length} edge elements to export`)
+  }
+
   // Add all SVG elements from each edge container
-  allEdgeElements.forEach((edgeContainer) => {
-    const svgElements = edgeContainer.querySelectorAll("path, text, g, circle")
-    svgElements.forEach((element) => {
-      MainEdgesGTag.appendChild(element.cloneNode(true))
-    })
+  // Deep clone the entire edge container to preserve all nested structure
+  allEdgeElements.forEach((edgeContainer, index) => {
+    const children = Array.from(edgeContainer.children)
+    console.debug(`[SVG Export] Edge ${index}: ${children.length} children`)
+    
+    // Clone the entire edge element with all its children
+    const clonedEdge = edgeContainer.cloneNode(true) as Element
+    MainEdgesGTag.appendChild(clonedEdge)
   })
+
+  console.debug(`[SVG Export] Added ${allEdgeElements.length} edges to SVG`)
 
   return mainSVG.outerHTML
 }

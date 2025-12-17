@@ -176,12 +176,13 @@ export class ApollonEditor {
     void theme
     const container = document.createElement("div")
     container.style.display = "flex"
-    container.style.width = "100px"
-    container.style.height = "100px"
+    container.style.width = "2000px"
+    container.style.height = "2000px"
     container.style.zIndex = "-1000"
-    container.style.top = "0"
+    container.style.top = "-2000px"
     container.style.position = "absolute"
-    container.style.left = "-99px"
+    container.style.left = "-2000px"
+    container.style.visibility = "hidden"
 
     document.body.appendChild(container)
 
@@ -236,6 +237,25 @@ export class ApollonEditor {
     if (!reactFlowInstance) {
       document.body.removeChild(container)
       throw new Error("React Flow instance not initialized")
+    }
+
+    // Wait for edges to render by polling for their presence in the DOM
+    let edgesPresent = false
+    let attempts = 0
+    const maxAttempts = 30 // ~3 seconds with 100ms intervals
+
+    while (!edgesPresent && attempts < maxAttempts) {
+      const vp = container.querySelector(".react-flow__viewport")
+      const edgeElements = vp?.querySelectorAll(".react-flow__edge") ?? []
+      
+      // If we have edges in the model, wait for them to appear in DOM
+      // If we have no edges in model, we can proceed immediately
+      if (model.edges.length === 0 || edgeElements.length > 0) {
+        edgesPresent = true
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 100))
+        attempts++
+      }
     }
 
     const bounds = getDiagramBounds(reactFlowInstance)
