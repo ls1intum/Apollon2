@@ -38,10 +38,7 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
 
   const vp = container.querySelector(".react-flow__viewport")
 
-  if (!vp) {
-    console.warn("React Flow viewport not found")
-    return emptySVG
-  }
+  if (!vp) return emptySVG
 
   const SVG_NS = "http://www.w3.org/2000/svg"
   const mainSVG = document.createElementNS(SVG_NS, "svg")
@@ -93,16 +90,11 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
 
   // Add all SVG elements from each edge container
   // Deep clone the entire edge container to preserve all nested structure
-  allEdgeElements.forEach((edgeContainer, index) => {
-    const children = Array.from(edgeContainer.children)
-    console.debug(`[SVG Export] Edge ${index}: ${children.length} children`)
-
+  allEdgeElements.forEach((edgeContainer) => {
     // Clone the entire edge element with all its children
     const clonedEdge = edgeContainer.cloneNode(true) as Element
     MainEdgesGTag.appendChild(clonedEdge)
   })
-
-  console.debug(`[SVG Export] Added ${allEdgeElements.length} edges to SVG`)
 
   return mainSVG.outerHTML
 }
