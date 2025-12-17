@@ -99,10 +99,17 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
 
   // Log edge rendering status
   if (allEdgeElements.length === 0) {
-    console.warn("[SVG Export] No edge elements found in viewport - edges may be missing from export")
-    console.warn("[SVG Export] Viewport innerHTML sample:", vp.innerHTML.substring(0, 500))
+    console.warn(
+      "[SVG Export] No edge elements found in viewport - edges may be missing from export"
+    )
+    console.warn(
+      "[SVG Export] Viewport innerHTML sample:",
+      vp.innerHTML.substring(0, 500)
+    )
   } else {
-    console.debug(`[SVG Export] Found ${allEdgeElements.length} edge elements to export`)
+    console.debug(
+      `[SVG Export] Found ${allEdgeElements.length} edge elements to export`
+    )
   }
 
   // Add all SVG elements from each edge container
@@ -110,7 +117,7 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
   allEdgeElements.forEach((edgeContainer, index) => {
     const children = Array.from(edgeContainer.children)
     console.debug(`[SVG Export] Edge ${index}: ${children.length} children`)
-    
+
     // Clone the entire edge element with all its children
     const clonedEdge = edgeContainer.cloneNode(true) as Element
     MainEdgesGTag.appendChild(clonedEdge)

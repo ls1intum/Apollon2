@@ -247,7 +247,7 @@ export class ApollonEditor {
     while (!edgesPresent && attempts < maxAttempts) {
       const vp = container.querySelector(".react-flow__viewport")
       const edgeElements = vp?.querySelectorAll(".react-flow__edge") ?? []
-      
+
       // If we have edges in the model, wait for them to appear in DOM
       // If we have no edges in model, we can proceed immediately
       if (model.edges.length === 0 || edgeElements.length > 0) {

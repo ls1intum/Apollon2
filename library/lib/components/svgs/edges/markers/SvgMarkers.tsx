@@ -85,7 +85,12 @@ export function SvgMarkers() {
           stroke="var(--apollon2-primary-contrast)"
           markerUnits="strokeWidth"
         >
-          <path d="M0,29 L30,15 L0,1" fill="none" strokeWidth="1.5" stroke="var(--apollon2-primary-contrast)" />
+          <path
+            d="M0,29 L30,15 L0,1"
+            fill="none"
+            strokeWidth="1.5"
+            stroke="var(--apollon2-primary-contrast)"
+          />
         </marker>
         <marker
           id="usecase-arrow"
