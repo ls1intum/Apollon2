@@ -43,12 +43,6 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
     return emptySVG
   }
 
-  console.debug("Viewport found, scanning for edges/nodes...", {
-    viewportChildren: vp.children.length,
-    nodeElements: vp.querySelectorAll(".react-flow__node").length,
-    edgeElements: vp.querySelectorAll(".react-flow__edge").length,
-  })
-
   const SVG_NS = "http://www.w3.org/2000/svg"
   const mainSVG = document.createElementNS(SVG_NS, "svg")
   mainSVG.setAttribute("xmlns", "http://www.w3.org/2000/svg")
@@ -96,21 +90,6 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
 
   const edgeCircles = vp.querySelectorAll(".edge-circle")
   edgeCircles.forEach((circle) => circle.remove())
-
-  // Log edge rendering status
-  if (allEdgeElements.length === 0) {
-    console.warn(
-      "[SVG Export] No edge elements found in viewport - edges may be missing from export"
-    )
-    console.warn(
-      "[SVG Export] Viewport innerHTML sample:",
-      vp.innerHTML.substring(0, 500)
-    )
-  } else {
-    console.debug(
-      `[SVG Export] Found ${allEdgeElements.length} edge elements to export`
-    )
-  }
 
   // Add all SVG elements from each edge container
   // Deep clone the entire edge container to preserve all nested structure
