@@ -5,7 +5,9 @@ import { useNavigate } from "react-router"
 import { importDiagram } from "@tumaet/apollon"
 import { log } from "@/logger"
 
-export const JsonFileImportButton: React.FC<{ close: () => void }> = (props) => {
+export const JsonFileImportButton: React.FC<{ close: () => void }> = (
+  props
+) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const createModel = usePersistenceModelStore((state) => state.createModel)
   const navigate = useNavigate()
