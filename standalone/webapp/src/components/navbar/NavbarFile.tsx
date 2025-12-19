@@ -91,10 +91,10 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         <MenuItem onClick={handleStartFromTemplate}>
           Start from Template
         </MenuItem>
-        <MenuItem onClick={() => openModal("LOAD_DIAGRAM")}>
+        <MenuItem onClick={() => {openModal("LOAD_DIAGRAM"); closeMainMenu()}}>
           Load Diagram
         </MenuItem>
-        <JsonFileImportButton />
+        <JsonFileImportButton close={closeMainMenu} />
         <MenuItem
           onClick={openSubMenu}
           onMouseEnter={openSubMenu}
