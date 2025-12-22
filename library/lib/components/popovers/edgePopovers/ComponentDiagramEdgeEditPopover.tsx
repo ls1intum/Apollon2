@@ -1,4 +1,4 @@
-import { Box, FormControl, Select, MenuItem } from "@mui/material"
+import { Box, FormControl, Select, MenuItem, InputLabel } from "@mui/material"
 import { EdgeStyleEditor, Typography } from "@/components/ui"
 import { useReactFlow } from "@xyflow/react"
 import { SwapHorizIcon } from "@/components/Icon"
@@ -52,6 +52,7 @@ export const ComponentEdgeEditPopover: React.FC<PopoverProps> = ({
       />
 
       <FormControl fullWidth size="small">
+        <InputLabel id="edge-type-label">Edge Type</InputLabel>
         <Select
           labelId="edge-type-label"
           id="edge-type-select"
