@@ -52,7 +52,7 @@ export const UseCaseEdgeEditPopover: React.FC<PopoverProps> = ({
         ]}
       />
 
-      <FormControl fullWidth size="small">  
+      <FormControl fullWidth size="small">
         <InputLabel id="edge-type-label">Edge Type</InputLabel>
         <Select
           labelId="edge-type-label"
