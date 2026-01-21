@@ -6,8 +6,9 @@ import "@/styles/alignmentGuides.css"
 
 export const AlignmentGuides = () => {
   const { guides } = useAlignmentGuidesStore(
-    useShallow((state: any) => ({
-      guides: state.guides as AlignmentGuide[],
+    useShallow((state) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      guides: state.guides as any as AlignmentGuide[],
     }))
   )
 
