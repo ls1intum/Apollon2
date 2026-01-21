@@ -153,11 +153,16 @@ export const snapNodeToGuides = (
       // Snap center
       if (Math.abs(draggedBounds.centerX - guide.position) < threshold) {
         snappedPosition.x =
-          guide.position - draggedNode.position.x - (draggedNode.measured?.width || 100) / 2
+          guide.position -
+          draggedNode.position.x -
+          (draggedNode.measured?.width || 100) / 2
       }
       // Snap right edge
       if (Math.abs(draggedBounds.right - guide.position) < threshold) {
-        snappedPosition.x = guide.position - draggedNode.position.x - (draggedNode.measured?.width || 100)
+        snappedPosition.x =
+          guide.position -
+          draggedNode.position.x -
+          (draggedNode.measured?.width || 100)
       }
     } else if (guide.type === "horizontal") {
       // Snap top edge
@@ -167,12 +172,16 @@ export const snapNodeToGuides = (
       // Snap center
       if (Math.abs(draggedBounds.centerY - guide.position) < threshold) {
         snappedPosition.y =
-          guide.position - draggedNode.position.y - (draggedNode.measured?.height || 100) / 2
+          guide.position -
+          draggedNode.position.y -
+          (draggedNode.measured?.height || 100) / 2
       }
       // Snap bottom edge
       if (Math.abs(draggedBounds.bottom - guide.position) < threshold) {
         snappedPosition.y =
-          guide.position - draggedNode.position.y - (draggedNode.measured?.height || 100)
+          guide.position -
+          draggedNode.position.y -
+          (draggedNode.measured?.height || 100)
       }
     }
   }
