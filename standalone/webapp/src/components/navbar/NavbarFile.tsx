@@ -91,10 +91,15 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
         <MenuItem onClick={handleStartFromTemplate}>
           Start from Template
         </MenuItem>
-        <MenuItem onClick={() => openModal("LOAD_DIAGRAM")}>
+        <MenuItem
+          onClick={() => {
+            openModal("LOAD_DIAGRAM")
+            closeMainMenu()
+          }}
+        >
           Load Diagram
         </MenuItem>
-        <JsonFileImportButton />
+        <JsonFileImportButton close={closeMainMenu} />
         <MenuItem
           onClick={openSubMenu}
           onMouseEnter={openSubMenu}
@@ -125,15 +130,46 @@ export const NavbarFile: FC<Props> = ({ color, handleCloseNavMenu }) => {
           onMouseLeave: () => setSubMenuAnchorEl(null),
         }}
       >
-        <MenuItem onClick={exportAsSvg}>As SVG</MenuItem>
-        <MenuItem onClick={() => exportAsPng({ setWhiteBackground: true })}>
+        <MenuItem
+          onClick={() => {
+            exportAsSvg()
+            closeMainMenu()
+          }}
+        >
+          As SVG
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            exportAsPng({ setWhiteBackground: true })
+            closeMainMenu()
+          }}
+        >
           As PNG (White Background)
         </MenuItem>
-        <MenuItem onClick={() => exportAsPng({ setWhiteBackground: false })}>
+        <MenuItem
+          onClick={() => {
+            exportAsPng({ setWhiteBackground: false })
+            closeMainMenu()
+          }}
+        >
           As PNG (Transparent Background)
         </MenuItem>
-        <MenuItem onClick={exportAsJSON}>As JSON</MenuItem>
-        <MenuItem onClick={exportAsPDF}>As PDF</MenuItem>
+        <MenuItem
+          onClick={() => {
+            exportAsJSON()
+            closeMainMenu()
+          }}
+        >
+          As JSON
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            exportAsPDF()
+            closeMainMenu()
+          }}
+        >
+          As PDF
+        </MenuItem>
       </Menu>
     </>
   )
