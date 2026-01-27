@@ -94,6 +94,7 @@ function App({ onReactFlowInit }: AppProps) {
         width: "100%",
         overflow: "hidden",
         backgroundColor: "var(--apollon2-background)",
+        position: "relative",
       }}
     >
       {mode === ApollonMode.Modelling && !readonly && <Sidebar />}
@@ -139,8 +140,8 @@ function App({ onReactFlowInit }: AppProps) {
         <CustomMiniMap />
         <CustomControls />
         <AssessmentSelectionDebug />
-        <ScrollOverlay />
       </ReactFlow>
+      <ScrollOverlay />
     </div>
   )
 }

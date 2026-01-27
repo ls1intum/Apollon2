@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { useMetadataStore } from "@/store/context"
 import { useShallow } from "zustand/shallow"
 
@@ -17,7 +17,7 @@ export const ScrollOverlay: React.FC = () => {
   )
 
   const [showOverlay, setShowOverlay] = useState(false)
-  const [hideTimeoutId, setHideTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null)
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Handle Space key to temporarily enable scrolling
   useEffect(() => {
@@ -28,6 +28,11 @@ export const ScrollOverlay: React.FC = () => {
         e.preventDefault()
         setScrollEnabled(true)
         setShowOverlay(false)
+        // Clear any pending hide timeout
+        if (hideTimeoutRef.current) {
+          clearTimeout(hideTimeoutRef.current)
+          hideTimeoutRef.current = null
+        }
       }
     }
 
@@ -42,16 +47,15 @@ export const ScrollOverlay: React.FC = () => {
       setShowOverlay(true)
 
       // Clear existing timeout
-      setHideTimeoutId((prevId) => {
-        if (prevId) clearTimeout(prevId)
-        return null
-      })
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current)
+      }
 
-      // Hide overlay after 3 seconds of no scroll attempts
-      const newTimeoutId = setTimeout(() => {
+      // Hide overlay after 500ms of no scroll attempts
+      hideTimeoutRef.current = setTimeout(() => {
         setShowOverlay(false)
-      }, 3000)
-      setHideTimeoutId(newTimeoutId)
+        hideTimeoutRef.current = null
+      }, 500)
     }
 
     window.addEventListener("keydown", handleKeyDown)
@@ -62,11 +66,11 @@ export const ScrollOverlay: React.FC = () => {
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)
       window.removeEventListener("wheel", handleWheel)
-      if (hideTimeoutId) {
-        clearTimeout(hideTimeoutId)
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current)
       }
     }
-  }, [scrollLock, setScrollEnabled, hideTimeoutId])
+  }, [scrollLock, setScrollEnabled])
 
   if (!scrollLock || !showOverlay || scrollEnabled) return null
 
@@ -74,7 +78,7 @@ export const ScrollOverlay: React.FC = () => {
     <div className="scroll-overlay" role="presentation">
       <div className="scroll-overlay-hint">
         <div className="scroll-overlay-hint-content">
-          <p className="scroll-overlay-hint-text">Press Space for Scrolling</p>
+          <p className="scroll-overlay-hint-text">Hold "Space" for Scrolling within Editor</p>
         </div>
       </div>
     </div>
