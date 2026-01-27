@@ -57,15 +57,16 @@ function App({ onReactFlowInit }: AppProps) {
       }))
     )
 
-  const { mode, diagramType, readonly, scrollLock, scrollEnabled } = useMetadataStore(
-    useShallow((state) => ({
-      mode: state.mode,
-      diagramType: state.diagramType,
-      readonly: state.readonly,
-      scrollLock: state.scrollLock,
-      scrollEnabled: state.scrollEnabled,
-    }))
-  )
+  const { mode, diagramType, readonly, scrollLock, scrollEnabled } =
+    useMetadataStore(
+      useShallow((state) => ({
+        mode: state.mode,
+        diagramType: state.diagramType,
+        readonly: state.readonly,
+        scrollLock: state.scrollLock,
+        scrollEnabled: state.scrollEnabled,
+      }))
+    )
 
   const isDiagramModifiable = useDiagramModifiable()
 
