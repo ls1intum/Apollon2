@@ -79,7 +79,7 @@ export const ScrollOverlay: React.FC = () => {
       <div className="scroll-overlay-hint">
         <div className="scroll-overlay-hint-content">
           <p className="scroll-overlay-hint-text">
-            Hold "Space" for Scrolling within Editor
+            Hold &quot;Space&quot; for Scrolling within Editor
           </p>
         </div>
       </div>
