@@ -50,6 +50,7 @@ export const ApollonPlayground: React.FC = () => {
     locale: Locale.en,
     readonly: false,
     debug: false,
+    scrollLock: false,
   })
 
   useEffect(() => {
@@ -178,6 +179,20 @@ export const ApollonPlayground: React.FC = () => {
             }}
           />
           <label className="font-semibold">Readonly</label>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={apollonOptions.scrollLock}
+            onChange={(event) => {
+              setApollonOptions((prev) => ({
+                ...prev!,
+                scrollLock: event.target.checked,
+              }))
+            }}
+          />
+          <label className="font-semibold">Scroll Lock</label>
         </div>
 
         {apollonOptions.mode === ApollonMode.Assessment &&
