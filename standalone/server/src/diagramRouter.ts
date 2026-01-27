@@ -2,8 +2,11 @@
 import { Router, Request, Response } from "express"
 import Diagram from "./database/models/Diagram"
 import { log } from "./logger"
+import { ConversionResource } from "../resources/conversion-resource";
 
 const router = Router()
+
+const conversionResource = new ConversionResource();
 
 router.get("/:diagramID", async (req: Request, res: Response): Promise<any> => {
   try {
@@ -98,5 +101,7 @@ router.put("/:diagramID", async (req: Request, res: Response): Promise<any> => {
     res.status(500).json({ error: "Internal server error" })
   }
 })
+
+router.post('/converter/pdf', (req, res) => conversionResource.convert(req, res));
 
 export default router
