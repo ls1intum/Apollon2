@@ -12,6 +12,7 @@ import {
   Sidebar,
   SvgMarkers,
   AssessmentSelectionDebug,
+  ScrollOverlay,
 } from "@/components"
 import "@xyflow/react/dist/style.css"
 import "@/styles/app.css"
@@ -56,11 +57,13 @@ function App({ onReactFlowInit }: AppProps) {
       }))
     )
 
-  const { mode, diagramType, readonly } = useMetadataStore(
+  const { mode, diagramType, readonly, scrollLock, scrollEnabled } = useMetadataStore(
     useShallow((state) => ({
       mode: state.mode,
       diagramType: state.diagramType,
       readonly: state.readonly,
+      scrollLock: state.scrollLock,
+      scrollEnabled: state.scrollEnabled,
     }))
   )
 
@@ -129,11 +132,14 @@ function App({ onReactFlowInit }: AppProps) {
         edgesReconnectable={isDiagramModifiable}
         nodesConnectable={isDiagramModifiable}
         nodesDraggable={isDiagramModifiable}
+        panOnScroll={!scrollLock || scrollEnabled}
+        zoomOnScroll={!scrollLock || scrollEnabled}
       >
         <CustomBackground />
         <CustomMiniMap />
         <CustomControls />
         <AssessmentSelectionDebug />
+        <ScrollOverlay />
       </ReactFlow>
     </div>
   )
