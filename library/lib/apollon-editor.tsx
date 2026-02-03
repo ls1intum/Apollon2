@@ -96,6 +96,9 @@ export class ApollonEditor {
     if (options?.debug !== undefined) {
       this.metadataStore.getState().setDebug(options.debug)
     }
+    if (options?.scrollLock !== undefined) {
+      this.metadataStore.getState().setScrollLock(options.scrollLock)
+    }
 
     if (
       this.metadataStore.getState().mode === Apollon.ApollonMode.Modelling &&
