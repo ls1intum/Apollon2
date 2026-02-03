@@ -1,11 +1,7 @@
 import { useCallback, useMemo, useEffect, useRef, useState } from "react"
 import { getSmoothStepPath, useReactFlow } from "@xyflow/react"
 import { log } from "../logger"
-import {
-  STEP_BOARDER_RADIUS,
-  MARKER_PADDING,
-  SOURCE_CONNECTION_POINT_PADDING,
-} from "@/constants"
+import { EDGES } from "@/constants"
 import {
   adjustSourceCoordinates,
   adjustTargetCoordinates,
@@ -119,7 +115,7 @@ export const useStepPathEdge = ({
     strokeDashArray,
     offset = 0,
   } = getEdgeMarkerStyles(type)
-  const padding = markerPadding ?? MARKER_PADDING
+  const padding = markerPadding ?? EDGES.MARKER_PADDING
   const sourceNode = getNode(source)!
   const targetNode = getNode(target)!
   const allNodes = getNodes()
@@ -133,17 +129,24 @@ export const useStepPathEdge = ({
     if (!targetNode) return { x: targetX, y: targetY }
     return getPositionOnCanvas(targetNode, allNodes)
   }, [targetNode, allNodes, targetX, targetY])
+  // Round coordinates to whole pixels for pixel-perfect rendering
+  // React Flow may return fractional values when node dimensions are odd
+  const roundedSourceX = Math.round(sourceX)
+  const roundedSourceY = Math.round(sourceY)
+  const roundedTargetX = Math.round(targetX)
+  const roundedTargetY = Math.round(targetY)
+
   const adjustedTargetCoordinates = adjustTargetCoordinates(
-    targetX,
-    targetY,
+    roundedTargetX,
+    roundedTargetY,
     targetPosition,
     padding
   )
   const adjustedSourceCoordinates = adjustSourceCoordinates(
-    sourceX,
-    sourceY,
+    roundedSourceX,
+    roundedSourceY,
     sourcePosition,
-    SOURCE_CONNECTION_POINT_PADDING
+    EDGES.SOURCE_CONNECTION_POINT_PADDING
   )
   const basePath = useMemo(() => {
     if (!enableStraightPath) {
@@ -154,7 +157,7 @@ export const useStepPathEdge = ({
         targetX: adjustedTargetCoordinates.targetX,
         targetY: adjustedTargetCoordinates.targetY,
         targetPosition,
-        borderRadius: STEP_BOARDER_RADIUS,
+        borderRadius: EDGES.STEP_BORDER_RADIUS,
         offset: 30,
       })
       return edgePath
@@ -186,7 +189,7 @@ export const useStepPathEdge = ({
         targetX: adjustedTargetCoordinates.targetX,
         targetY: adjustedTargetCoordinates.targetY,
         targetPosition,
-        borderRadius: STEP_BOARDER_RADIUS,
+        borderRadius: EDGES.STEP_BORDER_RADIUS,
         offset: 30,
       })
       return edgePath
@@ -311,14 +314,56 @@ export const useStepPathEdge = ({
   ])
 
   const activePoints = useMemo(() => {
+    let points: IPoint[]
     if (tempReconnectPoints) {
-      return tempReconnectPoints
+      points = tempReconnectPoints
+    } else if (data?.points && data.points.length > 0) {
+      points = data.points
+    } else {
+      points = customPoints.length ? customPoints : computedPoints
     }
-    if (data?.points && data.points.length > 0) {
-      return data.points
+
+    // Always ensure first and last points use adjusted coordinates
+    // This handles stale stored points when nodes have moved
+    if (points.length >= 2) {
+      const adjustedFirst = {
+        x: adjustedSourceCoordinates.sourceX,
+        y: adjustedSourceCoordinates.sourceY,
+      }
+      const adjustedLast = {
+        x: adjustedTargetCoordinates.targetX,
+        y: adjustedTargetCoordinates.targetY,
+      }
+      // Only update if significantly different (more than 1px) to avoid unnecessary re-renders
+      const firstDiff =
+        Math.abs(points[0].x - adjustedFirst.x) > 1 ||
+        Math.abs(points[0].y - adjustedFirst.y) > 1
+      const lastDiff =
+        Math.abs(points[points.length - 1].x - adjustedLast.x) > 1 ||
+        Math.abs(points[points.length - 1].y - adjustedLast.y) > 1
+
+      if (firstDiff || lastDiff) {
+        points = [...points]
+        if (firstDiff) {
+          points[0] = adjustedFirst
+        }
+        if (lastDiff) {
+          points[points.length - 1] = adjustedLast
+        }
+      }
     }
-    return customPoints.length ? customPoints : computedPoints
-  }, [customPoints, computedPoints, tempReconnectPoints, data?.points])
+
+    return points
+  }, [
+    customPoints,
+    computedPoints,
+    tempReconnectPoints,
+    data?.points,
+    adjustedSourceCoordinates.sourceX,
+    adjustedSourceCoordinates.sourceY,
+    adjustedTargetCoordinates.targetX,
+    adjustedTargetCoordinates.targetY,
+  ])
 
   const currentPath = useMemo(() => {
     return pointsToSvgPath(activePoints)
@@ -490,7 +535,7 @@ export const useStepPathEdge = ({
             newSourceX,
             newSourceY,
             sourcePosition,
-            SOURCE_CONNECTION_POINT_PADDING
+            EDGES.SOURCE_CONNECTION_POINT_PADDING
           )
 
           const [edgePath] = getSmoothStepPath({
@@ -500,7 +545,7 @@ export const useStepPathEdge = ({
             targetX: adjustedTargetCoordinates.targetX,
             targetY: adjustedTargetCoordinates.targetY,
             targetPosition,
-            borderRadius: STEP_BOARDER_RADIUS,
+            borderRadius: EDGES.STEP_BORDER_RADIUS,
             offset: 30,
           })
 
@@ -545,7 +590,7 @@ export const useStepPathEdge = ({
               newSourceX,
               newSourceY,
               sourcePosition,
-              SOURCE_CONNECTION_POINT_PADDING
+              EDGES.SOURCE_CONNECTION_POINT_PADDING
             )
 
             const [edgePath] = getSmoothStepPath({
@@ -555,7 +600,7 @@ export const useStepPathEdge = ({
               targetX: adjustedTargetCoordinates.targetX,
               targetY: adjustedTargetCoordinates.targetY,
               targetPosition,
-              borderRadius: STEP_BOARDER_RADIUS,
+              borderRadius: EDGES.STEP_BORDER_RADIUS,
               offset: 30,
             })
             const simplifiedPath = simplifySvgPath(edgePath)
