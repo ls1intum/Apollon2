@@ -1,11 +1,11 @@
 //@ts-check
-"use strict";
+"use strict"
 
 //@ts-check
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
 
-const path = require("path");
-const webpack = require("webpack");
+const path = require("path")
+const webpack = require("webpack")
 
 /** @type WebpackConfig */
 const extensionConfig = {
@@ -63,6 +63,6 @@ const extensionConfig = {
   infrastructureLogging: {
     level: "log", // enables logging required for problem matchers
   },
-};
+}
 
-module.exports = [extensionConfig];
+module.exports = [extensionConfig]

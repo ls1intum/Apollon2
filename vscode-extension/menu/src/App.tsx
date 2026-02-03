@@ -5,20 +5,20 @@ import {
   VSCodeOption,
   VSCodeDivider,
   VSCodeProgressRing,
-} from "@vscode/webview-ui-toolkit/react";
-import { vscode } from "./index";
-import { useState } from "react";
-import useStore from "./store";
-import { UMLDiagramType } from "@tumaet/apollon";
+} from "@vscode/webview-ui-toolkit/react"
+import { vscode } from "./index"
+import { useState } from "react"
+import useStore from "./store"
+import { UMLDiagramType } from "@tumaet/apollon"
 
 function App() {
-  const existingDiagrams = useStore((state) => state.diagrams);
-  const [newDiagramName, setNewDiagramName] = useState<string>("");
+  const existingDiagrams = useStore((state) => state.diagrams)
+  const [newDiagramName, setNewDiagramName] = useState<string>("")
   const [newDiagramType, setNewDiagramType] =
-    useState<UMLDiagramType>("ClassDiagram");
+    useState<UMLDiagramType>("ClassDiagram")
   const [existingDiagramPath, setExistingDiagramPath] = useState<
     string | undefined
-  >(undefined);
+  >(undefined)
 
   const diagramTypes = [
     "ClassDiagram",
@@ -33,27 +33,27 @@ function App() {
     "PetriNet",
     "ReachabilityGraph",
     "BPMN",
-  ] as UMLDiagramType[];
+  ] as UMLDiagramType[]
 
   const isValidDiagramName = (name: string) => {
-    const invalidCharacters = /[\x00-\x1f\x80-\x9f<>:"/\\|?*\u0000]/;
-    return name.length > 0 && !invalidCharacters.test(name);
-  };
+    const invalidCharacters = /[\x00-\x1f\x80-\x9f<>:"/\\|?*\u0000]/
+    return name.length > 0 && !invalidCharacters.test(name)
+  }
 
   const createDiagram = () => {
     vscode.postMessage({
       type: "createDiagram",
       name: newDiagramName,
       diagramType: newDiagramType,
-    });
-  };
+    })
+  }
 
   const loadDiagram = () => {
     vscode.postMessage({
       type: "loadDiagram",
       path: existingDiagramPath ? existingDiagramPath : existingDiagrams![0],
-    });
-  };
+    })
+  }
 
   return (
     <div className="flex flex-col mx-5">
@@ -61,7 +61,7 @@ function App() {
       <VSCodeTextField
         id="new-diagram-name"
         onInput={(e) => {
-          setNewDiagramName((e.target as HTMLInputElement).value);
+          setNewDiagramName((e.target as HTMLInputElement).value)
         }}
       />
       <VSCodeDropdown
@@ -70,7 +70,7 @@ function App() {
         onInput={(e) => {
           setNewDiagramType(
             (e.target as HTMLInputElement).value as UMLDiagramType
-          );
+          )
         }}
       >
         {diagramTypes.map((type, index) => (
@@ -101,7 +101,7 @@ function App() {
             id="existing-diagrams"
             className="w-full"
             onInput={(e) => {
-              setExistingDiagramPath((e.target as HTMLInputElement).value);
+              setExistingDiagramPath((e.target as HTMLInputElement).value)
             }}
           >
             {existingDiagrams.map((diagram, index) => (
@@ -118,7 +118,7 @@ function App() {
         Load diagram
       </VSCodeButton>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

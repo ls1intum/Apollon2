@@ -1,4 +1,4 @@
-import { uuid } from "./util";
+import { uuid } from "./util"
 
 // Type definitions compatible with @tumaet/apollon
 export type UMLDiagramType =
@@ -14,32 +14,32 @@ export type UMLDiagramType =
   | "SyntaxTree"
   | "Flowchart"
   | "BPMN"
-  | "Sfc";
+  | "Sfc"
 
 export type UMLModel = {
-  version: `4.${number}.${number}`;
-  id: string;
-  title: string;
-  type: UMLDiagramType;
-  nodes: unknown[];
-  edges: unknown[];
-  assessments: { [id: string]: unknown };
-};
+  version: `4.${number}.${number}`
+  id: string
+  title: string
+  type: UMLDiagramType
+  nodes: unknown[]
+  edges: unknown[]
+  assessments: { [id: string]: unknown }
+}
 
 export type Diagram = {
-  id: string;
-  title: string;
-  model?: UMLModel;
-  lastUpdate: string;
-  versions?: Diagram[];
-  description?: string;
-  token?: string;
-};
+  id: string
+  title: string
+  model?: UMLModel
+  lastUpdate: string
+  versions?: Diagram[]
+  description?: string
+  token?: string
+}
 
 export const createDefaultDiagram = (
   diagramType: UMLDiagramType = "ClassDiagram"
 ): Diagram => {
-  const id = uuid();
+  const id = uuid()
   return {
     id,
     title: "UMLClassDiagram",
@@ -53,7 +53,7 @@ export const createDefaultDiagram = (
       assessments: {},
     },
     lastUpdate: new Date().toISOString(),
-  };
-};
+  }
+}
 
-export const defaultDiagram: Diagram = createDefaultDiagram();
+export const defaultDiagram: Diagram = createDefaultDiagram()

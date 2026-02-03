@@ -1,15 +1,15 @@
-import { create } from "zustand";
+import { create } from "zustand"
 
 interface Store {
-  diagrams?: string[];
-  setDiagrams: (diagrams: string[]) => void;
+  diagrams?: string[]
+  setDiagrams: (diagrams: string[]) => void
 }
 
 export const useStore = create<Store>((set) => ({
   diagrams: undefined,
   setDiagrams: (diagrams: string[]) => {
-    set({ diagrams: diagrams });
+    set({ diagrams: diagrams })
   },
-}));
+}))
 
-export default useStore;
+export default useStore

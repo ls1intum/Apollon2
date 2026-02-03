@@ -1,14 +1,14 @@
-import { create } from "zustand";
-import { ApollonOptions, UMLDiagramType, UMLModel } from "@tumaet/apollon";
-import { defaultEditorOptions } from "./types";
+import { create } from "zustand"
+import { ApollonOptions, UMLDiagramType, UMLModel } from "@tumaet/apollon"
+import { defaultEditorOptions } from "./types"
 
 interface Store {
-  model?: UMLModel;
-  createNewEditor: boolean;
-  options: ApollonOptions;
-  setModel: (model: UMLModel) => void;
-  setCreateNewEditor: (createNewEditor: boolean) => void;
-  setModelType: (type: UMLDiagramType) => void;
+  model?: UMLModel
+  createNewEditor: boolean
+  options: ApollonOptions
+  setModel: (model: UMLModel) => void
+  setCreateNewEditor: (createNewEditor: boolean) => void
+  setModelType: (type: UMLDiagramType) => void
 }
 
 export const useStore = create<Store>((set) => ({
@@ -16,16 +16,16 @@ export const useStore = create<Store>((set) => ({
   createNewEditor: false,
   options: defaultEditorOptions,
   setModel: (model: UMLModel) => {
-    set({ model: model });
+    set({ model: model })
   },
   setCreateNewEditor: (createNewEditor: boolean) => {
-    set({ createNewEditor: createNewEditor });
+    set({ createNewEditor: createNewEditor })
   },
   setModelType: (type: UMLDiagramType) => {
     set((state) => ({
       options: { ...state.options, type },
-    }));
+    }))
   },
-}));
+}))
 
-export default useStore;
+export default useStore
