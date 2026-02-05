@@ -80,6 +80,8 @@ export const useStepPathEdge = ({
   const dragOffsetRef = useRef<IPoint>({ x: 0, y: 0 })
   const pathRef = useRef<SVGPathElement | null>(null)
   const finalPointsRef = useRef<IPoint[]>([])
+  const isDraggingRef = useRef<boolean>(false)
+  const dragPointsRef = useRef<IPoint[]>([])
 
   const isDiagramModifiable = useDiagramModifiable()
   const { getNode, getNodes, screenToFlowPosition } = useReactFlow()
@@ -387,16 +389,30 @@ export const useStepPathEdge = ({
       const offsetY = event.clientY - currentMidpoint.y
       draggingIndexRef.current = index
       dragOffsetRef.current = { x: offsetX, y: offsetY }
+      isDraggingRef.current = true
+      dragPointsRef.current = [...activePoints]
+
+      // Get the circle element being dragged for direct DOM manipulation
+      const circleElement = event.target as SVGCircleElement
+
+      // Find the edge container and paths for direct DOM manipulation
+      const edgeContainer = circleElement.closest(".edge-container")
+      const mainEdgePath = edgeContainer?.querySelector(
+        ".react-flow__edge-path"
+      ) as SVGPathElement | null
+      const overlayEdgePath = edgeContainer?.querySelector(
+        ".edge-overlay"
+      ) as SVGPathElement | null
 
       const handlePointerMove = (moveEvent: PointerEvent) => {
-        if (draggingIndexRef.current === null) return
+        if (draggingIndexRef.current === null || !isDraggingRef.current) return
 
         const newX = moveEvent.clientX - dragOffsetRef.current.x
         const newY = moveEvent.clientY - dragOffsetRef.current.y
 
         const startIdx = draggingIndexRef.current + 1
         const endIdx = draggingIndexRef.current + 2
-        const newPoints = [...activePoints]
+        const newPoints = [...dragPointsRef.current]
 
         const linePosition =
           Math.abs(newPoints[startIdx].x - newPoints[endIdx].x) < 1
@@ -411,11 +427,49 @@ export const useStepPathEdge = ({
           newPoints[endIdx] = { x: newX, y: newPoints[endIdx].y }
         }
 
-        setCustomPoints(newPoints)
+        // Store for final update
+        dragPointsRef.current = newPoints
         finalPointsRef.current = newPoints
+
+        // Direct DOM manipulation for real-time feedback
+        const newPath = pointsToSvgPath(newPoints)
+        const markerPath = getMarkerSegmentPath(
+          newPoints,
+          offset,
+          targetPosition
+        )
+        const fullOverlayPath = `${newPath} ${markerPath}`
+
+        // Update main edge path (BaseEdge)
+        if (mainEdgePath) {
+          mainEdgePath.setAttribute("d", newPath)
+        }
+
+        // Update overlay path
+        if (overlayEdgePath) {
+          overlayEdgePath.setAttribute("d", fullOverlayPath)
+        }
+
+        // Update circle position directly
+        if (circleElement) {
+          const newMidpoints = calculateInnerMidpoints(newPoints)
+          if (newMidpoints[draggingIndexRef.current!]) {
+            circleElement.setAttribute(
+              "cx",
+              String(newMidpoints[draggingIndexRef.current!].x)
+            )
+            circleElement.setAttribute(
+              "cy",
+              String(newMidpoints[draggingIndexRef.current!].y)
+            )
+          }
+        }
       }
 
       const handlePointerUp = () => {
+        isDraggingRef.current = false
+        // Now sync to React state
+        setCustomPoints(finalPointsRef.current)
         setEdges((edges) =>
           edges.map((edge) =>
             edge.id === id
@@ -441,6 +495,8 @@ export const useStepPathEdge = ({
       setEdges,
       allowMidpointDragging,
       setCustomPoints,
+      offset,
+      targetPosition,
     ]
   )
 
