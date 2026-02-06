@@ -59,12 +59,17 @@
     "vite": "6.3.4"
   },
   "dependencies": {
-    "@capacitor/android": "7.0.1",
+    "@capacitor/android": "^8.0.0",
     "@capacitor/assets": "3.0.5",
-    "@capacitor/cli": "7.0.1",
-    "@capacitor/core": "7.0.1",
-    "@capacitor/ios": "7.0.1",
-    "@capacitor/splash-screen": "7.0.0",
-    "capacitor-plugin-safe-area": "4.0.0"
+    "@capacitor/cli": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/file-transfer": "^2.0.0",
+    "@capacitor/filesystem": "^8.0.0",
+    "@capacitor/ios": "^8.0.0",
+    "@capacitor/share": "^8.0.0",
+    "@capacitor/splash-screen": "^8.0.0",
+    "@capacitor/status-bar": "^8.0.0",
+    "capacitor-plugin-safe-area": "4.0.0",
+    "iobuffer": "^6.0.1"
   }
 }
