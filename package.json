@@ -68,6 +68,7 @@
     "@capacitor/ios": "^8.0.0",
     "@capacitor/share": "^8.0.0",
     "@capacitor/splash-screen": "^8.0.0",
+    "@capacitor/status-bar": "^8.0.0",
     "capacitor-plugin-safe-area": "4.0.0",
     "iobuffer": "^6.0.1"
   }
