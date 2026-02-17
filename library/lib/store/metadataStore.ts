@@ -12,8 +12,12 @@ export type MetadataStore = {
   mode: ApollonMode
   readonly: boolean
   debug: boolean
+  scrollLock: boolean
+  scrollEnabled: boolean
   setMode: (mode: ApollonMode) => void
   setReadonly: (readonly: boolean) => void
+  setScrollLock: (scrollLock: boolean) => void
+  setScrollEnabled: (scrollEnabled: boolean) => void
   updateDiagramTitle: (diagramTitle: string) => void
   updateDiagramType: (diagramType: UMLDiagramType) => void
   updateMetaData: (diagramTitle: string, diagramType: UMLDiagramType) => void
@@ -28,6 +32,8 @@ type InitialMetadataState = {
   mode: ApollonMode
   readonly: boolean
   debug: boolean
+  scrollLock: boolean
+  scrollEnabled: boolean
 }
 const initialMetadataState: InitialMetadataState = {
   diagramTitle: "Untitled Diagram",
@@ -35,6 +41,8 @@ const initialMetadataState: InitialMetadataState = {
   mode: ApollonMode.Modelling,
   readonly: false,
   debug: false,
+  scrollLock: false,
+  scrollEnabled: false,
 }
 
 export const createMetadataStore = (
@@ -94,6 +102,14 @@ export const createMetadataStore = (
 
         setReadonly: (readonly) => {
           set({ readonly }, undefined, "setReadonly")
+        },
+
+        setScrollLock: (scrollLock: boolean) => {
+          set({ scrollLock }, undefined, "setScrollLock")
+        },
+
+        setScrollEnabled: (scrollEnabled: boolean) => {
+          set({ scrollEnabled }, undefined, "setScrollEnabled")
         },
 
         setDebug: (debug) => {
