@@ -15,7 +15,9 @@ const sanitizeFileName = (value: string): string => {
   return sanitized || "diagram"
 }
 
-router.post("/export/pdf", async (req: Request, res: Response): Promise<any> => {
+router.post(
+  "/ap/converter/pdf",
+  async (req: Request, res: Response): Promise<any> => {
   try {
     let model: unknown = req.body?.model ?? req.body
 
@@ -53,7 +55,8 @@ router.post("/export/pdf", async (req: Request, res: Response): Promise<any> => 
     log.error("Error in exportDiagramAsPdf endpoint:", error as Error)
     return res.status(500).json({ error: "Failed to export diagram as PDF" })
   }
-})
+  }
+)
 
 router.get("/:diagramID", async (req: Request, res: Response): Promise<any> => {
   try {
