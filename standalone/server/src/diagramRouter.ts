@@ -16,7 +16,7 @@ const sanitizeFileName = (value: string): string => {
 }
 
 router.post(
-  "/api/converter/pdf",
+  "/converter/pdf",
   async (req: Request, res: Response): Promise<any> => {
   try {
     let model: unknown = req.body?.model ?? req.body
