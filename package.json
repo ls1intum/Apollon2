@@ -56,7 +56,7 @@
     "concurrently": "9.1.0",
     "husky": "9.1.7",
     "prettier": "3.4.2",
-    "vite": "6.3.4"
+    "vite": "6.4.1"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",
