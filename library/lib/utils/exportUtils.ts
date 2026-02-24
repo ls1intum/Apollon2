@@ -89,11 +89,11 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
   edgeCircles.forEach((circle) => circle.remove())
 
   // Add all SVG elements from each edge container
+  // Deep clone the entire edge container to preserve all nested structure
   allEdgeElements.forEach((edgeContainer) => {
-    const svgElements = edgeContainer.querySelectorAll("path, text, g, circle")
-    svgElements.forEach((element) => {
-      MainEdgesGTag.appendChild(element.cloneNode(true))
-    })
+    // Clone the entire edge element with all its children
+    const clonedEdge = edgeContainer.cloneNode(true) as Element
+    MainEdgesGTag.appendChild(clonedEdge)
   })
 
   return mainSVG.outerHTML

@@ -12,6 +12,7 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@ionic/react": "^8.7.13",
     "@mui/icons-material": "6.4.2",
     "@mui/material": "6.4.2",
     "@tailwindcss/vite": "4.0.17",
