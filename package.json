@@ -48,14 +48,14 @@
     "npm": ">=11.1.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.6.0",
-    "@commitlint/config-conventional": "19.6.0",
-    "@emotion/react": "11.11.1",
-    "@emotion/styled": "11.11.0",
-    "@types/node": "22.13.1",
-    "concurrently": "9.1.0",
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
+    "@types/node": "22.19.13",
+    "concurrently": "9.2.1",
     "husky": "9.1.7",
-    "prettier": "3.4.2",
+    "prettier": "3.8.1",
     "vite": "6.3.4"
   },
   "dependencies": {
@@ -69,7 +69,7 @@
     "@capacitor/share": "^8.0.0",
     "@capacitor/splash-screen": "^8.0.0",
     "@capacitor/status-bar": "^8.0.0",
-    "capacitor-plugin-safe-area": "4.0.0",
+    "capacitor-plugin-safe-area": "4.0.3",
     "iobuffer": "^6.0.1"
   }
 }
