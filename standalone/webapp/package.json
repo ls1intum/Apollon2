@@ -12,27 +12,27 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@mui/icons-material": "6.4.2",
-    "@mui/material": "6.4.2",
-    "@tailwindcss/vite": "4.0.17",
+    "@mui/icons-material": "6.5.0",
+    "@mui/material": "6.5.0",
+    "@tailwindcss/vite": "4.2.1",
     "@tumaet/apollon": "*",
-    "@types/node": "22.13.8",
+    "@types/node": "22.19.13",
     "jspdf": "4.1.0",
-    "react-router": "7.12.0",
-    "tailwindcss": "4.0.17",
-    "zustand": "5.0.3"
+    "react-router": "7.13.1",
+    "tailwindcss": "4.2.1",
+    "zustand": "5.0.11"
   },
   "devDependencies": {
-    "@eslint/js": "9.17.0",
-    "@types/react": "18.0.0",
-    "@types/react-dom": "18.0.0",
-    "@vitejs/plugin-react": "4.3.4",
-    "eslint": "9.17.0",
-    "eslint-plugin-react": "7.37.2",
-    "globals": "15.13.0",
+    "@eslint/js": "9.39.3",
+    "@types/react": "18.3.28",
+    "@types/react-dom": "18.3.7",
+    "@vitejs/plugin-react": "4.7.0",
+    "eslint": "9.39.3",
+    "eslint-plugin-react": "7.37.5",
+    "globals": "15.15.0",
     "react-toastify": "11.0.5",
-    "typescript": "5.7.2",
-    "typescript-eslint": "8.18.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.56.1",
     "vite": "6.3.4",
     "vite-tsconfig-paths": "^5.1.1"
   }
