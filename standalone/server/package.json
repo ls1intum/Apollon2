@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "dependencies": {
     "cors": "2.8.5",
-    "dotenv": "16.4.7",
+    "dotenv": "17.3.1",
     "express": "5.1.0",
-    "mongoose": "8.14.0",
+    "mongoose": "9.2.3",
     "node-cron": "4.1.0",
     "pdfmake": "^0.3.3",
     "playwright": "^1.51.1",
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/cors": "2.8.19",
     "@types/express": "5.0.3",
-    "@types/node": "22.14.0",
+    "@types/node": "24.11.0",
     "@types/ws": "8.18.1",
     "typescript": "5.8.2",
     "tsx": "4.19.2"
