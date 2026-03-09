@@ -90,10 +90,16 @@ export const useMessagePositioning = (
     } else {
       // Vertical middle segment: messages left and right
       forwardArrowBoxPosition = { x: -verticalEdgeMessageSpacing, y: 0 }
-      forwardLabelBoxPosition = { x: -verticalEdgeMessageSpacing - labelOffset, y: 0 }
+      forwardLabelBoxPosition = {
+        x: -verticalEdgeMessageSpacing - labelOffset,
+        y: 0,
+      }
 
       backwardArrowBoxPosition = { x: verticalEdgeMessageSpacing, y: 0 }
-      backwardLabelBoxPosition = { x: verticalEdgeMessageSpacing + labelOffset, y: 0 }
+      backwardLabelBoxPosition = {
+        x: verticalEdgeMessageSpacing + labelOffset,
+        y: 0,
+      }
     }
 
     return {

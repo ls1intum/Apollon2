@@ -268,9 +268,11 @@ export class ApollonEditor {
     }
 
     // Wait for next animation frame to ensure all edge labels have rendered
-    await new Promise((resolve) => requestAnimationFrame(() => {
-      requestAnimationFrame(resolve)
-    }))
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => {
+        requestAnimationFrame(resolve)
+      })
+    )
 
     const svgString = getSVG(container, clip)
 
