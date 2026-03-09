@@ -85,15 +85,28 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
   const MainEdgesGTag = document.createElement("g")
   mainSVG.appendChild(MainEdgesGTag)
 
-  const edgeCircles = vp.querySelectorAll(".edge-circle")
-  edgeCircles.forEach((circle) => circle.remove())
-
-  // Add all SVG elements from each edge container
+  // Clone entire edge structure to preserve hierarchy
   allEdgeElements.forEach((edgeContainer) => {
-    const svgElements = edgeContainer.querySelectorAll("path, text, g, circle")
-    svgElements.forEach((element) => {
-      MainEdgesGTag.appendChild(element.cloneNode(true))
+    // Clone the entire edge group with all its children
+    const edgeClone = edgeContainer.cloneNode(true) as Element
+    
+    // Remove interactive/UI elements from the clone
+    const interactiveSelectors = [
+      ".react-flow__edgeupdater",
+      ".react-flow__edge-interaction", 
+      ".edge-overlay",
+      ".edge-circle",
+      "foreignObject",
+      "circle[fill='transparent']",
+      "circle[fill='lightgray']"
+    ]
+    
+    interactiveSelectors.forEach(selector => {
+      const elements = edgeClone.querySelectorAll(selector)
+      elements.forEach(el => el.remove())
     })
+    
+    MainEdgesGTag.appendChild(edgeClone)
   })
 
   return mainSVG.outerHTML

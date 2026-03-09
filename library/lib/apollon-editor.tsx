@@ -267,6 +267,11 @@ export class ApollonEditor {
       height: bounds.height + margin * 2,
     }
 
+    // Wait for next animation frame to ensure all edge labels have rendered
+    await new Promise((resolve) => requestAnimationFrame(() => {
+      requestAnimationFrame(resolve)
+    }))
+
     const svgString = getSVG(container, clip)
 
     // Clean up
