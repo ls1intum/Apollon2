@@ -99,10 +99,42 @@ export const getSVG = (container: HTMLElement, clip: Rect): string => {
   return mainSVG.outerHTML
 }
 
-function getBoundingBox(edges: Edge[]) {
+function getBoundingBox(edges: Edge[], nodes: Node[]) {
+  // Collect all edge points
   const allPoints: IPoint[] = edges.flatMap(
     (edge) => (edge.data?.points as IPoint[]) ?? []
   )
+
+  // Create a map for quick node lookup
+  const nodeMap = new Map(nodes.map((node) => [node.id, node]))
+
+  // Add source and target positions for each edge to ensure we capture connection points
+  edges.forEach((edge) => {
+    const sourceNode = nodeMap.get(edge.source)
+    const targetNode = nodeMap.get(edge.target)
+
+    if (sourceNode && sourceNode.position) {
+      allPoints.push({ x: sourceNode.position.x, y: sourceNode.position.y })
+      if (sourceNode.width && sourceNode.height) {
+        // Add corners of source node to ensure complete coverage
+        allPoints.push({
+          x: sourceNode.position.x + sourceNode.width,
+          y: sourceNode.position.y + sourceNode.height,
+        })
+      }
+    }
+
+    if (targetNode && targetNode.position) {
+      allPoints.push({ x: targetNode.position.x, y: targetNode.position.y })
+      if (targetNode.width && targetNode.height) {
+        // Add corners of target node to ensure complete coverage
+        allPoints.push({
+          x: targetNode.position.x + targetNode.width,
+          y: targetNode.position.y + targetNode.height,
+        })
+      }
+    }
+  })
 
   if (allPoints.length === 0) {
     return undefined // No points to calculate bounds
@@ -141,8 +173,9 @@ function mergeBounds(a: Rect, b: Rect): Rect {
 export function getDiagramBounds(
   reactFlow: ReactFlowInstance<Node, Edge>
 ): Rect {
-  const nodeBounds = reactFlow.getNodesBounds(reactFlow.getNodes())
-  const edgeBounds = getBoundingBox(reactFlow.getEdges())
+  const nodes = reactFlow.getNodes()
+  const nodeBounds = reactFlow.getNodesBounds(nodes)
+  const edgeBounds = getBoundingBox(reactFlow.getEdges(), nodes)
 
   if (!edgeBounds) return nodeBounds
 

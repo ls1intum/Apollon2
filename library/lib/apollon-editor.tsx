@@ -259,7 +259,7 @@ export class ApollonEditor {
 
     const bounds = getDiagramBounds(reactFlowInstance)
 
-    const margin = 20
+    const margin = 60
     const clip = {
       x: bounds.x - margin,
       y: bounds.y - margin,
