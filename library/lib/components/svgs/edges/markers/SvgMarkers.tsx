@@ -45,13 +45,13 @@ export function SvgMarkers() {
           viewBox="0 0 30 30"
           markerWidth="22"
           markerHeight="30"
-          refX="30"
+          refX="28"
           refY="15"
           orient="auto"
           markerUnits="strokeWidth"
         >
           <path
-            d="M0,1 L0,29 L30,15 z"
+            d="M3,3 L3,27 L27,15 z"
             fill="white"
             stroke="currentColor"
             strokeWidth="1.5"

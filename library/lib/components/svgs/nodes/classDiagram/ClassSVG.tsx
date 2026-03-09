@@ -95,7 +95,7 @@ export const ClassSVG = ({
         />
 
         {/* Attributes Section */}
-        {attributes.length > 0 && (
+        {attributes.length >= 0 && (
           <>
             {/* Separation Line After Header */}
             <SeparationLine
@@ -116,7 +116,7 @@ export const ClassSVG = ({
         )}
 
         {/* Methods Section */}
-        {methods.length > 0 && (
+        {methods.length >= 0 && (
           <>
             <SeparationLine
               y={headerHeight + attributes.length * attributeHeight}

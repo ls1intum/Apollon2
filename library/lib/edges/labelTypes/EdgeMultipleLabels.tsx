@@ -66,7 +66,12 @@ export const EdgeMultipleLabels = ({
         return { y: index * spacing, x: 0 }
       }
     } else {
-      return { y: index * spacing, x: 0 }
+      // For vertical edges, separate forward and backward messages vertically
+      if (isForward) {
+        return { y: -index * spacing, x: 0 }
+      } else {
+        return { y: index * spacing, x: 0 }
+      }
     }
   }
 
