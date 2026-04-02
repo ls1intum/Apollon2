@@ -1,4 +1,4 @@
-FROM node:22.14.0-slim AS builder
+FROM node:24.14.1-slim AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY library ./library
 
 RUN npm run build:lib && npm run build:server
 
-FROM node:22.14.0-slim AS runtime
+FROM node:24.14.1-slim AS runtime
 
 WORKDIR /app
 
