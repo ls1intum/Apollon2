@@ -18,10 +18,15 @@ import {
   AssessmentSelectionStore,
 } from "@/store/assessmentSelectionStore"
 import {
+  createAlignmentGuidesStore,
+  AlignmentGuidesStore,
+} from "@/store/alignmentGuidesStore"
+import {
   DiagramStoreContext,
   MetadataStoreContext,
   PopoverStoreContext,
   AssessmentSelectionStoreContext,
+  AlignmentGuidesStoreContext,
 } from "./store/context"
 import {
   MessageType,
@@ -41,10 +46,11 @@ export class ApollonEditor {
   private readonly metadataStore: StoreApi<MetadataStore>
   private readonly popoverStore: StoreApi<PopoverStore>
   private readonly assessmentSelectionStore: StoreApi<AssessmentSelectionStore>
+  private readonly alignmentGuidesStore: StoreApi<AlignmentGuidesStore>
   private subscribers: Apollon.Subscribers = {}
   constructor(element: HTMLElement, options?: Apollon.ApollonOptions) {
     if (!(element instanceof HTMLElement)) {
-      throw new Error("Element is required to initialize Apollon2")
+      throw new Error("Element is required to initialize Apollon")
     }
 
     this.ydoc = new Y.Doc()
@@ -52,6 +58,7 @@ export class ApollonEditor {
     this.metadataStore = createMetadataStore(this.ydoc)
     this.popoverStore = createPopoverStore()
     this.assessmentSelectionStore = createAssessmentSelectionStore()
+    this.alignmentGuidesStore = createAlignmentGuidesStore()
     this.syncManager = new YjsSyncClass(
       this.ydoc,
       this.diagramStore,
@@ -63,7 +70,7 @@ export class ApollonEditor {
 
     // Initialize React root
     this.root = ReactDOM.createRoot(element, {
-      identifierPrefix: `apollon2-${diagramId}`,
+      identifierPrefix: `apollon-${diagramId}`,
     })
 
     this.diagramStore.getState().setDiagramId(diagramId)
@@ -114,9 +121,13 @@ export class ApollonEditor {
             <AssessmentSelectionStoreContext.Provider
               value={this.assessmentSelectionStore}
             >
-              <AppWithProvider
-                onReactFlowInit={this.setReactFlowInstance.bind(this)}
-              />
+              <AlignmentGuidesStoreContext.Provider
+                value={this.alignmentGuidesStore}
+              >
+                <AppWithProvider
+                  onReactFlowInit={this.setReactFlowInstance.bind(this)}
+                />
+              </AlignmentGuidesStoreContext.Provider>
             </AssessmentSelectionStoreContext.Provider>
           </PopoverStoreContext.Provider>
         </MetadataStoreContext.Provider>
@@ -175,12 +186,11 @@ export class ApollonEditor {
     options?: Apollon.ExportOptions,
     theme?: DeepPartial<Apollon.Styles>
   ): Promise<Apollon.SVG> {
-    void options
     void theme
     const container = document.createElement("div")
     container.style.display = "flex"
-    container.style.width = "2000px"
-    container.style.height = "2000px"
+    container.style.width = "4000px"
+    container.style.height = "4000px"
     container.style.zIndex = "-1000"
     container.style.top = "-2000px"
     container.style.position = "absolute"
@@ -194,6 +204,7 @@ export class ApollonEditor {
     const metadataStore = createMetadataStore(ydoc)
     const popoverStore = createPopoverStore()
     const assessmentSelectionStore = createAssessmentSelectionStore()
+    const alignmentGuidesStore = createAlignmentGuidesStore()
     const diagramId = Math.random().toString(36).substring(2, 15)
 
     let setReactFlowInstance: (instance: ReactFlowInstance) => void = () => {}
@@ -205,7 +216,7 @@ export class ApollonEditor {
     )
 
     const svgRoot = ReactDOM.createRoot(container, {
-      identifierPrefix: `apollon2-exportAsSVG-${diagramId}`,
+      identifierPrefix: `apollon-exportAsSVG-${diagramId}`,
     })
 
     diagramStore.getState().setNodesAndEdges(model.nodes, model.edges)
@@ -219,7 +230,11 @@ export class ApollonEditor {
             <AssessmentSelectionStoreContext.Provider
               value={assessmentSelectionStore}
             >
-              <AppWithProvider onReactFlowInit={setReactFlowInstance} />
+              <AlignmentGuidesStoreContext.Provider
+                value={alignmentGuidesStore}
+              >
+                <AppWithProvider onReactFlowInit={setReactFlowInstance} />
+              </AlignmentGuidesStoreContext.Provider>
             </AssessmentSelectionStoreContext.Provider>
           </PopoverStoreContext.Provider>
         </MetadataStoreContext.Provider>
@@ -242,28 +257,20 @@ export class ApollonEditor {
       throw new Error("React Flow instance not initialized")
     }
 
-    // Wait for edges to render by polling for their presence in the DOM
-    let edgesPresent = false
-    let attempts = 0
-    const maxAttempts = 30 // ~3 seconds with 100ms intervals
+    // Wait for ReactFlow to fully lay out nodes and measure custom handle
+    // positions (especially for non-rectangular shapes like parallelograms).
+    // setTimeout lets ResizeObserver callbacks fire; double-rAF ensures paint.
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => resolve())
+        })
+      }, 150)
+    })
 
-    while (!edgesPresent && attempts < maxAttempts) {
-      const vp = container.querySelector(".react-flow__viewport")
-      const edgeElements = vp?.querySelectorAll(".react-flow__edge") ?? []
+    const bounds = getDiagramBounds(reactFlowInstance, container)
 
-      // If we have edges in the model, wait for them to appear in DOM
-      // If we have no edges in model, we can proceed immediately
-      if (model.edges.length === 0 || edgeElements.length > 0) {
-        edgesPresent = true
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 100))
-        attempts++
-      }
-    }
-
-    const bounds = getDiagramBounds(reactFlowInstance)
-
-    const margin = 20
+    const margin = 60
     const clip = {
       x: bounds.x - margin,
       y: bounds.y - margin,
@@ -271,7 +278,7 @@ export class ApollonEditor {
       height: bounds.height + margin * 2,
     }
 
-    const svgString = getSVG(container, clip)
+    const svgString = getSVG(container, clip, options)
 
     // Clean up
     svgRoot.unmount()

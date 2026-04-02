@@ -1,3 +1,4 @@
+import type { SvgExportMode } from "@tumaet/apollon"
 import { useFileDownload } from "./useFileDownload"
 import { useEditorContext } from "@/contexts"
 import { log } from "@/logger"
@@ -5,19 +6,31 @@ import { isPlatform } from "@ionic/react"
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem"
 import { Share } from "@capacitor/share"
 
-export const useExportAsSVG = () => {
+const buildSvgFileName = (title: string, suffix?: string) =>
+  suffix ? `${title}${suffix}.svg` : `${title}.svg`
+
+export const useExportAsSVG = (
+  svgMode: SvgExportMode = "web",
+  fileNameSuffix?: string
+) => {
   const { editor } = useEditorContext()
   const downloadFile = useFileDownload()
 
   const exportSVG = async () => {
-    const apollonSVG = await editor?.exportAsSVG()
+    if (!editor) {
+      log.error("Failed to export SVG: editor is not available")
+      return
+    }
+
+    const apollonSVG = await editor.exportAsSVG({ svgMode })
+
     if (!apollonSVG) {
       log.error("Failed to export SVG")
       return
     }
 
     const diagramTitle = editor?.model.title || "diagram"
-    const fileName = `${diagramTitle}.svg`
+    const fileName = buildSvgFileName(diagramTitle, fileNameSuffix)
 
     if (isPlatform("ios") || isPlatform("android")) {
       try {

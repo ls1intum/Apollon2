@@ -1,25 +1,63 @@
 services:
   caddy:
-    image: caddy:alpine
-    container_name: apollon2-caddy
+    image: caddy:2.9-alpine
+    container_name: apollon-caddy
     restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
-
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
+    configs:
+      - source: caddyfile
+        target: /etc/caddy/Caddyfile
     networks:
-      - shared-network
+      - apollon
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+configs:
+  caddyfile:
+    content: |
+      {$$DOMAIN} {
+        header {
+          Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+          Referrer-Policy "strict-origin-when-cross-origin"
+          X-Content-Type-Options "nosniff"
+          Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        }
+
+        @websockets path /ws
+        reverse_proxy @websockets server:4444 {
+          transport http {
+            versions h1.1
+          }
+        }
+
+        @api path /api/*
+        reverse_proxy @api server:8000
+
+        reverse_proxy webapp:8080
+      }
 
 volumes:
   caddy_data:
   caddy_config:
 
 networks:
-  shared-network:
-    name: shared-network
+  apollon:
+    name: apollon
     driver: bridge

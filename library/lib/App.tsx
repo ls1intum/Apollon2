@@ -10,19 +10,15 @@ import {
   CustomControls,
   CustomMiniMap,
   Sidebar,
-  SvgMarkers,
   AssessmentSelectionDebug,
   ScrollOverlay,
+  AlignmentGuides,
 } from "@/components"
 import "@xyflow/react/dist/style.css"
 import "@/styles/app.css"
 import { useDiagramStore, useMetadataStore } from "./store/context"
 import { useShallow } from "zustand/shallow"
-import {
-  MIN_SCALE_TO_ZOOM_OUT,
-  MAX_SCALE_TO_ZOOM_IN,
-  SNAP_TO_GRID_PX,
-} from "./constants"
+import { CANVAS } from "./constants"
 import { diagramEdgeTypes } from "./edges"
 import {
   useNodeDragStop,
@@ -30,6 +26,7 @@ import {
   useReconnect,
   useElementInteractions,
   useDragOver,
+  useNodeDrag,
 } from "./hooks"
 import { diagramNodeTypes } from "./nodes"
 import { useDiagramModifiable } from "./hooks/useDiagramModifiable"
@@ -72,6 +69,7 @@ function App({ onReactFlowInit }: AppProps) {
 
   const connectionLineType = getConnectionLineType(diagramType)
   const onNodeDragStop = useNodeDragStop()
+  const onNodeDrag = useNodeDrag()
   const onDragOver = useDragOver()
   const { onConnect, onConnectEnd, onConnectStart, onEdgesDelete } =
     useConnect()
@@ -94,14 +92,14 @@ function App({ onReactFlowInit }: AppProps) {
         height: "100%",
         width: "100%",
         overflow: "hidden",
-        backgroundColor: "var(--apollon2-background)",
+        backgroundColor: "var(--apollon-background)",
         position: "relative",
       }}
     >
       {mode === ApollonMode.Modelling && !readonly && <Sidebar />}
-      <SvgMarkers />
       <ReactFlow
         id={`react-flow-library-${diagramId}`}
+        className="apollon-container"
         nodeTypes={diagramNodeTypes}
         edgeTypes={diagramEdgeTypes}
         nodes={nodes}
@@ -114,6 +112,7 @@ function App({ onReactFlowInit }: AppProps) {
         onEdgesDelete={onEdgesDelete}
         onConnectEnd={onConnectEnd}
         zoomOnDoubleClick={false}
+        onNodeDrag={onNodeDrag}
         onNodeDragStop={onNodeDragStop}
         onReconnect={onReconnect}
         connectionLineType={connectionLineType}
@@ -122,10 +121,10 @@ function App({ onReactFlowInit }: AppProps) {
           instance.fitView({ maxZoom: 1.0, minZoom: 1.0 })
           handleReactFlowInit(instance)
         }}
-        minZoom={MIN_SCALE_TO_ZOOM_OUT}
-        maxZoom={MAX_SCALE_TO_ZOOM_IN}
+        minZoom={CANVAS.MIN_SCALE_TO_ZOOM_OUT}
+        maxZoom={CANVAS.MAX_SCALE_TO_ZOOM_IN}
         snapToGrid
-        snapGrid={[SNAP_TO_GRID_PX, SNAP_TO_GRID_PX]}
+        snapGrid={[CANVAS.SNAP_TO_GRID_PX, CANVAS.SNAP_TO_GRID_PX]}
         onNodeDoubleClick={onNodeDoubleClick}
         onEdgeDoubleClick={onEdgeDoubleClick}
         onBeforeDelete={onBeforeDelete}
@@ -140,6 +139,7 @@ function App({ onReactFlowInit }: AppProps) {
         <CustomBackground />
         <CustomMiniMap />
         <CustomControls />
+        <AlignmentGuides />
         <AssessmentSelectionDebug />
       </ReactFlow>
       <ScrollOverlay />

@@ -3,16 +3,20 @@ name: Publish Library Minor Version
 on:
   workflow_dispatch:
 
+concurrency:
+  group: publish-library
+  cancel-in-progress: false
+
 jobs:
   publish-minor:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # Needed for pushing changes and creating PR
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22.14.0
           registry-url: https://registry.npmjs.org/
