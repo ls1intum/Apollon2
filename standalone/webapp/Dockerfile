@@ -1,4 +1,4 @@
-FROM node:22.14.0-slim AS builder
+FROM node:22.22.2-slim AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY library ./library
 
 RUN npm run build:lib && npm run build:webapp
 
-FROM nginx:1.27-alpine AS runtime
+FROM nginx:1.29-alpine AS runtime
 
 LABEL org.opencontainers.image.source="https://github.com/ls1intum/Apollon" \
       org.opencontainers.image.title="apollon-webapp"
